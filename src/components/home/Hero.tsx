@@ -13,7 +13,7 @@ export function Hero() {
           aanbeveling.
         </p>
         <div className="mt-6">
-          <ButtonLink href="/stickwijzer" className="bg-white text-emerald-900 hover:bg-emerald-50">
+          <ButtonLink href="/stickwijzer" variant="inverse">
             Start de stickwijzer
           </ButtonLink>
         </div>

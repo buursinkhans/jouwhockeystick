@@ -6,6 +6,8 @@ export const buttonBaseClasses =
 export const buttonVariantClasses = {
   primary: 'bg-emerald-700 text-white hover:bg-emerald-800',
   secondary: 'border border-emerald-700 text-emerald-800 hover:bg-emerald-50',
+  /** For use on a dark/colored background (e.g. the Hero section). */
+  inverse: 'bg-white text-emerald-900 hover:bg-emerald-50',
 } as const;
 const baseClasses = buttonBaseClasses;
 const variantClasses = buttonVariantClasses;
