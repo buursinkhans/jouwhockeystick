@@ -7,6 +7,11 @@ import { jdhX01MidBow } from './products/jdh-x01-mid-bow';
 import { jdhX93ProBow } from './products/jdh-x93-pro-bow';
 import { princessCompetition1StarProbow } from './products/princess-competition-1-star-probow';
 import { princessPremium4k10StarSg9Lb } from './products/princess-premium-4k-10-star-sg9-lb';
+import { graysAuraGtJunior } from './products/grays-aura-gt-junior';
+import { jdhJuniorMidBow } from './products/jdh-junior-mid-bow';
+import { braboGforceEliteXOneLbJr } from './products/brabo-gforce-elite-x-one-lb-jr';
+import { princessCompetitionJr3k10Star } from './products/princess-competition-jr-3k-10-star';
+import { princessPremiumJr4k10Star } from './products/princess-premium-jr-4k-10-star';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -17,6 +22,11 @@ const ALL_PRODUCTS: Product[] = [
   jdhX93ProBow,
   princessCompetition1StarProbow,
   princessPremium4k10StarSg9Lb,
+  graysAuraGtJunior,
+  jdhJuniorMidBow,
+  braboGforceEliteXOneLbJr,
+  princessCompetitionJr3k10Star,
+  princessPremiumJr4k10Star,
 ];
 
 const VERIFICATION_FRESHNESS_MONTHS = 12;
