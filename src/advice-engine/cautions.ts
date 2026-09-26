@@ -23,13 +23,18 @@ const YOUNG_PLAYER_MAX_AGE = 11;
  */
 export function getCautions(product: Product, profile: QuizProfile): CautionCode[] {
   const cautions: CautionCode[] = [];
-  const carbon = product.carbonPercentage.value;
+  const carbon = product.carbonPercentage?.value;
 
-  if (carbon >= HIGH_CARBON_THRESHOLD && profile.currentStickExperience === 'nog-geen-stick') {
+  if (
+    carbon !== undefined &&
+    carbon >= HIGH_CARBON_THRESHOLD &&
+    profile.currentStickExperience === 'nog-geen-stick'
+  ) {
     cautions.push('HIGH_CARBON_FOR_BEGINNER');
   }
 
   if (
+    carbon !== undefined &&
     carbon >= YOUNG_PLAYER_CARBON_THRESHOLD &&
     profile.age !== null &&
     profile.age <= YOUNG_PLAYER_MAX_AGE

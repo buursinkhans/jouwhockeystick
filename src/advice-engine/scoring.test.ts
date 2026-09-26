@@ -53,4 +53,18 @@ describe('scoreProduct', () => {
     const positionContribution = withPosition - withoutPosition;
     expect(positionContribution / MAX_POSSIBLE_SCORE).toBeLessThanOrEqual(0.15);
   });
+
+  it('never crashes and never awards PLAYSTYLE_MATCH when bowProfile is unknown', () => {
+    const product = buildProduct({ bowProfile: undefined });
+    const profile = buildProfile({ preferredBowProfile: 'low-bow' });
+    const result = scoreProduct(product, profile);
+    expect(result.reasonCodes).not.toContain('PLAYSTYLE_MATCH');
+  });
+
+  it('never crashes when carbonPercentage is unknown, and does not falsely claim COMFORT_MATCH for a strong preference', () => {
+    const product = buildProduct({ carbonPercentage: undefined });
+    const profile = buildProfile({ comfortPreference: 'stevig-krachtig' });
+    const result = scoreProduct(product, profile);
+    expect(result.reasonCodes).not.toContain('COMFORT_MATCH');
+  });
 });

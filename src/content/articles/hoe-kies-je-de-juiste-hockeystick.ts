@@ -47,7 +47,7 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
       level: 2,
       body: [
         'Een hoger carbonpercentage maakt een stick doorgaans stugger en krachtiger, maar ook minder vergevingsgezind bij mishits. Voor spelers die nog volop in ontwikkeling zijn, is een lager carbonpercentage vaak een prettiger startpunt.',
-        'Budget blijft altijd een van de doorslaggevende factoren. Op deze site vind je bij elk model een richtprijs; controleer de actuele prijs altijd bij de partnerwinkel.',
+        'Budget blijft altijd een van de doorslaggevende factoren. Op deze site vind je bij elk model de adviesprijs van de fabrikant; controleer de actuele prijs altijd op bol.com.',
       ],
     },
     {

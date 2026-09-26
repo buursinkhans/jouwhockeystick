@@ -1,20 +1,22 @@
 # CLAUDE.md — jouwhockeystick.nl
 
 ## Product
-jouwhockeystick.nl is een Nederlandse, mobiele-first website die hockeyers en ouders helpt een passende hockeystick te kiezen. De catalogus omvat meerdere merken (Grays, Brabo, adidas, JDH, Princess).
+jouwhockeystick.nl is een Nederlandse, mobiele-first website die hockeyers en ouders helpt een passende hockeystick te kiezen. De catalogus bevat producten van Grays, Brabo, JDH en Princess met specs die rechtstreeks van de officiële merksites zijn gehaald. adidas is tijdelijk niet in de catalogus opgenomen omdat adidas.nl geautomatiseerde toegang blokkeert (bot-bescherming) — specs konden niet geverifieerd worden.
 
 De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking, kennisartikelen en e-commerce. De belangrijkste merkwaarden zijn helder, persoonlijk, eerlijk, energiek, deskundig en verifieerbaar.
 
 ## Testfase-scope
 - Dit is een validatie-MVP: er is GEEN checkout, winkelmand of betaalverwerking. Bouw dit niet, tenzij expliciet gevraagd.
 - Vervang elke verwijzing naar "afrekenen" of "bestellen" door het interesseformulier uit docs/test-mvp-scope.md.
-- Analytics-events (quiz_start, quiz_complete, interest_submit) zijn in deze fase net zo belangrijk als de functionaliteit zelf. Voeg ze toe bij elke relevante wijziging.
-- Prijzen en voorraad zijn in deze fase richtprijzen, geen live data. Markeer dit zichtbaar op de pagina.
+- Analytics-events (quiz_start, quiz_complete, interest_submit, bolcom_click) zijn in deze fase net zo belangrijk als de functionaliteit zelf. Voeg ze toe bij elke relevante wijziging.
+- Getoonde prijzen zijn de officiële adviesprijzen van de fabrikant (met bron en datum), geen live bol.com-prijzen. Markeer dit zichtbaar op de pagina.
 
 ## Commerce
-- De MVP verwijst door naar een externe partnerwinkel; er is geen eigen checkout, voorraad of betaalverwerking.
-- Iedere productpagina en ieder stickadvies bevat een duidelijke, niet-misleidende vermelding dat de partnerwinkel de verkoper is.
-- Trackinglinks en kortingscodes zijn de enige bron van waarheid voor attributie; hardcode geen commissieaannames in de UI.
+- jouwhockeystick.nl verwijst door naar bol.com; er is geen eigen checkout, voorraad of betaalverwerking.
+- Er is nog geen bol.com Partnerprogramma-account; links zijn generieke bol.com-zoeklinks (`src/lib/bolcom.ts`), geen echte affiliate-tracking. Voeg geen fictieve tracking-parameters toe.
+- Iedere productpagina en ieder stickadvies bevat een duidelijke, niet-misleidende vermelding dat bol.com de verkoper is.
+- Geen kortingsclaims (bijv. "X% korting") zonder een echte, verifieerbare eerdere verkoopprijs — dit is wettelijk gereguleerd (EU Omnibus-richtlijn). Toon alleen de adviesprijs.
+- Trackinglinks zijn de enige bron van waarheid voor attributie; hardcode geen commissieaannames in de UI.
 
 ## Kernregels
 - Gebruik TypeScript in strict mode. Vermijd `any`; gebruik expliciete types, discriminated unions en Zod-validatie waar passend.

@@ -56,11 +56,6 @@ export function buildProduct(overrides: Partial<Product> = {}): Product {
       source: 'editorial-estimate',
       lastVerifiedAt: '2026-06-01',
     },
-    partnerShop: {
-      name: 'Test Winkel',
-      url: 'https://example.test/product',
-      isSeller: true,
-    },
     ...overrides,
   };
 }

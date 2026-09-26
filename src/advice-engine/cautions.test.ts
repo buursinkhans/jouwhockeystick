@@ -47,4 +47,12 @@ describe('getCautions', () => {
     const profile = buildProfile({ age: null, currentStickExperience: 'ruime-ervaring' });
     expect(getCautions(product, profile)).not.toContain('HIGH_CARBON_FOR_YOUNG_PLAYER');
   });
+
+  it('never crashes and never raises a carbon-related caution when carbon is unknown', () => {
+    const product = buildProduct({ carbonPercentage: undefined });
+    const profile = buildProfile({ currentStickExperience: 'nog-geen-stick', buyerType: 'kind', age: 8 });
+    const cautions = getCautions(product, profile);
+    expect(cautions).not.toContain('HIGH_CARBON_FOR_BEGINNER');
+    expect(cautions).not.toContain('HIGH_CARBON_FOR_YOUNG_PLAYER');
+  });
 });

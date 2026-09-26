@@ -27,12 +27,13 @@ export function StickIllustration({
   className = '',
 }: {
   brand: Brand;
-  bowProfile: BowProfile;
+  /** Purely decorative fallback (mid-bow curve) when the bow profile isn't known. */
+  bowProfile?: BowProfile;
   alt: string;
   className?: string;
 }) {
   const color = BRAND_COLORS[brand];
-  const curve = BOW_CURVE[bowProfile];
+  const curve = BOW_CURVE[bowProfile ?? 'mid-bow'];
 
   return (
     <svg

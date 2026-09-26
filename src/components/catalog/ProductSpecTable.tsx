@@ -1,4 +1,4 @@
-import type { Product } from '@/catalog/types';
+import type { BowProfile, Product } from '@/catalog/types';
 import { SourceBadge, type SourceMeta } from '@/components/ui/SourceBadge';
 
 const EXPERIENCE_LABELS: Record<Product['experienceLevel']['value'], string> = {
@@ -7,7 +7,7 @@ const EXPERIENCE_LABELS: Record<Product['experienceLevel']['value'], string> = {
   ervaren: 'Ervaren',
 };
 
-const BOW_LABELS: Record<Product['bowProfile']['value'], string> = {
+const BOW_LABELS: Record<BowProfile, string> = {
   'low-bow': 'Low bow',
   'mid-bow': 'Mid bow',
   'late-bow': 'Late bow',
@@ -38,16 +38,33 @@ export function ProductSpecTable({ product }: { product: Product }) {
       value: product.recommendedPositions.value.map((p) => POSITION_LABELS[p] ?? p).join(', '),
       sourced: product.recommendedPositions,
     },
-    {
+  ];
+
+  if (product.bowProfile) {
+    rows.push({
       label: 'Bow-profiel',
       value: BOW_LABELS[product.bowProfile.value],
       sourced: product.bowProfile,
-    },
-    {
+    });
+  }
+
+  if (product.carbonPercentage) {
+    rows.push({
       label: 'Carbonpercentage',
       value: `${product.carbonPercentage.value}%`,
       sourced: product.carbonPercentage,
-    },
+    });
+  }
+
+  if (product.weightGrams) {
+    rows.push({
+      label: 'Gewicht',
+      value: `${product.weightGrams.value} gram`,
+      sourced: product.weightGrams,
+    });
+  }
+
+  rows.push(
     {
       label: 'Beschikbare lengtes',
       value: product.lengthsInches.value.map((l) => `${l}"`).join(', '),
@@ -58,7 +75,7 @@ export function ProductSpecTable({ product }: { product: Product }) {
       value: STOCK_LABELS[product.stock.value],
       sourced: product.stock,
     },
-  ];
+  );
 
   return (
     <table className="w-full border-collapse text-left">

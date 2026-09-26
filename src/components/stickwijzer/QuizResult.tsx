@@ -3,6 +3,7 @@ import type { AdviceResult } from '@/advice-engine/types';
 import { Card } from '@/components/ui/Card';
 import { ButtonLink } from '@/components/ui/Button';
 import { ProductNotice } from '@/components/ui/ProductNotice';
+import { BolComLink } from '@/components/ui/BolComLink';
 import { StickIllustration } from '@/components/catalog/StickIllustration';
 import { ReasonList } from './ReasonList';
 import { CautionList } from './CautionList';
@@ -26,7 +27,7 @@ export function QuizResult({ advice }: { advice: AdviceResult }) {
             <ReasonList reasonCodes={alt.reasonCodes} />
             <CautionList cautions={alt.cautions} />
             <div className="mt-3">
-              <ProductNotice product={alt.product} />
+              <ProductNotice />
             </div>
           </Card>
         ))}
@@ -49,7 +50,7 @@ export function QuizResult({ advice }: { advice: AdviceResult }) {
         <div className="flex items-start gap-4">
           <StickIllustration
             brand={recommended.product.brand}
-            bowProfile={recommended.product.bowProfile.value}
+            bowProfile={recommended.product.bowProfile?.value}
             alt={recommended.product.imageAlt}
             className="h-16 w-16 shrink-0"
           />
@@ -66,14 +67,14 @@ export function QuizResult({ advice }: { advice: AdviceResult }) {
         <ReasonList reasonCodes={recommended.reasonCodes} />
         <CautionList cautions={recommended.cautions} />
         <div className="mt-4">
-          <ProductNotice product={recommended.product} />
+          <ProductNotice />
         </div>
-        <div className="mt-4 flex gap-3">
+        <div className="mt-4 flex flex-wrap gap-3">
+          <BolComLink brand={recommended.product.brand} productName={recommended.product.name} variant="primary">
+            Bekijk op bol.com
+          </BolComLink>
           <ButtonLink href={`/sticks/${recommended.product.slug}`} variant="secondary">
             Bekijk details
-          </ButtonLink>
-          <ButtonLink href={`/interesse?product=${recommended.product.slug}&source=stickwijzer-resultaat`}>
-            Ik heb interesse
           </ButtonLink>
         </div>
       </Card>

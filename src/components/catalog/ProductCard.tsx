@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Product } from '@/catalog/types';
 import { Card } from '@/components/ui/Card';
 import { ProductNotice } from '@/components/ui/ProductNotice';
+import { BolComLink } from '@/components/ui/BolComLink';
 import { StickIllustration } from './StickIllustration';
 import { ProductProsAndCons } from './ProductProsAndCons';
 
@@ -10,7 +11,7 @@ export function ProductCard({ product }: { product: Product }) {
     <Card>
       <StickIllustration
         brand={product.brand}
-        bowProfile={product.bowProfile.value}
+        bowProfile={product.bowProfile?.value}
         alt={product.imageAlt}
         className="h-24 w-24"
       />
@@ -27,10 +28,19 @@ export function ProductCard({ product }: { product: Product }) {
         €{product.priceIndicativeEur.value.toFixed(2)}
       </p>
       <div className="mt-1">
-        <ProductNotice product={product} />
+        <ProductNotice />
       </div>
       <div className="mt-4">
         <ProductProsAndCons product={product} limit={2} />
+      </div>
+      <div className="mt-4">
+        <BolComLink
+          brand={product.brand}
+          productName={product.name}
+          className="text-sm font-semibold text-emerald-800 hover:underline"
+        >
+          Bekijk op bol.com
+        </BolComLink>
       </div>
     </Card>
   );

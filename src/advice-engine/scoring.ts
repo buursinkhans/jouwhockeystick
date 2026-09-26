@@ -18,7 +18,11 @@ const POINTS = {
 } as const;
 
 function scoreComfort(product: Product, profile: QuizProfile): number {
-  const carbon = product.carbonPercentage.value;
+  const carbon = product.carbonPercentage?.value;
+  // Carbon unknown: never claim a comfort match we can't actually verify.
+  if (carbon === undefined) {
+    return 0;
+  }
   if (profile.comfortPreference === 'geen-voorkeur') {
     return POINTS.comfortMatch / 2;
   }
@@ -53,7 +57,7 @@ export function scoreProduct(product: Product, profile: QuizProfile): ScoredProd
     reasonCodes.push('EXPERIENCE_MATCH');
   }
 
-  if (profile.preferredBowProfile && product.bowProfile.value === profile.preferredBowProfile) {
+  if (profile.preferredBowProfile && product.bowProfile?.value === profile.preferredBowProfile) {
     score += POINTS.playstyleMatch;
     reasonCodes.push('PLAYSTYLE_MATCH');
   }

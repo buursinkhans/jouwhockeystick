@@ -49,8 +49,8 @@ export default function OverOnsPage() {
       <h2 className="mt-10 text-2xl font-bold">Hoe we werken</h2>
       <p className="mt-3 leading-relaxed text-zinc-700">
         De stickwijzer op deze site geeft je een persoonlijk advies met zichtbare redenen. De
-        daadwerkelijke aankoop verloopt via onze partnerwinkel — wij verkopen zelf niet, maar
-        zorgen dat je met een duidelijk advies bij de juiste stick uitkomt.
+        daadwerkelijke aankoop verloopt via bol.com — wij verkopen zelf niet, maar zorgen dat je
+        met een duidelijk advies bij de juiste stick uitkomt.
       </p>
 
       <h2 className="mt-10 text-2xl font-bold">Contact</h2>

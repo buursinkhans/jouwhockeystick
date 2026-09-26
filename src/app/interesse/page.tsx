@@ -23,7 +23,7 @@ export default async function InteressePage({
       <h1 className="text-3xl font-bold">Interesse doorgeven</h1>
       <p className="mt-2 text-zinc-600">
         {product ? `Je geeft interesse door voor de ${product.name}. ` : ''}
-        We nemen contact met je op om je verder te helpen, via onze partnerwinkel.
+        We nemen contact met je op om je verder te helpen.
       </p>
       <div className="mt-8">
         <InterestForm initialProductSlug={product?.slug} source={source} />

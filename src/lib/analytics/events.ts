@@ -6,4 +6,5 @@ export type AnalyticsEvent =
       hasRecommendation: boolean;
       isUncertain: boolean;
     }
-  | { name: 'interest_submit'; source: string; hasProductSlug: boolean };
+  | { name: 'interest_submit'; source: string; hasProductSlug: boolean }
+  | { name: 'bolcom_click'; brand: string; productName: string };

@@ -6,6 +6,7 @@ import { ProductProsAndCons } from '@/components/catalog/ProductProsAndCons';
 import { StickIllustration } from '@/components/catalog/StickIllustration';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { ButtonLink } from '@/components/ui/Button';
+import { BolComLink } from '@/components/ui/BolComLink';
 
 export function generateStaticParams() {
   return getAllProducts().map((product) => ({ slug: product.slug }));
@@ -36,8 +37,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   }
 
   // Structured data describes only visibly verifiable information on this
-  // page, and deliberately omits `offers`/price since there is no live
-  // partner-shop feed yet (source-policy.md §6).
+  // page, and deliberately omits `offers`/price since the actual purchase
+  // and any live pricing happens on bol.com, not on this page.
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -52,7 +53,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="flex items-start gap-6">
         <StickIllustration
           brand={product.brand}
-          bowProfile={product.bowProfile.value}
+          bowProfile={product.bowProfile?.value}
           alt={product.imageAlt}
           className="h-28 w-28 shrink-0"
         />
@@ -67,12 +68,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
       <p className="mt-6 text-2xl font-bold">€{product.priceIndicativeEur.value.toFixed(2)}</p>
       <div className="mt-1">
-        <ProductNotice product={product} />
+        <ProductNotice />
       </div>
 
-      <div className="mt-6">
-        <ButtonLink href={`/interesse?product=${product.slug}&source=productpagina`}>
-          Ik heb interesse in deze stick
+      <div className="mt-6 flex flex-wrap gap-3">
+        <BolComLink brand={product.brand} productName={product.name} variant="primary">
+          Bekijk op bol.com
+        </BolComLink>
+        <ButtonLink href={`/interesse?product=${product.slug}&source=productpagina`} variant="secondary">
+          Stel een vraag
         </ButtonLink>
       </div>
 

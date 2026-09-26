@@ -20,7 +20,6 @@ function buildProduct(lastVerifiedAt: string): Product {
     summary: 'Test',
     strengths: { value: ['Sterk punt'], source: 'editorial-estimate', lastVerifiedAt },
     pointsOfAttention: { value: ['Aandachtspunt'], source: 'editorial-estimate', lastVerifiedAt },
-    partnerShop: { name: 'Test Winkel', url: 'https://example.test', isSeller: true },
   };
 }
 
@@ -48,7 +47,7 @@ describe('catalog composition', () => {
     }
   });
 
-  it('includes all five expected brands', () => {
-    expect(getAllBrands()).toEqual(['Brabo', 'Grays', 'JDH', 'Princess', 'adidas']);
+  it('includes the four currently verified brands', () => {
+    expect(getAllBrands()).toEqual(['Brabo', 'Grays', 'JDH', 'Princess']);
   });
 });

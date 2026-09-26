@@ -67,8 +67,12 @@ export const productSchema = z.object({
   imageAlt: z.string(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),
-  bowProfile: sourcedValueSchema(bowProfileSchema),
-  carbonPercentage: sourcedValueSchema(z.number().min(0).max(100)),
+  /** Optional — not every brand states a bow profile for every model; never guessed. */
+  bowProfile: sourcedValueSchema(bowProfileSchema).optional(),
+  /** Optional — not every brand publishes a carbon percentage; never guessed. */
+  carbonPercentage: sourcedValueSchema(z.number().min(0).max(100)).optional(),
+  /** Optional — not every brand publishes a weight. */
+  weightGrams: sourcedValueSchema(z.number().positive()).optional(),
   lengthsInches: sourcedValueSchema(z.array(z.number())),
   priceIndicativeEur: sourcedValueSchema(z.number().positive()),
   stock: sourcedValueSchema(stockStatusSchema),
@@ -76,10 +80,5 @@ export const productSchema = z.object({
   /** Editorial pros/cons — always marked as our own assessment, never a hard spec (source-policy.md §2). */
   strengths: sourcedValueSchema(z.array(z.string()).min(1)),
   pointsOfAttention: sourcedValueSchema(z.array(z.string()).min(1)),
-  partnerShop: z.object({
-    name: z.string(),
-    url: z.string(),
-    isSeller: z.literal(true),
-  }),
 });
 export type Product = z.infer<typeof productSchema>;
