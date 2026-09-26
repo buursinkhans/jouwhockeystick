@@ -5,6 +5,7 @@ import {
   type BowProfile,
   type Product,
 } from '@/catalog/types';
+import type { NoMatchReason } from './hardFilters';
 
 export const buyerTypeSchema = z.enum(['zelf', 'kind']);
 export type BuyerType = z.infer<typeof buyerTypeSchema>;
@@ -78,4 +79,6 @@ export type AdviceResult = {
   alternatives: ScoredProduct[];
   isUncertain: boolean;
   excludedCount: number;
+  /** The single hard-filter stage that excluded every product, when `recommended` is null. */
+  noMatchReason: NoMatchReason | null;
 };

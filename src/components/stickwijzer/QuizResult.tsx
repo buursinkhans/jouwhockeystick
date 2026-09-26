@@ -1,35 +1,36 @@
-import Link from 'next/link';
 import type { AdviceResult } from '@/advice-engine/types';
-import { Card } from '@/components/ui/Card';
-import { ButtonLink } from '@/components/ui/Button';
-import { ProductNotice } from '@/components/ui/ProductNotice';
-import { BolComLink } from '@/components/ui/BolComLink';
-import { StickIllustration } from '@/components/catalog/StickIllustration';
-import { ReasonList } from './ReasonList';
-import { CautionList } from './CautionList';
+import type { NoMatchReason } from '@/advice-engine/hardFilters';
+import { RecommendationCard } from './RecommendationCard';
+
+const NO_MATCH_MESSAGES: Record<NoMatchReason, string> = {
+  length:
+    'We hebben op dit moment geen stick in onze catalogus in een lengte die past bij je lichaamslengte.',
+  budget:
+    'We hebben op dit moment geen stick in onze catalogus die binnen je opgegeven budget past.',
+  availability:
+    'De sticks die verder bij je passen, zijn op dit moment gemarkeerd als niet beschikbaar.',
+  verification:
+    'We hebben op dit moment geen recent geverifieerde producten in onze catalogus.',
+};
 
 export function QuizResult({ advice }: { advice: AdviceResult }) {
   if (!advice.recommended) {
+    const message = advice.noMatchReason
+      ? NO_MATCH_MESSAGES[advice.noMatchReason]
+      : 'We konden op basis van je antwoorden geen eenduidig advies geven.';
+
     return (
       <div className="space-y-4">
         <p className="rounded-lg bg-amber-50 px-4 py-3 text-amber-900">
-          We konden op basis van je antwoorden geen eenduidig advies geven — je signalen (zoals
-          lengte en budget) spraken elkaar mogelijk tegen. Hieronder vind je een paar
-          alternatieven om te overwegen.
+          {message} Hieronder vind je een paar alternatieven om te overwegen.
         </p>
         {advice.alternatives.map((alt) => (
-          <Card key={alt.product.slug}>
-            <h3 className="text-lg font-semibold">
-              <Link href={`/sticks/${alt.product.slug}`} className="hover:underline">
-                {alt.product.name}
-              </Link>
-            </h3>
-            <ReasonList reasonCodes={alt.reasonCodes} />
-            <CautionList cautions={alt.cautions} />
-            <div className="mt-3">
-              <ProductNotice />
-            </div>
-          </Card>
+          <RecommendationCard
+            key={alt.product.slug}
+            product={alt.product}
+            reasonCodes={alt.reasonCodes}
+            cautions={alt.cautions}
+          />
         ))}
       </div>
     );
@@ -46,53 +47,24 @@ export function QuizResult({ advice }: { advice: AdviceResult }) {
         </p>
       )}
 
-      <Card>
-        <div className="flex items-start gap-4">
-          <StickIllustration
-            brand={recommended.product.brand}
-            bowProfile={recommended.product.bowProfile?.value}
-            alt={recommended.product.imageAlt}
-            className="h-16 w-16 shrink-0"
-          />
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Advies</p>
-            <h2 className="mt-1 text-xl font-bold">
-              <Link href={`/sticks/${recommended.product.slug}`} className="hover:underline">
-                {recommended.product.name}
-              </Link>
-            </h2>
-            <p className="mt-2 text-sm text-zinc-600">{recommended.product.summary}</p>
-          </div>
-        </div>
-        <ReasonList reasonCodes={recommended.reasonCodes} />
-        <CautionList cautions={recommended.cautions} />
-        <div className="mt-4">
-          <ProductNotice />
-        </div>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <BolComLink brand={recommended.product.brand} productName={recommended.product.name} variant="primary">
-            Bekijk op bol.com
-          </BolComLink>
-          <ButtonLink href={`/sticks/${recommended.product.slug}`} variant="secondary">
-            Bekijk details
-          </ButtonLink>
-        </div>
-      </Card>
+      <RecommendationCard
+        product={recommended.product}
+        reasonCodes={recommended.reasonCodes}
+        cautions={recommended.cautions}
+        label="Advies"
+      />
 
       {advice.alternatives.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold">Alternatief</h3>
           <div className="mt-3 space-y-4">
             {advice.alternatives.map((alt) => (
-              <Card key={alt.product.slug}>
-                <h4 className="font-semibold">
-                  <Link href={`/sticks/${alt.product.slug}`} className="hover:underline">
-                    {alt.product.name}
-                  </Link>
-                </h4>
-                <ReasonList reasonCodes={alt.reasonCodes} />
-                <CautionList cautions={alt.cautions} />
-              </Card>
+              <RecommendationCard
+                key={alt.product.slug}
+                product={alt.product}
+                reasonCodes={alt.reasonCodes}
+                cautions={alt.cautions}
+              />
             ))}
           </div>
         </div>

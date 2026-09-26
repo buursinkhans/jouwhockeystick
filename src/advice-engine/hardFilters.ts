@@ -21,18 +21,37 @@ export function filterByVerification(products: Product[], now: Date = new Date()
   return products.filter((product) => isProductActive(product, now));
 }
 
+/** The first filter stage that narrowed the candidates down to zero, if any. */
+export type NoMatchReason = 'verification' | 'length' | 'availability' | 'budget';
+
 export function applyHardFilters(
   products: Product[],
   profile: QuizProfile,
   now: Date = new Date(),
-): { passed: Product[]; excludedCount: number } {
+): { passed: Product[]; excludedCount: number; noMatchReason: NoMatchReason | null } {
   const verified = filterByVerification(products, now);
+  if (verified.length === 0) {
+    return { passed: [], excludedCount: products.length, noMatchReason: 'verification' };
+  }
+
   const rightLength = filterByLength(verified, profile);
+  if (rightLength.length === 0) {
+    return { passed: [], excludedCount: products.length, noMatchReason: 'length' };
+  }
+
   const available = filterByAvailability(rightLength);
+  if (available.length === 0) {
+    return { passed: [], excludedCount: products.length, noMatchReason: 'availability' };
+  }
+
   const withinBudget = filterByAbsoluteBudget(available, profile);
+  if (withinBudget.length === 0) {
+    return { passed: [], excludedCount: products.length, noMatchReason: 'budget' };
+  }
 
   return {
     passed: withinBudget,
     excludedCount: products.length - withinBudget.length,
+    noMatchReason: null,
   };
 }

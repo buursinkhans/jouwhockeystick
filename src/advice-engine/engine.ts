@@ -30,7 +30,7 @@ export function getAdvice(
   products: Product[],
   now: Date = new Date(),
 ): AdviceResult {
-  const { passed, excludedCount } = applyHardFilters(products, profile, now);
+  const { passed, excludedCount, noMatchReason } = applyHardFilters(products, profile, now);
 
   const base: Pick<AdviceResult, 'ruleSetVersion' | 'generatedAt' | 'profile' | 'excludedCount'> = {
     ruleSetVersion: RULE_SET_VERSION,
@@ -46,6 +46,7 @@ export function getAdvice(
       recommended: null,
       alternatives: fallback,
       isUncertain: true,
+      noMatchReason,
     };
   }
 
@@ -53,7 +54,7 @@ export function getAdvice(
   const [top, second] = ranked;
 
   if (!top) {
-    return { ...base, recommended: null, alternatives: [], isUncertain: true };
+    return { ...base, recommended: null, alternatives: [], isUncertain: true, noMatchReason };
   }
 
   const scoreGap = second ? top.score - second.score : Number.POSITIVE_INFINITY;
@@ -64,5 +65,6 @@ export function getAdvice(
     recommended: top,
     alternatives: ranked.slice(1, 1 + MAX_ALTERNATIVES),
     isUncertain,
+    noMatchReason: null,
   };
 }

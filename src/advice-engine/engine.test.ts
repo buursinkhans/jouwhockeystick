@@ -25,6 +25,7 @@ describe('getAdvice', () => {
     expect(result.recommended?.product.slug).toBe('strong-match');
     expect(result.recommended?.reasonCodes.length).toBeGreaterThanOrEqual(2);
     expect(result.isUncertain).toBe(false);
+    expect(result.noMatchReason).toBeNull();
   });
 
   it('marks the result uncertain and still offers an alternative on conflicting/close signals', () => {
@@ -50,6 +51,9 @@ describe('getAdvice', () => {
     expect(result.isUncertain).toBe(true);
     expect(result.alternatives.length).toBe(1);
     expect(result.excludedCount).toBe(1);
+    // Length was fine (default fixture length matches default profile range) —
+    // budget is the actual, single reason nothing passed, not "length and budget".
+    expect(result.noMatchReason).toBe('budget');
   });
 
   it('never returns an out-of-stock or expired product, even as a fallback alternative', () => {
@@ -68,5 +72,6 @@ describe('getAdvice', () => {
     const result = getAdvice(profile, [expired, outOfStock], NOW);
 
     expect(result.alternatives).toEqual([]);
+    expect(result.noMatchReason).toBe('availability');
   });
 });

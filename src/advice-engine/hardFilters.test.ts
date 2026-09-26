@@ -57,12 +57,48 @@ describe('applyHardFilters', () => {
   it('reports excludedCount for products that fail any filter', () => {
     const passing = buildProduct({ slug: 'passes' });
     const overBudget = buildProduct({ slug: 'too-expensive', priceIndicativeEur: { value: 999, source: 'editorial-estimate', lastVerifiedAt: '2026-06-01' } });
-    const { passed, excludedCount } = applyHardFilters(
+    const { passed, excludedCount, noMatchReason } = applyHardFilters(
       [passing, overBudget],
       buildProfile({ budgetMaxEur: 150 }),
       NOW,
     );
     expect(passed).toEqual([passing]);
     expect(excludedCount).toBe(1);
+    expect(noMatchReason).toBeNull();
+  });
+
+  it('reports "length" when the length filter alone empties the candidate set', () => {
+    const product = buildProduct({ lengthsInches: { value: [36.5], source: 'editorial-estimate', lastVerifiedAt: '2026-06-01' } });
+    const result = applyHardFilters([product], buildProfile({ lengthRangeInches: [28, 30], budgetMaxEur: 1 }), NOW);
+    expect(result.passed).toEqual([]);
+    expect(result.noMatchReason).toBe('length');
+  });
+
+  it('reports "budget" only when length is fine but price is the actual blocker', () => {
+    const product = buildProduct({
+      lengthsInches: { value: [36.5], source: 'editorial-estimate', lastVerifiedAt: '2026-06-01' },
+      priceIndicativeEur: { value: 500, source: 'editorial-estimate', lastVerifiedAt: '2026-06-01' },
+    });
+    const result = applyHardFilters(
+      [product],
+      buildProfile({ lengthRangeInches: [35, 37.5], budgetMaxEur: 50 }),
+      NOW,
+    );
+    expect(result.passed).toEqual([]);
+    expect(result.noMatchReason).toBe('budget');
+  });
+
+  it('reports "availability" when length and budget are fine but nothing is in stock', () => {
+    const product = buildProduct({
+      lengthsInches: { value: [36.5], source: 'editorial-estimate', lastVerifiedAt: '2026-06-01' },
+      stock: { value: 'unavailable', source: 'editorial-estimate', lastVerifiedAt: '2026-06-01' },
+    });
+    const result = applyHardFilters(
+      [product],
+      buildProfile({ lengthRangeInches: [35, 37.5], budgetMaxEur: 500 }),
+      NOW,
+    );
+    expect(result.passed).toEqual([]);
+    expect(result.noMatchReason).toBe('availability');
   });
 });
