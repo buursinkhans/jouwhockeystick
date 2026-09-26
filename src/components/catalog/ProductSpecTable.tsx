@@ -1,30 +1,6 @@
-import type { BowProfile, Product } from '@/catalog/types';
+import type { Product } from '@/catalog/types';
+import { BOW_LABELS, EXPERIENCE_LABELS, POSITION_LABELS, STOCK_LABELS } from '@/catalog/labels';
 import { SourceBadge, type SourceMeta } from '@/components/ui/SourceBadge';
-
-const EXPERIENCE_LABELS: Record<Product['experienceLevel']['value'], string> = {
-  beginner: 'Beginner',
-  gevorderd: 'Gevorderd',
-  ervaren: 'Ervaren',
-};
-
-const BOW_LABELS: Record<BowProfile, string> = {
-  'low-bow': 'Low bow',
-  'mid-bow': 'Mid bow',
-  'late-bow': 'Late bow',
-};
-
-const STOCK_LABELS: Record<Product['stock']['value'], string> = {
-  available: 'Beschikbaar',
-  limited: 'Beperkt beschikbaar',
-  unavailable: 'Niet beschikbaar',
-};
-
-const POSITION_LABELS: Record<string, string> = {
-  keeper: 'Keeper',
-  verdediger: 'Verdediger',
-  middenvelder: 'Middenvelder',
-  aanvaller: 'Aanvaller',
-};
 
 export function ProductSpecTable({ product }: { product: Product }) {
   const rows: Array<{ label: string; value: string; sourced: SourceMeta }> = [

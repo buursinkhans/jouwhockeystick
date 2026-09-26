@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/Card';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { BolComLink } from '@/components/ui/BolComLink';
 import { StickIllustration } from '@/components/catalog/StickIllustration';
+import { ProductSpecTable } from '@/components/catalog/ProductSpecTable';
 import { ReasonList } from './ReasonList';
 import { CautionList } from './CautionList';
 
@@ -52,8 +53,18 @@ export function RecommendationCard({
         </div>
       </div>
 
+      <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+        Waarom dit past
+      </p>
       <ReasonList reasonCodes={reasonCodes} />
       <CautionList cautions={cautions} />
+
+      <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+        Specificaties
+      </p>
+      <div className="mt-2">
+        <ProductSpecTable product={product} />
+      </div>
 
       <p className="mt-4 text-lg font-bold">€{product.priceIndicativeEur.value.toFixed(2)}</p>
       <ProductNotice />

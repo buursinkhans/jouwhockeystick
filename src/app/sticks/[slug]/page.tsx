@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllProducts, getProductBySlug } from '@/catalog';
 import { ProductSpecTable } from '@/components/catalog/ProductSpecTable';
@@ -89,6 +90,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="mt-4">
         <ProductSpecTable product={product} />
       </div>
+
+      <p className="mt-6 text-sm">
+        <Link href={`/vergelijk?a=${product.slug}`} className="font-semibold text-emerald-800 hover:underline">
+          Vergelijk deze stick met een andere
+        </Link>
+      </p>
     </div>
   );
 }
