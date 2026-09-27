@@ -6,6 +6,9 @@ export const braboEliteXOneLb: Product = {
   name: 'Brabo Elite X One LB',
   dataStatus: 'verified',
   imageAlt: 'Brabo Elite X One LB hockeystick',
+  imageUrl:
+    'https://brabohockey.com/cdn/shop/files/315.60102.000_1_8d62979e-7b1d-4c77-b3b6-e6e299d942f6.jpg?v=1780553825',
+  imageSourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',

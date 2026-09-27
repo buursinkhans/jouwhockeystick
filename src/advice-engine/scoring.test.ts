@@ -67,4 +67,21 @@ describe('scoreProduct', () => {
     const result = scoreProduct(product, profile);
     expect(result.reasonCodes).not.toContain('COMFORT_MATCH');
   });
+
+  it('does not penalize a product with an undisclosed carbon percentage below a product with a confirmed non-matching one', () => {
+    // A brand that simply doesn't publish carbon% (e.g. Grays) should not
+    // score worse on comfort than a competitor whose published carbon%
+    // actively contradicts the user's stated preference.
+    const undisclosedCarbon = buildProduct({ slug: 'undisclosed', carbonPercentage: undefined });
+    const confirmedMismatch = buildProduct({
+      slug: 'confirmed-mismatch',
+      carbonPercentage: { value: 90, source: 'brand-website', lastVerifiedAt: '2026-06-01' },
+    });
+    const profile = buildProfile({ comfortPreference: 'licht-wendbaar' });
+
+    const undisclosedScore = scoreProduct(undisclosedCarbon, profile).score;
+    const mismatchScore = scoreProduct(confirmedMismatch, profile).score;
+
+    expect(undisclosedScore).toBeGreaterThanOrEqual(mismatchScore);
+  });
 });

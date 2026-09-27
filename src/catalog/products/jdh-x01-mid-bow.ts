@@ -6,6 +6,8 @@ export const jdhX01MidBow: Product = {
   name: 'JDH X01 Mid Bow',
   dataStatus: 'verified',
   imageAlt: 'JDH X01 Mid Bow hockeystick',
+  imageUrl: 'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6895ada67abf55238ef7a019_X1MBGN_bla_6%20.jpg',
+  imageSourceUrl: 'https://jdhsports.eu/product/x01-mid-bow',
   experienceLevel: {
     value: 'beginner',
     source: 'brand-website',

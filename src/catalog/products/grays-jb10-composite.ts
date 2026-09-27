@@ -6,6 +6,9 @@ export const graysJb10Composite: Product = {
   name: 'Grays JB 10 Composite Hockey Stick',
   dataStatus: 'verified',
   imageAlt: 'Grays JB 10 Composite hockeystick',
+  imageUrl: 'https://www.grays-hockey.eu/cdn/shop/files/2705263JB10BlueBackMain.jpg?v=1779972697',
+  imageSourceUrl:
+    'https://www.grays-hockey.eu/collections/jb-jumbow-composite-hockey-sticks/products/jb10-composite-hockey-stick-1',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',

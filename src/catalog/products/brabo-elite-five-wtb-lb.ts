@@ -6,6 +6,9 @@ export const braboEliteFiveWtbLb: Product = {
   name: 'Brabo Elite Five WTB LB',
   dataStatus: 'verified',
   imageAlt: 'Brabo Elite Five WTB LB hockeystick',
+  imageUrl:
+    'https://brabohockey.com/cdn/shop/files/315.60182.000_1_916b2c9b-cad3-4c6b-8b40-2a2b1a239561.jpg?v=1780553961',
+  imageSourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',

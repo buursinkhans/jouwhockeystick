@@ -6,6 +6,8 @@ export const jdhX93ProBow: Product = {
   name: 'JDH X93 Pro Bow',
   dataStatus: 'verified',
   imageAlt: 'JDH X93 Pro Bow hockeystick',
+  imageUrl: 'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6893309f82d13c2b54d349f4_X93PBGN_teal_6%20.jpg',
+  imageSourceUrl: 'https://jdhsports.eu/product/x93-pro-bow',
   experienceLevel: {
     value: 'ervaren',
     source: 'editorial-estimate',

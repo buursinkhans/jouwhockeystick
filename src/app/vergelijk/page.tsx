@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllProducts, getProductBySlug } from '@/catalog';
 import { buildCompareRows } from '@/catalog/compare';
-import { StickIllustration } from '@/components/catalog/StickIllustration';
+import { ProductImage } from '@/components/catalog/ProductImage';
 import { BolComLink } from '@/components/ui/BolComLink';
 
 export const metadata: Metadata = {
@@ -83,12 +83,7 @@ export default async function VergelijkPage({
           <div className="grid grid-cols-2 gap-4">
             {[productA, productB].map((product) => (
               <div key={product.slug} className="text-center">
-                <StickIllustration
-                  brand={product.brand}
-                  bowProfile={product.bowProfile?.value}
-                  alt={product.imageAlt}
-                  className="mx-auto h-20 w-20"
-                />
+                <ProductImage product={product} className="mx-auto h-20 w-20" />
                 <p className="mt-2 font-semibold">
                   <Link href={`/sticks/${product.slug}`} className="hover:underline">
                     {product.name}
@@ -101,7 +96,7 @@ export default async function VergelijkPage({
                     variant="secondary"
                     className="text-sm"
                   >
-                    Bekijk op bol.com
+                    Bekijk en koop op bol.com
                   </BolComLink>
                 </div>
               </div>

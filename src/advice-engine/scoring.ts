@@ -17,22 +17,29 @@ const POINTS = {
   stockAvailable: 5,
 } as const;
 
-function scoreComfort(product: Product, profile: QuizProfile): number {
+/**
+ * `verified: true` means we have actual evidence for the comfort match, so
+ * it's safe to show the COMFORT_MATCH reason to the user. An unknown carbon
+ * percentage (some brands, e.g. Grays, don't publish one) gets the same
+ * neutral score as "no preference" — never treated as a confirmed mismatch
+ * — so a brand's incomplete public specs don't structurally push it down
+ * the ranking. It just never gets to claim credit it can't back up.
+ */
+function scoreComfort(product: Product, profile: QuizProfile): { score: number; verified: boolean } {
   const carbon = product.carbonPercentage?.value;
-  // Carbon unknown: never claim a comfort match we can't actually verify.
   if (carbon === undefined) {
-    return 0;
+    return { score: POINTS.comfortMatch / 2, verified: false };
   }
   if (profile.comfortPreference === 'geen-voorkeur') {
-    return POINTS.comfortMatch / 2;
+    return { score: POINTS.comfortMatch / 2, verified: true };
   }
   if (profile.comfortPreference === 'licht-wendbaar' && carbon <= 20) {
-    return POINTS.comfortMatch;
+    return { score: POINTS.comfortMatch, verified: true };
   }
   if (profile.comfortPreference === 'stevig-krachtig' && carbon >= 40) {
-    return POINTS.comfortMatch;
+    return { score: POINTS.comfortMatch, verified: true };
   }
-  return 0;
+  return { score: 0, verified: false };
 }
 
 function scoreUpgradePath(product: Product, profile: QuizProfile): number {
@@ -62,9 +69,9 @@ export function scoreProduct(product: Product, profile: QuizProfile): ScoredProd
     reasonCodes.push('PLAYSTYLE_MATCH');
   }
 
-  const comfortScore = scoreComfort(product, profile);
-  if (comfortScore > 0) {
-    score += comfortScore;
+  const comfort = scoreComfort(product, profile);
+  score += comfort.score;
+  if (comfort.verified) {
     reasonCodes.push('COMFORT_MATCH');
   }
 

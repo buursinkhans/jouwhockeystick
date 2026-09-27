@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { getAllProducts, getProductBySlug } from '@/catalog';
 import { ProductSpecTable } from '@/components/catalog/ProductSpecTable';
 import { ProductProsAndCons } from '@/components/catalog/ProductProsAndCons';
-import { StickIllustration } from '@/components/catalog/StickIllustration';
+import { ProductImage } from '@/components/catalog/ProductImage';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { ButtonLink } from '@/components/ui/Button';
 import { BolComLink } from '@/components/ui/BolComLink';
@@ -52,12 +52,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="flex items-start gap-6">
-        <StickIllustration
-          brand={product.brand}
-          bowProfile={product.bowProfile?.value}
-          alt={product.imageAlt}
-          className="h-28 w-28 shrink-0"
-        />
+        <div className="shrink-0">
+          <ProductImage product={product} className="h-40 w-40 sm:h-48 sm:w-48" />
+          {product.imageUrl && product.imageSourceUrl && (
+            <p className="mt-1 text-center text-xs text-zinc-400">
+              <a href={product.imageSourceUrl} className="hover:underline">
+                Foto: {product.brand}
+              </a>
+            </p>
+          )}
+        </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
             {product.brand}
@@ -74,7 +78,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
       <div className="mt-6 flex flex-wrap gap-3">
         <BolComLink brand={product.brand} productName={product.name} variant="primary">
-          Bekijk op bol.com
+          Bekijk en koop op bol.com
         </BolComLink>
         <ButtonLink href={`/interesse?product=${product.slug}&source=productpagina`} variant="secondary">
           Stel een vraag

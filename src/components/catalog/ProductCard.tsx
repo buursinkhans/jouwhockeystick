@@ -3,18 +3,13 @@ import type { Product } from '@/catalog/types';
 import { Card } from '@/components/ui/Card';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { BolComLink } from '@/components/ui/BolComLink';
-import { StickIllustration } from './StickIllustration';
+import { ProductImage } from './ProductImage';
 import { ProductProsAndCons } from './ProductProsAndCons';
 
 export function ProductCard({ product }: { product: Product }) {
   return (
     <Card>
-      <StickIllustration
-        brand={product.brand}
-        bowProfile={product.bowProfile?.value}
-        alt={product.imageAlt}
-        className="h-24 w-24"
-      />
+      <ProductImage product={product} className="h-24 w-24" />
       <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-emerald-700">
         {product.brand}
       </p>
@@ -39,7 +34,7 @@ export function ProductCard({ product }: { product: Product }) {
           productName={product.name}
           className="text-sm font-semibold text-emerald-800 hover:underline"
         >
-          Bekijk op bol.com
+          Bekijk en koop op bol.com
         </BolComLink>
       </div>
     </Card>

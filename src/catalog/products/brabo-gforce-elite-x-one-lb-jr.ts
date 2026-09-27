@@ -6,6 +6,9 @@ export const braboGforceEliteXOneLbJr: Product = {
   name: 'Brabo G-Force Elite X One LB JR',
   dataStatus: 'verified',
   imageAlt: 'Brabo G-Force Elite X One LB JR hockeystick',
+  imageUrl:
+    'https://brabohockey.com/cdn/shop/files/315.65002.000_1_13778423-db90-45b9-9e69-d86936485382.jpg?v=1780554380',
+  imageSourceUrl: 'https://brabohockey.com/collections/sticks-junior/products/315-65002-g-force-elite-x-one-lb-jr',
   experienceLevel: {
     value: 'gevorderd',
     source: 'editorial-estimate',

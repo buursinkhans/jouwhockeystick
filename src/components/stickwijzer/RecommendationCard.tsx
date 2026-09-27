@@ -4,7 +4,7 @@ import type { Product } from '@/catalog/types';
 import { Card } from '@/components/ui/Card';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { BolComLink } from '@/components/ui/BolComLink';
-import { StickIllustration } from '@/components/catalog/StickIllustration';
+import { ProductImage } from '@/components/catalog/ProductImage';
 import { ProductSpecTable } from '@/components/catalog/ProductSpecTable';
 import { ReasonList } from './ReasonList';
 import { CautionList } from './CautionList';
@@ -38,12 +38,7 @@ export function RecommendationCard({
       </Link>
 
       <div className="flex items-start gap-4">
-        <StickIllustration
-          brand={product.brand}
-          bowProfile={product.bowProfile?.value}
-          alt={product.imageAlt}
-          className="h-16 w-16 shrink-0"
-        />
+        <ProductImage product={product} className="h-16 w-16 shrink-0" />
         <div>
           {label && (
             <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">{label}</p>
@@ -71,7 +66,7 @@ export function RecommendationCard({
 
       <div className="relative z-20 mt-4">
         <BolComLink brand={product.brand} productName={product.name} variant="primary">
-          Bekijk op bol.com
+          Bekijk en koop op bol.com
         </BolComLink>
       </div>
     </Card>

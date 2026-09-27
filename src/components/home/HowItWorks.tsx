@@ -8,7 +8,7 @@ const STEPS = [
     body: 'Je krijgt een aanbeveling met zichtbare redenen, en indien nodig een alternatief.',
   },
   {
-    title: '3. Bekijk op bol.com',
+    title: '3. Bekijk en koop op bol.com',
     body: 'De daadwerkelijke aankoop verloopt via bol.com, niet via deze site.',
   },
 ];

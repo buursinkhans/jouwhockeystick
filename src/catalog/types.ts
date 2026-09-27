@@ -65,6 +65,9 @@ export const productSchema = z.object({
    */
   dataStatus: z.enum(['test-data', 'verified']),
   imageAlt: z.string(),
+  /** Direct URL to the product photo on the brand's own official product page — omitted falls back to an illustration. */
+  imageUrl: z.string().url().optional(),
+  imageSourceUrl: z.string().url().optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),
   /** Optional — not every brand states a bow profile for every model; never guessed. */

@@ -6,6 +6,9 @@ export const princessPremium4k10StarSg9Lb: Product = {
   name: 'Princess Premium 4K 10 Star SG9-LB',
   dataStatus: 'verified',
   imageAlt: 'Princess Premium 4K 10 Star SG9-LB hockeystick',
+  imageUrl:
+    'https://www.princess-hockey.com/cdn/shop/files/330.61002.000_1_b5ae1882-e4c2-429e-b2dc-361b8280002e.jpg?v=1779889064',
+  imageSourceUrl: 'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',

@@ -6,6 +6,10 @@ export const princessPremiumJr4k10Star: Product = {
   name: 'Princess Premium JR 4K 10 STAR SG9-LB',
   dataStatus: 'verified',
   imageAlt: 'Princess Premium JR 4K 10 STAR hockeystick',
+  imageUrl:
+    'https://www.princess-hockey.com/cdn/shop/files/330.64002.000_1_75f53b16-4de3-4bfc-adac-dbf549332d33.jpg?v=1779888519',
+  imageSourceUrl:
+    'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
   experienceLevel: {
     value: 'gevorderd',
     source: 'brand-website',
