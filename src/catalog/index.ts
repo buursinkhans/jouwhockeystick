@@ -15,6 +15,8 @@ import { princessPremiumJr4k10Star } from './products/princess-premium-jr-4k-10-
 import { graysJb12PlusComposite } from './products/grays-jb12-plus-composite';
 import { graysPb11PlusComposite } from './products/grays-pb11-plus-composite';
 import { graysDb10PlusComposite } from './products/grays-db10-plus-composite';
+import { adidasEstro4 } from './products/adidas-estro-4';
+import { adidasEstro75Le } from './products/adidas-estro-75-le';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -33,6 +35,8 @@ const ALL_PRODUCTS: Product[] = [
   graysJb12PlusComposite,
   graysPb11PlusComposite,
   graysDb10PlusComposite,
+  adidasEstro4,
+  adidasEstro75Le,
 ];
 
 const VERIFICATION_FRESHNESS_MONTHS = 12;

@@ -50,8 +50,8 @@ describe('catalog composition', () => {
     }
   });
 
-  it('includes the four currently verified brands', () => {
-    expect(getAllBrands()).toEqual(['Brabo', 'Grays', 'JDH', 'Princess']);
+  it('includes all five currently verified brands', () => {
+    expect(getAllBrands()).toEqual(['Brabo', 'Grays', 'JDH', 'Princess', 'adidas']);
   });
 });
 

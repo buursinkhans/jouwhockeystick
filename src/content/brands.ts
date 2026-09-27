@@ -97,11 +97,11 @@ export const BRAND_PROFILES: BrandProfile[] = [
     brand: 'adidas',
     logoBackground: 'light',
     characteristics:
-      'De officiële adidas-website blokkeert geautomatiseerd bezoek, dus specs komen hier van gangbare hockeywinkels: de Carbon- en Compo1-lijnen gebruiken een "Dual Rod System" (twee massieve carbonstaven in de schacht) voor extra stugheid en slagkracht.',
+      'De officiële adidas-website blokkeert geautomatiseerd bezoek. De sticks in onze catalogus zijn daarom gesourced via bol.com-listings (onze verkooppartner) in plaats van adidas zelf; de Carbon- en Compo1-lijnen gebruiken volgens gangbare hockeywinkels een "Dual Rod System" (twee massieve carbonstaven in de schacht) voor extra stugheid en slagkracht.',
     characteristicsSourceUrl: 'https://www.hockeydirect.com/collections/adidas-hockey-sticks',
     nationalTeamNote:
       'adidas is sinds 1999 officieel partner van de KNHB en levert de kleding/kit voor de Nederlandse jeugd- en A-teams (heren en dames) — dit is een kledingsponsoring, geen bevestigde koppeling met welke stick de spelers daadwerkelijk gebruiken.',
     nationalTeamSourceUrl: 'https://www.knhb.nl/over-knhb/partners/adidas',
-    hasCatalogProducts: false,
+    hasCatalogProducts: true,
   },
 ];

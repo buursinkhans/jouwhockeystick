@@ -1,7 +1,7 @@
 # CLAUDE.md — jouwhockeystick.nl
 
 ## Product
-jouwhockeystick.nl is een Nederlandse, mobiele-first website die hockeyers en ouders helpt een passende hockeystick te kiezen. De catalogus bevat producten van Grays, Brabo, JDH en Princess met specs die rechtstreeks van de officiële merksites zijn gehaald. adidas is tijdelijk niet in de catalogus opgenomen omdat adidas.nl geautomatiseerde toegang blokkeert (bot-bescherming) — specs konden niet geverifieerd worden.
+jouwhockeystick.nl is een Nederlandse, mobiele-first website die hockeyers en ouders helpt een passende hockeystick te kiezen. De catalogus bevat producten van Grays, Brabo, JDH en Princess met specs die rechtstreeks van de officiële merksites zijn gehaald. adidas.nl blokkeert geautomatiseerde toegang (bot-bescherming), dus adidas-producten zijn in plaats daarvan gesourced via bol.com-listings (`source: 'partner-shop'`) — dit staat expliciet vermeld per producteigenschap.
 
 De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking, kennisartikelen en e-commerce. De belangrijkste merkwaarden zijn helder, persoonlijk, eerlijk, energiek, deskundig en verifieerbaar.
 
