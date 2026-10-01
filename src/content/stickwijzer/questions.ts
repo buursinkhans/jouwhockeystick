@@ -1,12 +1,27 @@
-import type { AdviceAnswers, AdviceRoute, QuestionId } from '@/advice-engine/answers';
+import type {
+  AdviceAnswers,
+  AdviceRoute,
+  QuestionId,
+} from '@/advice-engine/answers';
 
-type Option = { value: string; label: string };
+type Option = {
+  value: string;
+  label: string;
+  /** When present the option is shown as a card that explains itself. */
+  details?: Array<{ term: string; text: string }>;
+};
 
 export type QuestionInput =
   | { kind: 'single'; options: Option[] }
   | { kind: 'multi'; max: number; options: Option[] }
   | { kind: 'number'; min: number; max: number; unit: string }
-  | { kind: 'scale'; min: number; max: number; minLabel: string; maxLabel: string };
+  | {
+      kind: 'scale';
+      min: number;
+      max: number;
+      minLabel: string;
+      maxLabel: string;
+    };
 
 export type QuestionDef = {
   id: QuestionId;
@@ -29,7 +44,8 @@ const CONFIDENCE_SCALE: QuestionInput = {
   maxLabel: 'heel zeker',
 };
 
-const hasCurrentStick = (answers: Partial<AdviceAnswers>) => answers.has_current_stick === 'yes';
+const hasCurrentStick = (answers: Partial<AdviceAnswers>) =>
+  answers.has_current_stick === 'yes';
 
 export const QUESTIONS: Record<QuestionId, QuestionDef> = {
   advice_goal: {
@@ -48,16 +64,67 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
   },
   route_self_select: {
     id: 'route_self_select',
-    question: 'Welke situatie past het best?',
+    question: 'Welke route past het best?',
     shortLabel: 'situatie',
     dataUse:
-      'Dit bepaalt hoe uitgebreid de keuzehulp is: kort voor een eerste stick, verdiepend voor gevorderde spelers.',
+      'De route bepaalt hoeveel we vragen en welke sticks in beeld komen. Twijfel je? Kies de eenvoudigere route; na de vragen over leeftijd en ervaring stellen we een andere route voor als die beter past, en je kunt altijd teruggaan.',
     input: {
       kind: 'single',
       options: [
-        { value: 'first_stick', label: 'Net begonnen / eerste stick' },
-        { value: 'next_stick', label: 'Speelt al een tijdje en zoekt de volgende stick' },
-        { value: 'advanced_compare', label: 'Speelt gevorderd en wil gericht vergelijken' },
+        {
+          value: 'first_stick',
+          label: 'Start — eerste stick',
+          details: [
+            {
+              term: 'Voor wie',
+              text: 'Beginnende kinderen en nieuwe hockeyers die hun eerste stick kiezen.',
+            },
+            {
+              term: 'Waar we op letten',
+              text: 'Juiste maat, hanteerbaarheid, controle en budget. Plezier in het spel telt mee; techniek per actie vragen we niet.',
+            },
+            {
+              term: 'Wat je krijgt',
+              text: 'Alleen startmodellen. Geen extreme low bow en geen sticks met heel veel carbon.',
+            },
+          ],
+        },
+        {
+          value: 'next_stick',
+          label: 'Ontwikkel — volgende stick',
+          details: [
+            {
+              term: 'Voor wie',
+              text: 'Spelers die de basis kennen en ontdekken wat voor speler ze zijn.',
+            },
+            {
+              term: 'Waar we op letten',
+              text: 'Naast maat en budget ook de eerste aanname, de ontwikkeldoelen en het gewenste stickgevoel.',
+            },
+            {
+              term: 'Wat je krijgt',
+              text: 'Een logische volgende stap, met de afweging tussen controle en bijvoorbeeld 3D erbij.',
+            },
+          ],
+        },
+        {
+          value: 'advanced_compare',
+          label: 'Prestatie — gericht vergelijken',
+          details: [
+            {
+              term: 'Voor wie',
+              text: 'Gevorderde jeugd en senioren die precies weten wat ze in wedstrijden doen.',
+            },
+            {
+              term: 'Waar we op letten',
+              text: 'Wedstrijdacties, techniek per actie, ervaring met bow-profielen, stijfheid en gevoeligheid voor trilling.',
+            },
+            {
+              term: 'Wat je krijgt',
+              text: 'Een gedetailleerde match, ook op sticks voor ervaren spelers, met de trade-off per stick.',
+            },
+          ],
+        },
       ],
     },
   },
@@ -65,7 +132,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     id: 'age_band',
     question: 'In welke leeftijdsgroep valt de speler?',
     shortLabel: 'leeftijdsgroep',
-    dataUse: 'We vragen bewust geen geboortedatum; een leeftijdsgroep is genoeg voor het advies.',
+    dataUse:
+      'We vragen bewust geen geboortedatum; een leeftijdsgroep is genoeg voor het advies.',
     input: {
       kind: 'single',
       options: [
@@ -82,7 +150,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     id: 'experience_seasons',
     question: 'Hoe lang speelt de speler hockey?',
     shortLabel: 'ervaring',
-    dataUse: 'Ervaring bepaalt hoe eenvoudig of juist gedetailleerd het advies moet zijn.',
+    dataUse:
+      'Ervaring bepaalt hoe eenvoudig of juist gedetailleerd het advies moet zijn.',
     input: {
       kind: 'single',
       options: [
@@ -109,7 +178,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     shortLabel: 'lengte onzeker',
     helpText:
       'Meten: laat de speler met hockeyschoenen aan rechtop tegen een muur staan en meet van de vloer tot de kruin.',
-    dataUse: 'Bij een geschatte lengte geven we het lengteadvies met een ruimere marge.',
+    dataUse:
+      'Bij een geschatte lengte geven we het lengteadvies met een ruimere marge.',
     input: {
       kind: 'single',
       options: [
@@ -122,11 +192,25 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     id: 'current_length_inch',
     question: 'Welke sticklengte gebruikt de speler nu?',
     shortLabel: 'huidige sticklengte',
-    dataUse: 'Hiermee controleren we of het lengteadvies aansluit op de huidige stick.',
+    dataUse:
+      'Hiermee controleren we of het lengteadvies aansluit op de huidige stick.',
     input: {
       kind: 'single',
       options: [
-        ...['24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36.5'].map((value) => ({
+        ...[
+          '24',
+          '26',
+          '27',
+          '28',
+          '29',
+          '30',
+          '31',
+          '32',
+          '33',
+          '34',
+          '35',
+          '36.5',
+        ].map((value) => ({
           value,
           label: `${value.replace('.', ',')}"`,
         })),
@@ -173,7 +257,10 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     input: {
       kind: 'single',
       options: [
-        { value: 'practicing_basics', label: 'Aannemen, passen en dribbelen oefenen' },
+        {
+          value: 'practicing_basics',
+          label: 'Aannemen, passen en dribbelen oefenen',
+        },
         { value: 'basics_mostly_good', label: 'De basis gaat meestal goed' },
         { value: 'refining_actions', label: 'Acties verfijnen' },
       ],
@@ -216,7 +303,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     id: 'primary_goals',
     question: 'Wat wil de speler vooral leren of verbeteren?',
     shortLabel: 'ontwikkeldoelen',
-    dataUse: 'Dit is de belangrijkste factor in de match: het doel weegt zwaarder dan de positie.',
+    dataUse:
+      'Dit is de belangrijkste factor in de match: het doel weegt zwaarder dan de positie.',
     input: {
       kind: 'multi',
       max: 2,
@@ -236,7 +324,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     id: 'fun_style',
     question: 'Waar heeft de speler het meeste plezier in?',
     shortLabel: 'speelplezier',
-    dataUse: 'Plezier zegt veel over de speelstijl, ook als die nog niet vastligt.',
+    dataUse:
+      'Plezier zegt veel over de speelstijl, ook als die nog niet vastligt.',
     input: {
       kind: 'single',
       options: [
@@ -267,7 +356,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     id: 'match_actions_frequency',
     question: 'Welke acties komen vaak voor in wedstrijden?',
     shortLabel: 'wedstrijdacties',
-    dataUse: 'Hiermee verfijnen we de match op wat de speler in wedstrijden echt doet.',
+    dataUse:
+      'Hiermee verfijnen we de match op wat de speler in wedstrijden echt doet.',
     input: {
       kind: 'multi',
       max: 3,
@@ -356,7 +446,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     shortLabel: 'stickgevoel',
     helpText:
       'Zacht en controlegericht: vaak prettiger bij aannemen en voor verdere basisontwikkeling. In balans: een combinatie van controle en directe passing. Direct en krachtig: een stijver, sneller gevoel; vooral passend als de eerste aanname op tempo betrouwbaar is.',
-    dataUse: 'Het gewenste gevoel vergelijken we met de stijfheid van de stick.',
+    dataUse:
+      'Het gewenste gevoel vergelijken we met de stijfheid van de stick.',
     input: {
       kind: 'single',
       options: [
@@ -389,7 +480,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     shortLabel: 'bow-ervaring',
     helpText:
       'De bow is de kromming van de stick. Hoe lager en uitgesprokener de kromming, hoe meer de stick op liften en 3D is gericht.',
-    dataUse: 'Zo voorkomen we een te grote overstap naar een heel ander profiel.',
+    dataUse:
+      'Zo voorkomen we een te grote overstap naar een heel ander profiel.',
     input: {
       kind: 'single',
       options: [
@@ -405,7 +497,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     id: 'vibration_sensitivity',
     question: 'Stoort trilling bij aannemen of harde passes?',
     shortLabel: 'trillingsgevoeligheid',
-    dataUse: 'Bij gevoeligheid voor trilling wegen we een zachter gevoel zwaarder.',
+    dataUse:
+      'Bij gevoeligheid voor trilling wegen we een zachter gevoel zwaarder.',
     input: {
       kind: 'single',
       options: [
@@ -495,7 +588,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     question: 'Welk bedrag is passend voor alleen de stick?',
     shortLabel: 'budget',
     helpText: 'We rekenen met richtprijzen, geen live winkelprijzen.',
-    dataUse: 'Sticks boven je budget laten we weg, tenzij je eerst wilt vergelijken.',
+    dataUse:
+      'Sticks boven je budget laten we weg, tenzij je eerst wilt vergelijken.',
     input: {
       kind: 'single',
       options: [
@@ -529,12 +623,16 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     shortLabel: 'beschikbaarheid',
     helpText:
       'Onze voorraadstatus is een indicatie, geen live koppeling. Controleer de beschikbaarheid altijd bij de winkel.',
-    dataUse: 'Bij "alleen direct leverbaar" tonen we alleen sticks die als beschikbaar zijn gemarkeerd.',
+    dataUse:
+      'Bij "alleen direct leverbaar" tonen we alleen sticks die als beschikbaar zijn gemarkeerd.',
     input: {
       kind: 'single',
       options: [
         { value: 'only_direct', label: 'Alleen direct leverbaar' },
-        { value: 'best_match_later', label: 'De beste match, ook als die later komt' },
+        {
+          value: 'best_match_later',
+          label: 'De beste match, ook als die later komt',
+        },
         { value: 'no_preference', label: 'Geen voorkeur' },
       ],
     },
@@ -543,8 +641,10 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     id: 'left_handed_requirement',
     question: 'Is een linkshandige (omgekeerde) stick nodig?',
     shortLabel: 'linkshandige stick',
-    helpText: 'Twijfel je? Kies dan "Weet ik niet"; je krijgt gewoon een advies voor een reguliere stick.',
-    dataUse: 'Bij een uitzondering tonen we geen verkeerde stick, maar verwijzen we naar persoonlijke hulp.',
+    helpText:
+      'Twijfel je? Kies dan "Weet ik niet"; je krijgt gewoon een advies voor een reguliere stick.',
+    dataUse:
+      'Bij een uitzondering tonen we geen verkeerde stick, maar verwijzen we naar persoonlijke hulp.',
     input: {
       kind: 'single',
       options: [
@@ -561,14 +661,14 @@ export type ScreenDef = {
   title: string;
   /** Always visible on the screen. */
   questions: QuestionId[];
-  /** Tucked away under "Meer vertellen (optioneel)". */
+  /** Shown below the required questions, marked as optional. */
   optional?: QuestionId[];
 };
 
 export const FIRST_SCREEN: ScreenDef = {
   id: 'who',
-  title: 'Voor wie en welke situatie',
-  questions: ['advice_goal', 'route_self_select'],
+  title: 'Kies je route',
+  questions: ['route_self_select', 'advice_goal'],
 };
 const AGE_EXPERIENCE: ScreenDef = {
   id: 'age_experience',
@@ -602,8 +702,16 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
       questions: ['height_cm', 'left_handed_requirement'],
       optional: ['height_uncertain', 'junior_grip_needed'],
     },
-    { ...CURRENT_STICK, title: 'Eerste stick of vervanging', optional: ['current_stick_problem'] },
-    { id: 'fun', title: 'Plezier en basis', questions: ['fun_style', 'core_skills_stage'] },
+    {
+      ...CURRENT_STICK,
+      title: 'Eerste stick of vervanging',
+      optional: ['current_stick_problem'],
+    },
+    {
+      id: 'fun',
+      title: 'Plezier en basis',
+      questions: ['fun_style', 'core_skills_stage'],
+    },
     BUDGET,
   ],
   ONTWIKKEL: [
@@ -613,7 +721,11 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
       id: 'height',
       title: 'Lengte',
       questions: ['height_cm', 'left_handed_requirement'],
-      optional: ['height_uncertain', 'current_length_inch', 'junior_grip_needed'],
+      optional: [
+        'height_uncertain',
+        'current_length_inch',
+        'junior_grip_needed',
+      ],
     },
     {
       id: 'first_touch',
@@ -623,7 +735,12 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     },
     { id: 'core_skills', title: 'Basis', questions: ['core_skills_stage'] },
     { id: 'goals', title: 'Ontwikkeldoelen', questions: ['primary_goals'] },
-    { id: 'fun', title: 'Speelstijl', questions: ['fun_style'], optional: ['positions'] },
+    {
+      id: 'fun',
+      title: 'Speelstijl',
+      questions: ['fun_style'],
+      optional: ['positions'],
+    },
     { id: 'feel', title: 'Stickgevoel', questions: ['feel_preference'] },
     CURRENT_STICK,
     BUDGET,
@@ -643,8 +760,17 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
       questions: ['first_touch_confidence'],
       optional: ['playing_level', 'training_frequency'],
     },
-    { id: 'goals', title: 'Doelen', questions: ['primary_goals'], optional: ['positions'] },
-    { id: 'match_actions', title: 'Wedstrijdacties', questions: ['match_actions_frequency'] },
+    {
+      id: 'goals',
+      title: 'Doelen',
+      questions: ['primary_goals'],
+      optional: ['positions'],
+    },
+    {
+      id: 'match_actions',
+      title: 'Wedstrijdacties',
+      questions: ['match_actions_frequency'],
+    },
     {
       id: 'skills_ground',
       title: 'Techniek: passen, slag en 3D',
@@ -659,7 +785,11 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
       id: 'feel',
       title: 'Stickgevoel',
       questions: ['feel_preference'],
-      optional: ['bow_experience', 'vibration_sensitivity', 'stick_weight_preference'],
+      optional: [
+        'bow_experience',
+        'vibration_sensitivity',
+        'stick_weight_preference',
+      ],
     },
     CURRENT_STICK,
     BUDGET,

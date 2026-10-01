@@ -1,21 +1,30 @@
+import type { ReactNode } from 'react';
 import type { QuestionDef } from '@/content/stickwijzer/questions';
+import { InfoIcon } from '@/components/ui/icons';
 
 export type AnswerValue = string | string[] | number | undefined;
 
 const OPTION_CLASSES =
   'flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm has-[:checked]:border-emerald-700 has-[:checked]:bg-emerald-50 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-emerald-700 has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50';
 
+const CARD_CLASSES =
+  'flex cursor-pointer flex-col rounded-2xl border border-zinc-300 bg-white p-4 has-[:checked]:border-emerald-700 has-[:checked]:bg-emerald-50 has-[:checked]:ring-1 has-[:checked]:ring-emerald-700 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-emerald-700';
+
+/** The explanation that sits next to a question: why we ask it, plus any help text. */
 function Explanation({ def }: { def: QuestionDef }) {
   return (
-    <div className="mt-2 space-y-1 text-sm text-zinc-600">
-      {def.helpText && <p id={`${def.id}-help`}>{def.helpText}</p>}
-      <details>
-        <summary className="cursor-pointer select-none text-emerald-800 hover:underline">
-          Waarom vragen we dit?
-        </summary>
-        <p className="mt-1 max-w-prose">{def.dataUse}</p>
-      </details>
-    </div>
+    <aside className="self-start rounded-xl bg-emerald-50/60 px-4 py-3 text-sm text-zinc-700">
+      <p className="flex items-center gap-1.5 font-semibold text-emerald-900">
+        <InfoIcon size={16} />
+        Waarom vragen we dit?
+      </p>
+      <p className="mt-1">{def.dataUse}</p>
+      {def.helpText && (
+        <p id={`${def.id}-help`} className="mt-2">
+          {def.helpText}
+        </p>
+      )}
+    </aside>
   );
 }
 
@@ -25,16 +34,22 @@ export function QuestionField({
   onChange,
   optional = false,
   errorMessage,
+  optionMeta,
 }: {
   def: QuestionDef;
   value: AnswerValue;
   onChange: (value: AnswerValue) => void;
   optional?: boolean;
   errorMessage?: string;
+  /** Extra line per option, keyed by option value — only used by the card layout. */
+  optionMeta?: Record<string, string>;
 }) {
   const { input } = def;
   const errorId = `${def.id}-error`;
-  const describedBy = [def.helpText ? `${def.id}-help` : null, errorMessage ? errorId : null]
+  const describedBy = [
+    def.helpText ? `${def.id}-help` : null,
+    errorMessage ? errorId : null,
+  ]
     .filter(Boolean)
     .join(' ');
   const error = errorMessage ? (
@@ -42,10 +57,14 @@ export function QuestionField({
       {errorMessage}
     </p>
   ) : null;
-  const suffix = optional ? <span className="font-normal text-zinc-500"> (optioneel)</span> : null;
+  const suffix = optional ? (
+    <span className="font-normal text-zinc-500"> (optioneel)</span>
+  ) : null;
+
+  let control: ReactNode;
 
   if (input.kind === 'number') {
-    return (
+    control = (
       <div>
         <label htmlFor={def.id} className="block font-medium">
           {def.question}
@@ -60,7 +79,11 @@ export function QuestionField({
             max={input.max}
             value={typeof value === 'number' ? value : ''}
             onChange={(event) =>
-              onChange(event.target.value === '' ? undefined : Number(event.target.value))
+              onChange(
+                event.target.value === ''
+                  ? undefined
+                  : Number(event.target.value),
+              )
             }
             aria-describedby={describedBy || undefined}
             aria-invalid={errorMessage ? true : undefined}
@@ -69,14 +92,14 @@ export function QuestionField({
           <span className="text-sm text-zinc-600">{input.unit}</span>
         </div>
         {error}
-        <Explanation def={def} />
       </div>
     );
-  }
-
-  if (input.kind === 'scale') {
-    const steps = Array.from({ length: input.max - input.min + 1 }, (_, index) => input.min + index);
-    return (
+  } else if (input.kind === 'scale') {
+    const steps = Array.from(
+      { length: input.max - input.min + 1 },
+      (_, index) => input.min + index,
+    );
+    control = (
       <fieldset aria-describedby={describedBy || undefined}>
         <legend className="font-medium">
           {def.question}
@@ -84,7 +107,10 @@ export function QuestionField({
         </legend>
         <div className="mt-2 flex flex-wrap gap-2">
           {steps.map((step) => (
-            <label key={step} className={`${OPTION_CLASSES} justify-center px-4`}>
+            <label
+              key={step}
+              className={`${OPTION_CLASSES} justify-center px-4`}
+            >
               <input
                 type="radio"
                 name={def.id}
@@ -100,21 +126,20 @@ export function QuestionField({
           {input.min} = {input.minLabel}, {input.max} = {input.maxLabel}
         </p>
         {error}
-        <Explanation def={def} />
       </fieldset>
     );
-  }
-
-  if (input.kind === 'multi') {
+  } else if (input.kind === 'multi') {
     const selected = Array.isArray(value) ? value : [];
     const atMax = selected.length >= input.max;
-    return (
+    control = (
       <fieldset aria-describedby={describedBy || undefined}>
         <legend className="font-medium">
           {def.question}
           {suffix}
         </legend>
-        <p className="mt-1 text-sm text-zinc-600">Kies er maximaal {input.max}.</p>
+        <p className="mt-1 text-sm text-zinc-600">
+          Kies er maximaal {input.max}.
+        </p>
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           {input.options.map((option) => {
             const checked = selected.includes(option.value);
@@ -139,33 +164,86 @@ export function QuestionField({
           })}
         </div>
         {error}
-        <Explanation def={def} />
+      </fieldset>
+    );
+  } else if (input.options.some((option) => option.details)) {
+    // Card layout: each option explains itself, so the cards take the full
+    // width and the general explanation goes underneath instead of beside.
+    return (
+      <div>
+        <fieldset aria-describedby={describedBy || undefined}>
+          <legend className="text-lg font-semibold">
+            {def.question}
+            {suffix}
+          </legend>
+          <div className="mt-3 grid gap-3 md:grid-cols-3">
+            {input.options.map((option) => (
+              <label key={option.value} className={CARD_CLASSES}>
+                <span className="flex items-center gap-2 font-semibold">
+                  <input
+                    type="radio"
+                    name={def.id}
+                    value={option.value}
+                    checked={value === option.value}
+                    onChange={() => onChange(option.value)}
+                  />
+                  {option.label}
+                </span>
+                {option.details?.map((detail) => (
+                  <span
+                    key={detail.term}
+                    className="mt-3 block text-sm text-zinc-700"
+                  >
+                    <span className="block text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      {detail.term}
+                    </span>
+                    {detail.text}
+                  </span>
+                ))}
+                {optionMeta?.[option.value] && (
+                  <span className="mt-3 block text-sm font-medium text-emerald-800">
+                    {optionMeta[option.value]}
+                  </span>
+                )}
+              </label>
+            ))}
+          </div>
+          {error}
+        </fieldset>
+        <p className="mt-3 text-sm text-zinc-600">{def.dataUse}</p>
+      </div>
+    );
+  } else {
+    control = (
+      <fieldset aria-describedby={describedBy || undefined}>
+        <legend className="font-medium">
+          {def.question}
+          {suffix}
+        </legend>
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+          {input.options.map((option) => (
+            <label key={option.value} className={OPTION_CLASSES}>
+              <input
+                type="radio"
+                name={def.id}
+                value={option.value}
+                checked={value === option.value}
+                onChange={() => onChange(option.value)}
+              />
+              {option.label}
+            </label>
+          ))}
+        </div>
+        {error}
       </fieldset>
     );
   }
 
+  // Question on the left, explanation on the right; stacked on small screens.
   return (
-    <fieldset aria-describedby={describedBy || undefined}>
-      <legend className="font-medium">
-        {def.question}
-        {suffix}
-      </legend>
-      <div className="mt-2 grid gap-2 sm:grid-cols-2">
-        {input.options.map((option) => (
-          <label key={option.value} className={OPTION_CLASSES}>
-            <input
-              type="radio"
-              name={def.id}
-              value={option.value}
-              checked={value === option.value}
-              onChange={() => onChange(option.value)}
-            />
-            {option.label}
-          </label>
-        ))}
-      </div>
-      {error}
+    <div className="grid gap-3 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-8">
+      {control}
       <Explanation def={def} />
-    </fieldset>
+    </div>
   );
 }
