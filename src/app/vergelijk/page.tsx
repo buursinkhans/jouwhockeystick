@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { getAllProducts, getProductBySlug } from '@/catalog';
 import { buildCompareRows } from '@/catalog/compare';
 import { ProductImage } from '@/components/catalog/ProductImage';
-import { BolComLink } from '@/components/ui/BolComLink';
+import { RetailerLinks } from '@/components/ui/RetailerLinks';
 
 export const metadata: Metadata = {
   title: 'Vergelijk hockeysticks',
@@ -90,14 +90,7 @@ export default async function VergelijkPage({
                   </Link>
                 </p>
                 <div className="mt-2">
-                  <BolComLink
-                    brand={product.brand}
-                    productName={product.name}
-                    variant="secondary"
-                    className="text-sm"
-                  >
-                    Bekijk en koop op bol.com
-                  </BolComLink>
+                  <RetailerLinks brand={product.brand} productName={product.name} className="text-sm" stack />
                 </div>
               </div>
             ))}

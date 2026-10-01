@@ -25,10 +25,10 @@ export const jdhX93ProBow: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
-    value: 'mid-bow',
+    value: 'probow',
     source: 'brand-website',
     sourceLabel:
-      'JDH noemt de curve "Medium curve (250mm from the hook of the stick)", wat overeenkomt met een (pro) mid-bow.',
+      'De modelnaam van JDH is "Pro Bow"; JDH omschrijft de curve als "Medium curve (250mm from the hook of the stick)".',
     sourceUrl: 'https://jdhsports.eu/product/x93-pro-bow',
     lastVerifiedAt: '2026-09-26',
   },
@@ -66,7 +66,7 @@ export const jdhX93ProBow: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   summary:
-    'Een hoog-carbon mid-bow stick, gericht op snelle bewegingen en precieze passes — kan een logische richting zijn voor ervaren spelers die een pro-georiënteerd model zoeken.',
+    'Een hoog-carbon stick met medium curve ("Pro Bow"), gericht op snelle bewegingen en precieze passes — kan een logische richting zijn voor ervaren spelers die een pro-georiënteerd model zoeken.',
   strengths: {
     value: [
       'Zeer hoog carbonpercentage (95%) voor maximale power en respons',

@@ -7,9 +7,12 @@ export const EXPERIENCE_LABELS: Record<Product['experienceLevel']['value'], stri
 };
 
 export const BOW_LABELS: Record<BowProfile, string> = {
-  'low-bow': 'Low bow',
-  'mid-bow': 'Mid bow',
-  'late-bow': 'Late bow',
+  ultrabow: 'Ultrabow / standaard',
+  midbow: 'Mid bow',
+  dynabow: 'Dynabow',
+  probow: 'Pro bow',
+  lowbow: 'Low bow',
+  extreme_lowbow: 'Extreme low bow',
 };
 
 export const STOCK_LABELS: Record<Product['stock']['value'], string> = {

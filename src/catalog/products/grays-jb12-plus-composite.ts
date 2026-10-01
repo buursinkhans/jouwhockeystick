@@ -28,7 +28,7 @@ export const graysJb12PlusComposite: Product = {
     lastVerifiedAt: '2026-09-27',
   },
   bowProfile: {
-    value: 'low-bow',
+    value: 'lowbow',
     source: 'brand-website',
     sourceLabel: 'Grays vermeldt dezelfde Jumbow-curvepositie (24.75 @ 200mm) als hun expliciete low-bow modellen.',
     sourceUrl:

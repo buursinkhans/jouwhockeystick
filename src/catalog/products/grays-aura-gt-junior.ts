@@ -25,10 +25,10 @@ export const graysAuraGtJunior: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
-    value: 'low-bow',
+    value: 'ultrabow',
     source: 'editorial-estimate',
     sourceLabel:
-      'Grays noemt dit "Classic bow, straighter curve" — dat past het beste bij een low-bow (traditioneel, minder uitgesproken curve), maar is niet letterlijk zo genoemd.',
+      'Grays noemt dit "Classic bow, straighter curve". In onze indeling is dat het rustigste, minst uitgesproken profiel (ultrabow/standaard); Grays gebruikt die naam voor dit model niet letterlijk.',
     sourceUrl: 'https://grays-hockey.eu/collections/junior-hockey-sticks/products/aura-gt-junior-hockey-stick-blue',
     lastVerifiedAt: '2026-09-26',
   },

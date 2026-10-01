@@ -25,7 +25,7 @@ export const princessCompetitionJr3k10Star: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
-    value: 'low-bow',
+    value: 'lowbow',
     source: 'brand-website',
     sourceLabel: 'Princess vermeldt "SG9-LB (Low Bow)" voor dit model.',
     sourceUrl: 'https://www.princess-hockey.com/collections/sticks-junior/products/330-64022-competition-jr-3k-10-star-sg9-l',

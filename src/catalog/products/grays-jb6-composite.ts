@@ -28,7 +28,7 @@ export const graysJb6Composite: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
-    value: 'low-bow',
+    value: 'lowbow',
     source: 'editorial-estimate',
     sourceLabel:
       'Grays noemt dit model "Jumbow blade profile" op curvepositie 24.75 @ 200mm — dezelfde positie als hun JB 10, die zij wél expliciet "low-bow" noemen. Voor de JB 6 gebruikt Grays dat exacte label niet.',

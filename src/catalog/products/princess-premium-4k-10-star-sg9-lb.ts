@@ -24,7 +24,7 @@ export const princessPremium4k10StarSg9Lb: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
-    value: 'low-bow',
+    value: 'lowbow',
     source: 'brand-website',
     sourceLabel: 'Princess vermeldt expliciet "Shape: Low Bow" met curve 24mm op 200mm.',
     sourceUrl: 'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',

@@ -25,7 +25,7 @@ export const braboGforceEliteXOneLbJr: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
-    value: 'low-bow',
+    value: 'lowbow',
     source: 'brand-website',
     sourceLabel: 'Brabo noemt dit model expliciet "Low Bow".',
     sourceUrl: 'https://brabohockey.com/collections/sticks-junior/products/315-65002-g-force-elite-x-one-lb-jr',

@@ -28,10 +28,10 @@ export const graysPb11PlusComposite: Product = {
     lastVerifiedAt: '2026-09-27',
   },
   bowProfile: {
-    value: 'low-bow',
+    value: 'probow',
     source: 'brand-website',
     sourceLabel:
-      'Grays vermeldt dezelfde curvepositie (24.75 @ 200mm, kop "Vertex") als hun expliciete low-bow modellen.',
+      'Grays voert dit model in de "Probow Plus"-lijn (curvepositie 24.75 @ 200mm, kop "Vertex"). Die curvepositie is gelijk aan die van hun Jumbow-modellen.',
     sourceUrl:
       'https://www.grays-hockey.eu/collections/pb-probow-plus-composite-hockey-sticks/products/pb11-plus-composite-hockey-stick',
     lastVerifiedAt: '2026-09-27',

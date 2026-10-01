@@ -24,7 +24,7 @@ export const jdhX01MidBow: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
-    value: 'mid-bow',
+    value: 'midbow',
     source: 'brand-website',
     sourceLabel: 'JDH noemt de curve "Neutral (260mm from the toe of the stick)", wat overeenkomt met een mid-bow.',
     sourceUrl: 'https://jdhsports.eu/product/x01-mid-bow',

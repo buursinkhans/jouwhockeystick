@@ -27,7 +27,7 @@ export const graysJb10Composite: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
-    value: 'low-bow',
+    value: 'lowbow',
     source: 'brand-website',
     sourceLabel: 'Grays noemt dit model expliciet "Jumbow low-bow" (curvepositie 24.75 @ 200mm).',
     sourceUrl:

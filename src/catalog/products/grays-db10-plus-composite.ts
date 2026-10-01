@@ -27,10 +27,10 @@ export const graysDb10PlusComposite: Product = {
     lastVerifiedAt: '2026-09-27',
   },
   bowProfile: {
-    value: 'mid-bow',
-    source: 'editorial-estimate',
+    value: 'dynabow',
+    source: 'brand-website',
     sourceLabel:
-      'Grays vermeldt curvepositie 24.95mm op 250mm ("Dynabow", "Micro head configuration") — verder in de stick dan hun low-bow referentiepunt (200mm), wat het dichtst bij een mid-bow komt.',
+      'Grays noemt dit profiel zelf "Dynabow" (curvepositie 24.95mm op 250mm, "Micro head configuration").',
     sourceUrl:
       'https://www.grays-hockey.eu/collections/db-dynabow-plus-composite-hockey-sticks/products/db10-plus-composite-hockey-stick',
     lastVerifiedAt: '2026-09-27',

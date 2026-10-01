@@ -7,7 +7,7 @@ import { ProductProsAndCons } from '@/components/catalog/ProductProsAndCons';
 import { ProductImage } from '@/components/catalog/ProductImage';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { ButtonLink } from '@/components/ui/Button';
-import { BolComLink } from '@/components/ui/BolComLink';
+import { RetailerLinks } from '@/components/ui/RetailerLinks';
 
 export function generateStaticParams() {
   return getAllProducts().map((product) => ({ slug: product.slug }));
@@ -76,10 +76,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <ProductNotice />
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-3">
-        <BolComLink brand={product.brand} productName={product.name} variant="primary">
-          Bekijk en koop op bol.com
-        </BolComLink>
+      <div className="mt-6 flex flex-wrap items-start gap-3">
+        <RetailerLinks brand={product.brand} productName={product.name} />
         <ButtonLink href={`/interesse?product=${product.slug}&source=productpagina`} variant="secondary">
           Stel een vraag
         </ButtonLink>

@@ -10,9 +10,12 @@ const BRAND_COLORS: Record<Brand, string> = {
 
 // Rough head-curve offsets so the illustration hints at the bow profile.
 const BOW_CURVE: Record<BowProfile, string> = {
-  'low-bow': 'M20 90 Q26 66 46 58',
-  'mid-bow': 'M20 90 Q30 60 46 58',
-  'late-bow': 'M20 90 Q34 56 46 58',
+  ultrabow: 'M20 90 Q34 56 46 58',
+  midbow: 'M20 90 Q30 60 46 58',
+  dynabow: 'M20 90 Q30 60 46 58',
+  probow: 'M20 90 Q28 63 46 58',
+  lowbow: 'M20 90 Q26 66 46 58',
+  extreme_lowbow: 'M20 90 Q24 69 46 58',
 };
 
 /**
@@ -33,7 +36,7 @@ export function StickIllustration({
   className?: string;
 }) {
   const color = BRAND_COLORS[brand];
-  const curve = BOW_CURVE[bowProfile ?? 'mid-bow'];
+  const curve = BOW_CURVE[bowProfile ?? 'midbow'];
 
   return (
     <svg

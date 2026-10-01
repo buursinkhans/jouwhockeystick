@@ -25,6 +25,14 @@ export const princessCompetition1StarProbow: Product = {
       'Princess noemt geen specifieke veldpositie, alleen "controle" en "comfort" — ingeschat als all-round.',
     lastVerifiedAt: '2026-09-26',
   },
+  bowProfile: {
+    value: 'probow',
+    source: 'brand-website',
+    sourceLabel:
+      'De modelnaam van Princess vermeldt "PROBOW"; de productpagina noemt geen curvemaat of -positie.',
+    sourceUrl: 'https://www.princess-hockey.com/products/330-63005-competition-1-star-probow-pi-wh',
+    lastVerifiedAt: '2026-09-26',
+  },
   carbonPercentage: {
     value: 15,
     source: 'brand-website',
@@ -65,7 +73,7 @@ export const princessCompetition1StarProbow: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Bow-profiel (curvevorm) wordt door Princess niet eenduidig vermeld — lastig direct te vergelijken met low/mid/late-bow modellen van andere merken',
+      'Princess vermeldt alleen "PROBOW" in de modelnaam, geen curvemaat of -positie — lastig direct te vergelijken met modellen van andere merken',
       'Gewicht wordt door Princess niet vermeld',
     ],
     source: 'editorial-estimate',

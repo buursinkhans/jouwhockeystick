@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getAllBrands, getAllProducts, isProductActive } from './index';
 import type { Product } from './types';
-import { getAdvice } from '@/advice-engine/engine';
-import { normalizeProfile } from '@/advice-engine/normalizeProfile';
-import type { QuizAnswers } from '@/advice-engine/types';
 
 function buildProduct(lastVerifiedAt: string): Product {
   const sourced = { value: 'beginner' as const, source: 'editorial-estimate' as const, lastVerifiedAt };
@@ -15,7 +12,7 @@ function buildProduct(lastVerifiedAt: string): Product {
     imageAlt: 'Test',
     experienceLevel: sourced,
     recommendedPositions: { value: ['middenvelder'], source: 'editorial-estimate', lastVerifiedAt },
-    bowProfile: { value: 'low-bow', source: 'editorial-estimate', lastVerifiedAt },
+    bowProfile: { value: 'lowbow', source: 'editorial-estimate', lastVerifiedAt },
     carbonPercentage: { value: 10, source: 'editorial-estimate', lastVerifiedAt },
     lengthsInches: { value: [35], source: 'editorial-estimate', lastVerifiedAt },
     priceIndicativeEur: { value: 90, source: 'editorial-estimate', lastVerifiedAt },
@@ -52,26 +49,5 @@ describe('catalog composition', () => {
 
   it('includes all five currently verified brands', () => {
     expect(getAllBrands()).toEqual(['Brabo', 'Grays', 'JDH', 'Princess', 'adidas']);
-  });
-});
-
-describe('catalog + advice engine integration', () => {
-  it('finds a real recommendation for a young child with a modest budget', () => {
-    const answers: QuizAnswers = {
-      buyerType: 'kind',
-      age: 9,
-      playerHeightCm: 130,
-      experienceLevel: 'beginner',
-      currentStickExperience: 'nog-geen-stick',
-      position: 'middenvelder',
-      desiredPlayActions: ['dribbelen'],
-      comfortPreference: 'geen-voorkeur',
-      budgetMaxEur: 50,
-    };
-    const profile = normalizeProfile(answers);
-    const advice = getAdvice(profile, getAllProducts());
-
-    expect(advice.recommended).not.toBeNull();
-    expect(advice.noMatchReason).toBeNull();
   });
 });

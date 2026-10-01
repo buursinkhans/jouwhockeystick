@@ -1,49 +1,66 @@
 import type { Product } from '@/catalog/types';
-import type { CautionCode, QuizProfile } from './types';
+import type { AdviceAnswers } from './answers';
+import { BOW_RANK, deriveAdviceRules } from './productRules';
+import type { CautionCode, PlayerContext, ResultRole } from './types';
 
-/** Nuanced, Dutch explanations — never an absolute warning, always "kan" (source-policy.md §4). */
-export const CAUTION_LABELS: Record<CautionCode, string> = {
-  HIGH_CARBON_FOR_BEGINNER:
-    'Dit is een stick met een hoog carbonpercentage. Dat kan minder vergevingsgezind aanvoelen bij mishits, wat lastiger kan zijn als je nog weinig stickervaring hebt.',
-  HIGH_CARBON_FOR_YOUNG_PLAYER:
-    'Het hoge carbonpercentage van deze stick maakt hem stugger. Voor een jonge speler kan een lager carbonpercentage prettiger en veiliger aanvoelen.',
-  EXPERIENCE_GAP:
-    'Deze stick is doorgaans gericht op ervaren spelers. Dat kan een grotere stap zijn dan je op basis van je huidige ervaring zoekt.',
-};
+const HIGH_CARBON_CAUTION_THRESHOLD = 50;
 
-const HIGH_CARBON_THRESHOLD = 50;
-const YOUNG_PLAYER_CARBON_THRESHOLD = 40;
-const YOUNG_PLAYER_MAX_AGE = 11;
+const BOW_EXPERIENCE_RANK: Record<
+  Exclude<NonNullable<AdviceAnswers['bow_experience']>, 'unknown'>,
+  number
+> = { standard: 0.5, pro_late: 2, low: 3, extreme_low: 4 };
 
 /**
  * Informational only — cautions never affect the score, so they can never
- * silently push a product down the ranking. They exist purely to disclose
- * a reason the top match might not be right for you (CLAUDE.md: geen
- * schijnprecisie, toon nuance).
+ * silently push a product down the ranking. They disclose the trade-off the
+ * player makes with this stick (spec §1.2, §6.4).
  */
-export function getCautions(product: Product, profile: QuizProfile): CautionCode[] {
+export function getCautions(product: Product, ctx: PlayerContext, role: ResultRole): CautionCode[] {
   const cautions: CautionCode[] = [];
+  const rules = deriveAdviceRules(product);
   const carbon = product.carbonPercentage?.value;
+  const bow = product.bowProfile?.value;
 
+  if (role === 'other_size') {
+    cautions.push('OTHER_SIZE');
+  }
+  if (role === 'ambitious_choice') {
+    cautions.push('AMBITIOUS_STEP');
+  }
   if (
     carbon !== undefined &&
-    carbon >= HIGH_CARBON_THRESHOLD &&
-    profile.currentStickExperience === 'nog-geen-stick'
+    carbon >= HIGH_CARBON_CAUTION_THRESHOLD &&
+    (ctx.band !== 'advanced' || ctx.firstTouchLow)
   ) {
-    cautions.push('HIGH_CARBON_FOR_BEGINNER');
+    cautions.push('HIGH_CARBON_STEP');
   }
-
   if (
-    carbon !== undefined &&
-    carbon >= YOUNG_PLAYER_CARBON_THRESHOLD &&
-    profile.age !== null &&
-    profile.age <= YOUNG_PLAYER_MAX_AGE
+    (bow === 'lowbow' || bow === 'extreme_lowbow') &&
+    (ctx.route !== 'PRESTATIE' || ctx.answers.first_touch_confidence !== 'very_confident')
   ) {
-    cautions.push('HIGH_CARBON_FOR_YOUNG_PLAYER');
+    cautions.push('LOWBOW_TRADEOFF');
   }
 
-  if (product.experienceLevel.value === 'ervaren' && profile.experienceLevel === 'beginner') {
-    cautions.push('EXPERIENCE_GAP');
+  const bowExperience = ctx.answers.bow_experience;
+  if (
+    bow &&
+    bowExperience &&
+    bowExperience !== 'unknown' &&
+    Math.abs(BOW_EXPERIENCE_RANK[bowExperience] - BOW_RANK[bow]) >= 2
+  ) {
+    cautions.push('BIG_BOW_CHANGE');
+  }
+  if (
+    rules.feel === 'direct' &&
+    (ctx.answers.vibration_sensitivity === 'yes' || ctx.answers.vibration_sensitivity === 'sometimes')
+  ) {
+    cautions.push('DIRECT_FEEL_VIBRATION');
+  }
+  if (rules.feel === 'soft') {
+    cautions.push('LESS_POWER');
+  }
+  if (carbon === undefined) {
+    cautions.push('CARBON_UNKNOWN');
   }
 
   return cautions;

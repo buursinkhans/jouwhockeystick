@@ -10,6 +10,10 @@ export function Footer() {
             Over ons
           </Link>
           {' · '}
+          <Link href="/methodiek" className="hover:underline">
+            Zo werkt ons advies
+          </Link>
+          {' · '}
           <a href="mailto:info@jouwhockeystick.nl" className="hover:underline">
             info@jouwhockeystick.nl
           </a>

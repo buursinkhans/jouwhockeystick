@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Product } from '@/catalog/types';
 import { Card } from '@/components/ui/Card';
 import { ProductNotice } from '@/components/ui/ProductNotice';
-import { BolComLink } from '@/components/ui/BolComLink';
+import { RetailerLinks } from '@/components/ui/RetailerLinks';
 import { ProductImage } from './ProductImage';
 import { ProductProsAndCons } from './ProductProsAndCons';
 
@@ -29,13 +29,7 @@ export function ProductCard({ product }: { product: Product }) {
         <ProductProsAndCons product={product} limit={2} />
       </div>
       <div className="mt-4">
-        <BolComLink
-          brand={product.brand}
-          productName={product.name}
-          className="text-sm font-semibold text-emerald-800 hover:underline"
-        >
-          Bekijk en koop op bol.com
-        </BolComLink>
+        <RetailerLinks brand={product.brand} productName={product.name} stack />
       </div>
     </Card>
   );

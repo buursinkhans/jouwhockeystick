@@ -26,7 +26,7 @@ export const braboEliteFiveWtbLb: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
-    value: 'low-bow',
+    value: 'lowbow',
     source: 'brand-website',
     sourceLabel: 'Brabo noemt dit model expliciet "Low Bow".',
     sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',

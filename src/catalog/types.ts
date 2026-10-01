@@ -46,7 +46,14 @@ export const positionSchema = z.enum([
 ]);
 export type Position = z.infer<typeof positionSchema>;
 
-export const bowProfileSchema = z.enum(['low-bow', 'mid-bow', 'late-bow']);
+export const bowProfileSchema = z.enum([
+  'ultrabow',
+  'midbow',
+  'dynabow',
+  'probow',
+  'lowbow',
+  'extreme_lowbow',
+]);
 export type BowProfile = z.infer<typeof bowProfileSchema>;
 
 export const stockStatusSchema = z.enum(['available', 'limited', 'unavailable']);

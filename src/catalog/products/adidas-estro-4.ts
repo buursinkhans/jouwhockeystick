@@ -25,7 +25,7 @@ export const adidasEstro4: Product = {
     lastVerifiedAt: '2026-09-27',
   },
   bowProfile: {
-    value: 'mid-bow',
+    value: 'midbow',
     source: 'partner-shop',
     sourceLabel: 'Bol.com-listing vermeldt expliciet "Mid Bow" (curve 22mm op 25cm van de hoek).',
     sourceUrl: 'https://www.bol.com/nl/nl/p/adidas-estro-4-hockeystick/9300000111826384/',

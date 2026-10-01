@@ -1,74 +1,190 @@
+import { useState, type RefObject } from 'react';
+import Link from 'next/link';
+import type { AdviceAnswers } from '@/advice-engine/answers';
 import type { AdviceResult } from '@/advice-engine/types';
-import type { NoMatchReason } from '@/advice-engine/hardFilters';
+import {
+  ADVICE_DISCLAIMER,
+  LEFT_HANDED_REFERRAL,
+  NO_MATCH_TEXT,
+  ROUTE_RESULT_COPY,
+  SELLER_NOTE,
+  START_FOOTNOTE,
+  TRANSPARENCY_NOTE,
+  formatInch,
+  sizeAdviceText,
+} from '@/content/stickwijzer/resultCopy';
+import { Button, ButtonLink } from '@/components/ui/Button';
 import { RecommendationCard } from './RecommendationCard';
 
-const NO_MATCH_MESSAGES: Record<NoMatchReason, string> = {
-  length:
-    'We hebben op dit moment geen stick in onze catalogus in een lengte die past bij je lichaamslengte.',
-  budget:
-    'We hebben op dit moment geen stick in onze catalogus die binnen je opgegeven budget past.',
-  availability:
-    'De sticks die verder bij je passen, zijn op dit moment gemarkeerd als niet beschikbaar.',
-  verification:
-    'We hebben op dit moment geen recent geverifieerde producten in onze catalogus.',
-};
+const INTEREST_HREF = '/interesse?source=stickwijzer-resultaat';
 
-export function QuizResult({ advice }: { advice: AdviceResult }) {
-  if (!advice.recommended) {
-    const message = advice.noMatchReason
-      ? NO_MATCH_MESSAGES[advice.noMatchReason]
-      : 'We konden op basis van je antwoorden geen eenduidig advies geven.';
+function Feedback({ onFeedback }: { onFeedback: (helpful: boolean) => void }) {
+  const [submitted, setSubmitted] = useState(false);
 
+  if (submitted) {
     return (
-      <div className="space-y-4">
-        <p className="rounded-lg bg-amber-50 px-4 py-3 text-amber-900">
-          {message} Hieronder vind je een paar alternatieven om te overwegen.
-        </p>
-        {advice.alternatives.map((alt) => (
-          <RecommendationCard
-            key={alt.product.slug}
-            product={alt.product}
-            reasonCodes={alt.reasonCodes}
-            cautions={alt.cautions}
-          />
-        ))}
-      </div>
+      <p className="text-sm text-zinc-700" role="status">
+        Dank je, daar leren we van.
+      </p>
     );
   }
+  const answer = (helpful: boolean) => {
+    onFeedback(helpful);
+    setSubmitted(true);
+  };
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <p className="text-sm font-medium">Was dit advies nuttig?</p>
+      <Button variant="secondary" onClick={() => answer(true)}>
+        Ja
+      </Button>
+      <Button variant="secondary" onClick={() => answer(false)}>
+        Nee
+      </Button>
+    </div>
+  );
+}
 
-  const { recommended } = advice;
+export function QuizResult({
+  advice,
+  adviceGoal,
+  headingRef,
+  onEdit,
+  onRestart,
+  onFeedback,
+}: {
+  advice: AdviceResult;
+  adviceGoal: AdviceAnswers['advice_goal'] | undefined;
+  headingRef: RefObject<HTMLHeadingElement | null>;
+  onEdit: () => void;
+  onRestart: () => void;
+  onFeedback: (helpful: boolean) => void;
+}) {
+  const copy = ROUTE_RESULT_COPY[advice.route];
+  const hasResults = advice.results.length > 0;
+  const isLeftHanded = advice.referral === 'left_handed';
+  const title = isLeftHanded
+    ? 'Hiervoor helpen we je liever persoonlijk.'
+    : hasResults
+      ? copy.title
+      : 'We hebben nu geen passende stick voor deze antwoorden.';
 
   return (
-    <div className="space-y-6">
-      {advice.isUncertain && (
-        <p className="rounded-lg bg-amber-50 px-4 py-3 text-amber-900">
-          Dit advies is niet honderd procent eenduidig — bekijk gerust ook het alternatief
-          hieronder.
-        </p>
+    <div className="space-y-8">
+      <div>
+        <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold focus:outline-none">
+          {title}
+        </h2>
+        {hasResults && <p className="mt-2 text-zinc-700">{copy.summary}</p>}
+        {hasResults && adviceGoal === 'child' && (
+          <p className="mt-2 text-sm text-zinc-600">
+            Laat je kind de stick zo mogelijk even vasthouden: gevoel en plezier tellen mee.
+          </p>
+        )}
+      </div>
+
+      {isLeftHanded ? (
+        <div className="rounded-lg bg-amber-50 px-4 py-3 text-amber-900">
+          <p>{LEFT_HANDED_REFERRAL}</p>
+          <ButtonLink href={INTEREST_HREF} className="mt-3">
+            Vraag persoonlijk advies
+          </ButtonLink>
+        </div>
+      ) : (
+        <section aria-labelledby="size-advice-heading">
+          <h3 id="size-advice-heading" className="text-lg font-semibold">
+            Lengteadvies: {formatInch(advice.sizeAdvice.primaryInch)}
+            {advice.sizeAdvice.alternativeInch !== undefined &&
+              ` (of ${formatInch(advice.sizeAdvice.alternativeInch)})`}
+          </h3>
+          <ul className="mt-2 space-y-1 text-sm text-zinc-700">
+            {sizeAdviceText(advice.sizeAdvice).map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        </section>
       )}
 
-      <RecommendationCard
-        product={recommended.product}
-        reasonCodes={recommended.reasonCodes}
-        cautions={recommended.cautions}
-        label="Advies"
-      />
-
-      {advice.alternatives.length > 0 && (
-        <div>
-          <h3 className="text-lg font-semibold">Alternatief</h3>
+      {hasResults && (
+        <section aria-labelledby="results-heading">
+          <h3 id="results-heading" className="text-lg font-semibold">
+            {advice.results.length === 1 ? 'Onze aanbeveling' : 'Onze aanbevelingen'}
+          </h3>
+          {advice.isUncertain && (
+            <p className="mt-2 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              Dit advies is minder zeker dan we zouden willen. Lees de aandachtspunten goed en pas de
+              stick bij voorkeur eerst in de hand.
+            </p>
+          )}
           <div className="mt-3 space-y-4">
-            {advice.alternatives.map((alt) => (
-              <RecommendationCard
-                key={alt.product.slug}
-                product={alt.product}
-                reasonCodes={alt.reasonCodes}
-                cautions={alt.cautions}
-              />
+            {advice.results.map((item) => (
+              <RecommendationCard key={item.product.slug} item={item} route={advice.route} />
             ))}
           </div>
-        </div>
+          {advice.route === 'START' && <p className="mt-4 text-sm text-zinc-700">{START_FOOTNOTE}</p>}
+        </section>
       )}
+
+      {!hasResults && !isLeftHanded && (
+        <section aria-labelledby="no-match-heading">
+          <h3 id="no-match-heading" className="sr-only">
+            Geen passende stick
+          </h3>
+          <div className="rounded-lg bg-amber-50 px-4 py-3 text-amber-900">
+            <p>{advice.noMatchReason ? NO_MATCH_TEXT[advice.noMatchReason] : NO_MATCH_TEXT.data}</p>
+            <p className="mt-2 text-sm">
+              Laat het ons weten, dan kijken we persoonlijk mee of geven we een seintje als er een
+              passende stick is.
+            </p>
+            <ButtonLink href={INTEREST_HREF} className="mt-3">
+              Vraag persoonlijk advies
+            </ButtonLink>
+          </div>
+
+          {advice.otherSizeOptions.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold">Alternatief in een andere maat</h3>
+              <p className="mt-1 text-sm text-zinc-700">
+                Deze sticks passen bij de overige antwoorden, maar zijn één maat korter dan het
+                lengteadvies. We tonen bewust geen langere stick.
+              </p>
+              <div className="mt-3 space-y-4">
+                {advice.otherSizeOptions.map((item) => (
+                  <RecommendationCard key={item.product.slug} item={item} route={advice.route} />
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
+
+      <section aria-labelledby="method-heading" className="space-y-2 text-sm text-zinc-700">
+        <h3 id="method-heading" className="text-lg font-semibold text-zinc-900">
+          Waarom dit advies?
+        </h3>
+        <p>{TRANSPARENCY_NOTE}</p>
+        <p>{ADVICE_DISCLAIMER}</p>
+        <p>{SELLER_NOTE}</p>
+        <p>
+          <Link href={advice.methodUrl} className="font-semibold text-emerald-800 hover:underline">
+            Hoe komt ons advies tot stand?
+          </Link>
+        </p>
+        <p className="text-xs text-zinc-500">
+          {advice.adviceVersion} · adviesregels {advice.ruleSetVersion} · catalogus {advice.catalogVersion}
+        </p>
+      </section>
+
+      {!isLeftHanded && <Feedback onFeedback={onFeedback} />}
+
+      <div className="flex flex-wrap gap-3">
+        <Button variant="secondary" onClick={onEdit}>
+          Antwoorden aanpassen
+        </Button>
+        <Button variant="secondary" onClick={onRestart}>
+          Opnieuw beginnen
+        </Button>
+      </div>
     </div>
   );
 }
