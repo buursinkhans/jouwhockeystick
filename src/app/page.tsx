@@ -1,16 +1,16 @@
 import { getAllProducts } from '@/catalog';
 import { Hero } from '@/components/home/Hero';
-import { HowItWorks } from '@/components/home/HowItWorks';
+import { StickwijzerExplainer } from '@/components/home/StickwijzerExplainer';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 
 export default function Home() {
-  const featured = getAllProducts().slice(0, 3);
+  const products = getAllProducts();
 
   return (
     <>
       <Hero />
-      <HowItWorks />
-      <FeaturedProducts products={featured} />
+      <StickwijzerExplainer productCount={products.length} />
+      <FeaturedProducts products={products.slice(0, 3)} />
     </>
   );
 }

@@ -13,13 +13,13 @@ export default function StickwijzerPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold">Stickwijzer</h1>
-      <p className="mt-2 max-w-3xl text-zinc-700">
+      <p className="mt-2 text-zinc-700">
         Beantwoord een paar vragen over lengte, ervaring, speelwensen en budget.
         Je krijgt maximaal drie sticks met per stick de redenen, de afweging en
         de bronnen. Het advies is een hulpmiddel, geen garantie, en positie is
         nooit de beslissende factor.
       </p>
-      <p className="mt-2 max-w-3xl text-sm text-zinc-600">
+      <p className="mt-2 text-sm text-zinc-600">
         Je hebt geen account nodig. We vragen geen naam, e-mailadres of
         geboortedatum.{' '}
         <Link

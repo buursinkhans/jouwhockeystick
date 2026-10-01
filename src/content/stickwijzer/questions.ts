@@ -34,6 +34,8 @@ export type QuestionDef = {
   input: QuestionInput;
   /** Only shown when this returns true. */
   showWhen?: (answers: Partial<AdviceAnswers>) => boolean;
+  /** Spread the options over the full width, with the explanation underneath. */
+  fullWidth?: boolean;
 };
 
 const CONFIDENCE_SCALE: QuestionInput = {
@@ -53,6 +55,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     question: 'Voor wie zoek je een stick?',
     shortLabel: 'voor wie',
     dataUse: 'Hiermee stemmen we de toon van het advies af.',
+    fullWidth: true,
     input: {
       kind: 'single',
       options: [
@@ -667,8 +670,8 @@ export type ScreenDef = {
 
 export const FIRST_SCREEN: ScreenDef = {
   id: 'who',
-  title: 'Kies je route',
-  questions: ['route_self_select', 'advice_goal'],
+  title: 'Voor wie en welke route',
+  questions: ['advice_goal', 'route_self_select'],
 };
 const AGE_EXPERIENCE: ScreenDef = {
   id: 'age_experience',

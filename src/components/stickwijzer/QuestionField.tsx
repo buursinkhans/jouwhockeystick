@@ -213,6 +213,37 @@ export function QuestionField({
         <p className="mt-3 text-sm text-zinc-600">{def.dataUse}</p>
       </div>
     );
+  } else if (def.fullWidth) {
+    // Same width and column grid as the card layout, so the two line up.
+    return (
+      <div>
+        <fieldset aria-describedby={describedBy || undefined}>
+          <legend className="text-lg font-semibold">
+            {def.question}
+            {suffix}
+          </legend>
+          <div className="mt-3 grid gap-3 md:grid-cols-3">
+            {input.options.map((option) => (
+              <label
+                key={option.value}
+                className={`${OPTION_CLASSES} rounded-2xl px-4 py-3 font-semibold`}
+              >
+                <input
+                  type="radio"
+                  name={def.id}
+                  value={option.value}
+                  checked={value === option.value}
+                  onChange={() => onChange(option.value)}
+                />
+                {option.label}
+              </label>
+            ))}
+          </div>
+          {error}
+        </fieldset>
+        <p className="mt-3 text-sm text-zinc-600">{def.dataUse}</p>
+      </div>
+    );
   } else {
     control = (
       <fieldset aria-describedby={describedBy || undefined}>
