@@ -47,7 +47,7 @@ describe('getAdviceBlockers', () => {
     expect(getAdviceBlockers(buildProduct(), NOW)).toEqual([]);
   });
 
-  it('blocks a product without a bow profile or model year', () => {
+  it('blocks a product without a bow profile, but not for an unknown model year', () => {
     const product = buildProduct({
       bowProfile: undefined,
       experienceLevel: {
@@ -56,10 +56,7 @@ describe('getAdviceBlockers', () => {
         lastVerifiedAt: '2026-06-01',
       },
     });
-    expect(getAdviceBlockers(product, NOW)).toEqual([
-      'missing_bow',
-      'unknown_model_year',
-    ]);
+    expect(getAdviceBlockers(product, NOW)).toEqual(['missing_bow']);
   });
 
   it('blocks an editorial bow estimate that has no traceable source', () => {
@@ -108,10 +105,7 @@ describe('real catalog', () => {
     for (const product of getFieldProducts()) {
       const blockers = getAdviceBlockers(product);
       expect(
-        blockers.every(
-          (blocker) =>
-            blocker === 'unknown_model_year' || blocker === 'missing_bow',
-        ),
+        blockers.every((blocker) => blocker === 'missing_bow'),
         `${product.slug}: ${blockers.join(', ')}`,
       ).toBe(true);
     }

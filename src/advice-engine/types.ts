@@ -46,6 +46,7 @@ export type CautionCode =
   | 'LOWBOW_TRADEOFF'
   | 'LESS_POWER'
   | 'CARBON_UNKNOWN'
+  | 'MODEL_YEAR_UNCONFIRMED'
   | 'BIG_BOW_CHANGE'
   | 'DIRECT_FEEL_VIBRATION';
 

@@ -7,6 +7,7 @@ import { ProductSpecTable } from '@/components/catalog/ProductSpecTable';
 import { ProductProsAndCons } from '@/components/catalog/ProductProsAndCons';
 import { ProductImage } from '@/components/catalog/ProductImage';
 import { ProductNotice } from '@/components/ui/ProductNotice';
+import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
 import { ButtonLink } from '@/components/ui/Button';
 import { RetailerLinks } from '@/components/ui/RetailerLinks';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -100,6 +101,7 @@ export default async function ProductPage({
       <div className="mt-1">
         <ProductNotice />
       </div>
+      <PartnerLinkNote />
 
       <div className="mt-6 flex flex-wrap items-start gap-3">
         <RetailerLinks

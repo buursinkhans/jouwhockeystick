@@ -1,3 +1,4 @@
+import { getModelYear } from '@/catalog/modelYear';
 import type { Product } from '@/catalog/types';
 import type { AdviceAnswers } from './answers';
 import { BOW_RANK, deriveAdviceRules } from './productRules';
@@ -67,6 +68,9 @@ export function getCautions(
   }
   if (carbon === undefined) {
     cautions.push('CARBON_UNKNOWN');
+  }
+  if (getModelYear(product) === undefined) {
+    cautions.push('MODEL_YEAR_UNCONFIRMED');
   }
 
   return cautions;

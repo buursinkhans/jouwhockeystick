@@ -172,7 +172,9 @@ export const CAUTION_TEXT: Record<CautionCode, string> = {
   LESS_POWER:
     'Deze stick is minder gericht op maximale slagkracht dan een stijvere stick met veel carbon.',
   CARBON_UNKNOWN:
-    'De fabrikant vermeldt geen carbonpercentage. De stijfheid is daardoor niet goed te vergelijken met andere sticks.',
+    'Er is geen carbonpercentage vermeld. De stijfheid is daardoor niet goed te vergelijken met andere sticks.',
+  MODEL_YEAR_UNCONFIRMED:
+    'Het modeljaar is niet bevestigd. Controleer bij de winkel welke uitvoering je krijgt; specificaties kunnen per seizoen verschillen.',
   BIG_BOW_CHANGE:
     'Dit profiel wijkt duidelijk af van het profiel waarmee de speler ervaring heeft. Reken op een gewenningsperiode.',
   DIRECT_FEEL_VIBRATION:

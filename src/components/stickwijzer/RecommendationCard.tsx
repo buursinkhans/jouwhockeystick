@@ -124,11 +124,7 @@ export function RecommendationCard({
         </div>
         <div>
           <dt className="text-lijngrijs">Carbon</dt>
-          <dd>
-            {carbon === undefined
-              ? 'Niet vermeld door de fabrikant'
-              : `${carbon}%`}
-          </dd>
+          <dd>{carbon === undefined ? 'Niet vermeld' : `${carbon}%`}</dd>
         </div>
         <div>
           <dt className="text-lijngrijs">Modeljaar</dt>

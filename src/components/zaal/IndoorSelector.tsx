@@ -15,6 +15,7 @@ import { ProductImage } from '@/components/catalog/ProductImage';
 import { Button } from '@/components/ui/Button';
 import { AlertIcon, CheckIcon } from '@/components/ui/icons';
 import { RetailerLinks } from '@/components/ui/RetailerLinks';
+import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
 import { trackEvent } from '@/lib/analytics/track';
 
 const OPTION_CLASSES =
@@ -272,6 +273,7 @@ export function IndoorSelector({ products }: { products: Product[] }) {
                   prijs. Dit is geen persoonlijk advies: kijk bij elke stick ook
                   naar het profiel en het gevoel.
                 </p>
+                <PartnerLinkNote />
                 <ul className="mt-4 space-y-4">
                   {selection.matches.map((match) => (
                     <ResultCard

@@ -324,3 +324,34 @@ describe('applyHardFilters', () => {
     ).toBe('data');
   });
 });
+
+describe('unknown model year', () => {
+  it('still weighs and offers the stick, with a visible caution', () => {
+    const noYear = buildProduct({
+      slug: 'no-year',
+      experienceLevel: {
+        value: 'beginner',
+        source: 'partner-shop',
+        sourceUrl: 'https://www.bol.com/nl/nl/p/example/1/',
+        lastVerifiedAt: '2026-06-01',
+      },
+    });
+    const advice = getAdvice(buildStartAnswers(), [noYear], { now: NOW });
+
+    expect(advice.results.map((result) => result.product.slug)).toEqual([
+      'no-year',
+    ]);
+    expect(advice.results[0]?.cautions).toContain('MODEL_YEAR_UNCONFIRMED');
+  });
+
+  it('now offers the bol.com junior sticks for a 33-inch child in the real catalog', () => {
+    // 145 cm → 33 inch: only bol.com listings without a model year exist in 33".
+    const advice = getAdvice(buildStartAnswers({ height_cm: 145 }), catalog);
+
+    expect(advice.sizeAdvice.primaryInch).toBe(33);
+    expect(advice.results.length).toBeGreaterThan(0);
+    for (const result of advice.results) {
+      expect(result.cautions).toContain('MODEL_YEAR_UNCONFIRMED');
+    }
+  });
+});

@@ -1,5 +1,4 @@
 import { isProductActive } from '@/catalog';
-import { getModelYear } from '@/catalog/modelYear';
 import type { BowProfile, ExperienceLevel, Product } from '@/catalog/types';
 import { HIGH_CARBON, SOFT_MAX_CARBON, feelFromCarbon } from './carbon';
 import type { ExperienceBand, StickFeel } from './types';
@@ -102,7 +101,6 @@ export type AdviceBlocker =
   | 'missing_bow'
   | 'missing_lengths'
   | 'missing_core_source'
-  | 'unknown_model_year'
   | 'unavailable'
   | 'illogical_starter_flag';
 
@@ -118,6 +116,11 @@ function hasTraceableSource(
 /**
  * Publication checks from spec §11. A product with any blocker stays visible
  * in the catalog but is never used in an automated advice.
+ *
+ * Deliberate deviation (owner's decision, 2026-10-05): an unknown model year
+ * is not a blocker. Many shop listings don't state one; such sticks are
+ * weighed and offered like any other, with a visible "Modeljaar niet
+ * bevestigd" caution instead.
  */
 export function getAdviceBlockers(
   product: Product,
@@ -141,9 +144,6 @@ export function getAdviceBlockers(
     !hasTraceableSource(product.priceIndicativeEur)
   ) {
     blockers.push('missing_core_source');
-  }
-  if (getModelYear(product) === undefined) {
-    blockers.push('unknown_model_year');
   }
   if (product.stock.value === 'unavailable') {
     blockers.push('unavailable');

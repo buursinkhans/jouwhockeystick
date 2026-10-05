@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Brand } from '@/catalog/types';
 import type { RetailerPlacement } from '@/lib/retailers';
+import { PARTNER_LINK_LABEL, PARTNER_LINK_URL } from '@/content/partnerLinks';
 import { RetailerLink } from './RetailerLink';
 
 /**
@@ -40,12 +41,10 @@ export function RetailerLinks({
           Bekijk en koop op bol.com
         </RetailerLink>
       </div>
-      {/* Disclosure next to every shop button (partner links). */}
-      <p className="mt-2 text-xs text-lijngrijs">
-        Partnerlink: bij een aankoop via bol.com kunnen we een vergoeding
-        krijgen. Dat heeft geen invloed op ons advies.{' '}
-        <Link href="/methodiek#partnerlinks" className="underline">
-          Meer uitleg
+      {/* Short disclosure at every shop button; the full text is on /methodiek. */}
+      <p className="mt-1.5 text-xs text-lijngrijs">
+        <Link href={PARTNER_LINK_URL} className="underline hover:text-veld">
+          {PARTNER_LINK_LABEL}
         </Link>
       </p>
     </div>

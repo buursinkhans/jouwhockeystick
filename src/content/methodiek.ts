@@ -37,7 +37,7 @@ export const METHODIEK = {
     'Startroute: extreme low bow, dragflickstick of een stick die alleen voor ervaren spelers is bedoeld.',
     'De eerste aanname is nog in ontwikkeling en de stick heeft ongeveer 85% carbon of meer.',
     'De dragflick speelt geen rol en de stick is een uitgesproken dragflickstick.',
-    'Bow-profiel, bron, modeljaar of lengtes ontbreken in onze productgegevens.',
+    'Bow-profiel, bron of lengtes ontbreken in onze productgegevens. Een onbekend modeljaar sluit een stick niet uit; dat staat dan als aandachtspunt bij het advies.',
   ],
   roles: [
     {

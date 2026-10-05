@@ -15,6 +15,7 @@ import {
 } from '@/content/stickwijzer/resultCopy';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { RecommendationCard } from './RecommendationCard';
+import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
 
 const INTEREST_HREF = '/interesse?source=stickwijzer-resultaat';
 
@@ -117,6 +118,7 @@ export function QuizResult({
               ? 'Onze aanbeveling'
               : 'Onze aanbevelingen'}
           </h3>
+          <PartnerLinkNote />
           {advice.isUncertain && (
             <p className="mt-2 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">
               Dit advies is minder zeker dan we zouden willen. Lees de
