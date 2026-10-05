@@ -144,6 +144,11 @@ export default function MethodiekPage() {
       </div>
       <p className="mt-3 text-inkt/80">{METHODIEK.independence}</p>
 
+      <h2 id="partnerlinks" className="mt-10 scroll-mt-6 text-xl font-bold">
+        Partnerlinks
+      </h2>
+      <p className="mt-3 text-inkt/80">{METHODIEK.partnerLinks}</p>
+
       <h2 className="mt-10 text-xl font-bold">Maximaal drie aanbevelingen</h2>
       <dl className="mt-4 space-y-3">
         {METHODIEK.roles.map((role) => (

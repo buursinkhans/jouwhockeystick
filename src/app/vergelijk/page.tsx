@@ -98,6 +98,7 @@ export default async function VergelijkPage({
                   <RetailerLinks
                     brand={product.brand}
                     productName={product.name}
+                    placement="vergelijk"
                     className="text-sm"
                     stack
                   />

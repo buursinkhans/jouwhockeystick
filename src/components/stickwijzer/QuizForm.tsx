@@ -311,9 +311,10 @@ export function QuizForm() {
         })
       : null;
   const ScreenIcon = SCREEN_ICONS[screen.id] ?? QuestionIcon;
-  const optionalIds = (screen.optional ?? []).filter((id) =>
-    isVisible(id, answers),
-  );
+  const optionalSet = new Set(screen.optional ?? []);
+  const displayIds = (
+    screen.order ?? [...screen.questions, ...(screen.optional ?? [])]
+  ).filter((id) => !optionalSet.has(id) || isVisible(id, answers));
 
   return (
     <form
@@ -379,12 +380,13 @@ export function QuizForm() {
       </h2>
 
       <div className="mt-4 space-y-8">
-        {screen.questions.map((id) => (
+        {displayIds.map((id) => (
           <QuestionField
             key={id}
             def={QUESTIONS[id]}
             value={answers[id]}
             onChange={(value) => handleChange(id, value)}
+            optional={optionalSet.has(id)}
             errorMessage={id === 'height_cm' ? heightError(answers) : undefined}
             optionMeta={
               id === 'route_self_select' ? ROUTE_STEP_COUNTS : undefined
@@ -420,16 +422,6 @@ export function QuizForm() {
             </Button>
           </div>
         )}
-
-        {optionalIds.map((id) => (
-          <QuestionField
-            key={id}
-            def={QUESTIONS[id]}
-            value={answers[id]}
-            onChange={(value) => handleChange(id, value)}
-            optional
-          />
-        ))}
       </div>
 
       <p className="mt-4 min-h-5 text-sm text-red-700" aria-live="polite">

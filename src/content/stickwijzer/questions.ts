@@ -664,8 +664,10 @@ export type ScreenDef = {
   title: string;
   /** Always visible on the screen. */
   questions: QuestionId[];
-  /** Shown below the required questions, marked as optional. */
+  /** Marked as optional; shown below the required questions unless `order` says otherwise. */
   optional?: QuestionId[];
+  /** Display order of all questions on the screen, when it differs from required-then-optional. */
+  order?: QuestionId[];
 };
 
 export const FIRST_SCREEN: ScreenDef = {
@@ -704,6 +706,13 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
       title: 'Lengte',
       questions: ['height_cm', 'left_handed_requirement'],
       optional: ['height_uncertain', 'junior_grip_needed'],
+      // Keep the follow-up about the height directly under the height question.
+      order: [
+        'height_cm',
+        'height_uncertain',
+        'left_handed_requirement',
+        'junior_grip_needed',
+      ],
     },
     {
       ...CURRENT_STICK,
@@ -727,6 +736,13 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
       optional: [
         'height_uncertain',
         'current_length_inch',
+        'junior_grip_needed',
+      ],
+      order: [
+        'height_cm',
+        'height_uncertain',
+        'current_length_inch',
+        'left_handed_requirement',
         'junior_grip_needed',
       ],
     },
@@ -756,6 +772,12 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
       title: 'Lengte',
       questions: ['height_cm', 'left_handed_requirement'],
       optional: ['height_uncertain', 'current_length_inch'],
+      order: [
+        'height_cm',
+        'height_uncertain',
+        'current_length_inch',
+        'left_handed_requirement',
+      ],
     },
     {
       id: 'first_touch',

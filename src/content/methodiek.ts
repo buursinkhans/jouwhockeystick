@@ -71,6 +71,8 @@ export const METHODIEK = {
       body: 'Die hebben we op dit moment nog niet. Bij elke stick staat daarom "niet gemeten" en "nog niet getest". Zodra we meten of testen, vermelden we datum, methode en aantal geteste exemplaren.',
     },
   ],
+  partnerLinks:
+    'De knoppen naar bol.com zijn partnerlinks van het bol.com Partnerprogramma. Koop je via zo’n link, dan kunnen wij een vergoeding krijgen; voor jou verandert de prijs niet. Die vergoeding speelt geen rol in het advies: de score kent geen invoer voor marge, vergoeding of sponsoring, en een stick die niet bij bol.com te koop is, kan net zo goed als beste match uitkomen.',
   independence:
     'Marge, affiliatevergoeding of sponsoring is geen onderdeel van de score. Bij een gelijke score gaat de eenvoudigere en daarna de goedkopere stick voor.',
   closing: [

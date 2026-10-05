@@ -223,7 +223,11 @@ export function RecommendationCard({
       </details>
 
       <div className="mt-5">
-        <RetailerLinks brand={product.brand} productName={product.name} />
+        <RetailerLinks
+          brand={product.brand}
+          productName={product.name}
+          placement="stickwijzer"
+        />
       </div>
       <p className="mt-3 text-sm">
         <Link

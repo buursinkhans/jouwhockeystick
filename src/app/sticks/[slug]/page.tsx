@@ -100,7 +100,11 @@ export default async function ProductPage({
       </div>
 
       <div className="mt-6 flex flex-wrap items-start gap-3">
-        <RetailerLinks brand={product.brand} productName={product.name} />
+        <RetailerLinks
+          brand={product.brand}
+          productName={product.name}
+          placement="productpagina"
+        />
         <ButtonLink
           href={`/interesse?product=${product.slug}&source=productpagina`}
           variant="secondary"

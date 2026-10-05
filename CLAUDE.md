@@ -13,7 +13,7 @@ De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking
 
 ## Commerce
 - jouwhockeystick.nl verwijst door naar bol.com; er is geen eigen checkout, voorraad of betaalverwerking.
-- Er is nog geen bol.com Partnerprogramma-account; links zijn generieke bol.com-zoeklinks (`src/lib/bolcom.ts`), geen echte affiliate-tracking. Voeg geen fictieve tracking-parameters toe.
+- bol.com-links lopen via het bol.com Partnerprogramma (site ID 1547833, zie `src/lib/retailers.ts`), met een sub-ID per plek op de site. Elke winkelknop toont een partnerlink-vermelding; vergoedingen spelen geen rol in de adviesscore. bol.com is voorlopig de enige winkel op de site; voeg pas een andere winkel toe als daar een partnerprogramma voor is. Voeg geen fictieve tracking-parameters toe.
 - Iedere productpagina en ieder stickadvies bevat een duidelijke, niet-misleidende vermelding dat bol.com de verkoper is.
 - Geen kortingsclaims (bijv. "X% korting") zonder een echte, verifieerbare eerdere verkoopprijs — dit is wettelijk gereguleerd (EU Omnibus-richtlijn). Toon alleen de adviesprijs.
 - Trackinglinks zijn de enige bron van waarheid voor attributie; hardcode geen commissieaannames in de UI.

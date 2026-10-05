@@ -1,21 +1,24 @@
+import Link from 'next/link';
 import type { Brand } from '@/catalog/types';
+import type { RetailerPlacement } from '@/lib/retailers';
 import { RetailerLink } from './RetailerLink';
 
 /**
- * Renders the outbound retailer CTAs for a product. bol.com links straight
- * to a search for this exact model. PassaSports only has a verified
- * brand-category page (no confirmed per-product URLs), so its button is
- * phrased accordingly ("bekijk het {brand}-assortiment") rather than
- * implying it goes straight to this exact stick.
+ * The outbound shop CTA for a product: a bol.com partner link to a search
+ * for this exact model, plus the partner-link disclosure. bol.com is the
+ * only shop for now — other shops come back once they have a partner
+ * programme we can join.
  */
 export function RetailerLinks({
   brand,
   productName,
+  placement,
   className = '',
   stack = false,
 }: {
   brand: Brand;
   productName: string;
+  placement: RetailerPlacement;
   className?: string;
   /** Stacks the buttons full-width instead of placing them side by side. */
   stack?: boolean;
@@ -24,25 +27,27 @@ export function RetailerLinks({
   const buttonWidth = stack ? 'w-full' : '';
 
   return (
-    <div className={`${layout} ${className}`.trim()}>
-      <RetailerLink
-        retailer="bolcom"
-        brand={brand}
-        productName={productName}
-        variant="primary"
-        className={buttonWidth}
-      >
-        Bekijk en koop op bol.com
-      </RetailerLink>
-      <RetailerLink
-        retailer="passasports"
-        brand={brand}
-        productName={productName}
-        variant="secondary"
-        className={buttonWidth}
-      >
-        Bekijk {brand}-assortiment bij PassaSports
-      </RetailerLink>
+    <div className={className}>
+      <div className={layout}>
+        <RetailerLink
+          retailer="bolcom"
+          brand={brand}
+          productName={productName}
+          placement={placement}
+          variant="primary"
+          className={buttonWidth}
+        >
+          Bekijk en koop op bol.com
+        </RetailerLink>
+      </div>
+      {/* Disclosure next to every shop button (partner links). */}
+      <p className="mt-2 text-xs text-lijngrijs">
+        Partnerlink: bij een aankoop via bol.com kunnen we een vergoeding
+        krijgen. Dat heeft geen invloed op ons advies.{' '}
+        <Link href="/methodiek#partnerlinks" className="underline">
+          Meer uitleg
+        </Link>
+      </p>
     </div>
   );
 }

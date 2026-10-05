@@ -36,7 +36,12 @@ export function ProductCard({ product }: { product: Product }) {
         <ProductProsAndCons product={product} limit={1} stacked />
       </div>
       <div className="mt-auto pt-5">
-        <RetailerLinks brand={product.brand} productName={product.name} stack />
+        <RetailerLinks
+          brand={product.brand}
+          productName={product.name}
+          placement="catalogus"
+          stack
+        />
       </div>
     </article>
   );

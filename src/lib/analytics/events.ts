@@ -39,5 +39,6 @@ export type AnalyticsEvent =
       retailer: string;
       brand: string;
       productName: string;
+      placement: string;
     }
   | AdviceAnalyticsEvent;

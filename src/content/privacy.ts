@@ -15,8 +15,8 @@ export const PRIVACY = {
   title: 'Privacyverklaring',
   metaDescription:
     'Welke gegevens jouwhockeystick.nl verwerkt, waarom, hoe lang en met wie: de stickwijzer, het interesseformulier, cookieloze statistieken en hosting.',
-  version: '1.0',
-  updatedAt: '2026-10-05',
+  version: '1.1',
+  updatedAt: '2026-10-06',
   intro: [
     `${SITE_NAME} gebruikt zo weinig persoonsgegevens als mogelijk. Voor de stickwijzer hoef je geen naam, e-mailadres of geboortedatum op te geven, we plaatsen geen cookies en we gebruiken statistieken zonder cookies of bezoekersprofielen. Alleen als je zelf het interesseformulier invult, ontvangen we contactgegevens.`,
   ],
@@ -59,7 +59,8 @@ export const PRIVACY = {
       heading: 'Afbeeldingen en links van derden',
       paragraphs: [
         'Productfoto’s en logo’s laden we rechtstreeks van de websites van de merken en van bol.com. Daardoor ontvangt die website, zoals bij elke afbeelding op internet, technische gegevens zoals je IP-adres. Wij krijgen daar niets van te zien.',
-        'Als je doorklikt naar een winkel zoals bol.com of PassaSports, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken.',
+        'Als je doorklikt naar bol.com, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken.',
+        'De links naar bol.com lopen via het bol.com Partnerprogramma. Na een klik registreert bol.com dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; bol.com kan daarvoor op zijn eigen website cookies plaatsen. Wij ontvangen daarbij geen gegevens over wie je bent of wat je koopt, alleen geanonimiseerde totalen.',
       ],
     },
     {
