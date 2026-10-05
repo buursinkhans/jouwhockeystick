@@ -56,6 +56,10 @@ export const bowProfileSchema = z.enum([
 ]);
 export type BowProfile = z.infer<typeof bowProfileSchema>;
 
+/** Field (veld) or indoor (zaal) hockey. */
+export const disciplineSchema = z.enum(['veld', 'zaal']);
+export type Discipline = z.infer<typeof disciplineSchema>;
+
 export const stockStatusSchema = z.enum([
   'available',
   'limited',
@@ -69,6 +73,12 @@ export const brandSchema = z.enum([
   'adidas',
   'JDH',
   'Princess',
+  'Scoop',
+  'The Indian Maharadja',
+  'TK',
+  'Osaka',
+  'Stag',
+  'Ritual',
 ]);
 export type Brand = z.infer<typeof brandSchema>;
 
@@ -93,6 +103,12 @@ export const productSchema = z.object({
   carbonPercentage: sourcedValueSchema(z.number().min(0).max(100)).optional(),
   /** Optional — not every brand publishes a weight. */
   weightGrams: sourcedValueSchema(z.number().positive()).optional(),
+  /**
+   * Optional for backwards compatibility: products without it are field
+   * sticks. Indoor sticks always state it, sourced from the brand's own
+   * indoor category.
+   */
+  discipline: sourcedValueSchema(disciplineSchema).optional(),
   lengthsInches: sourcedValueSchema(z.array(z.number())),
   priceIndicativeEur: sourcedValueSchema(z.number().positive()),
   stock: sourcedValueSchema(stockStatusSchema),

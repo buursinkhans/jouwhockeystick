@@ -1,4 +1,7 @@
-import type { Brand, Product } from './types';
+import { getDiscipline } from './discipline';
+import type { Brand, Discipline, Product } from './types';
+
+export { getDiscipline };
 import { graysJb6Composite } from './products/grays-jb6-composite';
 import { graysJb10Composite } from './products/grays-jb10-composite';
 import { braboEliteFiveWtbLb } from './products/brabo-elite-five-wtb-lb';
@@ -17,6 +20,29 @@ import { graysPb11PlusComposite } from './products/grays-pb11-plus-composite';
 import { graysDb10PlusComposite } from './products/grays-db10-plus-composite';
 import { adidasEstro4 } from './products/adidas-estro-4';
 import { adidasEstro75Le } from './products/adidas-estro-75-le';
+import { graysPb10xiCompositeIndoor } from './products/grays-pb10xi-composite-indoor';
+import { graysJb8xiCompositeIndoor } from './products/grays-jb8xi-composite-indoor';
+import { graysDb7xiCompositeIndoor } from './products/grays-db7xi-composite-indoor';
+import { graysPb9iIndoor } from './products/grays-pb9i-indoor';
+import { princessCompetitionJr10StarIndoor } from './products/princess-competition-jr-10-star-indoor';
+import { grays6iDynabowIndoor } from './products/grays-6i-dynabow-indoor';
+import { grays4iDynabowIndoor } from './products/grays-4i-dynabow-indoor';
+import { scoopIndoorMidBow20Carbon } from './products/scoop-indoor-mid-bow-20-carbon';
+import { scoopWdnJuniorIndoor } from './products/scoop-wdn-junior-indoor';
+import { indianMaharadjaArcticWoodIndoor } from './products/indian-maharadja-arctic-wood-indoor';
+import { tk3ControlBowJuniorIndoor } from './products/tk-3-control-bow-junior-indoor';
+import { adidasYoungstar102627 } from './products/adidas-youngstar-10-2627';
+import { graysImpulseGtJunior } from './products/grays-impulse-gt-junior';
+import { braboOgeezSnowleopardJunior } from './products/brabo-ogeez-snowleopard-junior';
+import { osakaProTourGf20Junior } from './products/osaka-pro-tour-gf-20-junior';
+import { tkMaxiJunior } from './products/tk-maxi-junior';
+import { princessCompetitionJunior3StarJbow } from './products/princess-competition-junior-3-star-jbow';
+import { indianMaharadjaRedJunior } from './products/indian-maharadja-red-junior';
+import { stagMagicJrBowJunior } from './products/stag-magic-jr-bow-junior';
+import { adidasFabela302627 } from './products/adidas-fabela-30-2627';
+import { adidasEstro602627 } from './products/adidas-estro-60-2627';
+import { osakaProTour4020 } from './products/osaka-pro-tour-40-20';
+import { ritualSpecialist55 } from './products/ritual-specialist-55';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -37,13 +63,36 @@ const ALL_PRODUCTS: Product[] = [
   graysDb10PlusComposite,
   adidasEstro4,
   adidasEstro75Le,
+  graysPb10xiCompositeIndoor,
+  graysJb8xiCompositeIndoor,
+  graysDb7xiCompositeIndoor,
+  graysPb9iIndoor,
+  princessCompetitionJr10StarIndoor,
+  grays6iDynabowIndoor,
+  grays4iDynabowIndoor,
+  scoopIndoorMidBow20Carbon,
+  scoopWdnJuniorIndoor,
+  indianMaharadjaArcticWoodIndoor,
+  tk3ControlBowJuniorIndoor,
+  adidasYoungstar102627,
+  graysImpulseGtJunior,
+  braboOgeezSnowleopardJunior,
+  osakaProTourGf20Junior,
+  tkMaxiJunior,
+  princessCompetitionJunior3StarJbow,
+  indianMaharadjaRedJunior,
+  stagMagicJrBowJunior,
+  adidasFabela302627,
+  adidasEstro602627,
+  osakaProTour4020,
+  ritualSpecialist55,
 ];
 
 /**
  * Bump whenever product data changes. Stamped on every advice result so an
  * old result can be traced back to the catalog it was calculated from.
  */
-export const CATALOG_VERSION = '2026-10-01';
+export const CATALOG_VERSION = '2026-10-05c';
 
 const VERIFICATION_FRESHNESS_MONTHS = 12;
 
@@ -68,6 +117,18 @@ export function getAllProducts(now: Date = new Date()): Product[] {
   return ALL_PRODUCTS.filter((product) => isProductActive(product, now));
 }
 
+export function getFieldProducts(now: Date = new Date()): Product[] {
+  return getAllProducts(now).filter(
+    (product) => getDiscipline(product) === 'veld',
+  );
+}
+
+export function getIndoorProducts(now: Date = new Date()): Product[] {
+  return getAllProducts(now).filter(
+    (product) => getDiscipline(product) === 'zaal',
+  );
+}
+
 export function getProductBySlug(
   slug: string,
   now: Date = new Date(),
@@ -75,7 +136,14 @@ export function getProductBySlug(
   return getAllProducts(now).find((product) => product.slug === slug);
 }
 
-export function getAllBrands(now: Date = new Date()): Brand[] {
-  const brands = new Set(getAllProducts(now).map((product) => product.brand));
+/** Brands that have at least one active product, optionally within one discipline. */
+export function getAllBrands(
+  now: Date = new Date(),
+  discipline?: Discipline,
+): Brand[] {
+  const products = getAllProducts(now).filter(
+    (product) => !discipline || getDiscipline(product) === discipline,
+  );
+  const brands = new Set(products.map((product) => product.brand));
   return Array.from(brands).sort();
 }

@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { getAllBrands, getAllProducts, isProductActive } from './index';
+import {
+  getAllBrands,
+  getAllProducts,
+  isProductActive,
+  getDiscipline,
+  getFieldProducts,
+  getIndoorProducts,
+} from './index';
 import type { Product } from './types';
+import { getAdvice } from '@/advice-engine/engine';
+import { buildPerformanceAnswers } from '@/advice-engine/testFixtures';
 
 function buildProduct(lastVerifiedAt: string): Product {
   const sourced = {
@@ -79,13 +88,53 @@ describe('catalog composition', () => {
     }
   });
 
-  it('includes all five currently verified brands', () => {
-    expect(getAllBrands()).toEqual([
-      'Brabo',
-      'Grays',
-      'JDH',
-      'Princess',
-      'adidas',
-    ]);
+  it('lists only brands that have field sticks in the field brand filter', () => {
+    const fieldBrands = getAllBrands(new Date(), 'veld');
+    for (const brand of fieldBrands) {
+      expect(
+        getFieldProducts().some((product) => product.brand === brand),
+      ).toBe(true);
+    }
+    expect(fieldBrands).toEqual(
+      expect.arrayContaining(['Brabo', 'Grays', 'JDH', 'Princess', 'adidas']),
+    );
+  });
+});
+
+describe('field and indoor sticks', () => {
+  it('splits the catalog into field and indoor sticks without overlap', () => {
+    const field = getFieldProducts().map((product) => product.slug);
+    const indoor = getIndoorProducts().map((product) => product.slug);
+
+    expect(indoor.length).toBeGreaterThan(0);
+    expect(field.filter((slug) => indoor.includes(slug))).toEqual([]);
+    expect(field.length + indoor.length).toBe(getAllProducts().length);
+  });
+
+  it('treats a product without a stated discipline as a field stick', () => {
+    expect(getDiscipline(buildProduct('2026-06-01'))).toBe('veld');
+  });
+
+  it('gives every indoor stick a traceable source: the brand site or a bol.com listing', () => {
+    for (const product of getIndoorProducts()) {
+      expect(['brand-website', 'partner-shop']).toContain(
+        product.discipline?.source,
+      );
+      expect(product.discipline?.sourceUrl).toBeDefined();
+      expect(product.priceIndicativeEur.sourceUrl).toBeDefined();
+    }
+  });
+
+  it('never lets the stickwijzer advise an indoor stick', () => {
+    const indoor = new Set(getIndoorProducts().map((product) => product.slug));
+    const advice = getAdvice(
+      buildPerformanceAnswers({ budget_band: 'compare_first' }),
+      getAllProducts(),
+    );
+
+    expect(advice.results.length).toBeGreaterThan(0);
+    for (const item of [...advice.results, ...advice.otherSizeOptions]) {
+      expect(indoor.has(item.product.slug)).toBe(false);
+    }
   });
 });

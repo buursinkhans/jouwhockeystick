@@ -1,9 +1,11 @@
 import {
+  DISCIPLINE_LABELS,
   BOW_LABELS,
   EXPERIENCE_LABELS,
   POSITION_LABELS,
   STOCK_LABELS,
 } from './labels';
+import { getDiscipline } from './discipline';
 import type { Product } from './types';
 
 export type CompareRow = { label: string; valueA: string; valueB: string };
@@ -25,6 +27,11 @@ function formatPositions(product: Product): string {
 export function buildCompareRows(a: Product, b: Product): CompareRow[] {
   const rows: CompareRow[] = [
     { label: 'Merk', valueA: a.brand, valueB: b.brand },
+    {
+      label: 'Soort stick',
+      valueA: DISCIPLINE_LABELS[getDiscipline(a)],
+      valueB: DISCIPLINE_LABELS[getDiscipline(b)],
+    },
     {
       label: 'Ervaringsniveau',
       valueA: EXPERIENCE_LABELS[a.experienceLevel.value],

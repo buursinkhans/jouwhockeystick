@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getAllProducts } from '@/catalog';
+import { getFieldProducts } from '@/catalog';
 import { deriveAdviceRules, getAdviceBlockers } from './productRules';
 import { NOW, buildProduct, sourced } from './testFixtures';
 
@@ -103,14 +103,28 @@ describe('getAdviceBlockers', () => {
 });
 
 describe('real catalog', () => {
-  it('only blocks the products we know have incomplete source data', () => {
-    const blocked = getAllProducts()
-      .filter((product) => getAdviceBlockers(product).length > 0)
-      .map((product) => product.slug)
-      .sort();
+  it('blocks field sticks only for missing source data, never for a contradiction in our own data', () => {
+    // Indoor sticks never enter the stickwijzer, so only field sticks matter here.
+    for (const product of getFieldProducts()) {
+      const blockers = getAdviceBlockers(product);
+      expect(
+        blockers.every(
+          (blocker) =>
+            blocker === 'unknown_model_year' || blocker === 'missing_bow',
+        ),
+        `${product.slug}: ${blockers.join(', ')}`,
+      ).toBe(true);
+    }
+  });
 
-    // Both adidas models come from a bol.com listing without a stated model
-    // year; the Estro .75 LE also has no stated bow profile.
-    expect(blocked).toEqual(['adidas-estro-4', 'adidas-estro-75-le']);
+  it('keeps every field stick from a brand website advisable', () => {
+    // bol.com listings often lack a model year; brand-site data must not.
+    const blockedBrandSite = getFieldProducts()
+      .filter(
+        (product) => product.priceIndicativeEur.source === 'brand-website',
+      )
+      .filter((product) => getAdviceBlockers(product).length > 0)
+      .map((product) => product.slug);
+    expect(blockedBrandSite).toEqual([]);
   });
 });

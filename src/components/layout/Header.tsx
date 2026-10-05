@@ -4,6 +4,7 @@ import { Logo, LogoIcon } from '@/components/brand/Logo';
 const NAV_LINKS = [
   { href: '/stickwijzer', label: 'Stickwijzer' },
   { href: '/sticks', label: 'Sticks' },
+  { href: '/zaalsticks', label: 'Zaalsticks' },
   { href: '/merken', label: 'Merken' },
   { href: '/vergelijk', label: 'Vergelijk' },
   { href: '/kennis/hoe-kies-je-de-juiste-hockeystick', label: 'Kennisbank' },

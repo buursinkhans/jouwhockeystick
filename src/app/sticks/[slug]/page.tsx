@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getAllProducts, getProductBySlug } from '@/catalog';
+import { getAllProducts, getDiscipline, getProductBySlug } from '@/catalog';
 import { ProductSpecTable } from '@/components/catalog/ProductSpecTable';
 import { ProductProsAndCons } from '@/components/catalog/ProductProsAndCons';
 import { ProductImage } from '@/components/catalog/ProductImage';
@@ -65,7 +65,9 @@ export default async function ProductPage({
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
-          { label: 'Sticks', href: '/sticks' },
+          getDiscipline(product) === 'zaal'
+            ? { label: 'Zaalsticks', href: '/zaalsticks' }
+            : { label: 'Sticks', href: '/sticks' },
           { label: product.name, href: `/sticks/${product.slug}` },
         ]}
       />

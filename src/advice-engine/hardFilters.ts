@@ -1,3 +1,4 @@
+import { getDiscipline } from '@/catalog';
 import type { Product } from '@/catalog/types';
 import {
   BAND_ORDER,
@@ -11,8 +12,15 @@ import type { NoMatchReason, PlayerContext } from './types';
 type Stage = Exclude<NoMatchReason, 'length'>;
 
 /** Publication blockers from spec §11: missing bow, source, model year, stock or verification. */
+/**
+ * Publication blockers from spec §11, plus: the stickwijzer advises field
+ * sticks only. Indoor sticks have their own section without advice rules.
+ */
 function passesData(product: Product, ctx: PlayerContext): boolean {
-  return getAdviceBlockers(product, ctx.now).length === 0;
+  return (
+    getDiscipline(product) === 'veld' &&
+    getAdviceBlockers(product, ctx.now).length === 0
+  );
 }
 
 function passesExperience(product: Product, ctx: PlayerContext): boolean {

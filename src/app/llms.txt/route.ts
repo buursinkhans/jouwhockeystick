@@ -31,7 +31,8 @@ export function GET() {
     ),
     '',
     '## Catalogus',
-    `- [Alle hockeysticks](${absoluteUrl('/sticks')}): specificaties met bron en controledatum per stick.`,
+    `- [Veldhockeysticks](${absoluteUrl('/sticks')}): specificaties met bron en controledatum per stick.`,
+    `- [Zaalsticks](${absoluteUrl('/zaalsticks')}): wat er anders is in de zaal volgens de FIH-regels, en zaalsticks met bron per gegeven.`,
     `- [Merken](${absoluteUrl('/merken')}): de merken in de catalogus.`,
     '',
   ];

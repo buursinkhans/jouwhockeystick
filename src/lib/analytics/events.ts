@@ -41,4 +41,12 @@ export type AnalyticsEvent =
       productName: string;
       placement: string;
     }
+  | {
+      /** The short indoor selector on /zaalsticks; no personal data. */
+      name: 'indoor_selection';
+      player: string;
+      budget: string;
+      sizes: string;
+      resultCount: number;
+    }
   | AdviceAnalyticsEvent;

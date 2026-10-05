@@ -1,6 +1,7 @@
 import type { Product } from '@/catalog/types';
 import {
   BOW_LABELS,
+  DISCIPLINE_LABELS,
   EXPERIENCE_LABELS,
   POSITION_LABELS,
   STOCK_LABELS,
@@ -22,6 +23,14 @@ export function ProductSpecTable({ product }: { product: Product }) {
       sourced: product.recommendedPositions,
     },
   ];
+
+  if (product.discipline) {
+    rows.unshift({
+      label: 'Soort stick',
+      value: DISCIPLINE_LABELS[product.discipline.value],
+      sourced: product.discipline,
+    });
+  }
 
   if (product.bowProfile) {
     rows.push({

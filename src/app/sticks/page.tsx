@@ -1,13 +1,13 @@
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
-import { getAllBrands, getAllProducts } from '@/catalog';
+import { getAllBrands, getFieldProducts } from '@/catalog';
 import type { Brand } from '@/catalog/types';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
 
 export const metadata = pageMetadata({
-  title: 'Alle hockeysticks',
+  title: 'Veldhockeysticks',
   description:
-    'Bekijk alle hockeysticks in de catalogus van jouwhockeystick.nl, met richtprijzen en sterke/aandachtspunten per stick.',
+    'Bekijk alle veldhockeysticks in de catalogus van jouwhockeystick.nl, met richtprijzen en sterke/aandachtspunten per stick.',
   path: '/sticks',
 });
 
@@ -24,15 +24,15 @@ export default async function SticksPage({
   searchParams: Promise<{ brand?: string }>;
 }) {
   const { brand } = await searchParams;
-  const brands = getAllBrands();
+  const brands = getAllBrands(new Date(), 'veld');
   const activeBrand = isValidBrand(brand, brands) ? brand : undefined;
-  const products = getAllProducts().filter(
+  const products = getFieldProducts().filter(
     (p) => !activeBrand || p.brand === activeBrand,
   );
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-bold">Alle hockeysticks</h1>
+      <h1 className="text-3xl font-bold">Veldhockeysticks</h1>
       <p className="mt-2 max-w-2xl text-lijngrijs">
         Twijfel je welke bij je past? Doorloop de{' '}
         <Link
@@ -41,7 +41,15 @@ export default async function SticksPage({
         >
           stickwijzer
         </Link>{' '}
-        voor een persoonlijk advies.
+        voor een persoonlijk advies. Zoek je een stick voor de zaal? Bekijk dan
+        de{' '}
+        <Link
+          href="/zaalsticks"
+          className="font-semibold text-veld hover:underline"
+        >
+          zaalsticks
+        </Link>
+        .
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">

@@ -1,4 +1,4 @@
-import type { BowProfile, Product } from './types';
+import type { BowProfile, Product, Discipline } from './types';
 
 export const EXPERIENCE_LABELS: Record<
   Product['experienceLevel']['value'],
@@ -16,6 +16,11 @@ export const BOW_LABELS: Record<BowProfile, string> = {
   probow: 'Pro bow',
   lowbow: 'Low bow',
   extreme_lowbow: 'Extreme low bow',
+};
+
+export const DISCIPLINE_LABELS: Record<Discipline, string> = {
+  veld: 'Veldhockey',
+  zaal: 'Zaalhockey',
 };
 
 export const STOCK_LABELS: Record<Product['stock']['value'], string> = {

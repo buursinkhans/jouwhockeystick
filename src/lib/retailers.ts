@@ -4,7 +4,7 @@ export type RetailerId = 'bolcom';
 
 /** Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert. */
 export type RetailerPlacement =
-  'stickwijzer' | 'productpagina' | 'catalogus' | 'vergelijk';
+  'stickwijzer' | 'productpagina' | 'catalogus' | 'vergelijk' | 'zaalkeuze';
 
 /**
  * bol.com Partnerprogramma site ID of jouwhockeystick.nl. Not a secret — it is
