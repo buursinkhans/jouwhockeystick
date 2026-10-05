@@ -1,19 +1,23 @@
-import { interestFormSchema, type InterestFormInput, type InterestFormSubmission } from './types';
+import {
+  interestFormSchema,
+  type InterestFormInput,
+  type InterestFormSubmission,
+} from './types';
 
 export type SubmitInterestResult =
   | { status: 'success'; submission: InterestFormSubmission }
   | { status: 'error'; fieldErrors: Record<string, string[] | undefined> };
 
-export type InterestSink = (submission: InterestFormSubmission) => void | Promise<void>;
+export type InterestSink = (
+  submission: InterestFormSubmission,
+) => void | Promise<void>;
 
 /**
- * No real persistence in this MVP pass — the default sink just logs, so a
- * real destination (email/CRM/DB) can be swapped in later without touching
- * call sites (this is a lead form, never a checkout).
+ * This step only validates. Delivery happens from the browser through
+ * Netlify Forms (see netlifyForm.ts), so the default sink does nothing —
+ * and in particular never writes a visitor's contact details to a log.
  */
-const defaultSink: InterestSink = (submission) => {
-  console.info('[interesse] nieuwe aanmelding', submission);
-};
+const defaultSink: InterestSink = () => {};
 
 export async function submitInterest(
   input: InterestFormInput,

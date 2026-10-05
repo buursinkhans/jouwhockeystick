@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import { CATALOG_VERSION } from '@/catalog';
 import { ADVICE_VERSION, RULE_SET_VERSION } from '@/advice-engine/ruleSetVersion';
 import { ROUTE_WEIGHTS } from '@/advice-engine/scoring';
@@ -7,10 +7,11 @@ import { METHODIEK, WEIGHT_LABELS } from '@/content/methodiek';
 import { GROWTH_WARNING, formatInch } from '@/content/stickwijzer/resultCopy';
 import { ButtonLink } from '@/components/ui/Button';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: METHODIEK.title,
   description: METHODIEK.metaDescription,
-};
+  path: '/methodiek',
+});
 
 const WEIGHT_KEYS = Object.keys(WEIGHT_LABELS) as Array<keyof typeof WEIGHT_LABELS>;
 

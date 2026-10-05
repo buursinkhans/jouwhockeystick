@@ -1,14 +1,15 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllBrands, getAllProducts } from '@/catalog';
 import type { Brand } from '@/catalog/types';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Alle hockeysticks',
   description:
     'Bekijk alle hockeysticks in de catalogus van jouwhockeystick.nl, met richtprijzen en sterke/aandachtspunten per stick.',
-};
+  path: '/sticks',
+});
 
 function isValidBrand(value: string | undefined, brands: Brand[]): value is Brand {
   return value !== undefined && brands.includes(value as Brand);

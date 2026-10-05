@@ -1,10 +1,11 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Over ons',
   description:
     'Waarom we jouwhockeystick.nl zijn begonnen en wie we willen zijn: een heldere, eerlijke gids bij het kiezen van een hockeystick.',
-};
+  path: '/over-ons',
+});
 
 export default function OverOnsPage() {
   return (

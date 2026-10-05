@@ -25,12 +25,18 @@ describe('submitInterest', () => {
   });
 
   it('rejects when neither email nor phone is provided', async () => {
-    const result = await submitInterest({ consentGiven: true, source: 'algemeen' }, vi.fn());
+    const result = await submitInterest(
+      { consentGiven: true, source: 'algemeen' },
+      vi.fn(),
+    );
     expect(result.status).toBe('error');
   });
 
   it('rejects when consent is not given', async () => {
-    const result = await submitInterest({ ...validInput, consentGiven: false }, vi.fn());
+    const result = await submitInterest(
+      { ...validInput, consentGiven: false },
+      vi.fn(),
+    );
     expect(result.status).toBe('error');
   });
 

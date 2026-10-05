@@ -1,13 +1,14 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { ADVICE_VERSION } from '@/advice-engine/ruleSetVersion';
 import { StickwijzerLoader } from '@/components/stickwijzer/StickwijzerLoader';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Stickwijzer',
   description:
     'Keuzehulp voor een hockeystick: een korte route voor een eerste stick en een verdiepende route voor gevorderde spelers. Je ziet per advies de redenen, de afweging en de bronnen.',
-};
+  path: '/stickwijzer',
+});
 
 export default function StickwijzerPage() {
   return (

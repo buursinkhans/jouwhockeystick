@@ -1,12 +1,14 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import { getProductBySlug } from '@/catalog';
 import { interestSourceSchema } from '@/interest/types';
 import { InterestForm } from '@/components/interesse/InterestForm';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Interesse doorgeven',
   description: 'Geef je interesse door en we nemen contact met je op.',
-};
+  path: '/interesse',
+  noIndex: true,
+});
 
 export default async function InteressePage({
   searchParams,

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllProducts, getProductBySlug } from '@/catalog';
@@ -8,6 +9,8 @@ import { ProductImage } from '@/components/catalog/ProductImage';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { ButtonLink } from '@/components/ui/Button';
 import { RetailerLinks } from '@/components/ui/RetailerLinks';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { ProductFitAndSources } from '@/components/catalog/ProductFitAndSources';
 
 export function generateStaticParams() {
   return getAllProducts().map((product) => ({ slug: product.slug }));
@@ -23,10 +26,11 @@ export async function generateMetadata({
   if (!product) {
     return {};
   }
-  return {
+  return pageMetadata({
     title: product.name,
     description: product.summary,
-  };
+    path: `/sticks/${slug}`,
+  });
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -51,6 +55,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Sticks', href: '/sticks' },
+          { label: product.name, href: `/sticks/${product.slug}` },
+        ]}
+      />
       <div className="flex items-start gap-6">
         <div className="shrink-0">
           <ProductImage product={product} className="h-40 w-40 sm:h-48 sm:w-48" />
@@ -92,6 +103,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="mt-4">
         <ProductSpecTable product={product} />
       </div>
+
+      <ProductFitAndSources product={product} />
 
       <p className="mt-6 text-sm">
         <Link href={`/vergelijk?a=${product.slug}`} className="font-semibold text-emerald-800 hover:underline">

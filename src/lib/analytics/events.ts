@@ -34,5 +34,10 @@ export type AnalyticsEvent =
       isUncertain: boolean;
     }
   | { name: 'interest_submit'; source: string; hasProductSlug: boolean }
-  | { name: 'retailer_click'; retailer: string; brand: string; productName: string }
+  | {
+      name: 'retailer_click';
+      retailer: string;
+      brand: string;
+      productName: string;
+    }
   | AdviceAnalyticsEvent;

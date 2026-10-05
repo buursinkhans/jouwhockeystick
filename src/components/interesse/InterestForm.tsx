@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import Link from 'next/link';
 import { submitInterestAction } from '@/app/interesse/actions';
+import { sendInterestToNetlify } from '@/interest/netlifyForm';
 import type { InterestSource } from '@/interest/types';
+import { CONTACT_EMAIL } from '@/lib/site';
 import { trackEvent } from '@/lib/analytics/track';
 import { Button } from '@/components/ui/Button';
 
@@ -17,8 +20,12 @@ export function InterestForm({ initialProductSlug, source }: Props) {
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const [consentGiven, setConsentGiven] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string[] | undefined>>({});
+  const [status, setStatus] = useState<
+    'idle' | 'submitting' | 'success' | 'error' | 'send-failed'
+  >('idle');
+  const [fieldErrors, setFieldErrors] = useState<
+    Record<string, string[] | undefined>
+  >({});
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,23 +41,32 @@ export function InterestForm({ initialProductSlug, source }: Props) {
       source,
     });
 
-    if (result.status === 'success') {
-      setStatus('success');
-      setFieldErrors({});
-      trackEvent({
-        name: 'interest_submit',
-        source,
-        hasProductSlug: Boolean(initialProductSlug),
-      });
-    } else {
+    if (result.status === 'error') {
       setStatus('error');
       setFieldErrors(result.fieldErrors);
+      return;
     }
+
+    setFieldErrors({});
+    if (!(await sendInterestToNetlify(result.submission))) {
+      setStatus('send-failed');
+      return;
+    }
+
+    setStatus('success');
+    trackEvent({
+      name: 'interest_submit',
+      source,
+      hasProductSlug: Boolean(initialProductSlug),
+    });
   }
 
   if (status === 'success') {
     return (
-      <p role="status" className="rounded-lg bg-emerald-50 px-4 py-3 text-emerald-900">
+      <p
+        role="status"
+        className="rounded-lg bg-emerald-50 px-4 py-3 text-emerald-900"
+      >
         Bedankt voor je interesse! We nemen zo snel mogelijk contact met je op.
       </p>
     );
@@ -122,16 +138,42 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           type="checkbox"
           checked={consentGiven}
           onChange={(e) => setConsentGiven(e.target.checked)}
-          aria-describedby={fieldErrors.consentGiven ? 'consent-error' : undefined}
+          aria-describedby={
+            fieldErrors.consentGiven ? 'consent-error' : undefined
+          }
           className="mt-1"
         />
         <label htmlFor="consent" className="text-sm text-zinc-700">
           Ik geef toestemming om benaderd te worden over mijn aanvraag.
         </label>
       </div>
+      <p className="-mt-2 pl-6 text-xs text-zinc-500">
+        We gebruiken je gegevens alleen voor deze aanvraag en bewaren ze
+        maximaal 12 maanden. Lees de{' '}
+        <Link href="/privacy" className="underline">
+          privacyverklaring
+        </Link>
+        .
+      </p>
       {fieldErrors.consentGiven && (
         <p id="consent-error" className="text-sm text-red-700">
           {fieldErrors.consentGiven[0]}
+        </p>
+      )}
+
+      {status === 'send-failed' && (
+        <p
+          role="alert"
+          className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800"
+        >
+          Het versturen is niet gelukt. Probeer het opnieuw, of mail ons op{' '}
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="font-semibold underline"
+          >
+            {CONTACT_EMAIL}
+          </a>
+          .
         </p>
       )}
 

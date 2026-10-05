@@ -1,13 +1,14 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { BRAND_PROFILES } from '@/content/brands';
 import { Card } from '@/components/ui/Card';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Merken',
   description:
     'De hockeystickmerken die we vergelijken — Grays, Brabo, JDH, Princess en adidas — met hun belangrijkste kenmerken en Nederlandse hockey-sponsoring.',
-};
+  path: '/merken',
+});
 
 export default function MerkenPage() {
   return (

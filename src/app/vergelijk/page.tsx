@@ -1,14 +1,15 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllProducts, getProductBySlug } from '@/catalog';
 import { buildCompareRows } from '@/catalog/compare';
 import { ProductImage } from '@/components/catalog/ProductImage';
 import { RetailerLinks } from '@/components/ui/RetailerLinks';
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Vergelijk hockeysticks',
   description: 'Zet twee hockeysticks naast elkaar en vergelijk specificaties zoals carbonpercentage, gewicht, lengte en adviesprijs.',
-};
+  path: '/vergelijk',
+});
 
 export default async function VergelijkPage({
   searchParams,

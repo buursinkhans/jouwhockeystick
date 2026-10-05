@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Formulierdefinitie</title>
+  </head>
+  <body>
+    <!--
+      Static definition of the interest form so Netlify can detect it at
+      build time. Not a page for visitors: the real form lives on /interesse
+      and posts to this file. Keep the field names in sync with
+      src/interest/netlifyForm.ts.
+    -->
+    <form name="interesse" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="interesse" />
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="email" />
+      <input name="phone" />
+      <input name="productSlug" />
+      <textarea name="message"></textarea>
+      <input name="consentGiven" />
+      <input name="source" />
+      <input name="submittedAt" />
+    </form>
+  </body>
+</html>
