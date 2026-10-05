@@ -56,10 +56,20 @@ export const bowProfileSchema = z.enum([
 ]);
 export type BowProfile = z.infer<typeof bowProfileSchema>;
 
-export const stockStatusSchema = z.enum(['available', 'limited', 'unavailable']);
+export const stockStatusSchema = z.enum([
+  'available',
+  'limited',
+  'unavailable',
+]);
 export type StockStatus = z.infer<typeof stockStatusSchema>;
 
-export const brandSchema = z.enum(['Grays', 'Brabo', 'adidas', 'JDH', 'Princess']);
+export const brandSchema = z.enum([
+  'Grays',
+  'Brabo',
+  'adidas',
+  'JDH',
+  'Princess',
+]);
 export type Brand = z.infer<typeof brandSchema>;
 
 export const productSchema = z.object({

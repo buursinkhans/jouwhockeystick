@@ -16,18 +16,26 @@ const SESSION_ID_PATTERN = /^[a-zA-Z0-9-]{8,64}$/;
  * ship to the client bundle. Answers are validated again here; the client
  * check is only for fast feedback.
  */
-export async function getAdviceAction(input: unknown, adviceSessionId: string): Promise<GetAdviceActionResult> {
+export async function getAdviceAction(
+  input: unknown,
+  adviceSessionId: string,
+): Promise<GetAdviceActionResult> {
   const parsed = adviceAnswersSchema.safeParse(input);
   if (!parsed.success) {
     return {
       status: 'error',
-      message: 'Niet alle verplichte vragen zijn geldig ingevuld. Controleer je antwoorden.',
-      invalidQuestionIds: parsed.error.issues.map((issue) => String(issue.path[0])),
+      message:
+        'Niet alle verplichte vragen zijn geldig ingevuld. Controleer je antwoorden.',
+      invalidQuestionIds: parsed.error.issues.map((issue) =>
+        String(issue.path[0]),
+      ),
     };
   }
 
   const advice = getAdvice(parsed.data, getAllProducts(), {
-    adviceSessionId: SESSION_ID_PATTERN.test(adviceSessionId) ? adviceSessionId : '',
+    adviceSessionId: SESSION_ID_PATTERN.test(adviceSessionId)
+      ? adviceSessionId
+      : '',
   });
 
   return { status: 'success', advice };

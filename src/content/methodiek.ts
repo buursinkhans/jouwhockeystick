@@ -40,7 +40,10 @@ export const METHODIEK = {
     'Bow-profiel, bron, modeljaar of lengtes ontbreken in onze productgegevens.',
   ],
   roles: [
-    { name: 'Beste match', body: 'De hoogste score, en minimaal 70 van de 100 punten.' },
+    {
+      name: 'Beste match',
+      body: 'De hoogste score, en minimaal 70 van de 100 punten.',
+    },
     {
       name: 'Veilige keuze',
       body: 'Het beste alternatief dat niet lastiger speelt dan de beste match.',

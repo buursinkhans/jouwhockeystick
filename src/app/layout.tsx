@@ -1,4 +1,5 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
+import { Bricolage_Grotesque, Instrument_Sans } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
@@ -12,8 +13,34 @@ import {
   pageMetadata,
 } from '@/lib/site';
 
+// Self-hosted by next/font at build time: no request to Google from the
+// visitor's browser (merkinstructie §2.2 prefers self-hosting for privacy).
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  axes: ['opsz'],
+  variable: '--font-bricolage',
+  display: 'swap',
+});
+const instrumentSans = Instrument_Sans({
+  subsets: ['latin'],
+  variable: '--font-instrument-sans',
+  display: 'swap',
+});
+
+export const viewport: Viewport = {
+  themeColor: '#1846A3',
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
   ...pageMetadata({ description: DEFAULT_DESCRIPTION, path: '/' }),
   title: {
     default: DEFAULT_TITLE,
@@ -32,6 +59,8 @@ const siteJsonLd = {
       name: SITE_NAME,
       url: SITE_URL,
       email: CONTACT_EMAIL,
+      // The same icon that is visible in the header.
+      logo: `${SITE_URL}/icon-512.png`,
     },
     {
       '@type': 'WebSite',
@@ -46,8 +75,11 @@ const siteJsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="nl" className="h-full antialiased">
-      <body className="flex min-h-full flex-col bg-zinc-50 font-sans text-zinc-900">
+    <html
+      lang="nl"
+      className={`h-full antialiased ${bricolage.variable} ${instrumentSans.variable}`}
+    >
+      <body className="flex min-h-full flex-col bg-krijt font-sans text-inkt">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}

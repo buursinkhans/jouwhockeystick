@@ -20,7 +20,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
   };
 
   return (
-    <nav aria-label="Kruimelpad" className="mb-6 text-sm text-zinc-600">
+    <nav aria-label="Kruimelpad" className="mb-6 text-sm text-lijngrijs">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -31,7 +31,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
           return (
             <li key={item.href} className="flex items-center gap-2">
               {isLast ? (
-                <span aria-current="page" className="text-zinc-900">
+                <span aria-current="page" className="text-inkt">
                   {item.label}
                 </span>
               ) : (

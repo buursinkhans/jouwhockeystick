@@ -64,7 +64,8 @@ export const graysDb10PlusComposite: Product = {
       'Micro head-configuratie, gericht op precieze balaanname',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-27',
   },
   pointsOfAttention: {
@@ -73,7 +74,8 @@ export const graysDb10PlusComposite: Product = {
       'Grays vermeldt zelf geen specifiek niveau of positie voor dit model — hier ingeschat',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-27',
   },
 };

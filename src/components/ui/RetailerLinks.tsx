@@ -25,7 +25,13 @@ export function RetailerLinks({
 
   return (
     <div className={`${layout} ${className}`.trim()}>
-      <RetailerLink retailer="bolcom" brand={brand} productName={productName} variant="primary" className={buttonWidth}>
+      <RetailerLink
+        retailer="bolcom"
+        brand={brand}
+        productName={productName}
+        variant="primary"
+        className={buttonWidth}
+      >
         Bekijk en koop op bol.com
       </RetailerLink>
       <RetailerLink

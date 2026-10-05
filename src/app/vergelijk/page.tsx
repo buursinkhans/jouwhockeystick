@@ -7,7 +7,8 @@ import { RetailerLinks } from '@/components/ui/RetailerLinks';
 
 export const metadata = pageMetadata({
   title: 'Vergelijk hockeysticks',
-  description: 'Zet twee hockeysticks naast elkaar en vergelijk specificaties zoals carbonpercentage, gewicht, lengte en adviesprijs.',
+  description:
+    'Zet twee hockeysticks naast elkaar en vergelijk specificaties zoals carbonpercentage, gewicht, lengte en adviesprijs.',
   path: '/vergelijk',
 });
 
@@ -24,7 +25,7 @@ export default async function VergelijkPage({
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold">Vergelijk hockeysticks</h1>
-      <p className="mt-2 text-zinc-600">
+      <p className="mt-2 text-lijngrijs">
         Kies twee sticks om de specificaties naast elkaar te zien.
       </p>
 
@@ -37,7 +38,7 @@ export default async function VergelijkPage({
             id="a"
             name="a"
             defaultValue={params.a ?? ''}
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+            className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
           >
             <option value="" disabled>
               Kies een stick
@@ -57,7 +58,7 @@ export default async function VergelijkPage({
             id="b"
             name="b"
             defaultValue={params.b ?? ''}
-            className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+            className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
           >
             <option value="" disabled>
               Kies een stick
@@ -72,7 +73,7 @@ export default async function VergelijkPage({
         <div className="sm:col-span-2">
           <button
             type="submit"
-            className="rounded-full bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800"
+            className="rounded-full bg-veld px-5 py-3 text-sm font-semibold text-white hover:bg-veld/90"
           >
             Vergelijk
           </button>
@@ -86,12 +87,20 @@ export default async function VergelijkPage({
               <div key={product.slug} className="text-center">
                 <ProductImage product={product} className="mx-auto h-20 w-20" />
                 <p className="mt-2 font-semibold">
-                  <Link href={`/sticks/${product.slug}`} className="hover:underline">
+                  <Link
+                    href={`/sticks/${product.slug}`}
+                    className="hover:underline"
+                  >
                     {product.name}
                   </Link>
                 </p>
                 <div className="mt-2">
-                  <RetailerLinks brand={product.brand} productName={product.name} className="text-sm" stack />
+                  <RetailerLinks
+                    brand={product.brand}
+                    productName={product.name}
+                    className="text-sm"
+                    stack
+                  />
                 </div>
               </div>
             ))}
@@ -103,8 +112,11 @@ export default async function VergelijkPage({
             </caption>
             <tbody>
               {buildCompareRows(productA, productB).map((row) => (
-                <tr key={row.label} className="border-b border-zinc-200">
-                  <th scope="row" className="w-1/3 py-3 pr-4 align-top text-sm font-semibold text-zinc-700">
+                <tr key={row.label} className="border-b border-rand">
+                  <th
+                    scope="row"
+                    className="w-1/3 py-3 pr-4 align-top text-sm font-semibold text-inkt/80"
+                  >
                     {row.label}
                   </th>
                   <td className="py-3 pr-4 align-top">{row.valueA}</td>
@@ -113,13 +125,15 @@ export default async function VergelijkPage({
               ))}
             </tbody>
           </table>
-          <p className="mt-3 text-xs text-zinc-500">
-            Bekijk de productpagina van elke stick voor de exacte bron en verificatiedatum per
-            specificatie.
+          <p className="mt-3 text-xs text-lijngrijs">
+            Bekijk de productpagina van elke stick voor de exacte bron en
+            verificatiedatum per specificatie.
           </p>
         </div>
       ) : (
-        <p className="mt-10 text-zinc-600">Kies hierboven twee sticks om ze te vergelijken.</p>
+        <p className="mt-10 text-lijngrijs">
+          Kies hierboven twee sticks om ze te vergelijken.
+        </p>
       )}
     </div>
   );

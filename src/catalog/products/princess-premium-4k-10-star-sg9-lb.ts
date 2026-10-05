@@ -8,26 +8,31 @@ export const princessPremium4k10StarSg9Lb: Product = {
   imageAlt: 'Princess Premium 4K 10 Star SG9-LB hockeystick',
   imageUrl:
     'https://www.princess-hockey.com/cdn/shop/files/330.61002.000_1_b5ae1882-e4c2-429e-b2dc-361b8280002e.jpg?v=1779889064',
-  imageSourceUrl: 'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
+  imageSourceUrl:
+    'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',
     sourceLabel: 'Princess vermeldt expliciet "Niveau: Expert".',
-    sourceUrl: 'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
+    sourceUrl:
+      'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
     modelYear: 2025,
     lastVerifiedAt: '2026-09-26',
   },
   recommendedPositions: {
     value: ['middenvelder', 'aanvaller'],
     source: 'editorial-estimate',
-    sourceLabel: 'Princess vermeldt geen specifieke veldpositie voor dit model.',
+    sourceLabel:
+      'Princess vermeldt geen specifieke veldpositie voor dit model.',
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
     value: 'lowbow',
     source: 'brand-website',
-    sourceLabel: 'Princess vermeldt expliciet "Shape: Low Bow" met curve 24mm op 200mm.',
-    sourceUrl: 'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
+    sourceLabel:
+      'Princess vermeldt expliciet "Shape: Low Bow" met curve 24mm op 200mm.',
+    sourceUrl:
+      'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
     lastVerifiedAt: '2026-09-26',
   },
   carbonPercentage: {
@@ -35,27 +40,32 @@ export const princessPremium4k10StarSg9Lb: Product = {
     source: 'brand-website',
     sourceLabel:
       'Princess gebruikt een eigen schaal ("rating 10") die zij gelijkstellen aan 100% carbon (4K carbon vezel).',
-    sourceUrl: 'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
+    sourceUrl:
+      'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
     lastVerifiedAt: '2026-09-26',
   },
   weightGrams: {
     value: 515,
     source: 'brand-website',
-    sourceLabel: 'Princess vermeldt "Gewicht: 515" zonder expliciete eenheid; gangbaar in grammen voor hockeysticks.',
-    sourceUrl: 'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
+    sourceLabel:
+      'Princess vermeldt "Gewicht: 515" zonder expliciete eenheid; gangbaar in grammen voor hockeysticks.',
+    sourceUrl:
+      'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
     lastVerifiedAt: '2026-09-26',
   },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
-    sourceUrl: 'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
+    sourceUrl:
+      'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
     lastVerifiedAt: '2026-09-26',
   },
   priceIndicativeEur: {
     value: 299.99,
     source: 'brand-website',
     sourceLabel: 'Adviesprijs zoals vermeld op de officiële Princess-website.',
-    sourceUrl: 'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
+    sourceUrl:
+      'https://www.princess-hockey.com/products/330-61002-premium-4k-10-star-sg9-lb-pi-si',
     lastVerifiedAt: '2026-09-26',
   },
   stock: {
@@ -72,7 +82,8 @@ export const princessPremium4k10StarSg9Lb: Product = {
       'Exacte curvegegevens vermeld (24mm curve op 200mm) — precies te vergelijken',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Princess vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Princess vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
   pointsOfAttention: {
@@ -81,7 +92,8 @@ export const princessPremium4k10StarSg9Lb: Product = {
       'Prijs aan de hoge kant binnen dit assortiment',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Princess vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Princess vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
 };

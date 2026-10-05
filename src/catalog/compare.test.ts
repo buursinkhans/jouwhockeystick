@@ -10,14 +10,38 @@ function buildProduct(overrides: Partial<Product> = {}): Product {
     name: 'Test Stick',
     dataStatus: 'verified',
     imageAlt: 'Test',
-    experienceLevel: { value: 'beginner', source: 'editorial-estimate', lastVerifiedAt },
-    recommendedPositions: { value: ['middenvelder'], source: 'editorial-estimate', lastVerifiedAt },
-    lengthsInches: { value: [35], source: 'editorial-estimate', lastVerifiedAt },
-    priceIndicativeEur: { value: 90, source: 'editorial-estimate', lastVerifiedAt },
+    experienceLevel: {
+      value: 'beginner',
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
+    recommendedPositions: {
+      value: ['middenvelder'],
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
+    lengthsInches: {
+      value: [35],
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
+    priceIndicativeEur: {
+      value: 90,
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
     stock: { value: 'available', source: 'editorial-estimate', lastVerifiedAt },
     summary: 'Test',
-    strengths: { value: ['Sterk punt'], source: 'editorial-estimate', lastVerifiedAt },
-    pointsOfAttention: { value: ['Aandachtspunt'], source: 'editorial-estimate', lastVerifiedAt },
+    strengths: {
+      value: ['Sterk punt'],
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
+    pointsOfAttention: {
+      value: ['Aandachtspunt'],
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
     ...overrides,
   };
 }
@@ -26,7 +50,11 @@ describe('buildCompareRows', () => {
   it('includes a spec row when only one of the two products has it, showing "Niet vermeld" for the other', () => {
     const a = buildProduct({
       slug: 'a',
-      carbonPercentage: { value: 40, source: 'brand-website', lastVerifiedAt: '2026-06-01' },
+      carbonPercentage: {
+        value: 40,
+        source: 'brand-website',
+        lastVerifiedAt: '2026-06-01',
+      },
     });
     const b = buildProduct({ slug: 'b', carbonPercentage: undefined });
 
@@ -48,7 +76,14 @@ describe('buildCompareRows', () => {
   });
 
   it('always includes price, brand, and length rows', () => {
-    const a = buildProduct({ slug: 'a', priceIndicativeEur: { value: 129.99, source: 'brand-website', lastVerifiedAt: '2026-06-01' } });
+    const a = buildProduct({
+      slug: 'a',
+      priceIndicativeEur: {
+        value: 129.99,
+        source: 'brand-website',
+        lastVerifiedAt: '2026-06-01',
+      },
+    });
     const b = buildProduct({ slug: 'b' });
 
     const rows = buildCompareRows(a, b);

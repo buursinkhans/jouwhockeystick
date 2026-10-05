@@ -15,7 +15,10 @@ export function formatInch(inch: number): string {
   return `${String(inch).replace('.', ',')} inch`;
 }
 
-export const ROUTE_RESULT_COPY: Record<AdviceRoute, { title: string; summary: string }> = {
+export const ROUTE_RESULT_COPY: Record<
+  AdviceRoute,
+  { title: string; summary: string }
+> = {
   START: {
     title: 'Een goede start begint met een stick die makkelijk hanteert.',
     summary:
@@ -64,16 +67,22 @@ const START_ROLE_LABELS: Partial<Record<ResultRole, string>> = {
 };
 
 export function roleLabel(role: ResultRole, route: AdviceRoute): string {
-  return (route === 'START' ? START_ROLE_LABELS[role] : undefined) ?? ROLE_LABELS[role];
+  return (
+    (route === 'START' ? START_ROLE_LABELS[role] : undefined) ??
+    ROLE_LABELS[role]
+  );
 }
 
 export const ROLE_INTRO: Record<ResultRole, string> = {
   best_match: 'Een sterke match voor deze antwoorden.',
-  safe_choice: 'Een rustiger of gelijkwaardig alternatief dat niet lastiger speelt dan de beste match.',
-  ambitious_choice: 'Eén stap vooruit — passend als de basis er staat, maar niet noodzakelijk.',
+  safe_choice:
+    'Een rustiger of gelijkwaardig alternatief dat niet lastiger speelt dan de beste match.',
+  ambitious_choice:
+    'Eén stap vooruit — passend als de basis er staat, maar niet noodzakelijk.',
   closest_option:
     'Geen duidelijke match: dit komt het dichtst in de buurt, maar past op meerdere punten minder goed.',
-  other_size: 'Niet in de geadviseerde maat beschikbaar; dit is één maat korter.',
+  other_size:
+    'Niet in de geadviseerde maat beschikbaar; dit is één maat korter.',
 };
 
 export const GOAL_LABELS: Record<Goal, string> = {
@@ -94,20 +103,30 @@ const FEEL_LABELS: Record<StickFeel, string> = {
 };
 
 const EXPERIENCE_REASON: Record<ExperienceLevel, string> = {
-  beginner: 'Deze stick is gepositioneerd voor beginnende spelers; dat sluit aan bij de opgegeven ervaring.',
+  beginner:
+    'Deze stick is gepositioneerd voor beginnende spelers; dat sluit aan bij de opgegeven ervaring.',
   gevorderd:
     'Deze stick is gepositioneerd voor spelers die de basis beheersen en zich verder ontwikkelen.',
-  ervaren: 'Deze stick is gepositioneerd voor ervaren spelers; dat sluit aan bij de opgegeven ervaring.',
+  ervaren:
+    'Deze stick is gepositioneerd voor ervaren spelers; dat sluit aan bij de opgegeven ervaring.',
 };
 
 function listGoals(goals: Goal[]): string {
   const labels = goals.map((goal) => GOAL_LABELS[goal]);
-  return labels.length <= 1 ? labels.join('') : `${labels.slice(0, -1).join(', ')} en ${labels.at(-1)}`;
+  return labels.length <= 1
+    ? labels.join('')
+    : `${labels.slice(0, -1).join(', ')} en ${labels.at(-1)}`;
 }
 
 /** Nuanced, Dutch reason text. Product facts are read from the catalog, never typed here. */
-export function reasonText(reason: AdviceReason, product: Product, route: AdviceRoute): string {
-  const bow = product.bowProfile ? BOW_LABELS[product.bowProfile.value] : 'bow-profiel';
+export function reasonText(
+  reason: AdviceReason,
+  product: Product,
+  route: AdviceRoute,
+): string {
+  const bow = product.bowProfile
+    ? BOW_LABELS[product.bowProfile.value]
+    : 'bow-profiel';
   const carbon = product.carbonPercentage?.value;
 
   switch (reason.code) {
@@ -161,7 +180,8 @@ export const CAUTION_TEXT: Record<CautionCode, string> = {
 };
 
 export const LESS_SUITABLE_FOR: Record<ExperienceLevel, string> = {
-  beginner: 'Minder passend als de speler aantoonbaar technisch verder is en een directere stick zoekt.',
+  beginner:
+    'Minder passend als de speler aantoonbaar technisch verder is en een directere stick zoekt.',
   gevorderd: 'Minder passend als aannemen en passen nog niet stabiel gaan.',
   ervaren: 'Minder passend voor spelers die de basistechniek nog ontwikkelen.',
 };
@@ -174,7 +194,8 @@ export const NO_MATCH_TEXT: Record<NoMatchReason, string> = {
     'In de geadviseerde maat hebben we op dit moment geen stick die bij de opgegeven ervaring past.',
   safety:
     'De sticks in deze maat zijn te stijf of te specialistisch voor de opgegeven techniek. We adviseren ze daarom niet.',
-  budget: 'In de geadviseerde maat hebben we op dit moment geen passende stick binnen het opgegeven budget.',
+  budget:
+    'In de geadviseerde maat hebben we op dit moment geen passende stick binnen het opgegeven budget.',
   availability:
     'De sticks die verder passen zijn niet als direct leverbaar gemarkeerd. We tonen daarom geen stick in een verkeerde maat.',
 };
@@ -185,7 +206,9 @@ export const LEFT_HANDED_REFERRAL =
 export function sizeAdviceText(size: SizeAdvice): string[] {
   const lines: string[] = [];
   if (size.alternativeInch === undefined) {
-    lines.push(`Op basis van de lichaamslengte is ${formatInch(size.primaryInch)} een logische maat.`);
+    lines.push(
+      `Op basis van de lichaamslengte is ${formatInch(size.primaryInch)} een logische maat.`,
+    );
   } else if (size.basis === 'borderline') {
     lines.push(
       `De speler zit op de grens tussen twee maten: ${formatInch(size.primaryInch)} is het uitgangspunt, ${formatInch(size.alternativeInch)} kan ook passen. Pas bij twijfel beide in de hand.`,
@@ -196,7 +219,9 @@ export function sizeAdviceText(size: SizeAdvice): string[] {
     );
   }
   if (size.confidence === 'low') {
-    lines.push('De lengte is een schatting. Meet de speler na voordat je koopt.');
+    lines.push(
+      'De lengte is een schatting. Meet de speler na voordat je koopt.',
+    );
   }
   if (size.differsFromCurrentInch !== undefined) {
     lines.push(

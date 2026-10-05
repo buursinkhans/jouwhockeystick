@@ -6,7 +6,8 @@ export const graysJb10Composite: Product = {
   name: 'Grays JB 10 Composite Hockey Stick',
   dataStatus: 'verified',
   imageAlt: 'Grays JB 10 Composite hockeystick',
-  imageUrl: 'https://www.grays-hockey.eu/cdn/shop/files/2705263JB10BlueBackMain.jpg?v=1779972697',
+  imageUrl:
+    'https://www.grays-hockey.eu/cdn/shop/files/2705263JB10BlueBackMain.jpg?v=1779972697',
   imageSourceUrl:
     'https://www.grays-hockey.eu/collections/jb-jumbow-composite-hockey-sticks/products/jb10-composite-hockey-stick-1',
   experienceLevel: {
@@ -29,7 +30,8 @@ export const graysJb10Composite: Product = {
   bowProfile: {
     value: 'lowbow',
     source: 'brand-website',
-    sourceLabel: 'Grays noemt dit model expliciet "Jumbow low-bow" (curvepositie 24.75 @ 200mm).',
+    sourceLabel:
+      'Grays noemt dit model expliciet "Jumbow low-bow" (curvepositie 24.75 @ 200mm).',
     sourceUrl:
       'https://www.grays-hockey.eu/collections/jb-jumbow-composite-hockey-sticks/products/jb10-composite-hockey-stick-1',
     lastVerifiedAt: '2026-09-26',
@@ -63,7 +65,8 @@ export const graysJb10Composite: Product = {
       'Expliciete low-bow, breed lengteaanbod tot 38.5"',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
   pointsOfAttention: {
@@ -72,7 +75,8 @@ export const graysJb10Composite: Product = {
       'Prijs aan de hoge kant binnen dit assortiment — vooral interessant als het gebruiksniveau dat rechtvaardigt',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
 };

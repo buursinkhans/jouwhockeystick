@@ -2,7 +2,12 @@ import type { BowProfile, Product } from '@/catalog/types';
 import type { AdviceAnswers, AdviceRoute, Goal, QuestionId } from './answers';
 import { BOW_RANK, SOFT_MAX_CARBON, deriveAdviceRules } from './productRules';
 import { matchSize } from './sizeAdvice';
-import type { AdviceReason, PlayerContext, ScoreBreakdown, StickFeel } from './types';
+import type {
+  AdviceReason,
+  PlayerContext,
+  ScoreBreakdown,
+  StickFeel,
+} from './types';
 
 type Weights = {
   size: number;
@@ -20,9 +25,33 @@ type Weights = {
  * ScoreBreakdown component the table has no row for.
  */
 export const ROUTE_WEIGHTS: Record<AdviceRoute, Weights> = {
-  START: { size: 30, experience: 25, goal: 15, bow: 10, feel: 10, budget: 10, availability: 0 },
-  ONTWIKKEL: { size: 25, experience: 20, goal: 20, bow: 15, feel: 10, budget: 10, availability: 0 },
-  PRESTATIE: { size: 20, experience: 15, goal: 25, bow: 15, feel: 15, budget: 7, availability: 3 },
+  START: {
+    size: 30,
+    experience: 25,
+    goal: 15,
+    bow: 10,
+    feel: 10,
+    budget: 10,
+    availability: 0,
+  },
+  ONTWIKKEL: {
+    size: 25,
+    experience: 20,
+    goal: 20,
+    bow: 15,
+    feel: 10,
+    budget: 10,
+    availability: 0,
+  },
+  PRESTATIE: {
+    size: 20,
+    experience: 15,
+    goal: 25,
+    bow: 15,
+    feel: 15,
+    budget: 7,
+    availability: 3,
+  },
 };
 
 /**
@@ -30,12 +59,66 @@ export const ROUTE_WEIGHTS: Record<AdviceRoute, Weights> = {
  * (0–1). A general principle per profile, not a claim about one model.
  */
 export const BOW_GOAL_SUPPORT: Record<BowProfile, Record<Goal, number>> = {
-  ultrabow: { first_touch: 1, passing: 1, hit: 0.8, dribble_3d: 0.3, backhand: 0.6, aerial: 0.2, dragflick: 0, allround: 0.8 },
-  midbow: { first_touch: 1, passing: 1, hit: 1, dribble_3d: 0.5, backhand: 0.7, aerial: 0.4, dragflick: 0.1, allround: 1 },
-  dynabow: { first_touch: 0.9, passing: 1, hit: 0.9, dribble_3d: 0.6, backhand: 0.7, aerial: 0.5, dragflick: 0.2, allround: 1 },
-  probow: { first_touch: 0.8, passing: 0.9, hit: 0.9, dribble_3d: 0.8, backhand: 0.8, aerial: 0.8, dragflick: 0.5, allround: 0.9 },
-  lowbow: { first_touch: 0.6, passing: 0.7, hit: 0.7, dribble_3d: 1, backhand: 0.8, aerial: 1, dragflick: 0.8, allround: 0.6 },
-  extreme_lowbow: { first_touch: 0.4, passing: 0.5, hit: 0.5, dribble_3d: 1, backhand: 0.7, aerial: 1, dragflick: 1, allround: 0.3 },
+  ultrabow: {
+    first_touch: 1,
+    passing: 1,
+    hit: 0.8,
+    dribble_3d: 0.3,
+    backhand: 0.6,
+    aerial: 0.2,
+    dragflick: 0,
+    allround: 0.8,
+  },
+  midbow: {
+    first_touch: 1,
+    passing: 1,
+    hit: 1,
+    dribble_3d: 0.5,
+    backhand: 0.7,
+    aerial: 0.4,
+    dragflick: 0.1,
+    allround: 1,
+  },
+  dynabow: {
+    first_touch: 0.9,
+    passing: 1,
+    hit: 0.9,
+    dribble_3d: 0.6,
+    backhand: 0.7,
+    aerial: 0.5,
+    dragflick: 0.2,
+    allround: 1,
+  },
+  probow: {
+    first_touch: 0.8,
+    passing: 0.9,
+    hit: 0.9,
+    dribble_3d: 0.8,
+    backhand: 0.8,
+    aerial: 0.8,
+    dragflick: 0.5,
+    allround: 0.9,
+  },
+  lowbow: {
+    first_touch: 0.6,
+    passing: 0.7,
+    hit: 0.7,
+    dribble_3d: 1,
+    backhand: 0.8,
+    aerial: 1,
+    dragflick: 0.8,
+    allround: 0.6,
+  },
+  extreme_lowbow: {
+    first_touch: 0.4,
+    passing: 0.5,
+    hit: 0.5,
+    dribble_3d: 1,
+    backhand: 0.7,
+    aerial: 1,
+    dragflick: 1,
+    allround: 0.3,
+  },
 };
 
 const START_BOW_FIT: Record<BowProfile, number> = {
@@ -52,16 +135,27 @@ const BOW_EXPERIENCE_RANK: Record<
   number
 > = { standard: 0.5, pro_late: 2, low: 3, extreme_low: 4 };
 
-const FEEL_INDEX: Record<StickFeel, number> = { soft: 0, balanced: 1, direct: 2 };
+const FEEL_INDEX: Record<StickFeel, number> = {
+  soft: 0,
+  balanced: 1,
+  direct: 2,
+};
 
 const NEUTRAL_GOAL_FIT = 0.7;
 const GOAL_REASON_THRESHOLD = 0.75;
 const BOW_REASON_THRESHOLD = 0.85;
 
 export type SizeBasis = 'primary' | 'alternative' | 'other_size';
-const SIZE_FIT: Record<SizeBasis, number> = { primary: 1, alternative: 0.6, other_size: 0.3 };
+const SIZE_FIT: Record<SizeBasis, number> = {
+  primary: 1,
+  alternative: 0.6,
+  other_size: 0.3,
+};
 
-function experienceFit(product: Product, ctx: PlayerContext): { fit: number; controlFocus: boolean } {
+function experienceFit(
+  product: Product,
+  ctx: PlayerContext,
+): { fit: number; controlFocus: boolean } {
   const rules = deriveAdviceRules(product);
   const bandFit = rules.homeBand === ctx.band ? 1 : 0.6;
   if (!ctx.learningControl) {
@@ -72,7 +166,12 @@ function experienceFit(product: Product, ctx: PlayerContext): { fit: number; con
   let controlFit: number;
   if (carbon === undefined) {
     // Unknown stiffness is judged on the level the brand positions the stick for.
-    controlFit = rules.homeBand === 'starter' ? 1 : rules.homeBand === 'developing' ? 0.7 : 0.4;
+    controlFit =
+      rules.homeBand === 'starter'
+        ? 1
+        : rules.homeBand === 'developing'
+          ? 0.7
+          : 0.4;
   } else {
     controlFit = carbon <= SOFT_MAX_CARBON ? 1 : carbon <= 60 ? 0.7 : 0.4;
   }
@@ -82,20 +181,31 @@ function experienceFit(product: Product, ctx: PlayerContext): { fit: number; con
   };
 }
 
-function goalFit(bow: BowProfile, ctx: PlayerContext): { fit: number; supported: Goal[] } {
+function goalFit(
+  bow: BowProfile,
+  ctx: PlayerContext,
+): { fit: number; supported: Goal[] } {
   if (ctx.goals.length === 0) {
     return { fit: NEUTRAL_GOAL_FIT, supported: [] };
   }
   const support = BOW_GOAL_SUPPORT[bow];
   const totalWeight = ctx.goals.reduce((sum, { weight }) => sum + weight, 0);
-  const fit = ctx.goals.reduce((sum, { goal, weight }) => sum + support[goal] * weight, 0) / totalWeight;
+  const fit =
+    ctx.goals.reduce(
+      (sum, { goal, weight }) => sum + support[goal] * weight,
+      0,
+    ) / totalWeight;
   const supported = ctx.goals
     .filter(({ goal }) => support[goal] >= GOAL_REASON_THRESHOLD)
     .map(({ goal }) => goal);
   return { fit, supported };
 }
 
-function bowFit(bow: BowProfile, ctx: PlayerContext, goalFitValue: number): number {
+function bowFit(
+  bow: BowProfile,
+  ctx: PlayerContext,
+  goalFitValue: number,
+): number {
   if (ctx.route === 'START') {
     return START_BOW_FIT[bow];
   }
@@ -105,7 +215,9 @@ function bowFit(bow: BowProfile, ctx: PlayerContext, goalFitValue: number): numb
       return 0.2;
     }
     if (bow === 'lowbow') {
-      const wantsLift = ctx.goals.some(({ goal }) => goal === 'dribble_3d' || goal === 'aerial');
+      const wantsLift = ctx.goals.some(
+        ({ goal }) => goal === 'dribble_3d' || goal === 'aerial',
+      );
       return wantsLift ? 0.9 : 0.6;
     }
     return bow === 'ultrabow' ? 0.7 : 1;
@@ -116,17 +228,30 @@ function bowFit(bow: BowProfile, ctx: PlayerContext, goalFitValue: number): numb
   let fit: number;
   if (experience && experience !== 'unknown') {
     const distance = Math.abs(BOW_EXPERIENCE_RANK[experience] - BOW_RANK[bow]);
-    fit = distance <= 0.5 ? 1 : distance <= 1.5 ? 0.85 : distance <= 2.5 ? 0.55 : 0.3;
+    fit =
+      distance <= 0.5
+        ? 1
+        : distance <= 1.5
+          ? 0.85
+          : distance <= 2.5
+            ? 0.55
+            : 0.3;
   } else {
     fit = Math.max(0.5, goalFitValue);
   }
-  if (bow === 'extreme_lowbow' && ctx.answers.skill_dragflick !== 'specialist') {
+  if (
+    bow === 'extreme_lowbow' &&
+    ctx.answers.skill_dragflick !== 'specialist'
+  ) {
     fit *= 0.5;
   }
   return fit;
 }
 
-function feelFit(product: Product, ctx: PlayerContext): { fit: number; exactMatch: boolean } {
+function feelFit(
+  product: Product,
+  ctx: PlayerContext,
+): { fit: number; exactMatch: boolean } {
   const productFeel = deriveAdviceRules(product).feel;
   if (productFeel === null) {
     // Unknown is neutral, never a mismatch — and never earns a "feel" reason.
@@ -136,7 +261,9 @@ function feelFit(product: Product, ctx: PlayerContext): { fit: number; exactMatc
     return { fit: 0.7, exactMatch: false };
   }
 
-  const distance = Math.abs(FEEL_INDEX[productFeel] - FEEL_INDEX[ctx.feelPreference]);
+  const distance = Math.abs(
+    FEEL_INDEX[productFeel] - FEEL_INDEX[ctx.feelPreference],
+  );
   let fit = distance === 0 ? 1 : distance === 1 ? 0.5 : 0.1;
   if (ctx.answers.vibration_sensitivity === 'yes' && productFeel === 'direct') {
     fit *= 0.6;
@@ -144,7 +271,10 @@ function feelFit(product: Product, ctx: PlayerContext): { fit: number; exactMatc
   return { fit, exactMatch: distance === 0 };
 }
 
-function budgetFit(product: Product, ctx: PlayerContext): { fit: number; inBand: boolean } {
+function budgetFit(
+  product: Product,
+  ctx: PlayerContext,
+): { fit: number; inBand: boolean } {
   if (ctx.budget === null) {
     return { fit: 0.7, inBand: false };
   }
@@ -178,7 +308,9 @@ export function scoreProduct(
   const weights = ROUTE_WEIGHTS[ctx.route];
   const bow = product.bowProfile?.value ?? 'midbow';
   const sizeMatch = matchSize(product, ctx.sizeAdvice);
-  const sizeBasis: SizeBasis = sizeBasisOverride ?? (sizeMatch === 'alternative' ? 'alternative' : 'primary');
+  const sizeBasis: SizeBasis =
+    sizeBasisOverride ??
+    (sizeMatch === 'alternative' ? 'alternative' : 'primary');
 
   const experience = experienceFit(product, ctx);
   const goal = goalFit(bow, ctx);
@@ -201,9 +333,15 @@ export function scoreProduct(
       inch: ctx.sizeAdvice.alternativeInch,
     });
   }
-  reasons.push({ code: 'EXPERIENCE_FIT', evidence: { kind: 'spec', field: 'experienceLevel' } });
+  reasons.push({
+    code: 'EXPERIENCE_FIT',
+    evidence: { kind: 'spec', field: 'experienceLevel' },
+  });
   if (experience.controlFocus) {
-    reasons.push({ code: 'CONTROL_FOCUS', evidence: { kind: 'spec', field: 'carbonPercentage' } });
+    reasons.push({
+      code: 'CONTROL_FOCUS',
+      evidence: { kind: 'spec', field: 'carbonPercentage' },
+    });
   }
   if (goal.supported.length > 0 && goal.fit >= GOAL_REASON_THRESHOLD) {
     reasons.push({
@@ -213,10 +351,16 @@ export function scoreProduct(
     });
   }
   if (product.bowProfile && bowFitValue >= BOW_REASON_THRESHOLD) {
-    reasons.push({ code: 'BOW_FIT', evidence: { kind: 'spec', field: 'bowProfile' } });
+    reasons.push({
+      code: 'BOW_FIT',
+      evidence: { kind: 'spec', field: 'bowProfile' },
+    });
   }
   if (feel.exactMatch && ctx.route !== 'START') {
-    reasons.push({ code: 'FEEL_FIT', evidence: { kind: 'spec', field: 'carbonPercentage' } });
+    reasons.push({
+      code: 'FEEL_FIT',
+      evidence: { kind: 'spec', field: 'carbonPercentage' },
+    });
   }
   if (ctx.budget !== null) {
     reasons.push({
@@ -225,7 +369,10 @@ export function scoreProduct(
     });
   }
   if (reasons.length < 3 && product.bowProfile) {
-    reasons.push({ code: 'SPECS_VERIFIED', evidence: { kind: 'spec', field: 'bowProfile' } });
+    reasons.push({
+      code: 'SPECS_VERIFIED',
+      evidence: { kind: 'spec', field: 'bowProfile' },
+    });
   }
 
   const breakdown: ScoreBreakdown = {

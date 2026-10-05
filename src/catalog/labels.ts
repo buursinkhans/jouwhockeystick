@@ -1,6 +1,9 @@
 import type { BowProfile, Product } from './types';
 
-export const EXPERIENCE_LABELS: Record<Product['experienceLevel']['value'], string> = {
+export const EXPERIENCE_LABELS: Record<
+  Product['experienceLevel']['value'],
+  string
+> = {
   beginner: 'Beginner',
   gevorderd: 'Gevorderd',
   ervaren: 'Ervaren',

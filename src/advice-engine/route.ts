@@ -8,9 +8,20 @@ type RouteSignals = Pick<AdviceAnswers, 'age_band' | 'experience_seasons'> &
  * 11–12 band contains 11, so that band counts as young here. The user can
  * always override the suggestion.
  */
-const YOUNG_AGE_BANDS: ReadonlyArray<AdviceAnswers['age_band']> = ['under_8', '8_10', '11_12'];
-const UNDER_ONE_SEASON: ReadonlyArray<AdviceAnswers['experience_seasons']> = ['trial', 'lt_1'];
-const UNDER_TWO_SEASONS: ReadonlyArray<AdviceAnswers['experience_seasons']> = ['trial', 'lt_1', '1'];
+const YOUNG_AGE_BANDS: ReadonlyArray<AdviceAnswers['age_band']> = [
+  'under_8',
+  '8_10',
+  '11_12',
+];
+const UNDER_ONE_SEASON: ReadonlyArray<AdviceAnswers['experience_seasons']> = [
+  'trial',
+  'lt_1',
+];
+const UNDER_TWO_SEASONS: ReadonlyArray<AdviceAnswers['experience_seasons']> = [
+  'trial',
+  'lt_1',
+  '1',
+];
 
 /**
  * Suggested route from age and experience (spec §2.1). Only a suggestion:

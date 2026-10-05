@@ -124,7 +124,9 @@ export const contentClaimSchema = z.object({
     productIds: z.array(z.string()).optional(),
     productAttributes: z.array(z.string()).optional(),
     adviceRoutes: z.array(adviceRouteSchema).optional(),
-    pageTypes: z.array(z.enum(['product', 'comparison', 'guide', 'advice_result'])).optional(),
+    pageTypes: z
+      .array(z.enum(['product', 'comparison', 'guide', 'advice_result']))
+      .optional(),
   }),
   sourceIds: z.array(z.string()),
   confidence: z.enum(['high', 'moderate', 'limited']),

@@ -7,5 +7,9 @@
  * the exact provenance.
  */
 export function ProductNotice() {
-  return <p className="text-xs text-zinc-500">Richtprijs · bekijk actuele prijs bij bol.com</p>;
+  return (
+    <p className="text-xs text-lijngrijs">
+      Richtprijs · bekijk actuele prijs bij bol.com
+    </p>
+  );
 }

@@ -31,14 +31,18 @@ function expectExplainable(advice: AdviceResult) {
     if (result.role !== 'other_size') {
       expect(result.reasons.length).toBeGreaterThanOrEqual(3);
     }
-    expect(result.breakdown.explanationTags).toEqual(result.reasons.map((reason) => reason.code));
+    expect(result.breakdown.explanationTags).toEqual(
+      result.reasons.map((reason) => reason.code),
+    );
   }
 }
 
 describe('route weights', () => {
   it('add up to 100 points for every route', () => {
     for (const weights of Object.values(ROUTE_WEIGHTS)) {
-      expect(Object.values(weights).reduce((sum, value) => sum + value, 0)).toBe(100);
+      expect(
+        Object.values(weights).reduce((sum, value) => sum + value, 0),
+      ).toBe(100);
     }
   });
 });
@@ -48,7 +52,10 @@ describe('acceptance scenarios (spec §12) against the real catalog', () => {
     const advice = getAdvice(buildStartAnswers(), catalog);
 
     expect(advice.route).toBe('START');
-    expect(advice.sizeAdvice).toMatchObject({ primaryInch: 30, alternativeInch: 31 });
+    expect(advice.sizeAdvice).toMatchObject({
+      primaryInch: 30,
+      alternativeInch: 31,
+    });
     expect(advice.results.length).toBeGreaterThan(0);
     expect(advice.results.length).toBeLessThanOrEqual(3);
     expect(bestOf(advice).role).toBe('best_match');
@@ -65,7 +72,10 @@ describe('acceptance scenarios (spec §12) against the real catalog', () => {
     const advice = getAdvice(buildDevelopAnswers(), catalog);
 
     expect(advice.route).toBe('ONTWIKKEL');
-    expect(advice.sizeAdvice).toMatchObject({ primaryInch: 34, alternativeInch: 35 });
+    expect(advice.sizeAdvice).toMatchObject({
+      primaryInch: 34,
+      alternativeInch: 35,
+    });
     expect(bestOf(advice).role).toBe('best_match');
     for (const result of advice.results) {
       expect(result.product.priceIndicativeEur.value).toBeLessThanOrEqual(175);
@@ -85,14 +95,21 @@ describe('acceptance scenarios (spec §12) against the real catalog', () => {
       lengthsInches: sourced.lengths([36.5]),
       priceIndicativeEur: sourced.price(240),
     });
-    const advice = getAdvice(buildPerformanceAnswers(), [...catalog, dragflickSpecialist]);
+    const advice = getAdvice(buildPerformanceAnswers(), [
+      ...catalog,
+      dragflickSpecialist,
+    ]);
 
     expect(advice.route).toBe('PRESTATIE');
     expect(advice.sizeAdvice.primaryInch).toBe(36.5);
     expect(bestOf(advice).role).toBe('best_match');
-    expect(advice.results.map((result) => result.product.slug)).not.toContain('dragflick-specialist');
+    expect(advice.results.map((result) => result.product.slug)).not.toContain(
+      'dragflick-specialist',
+    );
     // Low bow is allowed here, but the first-touch trade-off must be explicit.
-    const lowBowResults = advice.results.filter((result) => result.product.bowProfile?.value === 'lowbow');
+    const lowBowResults = advice.results.filter(
+      (result) => result.product.bowProfile?.value === 'lowbow',
+    );
     for (const result of lowBowResults) {
       expect(result.cautions).toContain('LOWBOW_TRADEOFF');
     }
@@ -121,23 +138,36 @@ describe('acceptance scenarios (spec §12) against the real catalog', () => {
     for (const { product } of advice.results) {
       expect(product.carbonPercentage?.value ?? 0).toBeLessThan(HIGH_CARBON);
     }
-    const ambitious = advice.results.find((result) => result.role === 'ambitious_choice');
+    const ambitious = advice.results.find(
+      (result) => result.role === 'ambitious_choice',
+    );
     if (ambitious) {
       expect(ambitious.cautions).toContain('AMBITIOUS_STEP');
-      expect(deriveAdviceRules(ambitious.product).complexity).toBeLessThanOrEqual(
-        deriveAdviceRules(best.product).complexity + 1,
-      );
+      expect(
+        deriveAdviceRules(ambitious.product).complexity,
+      ).toBeLessThanOrEqual(deriveAdviceRules(best.product).complexity + 1);
     }
     expectExplainable(advice);
   });
 
   it('5 — no directly available stock in the needed size: no wrong size as best match', () => {
     const products = [
-      buildProduct({ slug: 'a', lengthsInches: sourced.lengths([31]), stock: sourced.stock('limited') }),
-      buildProduct({ slug: 'b', lengthsInches: sourced.lengths([30, 31, 32]), stock: sourced.stock('limited') }),
+      buildProduct({
+        slug: 'a',
+        lengthsInches: sourced.lengths([31]),
+        stock: sourced.stock('limited'),
+      }),
+      buildProduct({
+        slug: 'b',
+        lengthsInches: sourced.lengths([30, 31, 32]),
+        stock: sourced.stock('limited'),
+      }),
     ];
     const advice = getAdvice(
-      buildStartAnswers({ height_cm: 135, availability_preference: 'only_direct' }),
+      buildStartAnswers({
+        height_cm: 135,
+        availability_preference: 'only_direct',
+      }),
       products,
       { now: NOW },
     );
@@ -152,7 +182,9 @@ describe('acceptance scenarios (spec §12) against the real catalog', () => {
 
 describe('getAdvice', () => {
   it('stamps the advice, rule set and catalog versions and the session id', () => {
-    const advice = getAdvice(buildStartAnswers(), catalog, { adviceSessionId: 'session-1' });
+    const advice = getAdvice(buildStartAnswers(), catalog, {
+      adviceSessionId: 'session-1',
+    });
 
     expect(advice).toMatchObject({
       adviceSessionId: 'session-1',
@@ -164,7 +196,10 @@ describe('getAdvice', () => {
   });
 
   it('refers a left-handed request to personal help instead of showing a wrong product', () => {
-    const advice = getAdvice(buildStartAnswers({ left_handed_requirement: 'yes' }), catalog);
+    const advice = getAdvice(
+      buildStartAnswers({ left_handed_requirement: 'yes' }),
+      catalog,
+    );
 
     expect(advice.referral).toBe('left_handed');
     expect(advice.results).toEqual([]);
@@ -222,22 +257,34 @@ describe('getAdvice', () => {
 });
 
 describe('applyHardFilters', () => {
-  const filter = (answers: Parameters<typeof buildPlayerContext>[0], products: ReturnType<typeof buildProduct>[]) =>
-    applyHardFilters(products, buildPlayerContext(answers, NOW));
+  const filter = (
+    answers: Parameters<typeof buildPlayerContext>[0],
+    products: ReturnType<typeof buildProduct>[],
+  ) => applyHardFilters(products, buildPlayerContext(answers, NOW));
 
   it('reports the budget stage when price is the only thing in the way', () => {
-    const result = filter(buildStartAnswers({ budget_band: 'lt_75' }), [buildProduct()]);
+    const result = filter(buildStartAnswers({ budget_band: 'lt_75' }), [
+      buildProduct(),
+    ]);
     expect(result).toMatchObject({ passed: [], noMatchReason: 'budget' });
   });
 
   it('skips the budget filter when the user wants to compare first', () => {
     const pricey = buildProduct({ priceIndicativeEur: sourced.price(400) });
-    expect(filter(buildStartAnswers({ budget_band: 'compare_first' }), [pricey]).passed).toHaveLength(1);
+    expect(
+      filter(buildStartAnswers({ budget_band: 'compare_first' }), [pricey])
+        .passed,
+    ).toHaveLength(1);
   });
 
   it('excludes a stick outside the experience band', () => {
-    const elite = buildProduct({ experienceLevel: sourced.level('ervaren'), carbonPercentage: sourced.carbon(60) });
-    expect(filter(buildStartAnswers(), [elite]).noMatchReason).toBe('experience');
+    const elite = buildProduct({
+      experienceLevel: sourced.level('ervaren'),
+      carbonPercentage: sourced.carbon(60),
+    });
+    expect(filter(buildStartAnswers(), [elite]).noMatchReason).toBe(
+      'experience',
+    );
   });
 
   it('excludes ~85%+ carbon when the first touch is still in the lower half', () => {
@@ -247,7 +294,10 @@ describe('applyHardFilters', () => {
     });
     expect(filter(buildDevelopAnswers(), [stiff]).noMatchReason).toBe('safety');
     expect(
-      filter(buildDevelopAnswers({ first_touch_confidence: 'good_under_pressure' }), [stiff]).passed,
+      filter(
+        buildDevelopAnswers({ first_touch_confidence: 'good_under_pressure' }),
+        [stiff],
+      ).passed,
     ).toHaveLength(1);
   });
 
@@ -257,13 +307,20 @@ describe('applyHardFilters', () => {
       bowProfile: sourced.bow('extreme_lowbow'),
       carbonPercentage: sourced.carbon(70),
     });
-    expect(filter(buildPerformanceAnswers(), [specialist]).noMatchReason).toBe('safety');
+    expect(filter(buildPerformanceAnswers(), [specialist]).noMatchReason).toBe(
+      'safety',
+    );
     expect(
-      filter(buildPerformanceAnswers({ skill_dragflick: 'specialist' }), [specialist]).passed,
+      filter(buildPerformanceAnswers({ skill_dragflick: 'specialist' }), [
+        specialist,
+      ]).passed,
     ).toHaveLength(1);
   });
 
   it('never advises a product with a publication blocker', () => {
-    expect(filter(buildStartAnswers(), [buildProduct({ bowProfile: undefined })]).noMatchReason).toBe('data');
+    expect(
+      filter(buildStartAnswers(), [buildProduct({ bowProfile: undefined })])
+        .noMatchReason,
+    ).toBe('data');
   });
 });

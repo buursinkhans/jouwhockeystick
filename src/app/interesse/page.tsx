@@ -23,7 +23,7 @@ export default async function InteressePage({
   return (
     <div className="mx-auto max-w-xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold">Interesse doorgeven</h1>
-      <p className="mt-2 text-zinc-600">
+      <p className="mt-2 text-lijngrijs">
         {product ? `Je geeft interesse door voor de ${product.name}. ` : ''}
         We nemen contact met je op om je verder te helpen.
       </p>

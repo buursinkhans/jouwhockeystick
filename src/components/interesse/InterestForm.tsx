@@ -63,10 +63,7 @@ export function InterestForm({ initialProductSlug, source }: Props) {
 
   if (status === 'success') {
     return (
-      <p
-        role="status"
-        className="rounded-lg bg-emerald-50 px-4 py-3 text-emerald-900"
-      >
+      <p role="status" className="rounded-lg bg-krijt px-4 py-3 text-veld">
         Bedankt voor je interesse! We nemen zo snel mogelijk contact met je op.
       </p>
     );
@@ -83,7 +80,7 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
         />
       </div>
 
@@ -97,7 +94,7 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
         />
         {fieldErrors.email && (
           <p id="email-error" className="mt-1 text-sm text-red-700">
@@ -115,7 +112,7 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           type="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
         />
       </div>
 
@@ -128,7 +125,7 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           rows={4}
-          className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2"
+          className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
         />
       </div>
 
@@ -143,11 +140,11 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           }
           className="mt-1"
         />
-        <label htmlFor="consent" className="text-sm text-zinc-700">
+        <label htmlFor="consent" className="text-sm text-inkt/80">
           Ik geef toestemming om benaderd te worden over mijn aanvraag.
         </label>
       </div>
-      <p className="-mt-2 pl-6 text-xs text-zinc-500">
+      <p className="-mt-2 pl-6 text-xs text-lijngrijs">
         We gebruiken je gegevens alleen voor deze aanvraag en bewaren ze
         maximaal 12 maanden. Lees de{' '}
         <Link href="/privacy" className="underline">

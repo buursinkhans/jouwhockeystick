@@ -1,5 +1,10 @@
 import type { Product } from '@/catalog/types';
-import { BOW_LABELS, EXPERIENCE_LABELS, POSITION_LABELS, STOCK_LABELS } from '@/catalog/labels';
+import {
+  BOW_LABELS,
+  EXPERIENCE_LABELS,
+  POSITION_LABELS,
+  STOCK_LABELS,
+} from '@/catalog/labels';
 import { SourceBadge, type SourceMeta } from '@/components/ui/SourceBadge';
 
 export function ProductSpecTable({ product }: { product: Product }) {
@@ -11,7 +16,9 @@ export function ProductSpecTable({ product }: { product: Product }) {
     },
     {
       label: 'Vaak gebruikt op positie',
-      value: product.recommendedPositions.value.map((p) => POSITION_LABELS[p] ?? p).join(', '),
+      value: product.recommendedPositions.value
+        .map((p) => POSITION_LABELS[p] ?? p)
+        .join(', '),
       sourced: product.recommendedPositions,
     },
   ];
@@ -58,8 +65,11 @@ export function ProductSpecTable({ product }: { product: Product }) {
       <caption className="sr-only">Specificaties van {product.name}</caption>
       <tbody>
         {rows.map((row) => (
-          <tr key={row.label} className="border-b border-zinc-200">
-            <th scope="row" className="w-1/3 py-3 pr-4 align-top text-sm font-semibold text-zinc-700">
+          <tr key={row.label} className="border-b border-rand">
+            <th
+              scope="row"
+              className="w-1/3 py-3 pr-4 align-top text-sm font-semibold text-inkt/80"
+            >
               {row.label}
             </th>
             <td className="py-3">

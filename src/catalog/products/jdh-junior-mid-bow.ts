@@ -6,12 +6,14 @@ export const jdhJuniorMidBow: Product = {
   name: 'JDH Junior Mid Bow',
   dataStatus: 'verified',
   imageAlt: 'JDH Junior Mid Bow hockeystick',
-  imageUrl: 'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6895cff0bd9b9aab1edd81e9_JNRGN_teal_6%20.jpg',
+  imageUrl:
+    'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6895cff0bd9b9aab1edd81e9_JNRGN_teal_6%20.jpg',
   imageSourceUrl: 'https://jdhsports.eu/product/junior-mid-bow',
   experienceLevel: {
     value: 'beginner',
     source: 'brand-website',
-    sourceLabel: 'JDH omschrijft dit model expliciet als "perfect for young players just starting hockey".',
+    sourceLabel:
+      'JDH omschrijft dit model expliciet als "perfect for young players just starting hockey".',
     sourceUrl: 'https://jdhsports.eu/product/junior-mid-bow',
     modelYear: 2025,
     lastVerifiedAt: '2026-09-26',
@@ -33,14 +35,16 @@ export const jdhJuniorMidBow: Product = {
   carbonPercentage: {
     value: 0,
     source: 'brand-website',
-    sourceLabel: 'JDH omschrijft dit model als "100% Composite/Fiberglass" — geen carbon vermeld.',
+    sourceLabel:
+      'JDH omschrijft dit model als "100% Composite/Fiberglass" — geen carbon vermeld.',
     sourceUrl: 'https://jdhsports.eu/product/junior-mid-bow',
     lastVerifiedAt: '2026-09-26',
   },
   weightGrams: {
     value: 445,
     source: 'brand-website',
-    sourceLabel: 'JDH vermeldt een gewichtsbereik van 420–475 gram (afhankelijk van lengte); hier het gemiddelde getoond.',
+    sourceLabel:
+      'JDH vermeldt een gewichtsbereik van 420–475 gram (afhankelijk van lengte); hier het gemiddelde getoond.',
     sourceUrl: 'https://jdhsports.eu/product/junior-mid-bow',
     lastVerifiedAt: '2026-09-26',
   },
@@ -71,7 +75,8 @@ export const jdhJuniorMidBow: Product = {
       'Volledig composiet/fiberglass zonder carbon — vergevingsgezind voor een startende speler',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door JDH vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door JDH vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
   pointsOfAttention: {
@@ -80,7 +85,8 @@ export const jdhJuniorMidBow: Product = {
       'Geen carbon, dus minder power dan de duurdere junior carbon-modellen',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door JDH vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door JDH vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
 };

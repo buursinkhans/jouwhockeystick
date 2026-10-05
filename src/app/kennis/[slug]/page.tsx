@@ -28,7 +28,11 @@ export async function generateMetadata({
   });
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ArticlePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const article = getArticleBySlug(slug);
 
@@ -48,7 +52,10 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },

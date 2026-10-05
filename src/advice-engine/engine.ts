@@ -8,16 +8,28 @@ import { deriveAdviceRules } from './productRules';
 import { ADVICE_VERSION, METHOD_URL, RULE_SET_VERSION } from './ruleSetVersion';
 import { scoreProduct, type SizeBasis } from './scoring';
 import { findShorterSize, matchSize } from './sizeAdvice';
-import type { AdviceResult, AdviceResultItem, PlayerContext, ResultRole } from './types';
+import type {
+  AdviceResult,
+  AdviceResultItem,
+  PlayerContext,
+  ResultRole,
+} from './types';
 
 /** A best match needs at least this score out of 100 (spec §6.3). */
 export const BEST_MATCH_MIN_SCORE = 70;
 const AMBITIOUS_MIN_SCORE = 60;
 const MAX_OTHER_SIZE_OPTIONS = 2;
 
-type Candidate = Omit<AdviceResultItem, 'role' | 'cautions'> & { complexity: number };
+type Candidate = Omit<AdviceResultItem, 'role' | 'cautions'> & {
+  complexity: number;
+};
 
-function toCandidate(product: Product, ctx: PlayerContext, sizeInch: number, basis?: SizeBasis): Candidate {
+function toCandidate(
+  product: Product,
+  ctx: PlayerContext,
+  sizeInch: number,
+  basis?: SizeBasis,
+): Candidate {
   const { breakdown, reasons } = scoreProduct(product, ctx, basis);
   return {
     product,
@@ -39,7 +51,11 @@ function byScore(a: Candidate, b: Candidate): number {
   );
 }
 
-function withRole(candidate: Candidate, role: ResultRole, ctx: PlayerContext): AdviceResultItem {
+function withRole(
+  candidate: Candidate,
+  role: ResultRole,
+  ctx: PlayerContext,
+): AdviceResultItem {
   return {
     role,
     product: candidate.product,
@@ -51,17 +67,26 @@ function withRole(candidate: Candidate, role: ResultRole, ctx: PlayerContext): A
   };
 }
 
-function assignRoles(ranked: Candidate[], ctx: PlayerContext): AdviceResultItem[] {
+function assignRoles(
+  ranked: Candidate[],
+  ctx: PlayerContext,
+): AdviceResultItem[] {
   const [best, ...rest] = ranked;
   if (!best) {
     return [];
   }
 
   const results: AdviceResultItem[] = [
-    withRole(best, best.score >= BEST_MATCH_MIN_SCORE ? 'best_match' : 'closest_option', ctx),
+    withRole(
+      best,
+      best.score >= BEST_MATCH_MIN_SCORE ? 'best_match' : 'closest_option',
+      ctx,
+    ),
   ];
 
-  const safe = rest.find((candidate) => candidate.complexity <= best.complexity);
+  const safe = rest.find(
+    (candidate) => candidate.complexity <= best.complexity,
+  );
   if (safe) {
     results.push(withRole(safe, 'safe_choice', ctx));
   }
@@ -86,7 +111,10 @@ function assignRoles(ranked: Candidate[], ctx: PlayerContext): AdviceResultItem[
  * Shorter-size fallback for when nothing exists in the advised size. These
  * are returned separately and never as a best match.
  */
-function otherSizeOptions(products: Product[], ctx: PlayerContext): AdviceResultItem[] {
+function otherSizeOptions(
+  products: Product[],
+  ctx: PlayerContext,
+): AdviceResultItem[] {
   const candidates: Candidate[] = [];
   for (const product of products) {
     const shorter = findShorterSize(product, ctx.sizeAdvice);
@@ -110,7 +138,12 @@ export function getAdvice(
 
   const base: Omit<
     AdviceResult,
-    'results' | 'otherSizeOptions' | 'isUncertain' | 'noMatchReason' | 'referral' | 'excludedCount'
+    | 'results'
+    | 'otherSizeOptions'
+    | 'isUncertain'
+    | 'noMatchReason'
+    | 'referral'
+    | 'excludedCount'
   > = {
     adviceSessionId: options.adviceSessionId ?? '',
     adviceVersion: ADVICE_VERSION,
@@ -136,13 +169,17 @@ export function getAdvice(
     };
   }
 
-  const { passed, excludedCount, noMatchReason } = applyHardFilters(products, ctx);
+  const { passed, excludedCount, noMatchReason } = applyHardFilters(
+    products,
+    ctx,
+  );
 
   if (passed.length === 0) {
     return {
       ...base,
       results: [],
-      otherSizeOptions: noMatchReason === 'length' ? otherSizeOptions(products, ctx) : [],
+      otherSizeOptions:
+        noMatchReason === 'length' ? otherSizeOptions(products, ctx) : [],
       isUncertain: true,
       noMatchReason,
       referral: null,
@@ -153,7 +190,8 @@ export function getAdvice(
   const ranked = passed
     .map((product) => {
       const sizeInch =
-        matchSize(product, ctx.sizeAdvice) === 'alternative' && ctx.sizeAdvice.alternativeInch !== undefined
+        matchSize(product, ctx.sizeAdvice) === 'alternative' &&
+        ctx.sizeAdvice.alternativeInch !== undefined
           ? ctx.sizeAdvice.alternativeInch
           : ctx.sizeAdvice.primaryInch;
       return toCandidate(product, ctx, sizeInch);
@@ -165,7 +203,8 @@ export function getAdvice(
     ...base,
     results,
     otherSizeOptions: [],
-    isUncertain: results[0]?.role !== 'best_match' || ctx.sizeAdvice.confidence === 'low',
+    isUncertain:
+      results[0]?.role !== 'best_match' || ctx.sizeAdvice.confidence === 'low',
     noMatchReason: null,
     referral: null,
     excludedCount,

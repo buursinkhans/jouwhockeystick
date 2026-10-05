@@ -33,7 +33,11 @@ export async function generateMetadata({
   });
 }
 
-export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const product = getProductBySlug(slug);
 
@@ -54,7 +58,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
@@ -64,9 +71,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       />
       <div className="flex items-start gap-6">
         <div className="shrink-0">
-          <ProductImage product={product} className="h-40 w-40 sm:h-48 sm:w-48" />
+          <ProductImage
+            product={product}
+            className="h-40 w-40 sm:h-48 sm:w-48"
+          />
           {product.imageUrl && product.imageSourceUrl && (
-            <p className="mt-1 text-center text-xs text-zinc-400">
+            <p className="mt-1 text-center text-xs text-lijngrijs">
               <a href={product.imageSourceUrl} className="hover:underline">
                 Foto: {product.brand}
               </a>
@@ -74,27 +84,34 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           )}
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+          <p className="text-xs font-semibold uppercase tracking-wide text-veld">
             {product.brand}
           </p>
           <h1 className="mt-1 text-3xl font-bold">{product.name}</h1>
-          <p className="mt-4 text-zinc-700">{product.summary}</p>
+          <p className="mt-4 text-inkt/80">{product.summary}</p>
         </div>
       </div>
 
-      <p className="mt-6 text-2xl font-bold">€{product.priceIndicativeEur.value.toFixed(2)}</p>
+      <p className="mt-6 text-2xl font-bold">
+        €{product.priceIndicativeEur.value.toFixed(2)}
+      </p>
       <div className="mt-1">
         <ProductNotice />
       </div>
 
       <div className="mt-6 flex flex-wrap items-start gap-3">
         <RetailerLinks brand={product.brand} productName={product.name} />
-        <ButtonLink href={`/interesse?product=${product.slug}&source=productpagina`} variant="secondary">
+        <ButtonLink
+          href={`/interesse?product=${product.slug}&source=productpagina`}
+          variant="secondary"
+        >
           Stel een vraag
         </ButtonLink>
       </div>
 
-      <h2 className="mt-10 text-xl font-bold">Sterke punten &amp; aandachtspunten</h2>
+      <h2 className="mt-10 text-xl font-bold">
+        Sterke punten &amp; aandachtspunten
+      </h2>
       <div className="mt-4">
         <ProductProsAndCons product={product} />
       </div>
@@ -107,7 +124,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <ProductFitAndSources product={product} />
 
       <p className="mt-6 text-sm">
-        <Link href={`/vergelijk?a=${product.slug}`} className="font-semibold text-emerald-800 hover:underline">
+        <Link
+          href={`/vergelijk?a=${product.slug}`}
+          className="font-semibold text-veld hover:underline"
+        >
           Vergelijk deze stick met een andere
         </Link>
       </p>

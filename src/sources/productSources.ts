@@ -1,4 +1,8 @@
-import type { Product, SourceType as CatalogSourceType, SourcedValue } from '@/catalog/types';
+import type {
+  Product,
+  SourceType as CatalogSourceType,
+  SourcedValue,
+} from '@/catalog/types';
 import type { EvidenceStrength, SourceRecord, SourceType } from './types';
 
 const SOURCE_TYPE: Record<CatalogSourceType, SourceType> = {
@@ -50,7 +54,10 @@ const FIELD_LABELS = {
 
 type SourcedField = keyof typeof FIELD_LABELS;
 
-function publisherFor(product: Product, sourced: SourcedValue<unknown>): string {
+function publisherFor(
+  product: Product,
+  sourced: SourcedValue<unknown>,
+): string {
   if (sourced.source === 'editorial-estimate') {
     return SITE_NAME;
   }
@@ -68,7 +75,10 @@ export function sourceTypeOf(sourced: SourcedValue<unknown>): SourceType {
 }
 
 /** "Fabrikantgegevens — Grays", "Redactionele adviesregel — jouwhockeystick.nl", … */
-export function sourceLine(product: Product, sourced: SourcedValue<unknown>): string {
+export function sourceLine(
+  product: Product,
+  sourced: SourcedValue<unknown>,
+): string {
   return `${SOURCE_DISPLAY_LABEL[sourceTypeOf(sourced)]} — ${publisherFor(product, sourced)}`;
 }
 
@@ -78,7 +88,14 @@ export function sourceLine(product: Product, sourced: SourcedValue<unknown>): st
  * which source backs which specs without duplicating that data by hand.
  */
 export function buildProductSourceRecords(product: Product): SourceRecord[] {
-  const groups = new Map<string, { sourced: SourcedValue<unknown>; fields: SourcedField[]; checkedAt: string }>();
+  const groups = new Map<
+    string,
+    {
+      sourced: SourcedValue<unknown>;
+      fields: SourcedField[];
+      checkedAt: string;
+    }
+  >();
 
   for (const field of Object.keys(FIELD_LABELS) as SourcedField[]) {
     const sourced: SourcedValue<unknown> | undefined = product[field];
@@ -93,28 +110,39 @@ export function buildProductSourceRecords(product: Product): SourceRecord[] {
         group.checkedAt = sourced.lastVerifiedAt;
       }
     } else {
-      groups.set(key, { sourced, fields: [field], checkedAt: sourced.lastVerifiedAt });
+      groups.set(key, {
+        sourced,
+        fields: [field],
+        checkedAt: sourced.lastVerifiedAt,
+      });
     }
   }
 
-  return Array.from(groups.values(), ({ sourced, fields, checkedAt }, index) => {
-    const editorial = sourced.source === 'editorial-estimate';
-    const record: SourceRecord = {
-      id: `${product.slug}:${index + 1}`,
-      sourceType: sourceTypeOf(sourced),
-      evidenceStrength: EVIDENCE_STRENGTH[sourced.source],
-      title: editorial ? `Redactionele inschatting bij ${product.name}` : `${product.name} — productpagina`,
-      publisher: publisherFor(product, sourced),
-      checkedAt,
-      claimSummary: fields.map((field) => FIELD_LABELS[field]).join(', '),
-      relatedProductIds: [product.slug],
-    };
-    if (!editorial && sourced.sourceUrl) {
-      record.url = sourced.sourceUrl;
-    }
-    if (editorial) {
-      record.limitations = ['Eigen inschatting op basis van de vermelde specificaties; geen meting of praktijktest.'];
-    }
-    return record;
-  });
+  return Array.from(
+    groups.values(),
+    ({ sourced, fields, checkedAt }, index) => {
+      const editorial = sourced.source === 'editorial-estimate';
+      const record: SourceRecord = {
+        id: `${product.slug}:${index + 1}`,
+        sourceType: sourceTypeOf(sourced),
+        evidenceStrength: EVIDENCE_STRENGTH[sourced.source],
+        title: editorial
+          ? `Redactionele inschatting bij ${product.name}`
+          : `${product.name} — productpagina`,
+        publisher: publisherFor(product, sourced),
+        checkedAt,
+        claimSummary: fields.map((field) => FIELD_LABELS[field]).join(', '),
+        relatedProductIds: [product.slug],
+      };
+      if (!editorial && sourced.sourceUrl) {
+        record.url = sourced.sourceUrl;
+      }
+      if (editorial) {
+        record.limitations = [
+          'Eigen inschatting op basis van de vermelde specificaties; geen meting of praktijktest.',
+        ];
+      }
+      return record;
+    },
+  );
 }

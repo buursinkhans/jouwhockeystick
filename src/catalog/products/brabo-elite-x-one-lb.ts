@@ -8,12 +8,15 @@ export const braboEliteXOneLb: Product = {
   imageAlt: 'Brabo Elite X One LB hockeystick',
   imageUrl:
     'https://brabohockey.com/cdn/shop/files/315.60102.000_1_8d62979e-7b1d-4c77-b3b6-e6e299d942f6.jpg?v=1780553825',
-  imageSourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
+  imageSourceUrl:
+    'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',
-    sourceLabel: 'Brabo omschrijft dit model expliciet als bedoeld voor "experienced players".',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
+    sourceLabel:
+      'Brabo omschrijft dit model expliciet als bedoeld voor "experienced players".',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
     modelYear: 2025,
     lastVerifiedAt: '2026-09-26',
   },
@@ -28,27 +31,31 @@ export const braboEliteXOneLb: Product = {
     value: 'lowbow',
     source: 'brand-website',
     sourceLabel: 'Brabo noemt dit model expliciet "Low Bow".',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
     lastVerifiedAt: '2026-09-26',
   },
   carbonPercentage: {
     value: 100,
     source: 'brand-website',
     sourceLabel: 'Brabo vermeldt expliciet "100% X-Fusion Carbon".',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
     lastVerifiedAt: '2026-09-26',
   },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
     lastVerifiedAt: '2026-09-26',
   },
   priceIndicativeEur: {
     value: 299.99,
     source: 'brand-website',
     sourceLabel: 'Adviesprijs zoals vermeld op de officiële Brabo-website.',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60102-elite-x-one-lb',
     lastVerifiedAt: '2026-09-26',
   },
   stock: {
@@ -65,7 +72,8 @@ export const braboEliteXOneLb: Product = {
       'Low-bow profiel van dezelfde Elite-serie als de instapvarianten, dus vertrouwd balgevoel bij een upgrade',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Brabo vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Brabo vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
   pointsOfAttention: {
@@ -74,7 +82,8 @@ export const braboEliteXOneLb: Product = {
       'Brabo positioneert dit expliciet voor ervaren spelers — niet de voor de hand liggende keuze als eerste stick',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Brabo vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Brabo vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
 };

@@ -5,9 +5,9 @@ export function SourceList({ sources }: { sources: Article['sources'] }) {
     return null;
   }
   return (
-    <div className="mt-10 border-t border-zinc-200 pt-6">
+    <div className="mt-10 border-t border-rand pt-6">
       <h2 className="text-lg font-semibold">Bronnen</h2>
-      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-zinc-600">
+      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-lijngrijs">
         {sources.map((source) => (
           <li key={source.label}>
             {source.url ? (

@@ -65,7 +65,8 @@ export const graysPb11PlusComposite: Product = {
       'Gericht op 3D-skills, luchtballen en passtechniek',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-27',
   },
   pointsOfAttention: {
@@ -74,7 +75,8 @@ export const graysPb11PlusComposite: Product = {
       'Specialistische, dure stick — minder voor de hand liggend als eerste upgrade',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-27',
   },
 };

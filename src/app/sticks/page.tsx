@@ -11,7 +11,10 @@ export const metadata = pageMetadata({
   path: '/sticks',
 });
 
-function isValidBrand(value: string | undefined, brands: Brand[]): value is Brand {
+function isValidBrand(
+  value: string | undefined,
+  brands: Brand[],
+): value is Brand {
   return value !== undefined && brands.includes(value as Brand);
 }
 
@@ -23,14 +26,19 @@ export default async function SticksPage({
   const { brand } = await searchParams;
   const brands = getAllBrands();
   const activeBrand = isValidBrand(brand, brands) ? brand : undefined;
-  const products = getAllProducts().filter((p) => !activeBrand || p.brand === activeBrand);
+  const products = getAllProducts().filter(
+    (p) => !activeBrand || p.brand === activeBrand,
+  );
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold">Alle hockeysticks</h1>
-      <p className="mt-2 max-w-2xl text-zinc-600">
+      <p className="mt-2 max-w-2xl text-lijngrijs">
         Twijfel je welke bij je past? Doorloop de{' '}
-        <Link href="/stickwijzer" className="font-semibold text-emerald-800 hover:underline">
+        <Link
+          href="/stickwijzer"
+          className="font-semibold text-veld hover:underline"
+        >
           stickwijzer
         </Link>{' '}
         voor een persoonlijk advies.
@@ -41,8 +49,8 @@ export default async function SticksPage({
           href="/sticks"
           className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
             !activeBrand
-              ? 'border-emerald-700 bg-emerald-700 text-white'
-              : 'border-zinc-300 text-zinc-700 hover:border-emerald-700'
+              ? 'border-veld bg-veld text-white'
+              : 'border-lijngrijs text-inkt/80 hover:border-veld'
           }`}
         >
           Alle merken
@@ -53,8 +61,8 @@ export default async function SticksPage({
             href={`/sticks?brand=${encodeURIComponent(b)}`}
             className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
               activeBrand === b
-                ? 'border-emerald-700 bg-emerald-700 text-white'
-                : 'border-zinc-300 text-zinc-700 hover:border-emerald-700'
+                ? 'border-veld bg-veld text-white'
+                : 'border-lijngrijs text-inkt/80 hover:border-veld'
             }`}
           >
             {b}

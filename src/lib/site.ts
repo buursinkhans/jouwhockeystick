@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 export const SITE_URL = 'https://jouwhockeystick.nl';
 export const SITE_NAME = 'jouwhockeystick.nl';
 export const CONTACT_EMAIL = 'info@jouwhockeystick.nl';
+/** Pay-off from the brand guideline (merkinstructie §1). */
+export const BRAND_PAYOFF = 'Eerlijk stickadvies op maat';
 
 export const DEFAULT_TITLE =
   'jouwhockeystick.nl — vind de hockeystick die bij je past';
@@ -58,14 +60,14 @@ export function pageMetadata({
       siteName: SITE_NAME,
       locale: 'nl_NL',
       type: 'website',
-      // Setting openGraph on a page replaces the inherited one, including the
-      // file-based image, so the shared image is listed explicitly.
+      // Setting openGraph on a page replaces the inherited one, so the shared
+      // brand image (public/og-image.png) is listed on every page.
       images: [
         {
-          url: '/opengraph-image',
+          url: '/og-image.png',
           width: 1200,
           height: 630,
-          alt: DEFAULT_TITLE,
+          alt: `${SITE_NAME} — ${BRAND_PAYOFF}`,
         },
       ],
     },

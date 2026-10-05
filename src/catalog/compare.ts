@@ -1,4 +1,9 @@
-import { BOW_LABELS, EXPERIENCE_LABELS, POSITION_LABELS, STOCK_LABELS } from './labels';
+import {
+  BOW_LABELS,
+  EXPERIENCE_LABELS,
+  POSITION_LABELS,
+  STOCK_LABELS,
+} from './labels';
 import type { Product } from './types';
 
 export type CompareRow = { label: string; valueA: string; valueB: string };
@@ -6,7 +11,9 @@ export type CompareRow = { label: string; valueA: string; valueB: string };
 const NOT_STATED = 'Niet vermeld';
 
 function formatPositions(product: Product): string {
-  return product.recommendedPositions.value.map((p) => POSITION_LABELS[p] ?? p).join(', ');
+  return product.recommendedPositions.value
+    .map((p) => POSITION_LABELS[p] ?? p)
+    .join(', ');
 }
 
 /**

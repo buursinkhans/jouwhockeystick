@@ -38,7 +38,9 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
     // products such as headphones, since bol.com's search matches on loose
     // word overlap.
     getUrl: ({ productName }) => {
-      const params = new URLSearchParams({ searchtext: `${productName} hockeystick` });
+      const params = new URLSearchParams({
+        searchtext: `${productName} hockeystick`,
+      });
       return `https://www.bol.com/nl/nl/s/?${params.toString()}`;
     },
   },
@@ -51,7 +53,9 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
     // TradeTracker, replace this with a real TradeTracker deeplink.
     getUrl: ({ brand }) => {
       const slug = PASSASPORTS_BRAND_SLUGS[brand];
-      return slug ? `https://www.passasports.nl/hockey/hockeysticks/${slug}` : null;
+      return slug
+        ? `https://www.passasports.nl/hockey/hockeysticks/${slug}`
+        : null;
     },
   },
 };

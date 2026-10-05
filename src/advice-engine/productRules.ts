@@ -6,7 +6,11 @@ import type { ExperienceBand, StickFeel } from './types';
 
 export { HIGH_CARBON, SOFT_MAX_CARBON };
 
-export const BAND_ORDER: readonly ExperienceBand[] = ['starter', 'developing', 'advanced'];
+export const BAND_ORDER: readonly ExperienceBand[] = [
+  'starter',
+  'developing',
+  'advanced',
+];
 
 /** Higher = more pronounced, more specialised curve. */
 export const BOW_RANK: Record<BowProfile, number> = {
@@ -27,7 +31,11 @@ const BANDS_BY_LEVEL: Record<
   ervaren: { home: 'advanced', min: 'advanced', max: 'advanced' },
 };
 
-const LEVEL_INDEX: Record<ExperienceLevel, number> = { beginner: 0, gevorderd: 1, ervaren: 2 };
+const LEVEL_INDEX: Record<ExperienceLevel, number> = {
+  beginner: 0,
+  gevorderd: 1,
+  ervaren: 2,
+};
 
 export type ProductAdviceRules = {
   homeBand: ExperienceBand;
@@ -43,7 +51,10 @@ export type ProductAdviceRules = {
   complexity: number;
 };
 
-function carbonTier(carbon: number | undefined, level: ExperienceLevel): number {
+function carbonTier(
+  carbon: number | undefined,
+  level: ExperienceLevel,
+): number {
   if (carbon === undefined) {
     // Unknown stiffness: fall back on the level the brand positions the stick for.
     return LEVEL_INDEX[level];
@@ -73,12 +84,16 @@ export function deriveAdviceRules(product: Product): ProductAdviceRules {
     homeBand: bands.home,
     minBand: bands.min,
     maxBand: bands.max,
-    starterAllowed: level === 'beginner' && bow !== 'extreme_lowbow' && !highCarbon,
+    starterAllowed:
+      level === 'beginner' && bow !== 'extreme_lowbow' && !highCarbon,
     juniorModel: Math.min(...product.lengthsInches.value) < 36,
     dragflickSpecialist: bow === 'extreme_lowbow',
     eliteOnly: level === 'ervaren',
     feel: feelFromCarbon(carbon),
-    complexity: (bow ? BOW_RANK[bow] : 0) + carbonTier(carbon, level) + LEVEL_INDEX[level],
+    complexity:
+      (bow ? BOW_RANK[bow] : 0) +
+      carbonTier(carbon, level) +
+      LEVEL_INDEX[level],
   };
 }
 
@@ -91,7 +106,9 @@ export type AdviceBlocker =
   | 'unavailable'
   | 'illogical_starter_flag';
 
-function hasTraceableSource(sourced: { source: string; sourceUrl?: string } | undefined): boolean {
+function hasTraceableSource(
+  sourced: { source: string; sourceUrl?: string } | undefined,
+): boolean {
   if (!sourced) {
     return false;
   }
@@ -102,7 +119,10 @@ function hasTraceableSource(sourced: { source: string; sourceUrl?: string } | un
  * Publication checks from spec §11. A product with any blocker stays visible
  * in the catalog but is never used in an automated advice.
  */
-export function getAdviceBlockers(product: Product, now: Date = new Date()): AdviceBlocker[] {
+export function getAdviceBlockers(
+  product: Product,
+  now: Date = new Date(),
+): AdviceBlocker[] {
   const blockers: AdviceBlocker[] = [];
   const carbon = product.carbonPercentage?.value;
 
@@ -130,7 +150,8 @@ export function getAdviceBlockers(product: Product, now: Date = new Date()): Adv
   }
   if (
     product.experienceLevel.value === 'beginner' &&
-    (product.bowProfile?.value === 'extreme_lowbow' || (carbon !== undefined && carbon >= HIGH_CARBON))
+    (product.bowProfile?.value === 'extreme_lowbow' ||
+      (carbon !== undefined && carbon >= HIGH_CARBON))
   ) {
     blockers.push('illogical_starter_flag');
   }

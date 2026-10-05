@@ -6,7 +6,8 @@ export const jdhX01MidBow: Product = {
   name: 'JDH X01 Mid Bow',
   dataStatus: 'verified',
   imageAlt: 'JDH X01 Mid Bow hockeystick',
-  imageUrl: 'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6895ada67abf55238ef7a019_X1MBGN_bla_6%20.jpg',
+  imageUrl:
+    'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6895ada67abf55238ef7a019_X1MBGN_bla_6%20.jpg',
   imageSourceUrl: 'https://jdhsports.eu/product/x01-mid-bow',
   experienceLevel: {
     value: 'beginner',
@@ -20,13 +21,15 @@ export const jdhX01MidBow: Product = {
   recommendedPositions: {
     value: ['verdediger', 'middenvelder', 'aanvaller'],
     source: 'editorial-estimate',
-    sourceLabel: 'JDH noemt geen specifieke veldpositie, alleen "beginner and young players" (all-round).',
+    sourceLabel:
+      'JDH noemt geen specifieke veldpositie, alleen "beginner and young players" (all-round).',
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
     value: 'midbow',
     source: 'brand-website',
-    sourceLabel: 'JDH noemt de curve "Neutral (260mm from the toe of the stick)", wat overeenkomt met een mid-bow.',
+    sourceLabel:
+      'JDH noemt de curve "Neutral (260mm from the toe of the stick)", wat overeenkomt met een mid-bow.',
     sourceUrl: 'https://jdhsports.eu/product/x01-mid-bow',
     lastVerifiedAt: '2026-09-26',
   },
@@ -40,7 +43,8 @@ export const jdhX01MidBow: Product = {
   weightGrams: {
     value: 505,
     source: 'brand-website',
-    sourceLabel: 'JDH vermeldt een gewichtsbereik van 500–510 gram; hier het gemiddelde getoond.',
+    sourceLabel:
+      'JDH vermeldt een gewichtsbereik van 500–510 gram; hier het gemiddelde getoond.',
     sourceUrl: 'https://jdhsports.eu/product/x01-mid-bow',
     lastVerifiedAt: '2026-09-26',
   },
@@ -71,7 +75,8 @@ export const jdhX01MidBow: Product = {
       'Gematigd carbonpercentage (30%) — vergevingsgezind maar toch responsief',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door JDH vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door JDH vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
   pointsOfAttention: {
@@ -80,7 +85,8 @@ export const jdhX01MidBow: Product = {
       'Minder krachtig dan modellen met een hoger carbonpercentage — logisch gezien het beoogde niveau',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door JDH vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door JDH vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
 };

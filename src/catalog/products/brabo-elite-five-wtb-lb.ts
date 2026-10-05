@@ -8,13 +8,15 @@ export const braboEliteFiveWtbLb: Product = {
   imageAlt: 'Brabo Elite Five WTB LB hockeystick',
   imageUrl:
     'https://brabohockey.com/cdn/shop/files/315.60182.000_1_916b2c9b-cad3-4c6b-8b40-2a2b1a239561.jpg?v=1780553961',
-  imageSourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
+  imageSourceUrl:
+    'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',
     sourceLabel:
       'Brabo omschrijft dit model expliciet als bedoeld voor "experienced players who want a direct and powerful stick".',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
     modelYear: 2025,
     lastVerifiedAt: '2026-09-26',
   },
@@ -29,27 +31,31 @@ export const braboEliteFiveWtbLb: Product = {
     value: 'lowbow',
     source: 'brand-website',
     sourceLabel: 'Brabo noemt dit model expliciet "Low Bow".',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
     lastVerifiedAt: '2026-09-26',
   },
   carbonPercentage: {
     value: 50,
     source: 'brand-website',
     sourceLabel: 'Brabo vermeldt expliciet "50% Carbon".',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
     lastVerifiedAt: '2026-09-26',
   },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
     lastVerifiedAt: '2026-09-26',
   },
   priceIndicativeEur: {
     value: 149.99,
     source: 'brand-website',
     sourceLabel: 'Adviesprijs zoals vermeld op de officiële Brabo-website.',
-    sourceUrl: 'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
+    sourceUrl:
+      'https://brabohockey.com/en/collections/brabo-elite-series/products/315-60182-elite-five-wtb-lb',
     lastVerifiedAt: '2026-09-26',
   },
   stock: {
@@ -66,7 +72,8 @@ export const braboEliteFiveWtbLb: Product = {
       'Low-bow profiel voor directe balcontrole',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Brabo vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Brabo vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
   pointsOfAttention: {
@@ -75,7 +82,8 @@ export const braboEliteFiveWtbLb: Product = {
       'Gewicht wordt door Brabo niet vermeld',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Brabo vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Brabo vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
 };

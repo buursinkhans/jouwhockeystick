@@ -36,19 +36,19 @@ export function ProductFitAndSources({ product }: { product: Product }) {
           <dt className="font-semibold">
             Past doorgaans bij: {EXPERIENCE_LABELS[level].toLowerCase()}
           </dt>
-          <dd className="text-zinc-700">{SUITABLE_FOR[level]}</dd>
+          <dd className="text-inkt/80">{SUITABLE_FOR[level]}</dd>
         </div>
         <div>
           <dt className="font-semibold">Minder passend</dt>
-          <dd className="text-zinc-700">{LESS_SUITABLE_FOR[level]}</dd>
+          <dd className="text-inkt/80">{LESS_SUITABLE_FOR[level]}</dd>
         </div>
       </dl>
-      <p className="mt-3 text-sm text-zinc-600">
+      <p className="mt-3 text-sm text-lijngrijs">
         Dit is onze redactionele inschatting op basis van de vermelde
         specificaties, geen garantie. De{' '}
         <Link
           href="/stickwijzer"
-          className="font-semibold text-emerald-800 hover:underline"
+          className="font-semibold text-veld hover:underline"
         >
           stickwijzer
         </Link>{' '}
@@ -56,7 +56,7 @@ export function ProductFitAndSources({ product }: { product: Product }) {
       </p>
 
       <h2 className="mt-10 text-xl font-bold">Bronnen en methode</h2>
-      <ul className="mt-4 space-y-2 text-sm text-zinc-700">
+      <ul className="mt-4 space-y-2 text-sm text-inkt/80">
         {sources.map((source) => (
           <li key={source.id}>
             <span className="font-semibold">
@@ -70,7 +70,7 @@ export function ProductFitAndSources({ product }: { product: Product }) {
                 <a
                   href={source.url}
                   rel="noopener noreferrer"
-                  className="text-emerald-800 underline"
+                  className="text-veld underline"
                 >
                   Bron bekijken
                 </a>
@@ -85,12 +85,12 @@ export function ProductFitAndSources({ product }: { product: Product }) {
           <span className="font-semibold">Praktijktest</span> — nog niet getest.
         </li>
       </ul>
-      <p className="mt-3 text-sm text-zinc-600">
+      <p className="mt-3 text-sm text-lijngrijs">
         Gegevens laatst gecontroleerd op{' '}
         <time dateTime={lastChecked}>{lastChecked}</time>.{' '}
         <Link
           href="/methodiek"
-          className="font-semibold text-emerald-800 hover:underline"
+          className="font-semibold text-veld hover:underline"
         >
           Hoe komt ons advies tot stand?
         </Link>

@@ -15,14 +15,23 @@ type Props = {
   children: ReactNode;
 };
 
-export function RetailerLink({ retailer, brand, productName, className = '', variant, children }: Props) {
+export function RetailerLink({
+  retailer,
+  brand,
+  productName,
+  className = '',
+  variant,
+  children,
+}: Props) {
   const url = RETAILERS[retailer].getUrl({ productName, brand });
 
   if (!url) {
     return null;
   }
 
-  const variantClass = variant ? `${buttonBaseClasses} ${buttonVariantClasses[variant]}` : '';
+  const variantClass = variant
+    ? `${buttonBaseClasses} ${buttonVariantClasses[variant]}`
+    : '';
 
   return (
     <a
@@ -30,7 +39,9 @@ export function RetailerLink({ retailer, brand, productName, className = '', var
       target="_blank"
       rel="noopener noreferrer sponsored"
       className={`${variantClass} ${className}`.trim()}
-      onClick={() => trackEvent({ name: 'retailer_click', retailer, brand, productName })}
+      onClick={() =>
+        trackEvent({ name: 'retailer_click', retailer, brand, productName })
+      }
     >
       {children}
     </a>

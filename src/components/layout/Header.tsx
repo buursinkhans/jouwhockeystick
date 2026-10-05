@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Logo, LogoIcon } from '@/components/brand/Logo';
 
 const NAV_LINKS = [
   { href: '/stickwijzer', label: 'Stickwijzer' },
@@ -12,17 +13,29 @@ const NAV_LINKS = [
 
 export function Header() {
   return (
-    <header className="border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-4 sm:px-6">
-        <Link href="/" className="text-lg font-bold text-emerald-800">
-          jouwhockeystick.nl
+    <header className="border-b border-rand bg-white">
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-4 py-4 sm:px-6">
+        {/* Lockup: 40 px icon on desktop, 32 px on mobile; below 360 px only icon + "Stickadvies" (merkinstructie §6). */}
+        <span className="hidden sm:inline-flex">
+          <Logo variant="lockup" size={40} />
+        </span>
+        <span className="hidden min-[360px]:inline-flex sm:hidden">
+          <Logo variant="lockup" size={32} />
+        </span>
+        <Link
+          href="/"
+          aria-label="jouwhockeystick.nl – naar home"
+          className="jhs-wordmark flex items-center gap-2 text-xl min-[360px]:hidden"
+        >
+          <LogoIcon size={32} />
+          <span aria-hidden="true">Stickadvies</span>
         </Link>
         <nav
           aria-label="Hoofdnavigatie"
-          className="flex flex-wrap gap-x-4 gap-y-1 text-sm font-medium text-zinc-700"
+          className="flex flex-wrap gap-x-4 gap-y-1 text-sm font-semibold text-inkt/80"
         >
           {NAV_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} className="hover:text-emerald-800">
+            <Link key={link.href} href={link.href} className="hover:text-veld">
               {link.label}
             </Link>
           ))}

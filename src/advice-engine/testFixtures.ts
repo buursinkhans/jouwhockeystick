@@ -12,16 +12,53 @@ export function buildProduct(overrides: Partial<Product> = {}): Product {
     name: 'Test Product',
     dataStatus: 'test-data',
     imageAlt: 'Test product',
-    experienceLevel: { value: 'beginner', source: 'brand-website', modelYear: 2025, lastVerifiedAt: VERIFIED },
-    recommendedPositions: { value: ['middenvelder'], source: 'editorial-estimate', lastVerifiedAt: VERIFIED },
-    bowProfile: { value: 'midbow', source: 'brand-website', lastVerifiedAt: VERIFIED },
-    carbonPercentage: { value: 10, source: 'brand-website', lastVerifiedAt: VERIFIED },
-    lengthsInches: { value: [30, 34, 36.5], source: 'brand-website', lastVerifiedAt: VERIFIED },
-    priceIndicativeEur: { value: 89.95, source: 'brand-website', lastVerifiedAt: VERIFIED },
-    stock: { value: 'available', source: 'editorial-estimate', lastVerifiedAt: VERIFIED },
+    experienceLevel: {
+      value: 'beginner',
+      source: 'brand-website',
+      modelYear: 2025,
+      lastVerifiedAt: VERIFIED,
+    },
+    recommendedPositions: {
+      value: ['middenvelder'],
+      source: 'editorial-estimate',
+      lastVerifiedAt: VERIFIED,
+    },
+    bowProfile: {
+      value: 'midbow',
+      source: 'brand-website',
+      lastVerifiedAt: VERIFIED,
+    },
+    carbonPercentage: {
+      value: 10,
+      source: 'brand-website',
+      lastVerifiedAt: VERIFIED,
+    },
+    lengthsInches: {
+      value: [30, 34, 36.5],
+      source: 'brand-website',
+      lastVerifiedAt: VERIFIED,
+    },
+    priceIndicativeEur: {
+      value: 89.95,
+      source: 'brand-website',
+      lastVerifiedAt: VERIFIED,
+    },
+    stock: {
+      value: 'available',
+      source: 'editorial-estimate',
+      lastVerifiedAt: VERIFIED,
+    },
     summary: 'Test product summary.',
-    strengths: { value: ['Test sterk punt'], source: 'editorial-estimate', lastVerifiedAt: VERIFIED },
-    pointsOfAttention: { value: ['Test aandachtspunt'], source: 'editorial-estimate', lastVerifiedAt: VERIFIED },
+    strengths: {
+      value: ['Test sterk punt'],
+      source: 'editorial-estimate',
+      lastVerifiedAt: VERIFIED,
+    },
+    pointsOfAttention: {
+      value: ['Test aandachtspunt'],
+      source: 'editorial-estimate',
+      lastVerifiedAt: VERIFIED,
+    },
     ...overrides,
   };
 }
@@ -34,7 +71,9 @@ export const sourced = {
     modelYear: 2025,
     lastVerifiedAt: VERIFIED,
   }),
-  bow: (value: NonNullable<Product['bowProfile']>['value']): Product['bowProfile'] => ({
+  bow: (
+    value: NonNullable<Product['bowProfile']>['value'],
+  ): Product['bowProfile'] => ({
     value,
     source: 'brand-website',
     lastVerifiedAt: VERIFIED,
@@ -62,7 +101,9 @@ export const sourced = {
 };
 
 /** Acceptance scenario 1 (spec §12): first stick for a child. */
-export function buildStartAnswers(overrides: Partial<AdviceAnswers> = {}): AdviceAnswers {
+export function buildStartAnswers(
+  overrides: Partial<AdviceAnswers> = {},
+): AdviceAnswers {
   return {
     advice_goal: 'child',
     route_self_select: 'first_stick',
@@ -80,7 +121,9 @@ export function buildStartAnswers(overrides: Partial<AdviceAnswers> = {}): Advic
 }
 
 /** Acceptance scenario 2: youth player in development. */
-export function buildDevelopAnswers(overrides: Partial<AdviceAnswers> = {}): AdviceAnswers {
+export function buildDevelopAnswers(
+  overrides: Partial<AdviceAnswers> = {},
+): AdviceAnswers {
   return {
     advice_goal: 'child',
     route_self_select: 'next_stick',
@@ -101,7 +144,9 @@ export function buildDevelopAnswers(overrides: Partial<AdviceAnswers> = {}): Adv
 }
 
 /** Acceptance scenario 3: advanced attacker without a dragflick role. */
-export function buildPerformanceAnswers(overrides: Partial<AdviceAnswers> = {}): AdviceAnswers {
+export function buildPerformanceAnswers(
+  overrides: Partial<AdviceAnswers> = {},
+): AdviceAnswers {
   return {
     advice_goal: 'self',
     route_self_select: 'advanced_compare',

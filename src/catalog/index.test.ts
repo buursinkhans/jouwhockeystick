@@ -3,7 +3,11 @@ import { getAllBrands, getAllProducts, isProductActive } from './index';
 import type { Product } from './types';
 
 function buildProduct(lastVerifiedAt: string): Product {
-  const sourced = { value: 'beginner' as const, source: 'editorial-estimate' as const, lastVerifiedAt };
+  const sourced = {
+    value: 'beginner' as const,
+    source: 'editorial-estimate' as const,
+    lastVerifiedAt,
+  };
   return {
     slug: 'test',
     brand: 'Grays',
@@ -11,15 +15,43 @@ function buildProduct(lastVerifiedAt: string): Product {
     dataStatus: 'test-data',
     imageAlt: 'Test',
     experienceLevel: sourced,
-    recommendedPositions: { value: ['middenvelder'], source: 'editorial-estimate', lastVerifiedAt },
-    bowProfile: { value: 'lowbow', source: 'editorial-estimate', lastVerifiedAt },
-    carbonPercentage: { value: 10, source: 'editorial-estimate', lastVerifiedAt },
-    lengthsInches: { value: [35], source: 'editorial-estimate', lastVerifiedAt },
-    priceIndicativeEur: { value: 90, source: 'editorial-estimate', lastVerifiedAt },
+    recommendedPositions: {
+      value: ['middenvelder'],
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
+    bowProfile: {
+      value: 'lowbow',
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
+    carbonPercentage: {
+      value: 10,
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
+    lengthsInches: {
+      value: [35],
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
+    priceIndicativeEur: {
+      value: 90,
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
     stock: { value: 'available', source: 'editorial-estimate', lastVerifiedAt },
     summary: 'Test',
-    strengths: { value: ['Sterk punt'], source: 'editorial-estimate', lastVerifiedAt },
-    pointsOfAttention: { value: ['Aandachtspunt'], source: 'editorial-estimate', lastVerifiedAt },
+    strengths: {
+      value: ['Sterk punt'],
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
+    pointsOfAttention: {
+      value: ['Aandachtspunt'],
+      source: 'editorial-estimate',
+      lastVerifiedAt,
+    },
   };
 }
 
@@ -48,6 +80,12 @@ describe('catalog composition', () => {
   });
 
   it('includes all five currently verified brands', () => {
-    expect(getAllBrands()).toEqual(['Brabo', 'Grays', 'JDH', 'Princess', 'adidas']);
+    expect(getAllBrands()).toEqual([
+      'Brabo',
+      'Grays',
+      'JDH',
+      'Princess',
+      'adidas',
+    ]);
   });
 });

@@ -4,7 +4,9 @@ import { hockeystickKiezenPraktischeTips } from './blogPosts/hockeystick-kiezen-
 const ALL_BLOG_POSTS: Article[] = [hockeystickKiezenPraktischeTips];
 
 export function getAllBlogPosts(): Article[] {
-  return [...ALL_BLOG_POSTS].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  return [...ALL_BLOG_POSTS].sort((a, b) =>
+    b.publishedAt.localeCompare(a.publishedAt),
+  );
 }
 
 export function getBlogPostBySlug(slug: string): Article | undefined {

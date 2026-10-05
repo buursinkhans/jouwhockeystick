@@ -1,6 +1,10 @@
 import type { Product } from '@/catalog/types';
 
-type LengthBand = { minCm: number; maxCm: number; sizes: readonly [number, ...number[]] };
+type LengthBand = {
+  minCm: number;
+  maxCm: number;
+  sizes: readonly [number, ...number[]];
+};
 
 const LAST_BAND: LengthBand = { minCm: 163, maxCm: 210, sizes: [36.5] };
 
@@ -87,7 +91,10 @@ export function matchSize(product: Product, sizeAdvice: SizeAdvice): SizeMatch {
   if (lengths.includes(sizeAdvice.primaryInch)) {
     return 'primary';
   }
-  if (sizeAdvice.alternativeInch !== undefined && lengths.includes(sizeAdvice.alternativeInch)) {
+  if (
+    sizeAdvice.alternativeInch !== undefined &&
+    lengths.includes(sizeAdvice.alternativeInch)
+  ) {
     return 'alternative';
   }
   return 'none';
@@ -98,9 +105,13 @@ export function matchSize(product: Product, sizeAdvice: SizeAdvice): SizeMatch {
  * advised size exists. Never longer: buying "op de groei" is what the length
  * advice warns against.
  */
-export function findShorterSize(product: Product, sizeAdvice: SizeAdvice): number | undefined {
+export function findShorterSize(
+  product: Product,
+  sizeAdvice: SizeAdvice,
+): number | undefined {
   const shorter = product.lengthsInches.value.filter(
-    (length) => length < sizeAdvice.primaryInch && sizeAdvice.primaryInch - length <= 1.5,
+    (length) =>
+      length < sizeAdvice.primaryInch && sizeAdvice.primaryInch - length <= 1.5,
   );
   return shorter.length > 0 ? Math.max(...shorter) : undefined;
 }

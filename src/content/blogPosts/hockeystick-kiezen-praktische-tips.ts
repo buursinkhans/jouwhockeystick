@@ -78,7 +78,10 @@ export const hockeystickKiezenPraktischeTips: Article = {
   updatedAt: '2026-09-27',
   sources: [
     { label: 'FIH Rules of Hockey (technische grenzen aan lengte en gewicht)' },
-    { label: 'Redactionele inschatting jouwhockeystick.nl — geen medisch of prestatie-advies' },
+    {
+      label:
+        'Redactionele inschatting jouwhockeystick.nl — geen medisch of prestatie-advies',
+    },
   ],
   metaDescription:
     'Praktische tips voor het kiezen van een hockeystick: lengte, bow-profiel, carbonpercentage, budget en de meest gemaakte fouten — ook bij het kopen voor je kind.',

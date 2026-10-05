@@ -30,7 +30,8 @@ export const graysJb12PlusComposite: Product = {
   bowProfile: {
     value: 'lowbow',
     source: 'brand-website',
-    sourceLabel: 'Grays vermeldt dezelfde Jumbow-curvepositie (24.75 @ 200mm) als hun expliciete low-bow modellen.',
+    sourceLabel:
+      'Grays vermeldt dezelfde Jumbow-curvepositie (24.75 @ 200mm) als hun expliciete low-bow modellen.',
     sourceUrl:
       'https://www.grays-hockey.eu/collections/jb-jumbow-plus-composite-hockey-sticks/products/jb12-plus-composite-hockey-stick',
     lastVerifiedAt: '2026-09-27',
@@ -64,7 +65,8 @@ export const graysJb12PlusComposite: Product = {
       'Zelfde low-bow curvepositie als de andere Jumbow-modellen, dus herkenbaar balgevoel bij een upgrade',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-27',
   },
   pointsOfAttention: {
@@ -73,7 +75,8 @@ export const graysJb12PlusComposite: Product = {
       'Hoogste prijs binnen de Grays-lijn (€450) — vooral interessant als het niveau dat rechtvaardigt',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-27',
   },
 };

@@ -51,7 +51,10 @@ const VERIFICATION_FRESHNESS_MONTHS = 12;
  * A product with no valid source or an expired lastVerifiedAt (older than
  * 12 months) must not be shown as active (source-policy.md §3).
  */
-export function isProductActive(product: Product, now: Date = new Date()): boolean {
+export function isProductActive(
+  product: Product,
+  now: Date = new Date(),
+): boolean {
   const lastVerifiedAt = new Date(product.experienceLevel.lastVerifiedAt);
   if (Number.isNaN(lastVerifiedAt.getTime())) {
     return false;
@@ -65,7 +68,10 @@ export function getAllProducts(now: Date = new Date()): Product[] {
   return ALL_PRODUCTS.filter((product) => isProductActive(product, now));
 }
 
-export function getProductBySlug(slug: string, now: Date = new Date()): Product | undefined {
+export function getProductBySlug(
+  slug: string,
+  now: Date = new Date(),
+): Product | undefined {
   return getAllProducts(now).find((product) => product.slug === slug);
 }
 

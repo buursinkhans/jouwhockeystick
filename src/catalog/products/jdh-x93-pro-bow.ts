@@ -6,7 +6,8 @@ export const jdhX93ProBow: Product = {
   name: 'JDH X93 Pro Bow',
   dataStatus: 'verified',
   imageAlt: 'JDH X93 Pro Bow hockeystick',
-  imageUrl: 'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6893309f82d13c2b54d349f4_X93PBGN_teal_6%20.jpg',
+  imageUrl:
+    'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6893309f82d13c2b54d349f4_X93PBGN_teal_6%20.jpg',
   imageSourceUrl: 'https://jdhsports.eu/product/x93-pro-bow',
   experienceLevel: {
     value: 'ervaren',
@@ -42,7 +43,8 @@ export const jdhX93ProBow: Product = {
   weightGrams: {
     value: 510,
     source: 'brand-website',
-    sourceLabel: 'JDH vermeldt een gewichtsbereik van 505–515 gram; hier het gemiddelde getoond.',
+    sourceLabel:
+      'JDH vermeldt een gewichtsbereik van 505–515 gram; hier het gemiddelde getoond.',
     sourceUrl: 'https://jdhsports.eu/product/x93-pro-bow',
     lastVerifiedAt: '2026-09-26',
   },
@@ -73,7 +75,8 @@ export const jdhX93ProBow: Product = {
       'Breed lengteaanbod tot 38.5"',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door JDH vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door JDH vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
   pointsOfAttention: {
@@ -82,7 +85,8 @@ export const jdhX93ProBow: Product = {
       'Niveau-aanduiding is een eigen inschatting — JDH vermeldt zelf geen doelgroep voor dit model',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door JDH vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door JDH vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
 };

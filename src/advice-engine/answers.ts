@@ -15,16 +15,37 @@ export const goalSchema = z.enum([
 ]);
 export type Goal = z.infer<typeof goalSchema>;
 
-export const routeSelfSelectSchema = z.enum(['first_stick', 'next_stick', 'advanced_compare']);
-export const ageBandSchema = z.enum(['under_8', '8_10', '11_12', '13_15', '16_18', '18_plus']);
-export const experienceSeasonsSchema = z.enum(['trial', 'lt_1', '1', '2_3', '4_plus']);
+export const routeSelfSelectSchema = z.enum([
+  'first_stick',
+  'next_stick',
+  'advanced_compare',
+]);
+export const ageBandSchema = z.enum([
+  'under_8',
+  '8_10',
+  '11_12',
+  '13_15',
+  '16_18',
+  '18_plus',
+]);
+export const experienceSeasonsSchema = z.enum([
+  'trial',
+  'lt_1',
+  '1',
+  '2_3',
+  '4_plus',
+]);
 export const firstTouchSchema = z.enum([
   'learning',
   'mostly_good',
   'good_under_pressure',
   'very_confident',
 ]);
-export const coreSkillsSchema = z.enum(['practicing_basics', 'basics_mostly_good', 'refining_actions']);
+export const coreSkillsSchema = z.enum([
+  'practicing_basics',
+  'basics_mostly_good',
+  'refining_actions',
+]);
 export const funStyleSchema = z.enum([
   'build_pass',
   'join_everywhere',
@@ -42,8 +63,19 @@ export const matchActionSchema = z.enum([
   'aerial',
   'dragflick',
 ]);
-export const feelPreferenceSchema = z.enum(['soft', 'balanced', 'direct', 'unknown']);
-export const bowExperienceSchema = z.enum(['standard', 'pro_late', 'low', 'extreme_low', 'unknown']);
+export const feelPreferenceSchema = z.enum([
+  'soft',
+  'balanced',
+  'direct',
+  'unknown',
+]);
+export const bowExperienceSchema = z.enum([
+  'standard',
+  'pro_late',
+  'low',
+  'extreme_low',
+  'unknown',
+]);
 export const budgetBandSchema = z.enum([
   'lt_75',
   '75_125',
@@ -86,7 +118,21 @@ const answersShape = {
   height_cm: z.number().int().min(95).max(210),
   height_uncertain: z.enum(['yes', 'no']).optional(),
   current_length_inch: z
-    .enum(['24', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36.5', 'unknown'])
+    .enum([
+      '24',
+      '26',
+      '27',
+      '28',
+      '29',
+      '30',
+      '31',
+      '32',
+      '33',
+      '34',
+      '35',
+      '36.5',
+      'unknown',
+    ])
     .optional(),
   junior_grip_needed: yesNoUnknownSchema.optional(),
   // C. Ervaring en technische basis
@@ -113,18 +159,37 @@ const answersShape = {
   skill_flat_pass: skillRatingSchema.optional(),
   skill_hit: skillRatingSchema.optional(),
   skill_dribble_3d: skillRatingSchema.optional(),
-  skill_aerial: z.enum(['never', 'developing', 'regular', 'key_weapon']).optional(),
-  skill_backhand: z.enum(['rarely', 'sometimes', 'regular', 'very_important']).optional(),
-  skill_dragflick: z.enum(['none', 'practicing', 'sometimes', 'specialist']).optional(),
+  skill_aerial: z
+    .enum(['never', 'developing', 'regular', 'key_weapon'])
+    .optional(),
+  skill_backhand: z
+    .enum(['rarely', 'sometimes', 'regular', 'very_important'])
+    .optional(),
+  skill_dragflick: z
+    .enum(['none', 'practicing', 'sometimes', 'specialist'])
+    .optional(),
   // F. Stickgevoel en materiaalvoorkeur
   feel_preference: feelPreferenceSchema.optional(),
-  stick_weight_preference: z.enum(['light', 'balanced', 'sturdy', 'unknown']).optional(),
+  stick_weight_preference: z
+    .enum(['light', 'balanced', 'sturdy', 'unknown'])
+    .optional(),
   bow_experience: bowExperienceSchema.optional(),
-  vibration_sensitivity: z.enum(['yes', 'sometimes', 'no', 'unknown']).optional(),
+  vibration_sensitivity: z
+    .enum(['yes', 'sometimes', 'no', 'unknown'])
+    .optional(),
   // G. Huidige stick en reden van vervanging
   has_current_stick: z.enum(['yes', 'no']),
   current_stick_like: z
-    .array(z.enum(['control', 'power', 'weight', 'dribbling', 'looks', 'nothing_special']))
+    .array(
+      z.enum([
+        'control',
+        'power',
+        'weight',
+        'dribbling',
+        'looks',
+        'nothing_special',
+      ]),
+    )
     .max(2)
     .optional(),
   current_stick_problem: z.array(currentStickProblemSchema).max(2).optional(),
@@ -138,8 +203,12 @@ const answersShape = {
   ]),
   // H. Budget, voorraad en koopvoorkeur
   budget_band: budgetBandSchema,
-  purchase_timing: z.enum(['this_week', 'within_2_weeks', 'before_season', 'orienting']).optional(),
-  availability_preference: z.enum(['only_direct', 'best_match_later', 'no_preference']).optional(),
+  purchase_timing: z
+    .enum(['this_week', 'within_2_weeks', 'before_season', 'orienting'])
+    .optional(),
+  availability_preference: z
+    .enum(['only_direct', 'best_match_later', 'no_preference'])
+    .optional(),
   // I. Context en uitzonderingen
   left_handed_requirement: yesNoUnknownSchema,
 };
@@ -162,7 +231,10 @@ export const QUESTION_META: Record<QuestionId, QuestionMeta> = {
   height_uncertain: { routes: ALL_ROUTES, required: false },
   current_length_inch: { routes: ['ONTWIKKEL', 'PRESTATIE'], required: false },
   junior_grip_needed: { routes: ['START', 'ONTWIKKEL'], required: false },
-  first_touch_confidence: { routes: ['ONTWIKKEL', 'PRESTATIE'], required: true },
+  first_touch_confidence: {
+    routes: ['ONTWIKKEL', 'PRESTATIE'],
+    required: true,
+  },
   core_skills_stage: { routes: ['START', 'ONTWIKKEL'], required: true },
   playing_level: { routes: ['ONTWIKKEL', 'PRESTATIE'], required: false },
   training_frequency: { routes: ['ONTWIKKEL', 'PRESTATIE'], required: false },
@@ -204,26 +276,40 @@ export function isAnswered(value: unknown): boolean {
   return true;
 }
 
-const ROUTE_BY_SELF_SELECT: Record<z.infer<typeof routeSelfSelectSchema>, AdviceRoute> = {
+const ROUTE_BY_SELF_SELECT: Record<
+  z.infer<typeof routeSelfSelectSchema>,
+  AdviceRoute
+> = {
   first_stick: 'START',
   next_stick: 'ONTWIKKEL',
   advanced_compare: 'PRESTATIE',
 };
 
 /** The user's own choice always decides the route (spec §2.1). */
-export function routeFromSelfSelect(value: AdviceAnswers['route_self_select']): AdviceRoute {
+export function routeFromSelfSelect(
+  value: AdviceAnswers['route_self_select'],
+): AdviceRoute {
   return ROUTE_BY_SELF_SELECT[value];
 }
 
 export function requiredQuestionIds(route: AdviceRoute): QuestionId[] {
-  return QUESTION_IDS.filter((id) => QUESTION_META[id].required && QUESTION_META[id].routes.includes(route));
+  return QUESTION_IDS.filter(
+    (id) =>
+      QUESTION_META[id].required && QUESTION_META[id].routes.includes(route),
+  );
 }
 
-export const adviceAnswersSchema = baseAnswersSchema.superRefine((data, ctx) => {
-  const route = routeFromSelfSelect(data.route_self_select);
-  for (const id of requiredQuestionIds(route)) {
-    if (!isAnswered(data[id])) {
-      ctx.addIssue({ code: 'custom', message: 'Deze vraag is verplicht.', path: [id] });
+export const adviceAnswersSchema = baseAnswersSchema.superRefine(
+  (data, ctx) => {
+    const route = routeFromSelfSelect(data.route_self_select);
+    for (const id of requiredQuestionIds(route)) {
+      if (!isAnswered(data[id])) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'Deze vraag is verplicht.',
+          path: [id],
+        });
+      }
     }
-  }
-});
+  },
+);

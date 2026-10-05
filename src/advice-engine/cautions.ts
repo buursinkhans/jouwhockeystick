@@ -15,7 +15,11 @@ const BOW_EXPERIENCE_RANK: Record<
  * silently push a product down the ranking. They disclose the trade-off the
  * player makes with this stick (spec §1.2, §6.4).
  */
-export function getCautions(product: Product, ctx: PlayerContext, role: ResultRole): CautionCode[] {
+export function getCautions(
+  product: Product,
+  ctx: PlayerContext,
+  role: ResultRole,
+): CautionCode[] {
   const cautions: CautionCode[] = [];
   const rules = deriveAdviceRules(product);
   const carbon = product.carbonPercentage?.value;
@@ -36,7 +40,8 @@ export function getCautions(product: Product, ctx: PlayerContext, role: ResultRo
   }
   if (
     (bow === 'lowbow' || bow === 'extreme_lowbow') &&
-    (ctx.route !== 'PRESTATIE' || ctx.answers.first_touch_confidence !== 'very_confident')
+    (ctx.route !== 'PRESTATIE' ||
+      ctx.answers.first_touch_confidence !== 'very_confident')
   ) {
     cautions.push('LOWBOW_TRADEOFF');
   }
@@ -52,7 +57,8 @@ export function getCautions(product: Product, ctx: PlayerContext, role: ResultRo
   }
   if (
     rules.feel === 'direct' &&
-    (ctx.answers.vibration_sensitivity === 'yes' || ctx.answers.vibration_sensitivity === 'sometimes')
+    (ctx.answers.vibration_sensitivity === 'yes' ||
+      ctx.answers.vibration_sensitivity === 'sometimes')
   ) {
     cautions.push('DIRECT_FEEL_VIBRATION');
   }

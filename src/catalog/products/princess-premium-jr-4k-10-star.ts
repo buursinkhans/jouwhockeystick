@@ -15,41 +15,47 @@ export const princessPremiumJr4k10Star: Product = {
     source: 'brand-website',
     sourceLabel:
       'Princess omschrijft dit model als "top junior stick" voor "ambitieuze jeugdspelers" — het topmodel binnen hun junior-lijn.',
-    sourceUrl: 'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
+    sourceUrl:
+      'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
     modelYear: 2025,
     lastVerifiedAt: '2026-09-26',
   },
   recommendedPositions: {
     value: ['verdediger', 'middenvelder', 'aanvaller'],
     source: 'editorial-estimate',
-    sourceLabel: 'Princess noemt geen specifieke veldpositie voor dit juniormodel.',
+    sourceLabel:
+      'Princess noemt geen specifieke veldpositie voor dit juniormodel.',
     lastVerifiedAt: '2026-09-26',
   },
   bowProfile: {
     value: 'lowbow',
     source: 'brand-website',
     sourceLabel: 'Princess vermeldt "SG9-LB (Low Bow)" voor dit model.',
-    sourceUrl: 'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
+    sourceUrl:
+      'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
     lastVerifiedAt: '2026-09-26',
   },
   carbonPercentage: {
     value: 40,
     source: 'brand-website',
     sourceLabel: 'Princess vermeldt expliciet "40% 4K Carbon".',
-    sourceUrl: 'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
+    sourceUrl:
+      'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
     lastVerifiedAt: '2026-09-26',
   },
   lengthsInches: {
     value: [34, 35, 36],
     source: 'brand-website',
-    sourceUrl: 'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
+    sourceUrl:
+      'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
     lastVerifiedAt: '2026-09-26',
   },
   priceIndicativeEur: {
     value: 129.99,
     source: 'brand-website',
     sourceLabel: 'Adviesprijs zoals vermeld op de officiële Princess-website.',
-    sourceUrl: 'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
+    sourceUrl:
+      'https://www.princess-hockey.com/collections/sticks-junior/products/330-64002-premium-jr-4k-10-star-sg9-lb',
     lastVerifiedAt: '2026-09-26',
   },
   stock: {
@@ -66,7 +72,8 @@ export const princessPremiumJr4k10Star: Product = {
       'Door Princess zelf gericht op "ambitieuze jeugdspelers" die net dat beetje meer willen',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Princess vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Princess vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
   pointsOfAttention: {
@@ -75,7 +82,8 @@ export const princessPremiumJr4k10Star: Product = {
       'Prijs (€129,99) aan de hoge kant binnen het junior-segment',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Princess vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Princess vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
 };

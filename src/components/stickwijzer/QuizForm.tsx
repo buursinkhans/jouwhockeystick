@@ -26,6 +26,8 @@ import { trackEvent } from '@/lib/analytics/track';
 import { Button } from '@/components/ui/Button';
 import { QuestionField, type AnswerValue } from './QuestionField';
 import { QuizResult } from './QuizResult';
+import { ROUTE_OPTION_ICONS, SCREEN_ICONS } from './stickwijzerIcons';
+import { QuestionIcon } from '@/components/ui/icons';
 
 type Answers = Partial<AdviceAnswers>;
 type StoredProgress = {
@@ -308,6 +310,7 @@ export function QuizForm() {
           experience_seasons: answers.experience_seasons,
         })
       : null;
+  const ScreenIcon = SCREEN_ICONS[screen.id] ?? QuestionIcon;
   const optionalIds = (screen.optional ?? []).filter((id) =>
     isVisible(id, answers),
   );
@@ -328,25 +331,50 @@ export function QuizForm() {
         }
       }}
     >
-      <p className="text-sm text-zinc-600">
+      <p className="text-sm text-lijngrijs">
         Stap {currentStep + 1}
         {route ? ` van ${screens.length}` : ''}
         {route ? ` · ${ROUTE_LABELS[route]}` : ''}
       </p>
       {route && (
-        <progress
-          className="mt-2 h-2 w-full overflow-hidden rounded-full [&::-moz-progress-bar]:bg-emerald-700 [&::-webkit-progress-bar]:bg-zinc-200 [&::-webkit-progress-value]:bg-emerald-700"
-          value={currentStep + 1}
-          max={screens.length}
+        // Thin line with an orange ball that moves along, echoing the logo
+        // without repeating it (merkinstructie §7).
+        <div
+          role="progressbar"
           aria-label="Voortgang van de keuzehulp"
-        />
+          aria-valuemin={1}
+          aria-valuemax={screens.length}
+          aria-valuenow={currentStep + 1}
+          aria-valuetext={`Stap ${currentStep + 1} van ${screens.length}`}
+          className="relative mt-3 h-3"
+        >
+          <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-rand" />
+          <span
+            className="absolute top-1/2 left-0 h-0.5 -translate-y-1/2 rounded-full bg-veld transition-[width] duration-300"
+            style={{
+              width: `${(currentStep / Math.max(1, screens.length - 1)) * 100}%`,
+            }}
+          />
+          <span
+            className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-bal transition-[left] duration-300"
+            style={{
+              left: `${(currentStep / Math.max(1, screens.length - 1)) * 100}%`,
+            }}
+          />
+        </div>
       )}
 
       <h2
         ref={headingRef}
         tabIndex={-1}
-        className="mt-4 text-xl font-bold focus:outline-none"
+        className="mt-6 flex items-center gap-3 text-2xl font-extrabold focus:outline-none"
       >
+        <span
+          aria-hidden="true"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-veld text-white"
+        >
+          <ScreenIcon size={22} />
+        </span>
         {screen.title}
       </h2>
 
@@ -360,6 +388,9 @@ export function QuizForm() {
             errorMessage={id === 'height_cm' ? heightError(answers) : undefined}
             optionMeta={
               id === 'route_self_select' ? ROUTE_STEP_COUNTS : undefined
+            }
+            optionIcons={
+              id === 'route_self_select' ? ROUTE_OPTION_ICONS : undefined
             }
           />
         ))}
@@ -426,7 +457,7 @@ export function QuizForm() {
         </Button>
       </div>
 
-      <p className="mt-6 text-xs text-zinc-500">
+      <p className="mt-6 text-xs text-lijngrijs">
         Je antwoorden blijven alleen in dit browsertabblad bewaard tot je het
         sluit.
       </p>

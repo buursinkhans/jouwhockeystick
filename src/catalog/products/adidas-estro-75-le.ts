@@ -31,7 +31,8 @@ export const adidasEstro75Le: Product = {
   lengthsInches: {
     value: [36.5],
     source: 'partner-shop',
-    sourceLabel: 'Alleen deze lengtevariant (36.5") actief gevonden als bol.com-listing.',
+    sourceLabel:
+      'Alleen deze lengtevariant (36.5") actief gevonden als bol.com-listing.',
     sourceUrl:
       'https://www.bol.com/nl/nl/p/adidas-estro-75-le-26-27-hockey-hockeysticks-sticks-senior-kunst-veld/9300000383206272/',
     lastVerifiedAt: '2026-09-27',
@@ -48,7 +49,8 @@ export const adidasEstro75Le: Product = {
   stock: {
     value: 'available',
     source: 'partner-shop',
-    sourceLabel: 'Bol.com toonde op controledatum "Voor 23:59 besteld, woensdag in huis".',
+    sourceLabel:
+      'Bol.com toonde op controledatum "Voor 23:59 besteld, woensdag in huis".',
     sourceUrl:
       'https://www.bol.com/nl/nl/p/adidas-estro-75-le-26-27-hockey-hockeysticks-sticks-senior-kunst-veld/9300000383206272/',
     lastVerifiedAt: '2026-09-27',
@@ -61,7 +63,8 @@ export const adidasEstro75Le: Product = {
       'Specifiek gericht op kunstgras-gebruik voor volwassenen',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de op bol.com vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de op bol.com vermelde specificaties.',
     lastVerifiedAt: '2026-09-27',
   },
   pointsOfAttention: {
@@ -70,7 +73,8 @@ export const adidasEstro75Le: Product = {
       'Specs zijn niet rechtstreeks bij adidas geverifieerd — adidas.nl is niet te raadplegen',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de op bol.com vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de op bol.com vermelde specificaties.',
     lastVerifiedAt: '2026-09-27',
   },
 };

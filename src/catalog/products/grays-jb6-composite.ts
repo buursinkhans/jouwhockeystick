@@ -65,7 +65,8 @@ export const graysJb6Composite: Product = {
       'Curveprofiel gelijk aan hun premium low-bow model, voor eenzelfde balgevoel',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
   pointsOfAttention: {
@@ -74,7 +75,8 @@ export const graysJb6Composite: Product = {
       'Beperkt tot twee lengtematen (36.5" en 37.5")',
     ],
     source: 'editorial-estimate',
-    sourceLabel: 'Eigen inschatting op basis van de door Grays vermelde specificaties.',
+    sourceLabel:
+      'Eigen inschatting op basis van de door Grays vermelde specificaties.',
     lastVerifiedAt: '2026-09-26',
   },
 };

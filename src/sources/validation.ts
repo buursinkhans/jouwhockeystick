@@ -12,13 +12,24 @@ export type ClaimIssue =
 /** Season-bound sources are re-checked at least every 18 months (spec §9.3). */
 export const RECHECK_AFTER_MONTHS = 18;
 
-const SPEC_SOURCE_TYPES: readonly SourceType[] = ['manufacturer', 'official_distributor', 'own_measurement'];
-const RESEARCH_SOURCE_TYPES: readonly SourceType[] = ['independent_research', 'academic_thesis'];
+const SPEC_SOURCE_TYPES: readonly SourceType[] = [
+  'manufacturer',
+  'official_distributor',
+  'own_measurement',
+];
+const RESEARCH_SOURCE_TYPES: readonly SourceType[] = [
+  'independent_research',
+  'academic_thesis',
+];
 
 /** A manufacturer claim may never be rephrased as proof or a guarantee. */
-const ABSOLUTE_WORDING = /\b(bewezen beter|objectief beter|gegarandeerd|garantie)\b/i;
+const ABSOLUTE_WORDING =
+  /\b(bewezen beter|objectief beter|gegarandeerd|garantie)\b/i;
 
-export function needsRecheck(source: SourceRecord, now: Date = new Date()): boolean {
+export function needsRecheck(
+  source: SourceRecord,
+  now: Date = new Date(),
+): boolean {
   if (!source.relatedProductIds || source.relatedProductIds.length === 0) {
     return false;
   }
@@ -32,7 +43,10 @@ export function needsRecheck(source: SourceRecord, now: Date = new Date()): bool
 }
 
 /** Validation rules from spec §9.7. An empty list means the claim may be published. */
-export function validateClaim(claim: ContentClaim, sources: SourceRecord[]): ClaimIssue[] {
+export function validateClaim(
+  claim: ContentClaim,
+  sources: SourceRecord[],
+): ClaimIssue[] {
   const issues: ClaimIssue[] = [];
   const linked = claim.sourceIds
     .map((id) => sources.find((source) => source.id === id))
@@ -42,17 +56,27 @@ export function validateClaim(claim: ContentClaim, sources: SourceRecord[]): Cla
     issues.push('missing_source');
   }
 
-  const hasType = (types: readonly SourceType[]) => linked.some((source) => types.includes(source.sourceType));
+  const hasType = (types: readonly SourceType[]) =>
+    linked.some((source) => types.includes(source.sourceType));
 
-  if (claim.claimType === 'product_specification' && !hasType(SPEC_SOURCE_TYPES)) {
+  if (
+    claim.claimType === 'product_specification' &&
+    !hasType(SPEC_SOURCE_TYPES)
+  ) {
     issues.push('spec_needs_primary_source');
   }
-  if (claim.claimType === 'scientific_interpretation' && !hasType(RESEARCH_SOURCE_TYPES)) {
+  if (
+    claim.claimType === 'scientific_interpretation' &&
+    !hasType(RESEARCH_SOURCE_TYPES)
+  ) {
     issues.push('science_needs_research_source');
   }
   if (
-    (claim.claimType === 'player_experience' || claim.displayedLabel === 'Spelerquote') &&
-    !linked.some((source) => source.quoteMetadata?.brandRelationship !== undefined)
+    (claim.claimType === 'player_experience' ||
+      claim.displayedLabel === 'Spelerquote') &&
+    !linked.some(
+      (source) => source.quoteMetadata?.brandRelationship !== undefined,
+    )
   ) {
     issues.push('quote_needs_metadata_and_disclosure');
   }
@@ -72,7 +96,10 @@ export function validateClaim(claim: ContentClaim, sources: SourceRecord[]): Cla
   ) {
     issues.push('field_test_needs_metadata');
   }
-  if (claim.claimType === 'manufacturer_claim' && ABSOLUTE_WORDING.test(claim.text)) {
+  if (
+    claim.claimType === 'manufacturer_claim' &&
+    ABSOLUTE_WORDING.test(claim.text)
+  ) {
     issues.push('absolute_claim_wording');
   }
 
@@ -80,7 +107,16 @@ export function validateClaim(claim: ContentClaim, sources: SourceRecord[]): Cla
 }
 
 /** An unverified claim must never surface as a reason in an automated advice. */
-export function isUsableInAdvice(claim: ContentClaim, sources: SourceRecord[], now: Date = new Date()): boolean {
-  const linked = sources.filter((source) => claim.sourceIds.includes(source.id));
-  return validateClaim(claim, sources).length === 0 && !linked.some((source) => needsRecheck(source, now));
+export function isUsableInAdvice(
+  claim: ContentClaim,
+  sources: SourceRecord[],
+  now: Date = new Date(),
+): boolean {
+  const linked = sources.filter((source) =>
+    claim.sourceIds.includes(source.id),
+  );
+  return (
+    validateClaim(claim, sources).length === 0 &&
+    !linked.some((source) => needsRecheck(source, now))
+  );
 }

@@ -11,7 +11,7 @@ export type SourceMeta = Omit<SourcedValue<unknown>, 'value'>;
 
 export function SourceBadge({ sourced }: { sourced: SourceMeta }) {
   return (
-    <p className="text-xs text-zinc-500">
+    <p className="text-xs text-lijngrijs">
       Bron: {sourced.sourceLabel ?? SOURCE_LABELS[sourced.source]}
       {sourced.modelYear ? ` · Modeljaar ${sourced.modelYear}` : ''}
       {' · Laatst gecontroleerd op '}

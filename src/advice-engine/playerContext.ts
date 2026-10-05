@@ -1,6 +1,16 @@
-import { routeFromSelfSelect, type AdviceAnswers, type AdviceRoute, type Goal } from './answers';
+import {
+  routeFromSelfSelect,
+  type AdviceAnswers,
+  type AdviceRoute,
+  type Goal,
+} from './answers';
 import { getSizeAdvice } from './sizeAdvice';
-import type { ExperienceBand, PlayerContext, StickFeel, WeightedGoal } from './types';
+import type {
+  ExperienceBand,
+  PlayerContext,
+  StickFeel,
+  WeightedGoal,
+} from './types';
 
 const BAND_BY_ROUTE: Record<AdviceRoute, ExperienceBand> = {
   START: 'starter',
@@ -8,7 +18,10 @@ const BAND_BY_ROUTE: Record<AdviceRoute, ExperienceBand> = {
   PRESTATIE: 'advanced',
 };
 
-const GOAL_BY_FUN_STYLE: Record<NonNullable<AdviceAnswers['fun_style']>, Goal> = {
+const GOAL_BY_FUN_STYLE: Record<
+  NonNullable<AdviceAnswers['fun_style']>,
+  Goal
+> = {
   build_pass: 'passing',
   join_everywhere: 'allround',
   dribble_actions: 'dribble_3d',
@@ -46,9 +59,13 @@ export const BUDGET_RANGE: Record<
  * Stated goals are the main driver; play-style and match-action answers
  * count for half, so a single goal answer is never drowned out by them.
  */
-function collectGoals(answers: AdviceAnswers, route: AdviceRoute): WeightedGoal[] {
+function collectGoals(
+  answers: AdviceAnswers,
+  route: AdviceRoute,
+): WeightedGoal[] {
   const weights = new Map<Goal, number>();
-  const add = (goal: Goal, weight: number) => weights.set(goal, (weights.get(goal) ?? 0) + weight);
+  const add = (goal: Goal, weight: number) =>
+    weights.set(goal, (weights.get(goal) ?? 0) + weight);
 
   for (const goal of answers.primary_goals ?? []) {
     add(goal, 1);
@@ -60,7 +77,10 @@ function collectGoals(answers: AdviceAnswers, route: AdviceRoute): WeightedGoal[
     for (const action of answers.match_actions_frequency ?? []) {
       add(GOAL_BY_MATCH_ACTION[action], 0.5);
     }
-    if (answers.skill_aerial === 'regular' || answers.skill_aerial === 'key_weapon') {
+    if (
+      answers.skill_aerial === 'regular' ||
+      answers.skill_aerial === 'key_weapon'
+    ) {
       add('aerial', 0.5);
     }
     if (answers.skill_backhand === 'very_important') {
@@ -76,7 +96,10 @@ function collectGoals(answers: AdviceAnswers, route: AdviceRoute): WeightedGoal[
   return Array.from(weights, ([goal, weight]) => ({ goal, weight }));
 }
 
-function resolveFeelPreference(answers: AdviceAnswers, route: AdviceRoute): StickFeel | null {
+function resolveFeelPreference(
+  answers: AdviceAnswers,
+  route: AdviceRoute,
+): StickFeel | null {
   if (route === 'START') {
     return 'soft';
   }
@@ -94,7 +117,10 @@ function resolveFeelPreference(answers: AdviceAnswers, route: AdviceRoute): Stic
   return null;
 }
 
-export function buildPlayerContext(answers: AdviceAnswers, now: Date = new Date()): PlayerContext {
+export function buildPlayerContext(
+  answers: AdviceAnswers,
+  now: Date = new Date(),
+): PlayerContext {
   const route = routeFromSelfSelect(answers.route_self_select);
   const currentLength =
     answers.current_length_inch && answers.current_length_inch !== 'unknown'
@@ -104,7 +130,8 @@ export function buildPlayerContext(answers: AdviceAnswers, now: Date = new Date(
   const firstTouch = answers.first_touch_confidence;
   const hasDragflickRole =
     route === 'PRESTATIE'
-      ? answers.skill_dragflick !== undefined && answers.skill_dragflick !== 'none'
+      ? answers.skill_dragflick !== undefined &&
+        answers.skill_dragflick !== 'none'
       : (answers.primary_goals ?? []).includes('dragflick');
 
   return {

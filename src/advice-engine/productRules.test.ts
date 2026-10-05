@@ -6,17 +6,26 @@ import { NOW, buildProduct, sourced } from './testFixtures';
 describe('deriveAdviceRules', () => {
   it('allows a soft beginner stick for starters', () => {
     const rules = deriveAdviceRules(buildProduct());
-    expect(rules).toMatchObject({ homeBand: 'starter', maxBand: 'developing', starterAllowed: true, feel: 'soft' });
+    expect(rules).toMatchObject({
+      homeBand: 'starter',
+      maxBand: 'developing',
+      starterAllowed: true,
+      feel: 'soft',
+    });
   });
 
   it('marks an extreme low bow as a dragflick specialist and never starter-allowed', () => {
-    const rules = deriveAdviceRules(buildProduct({ bowProfile: sourced.bow('extreme_lowbow') }));
+    const rules = deriveAdviceRules(
+      buildProduct({ bowProfile: sourced.bow('extreme_lowbow') }),
+    );
     expect(rules.dragflickSpecialist).toBe(true);
     expect(rules.starterAllowed).toBe(false);
   });
 
   it('leaves feel unknown when the brand publishes no carbon percentage', () => {
-    expect(deriveAdviceRules(buildProduct({ carbonPercentage: undefined })).feel).toBeNull();
+    expect(
+      deriveAdviceRules(buildProduct({ carbonPercentage: undefined })).feel,
+    ).toBeNull();
   });
 
   it('ranks a high-carbon low bow for experienced players as more complex than a starter stick', () => {
@@ -41,27 +50,51 @@ describe('getAdviceBlockers', () => {
   it('blocks a product without a bow profile or model year', () => {
     const product = buildProduct({
       bowProfile: undefined,
-      experienceLevel: { value: 'beginner', source: 'brand-website', lastVerifiedAt: '2026-06-01' },
+      experienceLevel: {
+        value: 'beginner',
+        source: 'brand-website',
+        lastVerifiedAt: '2026-06-01',
+      },
     });
-    expect(getAdviceBlockers(product, NOW)).toEqual(['missing_bow', 'unknown_model_year']);
+    expect(getAdviceBlockers(product, NOW)).toEqual([
+      'missing_bow',
+      'unknown_model_year',
+    ]);
   });
 
   it('blocks an editorial bow estimate that has no traceable source', () => {
     const product = buildProduct({
-      bowProfile: { value: 'midbow', source: 'editorial-estimate', lastVerifiedAt: '2026-06-01' },
+      bowProfile: {
+        value: 'midbow',
+        source: 'editorial-estimate',
+        lastVerifiedAt: '2026-06-01',
+      },
     });
     expect(getAdviceBlockers(product, NOW)).toEqual(['missing_core_source']);
   });
 
   it('blocks an unavailable product, an expired verification and an illogical starter flag', () => {
-    expect(getAdviceBlockers(buildProduct({ stock: sourced.stock('unavailable') }), NOW)).toEqual(['unavailable']);
-    expect(getAdviceBlockers(buildProduct({ carbonPercentage: sourced.carbon(95) }), NOW)).toEqual([
-      'illogical_starter_flag',
-    ]);
+    expect(
+      getAdviceBlockers(
+        buildProduct({ stock: sourced.stock('unavailable') }),
+        NOW,
+      ),
+    ).toEqual(['unavailable']);
+    expect(
+      getAdviceBlockers(
+        buildProduct({ carbonPercentage: sourced.carbon(95) }),
+        NOW,
+      ),
+    ).toEqual(['illogical_starter_flag']);
     expect(
       getAdviceBlockers(
         buildProduct({
-          experienceLevel: { value: 'beginner', source: 'brand-website', modelYear: 2024, lastVerifiedAt: '2025-01-01' },
+          experienceLevel: {
+            value: 'beginner',
+            source: 'brand-website',
+            modelYear: 2024,
+            lastVerifiedAt: '2025-01-01',
+          },
         }),
         NOW,
       ),

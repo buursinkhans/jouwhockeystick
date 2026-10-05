@@ -1,1 +1,70 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/*
+ * Brand tokens from the logo and brand guideline (merkinstructie §2.1).
+ * Colours in components come only from these tokens (bg-veld, text-inkt, …);
+ * amber and red remain in use solely for warnings and errors.
+ */
+@theme {
+  --color-veld: #1846a3;
+  --color-inkt: #0d1b2e;
+  --color-bal: #ff8a1f;
+  --color-krijt: #eef3fa;
+  --color-lijngrijs: #5b6b7f;
+  --color-nl-negatief: #c9d6f0;
+  --color-rand: #d5deea;
+}
+
+@theme inline {
+  --font-sans: var(--font-instrument-sans), system-ui, sans-serif;
+  --font-heading: var(--font-bricolage), system-ui, sans-serif;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.015em;
+  }
+}
+
+/* Wordmark settings from merkinstructie §2.2 and §6. */
+.jhs-wordmark {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  white-space: nowrap;
+  color: var(--color-inkt);
+}
+.jhs-wordmark svg {
+  color: var(--color-veld);
+}
+.jhs-tld {
+  font-weight: 500;
+  color: var(--color-lijngrijs);
+}
+.jhs-logo--negative .jhs-wordmark,
+.jhs-logo--negative .jhs-wordmark svg {
+  color: #ffffff;
+}
+.jhs-logo--negative .jhs-tld {
+  color: var(--color-nl-negatief);
+}
+
+/*
+ * Hexagon pattern (a nod to the dimples on a hockey ball and the texture of
+ * artificial turf). Decorative only: the strokes stay faint enough that text
+ * on top keeps its normal contrast.
+ */
+@utility bg-hex-dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='27.71' height='48' viewBox='0 0 27.71 48'%3E%3Cpath d='M13.86 0.00L27.71 8.00L27.71 24.00L13.86 32.00L0.00 24.00L0.00 8.00ZM0.00 24.00L13.86 32.00L13.86 48.00L0.00 56.00L-13.86 48.00L-13.86 32.00ZM27.71 24.00L41.57 32.00L41.57 48.00L27.71 56.00L13.86 48.00L13.86 32.00ZM0.00 -24.00L13.86 -16.00L13.86 0.00L0.00 8.00L-13.86 0.00L-13.86 -16.00ZM27.71 -24.00L41.57 -16.00L41.57 0.00L27.71 8.00L13.86 0.00L13.86 -16.00Z' fill='none' stroke='%23ffffff' stroke-opacity='0.07' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 34.64px 60px;
+}
+
+@utility bg-hex-light {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='27.71' height='48' viewBox='0 0 27.71 48'%3E%3Cpath d='M13.86 0.00L27.71 8.00L27.71 24.00L13.86 32.00L0.00 24.00L0.00 8.00ZM0.00 24.00L13.86 32.00L13.86 48.00L0.00 56.00L-13.86 48.00L-13.86 32.00ZM27.71 24.00L41.57 32.00L41.57 48.00L27.71 56.00L13.86 48.00L13.86 32.00ZM0.00 -24.00L13.86 -16.00L13.86 0.00L0.00 8.00L-13.86 0.00L-13.86 -16.00ZM27.71 -24.00L41.57 -16.00L41.57 0.00L27.71 8.00L13.86 0.00L13.86 -16.00Z' fill='none' stroke='%231846A3' stroke-opacity='0.08' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 34.64px 60px;
+}

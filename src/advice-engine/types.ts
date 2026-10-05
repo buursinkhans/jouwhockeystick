@@ -30,8 +30,7 @@ export type ReasonCode =
  * editorial advice rule plus the answers that rule was applied to.
  */
 export type ReasonEvidence =
-  | { kind: 'spec'; field: SpecField }
-  | { kind: 'rule'; basedOn: QuestionId[] };
+  { kind: 'spec'; field: SpecField } | { kind: 'rule'; basedOn: QuestionId[] };
 
 export type AdviceReason = {
   code: ReasonCode;
@@ -87,7 +86,8 @@ export type AdviceResultItem = {
 };
 
 /** The first hard-filter stage that left no candidates. */
-export type NoMatchReason = 'data' | 'length' | 'experience' | 'safety' | 'budget' | 'availability';
+export type NoMatchReason =
+  'data' | 'length' | 'experience' | 'safety' | 'budget' | 'availability';
 
 export type WeightedGoal = { goal: Goal; weight: number };
 

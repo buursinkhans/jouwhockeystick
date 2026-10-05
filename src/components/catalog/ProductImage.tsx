@@ -30,7 +30,6 @@ export function ProductImage({
 
   return (
     <StickIllustration
-      brand={product.brand}
       bowProfile={product.bowProfile?.value}
       alt={product.imageAlt}
       className={className}

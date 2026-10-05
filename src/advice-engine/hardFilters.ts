@@ -1,5 +1,10 @@
 import type { Product } from '@/catalog/types';
-import { BAND_ORDER, HIGH_CARBON, deriveAdviceRules, getAdviceBlockers } from './productRules';
+import {
+  BAND_ORDER,
+  HIGH_CARBON,
+  deriveAdviceRules,
+  getAdviceBlockers,
+} from './productRules';
 import { matchSize } from './sizeAdvice';
 import type { NoMatchReason, PlayerContext } from './types';
 
@@ -13,7 +18,10 @@ function passesData(product: Product, ctx: PlayerContext): boolean {
 function passesExperience(product: Product, ctx: PlayerContext): boolean {
   const rules = deriveAdviceRules(product);
   const player = BAND_ORDER.indexOf(ctx.band);
-  if (player < BAND_ORDER.indexOf(rules.minBand) || player > BAND_ORDER.indexOf(rules.maxBand)) {
+  if (
+    player < BAND_ORDER.indexOf(rules.minBand) ||
+    player > BAND_ORDER.indexOf(rules.maxBand)
+  ) {
     return false;
   }
   if (ctx.route === 'START') {
@@ -39,7 +47,9 @@ function passesSafety(product: Product, ctx: PlayerContext): boolean {
 }
 
 function passesBudget(product: Product, ctx: PlayerContext): boolean {
-  return ctx.budget === null || product.priceIndicativeEur.value <= ctx.budget.maxEur;
+  return (
+    ctx.budget === null || product.priceIndicativeEur.value <= ctx.budget.maxEur
+  );
 }
 
 function passesAvailability(product: Product, ctx: PlayerContext): boolean {
@@ -49,7 +59,9 @@ function passesAvailability(product: Product, ctx: PlayerContext): boolean {
   return product.stock.value !== 'unavailable';
 }
 
-const NON_LENGTH_STAGES: ReadonlyArray<[Stage, (product: Product, ctx: PlayerContext) => boolean]> = [
+const NON_LENGTH_STAGES: ReadonlyArray<
+  [Stage, (product: Product, ctx: PlayerContext) => boolean]
+> = [
   ['experience', passesExperience],
   ['safety', passesSafety],
   ['budget', passesBudget],
@@ -57,8 +69,14 @@ const NON_LENGTH_STAGES: ReadonlyArray<[Stage, (product: Product, ctx: PlayerCon
 ];
 
 /** Everything except the length check — used for the shorter-size fallback. */
-export function passesNonLengthFilters(product: Product, ctx: PlayerContext): boolean {
-  return passesData(product, ctx) && NON_LENGTH_STAGES.every(([, passes]) => passes(product, ctx));
+export function passesNonLengthFilters(
+  product: Product,
+  ctx: PlayerContext,
+): boolean {
+  return (
+    passesData(product, ctx) &&
+    NON_LENGTH_STAGES.every(([, passes]) => passes(product, ctx))
+  );
 }
 
 /**
@@ -69,7 +87,11 @@ export function passesNonLengthFilters(product: Product, ctx: PlayerContext): bo
 export function applyHardFilters(
   products: Product[],
   ctx: PlayerContext,
-): { passed: Product[]; excludedCount: number; noMatchReason: NoMatchReason | null } {
+): {
+  passed: Product[];
+  excludedCount: number;
+  noMatchReason: NoMatchReason | null;
+} {
   const noMatch = (noMatchReason: NoMatchReason) => ({
     passed: [],
     excludedCount: products.length,
@@ -81,7 +103,9 @@ export function applyHardFilters(
     return noMatch('data');
   }
 
-  candidates = candidates.filter((product) => matchSize(product, ctx.sizeAdvice) !== 'none');
+  candidates = candidates.filter(
+    (product) => matchSize(product, ctx.sizeAdvice) !== 'none',
+  );
   if (candidates.length === 0) {
     return noMatch('length');
   }
