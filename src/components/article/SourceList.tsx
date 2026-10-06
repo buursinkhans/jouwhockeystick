@@ -1,3 +1,4 @@
+import { sourceLinkRel } from '@/content/linkPolicy';
 import type { Article } from '@/content/types';
 
 export function SourceList({ sources }: { sources: Article['sources'] }) {
@@ -11,7 +12,11 @@ export function SourceList({ sources }: { sources: Article['sources'] }) {
         {sources.map((source) => (
           <li key={source.label}>
             {source.url ? (
-              <a href={source.url} className="hover:underline">
+              <a
+                href={source.url}
+                rel={sourceLinkRel(source.url)}
+                className="hover:underline"
+              >
                 {source.label}
               </a>
             ) : (
