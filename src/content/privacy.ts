@@ -15,7 +15,7 @@ export const PRIVACY = {
   title: 'Privacyverklaring',
   metaDescription:
     'Welke gegevens jouwhockeystick.nl verwerkt, waarom, hoe lang en met wie: de stickwijzer, het interesseformulier, cookieloze statistieken en hosting.',
-  version: '1.1',
+  version: '1.2',
   updatedAt: '2026-10-06',
   intro: [
     `${SITE_NAME} gebruikt zo weinig persoonsgegevens als mogelijk. Voor de stickwijzer hoef je geen naam, e-mailadres of geboortedatum op te geven, we plaatsen geen cookies en we gebruiken statistieken zonder cookies of bezoekersprofielen. Alleen als je zelf het interesseformulier invult, ontvangen we contactgegevens.`,
@@ -43,10 +43,11 @@ export const PRIVACY = {
       ],
     },
     {
-      heading: 'Statistieken (Simple Analytics)',
+      heading: 'Statistieken (Simple Analytics en PostHog)',
       paragraphs: [
         'We meten het gebruik van de site met Simple Analytics, een privacyvriendelijke dienst die geen cookies plaatst en geen bezoekersprofielen of IP-adressen opslaat. We zien daardoor alleen geanonimiseerde totalen, zoals het aantal bezoeken per pagina.',
         'Daarnaast tellen we anoniem welke stappen in de stickwijzer worden gezet, welke antwoorden vaak worden gekozen en op welke winkellinks wordt geklikt. Die gebeurtenissen bevatten geen naam, e-mailadres of ander kenmerk waarmee je te herkennen bent. We doen dit op basis van ons gerechtvaardigd belang om de stickwijzer te verbeteren.',
+        'Om te zien waar de site onduidelijk is, gebruiken we ook PostHog, met opslag in de Europese Unie (Frankfurt). PostHog registreert anoniem op welke knoppen en links wordt geklikt, hoe ver pagina’s worden gelezen en waar bezoekers in de stickwijzer afhaken, en maakt daar heatmaps van. We gebruiken PostHog zonder cookies en zonder lokale opslag in je browser, we maken geen opnames van bezoeken, en we koppelen niets aan jou als persoon. Wat je in formulieren typt, wordt niet vastgelegd.',
       ],
     },
     {
@@ -71,6 +72,7 @@ export const PRIVACY = {
       items: [
         'Netlify — hosting en verwerking van het interesseformulier. Netlify is gevestigd in de Verenigde Staten; voor doorgifte buiten de Europese Economische Ruimte gelden de waarborgen uit de verwerkersvoorwaarden van Netlify.',
         'Simple Analytics — cookieloze statistieken zonder persoonsgegevens.',
+        'PostHog — cookieloze analyse van klikgedrag en heatmaps, met opslag in de Europese Unie.',
         'Onze e-mailprovider — voor het ontvangen van je aanvraag.',
       ],
     },

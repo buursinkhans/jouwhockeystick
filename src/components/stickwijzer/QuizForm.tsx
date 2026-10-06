@@ -56,6 +56,19 @@ const ROUTE_STEP_COUNTS: Record<string, string> = Object.fromEntries(
   ]),
 );
 
+/**
+ * Random id for one wizard session. crypto.randomUUID only exists in secure
+ * contexts (https or localhost), so plain http falls back to random bytes.
+ */
+function newSessionId(): string {
+  if (typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return Array.from(crypto.getRandomValues(new Uint8Array(16)), (byte) =>
+    byte.toString(16).padStart(2, '0'),
+  ).join('');
+}
+
 function readProgress(): StoredProgress {
   const empty: StoredProgress = { answers: {}, stepIndex: 0, sessionId: '' };
   try {
@@ -196,7 +209,7 @@ export function QuizForm() {
   function handleChange(id: QuestionId, value: AnswerValue) {
     let activeSessionId = sessionId;
     if (!activeSessionId) {
-      activeSessionId = crypto.randomUUID();
+      activeSessionId = newSessionId();
       setSessionId(activeSessionId);
       trackEvent({ name: 'quiz_start' });
       track('advice_started', activeSessionId);

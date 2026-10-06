@@ -1,8 +1,14 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
+const posthogMock = vi.hoisted(() => ({ __loaded: false, capture: vi.fn() }));
+vi.mock('posthog-js', () => ({ default: posthogMock }));
+
 import { trackEvent } from './track';
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  posthogMock.__loaded = false;
+  posthogMock.capture.mockReset();
 });
 
 describe('trackEvent', () => {
@@ -45,6 +51,34 @@ describe('trackEvent', () => {
       questionId: 'budget_band',
       answerKey: '75_125',
     });
+  });
+
+  it('sends the same event and metadata to PostHog once it is initialised', () => {
+    vi.stubGlobal('window', { sa_event: vi.fn() });
+    posthogMock.__loaded = true;
+
+    trackEvent({
+      name: 'retailer_click',
+      retailer: 'bolcom',
+      brand: 'Grays',
+      productName: 'Grays JB 6',
+      placement: 'stickwijzer',
+    });
+
+    expect(posthogMock.capture).toHaveBeenCalledWith('retailer_click', {
+      retailer: 'bolcom',
+      brand: 'Grays',
+      productName: 'Grays JB 6',
+      placement: 'stickwijzer',
+    });
+  });
+
+  it('does not call PostHog when it is not initialised (local previews)', () => {
+    vi.stubGlobal('window', { sa_event: vi.fn() });
+
+    trackEvent({ name: 'quiz_start' });
+
+    expect(posthogMock.capture).not.toHaveBeenCalled();
   });
 
   it('queues events that fire before the Simple Analytics script has loaded', () => {
