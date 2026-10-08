@@ -51,6 +51,7 @@ describe('checkProductHealth', () => {
       ...verifiedOn(graysJb6Composite, 'not-a-date'),
       dataStatus: 'test-data',
       imageUrl: undefined,
+      bolProductUrl: undefined,
     };
     const kinds = checkProductHealth(product, new Date('2026-10-08')).issues.map(
       (issue) => issue.kind,
