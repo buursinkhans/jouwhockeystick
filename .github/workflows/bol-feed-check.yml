@@ -1,0 +1,42 @@
+# bol.com feed check, test run (read-only). Looks up every stick in the
+# bol.com Marketing Catalog API and writes the result to one GitHub issue.
+# Started by hand via Actions → "bol.com feed (testrun)" → Run workflow.
+name: bol.com feed (testrun)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Producten opzoeken bij bol.com
+        id: feed
+        env:
+          BOL_CLIENT_ID: ${{ secrets.BOL_CLIENT_ID }}
+          BOL_CLIENT_SECRET: ${{ secrets.BOL_CLIENT_SECRET }}
+        run: npm run --silent bol:feed-check > report.md
+        continue-on-error: true
+      - name: Rapport in issue zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create bol-feed --color 0000A4 --force
+          number=$(gh issue list --label bol-feed --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file report.md
+            gh issue comment "$number" --body "Testrun opnieuw gedraaid op $(date -u +%F)."
+          else
+            gh issue create --title "bol.com feed (testrun)" --label bol-feed --body-file report.md
+          fi
+      - name: Mislukte testrun zichtbaar maken
+        if: steps.feed.outcome == 'failure'
+        run: exit 1
