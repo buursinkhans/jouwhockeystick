@@ -1,0 +1,35 @@
+# Weekly catalog health check (source-policy.md §3). Read-only: it writes the
+# report to one GitHub issue and never changes code, data or the live site.
+name: Catalogus-controle
+
+on:
+  schedule:
+    - cron: '17 5 * * 1' # Mondays 05:17 UTC (07:17 Amsterdam, summer time)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Rapport maken
+        run: npm run --silent catalog:health > report.md
+      - name: Rapport in issue zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create catalogus-controle --color 1846A3 --force
+          number=$(gh issue list --label catalogus-controle --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file report.md
+            gh issue comment "$number" --body "Rapport bijgewerkt op $(date -u +%F)."
+          else
+            gh issue create --title "Catalogus-controle" --label catalogus-controle --body-file report.md
+          fi
