@@ -7,7 +7,7 @@ const NAV_LINKS = [
   { href: '/zaalsticks', label: 'Zaalsticks' },
   { href: '/merken', label: 'Merken' },
   { href: '/vergelijk', label: 'Vergelijk' },
-  { href: '/kennis/hoe-kies-je-de-juiste-hockeystick', label: 'Kennisbank' },
+  { href: '/kennis', label: 'Kennisbank' },
   { href: '/blog', label: 'Blog' },
   { href: '/over-ons', label: 'Over ons' },
 ];

@@ -12,6 +12,10 @@ import { ButtonLink } from '@/components/ui/Button';
 import { RetailerLinks } from '@/components/ui/RetailerLinks';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ProductFitAndSources } from '@/components/catalog/ProductFitAndSources';
+import { SimilarSticks } from '@/components/catalog/SimilarSticks';
+import { getSimilarSticks } from '@/catalog/similar';
+import { DISCIPLINE_LABELS } from '@/catalog/labels';
+import { absoluteUrl } from '@/lib/site';
 
 export function generateStaticParams() {
   return getAllProducts().map((product) => ({ slug: product.slug }));
@@ -27,8 +31,9 @@ export async function generateMetadata({
   if (!product) {
     return {};
   }
+  // "review" is deliberately not used: we do not test sticks ourselves.
   return pageMetadata({
-    title: product.name,
+    title: `${product.name}: specs en advies`,
     description: product.summary,
     path: `/sticks/${slug}`,
   });
@@ -49,12 +54,16 @@ export default async function ProductPage({
   // Structured data describes only visibly verifiable information on this
   // page, and deliberately omits `offers`/price since the actual purchase
   // and any live pricing happens on bol.com, not on this page.
+  // No Review or AggregateRating either: we have not tested the sticks.
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
-    brand: product.brand,
+    brand: { '@type': 'Brand', name: product.brand },
     description: product.summary,
+    category: DISCIPLINE_LABELS[getDiscipline(product)],
+    url: absoluteUrl(`/sticks/${product.slug}`),
+    ...(product.imageUrl && { image: product.imageUrl }),
   };
 
   return (
@@ -130,6 +139,11 @@ export default async function ProductPage({
       </div>
 
       <ProductFitAndSources product={product} />
+
+      <SimilarSticks
+        current={product}
+        similar={getSimilarSticks(product, getAllProducts())}
+      />
 
       <p className="mt-6 text-sm">
         <Link

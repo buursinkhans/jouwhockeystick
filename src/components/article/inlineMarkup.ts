@@ -5,9 +5,12 @@ export type InlineNode =
   | { kind: 'link'; text: string; href: string };
 
 const INLINE_PATTERN =
-  /\*\*(.+?)\*\*|\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|\*(.+?)\*/g;
+  /\*\*(.+?)\*\*|\[([^\]]+)\]\((https?:\/\/[^)\s]+|\/[^)\s]*)\)|\*(.+?)\*/g;
 
-/** Parses the small inline markup used in article text (no nesting). */
+/**
+ * Parses the small inline markup used in article text (no nesting). Links are
+ * either absolute http(s) URLs or site-internal paths starting with "/".
+ */
 export function parseInline(source: string): InlineNode[] {
   const nodes: InlineNode[] = [];
   let lastIndex = 0;

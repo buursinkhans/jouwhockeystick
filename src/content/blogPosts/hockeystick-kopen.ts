@@ -42,6 +42,7 @@ export const hockeystickKopen: Article = {
       body: [
         `Een verkeerde maat kun je niet oplossen met meer carbon of een duurder model. Vooral bij kinderen verdient de lengte daarom aandacht: een te lange stick kan het leren van de techniek lastiger maken. [Bron: Intersport — hockeystick kopen](${INTERSPORT_GUIDE})`,
         'Gebruik bij een online aankoop de maattabel van de aanbieder als startpunt. Laat de speler bij twijfel ook een stick vasthouden in een normale hockeyhouding. Kan diegene ontspannen bewegen, dribbelen en de stick dicht bij het lichaam houden?',
+        'Per lichaamslengte zie je de passende maat in onze [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel). De [stickwijzer](/stickwijzer) rekent de maat voor je uit en laat direct sticks zien die in die lengte te krijgen zijn.',
         `Voor volwassenen is 36,5 inch een veelgebruikte lengte. Er zijn ook langere modellen, maar langer is niet automatisch beter: vergelijk ze op hanteerbaarheid en persoonlijke voorkeur. [Bron: Intersport — hockeysticks](${INTERSPORT_STICKS})`,
       ],
     },
@@ -60,6 +61,7 @@ export const hockeystickKopen: Article = {
             'Een prijs waarbij je later zonder grote drempel kunt overstappen.',
           ],
         },
+        'Welke junior- en beginnerssticks we in de catalogus hebben, zie je bij [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
         `Dat sluit aan bij hoe fabrikanten hun instapmodellen ontwikkelen. Grays beschrijft bijvoorbeeld de GX1000 Ultrabow als een stick voor het leren van de kernvaardigheden van hockey. Dat is een fabrikantomschrijving, geen garantie dat ieder kind met dit model beter leert. [Fabrikantgegevens: Grays — GX1000 Ultrabow](${GRAYS_GX1000})`,
       ],
     },
@@ -115,6 +117,7 @@ export const hockeystickKopen: Article = {
           ],
         },
         'Let op: profielnamen verschillen per merk. Vergelijk daarom niet alleen het woord op de stick, maar ook de omschrijving van het exacte model.',
+        'Twijfel je tussen de twee meest gekozen profielen? Lees [low bow of mid bow](/kennis/low-bow-vs-mid-bow). Weet je niet welk profiel bij jouw spel past, dan vraagt de [stickwijzer](/stickwijzer) naar je spelacties en geeft een richting met redenen.',
       ],
     },
     {
@@ -172,6 +175,7 @@ export const hockeystickKopen: Article = {
         'Kies een passende, betaalbare basisstick en ontdek eerst wat je leuk vindt: opbouwen, verdedigen, dribbelen, afronden of overal meedoen. Bij een volgende aankoop kun je veel gerichter aangeven wat je prettig vindt en wat je wilt veranderen.',
         'Voor een ervaren speler is die verfijning juist waardevol. Dan gaat het niet om “meer carbon” of “meer kromming”, maar om een concrete afweging: meer directe passing, een ander kopgevoel, makkelijker liften of juist meer rust bij de eerste aanname.',
         '**De beste aankoopvraag is daarom niet: “Welke stick is de beste?” Maar: “Welke stick past bij mijn spel, mijn ontwikkeling en mijn budget?”**',
+        'Precies die vraag beantwoordt de [stickwijzer](/stickwijzer): je vult je lengte, ervaring, spelwensen en budget in en krijgt maximaal drie sticks, elk met zichtbare redenen en de bron van elk gegeven.',
         {
           type: 'note',
           text: '*Over de onderbouwing: deze kooptips gebruiken fabrikantinformatie en praktische koopgidsen. Fabrikantomschrijvingen vertellen waarvoor een model is ontworpen; ze bewijzen niet dat het voor iedere speler de beste keuze is. De keuzeadviezen in dit artikel zijn redactionele uitgangspunten, geen eigen testresultaten of prestatiegaranties.*',
@@ -181,7 +185,7 @@ export const hockeystickKopen: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-06',
-  updatedAt: '2026-10-06',
+  updatedAt: '2026-10-08',
   sources: [
     {
       label: 'Grays — Wat is de beste hockeystick voor verdedigers?',

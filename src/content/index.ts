@@ -1,7 +1,16 @@
 import type { Article } from './types';
+import { hockeystickLengteTabel } from './articles/hockeystick-lengte-tabel';
+import { hockeystickKinderenEnBeginners } from './articles/hockeystick-kinderen-en-beginners';
+import { lowBowVsMidBow } from './articles/low-bow-vs-mid-bow';
 import { hoeKiesJeDeJuisteHockeystick } from './articles/hoe-kies-je-de-juiste-hockeystick';
 
-const ALL_ARTICLES: Article[] = [hoeKiesJeDeJuisteHockeystick];
+/** Listed on /kennis in this order. */
+const ALL_ARTICLES: Article[] = [
+  hockeystickLengteTabel,
+  hockeystickKinderenEnBeginners,
+  lowBowVsMidBow,
+  hoeKiesJeDeJuisteHockeystick,
+];
 
 export function getAllArticles(): Article[] {
   return ALL_ARTICLES;

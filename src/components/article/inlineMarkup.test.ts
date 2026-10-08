@@ -28,4 +28,12 @@ describe('parseInline', () => {
       { kind: 'text', text: '[x](javascript:alert(1))' },
     ]);
   });
+
+  it('parses site-internal links', () => {
+    expect(parseInline('Doe de [stickwijzer](/stickwijzer).')).toEqual([
+      { kind: 'text', text: 'Doe de ' },
+      { kind: 'link', text: 'stickwijzer', href: '/stickwijzer' },
+      { kind: 'text', text: '.' },
+    ]);
+  });
 });

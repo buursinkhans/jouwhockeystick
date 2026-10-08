@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { pageMetadata } from '@/lib/site';
+import { absoluteUrl, pageMetadata, SITE_NAME } from '@/lib/site';
 import { notFound } from 'next/navigation';
 import { getAllArticles, getArticleBySlug } from '@/content';
 import { ArticleBody } from '@/components/article/ArticleBody';
@@ -44,10 +44,12 @@ export default async function ArticlePage({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: article.title,
-    author: { '@type': 'Person', name: article.author },
+    author: { '@type': 'Organization', name: article.author },
+    publisher: { '@type': 'Organization', name: SITE_NAME },
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
     description: article.metaDescription,
+    mainEntityOfPage: absoluteUrl(`/kennis/${article.slug}`),
   };
 
   return (
@@ -59,6 +61,7 @@ export default async function ArticlePage({
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
+          { label: 'Kennisbank', href: '/kennis' },
           { label: article.title, href: `/kennis/${article.slug}` },
         ]}
       />

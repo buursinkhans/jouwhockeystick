@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { pageMetadata } from '@/lib/site';
+import { absoluteUrl, pageMetadata, SITE_NAME } from '@/lib/site';
 import { notFound } from 'next/navigation';
 import { getAllBlogPosts, getBlogPostBySlug } from '@/content/blog';
 import { ArticleBody } from '@/components/article/ArticleBody';
@@ -45,9 +45,11 @@ export default async function BlogPostPage({
     '@type': 'BlogPosting',
     headline: post.title,
     author: { '@type': 'Organization', name: post.author },
+    publisher: { '@type': 'Organization', name: SITE_NAME },
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
     description: post.metaDescription,
+    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
   };
 
   return (

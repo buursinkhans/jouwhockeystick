@@ -8,7 +8,7 @@ import { CheckIcon, InfoIcon } from '@/components/ui/icons';
 import { absoluteUrl, pageMetadata, SITE_NAME } from '@/lib/site';
 
 export const metadata = pageMetadata({
-  title: 'Zaalsticks',
+  title: ZAAL.title,
   description: ZAAL.metaDescription,
   path: '/zaalsticks',
 });
