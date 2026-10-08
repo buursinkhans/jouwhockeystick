@@ -1,0 +1,43 @@
+# Weekly Search Console report (read-only): opportunities per search query,
+# written to one GitHub issue. Never changes code, content or the live site.
+name: Search Console-rapport
+
+on:
+  schedule:
+    - cron: '43 5 * * 1' # Mondays 05:43 UTC, after the catalog check
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Rapport maken
+        id: report
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+        run: npm run --silent seo:report > report.md
+        continue-on-error: true
+      - name: Rapport in issue zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create search-console --color 34A853 --force
+          number=$(gh issue list --label search-console --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file report.md
+            gh issue comment "$number" --body "Rapport bijgewerkt op $(date -u +%F)."
+          else
+            gh issue create --title "Search Console-rapport" --label search-console --body-file report.md
+          fi
+      - name: Mislukt rapport zichtbaar maken
+        if: steps.report.outcome == 'failure'
+        run: exit 1

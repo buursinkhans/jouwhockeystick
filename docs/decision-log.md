@@ -234,3 +234,11 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 ## 2026-10-08 — Laatste twee bol.com-twijfelgevallen
 
 **Besluit eigenaar:** Brabo Elite X One LB is dezelfde stick als "Brabo Elite X One Forged Carbon LB Bl/Or Senior" op bol.com en krijgt een directe link. Grays PB9i Indoor is niet dezelfde stick als "Grays 9i Probow Indoor" en wordt "niet verkrijgbaar bij bol.com". Sticks die bol.com niet verkoopt, blijven bewust in de stickwijzer-adviezen. Daarmee: 30 directe links, 11 niet verkrijgbaar, 0 zoeklinks.
+
+## 2026-10-08 — Wekelijkse Search Console-agent
+
+**Wat:** `src/seo/searchConsole.ts` analyseert Search Analytics-rijen (zoekwoord × pagina) van de laatste 28 dagen tegen de 28 daarvoor: totalen, "bijna pagina 1" (positie 5–20), "goed zichtbaar, weinig kliks" (top 5, CTR < 2%), nieuwe zoekwoorden en vertoningen per stickpagina. `scripts/search-console-report.ts` (`npm run seo:report`) haalt de data op als Google-service-account; de JWT wordt met Node's eigen crypto ondertekend, zonder Google-library. De workflow "Search Console-rapport" draait elke maandag en houdt één issue bij.
+
+**Toegang:** secret `GSC_SERVICE_ACCOUNT_JSON`; het service-account heeft in Search Console alleen rechten "Beperkt" (lezen). Property: eerst `sc-domain:jouwhockeystick.nl`, anders `https://jouwhockeystick.nl/`; vast te zetten met de repository-variabele `GSC_SITE_URL`.
+
+**Bewust niet:** de agent past geen titels of content aan. Hij levert de data voor de handgeschreven vergelijkende alinea's per stick (zie 2026-10-08, SEO-verbeteringen) en voor latere content-PR's.
