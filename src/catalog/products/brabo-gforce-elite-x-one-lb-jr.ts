@@ -5,6 +5,8 @@ export const braboGforceEliteXOneLbJr: Product = {
   brand: 'Brabo',
   name: 'Brabo G-Force Elite X One LB JR',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/brabo-g-force-elite-x-one-lb-junior-hockeystick/9300000317135881/',
   imageAlt: 'Brabo G-Force Elite X One LB JR hockeystick',
   imageUrl:
     'https://brabohockey.com/cdn/shop/files/315.65002.000_1_13778423-db90-45b9-9e69-d86936485382.jpg?v=1780554380',

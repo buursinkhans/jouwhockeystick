@@ -9,6 +9,8 @@ export const graysDb7xiCompositeIndoor: Product = {
   brand: 'Grays',
   name: 'Grays DB7Xi Composite Indoor Hockey Stick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/grays-db7xi-dynabow-senior-hockeystick-rood/9300000304766248/',
   imageAlt: 'Grays DB7Xi Composite zaalhockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAJD26Composite_20Sticks_20DB7Xi_20Dynabow_20Indoor_20Hockey_20Stick_20Red_20_20Silver.jpg?v=1779971676&width=1024',

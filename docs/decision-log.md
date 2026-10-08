@@ -216,3 +216,9 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 **Bewust niet:** de agent wijzigt niets. Kandidaten worden nooit automatisch gekoppeld en `priceIndicativeEur` blijft de adviesprijs van de fabrikant (CLAUDE.md, Testfase-scope). Of de site live bol.com-prijzen gaat tonen, is een apart besluit van de eigenaar.
 
 **Sleutels:** `BOL_CLIENT_ID` en `BOL_CLIENT_SECRET` staan alleen als GitHub Secret; de site zelf heeft ze niet nodig.
+
+## 2026-10-08 — Directe bol.com-links, tweede reeks (9 sticks)
+
+**Wat:** `bolProductUrl` voor 9 sticks die de feed-testrun (issue #5) eenduidig bij bol.com vond: Grays JB 6, JB 10, PB 11+, Aura GT Junior, DB7Xi Indoor; Brabo Elite Five WTB LB, G-Force Elite X One LB JR; Princess Competition JR 3K 10 STAR, Premium JR 4K 10 STAR. Door de eigenaar goedgekeurd. Waar bol.com meerdere maten als aparte pagina heeft, is de eerste gekozen; op bol.com kan de bezoeker van maat wisselen. Daarmee hebben 29 van de 41 sticks een directe link.
+
+**Open:** Brabo Elite X One LB en Grays PB9i Indoor (twijfelachtige match) en 9 sticks die bol.com niet verkoopt. Besluit van de eigenaar volgt.

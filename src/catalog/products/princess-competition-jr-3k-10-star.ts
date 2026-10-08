@@ -5,6 +5,8 @@ export const princessCompetitionJr3k10Star: Product = {
   brand: 'Princess',
   name: 'Princess Competition JR 3K 10 STAR SG9-L',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/princess-competition-junior-3k-10-star-sg9-l-black-orange-hockeystick/9300000317136507/',
   imageAlt: 'Princess Competition JR 3K 10 STAR hockeystick',
   imageUrl:
     'https://www.princess-hockey.com/cdn/shop/files/330.64022.000_1_4b0948b5-1f8e-46c3-88cf-d731fd94d1d4.jpg?v=1783354715',

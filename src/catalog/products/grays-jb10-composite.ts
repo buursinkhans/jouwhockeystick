@@ -5,6 +5,8 @@ export const graysJb10Composite: Product = {
   brand: 'Grays',
   name: 'Grays JB 10 Composite Hockey Stick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/grays-jb-10-senior-hockeystick-blauw/9300000304766046/',
   imageAlt: 'Grays JB 10 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/2705263JB10BlueBackMain.jpg?v=1779972697',
