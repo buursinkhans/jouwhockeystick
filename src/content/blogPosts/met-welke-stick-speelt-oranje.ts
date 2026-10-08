@@ -42,7 +42,7 @@ export const metWelkeStickSpeeltOranje: Article = {
       level: 2,
       body: [
         'Wie bij een interland langs het veld staat, kijkt al snel niet alleen naar de bal, maar ook naar de stick. Welk merk is dat? Welke kleur? En zou die stick bij mij ook werken?',
-        'We zochten uit wat er publiek bekend is over de sticks van de Oranje-dames en -heren. Dat bleek minder eenvoudig dan het lijkt. Een speler kan met een merk spelen, ambassadeur zijn van een merk of meegewerkt hebben aan een stick. Dat zijn drie verschillende dingen. Daarom vertellen we per speler wat de bronnen precies zeggen.',
+        'We zochten uit wat er publiek bekend is over de sticks van de Oranje-dames en -heren. Dat bleek minder eenvoudig dan het lijkt. Een speler kan met een merk spelen, ambassadeur zijn van een merk of meegewerkt hebben aan een stick. Dat zijn drie verschillende dingen. Daarom zetten we bij elke naam wat er precies bevestigd is.',
       ],
     },
     {
@@ -56,17 +56,53 @@ export const metWelkeStickSpeeltOranje: Article = {
       body: [
         {
           type: 'table',
-          columns: ['Speelster', 'Merk', 'Bijzonderheid'],
+          columns: ['Speelster', 'Merkvermelding', 'Wat is bevestigd?'],
           rows: [
-            ['Xan de Waard', 'adidas', ''],
-            ['Renée van Laarhoven', 'adidas', ''],
-            ['Felice Albers', 'adidas', ''],
-            ['Luna Fokke', 'adidas', ''],
-            ['Joosje Burg', 'adidas', ''],
-            ['Pien Dicke', 'adidas', ''],
-            ['Daantje de Kruijff', 'adidas', ''],
-            ['Yibbi Jansen', 'Osaka', 'Eigen Yibbi-collectie'],
-            ['Frédérique Matla', 'Princess', 'Medeontwikkelaar Premium 7 Star'],
+            [
+              'Xan de Waard',
+              'adidas',
+              'Vermeld als adidas-speelster; model niet bevestigd',
+            ],
+            [
+              'Renée van Laarhoven',
+              'adidas',
+              'Vermeld als adidas-speelster; model niet bevestigd',
+            ],
+            [
+              'Felice Albers',
+              'adidas',
+              'Vermeld als adidas-speelster; model niet bevestigd',
+            ],
+            [
+              'Luna Fokke',
+              'adidas',
+              'Vermeld als adidas-speelster; model niet bevestigd',
+            ],
+            [
+              'Joosje Burg',
+              'adidas',
+              'Vermeld als adidas-speelster; model niet bevestigd',
+            ],
+            [
+              'Pien Dicke',
+              'adidas',
+              'Vermeld als adidas-speelster; model niet bevestigd',
+            ],
+            [
+              'Daantje de Kruijff',
+              'adidas',
+              'Vermeld als adidas-speelster; model niet bevestigd',
+            ],
+            [
+              'Yibbi Jansen',
+              'Osaka',
+              'Ambassadeur met eigen Yibbi-collectie; model niet bevestigd',
+            ],
+            [
+              'Frédérique Matla',
+              'Princess',
+              'Atletenpagina; betrokken bij ontwikkeling Premium 7 Star',
+            ],
           ],
         },
       ],
@@ -77,12 +113,28 @@ export const metWelkeStickSpeeltOranje: Article = {
       body: [
         {
           type: 'table',
-          columns: ['Speler', 'Merk', 'Bijzonderheid'],
+          columns: ['Speler', 'Merkvermelding', 'Wat is bevestigd?'],
           rows: [
-            ['Thierry Brinkman', 'Brabo', ''],
-            ['Koen Bijen', 'Princess', 'Medeontwikkelaar Premium 7 Star'],
-            ['Jorrit Croon', 'adidas, eerder Princess', ''],
-            ['Jip Janssen', 'Grays (2020/2021)', ''],
+            [
+              'Thierry Brinkman',
+              'Brabo',
+              'Vermeld als Brabo-speler, met atletenpagina; model niet bevestigd',
+            ],
+            [
+              'Koen Bijen',
+              'Princess',
+              'Betrokken bij ontwikkeling Premium 7 Star',
+            ],
+            [
+              'Jorrit Croon',
+              'adidas / Princess',
+              'Verschillende bronvermeldingen; actuele keuze onzeker',
+            ],
+            [
+              'Jip Janssen',
+              'Grays',
+              'Historische vermelding uit seizoen 2020/2021',
+            ],
           ],
         },
         'Dit is geen volledige lijst van de huidige selecties. We noemen alleen spelers over wie een publieke bron iets zegt over hun stick.',
@@ -165,9 +217,9 @@ export const metWelkeStickSpeeltOranje: Article = {
       heading: 'Moet je dezelfde stick kopen als je idool?',
       level: 2,
       body: [
-        'Het is leuk om met hetzelfde merk te spelen als je favoriete international. Maar een international kiest een stick die past bij een spel van topniveau: vaak stijf, met veel carbon en een lage kromming voor sleeppushes, aerials en 3D-acties. Voor de meeste spelers, en zeker voor kinderen, is dat niet de logische eerste keuze.',
-        'Ons advies: kies gerust een merk dat je aanspreekt, maar kies het model op je eigen lengte, ervaring en spel. Hoe dat werkt, lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Het verschil in kromming lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow), en voor kinderen is er [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
-        'Wil je weten welke stick bij jou past, ook binnen het merk van je idool? Doe de [stickwijzer](/stickwijzer).',
+        'Het is leuk om met hetzelfde merk te spelen als je favoriete international. Maar de merknaam vertelt nog niet welk model bij jou past. In dit overzicht is het exacte wedstrijdmodel meestal niet bevestigd.',
+        'Gebruik de keuze van je idool daarom als inspiratie, niet als persoonlijk aankoopadvies. Kies gerust een merk dat je aanspreekt en kijk vervolgens naar je eigen lengte, ervaring, voorkeuren en budget.',
+        'Wil je weten welke stick bij jou past? Gebruik onze [stickwijzer](/stickwijzer) of lees onze uitleg in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Het verschil in kromming lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow), en voor kinderen is er [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },
     {
