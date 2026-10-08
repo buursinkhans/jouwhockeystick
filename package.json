@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "catalog:health": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-health.ts",
-    "bol:feed-check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/bol-feed-check.ts"
+    "bol:feed-check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/bol-feed-check.ts",
+    "seo:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/search-console-report.ts"
   },
   "dependencies": {
     "next": "16.3.6",
