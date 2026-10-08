@@ -36,32 +36,82 @@ type Row =
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/** Shape of a credential without revealing it: length, whitespace, UUID-like. */
+function describeCredential(name: string, value: string): string {
+  const trimmed = value.trim();
+  const uuidLike =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      trimmed,
+    );
+  const whitespace = trimmed.length !== value.length ? ', met spatie/enter aan begin of eind' : '';
+  return `${name}: ${trimmed.length} tekens${uuidLike ? ', UUID-vorm' : ''}${whitespace}`;
+}
+
+async function requestToken(
+  id: string,
+  secret: string,
+  style: 'basic' | 'form',
+): Promise<Response> {
+  if (style === 'basic') {
+    return fetch(TOKEN_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`,
+        Accept: 'application/json',
+      },
+      body: '',
+    });
+  }
+  return fetch(TOKEN_URL, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({ client_id: id, client_secret: secret }),
+  });
+}
+
 async function getToken(): Promise<string> {
-  const id = process.env.BOL_CLIENT_ID;
-  const secret = process.env.BOL_CLIENT_SECRET;
-  if (!id || !secret) {
+  const rawId = process.env.BOL_CLIENT_ID;
+  const rawSecret = process.env.BOL_CLIENT_SECRET;
+  if (!rawId || !rawSecret) {
     throw new Error(
       'BOL_CLIENT_ID en/of BOL_CLIENT_SECRET ontbreken (GitHub Secrets).',
     );
   }
-  const response = await fetch(TOKEN_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`,
-      Accept: 'application/json',
-      'Content-Length': '0',
-    },
-  });
-  if (!response.ok) {
-    throw new Error(
-      `Inloggen bij bol.com mislukt (HTTP ${response.status}). Controleer of de sleutels bij de Marketing API horen.`,
-    );
+  // Pasted secrets often carry a trailing newline or space.
+  const id = rawId.trim();
+  const secret = rawSecret.trim();
+
+  const attempts: string[] = [];
+  for (const style of ['basic', 'form'] as const) {
+    const response = await requestToken(id, secret, style);
+    if (response.ok) {
+      const body = (await response.json()) as Json;
+      if (typeof body.access_token === 'string') return body.access_token;
+      attempts.push(`${style}: geen access_token in het antwoord`);
+      continue;
+    }
+    // bol.com's error body (e.g. "invalid_client") contains no credentials.
+    const detail = (await response.text()).slice(0, 300).replace(/\s+/g, ' ');
+    attempts.push(`${style}: HTTP ${response.status} — ${detail || '(leeg)'}`);
   }
-  const body = (await response.json()) as Json;
-  if (typeof body.access_token !== 'string') {
-    throw new Error('Geen access_token in het antwoord van bol.com.');
-  }
-  return body.access_token;
+  throw new Error(
+    [
+      'Inloggen bij bol.com mislukt.',
+      '',
+      'Antwoorden van bol.com:',
+      ...attempts.map((line) => `- ${line}`),
+      '',
+      'Vorm van de sleutels (waarden worden nooit getoond):',
+      `- ${describeCredential('BOL_CLIENT_ID', rawId)}`,
+      `- ${describeCredential('BOL_CLIENT_SECRET', rawSecret)}`,
+      ...(id === secret
+        ? ['- ⚠️ BOL_CLIENT_ID en BOL_CLIENT_SECRET zijn identiek: waarschijnlijk is één waarde twee keer geplakt.']
+        : ['- BOL_CLIENT_ID en BOL_CLIENT_SECRET zijn verschillend.']),
+    ].join('\n'),
+  );
 }
 
 /** GET with one retry on 429. Returns null on 404 (unknown product). */
