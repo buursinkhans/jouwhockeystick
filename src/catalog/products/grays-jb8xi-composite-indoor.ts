@@ -9,6 +9,7 @@ export const graysJb8xiCompositeIndoor: Product = {
   brand: 'Grays',
   name: 'Grays JB8Xi Composite Indoor Hockey Stick',
   dataStatus: 'verified',
+  bolNotSold: { checkedAt: '2026-10-08' },
   imageAlt: 'Grays JB8Xi Composite zaalhockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAJC26Composite_20Sticks_20JB8Xi_20Jumbow_20Indoor_20Hockey_20Stick_20Mint_20_20Silver.jpg?v=1779971664&width=1024',

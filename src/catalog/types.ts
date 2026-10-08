@@ -104,6 +104,11 @@ export const productSchema = z.object({
     .url()
     .startsWith('https://www.bol.com/nl/nl/p/')
     .optional(),
+  /**
+   * Set when bol.com does not sell this model (checked via the feed check).
+   * The shop button then says so instead of linking to an unrelated search.
+   */
+  bolNotSold: z.object({ checkedAt: z.string() }).optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),
   /** Optional — not every brand states a bow profile for every model; never guessed. */

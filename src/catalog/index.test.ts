@@ -151,3 +151,13 @@ describe('bolProductUrl', () => {
     }
   });
 });
+
+describe('bolNotSold', () => {
+  it('is never combined with a direct bol.com link', () => {
+    for (const product of getCatalogProducts()) {
+      if (product.bolNotSold) {
+        expect(product.bolProductUrl).toBeUndefined();
+      }
+    }
+  });
+});

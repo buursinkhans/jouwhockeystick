@@ -5,6 +5,7 @@ export const princessCompetition1StarProbow: Product = {
   brand: 'Princess',
   name: 'Princess Competition 1 Star PROBOW Pi/Wh',
   dataStatus: 'verified',
+  bolNotSold: { checkedAt: '2026-10-08' },
   imageAlt: 'Princess Competition 1 Star PROBOW hockeystick',
   imageUrl:
     'https://www.princess-hockey.com/cdn/shop/files/330.63005.000_1_dba82b9a-60e5-4b0b-93a5-692f829b3110.jpg?v=1779888508',

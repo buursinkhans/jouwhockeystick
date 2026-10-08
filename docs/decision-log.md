@@ -222,3 +222,11 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 **Wat:** `bolProductUrl` voor 9 sticks die de feed-testrun (issue #5) eenduidig bij bol.com vond: Grays JB 6, JB 10, PB 11+, Aura GT Junior, DB7Xi Indoor; Brabo Elite Five WTB LB, G-Force Elite X One LB JR; Princess Competition JR 3K 10 STAR, Premium JR 4K 10 STAR. Door de eigenaar goedgekeurd. Waar bol.com meerdere maten als aparte pagina heeft, is de eerste gekozen; op bol.com kan de bezoeker van maat wisselen. Daarmee hebben 29 van de 41 sticks een directe link.
 
 **Open:** Brabo Elite X One LB en Grays PB9i Indoor (twijfelachtige match) en 9 sticks die bol.com niet verkoopt. Besluit van de eigenaar volgt.
+
+## 2026-10-08 — "Niet verkrijgbaar bij bol.com"
+
+**Aanleiding:** de feed-testrun (issue #5) vond 10 sticks niet bij bol.com. Hun winkelknop leidde naar een zoekopdracht met andere producten.
+
+**Wat (besluit eigenaar):** nieuw optioneel veld `bolNotSold: { checkedAt }`. Voor die sticks toont de site "Niet verkrijgbaar bij bol.com" in plaats van een winkelknop, en de prijsvermelding wordt "Richtprijs · niet verkrijgbaar bij bol.com". Gezet voor: JDH X01, X93 en Junior Mid Bow; Princess Competition 1 Star Probow, Premium 4K 10 Star (senior), Competition JR 10 Star Indoor; Grays JB 12+, DB 10+, PB10Xi, JB8Xi. De catalogus-controle meldt ze apart. De feed-testrun blijft ze opzoeken, zodat zichtbaar wordt als bol.com ze alsnog gaat verkopen.
+
+**Bewust niet:** de stickwijzer adviseert deze sticks nog steeds. Of ze uit de adviezen moeten, is een apart besluit.

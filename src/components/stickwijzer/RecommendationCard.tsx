@@ -131,7 +131,7 @@ export function RecommendationCard({
           <dd>{modelYear ?? 'Niet bevestigd'}</dd>
         </div>
       </dl>
-      <ProductNotice />
+      <ProductNotice notSoldAtBol={product.bolNotSold !== undefined} />
 
       <h5 className="mt-5 text-sm font-semibold">Waarom deze stick past</h5>
       <ul className="mt-2 space-y-3">
@@ -223,6 +223,7 @@ export function RecommendationCard({
           brand={product.brand}
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
+          notSoldAtBol={product.bolNotSold !== undefined}
           placement="stickwijzer"
         />
       </div>

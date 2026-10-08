@@ -5,6 +5,7 @@ export const jdhJuniorMidBow: Product = {
   brand: 'JDH',
   name: 'JDH Junior Mid Bow',
   dataStatus: 'verified',
+  bolNotSold: { checkedAt: '2026-10-08' },
   imageAlt: 'JDH Junior Mid Bow hockeystick',
   imageUrl:
     'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6895cff0bd9b9aab1edd81e9_JNRGN_teal_6%20.jpg',

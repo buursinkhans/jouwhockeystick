@@ -15,7 +15,8 @@ export type HealthIssue =
   | { kind: 'invalid_date'; field: string; lastVerifiedAt: string }
   | { kind: 'test_data' }
   | { kind: 'missing_image' }
-  | { kind: 'search_link_only' };
+  | { kind: 'search_link_only' }
+  | { kind: 'not_sold_at_bol'; checkedAt: string };
 
 export type ProductHealth = {
   slug: string;
@@ -82,7 +83,9 @@ export function checkProductHealth(
   if (!product.imageUrl) {
     issues.push({ kind: 'missing_image' });
   }
-  if (!product.bolProductUrl) {
+  if (product.bolNotSold) {
+    issues.push({ kind: 'not_sold_at_bol', checkedAt: product.bolNotSold.checkedAt });
+  } else if (!product.bolProductUrl) {
     issues.push({ kind: 'search_link_only' });
   }
 
@@ -115,6 +118,7 @@ const ISSUE_LABELS: Record<HealthIssue['kind'], string> = {
   test_data: 'Nog gemarkeerd als testdata',
   missing_image: 'Geen productfoto (toont illustratie)',
   search_link_only: 'Winkelknop gaat naar een zoekopdracht, niet naar de productpagina',
+  not_sold_at_bol: 'Niet verkrijgbaar bij bol.com',
 };
 
 /** One line per issue kind; re-checks are grouped per product to keep the report short. */
@@ -128,11 +132,13 @@ function describeIssues(issues: HealthIssue[]): string[] {
   for (const issue of issues) {
     if (issue.kind === 'recheck_due') continue;
     const label = ISSUE_LABELS[issue.kind];
-    lines.push(
-      'field' in issue
-        ? `${label}: \`${issue.field}\` (${issue.lastVerifiedAt})`
-        : label,
-    );
+    if ('field' in issue) {
+      lines.push(`${label}: \`${issue.field}\` (${issue.lastVerifiedAt})`);
+    } else if (issue.kind === 'not_sold_at_bol') {
+      lines.push(`${label} (gecontroleerd ${issue.checkedAt})`);
+    } else {
+      lines.push(label);
+    }
   }
   return lines;
 }

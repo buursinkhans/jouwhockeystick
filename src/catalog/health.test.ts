@@ -63,6 +63,20 @@ describe('checkProductHealth', () => {
   });
 });
 
+describe('not sold at bol.com', () => {
+  it('reports the stick as not sold instead of as a search link', () => {
+    const product: Product = {
+      ...verifiedOn(graysJb6Composite, '2026-09-26'),
+      bolProductUrl: undefined,
+      bolNotSold: { checkedAt: '2026-10-08' },
+    };
+    const kinds = checkProductHealth(product, new Date('2026-10-08')).issues.map(
+      (issue) => issue.kind,
+    );
+    expect(kinds).toEqual(['not_sold_at_bol']);
+  });
+});
+
 describe('checkCatalogHealth', () => {
   it('covers every product, including inactive ones', () => {
     const products = getCatalogProducts();
