@@ -5,6 +5,8 @@ export const braboEliteFiveWtbLb: Product = {
   brand: 'Brabo',
   name: 'Brabo Elite Five WTB LB',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/brabo-elite-five-wtb-carbon-lb-bk-wh-senior-hockeystick/9300000317135725/',
   imageAlt: 'Brabo Elite Five WTB LB hockeystick',
   imageUrl:
     'https://brabohockey.com/cdn/shop/files/315.60182.000_1_916b2c9b-cad3-4c6b-8b40-2a2b1a239561.jpg?v=1780553961',

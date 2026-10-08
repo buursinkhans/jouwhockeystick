@@ -5,6 +5,8 @@ export const graysAuraGtJunior: Product = {
   brand: 'Grays',
   name: 'Grays Aura GT Junior Hockey Stick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/grays-aura-gt-hockeystick-blauw/9300000304766385/',
   imageAlt: 'Grays Aura GT Junior hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HBCA26Wooden_20Sticks_20Aura_20GT_20Hockey_20Stick_20Blue_d5a133d9-bc05-45c3-bdf3-6af35ef64427.jpg?v=1779968851',

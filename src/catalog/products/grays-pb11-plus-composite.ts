@@ -5,6 +5,8 @@ export const graysPb11PlusComposite: Product = {
   brand: 'Grays',
   name: 'Grays PB 11+ Composite Hockey Stick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/grays-pb-11-senior-hockeystick-turquoise/9300000304766110/',
   imageAlt: 'Grays PB 11+ Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HACA26Composite_20Sticks_20PB11_2b_20Probow_20Plus_20Hockey_20Stick_20Turquoise.jpg?v=1779972721',
