@@ -15,6 +15,7 @@ export function RetailerLinks({
   productName,
   placement,
   bolProductUrl,
+  notSoldAtBol = false,
   className = '',
   stack = false,
 }: {
@@ -23,12 +24,24 @@ export function RetailerLinks({
   placement: RetailerPlacement;
   /** Direct bol.com product page, if known. */
   bolProductUrl?: string;
+  /** bol.com does not sell this model: show that instead of a link. */
+  notSoldAtBol?: boolean;
   className?: string;
   /** Stacks the buttons full-width instead of placing them side by side. */
   stack?: boolean;
 }) {
   const layout = stack ? 'flex flex-col gap-2' : 'flex flex-wrap gap-3';
   const buttonWidth = stack ? 'w-full' : '';
+
+  if (notSoldAtBol) {
+    return (
+      <div className={className}>
+        <p className="text-sm font-medium text-lijngrijs">
+          Niet verkrijgbaar bij bol.com
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className={className}>

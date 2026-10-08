@@ -97,6 +97,7 @@ function ResultCard({
           brand={product.brand}
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
+          notSoldAtBol={product.bolNotSold !== undefined}
           placement="zaalkeuze"
           className="mt-3"
           stack

@@ -30,7 +30,7 @@ export function ProductCard({ product }: { product: Product }) {
         €{product.priceIndicativeEur.value.toFixed(2)}
       </p>
       <div className="mt-1">
-        <ProductNotice />
+        <ProductNotice notSoldAtBol={product.bolNotSold !== undefined} />
       </div>
       <div className="mt-4">
         <ProductProsAndCons product={product} limit={1} stacked />
@@ -40,6 +40,7 @@ export function ProductCard({ product }: { product: Product }) {
           brand={product.brand}
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
+          notSoldAtBol={product.bolNotSold !== undefined}
           placement="catalogus"
           stack
         />

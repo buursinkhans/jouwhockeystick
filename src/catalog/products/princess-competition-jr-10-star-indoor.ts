@@ -9,6 +9,7 @@ export const princessCompetitionJr10StarIndoor: Product = {
   brand: 'Princess',
   name: 'Princess Competition JR 10 STAR Indoor SG9-LB',
   dataStatus: 'verified',
+  bolNotSold: { checkedAt: '2026-10-08' },
   imageAlt: 'Princess Competition JR 10 STAR Indoor zaalhockeystick',
   imageUrl:
     'https://www.princess-hockey.com/cdn/shop/files/330.66060.000_1_aeb3e3c7-8c57-4227-8646-85843d68edc0.jpg?v=1779888669&width=1024',

@@ -108,7 +108,7 @@ export default async function ProductPage({
         €{product.priceIndicativeEur.value.toFixed(2)}
       </p>
       <div className="mt-1">
-        <ProductNotice />
+        <ProductNotice notSoldAtBol={product.bolNotSold !== undefined} />
       </div>
       <PartnerLinkNote />
 
@@ -117,6 +117,7 @@ export default async function ProductPage({
           brand={product.brand}
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
+          notSoldAtBol={product.bolNotSold !== undefined}
           placement="productpagina"
         />
         <ButtonLink

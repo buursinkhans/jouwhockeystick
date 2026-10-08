@@ -6,10 +6,17 @@
  * wrong for the latter. See priceIndicativeEur.sourceLabel per product for
  * the exact provenance.
  */
-export function ProductNotice() {
+export function ProductNotice({
+  notSoldAtBol = false,
+}: {
+  /** bol.com does not sell this model, so there is no price to check there. */
+  notSoldAtBol?: boolean;
+}) {
   return (
     <p className="text-xs text-lijngrijs">
-      Richtprijs · bekijk actuele prijs bij bol.com
+      {notSoldAtBol
+        ? 'Richtprijs · niet verkrijgbaar bij bol.com'
+        : 'Richtprijs · bekijk actuele prijs bij bol.com'}
     </p>
   );
 }
