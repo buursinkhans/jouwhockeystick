@@ -9,6 +9,7 @@ export const graysPb9iIndoor: Product = {
   brand: 'Grays',
   name: 'Grays PB9i Indoor Hockey Stick',
   dataStatus: 'verified',
+  bolNotSold: { checkedAt: '2026-10-08' },
   imageAlt: 'Grays PB9i zaalhockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HBAL25WoodenSticksPB9iProbowWoodHybridIndoorHockeyStickWhite_Silver.jpg?v=1790669914&width=1024',

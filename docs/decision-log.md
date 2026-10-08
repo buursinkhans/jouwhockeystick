@@ -230,3 +230,7 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 **Wat (besluit eigenaar):** nieuw optioneel veld `bolNotSold: { checkedAt }`. Voor die sticks toont de site "Niet verkrijgbaar bij bol.com" in plaats van een winkelknop, en de prijsvermelding wordt "Richtprijs · niet verkrijgbaar bij bol.com". Gezet voor: JDH X01, X93 en Junior Mid Bow; Princess Competition 1 Star Probow, Premium 4K 10 Star (senior), Competition JR 10 Star Indoor; Grays JB 12+, DB 10+, PB10Xi, JB8Xi. De catalogus-controle meldt ze apart. De feed-testrun blijft ze opzoeken, zodat zichtbaar wordt als bol.com ze alsnog gaat verkopen.
 
 **Bewust niet:** de stickwijzer adviseert deze sticks nog steeds. Of ze uit de adviezen moeten, is een apart besluit.
+
+## 2026-10-08 — Laatste twee bol.com-twijfelgevallen
+
+**Besluit eigenaar:** Brabo Elite X One LB is dezelfde stick als "Brabo Elite X One Forged Carbon LB Bl/Or Senior" op bol.com en krijgt een directe link. Grays PB9i Indoor is niet dezelfde stick als "Grays 9i Probow Indoor" en wordt "niet verkrijgbaar bij bol.com". Sticks die bol.com niet verkoopt, blijven bewust in de stickwijzer-adviezen. Daarmee: 30 directe links, 11 niet verkrijgbaar, 0 zoeklinks.

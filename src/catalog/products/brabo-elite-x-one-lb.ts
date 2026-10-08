@@ -5,6 +5,8 @@ export const braboEliteXOneLb: Product = {
   brand: 'Brabo',
   name: 'Brabo Elite X One LB',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/brabo-elite-x-one-forged-carbon-lb-bl-or-senior-hockeystick/9300000317135701/',
   imageAlt: 'Brabo Elite X One LB hockeystick',
   imageUrl:
     'https://brabohockey.com/cdn/shop/files/315.60102.000_1_8d62979e-7b1d-4c77-b3b6-e6e299d942f6.jpg?v=1780553825',
