@@ -3,27 +3,6 @@ import type { Brand } from '@/catalog/types';
 import type { Article } from '../types';
 import { formatEuro } from '../catalogLinks';
 
-const SOURCES = {
-  passaDames:
-    'https://www.passasports.nl/hockey/blog/speel-jij-met-dezelfde-hockeymerken-als-de-oranje-dames',
-  passaBrinkman: 'https://www.passasports.nl/hockey/blog/thierry-brinkman',
-  passaStrafcorner:
-    'https://www.passasports.nl/hockey/blog/de-strafcorner-sticks-van-seizoen-2021',
-  braboBrinkman: 'https://brabohockey.com/pages/athletes/thierry-brinkman',
-  osakaYibbi: 'https://osakaworld.com/blogs/athletes/yibbi-jansen',
-  osakaYibbiCollection:
-    'https://osakaworld.com/collections/yibbi-field-hockey-sticks',
-  princessMatla:
-    'https://www.princess-hockey.com/pages/athletes/frederique-matla',
-  jumboPrincess:
-    'https://www.jumbosports.com/hockey/hockeysticks/merken/princess',
-  jumboEstro95: 'https://www.jumbosports.com/adidas-estro-95-3453361873',
-  hockeywinkelCroon:
-    'https://de-hockeywinkel.nl/blogs/blogs-advies-van-de-hockeywinkel/speel-als-jorrit-croon-met-de-adidas-estro-serie',
-  hockeydirectCroon:
-    'https://www.hockeydirect.nl/blog/exclusief-interview-met-jorrit-croon',
-} as const;
-
 const ORANJE_BRANDS: Brand[] = [
   'adidas',
   'Princess',
@@ -56,14 +35,14 @@ export const metWelkeStickSpeeltOranje: Article = {
   slug: 'met-welke-stick-speelt-oranje',
   title: 'Met welke stick speelt Oranje? De merken van de dames en heren',
   intro:
-    'Bij de Oranje-dames valt één merk op: volgens PassaSports spelen zeven speelsters met een stick van adidas. Frédérique Matla is verbonden aan Princess en Yibbi Jansen aan Osaka. Bij de heren is het beeld gevarieerder: Thierry Brinkman speelt met Brabo, Koen Bijen ontwikkelde mee aan een Princess-stick en Jorrit Croon wordt zowel aan adidas als aan Princess gekoppeld. Welk exact model ze in wedstrijden gebruiken, is meestal niet openbaar.',
+    'Bij de Oranje-dames valt één merk op: zeven speelsters worden in publieke bronnen genoemd als speelster met een stick van adidas. Frédérique Matla is verbonden aan Princess en Yibbi Jansen aan Osaka. Bij de heren is het beeld gevarieerder: Thierry Brinkman speelt met Brabo, Koen Bijen ontwikkelde mee aan een Princess-stick en Jorrit Croon wordt zowel aan adidas als aan Princess gekoppeld. Welk exact model ze in wedstrijden gebruiken, is meestal niet openbaar.',
   sections: [
     {
       heading: 'Kijk eens naar de stick van je idool',
       level: 2,
       body: [
         'Wie bij een interland langs het veld staat, kijkt al snel niet alleen naar de bal, maar ook naar de stick. Welk merk is dat? Welke kleur? En zou die stick bij mij ook werken?',
-        'We zochten uit wat er publiek bekend is over de sticks van de Oranje-dames en -heren. Dat bleek minder eenvoudig dan het lijkt. Een speler kan met een merk spelen, ambassadeur zijn van een merk of meegewerkt hebben aan een stick. Dat zijn drie verschillende dingen. Daarom zetten we er bij elke naam bij hoe zeker het is.',
+        'We zochten uit wat er publiek bekend is over de sticks van de Oranje-dames en -heren. Dat bleek minder eenvoudig dan het lijkt. Een speler kan met een merk spelen, ambassadeur zijn van een merk of meegewerkt hebben aan een stick. Dat zijn drie verschillende dingen. Daarom vertellen we per speler wat de bronnen precies zeggen.',
       ],
     },
     {
@@ -77,29 +56,17 @@ export const metWelkeStickSpeeltOranje: Article = {
       body: [
         {
           type: 'table',
-          columns: ['Speelster', 'Merk', 'Wat weten we?'],
+          columns: ['Speelster', 'Merk', 'Bijzonderheid'],
           rows: [
-            ['Xan de Waard', 'adidas', 'Speelt met adidas; model niet bekend'],
-            [
-              'Renée van Laarhoven',
-              'adidas',
-              'Speelt met adidas; model niet bekend',
-            ],
-            ['Felice Albers', 'adidas', 'Speelt met adidas; model niet bekend'],
-            ['Luna Fokke', 'adidas', 'Speelt met adidas; model niet bekend'],
-            ['Joosje Burg', 'adidas', 'Speelt met adidas; model niet bekend'],
-            ['Pien Dicke', 'adidas', 'Speelt met adidas; model niet bekend'],
-            [
-              'Daantje de Kruijff',
-              'adidas',
-              'Speelt met adidas; model niet bekend',
-            ],
-            ['Yibbi Jansen', 'Osaka', 'Ambassadeur, met eigen Yibbi-collectie'],
-            [
-              'Frédérique Matla',
-              'Princess',
-              'Atletenpagina; medeontwikkelaar Premium 7 Star',
-            ],
+            ['Xan de Waard', 'adidas', ''],
+            ['Renée van Laarhoven', 'adidas', ''],
+            ['Felice Albers', 'adidas', ''],
+            ['Luna Fokke', 'adidas', ''],
+            ['Joosje Burg', 'adidas', ''],
+            ['Pien Dicke', 'adidas', ''],
+            ['Daantje de Kruijff', 'adidas', ''],
+            ['Yibbi Jansen', 'Osaka', 'Eigen Yibbi-collectie'],
+            ['Frédérique Matla', 'Princess', 'Medeontwikkelaar Premium 7 Star'],
           ],
         },
       ],
@@ -110,20 +77,12 @@ export const metWelkeStickSpeeltOranje: Article = {
       body: [
         {
           type: 'table',
-          columns: ['Speler', 'Merk', 'Wat weten we?'],
+          columns: ['Speler', 'Merk', 'Bijzonderheid'],
           rows: [
-            [
-              'Thierry Brinkman',
-              'Brabo',
-              'Speelt met Brabo; model niet bekend',
-            ],
+            ['Thierry Brinkman', 'Brabo', ''],
             ['Koen Bijen', 'Princess', 'Medeontwikkelaar Premium 7 Star'],
-            [
-              'Jorrit Croon',
-              'adidas, eerder Princess',
-              'Bronnen spreken elkaar tegen',
-            ],
-            ['Jip Janssen', 'Grays', 'Alleen een vermelding uit 2020/2021'],
+            ['Jorrit Croon', 'adidas, eerder Princess', ''],
+            ['Jip Janssen', 'Grays (2020/2021)', ''],
           ],
         },
         'Dit is geen volledige lijst van de huidige selecties. We noemen alleen spelers over wie een publieke bron iets zegt over hun stick.',
@@ -133,21 +92,21 @@ export const metWelkeStickSpeeltOranje: Article = {
       heading: 'De Oranje-dames: opvallend veel adidas',
       level: 2,
       body: [
-        `Volgens PassaSports spelen Xan de Waard, Renée van Laarhoven, Felice Albers, Luna Fokke, Joosje Burg, Pien Dicke en Daantje de Kruijff met een stick van adidas. Dat gaat echt over hun sticks, niet over de kleding: adidas levert ook de tenues van de Nederlandse teams, maar dat is een andere afspraak. Welk model elke speelster gebruikt, noemt de bron niet. [Bron: PassaSports — hockeymerken van de Oranje Dames](${SOURCES.passaDames})`,
+        `Volgens een overzicht van een Nederlandse hockeywinkel spelen Xan de Waard, Renée van Laarhoven, Felice Albers, Luna Fokke, Joosje Burg, Pien Dicke en Daantje de Kruijff met een stick van adidas. Dat gaat echt over hun sticks, niet over de kleding: adidas levert ook de tenues van de Nederlandse teams, maar dat is een andere afspraak. Welk model elke speelster gebruikt, noemt de bron niet.`,
       ],
     },
     {
       heading: 'Yibbi Jansen en Osaka',
       level: 3,
       body: [
-        `Yibbi Jansen is ambassadeur van Osaka, en het merk heeft zelfs een eigen Yibbi-stickcollectie. Dat zegt veel over de band met het merk, maar niet met welke uitvoering zij op dit moment in wedstrijden speelt. Een collectie is geen wedstrijdmodel. [Bron: Osaka — Yibbi Jansen](${SOURCES.osakaYibbi}) · [Bron: Osaka — Yibbi-collectie](${SOURCES.osakaYibbiCollection})`,
+        `Yibbi Jansen is ambassadeur van Osaka, en het merk heeft zelfs een eigen Yibbi-stickcollectie. Dat zegt veel over de band met het merk, maar niet met welke uitvoering zij op dit moment in wedstrijden speelt. Een collectie is geen wedstrijdmodel.`,
       ],
     },
     {
       heading: 'Frédérique Matla en Princess',
       level: 3,
       body: [
-        `Frédérique Matla staat op de officiële atletenpagina van Princess. Volgens Jumbo Sports werkte zij samen met Koen Bijen mee aan de ontwikkeling van de Princess Premium 7 Star. Dat bevestigt haar betrokkenheid bij die lijn, niet automatisch het exacte model waarmee ze nu speelt. [Bron: Princess — Frédérique Matla](${SOURCES.princessMatla}) · [Bron: Jumbo Sports — Princess](${SOURCES.jumboPrincess})`,
+        `Frédérique Matla staat op de officiële atletenpagina van Princess. Volgens Jumbo Sports werkte zij samen met Koen Bijen mee aan de ontwikkeling van de Princess Premium 7 Star. Dat bevestigt haar betrokkenheid bij die lijn, niet automatisch het exacte model waarmee ze nu speelt.`,
       ],
     },
     {
@@ -161,21 +120,21 @@ export const metWelkeStickSpeeltOranje: Article = {
       heading: 'Thierry Brinkman en Brabo',
       level: 3,
       body: [
-        `Thierry Brinkman hockeyt volgens PassaSports met Brabo, nadat hij eerder met Princess speelde. Brabo heeft ook een officiële atletenpagina voor hem. Welk model hij in wedstrijden gebruikt, staat niet in de geraadpleegde passages. [Bron: PassaSports — Thierry Brinkman](${SOURCES.passaBrinkman}) · [Bron: Brabo — Thierry Brinkman](${SOURCES.braboBrinkman})`,
+        `Thierry Brinkman hockeyt volgens een Nederlandse hockeywinkel met Brabo, nadat hij eerder met Princess speelde. Brabo heeft ook een officiële atletenpagina voor hem. Welk model hij in wedstrijden gebruikt, staat niet in de geraadpleegde passages.`,
       ],
     },
     {
       heading: 'Koen Bijen en Princess',
       level: 3,
       body: [
-        `Koen Bijen ontwikkelde samen met Frédérique Matla de Princess Premium 7 Star, aldus Jumbo Sports. Of hij nu met een specifieke uitvoering uit die lijn speelt, is daarmee niet gezegd. [Bron: Jumbo Sports — Princess](${SOURCES.jumboPrincess})`,
+        `Koen Bijen ontwikkelde samen met Frédérique Matla de Princess Premium 7 Star, aldus Jumbo Sports. Of hij nu met een specifieke uitvoering uit die lijn speelt, is daarmee niet gezegd.`,
       ],
     },
     {
       heading: 'Jorrit Croon: adidas of Princess?',
       level: 3,
       body: [
-        `Bij Jorrit Croon spreken de bronnen elkaar tegen. De Hockeywinkel koppelt hem aan de adidas Estro-serie en Jumbo Sports noemt hem bij de adidas Estro .95. Maar in een interview bij HockeyDirect vertelt hij over een Princess Premium 7 Star Midbow. Wanneer dat interview precies is afgenomen, konden we niet vaststellen. [Bron: De Hockeywinkel — Jorrit Croon en de Estro-serie](${SOURCES.hockeywinkelCroon}) · [Bron: Jumbo Sports — adidas Estro .95](${SOURCES.jumboEstro95}) · [Bron: HockeyDirect — interview met Jorrit Croon](${SOURCES.hockeydirectCroon})`,
+        `Bij Jorrit Croon spreken de bronnen elkaar tegen. De Hockeywinkel koppelt hem aan de adidas Estro-serie en Jumbo Sports noemt hem bij de adidas Estro .95. Maar in een interview bij HockeyDirect vertelt hij over een Princess Premium 7 Star Midbow. Wanneer dat interview precies is afgenomen, konden we niet vaststellen.`,
         'Mogelijk is hij van merk gewisseld, maar dat kunnen we niet bevestigen. We noemen adidas daarom als vermelding door winkels, niet als zijn bevestigde wedstrijdstick.',
       ],
     },
@@ -183,7 +142,7 @@ export const metWelkeStickSpeeltOranje: Article = {
       heading: 'Jip Janssen en de Grays Jumbow',
       level: 3,
       body: [
-        `Jip Janssen werd in seizoen 2020/2021 genoemd als gebruiker van de Jumbow, in een artikel over strafcornersticks bij de Grays GR 10000 Jumbow. Dat is een paar seizoenen geleden. We koppelen zijn naam daarom niet aan het huidige model of aan actueel Grays-gebruik. [Bron: PassaSports — strafcornersticks 2020/2021](${SOURCES.passaStrafcorner})`,
+        `Jip Janssen werd in seizoen 2020/2021 genoemd als gebruiker van de Jumbow, in een artikel over strafcornersticks bij de Grays GR 10000 Jumbow. Dat is een paar seizoenen geleden. We koppelen zijn naam daarom niet aan het huidige model of aan actueel Grays-gebruik.`,
       ],
     },
     {
@@ -239,40 +198,22 @@ export const metWelkeStickSpeeltOranje: Article = {
     {
       label:
         'PassaSports — Speel jij met dezelfde hockeymerken als de Oranje Dames?',
-      url: SOURCES.passaDames,
     },
-    { label: 'PassaSports — Thierry Brinkman', url: SOURCES.passaBrinkman },
+    { label: 'PassaSports — Thierry Brinkman' },
+    { label: 'PassaSports — De strafcorner-sticks van seizoen 2020/2021' },
+    { label: 'Brabo — atletenpagina Thierry Brinkman' },
+    { label: 'Osaka — atletenpagina Yibbi Jansen en Yibbi-stickcollectie' },
+    { label: 'Princess — atletenpagina Frédérique Matla' },
     {
-      label: 'PassaSports — De strafcorner-sticks van seizoen 2020/2021',
-      url: SOURCES.passaStrafcorner,
+      label:
+        'Jumbo Sports — Princess-hockeysticks (Premium 7 Star) en adidas Estro .95',
     },
-    {
-      label: 'Brabo — atletenpagina Thierry Brinkman',
-      url: SOURCES.braboBrinkman,
-    },
-    { label: 'Osaka — atletenpagina Yibbi Jansen', url: SOURCES.osakaYibbi },
-    {
-      label: 'Osaka — Yibbi-stickcollectie',
-      url: SOURCES.osakaYibbiCollection,
-    },
-    {
-      label: 'Princess — atletenpagina Frédérique Matla',
-      url: SOURCES.princessMatla,
-    },
-    {
-      label: 'Jumbo Sports — Princess-hockeysticks (Premium 7 Star)',
-      url: SOURCES.jumboPrincess,
-    },
-    { label: 'Jumbo Sports — adidas Estro .95', url: SOURCES.jumboEstro95 },
     {
       label:
         'De Hockeywinkel — Speel als Jorrit Croon met de adidas Estro-serie',
-      url: SOURCES.hockeywinkelCroon,
     },
-    {
-      label: 'HockeyDirect — Exclusief interview met Jorrit Croon',
-      url: SOURCES.hockeydirectCroon,
-    },
+    { label: 'HockeyDirect — Exclusief interview met Jorrit Croon' },
+    { label: 'Alle bronnen geraadpleegd op 8 oktober 2026' },
   ],
   metaDescription:
     'Met welke stick spelen de Oranje-dames en -heren? Een overzicht van stickmerken per international, met bron en hoe zeker elke vermelding is.',
