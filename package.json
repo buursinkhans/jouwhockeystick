@@ -9,7 +9,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "catalog:health": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-health.ts"
   },
   "dependencies": {
     "next": "16.3.6",

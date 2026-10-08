@@ -113,6 +113,14 @@ export function isProductActive(
   return lastVerifiedAt >= cutoff;
 }
 
+/**
+ * Every product in the catalog, including inactive ones. Only for internal
+ * checks such as the catalog health report — never for pages.
+ */
+export function getCatalogProducts(): readonly Product[] {
+  return ALL_PRODUCTS;
+}
+
 export function getAllProducts(now: Date = new Date()): Product[] {
   return ALL_PRODUCTS.filter((product) => isProductActive(product, now));
 }
