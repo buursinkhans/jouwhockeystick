@@ -12,6 +12,8 @@ export const adidasEstro602627: Product = {
   brand: 'adidas',
   name: 'adidas Estro .60 26/27',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/adidas-estro-60-26-27-hockey-hockeysticks-sticks-senior-kunst-veld/9300000335785756/',
   imageAlt: 'adidas Estro .60 26/27 hockeystick',
   imageUrl: 'https://media.s-bol.com/M4BG8M8v3Z5B/xn6nQ1z/550x558.jpg',
   imageSourceUrl: SOURCE,

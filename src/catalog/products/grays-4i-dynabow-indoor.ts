@@ -12,6 +12,8 @@ export const grays4iDynabowIndoor: Product = {
   brand: 'Grays',
   name: 'Grays 4i Dynabow Indoor Senior Zaalhockeystick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/grays-4i-dynabow-indoor-senior-zaalhockeystick-fluo-geel-wit-zwart/9300000365346444/',
   imageAlt: 'Grays 4i Dynabow Indoor Senior Zaalhockeystick',
   imageUrl: 'https://media.s-bol.com/X809ALng1D0o/LZn6wxD/550x550.jpg',
   imageSourceUrl: SOURCE,

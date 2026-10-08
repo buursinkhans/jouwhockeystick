@@ -12,6 +12,8 @@ export const osakaProTour4020: Product = {
   brand: 'Osaka',
   name: 'Osaka Pro Tour 40 2.0 Veldhockeystick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/osaka-pro-tour-40-2-0-low-bow-hockeystick/9300000159549907/',
   imageAlt: 'Osaka Pro Tour 40 2.0 Veldhockeystick hockeystick',
   imageUrl: 'https://media.s-bol.com/rxVQqk7vKkw2/R6q10QV/254x840.jpg',
   imageSourceUrl: SOURCE,

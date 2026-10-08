@@ -12,6 +12,8 @@ export const scoopWdnJuniorIndoor: Product = {
   brand: 'Scoop',
   name: 'Scoop WDN Zaalhockeystick Junior Mid Bow',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/wdn-stick-junior-design-2-mid-bow-indoor-hockeystick-blue/9300000252690458/',
   imageAlt: 'Scoop WDN Zaalhockeystick Junior Mid Bow',
   imageUrl: 'https://media.s-bol.com/m0P1j6DrDQ2O/4GLyKn/550x558.jpg',
   imageSourceUrl: SOURCE,

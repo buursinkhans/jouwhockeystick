@@ -12,6 +12,8 @@ export const indianMaharadjaRedJunior: Product = {
   brand: 'The Indian Maharadja',
   name: 'The Indian Maharadja Red Jr Kinder Veldhockeystick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/the-indian-maharadja-red-jr-hockeystick/9300000112645904/',
   imageAlt: 'The Indian Maharadja Red Jr Kinder Veldhockeystick hockeystick',
   imageUrl: 'https://media.s-bol.com/JjGmlKA4YKvK/R6kRP4z/539x840.jpg',
   imageSourceUrl: SOURCE,

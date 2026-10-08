@@ -12,6 +12,8 @@ export const osakaProTourGf20Junior: Product = {
   brand: 'Osaka',
   name: 'Osaka Pro Tour GF 2.0 Junior Veldhockeystick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/osaka-pro-tour-gf-2-0-junior-hockeystick/9300000159549923/',
   imageAlt: 'Osaka Pro Tour GF 2.0 Junior Veldhockeystick hockeystick',
   imageUrl: 'https://media.s-bol.com/Zj7YR0Ky7XP2/Mw4NPLB/252x840.jpg',
   imageSourceUrl: SOURCE,

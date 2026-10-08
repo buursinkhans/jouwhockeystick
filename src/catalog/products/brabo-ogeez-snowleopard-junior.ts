@@ -12,6 +12,8 @@ export const braboOgeezSnowleopardJunior: Product = {
   brand: 'Brabo',
   name: "Brabo O'geez Snowleopard Kinder Veldhockeystick",
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/brabo-o-geez-snowleopard-kinder-veld-hockeystick-315-25330-020-kleur-mintgroen-maat-28/9300000122374311/',
   imageAlt: "Brabo O'geez Snowleopard Kinder Veldhockeystick hockeystick",
   // No imageUrl: the bol.com photo is a 550×42 strip that is unreadable as a thumbnail; the illustration is used instead.
   imageSourceUrl: SOURCE,

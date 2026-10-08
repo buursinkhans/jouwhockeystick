@@ -12,6 +12,8 @@ export const indianMaharadjaArcticWoodIndoor: Product = {
   brand: 'The Indian Maharadja',
   name: 'The Indian Maharadja Arctic Wood Zaalhockeystick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/the-indian-maharadja-arctic-wood-zaalhockeystick-10251071-kleur-mintgroen-wit-maat-36-5/9300000242642562/',
   imageAlt: 'The Indian Maharadja Arctic Wood Zaalhockeystick',
   imageUrl: 'https://media.s-bol.com/2ZMG8MEyJn7P/r06O1zw/492x840.jpg',
   imageSourceUrl: SOURCE,

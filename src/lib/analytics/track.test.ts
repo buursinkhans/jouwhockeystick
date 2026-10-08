@@ -63,6 +63,7 @@ describe('trackEvent', () => {
       brand: 'Grays',
       productName: 'Grays JB 6',
       placement: 'stickwijzer',
+      linkType: 'product',
     });
 
     expect(posthogMock.capture).toHaveBeenCalledWith('retailer_click', {
@@ -70,6 +71,7 @@ describe('trackEvent', () => {
       brand: 'Grays',
       productName: 'Grays JB 6',
       placement: 'stickwijzer',
+      linkType: 'product',
     });
   });
 

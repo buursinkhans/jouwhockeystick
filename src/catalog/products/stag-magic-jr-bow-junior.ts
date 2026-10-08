@@ -12,6 +12,8 @@ export const stagMagicJrBowJunior: Product = {
   brand: 'Stag',
   name: 'Stag Magic Hockeystick Jr-Bow Junior',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/stag-magic-hockeystick-jr-bow-junior-blauw-33-inch/9300000066814940/',
   imageAlt: 'Stag Magic Hockeystick Jr-Bow Junior hockeystick',
   imageUrl: 'https://media.s-bol.com/7GNMqQrRm9M1/W7PwGgX/282x840.jpg',
   imageSourceUrl: SOURCE,

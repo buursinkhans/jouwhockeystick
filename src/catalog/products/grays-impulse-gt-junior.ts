@@ -12,6 +12,8 @@ export const graysImpulseGtJunior: Product = {
   brand: 'Grays',
   name: 'Grays Impulse GT Junior',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/grays-impulse-gt-jun-hockeystick-hockey-hockeysticks-sticks-junior-hout-veld/9300000320015163/',
   imageAlt: 'Grays Impulse GT Junior hockeystick',
   imageUrl: 'https://media.s-bol.com/K4rOlY76L8nY/YvzD7zW/550x547.jpg',
   imageSourceUrl: SOURCE,

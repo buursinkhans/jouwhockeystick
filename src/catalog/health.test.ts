@@ -20,7 +20,10 @@ const verifiedOn = (product: Product, date: string): Product => {
 
 describe('checkProductHealth', () => {
   it('reports nothing for a fresh, verified product with an image', () => {
-    const product = verifiedOn(graysJb6Composite, '2026-09-26');
+    const product = {
+      ...verifiedOn(graysJb6Composite, '2026-09-26'),
+      bolProductUrl: 'https://www.bol.com/nl/nl/p/example/9300000000000000/',
+    };
     const health = checkProductHealth(product, new Date('2026-10-08'));
     expect(health.issues).toEqual([]);
   });
@@ -28,10 +31,9 @@ describe('checkProductHealth', () => {
   it('flags a quarterly re-check after three months', () => {
     const product = verifiedOn(graysJb6Composite, '2026-06-01');
     const health = checkProductHealth(product, new Date('2026-10-08'));
-    expect(health.issues.length).toBeGreaterThan(0);
-    expect(health.issues.every((issue) => issue.kind === 'recheck_due')).toBe(
-      true,
-    );
+    const kinds = health.issues.map((issue) => issue.kind);
+    expect(kinds).toContain('recheck_due');
+    expect(kinds).not.toContain('hidden');
   });
 
   it('flags a product hidden from the site after twelve months', () => {
@@ -56,6 +58,7 @@ describe('checkProductHealth', () => {
     expect(kinds).toContain('invalid_date');
     expect(kinds).toContain('test_data');
     expect(kinds).toContain('missing_image');
+    expect(kinds).toContain('search_link_only');
   });
 });
 
@@ -79,7 +82,13 @@ describe('checkCatalogHealth', () => {
 
   it('formats an all-clear report in Dutch', () => {
     const report = checkCatalogHealth(
-      [verifiedOn(graysJb6Composite, '2026-09-26')],
+      [
+        {
+          ...verifiedOn(graysJb6Composite, '2026-09-26'),
+          bolProductUrl:
+            'https://www.bol.com/nl/nl/p/example/9300000000000000/',
+        },
+      ],
       new Date('2026-10-08'),
     );
     expect(formatHealthReport(report)).toContain('Alles in orde');

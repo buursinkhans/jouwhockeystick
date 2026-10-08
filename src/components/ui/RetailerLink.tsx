@@ -15,6 +15,8 @@ type Props = {
   brand: Brand;
   productName: string;
   placement: RetailerPlacement;
+  /** Direct product page; without it the link goes to a search. */
+  productUrl?: string;
   className?: string;
   variant?: keyof typeof buttonVariantClasses;
   children: ReactNode;
@@ -25,6 +27,7 @@ export function RetailerLink({
   brand,
   productName,
   placement,
+  productUrl,
   className = '',
   variant,
   children,
@@ -33,6 +36,7 @@ export function RetailerLink({
     productName,
     brand,
     placement,
+    productUrl,
   });
 
   if (!url) {
@@ -56,6 +60,7 @@ export function RetailerLink({
           brand,
           productName,
           placement,
+          linkType: productUrl ? 'product' : 'search',
         })
       }
     >

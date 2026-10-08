@@ -95,6 +95,15 @@ export const productSchema = z.object({
   /** Direct URL to the product photo on the brand's own official product page — omitted falls back to an illustration. */
   imageUrl: z.string().url().optional(),
   imageSourceUrl: z.string().url().optional(),
+  /**
+   * Direct bol.com product page for shop links. Without it, shop links fall
+   * back to a bol.com search for this model.
+   */
+  bolProductUrl: z
+    .string()
+    .url()
+    .startsWith('https://www.bol.com/nl/nl/p/')
+    .optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),
   /** Optional — not every brand states a bow profile for every model; never guessed. */

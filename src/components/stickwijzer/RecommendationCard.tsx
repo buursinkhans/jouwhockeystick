@@ -222,6 +222,7 @@ export function RecommendationCard({
         <RetailerLinks
           brand={product.brand}
           productName={product.name}
+          bolProductUrl={product.bolProductUrl}
           placement="stickwijzer"
         />
       </div>
