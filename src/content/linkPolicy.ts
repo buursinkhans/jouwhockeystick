@@ -3,7 +3,14 @@
  * `nofollow`, so we do not pass ranking value to a competitor of our
  * partner shop. Manufacturers and rule bodies are followed normally.
  */
-const NOFOLLOW_HOSTS = ['intersport.nl', 'hockeydirect.nl', 'hockeydirect.com'];
+const NOFOLLOW_HOSTS = [
+  'intersport.nl',
+  'hockeydirect.nl',
+  'hockeydirect.com',
+  'passasports.nl',
+  'jumbosports.com',
+  'de-hockeywinkel.nl',
+];
 
 function isNofollowHost(href: string): boolean {
   let hostname: string;

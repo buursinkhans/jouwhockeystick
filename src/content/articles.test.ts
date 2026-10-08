@@ -15,7 +15,8 @@ function linksIn(text: string): string[] {
 }
 
 function internalPathExists(path: string): boolean {
-  const [, section, slug] = path.split('/');
+  const [pathname = ''] = path.split('?');
+  const [, section, slug] = pathname.split('/');
   if (slug === undefined) {
     return existsSync(`src/app/${section}/page.tsx`);
   }
