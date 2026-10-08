@@ -32,7 +32,11 @@ export function Header() {
           <span aria-hidden="true">Stickadvies</span>
         </Link>
         {/* The stickwijzer is the main action, so it is a button, not a nav link. */}
-        <ButtonLink href="/stickwijzer" className="px-4 py-2 lg:order-last">
+        <ButtonLink
+          href="/stickwijzer"
+          variant="accent"
+          className="px-4 py-2 lg:order-last"
+        >
           Stickwijzer
         </ButtonLink>
         <nav
