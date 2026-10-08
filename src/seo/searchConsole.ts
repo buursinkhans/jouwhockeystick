@@ -140,12 +140,20 @@ export function formatReport(input: {
   siteUrl: string;
   current: Period;
   previous: Period;
+  /** Query × page rows. Search Console leaves out rare (anonymised) queries here. */
   currentRows: SearchRow[];
   previousRows: SearchRow[];
+  /**
+   * Rows per page only (query left empty). These include anonymised
+   * queries, so totals and page figures come from here.
+   */
+  currentPages: SearchRow[];
+  previousPages: SearchRow[];
 }): string {
-  const now = totals(input.currentRows);
-  const before = totals(input.previousRows);
-  const pageList = pages(input.currentRows, input.previousRows);
+  const now = totals(input.currentPages);
+  const before = totals(input.previousPages);
+  const pageList = pages(input.currentPages, input.previousPages);
+  const hidden = now.impressions - totals(input.currentRows).impressions;
   const stickPages = pageList.filter((page) => path(page.page).startsWith('/sticks/'));
 
   return [
@@ -160,6 +168,18 @@ export function formatReport(input: {
     `| CTR | ${pct(now.ctr)} | ${pct(before.ctr)} | |`,
     `| Gem. positie | ${pos(now.position)} | ${pos(before.position)} | |`,
     '',
+    ...(now.impressions === 0
+      ? [
+          '> **Nog geen vertoningen in Google.** Controleer in Search Console onder *Indexering → Pagina’s* of de pagina’s geïndexeerd zijn, en dien de sitemap in (`https://jouwhockeystick.nl/sitemap.xml`) als dat nog niet is gebeurd.',
+          '',
+        ]
+      : []),
+    ...(hidden > 0
+      ? [
+          `_${hidden} vertoningen komen van zeldzame zoekwoorden die Google om privacyredenen niet per zoekwoord toont; ze tellen wel mee in de totalen en per pagina._`,
+          '',
+        ]
+      : []),
     '## Bijna pagina 1',
     'Zoekwoorden op positie 5–20: met een betere pagina of interne links vaak de goedkoopste groei.',
     '',
