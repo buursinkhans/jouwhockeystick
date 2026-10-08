@@ -95,9 +95,34 @@ describe('formatReport', () => {
         }),
       ],
       previousRows: [],
+      currentPages: [
+        row({
+          query: '',
+          page: 'https://jouwhockeystick.nl/sticks/grays-jb6-composite',
+          impressions: 25,
+          position: 11,
+        }),
+      ],
+      previousPages: [],
     });
     expect(report).toContain('## Bijna pagina 1');
     expect(report).toContain('| grays jb6 | /sticks/grays-jb6-composite |');
-    expect(report).toContain('Vertoningen | 10 | 0 | nieuw');
+    expect(report).toContain('Vertoningen | 25 | 0 | nieuw');
+    expect(report).toContain('15 vertoningen komen van zeldzame zoekwoorden');
+  });
+});
+
+describe('formatReport without data', () => {
+  it('explains what to check when Google shows no impressions yet', () => {
+    const report = formatReport({
+      siteUrl: 'sc-domain:jouwhockeystick.nl',
+      current: { start: '2026-09-08', end: '2026-10-05' },
+      previous: { start: '2026-08-11', end: '2026-09-07' },
+      currentRows: [],
+      previousRows: [],
+      currentPages: [],
+      previousPages: [],
+    });
+    expect(report).toContain('Nog geen vertoningen in Google');
   });
 });

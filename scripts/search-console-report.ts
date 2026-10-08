@@ -73,7 +73,12 @@ type QueryResult =
   | { ok: true; rows: SearchRow[] }
   | { ok: false; status: number; detail: string };
 
-async function query(siteUrl: string, period: Period, token: string): Promise<QueryResult> {
+async function query(
+  siteUrl: string,
+  period: Period,
+  token: string,
+  dimensions: ['query', 'page'] | ['page'],
+): Promise<QueryResult> {
   const response = await fetch(
     `${API}/${encodeURIComponent(siteUrl)}/searchAnalytics/query`,
     {
@@ -82,7 +87,7 @@ async function query(siteUrl: string, period: Period, token: string): Promise<Qu
       body: JSON.stringify({
         startDate: period.start,
         endDate: period.end,
-        dimensions: ['query', 'page'],
+        dimensions,
         rowLimit: 5000,
       }),
     },
@@ -91,13 +96,13 @@ async function query(siteUrl: string, period: Period, token: string): Promise<Qu
     return { ok: false, status: response.status, detail: (await response.text()).slice(0, 200) };
   }
   const body = (await response.json()) as {
-    rows?: { keys: [string, string]; clicks: number; impressions: number; position: number }[];
+    rows?: { keys: string[]; clicks: number; impressions: number; position: number }[];
   };
   return {
     ok: true,
     rows: (body.rows ?? []).map((row) => ({
-      query: row.keys[0],
-      page: row.keys[1],
+      query: dimensions.length === 2 ? (row.keys[0] ?? '') : '',
+      page: (dimensions.length === 2 ? row.keys[1] : row.keys[0]) ?? '',
       clicks: row.clicks,
       impressions: row.impressions,
       position: row.position,
@@ -117,19 +122,26 @@ async function main() {
   const candidates = process.env.GSC_SITE_URL ? [process.env.GSC_SITE_URL] : SITE_CANDIDATES;
   const failures: string[] = [];
   for (const siteUrl of candidates) {
-    const now = await query(siteUrl, current, token);
-    if (!now.ok) {
-      failures.push(`\`${siteUrl}\`: HTTP ${now.status} ${now.detail}`);
+    const nowPages = await query(siteUrl, current, token, ['page']);
+    if (!nowPages.ok) {
+      failures.push(`\`${siteUrl}\`: HTTP ${nowPages.status} ${nowPages.detail}`);
       continue;
     }
-    const before = await query(siteUrl, previous, token);
+    const rowsOf = (result: QueryResult) => (result.ok ? result.rows : []);
+    const [now, before, beforePages] = await Promise.all([
+      query(siteUrl, current, token, ['query', 'page']),
+      query(siteUrl, previous, token, ['query', 'page']),
+      query(siteUrl, previous, token, ['page']),
+    ]);
     console.log(
       formatReport({
         siteUrl,
         current,
         previous,
-        currentRows: now.rows,
-        previousRows: before.ok ? before.rows : [],
+        currentRows: rowsOf(now),
+        previousRows: rowsOf(before),
+        currentPages: nowPages.rows,
+        previousPages: rowsOf(beforePages),
       }),
     );
     return;
