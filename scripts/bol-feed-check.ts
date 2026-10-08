@@ -107,6 +107,9 @@ async function getToken(): Promise<string> {
       'Vorm van de sleutels (waarden worden nooit getoond):',
       `- ${describeCredential('BOL_CLIENT_ID', rawId)}`,
       `- ${describeCredential('BOL_CLIENT_SECRET', rawSecret)}`,
+      ...(id === secret
+        ? ['- ⚠️ BOL_CLIENT_ID en BOL_CLIENT_SECRET zijn identiek: waarschijnlijk is één waarde twee keer geplakt.']
+        : ['- BOL_CLIENT_ID en BOL_CLIENT_SECRET zijn verschillend.']),
     ].join('\n'),
   );
 }
