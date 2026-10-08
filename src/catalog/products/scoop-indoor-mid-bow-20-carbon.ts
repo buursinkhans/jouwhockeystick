@@ -12,6 +12,8 @@ export const scoopIndoorMidBow20Carbon: Product = {
   brand: 'Scoop',
   name: 'Scoop Zaalhockeystick Indoor Mid Bow 20% Carbon',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/zaalhockeystick-19-indoor-mid-bow-20-carbon-hockeystick-senior-36-5-inch/9300000049502863/',
   imageAlt: 'Scoop Zaalhockeystick Indoor Mid Bow 20% Carbon',
   imageUrl: 'https://media.s-bol.com/3nGoxvqw3Jkn/QWpV3jM/228x840.jpg',
   imageSourceUrl: SOURCE,

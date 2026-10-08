@@ -12,6 +12,8 @@ export const ritualSpecialist55: Product = {
   brand: 'Ritual',
   name: 'Ritual Specialist 55',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/ritual-specialist-55-hockey-hockeysticks-sticks-senior-kunst-veld/9300000264010081/',
   imageAlt: 'Ritual Specialist 55 hockeystick',
   imageUrl: 'https://media.s-bol.com/g3GPZgXY8x63/481z5z0/550x320.jpg',
   imageSourceUrl: SOURCE,

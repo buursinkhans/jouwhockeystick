@@ -12,6 +12,8 @@ export const princessCompetitionJunior3StarJbow: Product = {
   brand: 'Princess',
   name: 'Princess Competition Junior 3 STAR J-Bow',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/princess-competition-junior-3-star-j-bow-light-blue-white-hockeystick/9300000317136532/',
   imageAlt: 'Princess Competition Junior 3 STAR J-Bow hockeystick',
   imageUrl: 'https://media.s-bol.com/5YnnLx73RKlX/APvJq2z/550x517.jpg',
   imageSourceUrl: SOURCE,

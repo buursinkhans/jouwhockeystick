@@ -40,6 +40,8 @@ export type AnalyticsEvent =
       brand: string;
       productName: string;
       placement: string;
+      /** Direct product page or a search; to compare their conversion. */
+      linkType: 'product' | 'search';
     }
   | {
       /** The short indoor selector on /zaalsticks; no personal data. */

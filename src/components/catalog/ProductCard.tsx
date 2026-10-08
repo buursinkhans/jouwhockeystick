@@ -39,6 +39,7 @@ export function ProductCard({ product }: { product: Product }) {
         <RetailerLinks
           brand={product.brand}
           productName={product.name}
+          bolProductUrl={product.bolProductUrl}
           placement="catalogus"
           stack
         />

@@ -9,6 +9,8 @@ export const adidasEstro75Le: Product = {
   brand: 'adidas',
   name: 'adidas Estro .75 LE 26/27',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/adidas-estro-75-le-26-27-hockey-hockeysticks-sticks-senior-kunst-veld/9300000383206272/',
   imageAlt: 'adidas Estro .75 LE hockeystick',
   imageUrl: 'https://media.s-bol.com/yLPlK7Y2MKon/81PzAnj/550x558.jpg',
   imageSourceUrl:

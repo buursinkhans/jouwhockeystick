@@ -12,6 +12,8 @@ export const adidasFabela302627: Product = {
   brand: 'adidas',
   name: 'adidas Fabela .30 26/27',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/adidas-fabela-30-26-27-hockey-hockeysticks-sticks-senior-kunst-veld/9300000306901325/',
   imageAlt: 'adidas Fabela .30 26/27 hockeystick',
   imageUrl: 'https://media.s-bol.com/VBwpG1P64O71/jq1rDoW/550x558.jpg',
   imageSourceUrl: SOURCE,

@@ -12,6 +12,8 @@ export const tkMaxiJunior: Product = {
   brand: 'TK',
   name: 'TK MAXI Junior Veldhockeystick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/tk-maxi-junior-hockeystick/9300000226850913/',
   imageAlt: 'TK MAXI Junior Veldhockeystick hockeystick',
   imageUrl: 'https://media.s-bol.com/Vq6lnyk6VVXX/0Rj6ANv/492x840.jpg',
   imageSourceUrl: SOURCE,

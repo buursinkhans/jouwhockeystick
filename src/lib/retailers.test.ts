@@ -43,6 +43,20 @@ describe('bol.com retailer', () => {
     ).toBe(true);
   });
 
+  it('links straight to the product page when one is known', () => {
+    const productUrl =
+      'https://www.bol.com/nl/nl/p/tk-maxi-junior-hockeystick/9300000226850913/';
+    const url = RETAILERS.bolcom.getUrl({
+      productName: 'TK Maxi Junior',
+      brand: 'TK',
+      placement: 'productpagina',
+      productUrl,
+    });
+    const partner = new URL(url!);
+    expect(partner.searchParams.get('url')).toBe(productUrl);
+    expect(partner.searchParams.get('subid')).toBe('productpagina');
+  });
+
   it('uses the site ID of jouwhockeystick.nl by default', () => {
     expect(BOL_PARTNER_SITE_ID).toBe('1547833');
   });

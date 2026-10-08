@@ -14,7 +14,8 @@ export type HealthIssue =
   | { kind: 'recheck_due'; field: string; lastVerifiedAt: string }
   | { kind: 'invalid_date'; field: string; lastVerifiedAt: string }
   | { kind: 'test_data' }
-  | { kind: 'missing_image' };
+  | { kind: 'missing_image' }
+  | { kind: 'search_link_only' };
 
 export type ProductHealth = {
   slug: string;
@@ -81,6 +82,9 @@ export function checkProductHealth(
   if (!product.imageUrl) {
     issues.push({ kind: 'missing_image' });
   }
+  if (!product.bolProductUrl) {
+    issues.push({ kind: 'search_link_only' });
+  }
 
   return { slug: product.slug, name: product.name, issues };
 }
@@ -110,6 +114,7 @@ const ISSUE_LABELS: Record<HealthIssue['kind'], string> = {
   invalid_date: 'Ongeldige lastVerifiedAt',
   test_data: 'Nog gemarkeerd als testdata',
   missing_image: 'Geen productfoto (toont illustratie)',
+  search_link_only: 'Winkelknop gaat naar een zoekopdracht, niet naar de productpagina',
 };
 
 /** One line per issue kind; re-checks are grouped per product to keep the report short. */

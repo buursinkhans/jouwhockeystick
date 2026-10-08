@@ -12,6 +12,8 @@ export const adidasYoungstar102627: Product = {
   brand: 'adidas',
   name: 'adidas Youngstar .10 26/27 Junior',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/adidas-youngstar-10-26-27-hockey-hockeysticks-sticks-junior-hout-veld/9300000306901371/',
   imageAlt: 'adidas Youngstar .10 26/27 Junior hockeystick',
   imageUrl: 'https://media.s-bol.com/65Do1LDANqgO/Q0Mz4ZZ/550x558.jpg',
   imageSourceUrl: SOURCE,

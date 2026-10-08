@@ -9,6 +9,8 @@ export const adidasEstro4: Product = {
   brand: 'adidas',
   name: 'adidas Estro .4 Hockeystick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/adidas-estro-4-hockeystick/9300000111826384/',
   imageAlt: 'adidas Estro .4 hockeystick',
   experienceLevel: {
     value: 'gevorderd',

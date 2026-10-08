@@ -116,6 +116,7 @@ export default async function ProductPage({
         <RetailerLinks
           brand={product.brand}
           productName={product.name}
+          bolProductUrl={product.bolProductUrl}
           placement="productpagina"
         />
         <ButtonLink

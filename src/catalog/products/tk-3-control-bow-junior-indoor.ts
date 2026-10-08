@@ -12,6 +12,8 @@ export const tk3ControlBowJuniorIndoor: Product = {
   brand: 'TK',
   name: 'TK 3 Control Bow Junior Zaalhockeystick',
   dataStatus: 'verified',
+  bolProductUrl:
+    'https://www.bol.com/nl/nl/p/tk-3-control-bow-sky-silver-junior-zaalhockeystick/9300000167728587/',
   imageAlt: 'TK 3 Control Bow Junior Zaalhockeystick',
   imageUrl: 'https://media.s-bol.com/gNk3przxxgXj/V8Jrq9/550x550.jpg',
   imageSourceUrl: SOURCE,

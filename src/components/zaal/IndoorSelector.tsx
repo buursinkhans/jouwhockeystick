@@ -96,6 +96,7 @@ function ResultCard({
         <RetailerLinks
           brand={product.brand}
           productName={product.name}
+          bolProductUrl={product.bolProductUrl}
           placement="zaalkeuze"
           className="mt-3"
           stack

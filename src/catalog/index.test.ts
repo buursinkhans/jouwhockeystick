@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest';
 import {
   getAllBrands,
   getAllProducts,
+  getCatalogProducts,
   isProductActive,
   getDiscipline,
   getFieldProducts,
   getIndoorProducts,
 } from './index';
-import type { Product } from './types';
+import { productSchema, type Product } from './types';
 import { getAdvice } from '@/advice-engine/engine';
 import { buildPerformanceAnswers } from '@/advice-engine/testFixtures';
 
@@ -135,6 +136,18 @@ describe('field and indoor sticks', () => {
     expect(advice.results.length).toBeGreaterThan(0);
     for (const item of [...advice.results, ...advice.otherSizeOptions]) {
       expect(indoor.has(item.product.slug)).toBe(false);
+    }
+  });
+});
+
+describe('bolProductUrl', () => {
+  it('is a valid bol.com product page wherever it is set', () => {
+    for (const product of getCatalogProducts()) {
+      if (product.bolProductUrl === undefined) continue;
+      const parsed = productSchema.shape.bolProductUrl.safeParse(
+        product.bolProductUrl,
+      );
+      expect(parsed.success).toBe(true);
     }
   });
 });

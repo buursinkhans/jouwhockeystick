@@ -46,6 +46,8 @@ export type Retailer = {
     productName: string;
     brand: Brand;
     placement: RetailerPlacement;
+    /** Direct product page at this retailer; without it the link is a search. */
+    productUrl?: string;
   }) => string | null;
 };
 
@@ -57,7 +59,13 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
     // (e.g. "JDH X93 Pro Bow") can otherwise match unrelated bol.com
     // products such as headphones, since bol.com's search matches on loose
     // word overlap.
-    getUrl: ({ productName, placement }) => {
+    getUrl: ({ productName, placement, productUrl }) => {
+      if (productUrl) {
+        return bolPartnerUrl(productUrl, {
+          subid: placement,
+          name: productName,
+        });
+      }
       const params = new URLSearchParams({
         searchtext: `${productName} hockeystick`,
       });
