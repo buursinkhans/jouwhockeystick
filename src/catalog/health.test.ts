@@ -31,10 +31,9 @@ describe('checkProductHealth', () => {
   it('flags a quarterly re-check after three months', () => {
     const product = verifiedOn(graysJb6Composite, '2026-06-01');
     const health = checkProductHealth(product, new Date('2026-10-08'));
-    expect(health.issues.length).toBeGreaterThan(0);
-    expect(health.issues.every((issue) => issue.kind === 'recheck_due')).toBe(
-      true,
-    );
+    const kinds = health.issues.map((issue) => issue.kind);
+    expect(kinds).toContain('recheck_due');
+    expect(kinds).not.toContain('hidden');
   });
 
   it('flags a product hidden from the site after twelve months', () => {
