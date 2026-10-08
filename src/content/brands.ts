@@ -113,4 +113,59 @@ export const BRAND_PROFILES: BrandProfile[] = [
     nationalTeamSourceUrl: 'https://www.knhb.nl/over-knhb/partners/adidas',
     hasCatalogProducts: true,
   },
+  {
+    brand: 'Osaka',
+    logoBackground: 'light',
+    characteristics:
+      'Osaka is opgericht in 2011 en vernoemd naar de Japanse stad, uit bewondering voor de Japanse cultuur en ontwerpstijl. Het merk noemt design "het startpunt van het hele productontwikkelingsproces" en kiest voor eenvoud: minimaal, strak en functioneel, volgens het principe "less is more". Osaka noemt op die pagina geen eigen materiaaltechnologie.',
+    characteristicsSourceUrl: 'https://osakaworld.com/pages/about',
+    nationalTeamNote:
+      'Osaka presenteert Yibbi Jansen (Oranje dames, olympisch kampioen Parijs 2024) als ambassadeur. Op haar atletenpagina staat de Osaka x Yibbi-stick, en het merk heeft een eigen Yibbi-collectie.',
+    nationalTeamSourceUrl: 'https://osakaworld.com/blogs/athletes/yibbi-jansen',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'The Indian Maharadja',
+    logoBackground: 'light',
+    characteristics:
+      'The Indian Maharadja is volgens de eigen site een Nederlands lifestyle-hockeymerk, opgericht in 2009 in Amsterdam. Het merk is gebouwd rond het motto "East meets West": geïnspireerd door oosterse mystiek en westers hedendaags design. Het maakt kleurrijke jeugdsticks en sticks voor gevorderde spelers, en daarnaast teamkleding en clubartikelen.',
+    characteristicsSourceUrl:
+      'https://www.indianmaharadja.com/about-theindianmaharadja',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'TK',
+    logoBackground: 'light',
+    characteristics:
+      'TK staat voor oprichter Thomas Kille, die al begin jaren zeventig als speler experimenteerde met sticks versterkt met glasvezel. In 1985 kwamen de eerste TK-sticks in de verkoop. Het logo met twee olifanten met gekruiste slurven verwijst naar de bully waarmee een wedstrijd toen begon. Volgens TK hadden op de Olympische Spelen van 1992 in Barcelona tien medaillewinnaars een stick met dat logo. Sinds 2020 voert TK Sports GmbH het merk.',
+    characteristicsSourceUrl:
+      'https://www.tk-sports.eu/de/news/pressemitteilung-staffeluebergabe-bei-tk-hockey',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Ritual',
+    logoBackground: 'light',
+    characteristics:
+      'Ritual is een Australisch merk, opgericht door Nathaniel Nelson, die eerder bij andere hockeymerken werkte. De sticks worden in Australië ontworpen en volgens het merk getest door internationale spelers. Ritual noemt composiet met kevlar en carbon van lucht- en ruimtevaartleveranciers uit Nederland en Japan. Het merk zegt bewust geen hockeymateriaal "voor de massa" te maken, maar zich te richten op een kleine reeks sticks.',
+    characteristicsSourceUrl: 'https://ritualhockey.com/pages/about-us',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Scoop',
+    logoBackground: 'light',
+    characteristics:
+      'Van Scoop hebben we geen officiële merkwebsite gevonden. De Scoop-zaalsticks in onze catalogus en hun gegevens komen daarom uit de productinformatie op bol.com, onze partnerwinkel, en niet van het merk zelf. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+    characteristicsSourceUrl:
+      'https://www.bol.com/nl/nl/p/zaalhockeystick-19-indoor-mid-bow-20-carbon-hockeystick-senior-36-5-inch/9300000049502863/',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Stag',
+    logoBackground: 'light',
+    characteristics:
+      'Van Stag hebben we geen officiële merkwebsite met informatie over hockeysticks gevonden. De Stag-juniorstick in onze catalogus en de gegevens daarvan komen uit de productinformatie op bol.com, onze partnerwinkel, en niet van het merk zelf. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+    characteristicsSourceUrl:
+      'https://www.bol.com/nl/nl/p/stag-magic-hockeystick-jr-bow-junior-blauw-33-inch/9300000066814940/',
+    hasCatalogProducts: true,
+  },
 ];

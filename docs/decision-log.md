@@ -257,3 +257,15 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 **Wat:** een dashboard in claude.ai dat laat zien welke agents er zijn (gebouwd en gepland), hoe vaak ze draaiden en met welke uitkomst, welke PR's ze maakten en wat de resultaten zijn (catalogus, Google). `scripts/agent-dashboard-data.ts` (`npm run dashboard:data -- <map>`) verzamelt de cijfers uit GitHub en de catalogus als JSON. Een geplande taak ververst het dashboard elke maandagochtend.
 
 **Bewust niet:** het resterende Claude-tegoed van het abonnement; dat is niet uit te lezen. Het dashboard toont in plaats daarvan het aantal AI-runs en hun duur, en verwijst naar Instellingen → Gebruik in claude.ai.
+
+## 2026-10-09 — Merkprofielen voor alle merken in de catalogus
+
+**Wat:** /merken heeft nu een profiel voor alle 11 merken. Nieuw zijn Osaka, The Indian Maharadja, TK, Ritual, Scoop en Stag. De feiten komen van de eigen sites van de merken: de About-pagina's van Osaka, The Indian Maharadja en Ritual, het persbericht van TK Sports en de atletenpagina van Yibbi Jansen bij Osaka.
+
+**Scoop en Stag:** voor deze twee merken vonden we geen officiële merkwebsite. Het profiel zegt dat eerlijk, verwijst naar de bol.com-listing als bron van de productgegevens en bevat geen achtergrond over het merk.
+
+**Pagina:**
+- De intro en de metadata noemen de merken nu dynamisch, in plaats van "vijf merken".
+- Merken met alleen zaalsticks (Scoop) linken naar /zaalsticks, omdat het merkfilter op /sticks alleen veldsticks toont.
+- Zonder logo staat de merknaam niet meer twee keer op de pagina.
+- Een test bewaakt dat elk merk in de catalogus een profiel heeft.

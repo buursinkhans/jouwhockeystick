@@ -1,22 +1,33 @@
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
+import { getAllBrands } from '@/catalog';
 import { BRAND_PROFILES } from '@/content/brands';
 import { Card } from '@/components/ui/Card';
 
 export const metadata = pageMetadata({
   title: 'Merken',
-  description:
-    'De hockeystickmerken die we vergelijken — Grays, Brabo, JDH, Princess en adidas — met hun belangrijkste kenmerken en Nederlandse hockey-sponsoring.',
+  description: `De hockeystickmerken die we vergelijken — ${BRAND_PROFILES.map((b) => b.brand).join(', ')} — met hun belangrijkste kenmerken en Nederlandse hockey-sponsoring.`,
   path: '/merken',
 });
 
+function joinDutch(items: string[]): string {
+  return items.length <= 1
+    ? items.join('')
+    : `${items.slice(0, -1).join(', ')} en ${items.at(-1)}`;
+}
+
 export default function MerkenPage() {
+  const brandNames = BRAND_PROFILES.map((b) => b.brand);
+  // The /sticks brand filter only covers field sticks; indoor-only brands
+  // link to the indoor page instead.
+  const fieldBrands = new Set<string>(getAllBrands(new Date(), 'veld'));
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold">Merken</h1>
       <p className="mt-4 text-lg leading-relaxed text-inkt">
-        Op jouwhockeystick.nl vergelijken we sticks van vijf merken: Grays,
-        Brabo, JDH, Princess en adidas. Hieronder staat per merk kort wat het
+        Op jouwhockeystick.nl vergelijken we sticks van {brandNames.length}{' '}
+        merken: {joinDutch(brandNames)}. Hieronder staat per merk kort wat het
         kenmerkt, en — waar we dat konden bevestigen op officiële bronnen —
         welke Nederlandse hockeyinternationals het merk sponsort.
       </p>
@@ -40,11 +51,7 @@ export default function MerkenPage() {
                     className="max-h-10 max-w-full object-contain"
                   />
                 </div>
-              ) : (
-                <div className="flex h-14 w-28 shrink-0 items-center justify-center text-lg font-bold text-inkt/80">
-                  {brand.brand}
-                </div>
-              )}
+              ) : null}
               <h2 className="text-xl font-bold">{brand.brand}</h2>
             </div>
 
@@ -95,12 +102,21 @@ export default function MerkenPage() {
 
             <p className="mt-4 text-sm">
               {brand.hasCatalogProducts ? (
-                <Link
-                  href={`/sticks?brand=${encodeURIComponent(brand.brand)}`}
-                  className="font-semibold text-veld hover:underline"
-                >
-                  Bekijk alle {brand.brand}-sticks in onze catalogus
-                </Link>
+                fieldBrands.has(brand.brand) ? (
+                  <Link
+                    href={`/sticks?brand=${encodeURIComponent(brand.brand)}`}
+                    className="font-semibold text-veld hover:underline"
+                  >
+                    Bekijk alle {brand.brand}-sticks in onze catalogus
+                  </Link>
+                ) : (
+                  <Link
+                    href="/zaalsticks"
+                    className="font-semibold text-veld hover:underline"
+                  >
+                    Bekijk de {brand.brand}-zaalsticks bij onze zaalsticks
+                  </Link>
+                )
               ) : (
                 <span className="text-lijngrijs">
                   Nog geen {brand.brand}-sticks in onze catalogus (zie open
@@ -113,9 +129,11 @@ export default function MerkenPage() {
       </div>
 
       <p className="mt-8 text-xs text-lijngrijs">
-        Alle bovenstaande feiten zijn afkomstig van de officiële merksites, de
-        KNHB of hockey.nl — met bronvermelding per claim. We nemen geen
-        sponsoring- of spelersclaim over die we niet zelf konden verifiëren.
+        De feiten hierboven komen van de officiële merksites, de KNHB of
+        hockey.nl, met bronvermelding per claim. Heeft een merk geen officiële
+        site die we konden raadplegen, dan staat dat bij het merk en noemen we
+        de bron die we wel gebruikten. We nemen geen sponsoring- of spelersclaim
+        over die we niet zelf konden verifiëren.
       </p>
     </div>
   );
