@@ -3,13 +3,7 @@ import type { Brand } from '@/catalog/types';
 import type { Article } from '../types';
 import { formatEuro } from '../catalogLinks';
 
-const ORANJE_BRANDS: Brand[] = [
-  'adidas',
-  'Princess',
-  'Brabo',
-  'Osaka',
-  'Grays',
-];
+const ORANJE_BRANDS: Brand[] = ['adidas', 'Princess', 'Brabo', 'Osaka'];
 
 /** One line per brand with what our catalog holds, generated from the catalog. */
 function brandCatalogLine(brand: Brand): string | undefined {
@@ -42,7 +36,7 @@ export const metWelkeStickSpeeltOranje: Article = {
       level: 2,
       body: [
         'Wie bij een interland langs het veld staat, kijkt al snel niet alleen naar de bal, maar ook naar de stick. Welk merk is dat? Welke kleur? En zou die stick bij mij ook werken?',
-        'We zochten uit wat er publiek bekend is over de sticks van de Oranje-dames en -heren. Dat bleek minder eenvoudig dan het lijkt. Een speler kan met een merk spelen, ambassadeur zijn van een merk of meegewerkt hebben aan een stick. Dat zijn drie verschillende dingen. Daarom zetten we bij elke naam wat er precies bevestigd is.',
+        'We zochten uit wat er publiek bekend is over de sticks van de Oranje-dames en -heren. Dat bleek minder eenvoudig dan het lijkt. Een speler kan met een merk spelen, ambassadeur zijn van een merk of meegewerkt hebben aan een stick. Dat zijn drie verschillende dingen. Daarom vertellen we per speler wat de bronnen precies zeggen.',
       ],
     },
     {
@@ -56,52 +50,20 @@ export const metWelkeStickSpeeltOranje: Article = {
       body: [
         {
           type: 'table',
-          columns: ['Speelster', 'Merkvermelding', 'Wat is bevestigd?'],
+          columns: ['Speelster', 'Merk', 'Bijzonderheid'],
           rows: [
-            [
-              'Xan de Waard',
-              'adidas',
-              'Vermeld als adidas-speelster; model niet bevestigd',
-            ],
-            [
-              'Renée van Laarhoven',
-              'adidas',
-              'Vermeld als adidas-speelster; model niet bevestigd',
-            ],
-            [
-              'Felice Albers',
-              'adidas',
-              'Vermeld als adidas-speelster; model niet bevestigd',
-            ],
-            [
-              'Luna Fokke',
-              'adidas',
-              'Vermeld als adidas-speelster; model niet bevestigd',
-            ],
-            [
-              'Joosje Burg',
-              'adidas',
-              'Vermeld als adidas-speelster; model niet bevestigd',
-            ],
-            [
-              'Pien Dicke',
-              'adidas',
-              'Vermeld als adidas-speelster; model niet bevestigd',
-            ],
-            [
-              'Daantje de Kruijff',
-              'adidas',
-              'Vermeld als adidas-speelster; model niet bevestigd',
-            ],
-            [
-              'Yibbi Jansen',
-              'Osaka',
-              'Ambassadeur met eigen Yibbi-collectie; model niet bevestigd',
-            ],
+            ['Xan de Waard', 'adidas', ''],
+            ['Renée van Laarhoven', 'adidas', ''],
+            ['Felice Albers', 'adidas', ''],
+            ['Luna Fokke', 'adidas', ''],
+            ['Joosje Burg', 'adidas', ''],
+            ['Pien Dicke', 'adidas', ''],
+            ['Daantje de Kruijff', 'adidas', ''],
+            ['Yibbi Jansen', 'Osaka', 'Eigen Yibbi-collectie'],
             [
               'Frédérique Matla',
               'Princess',
-              'Atletenpagina; betrokken bij ontwikkeling Premium 7 Star',
+              'Betrokken bij ontwikkeling Premium 7 Star',
             ],
           ],
         },
@@ -113,28 +75,15 @@ export const metWelkeStickSpeeltOranje: Article = {
       body: [
         {
           type: 'table',
-          columns: ['Speler', 'Merkvermelding', 'Wat is bevestigd?'],
+          columns: ['Speler', 'Merk', 'Bijzonderheid'],
           rows: [
-            [
-              'Thierry Brinkman',
-              'Brabo',
-              'Vermeld als Brabo-speler, met atletenpagina; model niet bevestigd',
-            ],
+            ['Thierry Brinkman', 'Brabo', ''],
             [
               'Koen Bijen',
               'Princess',
               'Betrokken bij ontwikkeling Premium 7 Star',
             ],
-            [
-              'Jorrit Croon',
-              'adidas / Princess',
-              'Verschillende bronvermeldingen; actuele keuze onzeker',
-            ],
-            [
-              'Jip Janssen',
-              'Grays',
-              'Historische vermelding uit seizoen 2020/2021',
-            ],
+            ['Jorrit Croon', 'adidas / Princess', ''],
           ],
         },
         'Dit is geen volledige lijst van de huidige selecties. We noemen alleen spelers over wie een publieke bron iets zegt over hun stick.',
@@ -188,13 +137,6 @@ export const metWelkeStickSpeeltOranje: Article = {
       body: [
         `Bij Jorrit Croon spreken de bronnen elkaar tegen. De Hockeywinkel koppelt hem aan de adidas Estro-serie en Jumbo Sports noemt hem bij de adidas Estro .95. Maar in een interview bij HockeyDirect vertelt hij over een Princess Premium 7 Star Midbow. Wanneer dat interview precies is afgenomen, konden we niet vaststellen.`,
         'Mogelijk is hij van merk gewisseld, maar dat kunnen we niet bevestigen. We noemen adidas daarom als vermelding door winkels, niet als zijn bevestigde wedstrijdstick.',
-      ],
-    },
-    {
-      heading: 'Jip Janssen en de Grays Jumbow',
-      level: 3,
-      body: [
-        `Jip Janssen werd in seizoen 2020/2021 genoemd als gebruiker van de Jumbow, in een artikel over strafcornersticks bij de Grays GR 10000 Jumbow. Dat is een paar seizoenen geleden. We koppelen zijn naam daarom niet aan het huidige model of aan actueel Grays-gebruik.`,
       ],
     },
     {
@@ -252,7 +194,6 @@ export const metWelkeStickSpeeltOranje: Article = {
         'PassaSports — Speel jij met dezelfde hockeymerken als de Oranje Dames?',
     },
     { label: 'PassaSports — Thierry Brinkman' },
-    { label: 'PassaSports — De strafcorner-sticks van seizoen 2020/2021' },
     { label: 'Brabo — atletenpagina Thierry Brinkman' },
     { label: 'Osaka — atletenpagina Yibbi Jansen en Yibbi-stickcollectie' },
     { label: 'Princess — atletenpagina Frédérique Matla' },
