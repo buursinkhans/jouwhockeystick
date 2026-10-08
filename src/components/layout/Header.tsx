@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { Logo, LogoIcon } from '@/components/brand/Logo';
+import { ButtonLink } from '@/components/ui/Button';
 
 const NAV_LINKS = [
-  { href: '/stickwijzer', label: 'Stickwijzer' },
   { href: '/sticks', label: 'Sticks' },
   { href: '/zaalsticks', label: 'Zaalsticks' },
   { href: '/merken', label: 'Merken' },
@@ -31,9 +31,13 @@ export function Header() {
           <LogoIcon size={32} />
           <span aria-hidden="true">Stickadvies</span>
         </Link>
+        {/* The stickwijzer is the main action, so it is a button, not a nav link. */}
+        <ButtonLink href="/stickwijzer" className="px-4 py-2 lg:order-last">
+          Stickwijzer
+        </ButtonLink>
         <nav
           aria-label="Hoofdnavigatie"
-          className="flex flex-wrap gap-x-4 gap-y-1 text-sm font-semibold text-inkt/80"
+          className="order-last flex w-full flex-wrap gap-x-4 gap-y-1 text-sm font-semibold text-inkt/80 lg:order-none lg:w-auto"
         >
           {NAV_LINKS.map((link) => (
             <Link key={link.href} href={link.href} className="hover:text-veld">
