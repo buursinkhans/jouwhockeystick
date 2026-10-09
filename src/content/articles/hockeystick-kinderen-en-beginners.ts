@@ -88,7 +88,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Zaalhockey',
       level: 3,
       body: [
-        'Gaat je kind ook zaalhockeyen? Een zaalstick is lichter en dunner dan een veldstick. Op de pagina [zaalsticks](/zaalsticks) maak je in drie vragen een eerste selectie.',
+        'Gaat je kind ook zaalhockeyen? Een aparte zaalstick is volgens de spelregels niet verplicht. Waar je op let als je er wel een koopt, lees je in [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen). Op de pagina [zaalsticks](/zaalsticks) maak je in drie vragen een eerste selectie.',
       ],
     },
     {
