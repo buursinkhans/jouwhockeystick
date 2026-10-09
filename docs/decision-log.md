@@ -252,3 +252,8 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 **Correctie:** in `/kennis/hockeystick-kinderen-en-beginners` stond "Een zaalstick is lichter en dunner dan een veldstick", zonder bron en in strijd met `/zaalsticks` (dezelfde maximale eisen). Vervangen door een verwijzing naar het nieuwe artikel.
 
 **Bewust niet:** geen "beste zaalstick"-claims; het aanbod juniorzaalsticks is klein (3 sticks, 32–36 inch) en dat staat er eerlijk bij.
+## 2026-10-09 — Agent-regiekamer (dashboard)
+
+**Wat:** een dashboard in claude.ai dat laat zien welke agents er zijn (gebouwd en gepland), hoe vaak ze draaiden en met welke uitkomst, welke PR's ze maakten en wat de resultaten zijn (catalogus, Google). `scripts/agent-dashboard-data.ts` (`npm run dashboard:data -- <map>`) verzamelt de cijfers uit GitHub en de catalogus als JSON. Een geplande taak ververst het dashboard elke maandagochtend.
+
+**Bewust niet:** het resterende Claude-tegoed van het abonnement; dat is niet uit te lezen. Het dashboard toont in plaats daarvan het aantal AI-runs en hun duur, en verwijst naar Instellingen → Gebruik in claude.ai.
