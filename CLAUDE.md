@@ -61,6 +61,7 @@ Vóór afronding van een wijziging:
 5. Meld exact wat is uitgevoerd en wat niet kon worden uitgevoerd.
 
 ## Werkwijze
+0. Contentopdrachten (artikelen, blogs, een issue met label `content-brief`): volg `docs/content-agent.md`. De brief in het issue geldt als goedgekeurd plan; werk hem uit in een PR.
 1. Lees eerst relevante code en docs.
 2. Presenteer bij middelgrote/grote taken een plan en aannames vóór implementatie.
 3. Houd wijzigingen klein en coherent.

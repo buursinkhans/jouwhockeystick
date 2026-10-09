@@ -242,3 +242,13 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 **Toegang:** secret `GSC_SERVICE_ACCOUNT_JSON`; het service-account heeft in Search Console alleen rechten "Beperkt" (lezen). Property: eerst `sc-domain:jouwhockeystick.nl`, anders `https://jouwhockeystick.nl/`; vast te zetten met de repository-variabele `GSC_SITE_URL`.
 
 **Bewust niet:** de agent past geen titels of content aan. Hij levert de data voor de handgeschreven vergelijkende alinea's per stick (zie 2026-10-08, SEO-verbeteringen) en voor latere content-PR's.
+
+## 2026-10-09 — Content-agent en artikel "Zaalstick voor kinderen"
+
+**Content-agent:** `docs/content-agent.md` is het handboek voor alle content (agent en redactie): brief via een issue met label `content-brief`, eerst controleren op botsing met bestaande pagina's, catalogusdata in plaats van vaste tekst, bron per claim, en de controles vóór de PR. De agent draait als Claude Code GitHub Action (`.github/workflows/claude.yml`) op het Claude-abonnement van de eigenaar (secret `CLAUDE_CODE_OAUTH_TOKEN`), reageert op `@claude` in issues en PR's, en merget nooit zelf.
+
+**Artikel:** `/kennis/zaalstick-voor-kinderen`, gekozen door de eigenaar met het oog op het zaalseizoen. Eigen zoekintentie (zaalstick voor een kind) naast `/zaalsticks` (zaalstick kiezen in het algemeen) en `/kennis/hockeystick-kinderen-en-beginners` (veldstick). Spelregelclaims komen uit dezelfde FIH-bronnen als `/zaalsticks`; de lijst juniorzaalsticks, prijsrange en lengtebereik worden uit de catalogus gegenereerd.
+
+**Correctie:** in `/kennis/hockeystick-kinderen-en-beginners` stond "Een zaalstick is lichter en dunner dan een veldstick", zonder bron en in strijd met `/zaalsticks` (dezelfde maximale eisen). Vervangen door een verwijzing naar het nieuwe artikel.
+
+**Bewust niet:** geen "beste zaalstick"-claims; het aanbod juniorzaalsticks is klein (3 sticks, 32–36 inch) en dat staat er eerlijk bij.
