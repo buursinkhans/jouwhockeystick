@@ -10,7 +10,7 @@ const FOOTER_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="bg-hex-dark bg-veld text-nl-negatief">
+    <footer className="focus-ring-light bg-hex-dark bg-veld text-nl-negatief">
       <div className="mx-auto max-w-5xl px-4 py-12 text-sm sm:px-6">
         <Logo variant="wordmark-negative" size={30} tagline />
         <p className="mt-6 max-w-2xl">

@@ -39,7 +39,7 @@ export default async function VergelijkPage({
             id="a"
             name="a"
             defaultValue={params.a ?? ''}
-            className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
+            className="mt-1 min-h-11 w-full rounded-lg border border-lijngrijs px-3 py-2"
           >
             <option value="" disabled>
               Kies een stick
@@ -59,7 +59,7 @@ export default async function VergelijkPage({
             id="b"
             name="b"
             defaultValue={params.b ?? ''}
-            className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
+            className="mt-1 min-h-11 w-full rounded-lg border border-lijngrijs px-3 py-2"
           >
             <option value="" disabled>
               Kies een stick

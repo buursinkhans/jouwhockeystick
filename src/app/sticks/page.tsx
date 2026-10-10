@@ -55,7 +55,8 @@ export default async function SticksPage({
       <div className="mt-6 flex flex-wrap gap-2">
         <Link
           href="/sticks"
-          className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
+          aria-current={!activeBrand ? 'page' : undefined}
+          className={`inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-medium ${
             !activeBrand
               ? 'border-veld bg-veld text-white'
               : 'border-lijngrijs text-inkt/80 hover:border-veld'
@@ -67,7 +68,8 @@ export default async function SticksPage({
           <Link
             key={b}
             href={`/sticks?brand=${encodeURIComponent(b)}`}
-            className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
+            aria-current={activeBrand === b ? 'page' : undefined}
+            className={`inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-medium ${
               activeBrand === b
                 ? 'border-veld bg-veld text-white'
                 : 'border-lijngrijs text-inkt/80 hover:border-veld'
@@ -78,7 +80,11 @@ export default async function SticksPage({
         ))}
       </div>
 
-      <div className="mt-8">
+      <h2 className="mt-8 text-xl font-bold">
+        {activeBrand ? `${activeBrand}-veldsticks` : 'Alle veldsticks'}{' '}
+        <span className="font-normal text-lijngrijs">({products.length})</span>
+      </h2>
+      <div className="mt-4">
         <ProductGrid products={products} />
       </div>
     </div>

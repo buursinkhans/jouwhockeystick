@@ -84,8 +84,16 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
+        <a
+          href="#inhoud"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-inkt focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+        >
+          Direct naar de inhoud
+        </a>
         <Header />
-        <main className="flex-1">{children}</main>
+        <main id="inhoud" tabIndex={-1} className="flex-1 focus:outline-none">
+          {children}
+        </main>
         <Footer />
         {/* Simple Analytics: cookieless, no visitor ids. Events go through src/lib/analytics/track.ts. */}
         <Script

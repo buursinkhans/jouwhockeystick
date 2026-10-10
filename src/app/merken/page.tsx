@@ -59,7 +59,7 @@ export default function MerkenPage() {
               {brand.characteristics}{' '}
               <a
                 href={brand.characteristicsSourceUrl}
-                className="text-veld hover:underline"
+                className="inline-flex min-h-6 items-center text-veld hover:underline"
               >
                 (bron)
               </a>
@@ -72,7 +72,7 @@ export default function MerkenPage() {
                 {brand.nationalTeamSourceUrl && (
                   <a
                     href={brand.nationalTeamSourceUrl}
-                    className="text-veld hover:underline"
+                    className="inline-flex min-h-6 items-center text-veld hover:underline"
                   >
                     (bron)
                   </a>
@@ -91,7 +91,10 @@ export default function MerkenPage() {
                     <footer className="mt-1 not-italic text-xs text-lijngrijs">
                       — {q.attribution}
                       {q.language ? ` · ${q.language}` : ''} ·{' '}
-                      <a href={q.sourceUrl} className="hover:underline">
+                      <a
+                        href={q.sourceUrl}
+                        className="inline-flex min-h-6 items-center hover:underline"
+                      >
                         bron
                       </a>
                     </footer>

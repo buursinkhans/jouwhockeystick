@@ -80,7 +80,7 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
+          className="mt-1 min-h-11 w-full rounded-lg border border-lijngrijs px-3 py-2"
         />
       </div>
 
@@ -94,7 +94,7 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-          className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
+          className="mt-1 min-h-11 w-full rounded-lg border border-lijngrijs px-3 py-2"
         />
         {fieldErrors.email && (
           <p id="email-error" className="mt-1 text-sm text-red-700">
@@ -112,7 +112,7 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           type="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
+          className="mt-1 min-h-11 w-full rounded-lg border border-lijngrijs px-3 py-2"
         />
       </div>
 
@@ -125,11 +125,11 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           rows={4}
-          className="mt-1 w-full rounded-lg border border-lijngrijs px-3 py-2"
+          className="mt-1 min-h-11 w-full rounded-lg border border-lijngrijs px-3 py-2"
         />
       </div>
 
-      <div className="flex items-start gap-2">
+      <div className="flex items-start gap-3">
         <input
           id="consent"
           type="checkbox"
@@ -138,13 +138,13 @@ export function InterestForm({ initialProductSlug, source }: Props) {
           aria-describedby={
             fieldErrors.consentGiven ? 'consent-error' : undefined
           }
-          className="mt-1"
+          className="mt-0.5 h-6 w-6 shrink-0 accent-veld"
         />
         <label htmlFor="consent" className="text-sm text-inkt/80">
           Ik geef toestemming om benaderd te worden over mijn aanvraag.
         </label>
       </div>
-      <p className="-mt-2 pl-6 text-xs text-lijngrijs">
+      <p className="-mt-2 pl-8 text-xs text-lijngrijs">
         We gebruiken je gegevens alleen voor deze aanvraag en bewaren ze
         maximaal 12 maanden. Lees de{' '}
         <Link href="/privacy" className="underline">

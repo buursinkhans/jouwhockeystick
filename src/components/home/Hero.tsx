@@ -48,8 +48,10 @@ export function Hero() {
     <section className="bg-hex-light border-b border-rand bg-krijt">
       <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-20 md:grid-cols-[3fr_2fr]">
         <div>
-          <Logo variant="wordmark" size={40} tagline href={null} />
-          <h1 className="mt-8 text-4xl leading-tight font-extrabold text-inkt sm:text-5xl">
+          <div className="hidden sm:block">
+            <Logo variant="wordmark" size={40} tagline href={null} />
+          </div>
+          <h1 className="sm:mt-8 text-4xl leading-tight font-extrabold text-inkt sm:text-5xl">
             Vind de hockeystick die bij jou past
           </h1>
           <p className="mt-5 max-w-xl text-lg text-inkt/80">

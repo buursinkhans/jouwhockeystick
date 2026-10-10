@@ -294,3 +294,30 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 - Sticks die bol.com én PassaSports verkopen, houden hun bol.com-knop; de PassaSports-URL staat al klaar voor de koppeling.
 
 **Test aangepast:** de enginetest voor "een maat korter" ging ervan uit dat er geen 31"-beginnersstick in de catalogus stond. Hij gebruikt nu een eigen gefilterde catalogus, zodat de test niet meer afhangt van het assortiment.
+
+## 2026-10-10 — UX-ronde met UI/UX Pro Max
+
+**Werkwijze:** de site is doorgelicht met de regels van de skill UI/UX Pro Max (v2.13.0). Daarbij is per pagina geautomatiseerd gemeten:
+- schermbreedtes 375, 768, 1024 en 1440;
+- tikdoelen, contrast en focus;
+- koppen en horizontaal scrollen.
+
+Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen: de merkinstructie gaat voor.
+
+**Aangepast:**
+- **Toegankelijkheid:**
+  - een duidelijke focusring in veldblauw, wit op de blauwe footer;
+  - een skiplink "Direct naar de inhoud";
+  - `prefers-reduced-motion` wordt gerespecteerd;
+  - handcursor op knoppen, die Tailwind v4 standaard weghaalt.
+- **Navigatie:**
+  - op mobiel een menuknop met een lijst van 44 px-tikdoelen, in plaats van twee rijen kleine links van 20 px hoog (onder de WCAG-ondergrens van 24 px);
+  - de huidige pagina is gemarkeerd (`aria-current`).
+- **Tikdoelen van minimaal 44 px:**
+  - merkfilters op /sticks;
+  - formuliervelden en de toestemmings-checkbox op /interesse;
+  - de keuzelijsten op /vergelijk;
+  - de bronlinks op /merken (minimaal 24 px).
+- **Structuur:** /sticks heeft een H2 boven de lijst, zodat er geen kopniveau meer wordt overgeslagen. Op mobiel staat het woordmerk niet meer dubbel boven de vouw (header én hero).
+
+**Afwijking van de merkinstructie:** op mobiel is het header-icoon 26 px in plaats van 32 px, zodat logo, Stickwijzer-knop en menuknop tot 360 px op één rij passen. Het woordmerk is daardoor 138 px breed, 2 px onder het minimum van 140 px uit §4.1.

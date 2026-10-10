@@ -28,6 +28,50 @@
     font-family: var(--font-heading);
     letter-spacing: -0.015em;
   }
+
+  /* A clear keyboard focus ring in the brand blue (WCAG 2.4.7 / 2.4.11). */
+  :focus-visible {
+    outline: 3px solid var(--color-veld);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Tailwind v4 resets buttons to the default cursor; clickable things should point. */
+  button:not(:disabled),
+  [role='button'],
+  summary,
+  label:has(input:not(:disabled)),
+  select {
+    cursor: pointer;
+  }
+
+  /* Removes the double-tap zoom delay on interactive elements. */
+  a,
+  button,
+  input,
+  label,
+  select,
+  summary,
+  textarea {
+    touch-action: manipulation;
+  }
+}
+
+/* On the blue footer a blue focus ring would be invisible. */
+.focus-ring-light :focus-visible {
+  outline-color: #ffffff;
+}
+
+/* Respect the system setting for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Wordmark settings from merkinstructie §2.2 and §6. */
