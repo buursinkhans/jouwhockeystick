@@ -84,7 +84,10 @@ export function checkProductHealth(
     issues.push({ kind: 'missing_image' });
   }
   if (product.bolNotSold) {
-    issues.push({ kind: 'not_sold_at_bol', checkedAt: product.bolNotSold.checkedAt });
+    issues.push({
+      kind: 'not_sold_at_bol',
+      checkedAt: product.bolNotSold.checkedAt,
+    });
   } else if (!product.bolProductUrl) {
     issues.push({ kind: 'search_link_only' });
   }
@@ -117,7 +120,8 @@ const ISSUE_LABELS: Record<HealthIssue['kind'], string> = {
   invalid_date: 'Ongeldige lastVerifiedAt',
   test_data: 'Nog gemarkeerd als testdata',
   missing_image: 'Geen productfoto (toont illustratie)',
-  search_link_only: 'Winkelknop gaat naar een zoekopdracht, niet naar de productpagina',
+  search_link_only:
+    'Winkelknop gaat naar een zoekopdracht, niet naar de productpagina',
   not_sold_at_bol: 'Niet verkrijgbaar bij bol.com',
 };
 

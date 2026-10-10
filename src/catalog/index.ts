@@ -43,6 +43,38 @@ import { adidasFabela302627 } from './products/adidas-fabela-30-2627';
 import { adidasEstro602627 } from './products/adidas-estro-60-2627';
 import { osakaProTour4020 } from './products/osaka-pro-tour-40-20';
 import { ritualSpecialist55 } from './products/ritual-specialist-55';
+import { reeceAlphaJr } from './products/reece-alpha-jr';
+import { raviJuniorMidBow } from './products/ravi-junior-mid-bow';
+import { raviJunior30Carbon } from './products/ravi-junior-30-carbon';
+import { raviJuniorLowBow50Carbon } from './products/ravi-junior-low-bow-50-carbon';
+import { osakaStick1SeriesJunior } from './products/osaka-stick-1-series-junior';
+import { princessCompetitionJunior1StarJbow } from './products/princess-competition-junior-1-star-jbow';
+import { indianMaharadjaPro10Junior } from './products/indian-maharadja-pro-10-junior';
+import { scoopWdnJuniorVeld } from './products/scoop-wdn-junior-veld';
+import { graysAftershockUltrabow } from './products/grays-aftershock-ultrabow';
+import { csign20CarbonMidBow } from './products/csign-20-carbon-mid-bow';
+import { csign40CarbonLowBow } from './products/csign-40-carbon-low-bow';
+import { stagMatrix75Carbon } from './products/stag-matrix-75-carbon';
+import { indianMaharadjaBlade10 } from './products/indian-maharadja-blade-10';
+import { reeceNoxx600 } from './products/reece-noxx-600';
+import { raviMidBow70Carbon } from './products/ravi-mid-bow-70-carbon';
+import { raviProBow50Carbon } from './products/ravi-pro-bow-50-carbon';
+import { y1LbX2 } from './products/y1-lb-x2';
+import { y1Glg30 } from './products/y1-glg-30';
+import { y1Glg50 } from './products/y1-glg-50';
+import { scoopWdnZaalJunior } from './products/scoop-wdn-zaal-junior';
+import { reeceInAlphaJr } from './products/reece-in-alpha-jr';
+import { grays200iUltrabowIndoor } from './products/grays-200i-ultrabow-indoor';
+import { graysDb2xiDynabowIndoor } from './products/grays-db2xi-dynabow-indoor';
+import { graysJb3xiJumbowIndoor } from './products/grays-jb3xi-jumbow-indoor';
+import { adidasEstro10JuniorIndoor } from './products/adidas-estro-10-junior-indoor';
+import { indianMaharadjaSwiftJuniorIndoor } from './products/indian-maharadja-swift-junior-indoor';
+import { y1IndoorMidBowW1 } from './products/y1-indoor-mid-bow-w1';
+import { y1IndoorLowBowC50 } from './products/y1-indoor-low-bow-c50';
+import { malikLowbow2 } from './products/malik-lowbow-2';
+import { malikLowbow4Junior } from './products/malik-lowbow-4-junior';
+import { osakaMidbowHoutIndoorJunior } from './products/osaka-midbow-hout-indoor-junior';
+import { osakaProbowGfIndoorJunior } from './products/osaka-probow-gf-indoor-junior';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -86,13 +118,45 @@ const ALL_PRODUCTS: Product[] = [
   adidasEstro602627,
   osakaProTour4020,
   ritualSpecialist55,
+  reeceAlphaJr,
+  raviJuniorMidBow,
+  raviJunior30Carbon,
+  raviJuniorLowBow50Carbon,
+  osakaStick1SeriesJunior,
+  princessCompetitionJunior1StarJbow,
+  indianMaharadjaPro10Junior,
+  scoopWdnJuniorVeld,
+  graysAftershockUltrabow,
+  csign20CarbonMidBow,
+  csign40CarbonLowBow,
+  stagMatrix75Carbon,
+  indianMaharadjaBlade10,
+  reeceNoxx600,
+  raviMidBow70Carbon,
+  raviProBow50Carbon,
+  y1LbX2,
+  y1Glg30,
+  y1Glg50,
+  scoopWdnZaalJunior,
+  reeceInAlphaJr,
+  grays200iUltrabowIndoor,
+  graysDb2xiDynabowIndoor,
+  graysJb3xiJumbowIndoor,
+  adidasEstro10JuniorIndoor,
+  indianMaharadjaSwiftJuniorIndoor,
+  y1IndoorMidBowW1,
+  y1IndoorLowBowC50,
+  malikLowbow2,
+  malikLowbow4Junior,
+  osakaMidbowHoutIndoorJunior,
+  osakaProbowGfIndoorJunior,
 ];
 
 /**
  * Bump whenever product data changes. Stamped on every advice result so an
  * old result can be traced back to the catalog it was calculated from.
  */
-export const CATALOG_VERSION = '2026-10-05c';
+export const CATALOG_VERSION = '2026-10-10';
 
 const VERIFICATION_FRESHNESS_MONTHS = 12;
 

@@ -79,6 +79,11 @@ export const brandSchema = z.enum([
   'Osaka',
   'Stag',
   'Ritual',
+  'Y1',
+  'Reece',
+  'Ravi',
+  'Csign',
+  'Malik',
 ]);
 export type Brand = z.infer<typeof brandSchema>;
 
@@ -109,6 +114,16 @@ export const productSchema = z.object({
    * The shop button then says so instead of linking to an unrelated search.
    */
   bolNotSold: z.object({ checkedAt: z.string() }).optional(),
+  /**
+   * PassaSports product page. Kept for the affiliate link that is being set
+   * up; until then a stick sold only there gets a "koppeling volgt" note
+   * instead of a shop button (see RetailerLinks).
+   */
+  passaSportsProductUrl: z
+    .string()
+    .url()
+    .startsWith('https://www.passasports.nl/')
+    .optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),
   /** Optional — not every brand states a bow profile for every model; never guessed. */

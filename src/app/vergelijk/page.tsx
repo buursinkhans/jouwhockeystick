@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/site';
+import { isPassaSportsOnly } from '@/catalog/shop';
 import Link from 'next/link';
 import { getAllProducts, getProductBySlug } from '@/catalog';
 import { buildCompareRows } from '@/catalog/compare';
@@ -100,6 +101,7 @@ export default async function VergelijkPage({
                     productName={product.name}
                     bolProductUrl={product.bolProductUrl}
                     notSoldAtBol={product.bolNotSold !== undefined}
+                    passaSportsOnly={isPassaSportsOnly(product)}
                     placement="vergelijk"
                     className="text-sm"
                     stack

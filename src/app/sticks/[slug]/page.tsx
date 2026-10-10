@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { isPassaSportsOnly } from '@/catalog/shop';
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -108,9 +109,12 @@ export default async function ProductPage({
         €{product.priceIndicativeEur.value.toFixed(2)}
       </p>
       <div className="mt-1">
-        <ProductNotice notSoldAtBol={product.bolNotSold !== undefined} />
+        <ProductNotice
+          notSoldAtBol={product.bolNotSold !== undefined}
+          passaSportsOnly={isPassaSportsOnly(product)}
+        />
       </div>
-      <PartnerLinkNote />
+      {!isPassaSportsOnly(product) && <PartnerLinkNote />}
 
       <div className="mt-6 flex flex-wrap items-start gap-3">
         <RetailerLinks
@@ -118,6 +122,7 @@ export default async function ProductPage({
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
+          passaSportsOnly={isPassaSportsOnly(product)}
           placement="productpagina"
         />
         <ButtonLink

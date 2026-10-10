@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { isPassaSportsOnly } from '@/catalog/shop';
 import type { Product } from '@/catalog/types';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { RetailerLinks } from '@/components/ui/RetailerLinks';
@@ -30,7 +31,10 @@ export function ProductCard({ product }: { product: Product }) {
         €{product.priceIndicativeEur.value.toFixed(2)}
       </p>
       <div className="mt-1">
-        <ProductNotice notSoldAtBol={product.bolNotSold !== undefined} />
+        <ProductNotice
+          notSoldAtBol={product.bolNotSold !== undefined}
+          passaSportsOnly={isPassaSportsOnly(product)}
+        />
       </div>
       <div className="mt-4">
         <ProductProsAndCons product={product} limit={1} stacked />
@@ -41,6 +45,7 @@ export function ProductCard({ product }: { product: Product }) {
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
+          passaSportsOnly={isPassaSportsOnly(product)}
           placement="catalogus"
           stack
         />

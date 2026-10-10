@@ -269,3 +269,28 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 - Merken met alleen zaalsticks (Scoop) linken naar /zaalsticks, omdat het merkfilter op /sticks alleen veldsticks toont.
 - Zonder logo staat de merknaam niet meer twee keer op de pagina.
 - Een test bewaakt dat elk merk in de catalogus een profiel heeft.
+
+## 2026-10-10 — Assortiment uitgebreid naar 73 sticks en 16 merken; PassaSports tijdelijk zonder koppeling
+
+**Wat:** 32 sticks toegevoegd (`CATALOG_VERSION 2026-10-10`), gericht op de gaten in het assortiment:
+- veldsticks in 24", 29" en 31";
+- zaalsticks voor kinderen van 26" tot 30";
+- veldsticks voor volwassen beginners onder €100;
+- gevorderde sticks tussen €50 en €125;
+- ervaren junioren.
+
+**Merken:** Y1, Reece, Ravi, Csign en Malik zijn nieuw. Y1 en Reece hebben een merkprofiel van hun eigen site. Voor Ravi, Csign en Malik hebben we geen officiële merksite gevonden; hun profiel zegt dat eerlijk.
+
+**Bronnen:**
+- 26 sticks komen van bol.com-listings, elk met een directe partnerlink naar de productpagina.
+- 6 sticks komen van PassaSports-productpagina's, omdat bol.com ze niet verkoopt. Dat is per stick nagezocht.
+- Velden die elkaar in een listing tegenspreken, zijn weggelaten en uitgelegd in het sourceLabel, bijvoorbeeld een titel met "Pro bow" terwijl de specificaties "Mid bow" noemen.
+- Bij PassaSports-sticks zonder niveau-vermelding is het niveau een redactionele inschatting, met de reden erbij.
+- Bij PassaSports-sticks zijn geen productfoto's overgenomen, omdat er nog geen partnerschap is.
+
+**PassaSports (tijdelijk):** de eigenaar regelt een affiliatekoppeling met PassaSports, naar verwachting op maandag 12 oktober.
+- Tot die tijd heeft een stick die alleen PassaSports verkoopt (`bolNotSold` + `passaSportsProductUrl`, zie `isPassaSportsOnly`) geen koopknop, maar de melding "Te koop bij PassaSports — koppeling volgt".
+- Zulke sticks worden in de stickwijzer gewoon meegewogen en kunnen als beste keuze uitkomen.
+- Sticks die bol.com én PassaSports verkopen, houden hun bol.com-knop; de PassaSports-URL staat al klaar voor de koppeling.
+
+**Test aangepast:** de enginetest voor "een maat korter" ging ervan uit dat er geen 31"-beginnersstick in de catalogus stond. Hij gebruikt nu een eigen gefilterde catalogus, zodat de test niet meer afhangt van het assortiment.

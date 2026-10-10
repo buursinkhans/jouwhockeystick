@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { isPassaSportsOnly } from '@/catalog/shop';
 import Link from 'next/link';
 import type { Product } from '@/catalog/types';
 import {
@@ -98,6 +99,7 @@ function ResultCard({
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
+          passaSportsOnly={isPassaSportsOnly(product)}
           placement="zaalkeuze"
           className="mt-3"
           stack

@@ -168,4 +168,47 @@ export const BRAND_PROFILES: BrandProfile[] = [
       'https://www.bol.com/nl/nl/p/stag-magic-hockeystick-jr-bow-junior-blauw-33-inch/9300000066814940/',
     hasCatalogProducts: true,
   },
+  {
+    brand: 'Y1',
+    logoBackground: 'light',
+    characteristics:
+      'Y1 begon volgens de eigen site in 2012 in een studentenkamer aan de universiteit van Exeter (Verenigd Koninkrijk) en startte in 2015 met hockey. Het merk zegt producten te ontwikkelen "with players, not for them" en noemt zichzelf sinds 2021 het eerste klimaatneutrale hockeymerk. Volgens Y1 speelden op de Spelen van Parijs 2024 27 atleten met Y1.',
+    characteristicsSourceUrl: 'https://y1sport.com/pages/unity-history-of-y1',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Reece',
+    logoBackground: 'light',
+    characteristics:
+      'Reece Australia maakt volgens de eigen site deel uit van de Deventrade Group, een Nederlands familiebedrijf dat in 1985 werd opgericht en vooral bekend is van teamkleding. Reece maakt hockeysticks voor jeugd en senioren, voor veld en zaal; in onze catalogus vooral junior- en zaalsticks.',
+    characteristicsSourceUrl: 'https://www.reeceaustralia.com/nl/over-reece/',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Ravi',
+    logoBackground: 'light',
+    characteristics:
+      'Van Ravi hebben we geen officiële merkwebsite gevonden. De Ravi-sticks in onze catalogus worden op bol.com door Ravi zelf verkocht; de gegevens komen uit die productinformatie, niet van een merksite. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+    characteristicsSourceUrl:
+      'https://www.bol.com/nl/nl/p/ravi-hockeystick-mid-bow-70-carbon-black-36-5/9300000196468789/',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Csign',
+    logoBackground: 'light',
+    characteristics:
+      'Van Csign hebben we geen officiële merkwebsite gevonden. De Csign-sticks in onze catalogus en hun gegevens komen uit de productinformatie op bol.com, onze partnerwinkel. De samenstelling (carbon, twaron, fiberglass) staat in de productnaam. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+    characteristicsSourceUrl:
+      'https://www.bol.com/nl/nl/p/csign-sports-hockeystick-senior-40-carbon-10-twaron-50-fiberglass-low-bow-24mm/9300000008476394/',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Malik',
+    logoBackground: 'light',
+    characteristics:
+      'Van Malik hebben we geen officiële merkwebsite gevonden. De Malik-sticks in onze catalogus komen uit de productinformatie van PassaSports; bol.com verkoopt ze niet. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+    characteristicsSourceUrl:
+      'https://www.passasports.nl/hockey/hockeysticks/_brand-Malik',
+    hasCatalogProducts: true,
+  },
 ];

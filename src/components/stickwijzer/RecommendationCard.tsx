@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { isPassaSportsOnly } from '@/catalog/shop';
 import type { AdviceRoute } from '@/advice-engine/answers';
 import type {
   AdviceReason,
@@ -131,7 +132,10 @@ export function RecommendationCard({
           <dd>{modelYear ?? 'Niet bevestigd'}</dd>
         </div>
       </dl>
-      <ProductNotice notSoldAtBol={product.bolNotSold !== undefined} />
+      <ProductNotice
+        notSoldAtBol={product.bolNotSold !== undefined}
+        passaSportsOnly={isPassaSportsOnly(product)}
+      />
 
       <h5 className="mt-5 text-sm font-semibold">Waarom deze stick past</h5>
       <ul className="mt-2 space-y-3">
@@ -224,6 +228,7 @@ export function RecommendationCard({
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
+          passaSportsOnly={isPassaSportsOnly(product)}
           placement="stickwijzer"
         />
       </div>

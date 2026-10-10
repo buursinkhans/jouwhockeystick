@@ -207,7 +207,12 @@ describe('getAdvice', () => {
   });
 
   it('offers a shorter size separately — never as a match — when the advised size does not exist', () => {
-    const advice = getAdvice(buildStartAnswers({ height_cm: 135 }), catalog);
+    // 135 cm → 31". Remove every 31" stick so the gap exists regardless of
+    // what the real catalog holds.
+    const without31 = catalog.filter(
+      (product) => !product.lengthsInches.value.includes(31),
+    );
+    const advice = getAdvice(buildStartAnswers({ height_cm: 135 }), without31);
 
     expect(advice.noMatchReason).toBe('length');
     expect(advice.results).toEqual([]);

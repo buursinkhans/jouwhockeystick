@@ -11,7 +11,11 @@ import type { Product } from './types';
 const verifiedOn = (product: Product, date: string): Product => {
   const copy = structuredClone(product);
   for (const value of Object.values(copy)) {
-    if (typeof value === 'object' && value !== null && 'lastVerifiedAt' in value) {
+    if (
+      typeof value === 'object' &&
+      value !== null &&
+      'lastVerifiedAt' in value
+    ) {
       (value as { lastVerifiedAt: string }).lastVerifiedAt = date;
     }
   }
@@ -53,9 +57,10 @@ describe('checkProductHealth', () => {
       imageUrl: undefined,
       bolProductUrl: undefined,
     };
-    const kinds = checkProductHealth(product, new Date('2026-10-08')).issues.map(
-      (issue) => issue.kind,
-    );
+    const kinds = checkProductHealth(
+      product,
+      new Date('2026-10-08'),
+    ).issues.map((issue) => issue.kind);
     expect(kinds).toContain('invalid_date');
     expect(kinds).toContain('test_data');
     expect(kinds).toContain('missing_image');
@@ -70,9 +75,10 @@ describe('not sold at bol.com', () => {
       bolProductUrl: undefined,
       bolNotSold: { checkedAt: '2026-10-08' },
     };
-    const kinds = checkProductHealth(product, new Date('2026-10-08')).issues.map(
-      (issue) => issue.kind,
-    );
+    const kinds = checkProductHealth(
+      product,
+      new Date('2026-10-08'),
+    ).issues.map((issue) => issue.kind);
     expect(kinds).toEqual(['not_sold_at_bol']);
   });
 });
