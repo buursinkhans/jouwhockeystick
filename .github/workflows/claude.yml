@@ -51,4 +51,4 @@ jobs:
           label_trigger: akkoord
           claude_args: |
             --max-turns 60
-            --allowedTools "Bash(npm run lint),Bash(npm run typecheck),Bash(npm test),Bash(npx next typegen),Bash(npm run catalog:health)"
+            --allowedTools "Bash(npm run lint:*),Bash(npm run typecheck:*),Bash(npm test:*),Bash(npx next typegen:*),Bash(npm run catalog:health:*),Bash(gh pr create:*),Bash(gh pr view:*)"
