@@ -4,6 +4,7 @@ import {
   diffSites,
   formatMarketReport,
   hockeyUrls,
+  isHockeyStickTitle,
   labelFromUrl,
   parseSitemap,
   sitemapsFromRobots,
@@ -96,5 +97,16 @@ describe('formatMarketReport', () => {
     expect(hasChanges).toBe(true);
     expect(markdown).toContain('### Nieuw bij Vrijbuiter (1)');
     expect(markdown).toContain('1. Grays JB 6 — €121,90');
+  });
+});
+
+describe('isHockeyStickTitle', () => {
+  it('keeps sticks and drops accessories and toy sets', () => {
+    expect(isHockeyStickTitle('Grays DB 5 Hockeystick Oceaanblauw/Zilver')).toBe(true);
+    expect(isHockeyStickTitle('Scoop Zaalhockeystick - Indoor - Mid Bow - 20% Carbon')).toBe(true);
+    expect(isHockeyStickTitle('Brabo Fiets Klem - Accessoires - zwart')).toBe(false);
+    expect(isHockeyStickTitle('Gribbid Progrip - Hockeystick Grip - Zeemgrip')).toBe(false);
+    expect(isHockeyStickTitle('Hockeyset 2 Sticks 28” – Kunststof – Straathockey Set voor Kinderen')).toBe(false);
+    expect(isHockeyStickTitle('Techidna Kabel Tape - Voor Kabelbundels, Hockeysticks & Rackets')).toBe(false);
   });
 });

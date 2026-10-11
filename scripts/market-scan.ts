@@ -8,6 +8,7 @@ import { gunzipSync } from 'node:zlib';
 import {
   formatMarketReport,
   hockeyUrls,
+  isHockeyStickTitle,
   parseSitemap,
   sitemapsFromRobots,
   type BolItem,
@@ -30,11 +31,18 @@ const BOL_QUERIES = ['hockeystick', 'zaalhockeystick'];
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function fetchText(url: string): Promise<string> {
+async function fetchText(url: string, retries = 2): Promise<string> {
   const response = await fetch(url, {
     headers: { 'User-Agent': USER_AGENT },
     signal: AbortSignal.timeout(30_000),
   });
+  if (response.status === 429 && retries > 0) {
+    // Too many requests: wait as asked (max 60 s), then try again.
+    const retryAfter = Number(response.headers.get('retry-after'));
+    await sleep(Math.min(Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 30_000, 60_000));
+    return fetchText(url, retries - 1);
+  }
+  if (response.status === 403) throw new Error('HTTP 403 (site weigert automatische toegang)');
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const buffer = Buffer.from(await response.arrayBuffer());
   const gzipped = buffer[0] === 0x1f && buffer[1] === 0x8b;
@@ -114,13 +122,15 @@ async function scanBol(): Promise<BolList[]> {
       const body = (await response.json()) as {
         results?: { ean?: string; title?: string; url?: string; offer?: { price?: number } }[];
       };
-      const items: BolItem[] = (body.results ?? []).map((r, i) => ({
-        ean: r.ean ?? `onbekend-${i}`,
-        title: r.title ?? '(geen titel)',
-        rank: i + 1,
-        ...(r.offer?.price !== undefined && { price: r.offer.price }),
-        ...(r.url && { url: r.url }),
-      }));
+      const items: BolItem[] = (body.results ?? [])
+        .filter((r) => isHockeyStickTitle(r.title ?? ''))
+        .map((r, i) => ({
+          ean: r.ean ?? `onbekend-${i}`,
+          title: r.title ?? '(geen titel)',
+          rank: i + 1,
+          ...(r.offer?.price !== undefined && { price: r.offer.price }),
+          ...(r.url && { url: r.url }),
+        }));
       lists.push({ query, items });
     } catch (error) {
       lists.push({ query, items: [], error: error instanceof Error ? error.message : String(error) });
