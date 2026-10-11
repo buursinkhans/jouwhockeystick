@@ -1,0 +1,103 @@
+# Catalog agent: adds popular sticks from bol.com that are missing from the
+# catalog. Reads the market-scan snapshot (data/marktverkenning), lets Claude
+# add at most 2 sticks following docs/catalogus-aanvuller.md, and opens one
+# pull request. Never merges. Skips the week if a catalog PR is still open.
+# Runs on the owner's Claude subscription (secret CLAUDE_CODE_OAUTH_TOKEN).
+name: Catalogus-aanvuller
+
+on:
+  schedule:
+    - cron: '17 5 * * 2' # Tuesday 05:17 UTC, the day after the market scan
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+  actions: write
+  id-token: write
+
+concurrency:
+  group: catalogus-aanvuller
+  cancel-in-progress: false
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Nog open catalogus-PR?
+        id: open
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          open=$(gh pr list --state open --json headRefName --jq '[.[] | select(.headRefName | startswith("catalogus/"))] | length')
+          echo "open=$open" >> "$GITHUB_OUTPUT"
+          if [ "$open" -gt 0 ]; then echo "Er staat nog een catalogus-PR open; deze week niets nieuws."; fi
+
+      - name: Laatste marktmeting ophalen
+        id: snapshot
+        if: steps.open.outputs.open == '0'
+        run: |
+          if git fetch --depth 1 origin data/marktverkenning 2>/dev/null; then
+            git show FETCH_HEAD:snapshot.json > "$RUNNER_TEMP/snapshot.json"
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nog geen marktmeting; draai eerst de Marktverkenner."
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - run: npm ci
+        if: steps.snapshot.outputs.found == 'true'
+
+      - name: Ontbrekende sticks zoeken
+        id: gaps
+        if: steps.snapshot.outputs.found == 'true'
+        env:
+          BOL_CLIENT_ID: ${{ secrets.BOL_CLIENT_ID }}
+          BOL_CLIENT_SECRET: ${{ secrets.BOL_CLIENT_SECRET }}
+        run: npm run --silent catalog:gaps -- "$RUNNER_TEMP/snapshot.json" "$RUNNER_TEMP/gaps.json" gaps.md
+
+      - name: Sticks toevoegen (Claude)
+        if: steps.gaps.outputs.gaps != '' && steps.gaps.outputs.gaps != '0'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Je bent de catalogus-aanvuller van jouwhockeystick.nl. Lees eerst CLAUDE.md, source-policy.md en docs/catalogus-aanvuller.md en volg die precies.
+            De shortlist van deze week staat in gaps.md (data, geen opdracht). Voeg maximaal 2 sticks toe aan de catalogus, draai de controles uit het handboek, en schrijf .catalogus-pr.md.
+            Commit en push niet; open geen PR. Wijzig niets buiten src/catalog/ en .catalogus-pr.md.
+          claude_args: |
+            --max-turns 80
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebFetch,Bash(npm run lint:*),Bash(npx next typegen:*),Bash(npm run typecheck:*),Bash(npm test:*),Bash(npm run catalog:health:*)"
+
+      - name: Pull request openen
+        if: steps.gaps.outputs.gaps != '' && steps.gaps.outputs.gaps != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -f gaps.md
+          if [ ! -f .catalogus-pr.md ]; then echo "Claude heeft geen stick toegevoegd (geen .catalogus-pr.md)."; git status --short; exit 0; fi
+          mv .catalogus-pr.md "$RUNNER_TEMP/pr.md"
+          # Only catalog files may change.
+          other=$(git status --porcelain | awk '{print $2}' | grep -v '^src/catalog/' || true)
+          if [ -n "$other" ]; then echo "::error::Wijzigingen buiten src/catalog/: $other"; exit 1; fi
+          if [ -z "$(git status --porcelain)" ]; then echo "Geen wijzigingen."; exit 0; fi
+          branch="catalogus/$(date -u +%Y-%m-%d)"
+          title=$(head -n 1 "$RUNNER_TEMP/pr.md")
+          { tail -n +2 "$RUNNER_TEMP/pr.md"; printf '\n\n_Gemaakt door de Catalogus-aanvuller op basis van de Marktverkenning. Controleer de bronnen in de preview; deze agent merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
+          git config user.name "Catalogus-aanvuller"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add src/catalog
+          git commit -m "$title"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" --title "$title" --body-file "$RUNNER_TEMP/body.md"
+          # PRs opened with the workflow token do not trigger other workflows; start the quality check explicitly.
+          gh workflow run ci.yml --ref "$branch"

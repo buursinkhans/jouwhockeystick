@@ -16,6 +16,7 @@
     "dashboard:data": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/agent-dashboard-data.ts",
     "seo:technical": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/technical-seo.ts",
     "content:schedule": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/content-schedule.ts",
+    "catalog:gaps": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-gaps.ts",
     "market:scan": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/market-scan.ts"
   },
   "dependencies": {

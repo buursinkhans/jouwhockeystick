@@ -25,7 +25,7 @@ Een kans is iets wat met weinig moeite veel oplevert voor bezoekers en omzet. Ra
 1. **Iets wat de site schaadt**, zoals een fout in het Technical SEO-rapport of een stick die verborgen dreigt te raken. Dit is werk voor de eigenaar, geen brief.
 2. **Zoekwoorden die bijna op pagina 1 staan** (Search Console, positie 5–20), zodra er data is.
 3. **Seizoen:** content die binnen 6–8 weken nodig is.
-4. **Markt:** een model dat stijgt op bol.com of dat concurrenten net toevoegen en dat niet in onze catalogus staat (werk voor de eigenaar: catalogus), of een onderwerp waar concurrenten content over maken en wij niet.
+4. **Markt:** een onderwerp waar concurrenten content over maken en wij niet. Populaire sticks die niet in onze catalogus staan pakt de Catalogus-aanvuller op (dinsdag, label/branch `catalogus/`); daar maak je geen brief voor. Staat er al langer dan een week een catalogus-PR open, noem die onder **Voor jou**.
 5. **Gaten tussen catalogus en content:** een groep sticks (merk, budget, doelgroep) waar bezoekers naar zoeken en die nog geen eigen pagina heeft.
 
 Kwaliteit gaat boven volume. Schrijf geen brief die een bestaande pagina herhaalt (zie `docs/content-agent.md` §2); stel dan een uitbreiding van die pagina voor. Geen "beste stick"-lijsten of "review"-titels: we testen niet zelf.
