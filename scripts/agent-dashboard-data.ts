@@ -34,7 +34,9 @@ const AGENTS: Agent[] = [
   { id: 'research', naam: 'Zoekwoord-research', rol: 'Analytics', soort: 'AI (Claude)', start: 'Wekelijks', workflow: null, status: 'Gepland' },
   { id: 'links', naam: 'Interne links & CRO', rol: 'Content', soort: 'AI (Claude)', start: 'Tweewekelijks', workflow: null, status: 'Gepland' },
   { id: 'distributie', naam: 'Distributie', rol: 'Marketing', soort: 'AI (Claude)', start: 'Na publicatie', workflow: null, status: 'Gepland' },
-  { id: 'orchestrator', naam: 'Orchestrator', rol: 'Regie', soort: 'AI (Claude)', start: 'Dagelijks', workflow: null, status: 'Gepland' },
+  { id: 'orchestrator', naam: 'Orchestrator', rol: 'Regie', soort: 'AI (Claude)', start: 'Elke maandag', workflow: 'orchestrator.yml' },
+  { id: 'nieuwsbrief', naam: 'Nieuwsbrief (Brevo)', rol: 'Marketing', soort: 'AI (Claude)', start: 'Wekelijks, vanaf ±50 inschrijvers', workflow: null, status: 'Gepland' },
+  { id: 'inbox', naam: 'Inbox (Brevo)', rol: 'Marketing', soort: 'AI (Claude)', start: 'Bij binnenkomende mail', workflow: null, status: 'Gepland' },
 ];
 
 type Run = {

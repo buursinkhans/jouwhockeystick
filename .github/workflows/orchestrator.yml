@@ -1,0 +1,50 @@
+# Orchestrator: every Monday after the other reports, reads them and puts
+# out at most two content briefs plus a weekly plan, as GitHub issues.
+# Changes no files; the owner approves each brief with "@claude akkoord".
+# Runs on the owner's Claude subscription (secret CLAUDE_CODE_OAUTH_TOKEN).
+name: Orchestrator
+
+on:
+  schedule:
+    - cron: '37 6 * * 1' # Mondays 06:37 UTC, after catalog, Search Console and Technical SEO
+  workflow_dispatch:
+
+concurrency:
+  group: orchestrator
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+  id-token: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Labels klaarzetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create weekplanning --color 5319E7 --description "Weekplanning van de orchestrator" --force
+          gh label create voorstel --color FBCA04 --description "Wacht op goedkeuring van de eigenaar" --force
+          gh label create content-brief --color 1D76DB --description "Opdracht voor de content-agent" --force
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Je bent de orchestrator van jouwhockeystick.nl. Lees docs/orchestrator.md en voer het volledig uit voor vandaag.
+            Repository: ${{ github.repository }}. Gebruik `gh` voor issues en pull requests.
+          claude_args: |
+            --max-turns 40
+            --allowedTools "Read,Glob,Grep,Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue close:*),Bash(gh issue comment:*),Bash(gh pr list:*),Bash(npm run catalog:health),Bash(npm run --silent catalog:health),Bash(date:*)"

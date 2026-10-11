@@ -334,3 +334,13 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Waarom nu:** Google heeft de site nog niet geïndexeerd; technische fouten (noindex, verkeerde canonical, kapotte links) zijn dan het eerste om uit te sluiten.
 
 **Bewust niet:** externe links (bol.com en bronnen) worden niet gecontroleerd; partnerlinks en merksites blokkeren of beperken geautomatiseerde verzoeken. Geen Core Web Vitals; de laadtijd is alleen die van de HTML.
+
+## 2026-10-11 — Orchestrator
+
+**Wat:** `.github/workflows/orchestrator.yml` draait elke maandag na de rapporten (Claude Code GitHub Action, abonnement van de eigenaar). Hij volgt `docs/orchestrator.md`: leest de rapporten, lopend werk, bestaande content, catalogus en eerdere besluiten; zet maximaal 2 content-briefs uit (labels `content-brief` + `voorstel`) en één issue "Weekplanning". Hij mag alleen lezen en issues maken, sluiten en becommentariëren.
+
+**Goedkeuring:** briefs bevatten geen `@claude`. De eigenaar keurt een brief goed met de reactie `@claude akkoord`; pas dan schrijft de content-agent. Dat houdt kwaliteit en Claude-tegoed in de hand, en voorkomt dat agents elkaar eindeloos aansturen.
+
+## 2026-10-11 — E-mail en nieuwsbrief: Brevo (later)
+
+**Besluit eigenaar:** EU-proof werken; als het zover is wordt het **Brevo** (Frans, data in de EU volgens Brevo; let op een Amerikaanse subverwerker, te controleren in de verwerkersovereenkomst). Resend viel af (VS). Plan, in deze volgorde: aanmeldformulier met dubbele opt-in en aanpassing privacyverklaring (expliciete opdracht eigenaar nodig), lijst-bewaker (script), nieuwsbrief-agent vanaf ±50 inschrijvers (concept in Brevo, eigenaar verstuurt), inbox-agent via Brevo Inbound Parsing op een apart subdomein zodat `info@` ongemoeid blijft. Beide AI-agents staan als "Gepland" in de Agent-regiekamer.
