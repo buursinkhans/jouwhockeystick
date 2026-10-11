@@ -344,3 +344,9 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 ## 2026-10-11 — E-mail en nieuwsbrief: Brevo (later)
 
 **Besluit eigenaar:** EU-proof werken; als het zover is wordt het **Brevo** (Frans, data in de EU volgens Brevo; let op een Amerikaanse subverwerker, te controleren in de verwerkersovereenkomst). Resend viel af (VS). Plan, in deze volgorde: aanmeldformulier met dubbele opt-in en aanpassing privacyverklaring (expliciete opdracht eigenaar nodig), lijst-bewaker (script), nieuwsbrief-agent vanaf ±50 inschrijvers (concept in Brevo, eigenaar verstuurt), inbox-agent via Brevo Inbound Parsing op een apart subdomein zodat `info@` ongemoeid blijft. Beide AI-agents staan als "Gepland" in de Agent-regiekamer.
+
+## 2026-10-11 — Artikel "Zaalstick: wat krijg je voor een klein of ruim budget?"
+
+**Wat:** `/kennis/zaalstick-budget` (issue #20). Legt per prijsniveau (onder €50, €50–100, vanaf €100) uit wat de catalogus noemt aan carbon, bow-profiel en maten; alle cijfers en lijsten worden uit de catalogus gegenereerd. Botst niet met `/zaalsticks` (spelregels, lengte, selectie) en `/kennis/zaalstick-voor-kinderen` (kinderen); beide zijn gelinkt. Zaalsticks die niet bij bol.com te koop zijn staan erbij vermeld.
+
+**Bewust niet:** geen "beste"-lijst, geen kortingsclaims, geen claim dat een duurdere stick beter speelt, geen herhaling van spelregels en lengte. Ontbreekt een gegeven in de bron, dan staat dat er zo en wordt het niet geraden.
