@@ -82,6 +82,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # Name the failing command in an annotation, so the owner (and Claude) can read it without the log.
+          trap 'echo "::error::Pull request openen mislukt bij: $BASH_COMMAND"' ERR
           rm -f gaps.md
           if [ ! -f .catalogus-pr.md ]; then echo "Claude heeft geen stick toegevoegd (geen .catalogus-pr.md)."; git status --short; exit 0; fi
           mv .catalogus-pr.md "$RUNNER_TEMP/pr.md"
@@ -92,6 +94,9 @@ jobs:
           branch="catalogus/$(date -u +%Y-%m-%d)"
           title=$(head -n 1 "$RUNNER_TEMP/pr.md")
           { tail -n +2 "$RUNNER_TEMP/pr.md"; printf '\n\n_Gemaakt door de Catalogus-aanvuller op basis van de Marktverkenning. Controleer de bronnen in de preview; deze agent merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
+          # The Claude step reconfigures git auth; push with the workflow token explicitly.
+          git config --local --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
           git config user.name "Catalogus-aanvuller"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
