@@ -48,6 +48,13 @@ export function hockeyUrls(urls: string[]): string[] {
   return [...out].sort();
 }
 
+const ACCESSORY = /\b(klem|grip|zeemgrip|tape|hoes|tas|bag|set|speelgoed|bal|ballen|scheenbeschermer|handschoen)\b/i;
+
+/** True for an actual hockey stick; bol.com search also returns grips, clamps, tape and toy sets. */
+export function isHockeyStickTitle(title: string): boolean {
+  return /stick/i.test(title) && !ACCESSORY.test(title);
+}
+
 /** `Sitemap:` lines from robots.txt, limited to the given host. */
 export function sitemapsFromRobots(robots: string, host: string): string[] {
   return robots
