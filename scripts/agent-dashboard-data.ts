@@ -30,7 +30,7 @@ const AGENTS: Agent[] = [
   { id: 'bolfeed', naam: 'bol.com feed', rol: 'Data', soort: 'Script', start: 'Handmatig (testmodus)', workflow: 'bol-feed-check.yml' },
   { id: 'searchconsole', naam: 'Search Console-rapport', rol: 'Analytics', soort: 'Script', start: 'Elke maandag', workflow: 'search-console.yml' },
   { id: 'content', naam: 'Content-agent', rol: 'Content', soort: 'AI (Claude)', start: 'Op @claude', workflow: 'claude.yml' },
-  { id: 'techseo', naam: 'Technical SEO', rol: 'Bewaking', soort: 'Script', start: 'Wekelijks', workflow: null, status: 'Gepland' },
+  { id: 'techseo', naam: 'Technical SEO', rol: 'Bewaking', soort: 'Script', start: 'Elke maandag', workflow: 'technical-seo.yml' },
   { id: 'research', naam: 'Zoekwoord-research', rol: 'Analytics', soort: 'AI (Claude)', start: 'Wekelijks', workflow: null, status: 'Gepland' },
   { id: 'links', naam: 'Interne links & CRO', rol: 'Content', soort: 'AI (Claude)', start: 'Tweewekelijks', workflow: null, status: 'Gepland' },
   { id: 'distributie', naam: 'Distributie', rol: 'Marketing', soort: 'AI (Claude)', start: 'Na publicatie', workflow: null, status: 'Gepland' },
