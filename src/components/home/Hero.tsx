@@ -1,4 +1,4 @@
-import { Logo, LogoIcon } from '@/components/brand/Logo';
+import { AnimatedLogoIcon, Logo } from '@/components/brand/Logo';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import { SCREENS } from '@/content/stickwijzer/questions';
@@ -22,10 +22,10 @@ function HeroVisual() {
   return (
     <div
       aria-hidden="true"
-      className="relative mx-auto flex w-full max-w-xs justify-center py-4 [&>svg]:h-56 [&>svg]:w-56 sm:[&>svg]:h-64 sm:[&>svg]:w-64"
+      className="relative mx-auto flex w-full max-w-xs justify-end py-2 sm:justify-center [&>svg]:h-40 [&>svg]:w-40 md:[&>svg]:h-44 md:[&>svg]:w-44"
     >
-      <LogoIcon size={256} />
-      <ul className="absolute top-8 -left-2 space-y-2 sm:-left-10">
+      <AnimatedLogoIcon size={176} />
+      <ul className="absolute top-4 -left-2 space-y-2 sm:-left-6 lg:-left-16">
         {EXAMPLE_REASONS.map((reason) => (
           <li
             key={reason}
@@ -46,20 +46,20 @@ function HeroVisual() {
 export function Hero() {
   return (
     <section className="bg-hex-light border-b border-rand bg-krijt">
-      <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 py-14 sm:px-6 sm:py-20 md:grid-cols-[3fr_2fr]">
+      <div className="mx-auto grid max-w-5xl items-center gap-8 px-4 py-10 sm:px-6 sm:py-12 md:grid-cols-[3fr_2fr]">
         <div>
           <div className="hidden sm:block">
-            <Logo variant="wordmark" size={40} tagline href={null} />
+            <Logo variant="wordmark" size={30} tagline href={null} />
           </div>
-          <h1 className="sm:mt-8 text-4xl leading-tight font-extrabold text-inkt sm:text-5xl">
+          <h1 className="text-4xl leading-tight font-extrabold text-inkt sm:mt-5 sm:text-5xl">
             Vind de hockeystick die bij jou past
           </h1>
-          <p className="mt-5 max-w-xl text-lg text-inkt/80">
+          <p className="mt-4 max-w-xl text-lg text-inkt/80">
             Beantwoord een paar vragen over lengte, ervaring, speelwensen en
             budget. Je krijgt maximaal drie sticks, elk met de redenen waarom
             hij past — en eerlijk waar je op inlevert.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="mt-6 flex flex-wrap items-center gap-4">
             <ButtonLink href="/stickwijzer" variant="accent">
               Start de stickwijzer
             </ButtonLink>

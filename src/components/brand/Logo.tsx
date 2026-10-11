@@ -5,6 +5,7 @@ import {
   iconMarkup,
   wordmarkStickMarkup,
   type IconVariant,
+  animatedIconMarkup,
 } from './logoGeometry';
 
 type LogoVariant = 'wordmark' | 'wordmark-negative' | 'lockup' | 'icon';
@@ -49,6 +50,23 @@ export function LogoIcon({ size }: { size: number }) {
       aria-hidden="true"
       className="shrink-0"
       dangerouslySetInnerHTML={{ __html: iconMarkup(variant) }}
+    />
+  );
+}
+
+/**
+ * The large icon that plays the push animation once on load (see
+ * globals.css). With "reduce motion" on, it shows the still logo at once.
+ */
+export function AnimatedLogoIcon({ size }: { size: number }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      className="jhs-anim shrink-0"
+      dangerouslySetInnerHTML={{ __html: animatedIconMarkup() }}
     />
   );
 }

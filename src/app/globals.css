@@ -62,6 +62,119 @@
   outline-color: #ffffff;
 }
 
+/*
+ * Hero logo animation (plays once): the ball lies in the curl of the hook,
+ * the stick gives a short push and the ball arcs up to its place as the dot
+ * of the j. Positions are offsets from the ball's final spot in the icon's
+ * own units, so the animation always ends in the real logo. Transform and
+ * opacity only; never played when the visitor prefers reduced motion.
+ */
+/* Only for people who have not asked for less motion: they see the still logo. */
+@media (prefers-reduced-motion: no-preference) {
+  .jhs-anim .jhs-anim-ball {
+    animation: jhs-ball-to-dot 1.3s linear 0.4s both;
+  }
+  .jhs-anim .jhs-anim-stick {
+    animation: jhs-stick-push 1.3s ease-out 0.4s both;
+  }
+}
+/*
+ * Sampled from one cubic Bézier (curl of the hook → dot) with a single
+ * ease-out over the flight; intervals are linear, so the ball moves in one
+ * smooth arc instead of easing in and out at every point.
+ */
+@keyframes jhs-ball-to-dot {
+  0%,
+  18% {
+    transform: translate(-15px, 56px);
+  }
+  21.42% {
+    transform: translate(-16.12px, 49.23px);
+  }
+  24.83% {
+    transform: translate(-16.78px, 42.34px);
+  }
+  28.25% {
+    transform: translate(-17.02px, 35.62px);
+  }
+  31.67% {
+    transform: translate(-16.9px, 29.28px);
+  }
+  35.08% {
+    transform: translate(-16.47px, 23.47px);
+  }
+  38.5% {
+    transform: translate(-15.79px, 18.28px);
+  }
+  41.92% {
+    transform: translate(-14.89px, 13.77px);
+  }
+  45.33% {
+    transform: translate(-13.83px, 9.94px);
+  }
+  48.75% {
+    transform: translate(-12.65px, 6.8px);
+  }
+  52.17% {
+    transform: translate(-11.39px, 4.28px);
+  }
+  55.58% {
+    transform: translate(-10.09px, 2.35px);
+  }
+  59% {
+    transform: translate(-8.77px, 0.94px);
+  }
+  62.42% {
+    transform: translate(-7.48px, -0.03px);
+  }
+  65.83% {
+    transform: translate(-6.24px, -0.64px);
+  }
+  69.25% {
+    transform: translate(-5.07px, -0.95px);
+  }
+  72.67% {
+    transform: translate(-4px, -1.04px);
+  }
+  76.08% {
+    transform: translate(-3.03px, -0.98px);
+  }
+  79.5% {
+    transform: translate(-2.19px, -0.82px);
+  }
+  82.92% {
+    transform: translate(-1.49px, -0.62px);
+  }
+  86.33% {
+    transform: translate(-0.92px, -0.41px);
+  }
+  89.75% {
+    transform: translate(-0.49px, -0.23px);
+  }
+  93.17% {
+    transform: translate(-0.2px, -0.1px);
+  }
+  96.58% {
+    transform: translate(-0.04px, -0.02px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+@keyframes jhs-stick-push {
+  0%,
+  12% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-0.5px, -1.5px);
+  }
+  34%,
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
 /* Respect the system setting for less motion. */
 @media (prefers-reduced-motion: reduce) {
   *,

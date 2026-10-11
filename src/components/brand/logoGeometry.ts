@@ -118,3 +118,23 @@ export function iconMarkup(variant: IconVariant): string {
     <circle cx="58" cy="15" r="${spec.ballRadius}" fill="${BRAND_HEX.bal}"/>
   </g>`;
 }
+
+/**
+ * The large icon with hooks for the hero animation: the ball starts at the
+ * toe of the hook, the stick gives a short push and the ball arcs up to its
+ * place as the dot of the j. Same shapes as iconMarkup('large'); only class
+ * names are added, so the end state is always the real logo. The stick never
+ * rotates (merkinstructie §4.2); it only nudges.
+ */
+export function animatedIconMarkup(): string {
+  const spec = ICON_SPECS.large;
+  return `<rect width="100" height="100" rx="${spec.radius}" fill="${spec.background}"/>
+  <circle cx="50" cy="122" r="48" fill="none" stroke="${BRAND_HEX.wit}" stroke-opacity="${spec.arcOpacity}" stroke-width="2.5"/>
+  <g transform="rotate(${STICK_TILT_DEG} 58 55)">
+    <g class="jhs-anim-stick">
+      <path d="${spec.shaft}" fill="none" stroke="${BRAND_HEX.wit}" stroke-width="${spec.strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${spec.grip}" stroke="${spec.background}" stroke-width="${spec.gripWidth}" stroke-linecap="round"/>
+    </g>
+    <circle class="jhs-anim-ball" cx="58" cy="15" r="${spec.ballRadius}" fill="${BRAND_HEX.bal}"/>
+  </g>`;
+}

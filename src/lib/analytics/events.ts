@@ -51,4 +51,10 @@ export type AnalyticsEvent =
       sizes: string;
       resultCount: number;
     }
+  | {
+      /** A click in a homepage block under the hero, to see what it adds to the funnel. */
+      name: 'home_block_click';
+      block: 'season' | 'buying';
+      target: string;
+    }
   | AdviceAnalyticsEvent;
