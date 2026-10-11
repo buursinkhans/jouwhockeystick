@@ -6,6 +6,9 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Started by agent workflows whose pull requests (opened with the workflow
+  # token) do not trigger pull_request runs themselves.
+  workflow_dispatch:
 
 permissions:
   contents: read

@@ -390,3 +390,11 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Datum meegeven:** veld *Publicatiedatum* in het brief-sjabloon en in het formulier op de bediening; in een open PR met `@claude zet de publicatiedatum op JJJJ-MM-DD`.
 
 **Regel:** een live pagina linkt niet naar een geplande pagina (test).
+
+## 2026-10-11 — Catalogus-aanvuller
+
+**Wat:** elke dinsdag (na de Marktverkenner) zoekt `npm run catalog:gaps` populaire sticks uit de bol.com-toplijsten die niet in de catalogus staan, met productgegevens uit de bol.com-API. Claude voegt er maximaal 2 toe volgens `docs/catalogus-aanvuller.md` (merksite eerst, anders bol.com als `partner-shop`; specs alleen met bron) en de workflow opent één PR (`catalogus/<datum>`). Eén catalogus-PR tegelijk: staat er nog een open, dan slaat hij de week over. De eigenaar merget.
+
+**Waarom:** een stick die niet in de catalogus staat, kan de stickwijzer niet adviseren en levert dus geen klik naar bol.com op. De Marktverkenner liet zien dat o.a. de Grays DB 5 (#1 op bol.com) ontbrak.
+
+**Techniek:** PR's die met het workflow-token worden geopend starten zelf geen andere workflows; de workflow start daarom de Kwaliteitscontrole (`ci.yml`, nu ook `workflow_dispatch`) zelf op de branch.
