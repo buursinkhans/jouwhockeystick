@@ -327,3 +327,10 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Wat:** `/kennis/veldstick-zaalhockey` (issue #16). Eigen zoekintentie: mag en kan een veldstick in de zaal, voor alle spelers. Botst niet met `/zaalsticks` (zaalstick kiezen in het algemeen) en `/kennis/zaalstick-voor-kinderen` (kinderen); beide zijn in de tekst gelinkt. Spelregelclaims komen uit dezelfde FIH-bronnen; de zaalstickprijs komt uit de catalogus.
 
 **Bewust niet:** de brief had geen ingevulde hoofdvraag of doelgroep; de titel is als hoofdvraag gebruikt. Geen uitspraken over club- of competitieregels (niet te verifiëren; verwezen naar de club) en geen prestatieclaims over zaal- versus veldsticks.
+## 2026-10-11 — Technical SEO-agent
+
+**Wat:** `src/seo/technicalSeo.ts` (pure functies, met tests) en `scripts/technical-seo.ts` (`npm run seo:technical`) controleren elke pagina uit de live sitemap: status 200, doorverwijzingen, noindex, title en meta description (aanwezig, lengte, uniek), canonical gelijk aan de URL, precies één H1, afbeeldingen zonder alt-tekst en laadtijd. Daarna worden alle interne links op die pagina's gecontroleerd op kapotte bestemmingen. Workflow "Technical SEO" draait elke maandag en houdt één issue bij; wijzigt een PR de controle zelf, dan zet hij het rapport op die PR.
+
+**Waarom nu:** Google heeft de site nog niet geïndexeerd; technische fouten (noindex, verkeerde canonical, kapotte links) zijn dan het eerste om uit te sluiten.
+
+**Bewust niet:** externe links (bol.com en bronnen) worden niet gecontroleerd; partnerlinks en merksites blokkeren of beperken geautomatiseerde verzoeken. Geen Core Web Vitals; de laadtijd is alleen die van de HTML.

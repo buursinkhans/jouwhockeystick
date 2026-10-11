@@ -1,0 +1,54 @@
+# Weekly Technical SEO check (read-only): crawls the live sitemap and its
+# internal links and writes the findings to one GitHub issue. On a pull
+# request that changes the check itself, it posts the report on the PR.
+name: Technical SEO
+
+on:
+  schedule:
+    - cron: '7 6 * * 1' # Mondays 06:07 UTC, after the other reports
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/technical-seo.ts'
+      - 'src/seo/technicalSeo.ts'
+      - '.github/workflows/technical-seo.yml'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Site controleren
+        id: crawl
+        run: npm run --silent seo:technical > report.md
+        continue-on-error: true
+      - name: Rapport op de PR zetten
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment ${{ github.event.pull_request.number }} --body-file report.md
+      - name: Rapport in issue zetten
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create technical-seo --color B60205 --force
+          number=$(gh issue list --label technical-seo --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file report.md
+            gh issue comment "$number" --body "Rapport bijgewerkt op $(date -u +%F)."
+          else
+            gh issue create --title "Technical SEO" --label technical-seo --body-file report.md
+          fi
+      - name: Mislukte controle zichtbaar maken
+        if: steps.crawl.outcome == 'failure'
+        run: exit 1
