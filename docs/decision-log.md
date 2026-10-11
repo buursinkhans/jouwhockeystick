@@ -321,3 +321,9 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 - **Structuur:** /sticks heeft een H2 boven de lijst, zodat er geen kopniveau meer wordt overgeslagen. Op mobiel staat het woordmerk niet meer dubbel boven de vouw (header én hero).
 
 **Afwijking van de merkinstructie:** op mobiel is het header-icoon 26 px in plaats van 32 px, zodat logo, Stickwijzer-knop en menuknop tot 360 px op één rij passen. Het woordmerk is daardoor 138 px breed, 2 px onder het minimum van 140 px uit §4.1.
+
+## 2026-10-11 — Artikel "Kun je met een veldstick zaalhockeyen?"
+
+**Wat:** `/kennis/veldstick-zaalhockey` (issue #16). Eigen zoekintentie: mag en kan een veldstick in de zaal, voor alle spelers. Botst niet met `/zaalsticks` (zaalstick kiezen in het algemeen) en `/kennis/zaalstick-voor-kinderen` (kinderen); beide zijn in de tekst gelinkt. Spelregelclaims komen uit dezelfde FIH-bronnen; de zaalstickprijs komt uit de catalogus.
+
+**Bewust niet:** de brief had geen ingevulde hoofdvraag of doelgroep; de titel is als hoofdvraag gebruikt. Geen uitspraken over club- of competitieregels (niet te verifiëren; verwezen naar de club) en geen prestatieclaims over zaal- versus veldsticks.

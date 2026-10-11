@@ -4,12 +4,14 @@ import { hockeystickKinderenEnBeginners } from './articles/hockeystick-kinderen-
 import { lowBowVsMidBow } from './articles/low-bow-vs-mid-bow';
 import { hoeKiesJeDeJuisteHockeystick } from './articles/hoe-kies-je-de-juiste-hockeystick';
 import { zaalstickVoorKinderen } from './articles/zaalstick-voor-kinderen';
+import { veldstickZaalhockey } from './articles/veldstick-zaalhockey';
 
 /** Listed on /kennis in this order. */
 const ALL_ARTICLES: Article[] = [
   hockeystickLengteTabel,
   hockeystickKinderenEnBeginners,
   zaalstickVoorKinderen,
+  veldstickZaalhockey,
   lowBowVsMidBow,
   hoeKiesJeDeJuisteHockeystick,
 ];
