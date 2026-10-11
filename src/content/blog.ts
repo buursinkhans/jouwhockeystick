@@ -1,4 +1,5 @@
 import type { Article } from './types';
+import { visibleItems } from './schedule';
 import { hockeystickKiezenPraktischeTips } from './blogPosts/hockeystick-kiezen-praktische-tips';
 import { hockeystickKopen } from './blogPosts/hockeystick-kopen';
 import { metWelkeStickSpeeltOranje } from './blogPosts/met-welke-stick-speelt-oranje';
@@ -10,10 +11,16 @@ const ALL_BLOG_POSTS: Article[] = [
   metWelkeStickSpeeltOranje,
 ];
 
+/** Blog posts a visitor may see now (scheduled ones only on previews). */
 export function getAllBlogPosts(): Article[] {
-  return [...ALL_BLOG_POSTS];
+  return visibleItems(ALL_BLOG_POSTS);
 }
 
 export function getBlogPostBySlug(slug: string): Article | undefined {
-  return ALL_BLOG_POSTS.find((post) => post.slug === slug);
+  return getAllBlogPosts().find((post) => post.slug === slug);
+}
+
+/** Every blog post, including scheduled ones. For tests and the publication workflow. */
+export function getBlogPostsIncludingScheduled(): Article[] {
+  return [...ALL_BLOG_POSTS];
 }

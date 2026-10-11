@@ -5,6 +5,7 @@ import { getAllArticles, getArticleBySlug } from '@/content';
 import { ArticleBody } from '@/components/article/ArticleBody';
 import { ArticleMeta } from '@/components/article/ArticleMeta';
 import { SourceList } from '@/components/article/SourceList';
+import { ScheduledNotice } from '@/components/article/ScheduledNotice';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 
 export function generateStaticParams() {
@@ -65,6 +66,7 @@ export default async function ArticlePage({
           { label: article.title, href: `/kennis/${article.slug}` },
         ]}
       />
+      <ScheduledNotice article={article} />
       <h1 className="text-3xl font-bold">{article.title}</h1>
       <div className="mt-2">
         <ArticleMeta article={article} />

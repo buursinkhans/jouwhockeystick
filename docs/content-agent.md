@@ -9,6 +9,7 @@ Een opdracht is een GitHub-issue met het label `content-brief` (sjabloon: *Conte
 - **Onderwerp en hoofdvraag**: de vraag die de lezer stelt, in zijn eigen woorden.
 - **Soort**: `kennis` (blijvende uitleg, `/kennis/…`) of `blog` (actueel of verhalend, `/blog/…`).
 - **Doelgroep**: bijvoorbeeld ouders van een jeugdspeler, of een volwassen beginner.
+- **Publicatiedatum** (optioneel): de dag waarop de pagina live moet. Leeg = direct na de merge.
 - **Eventueel**: bronnen, zoekwoorden uit het Search Console-rapport, wat er zeker niet in moet.
 
 De agent werkt de brief uit in één pull request en reageert in het issue met een samenvatting. Feedback komt als `@claude …` in de PR; de agent past de PR daarop aan. **De agent merget nooit zelf.**
@@ -35,7 +36,10 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 
 - Een artikel is een `Article` (`src/content/types.ts`) in een eigen bestand: `src/content/articles/<slug>.ts` of `src/content/blogPosts/<slug>.ts`.
 - Voeg het toe aan de lijst in `src/content/index.ts` (kennis) of `src/content/blog.ts` (blog). De sitemap en de overzichtspagina's volgen vanzelf.
-- `author`: `Redactie jouwhockeystick.nl`. `publishedAt` en `updatedAt`: de datum van vandaag.
+- `author`: `Redactie jouwhockeystick.nl`.
+- `publishedAt`: de **publicatiedatum** uit de brief (`YYYY-MM-DD`); staat er geen, dan de datum van vandaag. `updatedAt`: gelijk aan `publishedAt`. Ligt de datum in de toekomst, dan is de pagina tot die dag onzichtbaar op de live site (niet in overzichten, sitemap of `llms.txt`) en alleen in de Netlify-preview te zien, met een melding "Gepland voor …". Op de publicatiedatum bouwt de workflow *Geplande publicatie* de site 's ochtends opnieuw (`src/content/schedule.ts`). Noem de datum in de PR-titel: `Content: <onderwerp> (#<issue>, live <datum>)`.
+- Link alleen naar pagina's die uiterlijk op jouw publicatiedatum live staan (test). Een geplande pagina mag dus naar live pagina's linken, maar een live pagina niet naar een geplande (zet die link pas na de publicatiedatum).
+- Vraagt de eigenaar in de PR om een andere datum (`@claude zet de publicatiedatum op …`), pas dan alleen `publishedAt` en `updatedAt` aan.
 - Elke externe link in de tekst staat ook in `sources` (test).
 - `metaDescription`: uniek, inhoudelijk, maximaal 158 tekens.
 - Raakt het artikel een bestaande pagina (bijv. een link of correctie), houd die wijziging klein.

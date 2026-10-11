@@ -1,0 +1,76 @@
+# Scheduled publishing: every morning, check whether an article or blog post
+# reaches its publication date (publishedAt) since the last production build.
+# If so, rebuild the live site through a Netlify build hook (secret
+# NETLIFY_BUILD_HOOK). Costs Netlify credits only on those days. Also keeps
+# one issue with the publication schedule up to date.
+name: Geplande publicatie
+
+on:
+  schedule:
+    - cron: '3 4 * * *' # daily 04:03 UTC = 05:03/06:03 Dutch time
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  actions: read
+
+concurrency:
+  group: publicatie
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Laatste live-build bepalen
+        id: since
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Last production build = the last push to main, or the last time
+          # this workflow rebuilt the site, whichever is later (Dutch dates).
+          head=$(TZ=Europe/Amsterdam date -d "$(git log -1 --format=%cI)" +%F)
+          hook=0000-00-00
+          for id in $(gh api "repos/${{ github.repository }}/actions/workflows/publicatie.yml/runs?status=success&per_page=30" --jq '.workflow_runs[].id'); do
+            ran=$(gh api "repos/${{ github.repository }}/actions/runs/$id/jobs" --jq '[.jobs[].steps[] | select(.name == "Netlify opnieuw bouwen" and .conclusion == "success")] | length')
+            if [ "$ran" -gt 0 ]; then
+              hook=$(TZ=Europe/Amsterdam date -d "$(gh api "repos/${{ github.repository }}/actions/runs/$id" --jq .run_started_at)" +%F)
+              break
+            fi
+          done
+          since=$head
+          if [[ "$hook" > "$since" ]]; then since=$hook; fi
+          echo "Laatste push naar main: $head; laatste herbouw door deze workflow: $hook"
+          echo "since=$since" >> "$GITHUB_OUTPUT"
+      - name: Planning controleren
+        id: plan
+        run: npm run --silent content:schedule -- "${{ steps.since.outputs.since }}" planning.md
+      - name: Netlify opnieuw bouwen
+        if: steps.plan.outputs.due == 'true'
+        env:
+          HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::error::Secret NETLIFY_BUILD_HOOK ontbreekt: maak een build hook in Netlify en zet de URL als repository secret."
+            exit 1
+          fi
+          curl --fail --silent --show-error -X POST -d '{}' "$HOOK"
+          echo "Netlify bouwt de site opnieuw."
+      - name: Planning in issue zetten
+        if: always() && steps.plan.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create publicatieplanning --color 1D76DB --force
+          number=$(gh issue list --label publicatieplanning --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file planning.md
+          else
+            gh issue create --title "Publicatieplanning" --label publicatieplanning --body-file planning.md
+          fi

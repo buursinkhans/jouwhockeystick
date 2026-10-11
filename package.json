@@ -15,6 +15,7 @@
     "seo:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/search-console-report.ts",
     "dashboard:data": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/agent-dashboard-data.ts",
     "seo:technical": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/technical-seo.ts",
+    "content:schedule": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/content-schedule.ts",
     "market:scan": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/market-scan.ts"
   },
   "dependencies": {

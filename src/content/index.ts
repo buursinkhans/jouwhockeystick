@@ -1,4 +1,5 @@
 import type { Article } from './types';
+import { visibleItems } from './schedule';
 import { hockeystickLengteTabel } from './articles/hockeystick-lengte-tabel';
 import { hockeystickKinderenEnBeginners } from './articles/hockeystick-kinderen-en-beginners';
 import { lowBowVsMidBow } from './articles/low-bow-vs-mid-bow';
@@ -18,10 +19,16 @@ const ALL_ARTICLES: Article[] = [
   hoeKiesJeDeJuisteHockeystick,
 ];
 
+/** Articles a visitor may see now (scheduled ones only on previews). */
 export function getAllArticles(): Article[] {
-  return ALL_ARTICLES;
+  return visibleItems(ALL_ARTICLES);
 }
 
 export function getArticleBySlug(slug: string): Article | undefined {
-  return ALL_ARTICLES.find((article) => article.slug === slug);
+  return getAllArticles().find((article) => article.slug === slug);
+}
+
+/** Every article, including scheduled ones. For tests and the publication workflow. */
+export function getArticlesIncludingScheduled(): Article[] {
+  return [...ALL_ARTICLES];
 }
