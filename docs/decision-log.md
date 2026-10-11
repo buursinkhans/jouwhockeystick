@@ -360,3 +360,21 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Netjes scrapen:** alleen sitemaps en robots.txt, één site tegelijk, 2 seconden tussen verzoeken (de crawl-delay van PassaSports), eigen user-agent met contact-URL, maximaal 80 sitemapbestanden per site, één keer per week. Geen productpagina's of prijzen van concurrenten ophalen.
 
 **Bewust niet:** het GEO-scorebord (AI-zichtbaarheid via OpenRouter) staat op de plank tot de eigenaar het vraagt.
+
+## 2026-10-11 — Homepage: zaalseizoensband, compactere hero en logo-animatie
+
+**Aanleiding:**
+- De homepage had niets voor zaalbezoekers, terwijl de stickwijzer alleen veldsticks adviseert.
+- Op een 14"-laptop stond alles onder de hero onder de vouw.
+
+**Wat:**
+- **Seizoensband (versie A, live):** "Het zaalseizoen komt eraan", direct onder de hero. De knop gaat naar de zaalkeuze (`/zaalsticks`), met een tekstlink naar *Zaalstick voor kinderen*.
+  - De band staat er alleen van oktober tot en met februari. De homepage wordt dagelijks opnieuw opgebouwd (`revalidate`), dus de band gaat vanzelf aan en uit.
+  - De knop is veldblauw: oranje blijft voor de stickwijzer (merkinstructie).
+- **Versie B** ("Een goede stick begint bij jouw spel", met de zaalstick als bijzondere stick) staat klaar in de code. Wisselen kan met `HOME_INTRO_VARIANT` in `src/content/home.ts`.
+- **Meten:** `home_block_click` (block, target), om in PostHog te zien wat de band toevoegt naast `quiz_start`.
+- **Hero compacter:** het grote icoon is 176 px (was 256, nog boven het minimum van 128 px voor boog en grip uit §3.2). Het woordmerk met pay-off blijft (§5), maar kleiner. Op 1440×780 staat de band volledig in beeld; op 1366×650 de titel en de knop.
+- **Logo-animatie:** de stick schept de bal uit de krul naar zijn plek als punt van de j.
+  - Eén vloeiende, gesamplede curve en één keer afgespeeld, in ongeveer 1,7 s.
+  - De stick draait nooit (§4.2); het eindbeeld is precies het logo.
+  - Bij "minder beweging" wordt de animatie niet afgespeeld.
