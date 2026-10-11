@@ -5,6 +5,7 @@ import { getAllBlogPosts, getBlogPostBySlug } from '@/content/blog';
 import { ArticleBody } from '@/components/article/ArticleBody';
 import { ArticleMeta } from '@/components/article/ArticleMeta';
 import { SourceList } from '@/components/article/SourceList';
+import { ScheduledNotice } from '@/components/article/ScheduledNotice';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 
 export function generateStaticParams() {
@@ -65,6 +66,7 @@ export default async function BlogPostPage({
           { label: post.title, href: `/blog/${post.slug}` },
         ]}
       />
+      <ScheduledNotice article={post} />
       <h1 className="text-3xl font-bold">{post.title}</h1>
       <div className="mt-2">
         <ArticleMeta article={post} />

@@ -38,8 +38,9 @@ export const articleSchema = z.object({
   intro: z.string(),
   sections: z.array(articleSectionSchema),
   author: z.string(),
-  publishedAt: z.string(),
-  updatedAt: z.string(),
+  /** YYYY-MM-DD. The page goes live on this date (Dutch time); see schedule.ts. */
+  publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  updatedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   sources: z.array(
     z.object({
       label: z.string(),

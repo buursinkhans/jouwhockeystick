@@ -380,3 +380,13 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
   - Eén vloeiende, gesamplede curve en één keer afgespeeld, in ongeveer 1,7 s.
   - De stick draait nooit (§4.2); het eindbeeld is precies het logo.
   - Bij "minder beweging" wordt de animatie niet afgespeeld.
+
+## 2026-10-11 — Content inplannen met een publicatiedatum
+
+**Besluit eigenaar:** content moet vooruit gemaakt kunnen worden en op een gekozen datum live gaan.
+
+**Hoe:** `publishedAt` (JJJJ-MM-DD, Nederlandse tijd) is de publicatiedatum. Daarvóór staat een pagina niet op de live site: niet als pagina, niet in overzichten, sitemap of `llms.txt` (`src/content/schedule.ts`). Op Netlify-previews is hij wel te zien, met de melding "Gepland voor …". De workflow *Geplande publicatie* kijkt elke ochtend (±06:00) of er iets live moet en laat Netlify dan opnieuw bouwen via de build hook (secret `NETLIFY_BUILD_HOOK`; 15 credits per publicatiedag). De planning staat in een issue met label `publicatieplanning` en op de Agent-bediening onder *Gepland*.
+
+**Datum meegeven:** veld *Publicatiedatum* in het brief-sjabloon en in het formulier op de bediening; in een open PR met `@claude zet de publicatiedatum op JJJJ-MM-DD`.
+
+**Regel:** een live pagina linkt niet naar een geplande pagina (test).

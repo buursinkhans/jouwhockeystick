@@ -13,6 +13,9 @@ labels: content-brief
 **Doelgroep:**
 <!-- Bijv.: ouders van een jeugdspeler -->
 
+**Publicatiedatum (optioneel):**
+<!-- JJJJ-MM-DD, bijv. 2026-11-15. Leeg = direct na de merge. -->
+
 **Bronnen, zoekwoorden of wensen (optioneel):**
 
 **Wat er zeker niet in moet (optioneel):**
