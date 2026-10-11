@@ -16,7 +16,7 @@ type Agent = {
   id: string;
   naam: string;
   rol: string;
-  soort: 'Script' | 'AI (Claude)';
+  soort: 'Script' | 'AI (Claude)' | 'Script + AI (Claude)';
   start: string;
   workflow: string | null;
   /** Fixed status for agents without runs; derived from runs otherwise. */
@@ -31,6 +31,7 @@ const AGENTS: Agent[] = [
   { id: 'searchconsole', naam: 'Search Console-rapport', rol: 'Analytics', soort: 'Script', start: 'Elke maandag', workflow: 'search-console.yml' },
   { id: 'content', naam: 'Content-agent', rol: 'Content', soort: 'AI (Claude)', start: 'Op @claude', workflow: 'claude.yml' },
   { id: 'techseo', naam: 'Technical SEO', rol: 'Bewaking', soort: 'Script', start: 'Elke maandag', workflow: 'technical-seo.yml' },
+  { id: 'markt', naam: 'Marktverkenner', rol: 'Analytics', soort: 'Script + AI (Claude)', start: 'Elke maandag', workflow: 'marktverkenning.yml' },
   { id: 'research', naam: 'Zoekwoord-research', rol: 'Analytics', soort: 'AI (Claude)', start: 'Wekelijks', workflow: null, status: 'Gepland' },
   { id: 'links', naam: 'Interne links & CRO', rol: 'Content', soort: 'AI (Claude)', start: 'Tweewekelijks', workflow: null, status: 'Gepland' },
   { id: 'distributie', naam: 'Distributie', rol: 'Marketing', soort: 'AI (Claude)', start: 'Na publicatie', workflow: null, status: 'Gepland' },

@@ -11,6 +11,7 @@ Gebruik `gh` voor GitHub (de repo is de huidige repo).
    - `technical-seo` — technische fouten op de live site
    - `search-console` — zoekverkeer uit Google
    - `bol-feed` — beschikbaarheid en prijzen bij bol.com (draait alleen op verzoek; kan oud zijn)
+   - `marktverkenning` — nieuwe hockeypagina's bij PassaSports, Daka en Vrijbuiter en de populairste hockeysticks op bol.com, met de duiding als reactie eronder
 2. **Wat er al loopt:** open issues met label `content-brief` en open pull requests (`gh pr list`). Zet nooit werk uit dat daar al staat.
 3. **Wat er al op de site staat:** de titels en intro's in `src/content/articles/`, `src/content/blogPosts/` en `src/content/zaal.ts`.
 4. **De catalogus:** `npm run catalog:health`, en waar nodig `src/catalog/products/` (merken, zaal of veld, niveau, prijs, junior of senior).
@@ -24,7 +25,8 @@ Een kans is iets wat met weinig moeite veel oplevert voor bezoekers en omzet. Ra
 1. **Iets wat de site schaadt**, zoals een fout in het Technical SEO-rapport of een stick die verborgen dreigt te raken. Dit is werk voor de eigenaar, geen brief.
 2. **Zoekwoorden die bijna op pagina 1 staan** (Search Console, positie 5–20), zodra er data is.
 3. **Seizoen:** content die binnen 6–8 weken nodig is.
-4. **Gaten tussen catalogus en content:** een groep sticks (merk, budget, doelgroep) waar bezoekers naar zoeken en die nog geen eigen pagina heeft.
+4. **Markt:** een model dat stijgt op bol.com of dat concurrenten net toevoegen en dat niet in onze catalogus staat (werk voor de eigenaar: catalogus), of een onderwerp waar concurrenten content over maken en wij niet.
+5. **Gaten tussen catalogus en content:** een groep sticks (merk, budget, doelgroep) waar bezoekers naar zoeken en die nog geen eigen pagina heeft.
 
 Kwaliteit gaat boven volume. Schrijf geen brief die een bestaande pagina herhaalt (zie `docs/content-agent.md` §2); stel dan een uitbreiding van die pagina voor. Geen "beste stick"-lijsten of "review"-titels: we testen niet zelf.
 
