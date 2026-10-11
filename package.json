@@ -14,7 +14,8 @@
     "bol:feed-check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/bol-feed-check.ts",
     "seo:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/search-console-report.ts",
     "dashboard:data": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/agent-dashboard-data.ts",
-    "seo:technical": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/technical-seo.ts"
+    "seo:technical": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/technical-seo.ts",
+    "market:scan": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/market-scan.ts"
   },
   "dependencies": {
     "next": "16.3.6",

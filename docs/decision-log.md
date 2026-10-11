@@ -350,3 +350,13 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Wat:** `/kennis/zaalstick-budget` (issue #20). Legt per prijsniveau (onder €50, €50–100, vanaf €100) uit wat de catalogus noemt aan carbon, bow-profiel en maten; alle cijfers en lijsten worden uit de catalogus gegenereerd. Botst niet met `/zaalsticks` (spelregels, lengte, selectie) en `/kennis/zaalstick-voor-kinderen` (kinderen); beide zijn gelinkt. Zaalsticks die niet bij bol.com te koop zijn staan erbij vermeld.
 
 **Bewust niet:** geen "beste"-lijst, geen kortingsclaims, geen claim dat een duurdere stick beter speelt, geen herhaling van spelregels en lengte. Ontbreekt een gegeven in de bron, dan staat dat er zo en wordt het niet geraden.
+
+## 2026-10-11 — Marktverkenner
+
+**Wat:** elke maandag (vóór de Orchestrator) leest `scripts/market-scan.ts` (`npm run market:scan`) de openbare sitemaps van PassaSports, Daka en Vrijbuiter (alleen pagina's met "hockey" in het pad) en de 50 populairste resultaten voor "hockeystick" en "zaalhockeystick" via de bol.com-API. Hij vergelijkt met vorige week (bewaard op de branch `data/marktverkenning`, zonder deploy) en zet het rapport in één issue met label `marktverkenning`. Bij wijzigingen plaatst Claude een korte duiding (max. 5 punten) als reactie. De Orchestrator leest dit mee.
+
+**Concurrenten (keuze eigenaar):** bol.com, PassaSports, Daka, Vrijbuiter.
+
+**Netjes scrapen:** alleen sitemaps en robots.txt, één site tegelijk, 2 seconden tussen verzoeken (de crawl-delay van PassaSports), eigen user-agent met contact-URL, maximaal 80 sitemapbestanden per site, één keer per week. Geen productpagina's of prijzen van concurrenten ophalen.
+
+**Bewust niet:** het GEO-scorebord (AI-zichtbaarheid via OpenRouter) staat op de plank tot de eigenaar het vraagt.
