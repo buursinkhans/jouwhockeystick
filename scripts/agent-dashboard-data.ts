@@ -8,6 +8,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { getCatalogProducts } from '../src/catalog/index';
 import { getDiscipline } from '../src/catalog/discipline';
+import type { MarketSnapshot } from '../src/market/marketScan';
 
 const REPO = 'buursinkhans/jouwhockeystick';
 const DAYS = 30;
@@ -29,7 +30,7 @@ const AGENTS: Agent[] = [
   { id: 'kwaliteit', naam: 'Kwaliteitscontrole', rol: 'Kwaliteit', soort: 'Script', start: 'Bij elke PR', workflow: 'ci.yml' },
   { id: 'bolfeed', naam: 'bol.com feed', rol: 'Data', soort: 'Script', start: 'Handmatig (testmodus)', workflow: 'bol-feed-check.yml' },
   { id: 'searchconsole', naam: 'Search Console-rapport', rol: 'Analytics', soort: 'Script', start: 'Elke maandag', workflow: 'search-console.yml' },
-  { id: 'content', naam: 'Content-agent', rol: 'Content', soort: 'AI (Claude)', start: 'Op @claude', workflow: 'claude.yml' },
+  { id: 'content', naam: 'Content-agent', rol: 'Content', soort: 'AI (Claude)', start: 'Op akkoord of @claude', workflow: 'claude.yml' },
   { id: 'techseo', naam: 'Technical SEO', rol: 'Bewaking', soort: 'Script', start: 'Elke maandag', workflow: 'technical-seo.yml' },
   { id: 'markt', naam: 'Marktverkenner', rol: 'Analytics', soort: 'Script + AI (Claude)', start: 'Elke maandag', workflow: 'marktverkenning.yml' },
   { id: 'research', naam: 'Zoekwoord-research', rol: 'Analytics', soort: 'AI (Claude)', start: 'Wekelijks', workflow: null, status: 'Gepland' },
@@ -176,6 +177,48 @@ function searchConsole(): { groep: string; kpi: string; waarde: number }[] {
   }
 }
 
+/** Latest market scan: the snapshot on the data branch plus the report issue and Claude's reading. */
+function market() {
+  const empty = { bol: [], winkels: [], duiding: [] };
+  try {
+    const file = gh<{ content: string }>(`repos/${REPO}/contents/snapshot.json?ref=data/marktverkenning`);
+    const snapshot = JSON.parse(Buffer.from(file.content, 'base64').toString('utf8')) as MarketSnapshot;
+    const issue = gh<{ number: number; html_url: string }[]>(`repos/${REPO}/issues?labels=marktverkenning&state=open&per_page=1`)[0];
+    const bol = snapshot.bol.flatMap((list) =>
+      list.items.slice(0, 10).map((item) => ({
+        id: `${list.query}-${item.rank}`,
+        lijst: list.query,
+        rang: item.rank,
+        stick: item.title,
+        prijs: item.price ?? null,
+      })),
+    );
+    const winkels = snapshot.sites.map((site) => ({
+      winkel: site.site,
+      hockeypaginas: site.error ? null : site.urls.length,
+      status: site.error ? `Niet gelezen (${site.error})` : 'Gelezen',
+      gemeten: snapshot.date,
+    }));
+    let duiding: { gemeten: string; tekst: string; rapport: string }[] = [];
+    if (issue) {
+      const comments = gh<{ body: string; user: { login: string } }[]>(`repos/${REPO}/issues/${issue.number}/comments?per_page=100`);
+      const latest = comments.filter((c) => c.user.login === 'claude[bot]' && c.body.startsWith('## Duiding')).at(-1);
+      duiding = [
+        {
+          gemeten: snapshot.date,
+          tekst: (latest?.body ?? 'Geen duiding: er was deze week niets veranderd, of het is een nulmeting.')
+            .replace(/^## Duiding\s*/, '')
+            .replace(/\*\*/g, ''),
+          rapport: issue.html_url,
+        },
+      ];
+    }
+    return { bol, winkels, duiding };
+  } catch {
+    return empty;
+  }
+}
+
 const outDir = process.argv[2] ?? 'dashboard-data';
 mkdirSync(outDir, { recursive: true });
 const write = (name: string, rows: unknown[]) =>
@@ -184,4 +227,8 @@ write('agents.json', agents);
 write('runs.json', runs);
 write('prs.json', pulls);
 write('resultaten.json', [...catalog, ...searchConsole()]);
+const markt = market();
+write('markt_bol.json', markt.bol);
+write('markt_winkels.json', markt.winkels);
+write('markt_duiding.json', markt.duiding);
 console.log(`${agents.length} agents, ${runs.length} runs, ${pulls.length} PR's → ${outDir}`);
