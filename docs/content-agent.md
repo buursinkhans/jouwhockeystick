@@ -45,4 +45,4 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 
 Draai `npm run lint`, `npx next typegen`, `npm run typecheck` en `npm test`. Lees de tekst daarna nog één keer als ouder of speler: is de hoofdvraag beantwoord, staat er niets in wat we niet kunnen onderbouwen?
 
-In de PR-beschrijving staan: de hoofdvraag, welke pagina's je op botsing hebt gecontroleerd, de bronnen, en wat je bewust hebt weggelaten.
+Open de PR zelf met `gh pr create --base main` (titel `Content: <onderwerp> (#<issue>)`, met `Closes #<issue>` in de beschrijving). In de PR-beschrijving staan: de hoofdvraag, welke pagina's je op botsing hebt gecontroleerd, de bronnen, en wat je bewust hebt weggelaten.
