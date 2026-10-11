@@ -39,7 +39,7 @@ Een issue per brief, met de labels `content-brief` en `voorstel`, in de vorm van
 - **Bronnen, zoekwoorden of wensen:** waarom nu (welk rapport, welk seizoen, welke sticks), welke bestaande pagina's de content-agent moet linken
 - **Wat er zeker niet in moet**
 
-**Zet nooit `@claude` in een brief.** De eigenaar keurt elke brief goed door eronder te reageren met `@claude akkoord`; pas dan gaat de content-agent schrijven. Eindig elke brief met precies deze regel:
+**Zet nooit `@claude` in een brief.** De eigenaar keurt elke brief goed door eronder te reageren met `@claude akkoord`; of door het label `akkoord` toe te voegen (zo doet de Agent-bediening het); pas dan gaat de content-agent schrijven. Zet zelf nooit het label `akkoord`. Eindig elke brief met precies deze regel:
 
 > Goedkeuren: reageer met `@claude akkoord`. Niet doen: sluit dit issue.
 
