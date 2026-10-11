@@ -80,7 +80,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Volwassen beginner?',
       level: 2,
       body: [
-        'Ook als volwassene begin je het makkelijkst met een rustige, soepele stick in 36,5 inch. Deze sticks zijn in onze catalogus gericht op beginners:',
+        'Ook als volwassene begin je het makkelijkst met een rustige, soepele stick in 36,5 inch. Meer over lengte, materiaal en budget lees je in [hockeystick voor volwassen beginners](/kennis/hockeystick-volwassen-beginner). Deze sticks zijn in onze catalogus gericht op beginners:',
         { type: 'list', items: adultSticks.map(stickListItem) },
       ],
     },

@@ -378,3 +378,11 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
   - Eén vloeiende, gesamplede curve en één keer afgespeeld, in ongeveer 1,7 s.
   - De stick draait nooit (§4.2); het eindbeeld is precies het logo.
   - Bij "minder beweging" wordt de animatie niet afgespeeld.
+
+## 2026-10-11 — Artikel "Hockeystick voor volwassen beginners"
+
+**Wat:** `/kennis/hockeystick-volwassen-beginner` (issue #19). Behandelt lengte, hout of composiet, carbonpercentage, bow-profiel, budget en wanneer upgraden voor volwassenen. De voorbeeldsticks onder €100 en de prijsbandbreedte worden uit de catalogus gegenereerd. Het kinderen-en-beginnersartikel kreeg één link naar de nieuwe pagina in het kopje "Volwassen beginner?".
+
+**Waarom nu:** het veldseizoen is net begonnen en de catalogus is op 2026-10-10 uitgebreid met veldsticks voor volwassen beginners onder €100.
+
+**Bewust niet:** geen "beste"-lijst, geen kortingsclaims, geen prestatieclaims, geen herhaling van de lengte- en kinderpagina's (daar staat een verwijzing). Het materiaal (hout of composiet) is geen vast catalogusveld; daarom noemt de tekst het per stick niet en verwijst naar de productpagina en listing.

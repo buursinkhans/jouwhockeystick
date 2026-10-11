@@ -1,6 +1,7 @@
 import type { Article } from './types';
 import { hockeystickLengteTabel } from './articles/hockeystick-lengte-tabel';
 import { hockeystickKinderenEnBeginners } from './articles/hockeystick-kinderen-en-beginners';
+import { hockeystickVolwassenBeginner } from './articles/hockeystick-volwassen-beginner';
 import { lowBowVsMidBow } from './articles/low-bow-vs-mid-bow';
 import { hoeKiesJeDeJuisteHockeystick } from './articles/hoe-kies-je-de-juiste-hockeystick';
 import { zaalstickVoorKinderen } from './articles/zaalstick-voor-kinderen';
@@ -11,6 +12,7 @@ import { zaalstickBudget } from './articles/zaalstick-budget';
 const ALL_ARTICLES: Article[] = [
   hockeystickLengteTabel,
   hockeystickKinderenEnBeginners,
+  hockeystickVolwassenBeginner,
   zaalstickVoorKinderen,
   veldstickZaalhockey,
   zaalstickBudget,
