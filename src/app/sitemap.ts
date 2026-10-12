@@ -16,6 +16,7 @@ const STATIC_PATHS = [
   '/vergelijk',
   '/blog',
   '/over-ons',
+  '/clubs',
   '/privacy',
 ];
 

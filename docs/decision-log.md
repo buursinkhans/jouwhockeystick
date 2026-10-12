@@ -398,3 +398,11 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Waarom:** een stick die niet in de catalogus staat, kan de stickwijzer niet adviseren en levert dus geen klik naar bol.com op. De Marktverkenner liet zien dat o.a. de Grays DB 5 (#1 op bol.com) ontbrak.
 
 **Techniek:** PR's die met het workflow-token worden geopend starten zelf geen andere workflows; de workflow start daarom de Kwaliteitscontrole (`ci.yml`, nu ook `workflow_dispatch`) zelf op de branch.
+
+## 2026-10-12 — Clubpagina en Club-outreach
+
+**Besluit eigenaar:** inzetten op organische groei, geen advertenties. Hockeyclubs zijn de grootste hefboom: zij krijgen elk seizoen de vraag "welke stick moet mijn kind hebben?".
+
+**Wat:** pagina `/clubs` ("Stickadvies voor nieuwe leden van jouw hockeyclub") met een printbare lengtetabel (uit `LENGTH_GUIDE`, dus gelijk aan de stickwijzer), een tekst voor de nieuwsbrief en eerlijke uitleg over de bol.com-vergoeding. Header en footer verdwijnen bij printen. Link in de footer; in de sitemap.
+
+**Club-outreach-agent:** geplande taak (dinsdag, of op verzoek) die volgens `docs/club-outreach.md` per run max. 5 clubs zoekt via de KNHB-clubfinder en per club een persoonlijke mail klaarzet op de privépagina *Club-outreach*. Alleen algemene rol-adressen van de club, geen namen van personen, afmeldzin in elke mail, één herinnering na 14 dagen. **De eigenaar verstuurt elke mail zelf**; de agent verstuurt niets. De clublijst staat in de privé-database van die pagina, niet in deze (openbare) repo.
