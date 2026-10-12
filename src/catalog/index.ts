@@ -75,6 +75,7 @@ import { malikLowbow2 } from './products/malik-lowbow-2';
 import { malikLowbow4Junior } from './products/malik-lowbow-4-junior';
 import { osakaMidbowHoutIndoorJunior } from './products/osaka-midbow-hout-indoor-junior';
 import { osakaProbowGfIndoorJunior } from './products/osaka-probow-gf-indoor-junior';
+import { graysDb5Composite } from './products/grays-db5-composite';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -150,6 +151,7 @@ const ALL_PRODUCTS: Product[] = [
   malikLowbow4Junior,
   osakaMidbowHoutIndoorJunior,
   osakaProbowGfIndoorJunior,
+  graysDb5Composite,
 ];
 
 /**
