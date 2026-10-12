@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  getAllBlogPosts,
-  getBlogPostBySlug,
-  getBlogPostsIncludingScheduled,
-} from './blog';
+import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsIncludingScheduled } from './blog';
 
 describe('blog posts', () => {
   it('keeps the editorial order', () => {
