@@ -406,3 +406,11 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Wat:** pagina `/clubs` ("Stickadvies voor nieuwe leden van jouw hockeyclub") met een printbare lengtetabel (uit `LENGTH_GUIDE`, dus gelijk aan de stickwijzer), een tekst voor de nieuwsbrief en eerlijke uitleg over de bol.com-vergoeding. Header en footer verdwijnen bij printen. Link in de footer; in de sitemap.
 
 **Club-outreach-agent:** geplande taak (dinsdag, of op verzoek) die volgens `docs/club-outreach.md` per run max. 5 clubs zoekt via de KNHB-clubfinder en per club een persoonlijke mail klaarzet op de privépagina *Club-outreach*. Alleen algemene rol-adressen van de club, geen namen van personen, afmeldzin in elke mail, één herinnering na 14 dagen. **De eigenaar verstuurt elke mail zelf**; de agent verstuurt niets. De clublijst staat in de privé-database van die pagina, niet in deze (openbare) repo.
+
+## 2026-10-12 — Instagram-posts via de Agent-bediening
+
+**Besluit eigenaar:** organisch groeien via Instagram (en Facebook, zakelijk). Posts worden gemaakt vanuit de Agent-bediening; de eigenaar plaatst ze zelf.
+
+**Hoe:** op de bediening kies je een pagina van de site en een vorm (carrousel of één beeld). De uitvoerder schrijft volgens `docs/instagram.md` de tekst per slide, het onderschrift, hashtags, alt-tekst en een link met UTM-code. De bediening tekent de slides zelf in de huisstijl (1080 × 1350) en biedt ze aan om te downloaden; met feedback kan een post opnieuw worden geschreven.
+
+**Bewust niet:** automatisch plaatsen (vraagt een goedgekeurde Meta-app), de Meta Pixel op de site (vraagt cookietoestemming en een aangepaste privacyverklaring), prijzen of voorraad in posts (een geplaatste post wordt niet bijgewerkt), spelers en citaten. Meten gaat via de UTM-link in PostHog en Simple Analytics.
