@@ -9,12 +9,13 @@ export const METHODIEK = {
     'Zo werkt de keuzehulp van jouwhockeystick.nl: eerst maat, ervaring, beschikbaarheid en budget, daarna speelwensen. Met bronlabels per gegeven en zonder commerciële rangschikking.',
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-01',
-  updatedAt: '2026-10-01',
+  updatedAt: '2026-10-12',
   /** Answers the main question within the first 80 words. */
   intro: [
     'Wij kijken eerst naar wat niet onderhandelbaar is: de juiste sticklengte, de ervaring van de speler, beschikbaarheid in die maat en het budget. Daarna vergelijken we de speelwensen, zoals aannemen, passen, dribbelen, 3D, backhand of dragflick.',
     'Voor beginnende hockeyers adviseren we bewust eenvoudiger. Dan staan maat, hanteerbaarheid, controle en plezier voorop. Een heel stijve of extreem gekromde stick is niet automatisch beter om hockey te leren.',
     'Voor ervaren spelers wegen we meer kenmerken mee, zoals gewenste acties, voorkeur voor een zachter of directer stickgevoel en ervaring met verschillende bow-profielen.',
+    'Wil je bij het merk van je huidige stick blijven? Dan krijgen sticks van dat merk extra punten, en tonen we de best passende stick van dat merk altijd. Er staat dan ook altijd minstens één stick van een ander merk bij, zodat je kunt vergelijken.',
   ],
   routes: [
     {
@@ -51,6 +52,14 @@ export const METHODIEK = {
     {
       name: 'Ambitieuze keuze',
       body: 'Eén verantwoorde stap vooruit. Die tonen we alleen als ervaring en techniek dat toelaten, en nooit om het rijtje vol te maken.',
+    },
+    {
+      name: 'Van je huidige merk',
+      body: 'Alleen als je bij je merk wilt blijven: de best passende stick van dat merk, als die niet al bovenaan staat maar wel redelijk past (minimaal 60 punten).',
+    },
+    {
+      name: 'Alternatief van een ander merk',
+      body: 'Alleen als je bij je merk wilt blijven en alle andere sticks van dat merk zijn: de best passende stick van een ander merk, om mee te vergelijken.',
     },
   ],
   sourceLabels: [

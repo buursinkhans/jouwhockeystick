@@ -151,6 +151,14 @@ export function buildPlayerContext(
     feelPreference: resolveFeelPreference(answers, route),
     hasDragflickRole,
     budget: BUDGET_RANGE[answers.budget_band],
+    preferredBrand:
+      answers.has_current_stick === 'yes' &&
+      answers.brand_loyalty === 'same_brand' &&
+      answers.current_stick_brand !== undefined &&
+      answers.current_stick_brand !== 'other' &&
+      answers.current_stick_brand !== 'unknown'
+        ? answers.current_stick_brand
+        : null,
     now,
   };
 }

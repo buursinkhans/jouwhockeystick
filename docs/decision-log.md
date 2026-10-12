@@ -464,3 +464,25 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Huisstijl:** `docs/content-agent.md` §3 beschrijft de nieuwe toon met voorbeelden, en de regel "bronnen onderaan, niet in de tekst". Een test (`src/content/articles.test.ts`) bewaakt dat er geen externe links of "[Bron:" in de tekst staan en dat elk artikel bronnen heeft.
 
 **Reden:** keuze van de eigenaar; de teksten waren te zakelijk.
+
+## 2026-10-12 — `ruleSetVersion v7-2026-10-12`: merk van de huidige stick en merkvoorkeur
+
+**Wat:** twee nieuwe, optionele vragen op het scherm "Huidige stick", in alle routes. Ze verschijnen alleen als de speler al een stick heeft.
+- "Van welk merk is de huidige stick?" — de merken uit de catalogus, plus "Ander merk" en "Weet ik niet".
+- "Wil je bij hetzelfde merk blijven?" — "Ja, liefst hetzelfde merk" of "Maakt niet uit". Deze vraag verschijnt alleen als het merk bekend is.
+
+**Regel (keuze eigenaar: zwaar meewegen, maar altijd een alternatief):**
+- Bij "Ja, liefst hetzelfde merk" krijgen sticks van dat merk +12 punten (`BRAND_PREFERENCE_POINTS`, `brandFit` in de score). Het totaal blijft maximaal 100. De reden `BRAND_PREFERENCE` staat zichtbaar bij de stick.
+- De best passende stick van dat merk staat altijd in het advies als hij redelijk past (≥ 60 punten). Haalt hij de top niet op eigen kracht, dan krijgt hij de rol "Van je huidige merk".
+- Zijn alle getoonde sticks van dat merk, dan komt de best passende stick van een ander merk erbij als "Alternatief van een ander merk".
+- Past geen enkele stick van het merk, dan zegt het advies dat eerlijk en toont het andere merken.
+- Bij "Maakt niet uit", "Ander merk", "Weet ik niet" of zonder huidige stick verandert er niets.
+
+De methodiekpagina is bijgewerkt met de nieuwe rollen.
+
+**Onderzocht: waarom Grays zelden de beste match is** (simulatie met 435 antwoordcombinaties):
+- Grays is het grootste merk bij de kandidaten en komt het vaakst voor in het advies, maar is maar in 10% van de gevallen de beste match.
+- Oorzaak 1, assortiment: onze Grays-veldsticks zitten aan de twee uitersten (goedkope beginnerssticks voor junioren, en sticks van €350–450 voor ervaren spelers). In 104 scenario's komt geen enkele Grays door de filters.
+- Oorzaak 2: Grays vermeldt geen carbonpercentages. Daardoor scoort "stickgevoel" neutraal (0,5), wat in de prestatieroute gemiddeld 6 punten scheelt.
+- Getest en verworpen: het gevoel afleiden uit het niveau maakt het voor Grays slechter, want veel Grays-sticks zijn voor ervaren spelers en worden dan als "direct" gelezen.
+- De prijs is geen oorzaak: de beste match is in 19% van de gevallen de goedkoopste kandidaat. Prijs telt alleen mee bij een gelijke score.

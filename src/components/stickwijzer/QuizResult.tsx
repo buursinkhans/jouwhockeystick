@@ -4,6 +4,7 @@ import type { AdviceAnswers } from '@/advice-engine/answers';
 import type { AdviceResult } from '@/advice-engine/types';
 import {
   ADVICE_DISCLAIMER,
+  brandNotFoundText,
   NO_MATCH_TEXT,
   ROUTE_RESULT_COPY,
   SELLER_NOTE,
@@ -77,6 +78,13 @@ export function QuizResult({
           {title}
         </h2>
         {hasResults && <p className="mt-2 text-inkt/80">{copy.summary}</p>}
+        {hasResults &&
+          advice.brandPreference &&
+          !advice.brandPreference.matched && (
+            <p className="mt-3 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
+              {brandNotFoundText(advice.brandPreference.brand)}
+            </p>
+          )}
         {hasResults && adviceGoal === 'child' && (
           <p className="mt-2 text-sm text-lijngrijs">
             Laat je kind de stick zo mogelijk even vasthouden: gevoel en plezier

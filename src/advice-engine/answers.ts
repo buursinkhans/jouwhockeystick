@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { brandSchema } from '@/catalog/types';
 
 export const adviceRouteSchema = z.enum(['START', 'ONTWIKKEL', 'PRESTATIE']);
 export type AdviceRoute = z.infer<typeof adviceRouteSchema>;
@@ -193,6 +194,12 @@ const answersShape = {
     .max(2)
     .optional(),
   current_stick_problem: z.array(currentStickProblemSchema).max(2).optional(),
+  /** Brand of the current stick: a catalog brand, another brand, or unknown. */
+  current_stick_brand: z
+    .union([brandSchema, z.enum(['other', 'unknown'])])
+    .optional(),
+  /** Stay with that brand? 'same_brand' weighs heavily in the score. */
+  brand_loyalty: z.enum(['same_brand', 'open']).optional(),
   replacement_reason: z.enum([
     'first_stick',
     'outgrown',
@@ -255,6 +262,8 @@ export const QUESTION_META: Record<QuestionId, QuestionMeta> = {
   has_current_stick: { routes: ALL_ROUTES, required: true },
   current_stick_like: { routes: ['ONTWIKKEL', 'PRESTATIE'], required: false },
   current_stick_problem: { routes: ALL_ROUTES, required: false },
+  current_stick_brand: { routes: ALL_ROUTES, required: false },
+  brand_loyalty: { routes: ALL_ROUTES, required: false },
   replacement_reason: { routes: ALL_ROUTES, required: true },
   budget_band: { routes: ALL_ROUTES, required: true },
   purchase_timing: { routes: ALL_ROUTES, required: false },

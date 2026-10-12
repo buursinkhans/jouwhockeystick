@@ -297,6 +297,14 @@ function goalQuestionIds(ctx: PlayerContext): QuestionId[] {
 const round1 = (value: number) => Math.round(value * 10) / 10;
 
 /**
+ * Editorial rule, owner's choice: staying with the current brand weighs
+ * heavily. Large enough to usually decide between comparable sticks, not so
+ * large that a clearly worse fit (size, level) wins. The total stays capped
+ * at 100, and the engine always adds one stick of another brand.
+ */
+export const BRAND_PREFERENCE_POINTS = 12;
+
+/**
  * Scores a product that already passed the hard filters. Commercial fields
  * (margin, affiliate, sponsoring) are deliberately not an input here.
  */
@@ -331,6 +339,17 @@ export function scoreProduct(
       code: 'SIZE_ALTERNATIVE',
       evidence: { kind: 'spec', field: 'lengthsInches' },
       inch: ctx.sizeAdvice.alternativeInch,
+    });
+  }
+  const brandMatch =
+    ctx.preferredBrand !== null && product.brand === ctx.preferredBrand;
+  if (brandMatch) {
+    reasons.push({
+      code: 'BRAND_PREFERENCE',
+      evidence: {
+        kind: 'rule',
+        basedOn: ['current_stick_brand', 'brand_loyalty'],
+      },
     });
   }
   reasons.push({
@@ -383,17 +402,22 @@ export function scoreProduct(
     feelFit: round1(weights.feel * feel.fit),
     budgetFit: round1(weights.budget * budget.fit),
     availabilityFit: round1(weights.availability * availability),
+    brandFit: brandMatch ? BRAND_PREFERENCE_POINTS : 0,
     total: 0,
     explanationTags: reasons.map((reason) => reason.code),
   };
   breakdown.total = round1(
-    breakdown.sizeFit +
-      breakdown.experienceFit +
-      breakdown.skillGoalFit +
-      breakdown.bowFit +
-      breakdown.feelFit +
-      breakdown.budgetFit +
-      breakdown.availabilityFit,
+    Math.min(
+      100,
+      breakdown.sizeFit +
+        breakdown.experienceFit +
+        breakdown.skillGoalFit +
+        breakdown.bowFit +
+        breakdown.feelFit +
+        breakdown.budgetFit +
+        breakdown.availabilityFit +
+        breakdown.brandFit,
+    ),
   );
 
   return { breakdown, reasons };

@@ -59,6 +59,8 @@ const ROLE_LABELS: Record<ResultRole, string> = {
   ambitious_choice: 'Ambitieuze keuze',
   closest_option: 'Dichtstbijzijnde optie',
   other_size: 'Alternatief in een andere maat',
+  other_brand: 'Alternatief van een ander merk',
+  same_brand: 'Van je huidige merk',
 };
 
 const START_ROLE_LABELS: Partial<Record<ResultRole, string>> = {
@@ -83,6 +85,10 @@ export const ROLE_INTRO: Record<ResultRole, string> = {
     'Geen duidelijke match: dit komt het dichtst in de buurt, maar past op meerdere punten minder goed.',
   other_size:
     'Niet in de geadviseerde maat beschikbaar; dit is één maat korter.',
+  other_brand:
+    'Je wilt bij je merk blijven, prima! Deze stick van een ander merk past ook goed bij je antwoorden. Handig om even mee te vergelijken.',
+  same_brand:
+    'De best passende stick van het merk dat je nu hebt. Hij past iets minder goed bij je antwoorden dan de sticks hierboven, maar is zeker het bekijken waard.',
 };
 
 export const GOAL_LABELS: Record<Goal, string> = {
@@ -156,6 +162,8 @@ export function reasonText(
       return 'De richtprijs blijft onder het opgegeven budget.';
     case 'SPECS_VERIFIED':
       return 'De kernspecificaties van deze stick zijn bij de bron gecontroleerd.';
+    case 'BRAND_PREFERENCE':
+      return `Van ${product.brand}, het merk van je huidige stick waar je bij wilt blijven.`;
   }
 }
 
@@ -187,6 +195,11 @@ export const LESS_SUITABLE_FOR: Record<ExperienceLevel, string> = {
   gevorderd: 'Minder passend als aannemen en passen nog niet stabiel gaan.',
   ervaren: 'Minder passend voor spelers die de basistechniek nog ontwikkelen.',
 };
+
+/** Shown when the player wants to stay with a brand but none of its sticks fit. */
+export function brandNotFoundText(brand: string): string {
+  return `We vonden geen stick van ${brand} die past bij je antwoorden, bijvoorbeeld door de maat, het niveau of je budget. Hieronder zie je sticks van andere merken die wel passen.`;
+}
 
 export const NO_MATCH_TEXT: Record<NoMatchReason, string> = {
   data: 'We hebben op dit moment geen sticks met volledig gecontroleerde gegevens om uit te adviseren.',

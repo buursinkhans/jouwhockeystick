@@ -3,6 +3,12 @@ import type {
   AdviceRoute,
   QuestionId,
 } from '@/advice-engine/answers';
+import { brandSchema } from '@/catalog/types';
+
+/** Catalog brands, alphabetical, for the "current stick brand" question. */
+const BRAND_OPTIONS = [...brandSchema.options]
+  .sort((a, b) => a.localeCompare(b, 'nl', { sensitivity: 'base' }))
+  .map((brand) => ({ value: brand, label: brand }));
 
 type Option = {
   value: string;
@@ -48,6 +54,13 @@ const CONFIDENCE_SCALE: QuestionInput = {
 
 const hasCurrentStick = (answers: Partial<AdviceAnswers>) =>
   answers.has_current_stick === 'yes';
+
+/** Only ask about staying with the brand when we know which brand it is. */
+const knowsCurrentBrand = (answers: Partial<AdviceAnswers>) =>
+  hasCurrentStick(answers) &&
+  answers.current_stick_brand !== undefined &&
+  answers.current_stick_brand !== 'other' &&
+  answers.current_stick_brand !== 'unknown';
 
 export const QUESTIONS: Record<QuestionId, QuestionDef> = {
   advice_goal: {
@@ -569,6 +582,37 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
       ],
     },
   },
+  current_stick_brand: {
+    id: 'current_stick_brand',
+    question: 'Van welk merk is de huidige stick?',
+    shortLabel: 'merk huidige stick',
+    dataUse:
+      'Ben je tevreden over je merk, dan kunnen we daar rekening mee houden.',
+    showWhen: hasCurrentStick,
+    input: {
+      kind: 'single',
+      options: [
+        ...BRAND_OPTIONS,
+        { value: 'other', label: 'Ander merk' },
+        { value: 'unknown', label: 'Weet ik niet' },
+      ],
+    },
+  },
+  brand_loyalty: {
+    id: 'brand_loyalty',
+    question: 'Wil je bij hetzelfde merk blijven?',
+    shortLabel: 'zelfde merk',
+    dataUse:
+      'Kies je voor hetzelfde merk, dan wegen we dat zwaar mee. We laten altijd ook een stick van een ander merk zien om mee te vergelijken.',
+    showWhen: knowsCurrentBrand,
+    input: {
+      kind: 'single',
+      options: [
+        { value: 'same_brand', label: 'Ja, liefst hetzelfde merk' },
+        { value: 'open', label: 'Maakt niet uit' },
+      ],
+    },
+  },
   replacement_reason: {
     id: 'replacement_reason',
     question: 'Waarom zoek je nu een stick?',
@@ -667,7 +711,20 @@ const CURRENT_STICK: ScreenDef = {
   id: 'current_stick',
   title: 'Huidige stick',
   questions: ['has_current_stick', 'replacement_reason'],
-  optional: ['current_stick_like', 'current_stick_problem'],
+  optional: [
+    'current_stick_brand',
+    'brand_loyalty',
+    'current_stick_like',
+    'current_stick_problem',
+  ],
+  order: [
+    'has_current_stick',
+    'current_stick_brand',
+    'brand_loyalty',
+    'replacement_reason',
+    'current_stick_like',
+    'current_stick_problem',
+  ],
 };
 const BUDGET: ScreenDef = {
   id: 'budget',
@@ -695,7 +752,18 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     {
       ...CURRENT_STICK,
       title: 'Eerste stick of vervanging',
-      optional: ['current_stick_problem'],
+      optional: [
+        'current_stick_brand',
+        'brand_loyalty',
+        'current_stick_problem',
+      ],
+      order: [
+        'has_current_stick',
+        'current_stick_brand',
+        'brand_loyalty',
+        'replacement_reason',
+        'current_stick_problem',
+      ],
     },
     {
       id: 'fun',

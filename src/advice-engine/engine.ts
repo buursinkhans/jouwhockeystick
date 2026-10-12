@@ -107,6 +107,53 @@ function assignRoles(
   return results;
 }
 
+/** Replaces the last result when the list is full, otherwise appends. */
+function withExtra(
+  results: AdviceResultItem[],
+  item: AdviceResultItem,
+): AdviceResultItem[] {
+  return results.length < 3
+    ? [...results, item]
+    : [...results.slice(0, 2), item];
+}
+
+/**
+ * When the player wants to stay with a brand (owner's rule: weigh it heavily,
+ * but always offer an alternative):
+ * 1. the best stick of that brand is always in the advice if it fits
+ *    reasonably (score ≥ AMBITIOUS_MIN_SCORE), as "same_brand" when it did
+ *    not make the top results on its own;
+ * 2. there is always one stick of another brand to compare with.
+ */
+function applyBrandPreference(
+  results: AdviceResultItem[],
+  ranked: Candidate[],
+  ctx: PlayerContext,
+): AdviceResultItem[] {
+  const brand = ctx.preferredBrand;
+  if (brand === null || results.length === 0) {
+    return results;
+  }
+  let adjusted = results;
+  if (!adjusted.some((result) => result.product.brand === brand)) {
+    const own = ranked.find(
+      (candidate) =>
+        candidate.product.brand === brand &&
+        candidate.score >= AMBITIOUS_MIN_SCORE,
+    );
+    if (own) {
+      adjusted = withExtra(adjusted, withRole(own, 'same_brand', ctx));
+    }
+  }
+  if (adjusted.every((result) => result.product.brand === brand)) {
+    const other = ranked.find((candidate) => candidate.product.brand !== brand);
+    if (other) {
+      adjusted = withExtra(adjusted, withRole(other, 'other_brand', ctx));
+    }
+  }
+  return adjusted;
+}
+
 /**
  * Shorter-size fallback for when nothing exists in the advised size. These
  * are returned separately and never as a best match.
@@ -142,6 +189,7 @@ export function getAdvice(
     | 'otherSizeOptions'
     | 'isUncertain'
     | 'noMatchReason'
+    | 'brandPreference'
     | 'excludedCount'
   > = {
     adviceSessionId: options.adviceSessionId ?? '',
@@ -167,6 +215,9 @@ export function getAdvice(
         noMatchReason === 'length' ? otherSizeOptions(products, ctx) : [],
       isUncertain: true,
       noMatchReason,
+      brandPreference: ctx.preferredBrand
+        ? { brand: ctx.preferredBrand, matched: false }
+        : null,
       excludedCount,
     };
   }
@@ -181,7 +232,7 @@ export function getAdvice(
       return toCandidate(product, ctx, sizeInch);
     })
     .sort(byScore);
-  const results = assignRoles(ranked, ctx);
+  const results = applyBrandPreference(assignRoles(ranked, ctx), ranked, ctx);
 
   return {
     ...base,
@@ -190,6 +241,14 @@ export function getAdvice(
     isUncertain:
       results[0]?.role !== 'best_match' || ctx.sizeAdvice.confidence === 'low',
     noMatchReason: null,
+    brandPreference: ctx.preferredBrand
+      ? {
+          brand: ctx.preferredBrand,
+          matched: results.some(
+            (result) => result.product.brand === ctx.preferredBrand,
+          ),
+        }
+      : null,
     excludedCount,
   };
 }

@@ -1,4 +1,4 @@
-import type { Product } from '@/catalog/types';
+import type { Product, Brand } from '@/catalog/types';
 import type { AdviceAnswers, AdviceRoute, Goal, QuestionId } from './answers';
 import type { SizeAdvice } from './sizeAdvice';
 
@@ -23,7 +23,8 @@ export type ReasonCode =
   | 'FEEL_FIT'
   | 'BUDGET_FIT'
   | 'BUDGET_BELOW'
-  | 'SPECS_VERIFIED';
+  | 'SPECS_VERIFIED'
+  | 'BRAND_PREFERENCE';
 
 /**
  * Every reason is traceable: either to a sourced product field or to an
@@ -59,6 +60,8 @@ export type ScoreBreakdown = {
   bowFit: number;
   budgetFit: number;
   availabilityFit: number;
+  /** Extra points for the brand the player wants to stay with (0 otherwise). */
+  brandFit: number;
   total: number;
   explanationTags: ReasonCode[];
 };
@@ -73,7 +76,11 @@ export type ResultRole =
   | 'safe_choice'
   | 'ambitious_choice'
   | 'closest_option'
-  | 'other_size';
+  | 'other_size'
+  /** Shown when the player wants to stay with a brand: one stick of another brand to compare. */
+  | 'other_brand'
+  /** The best stick of the preferred brand, when it fits reasonably but is not among the top results. */
+  | 'same_brand';
 
 export type AdviceResultItem = {
   role: ResultRole;
@@ -106,6 +113,8 @@ export type PlayerContext = {
   feelPreference: StickFeel | null;
   hasDragflickRole: boolean;
   budget: { minEur: number; maxEur: number } | null;
+  /** Brand of the current stick the player wants to stay with, if any. */
+  preferredBrand: Brand | null;
   now: Date;
 };
 
@@ -123,6 +132,8 @@ export type AdviceResult = {
   otherSizeOptions: AdviceResultItem[];
   isUncertain: boolean;
   noMatchReason: NoMatchReason | null;
+  /** Set when the player asked to stay with a brand; `matched` = a stick of it is in the advice. */
+  brandPreference: { brand: Brand; matched: boolean } | null;
   excludedCount: number;
   methodUrl: string;
 };
