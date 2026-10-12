@@ -202,9 +202,6 @@ export const NO_MATCH_TEXT: Record<NoMatchReason, string> = {
     'De sticks die verder passen zijn niet als direct leverbaar gemarkeerd. We tonen daarom geen stick in een verkeerde maat.',
 };
 
-export const LEFT_HANDED_REFERRAL =
-  'Je gaf aan dat een linkshandige (omgekeerde) stick nodig is. Onze catalogus bevat alleen reguliere sticks; we tonen daarom geen product dat niet past. Geef je vraag door, dan helpen we je persoonlijk verder.';
-
 export function sizeAdviceText(size: SizeAdvice): string[] {
   const lines: string[] = [];
   if (size.alternativeInch === undefined) {

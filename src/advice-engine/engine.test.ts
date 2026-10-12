@@ -195,17 +195,6 @@ describe('getAdvice', () => {
     });
   });
 
-  it('refers a left-handed request to personal help instead of showing a wrong product', () => {
-    const advice = getAdvice(
-      buildStartAnswers({ left_handed_requirement: 'yes' }),
-      catalog,
-    );
-
-    expect(advice.referral).toBe('left_handed');
-    expect(advice.results).toEqual([]);
-    expect(advice.otherSizeOptions).toEqual([]);
-  });
-
   it('offers a shorter size separately — never as a match — when the advised size does not exist', () => {
     // 135 cm → 31". Remove every 31" stick so the gap exists regardless of
     // what the real catalog holds.

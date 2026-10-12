@@ -123,8 +123,6 @@ export type AdviceResult = {
   otherSizeOptions: AdviceResultItem[];
   isUncertain: boolean;
   noMatchReason: NoMatchReason | null;
-  /** Set when the keuzehulp should not show products at all and refer to personal help instead. */
-  referral: 'left_handed' | null;
   excludedCount: number;
   methodUrl: string;
 };

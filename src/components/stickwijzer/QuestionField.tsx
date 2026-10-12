@@ -12,9 +12,6 @@ const OPTION_CLASSES =
 const OPTION_CARD_CLASSES =
   'flex flex-col rounded-2xl border border-lijngrijs bg-white p-4 has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:ring-1 has-[:checked]:ring-veld has-[input:focus-visible]:outline has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-veld';
 
-const CARD_CLASSES =
-  'flex cursor-pointer flex-col rounded-2xl border border-lijngrijs bg-white p-4 has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:ring-1 has-[:checked]:ring-veld has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-veld';
-
 /** The explanation that sits next to a question: why we ask it, plus any help text. */
 function Explanation({ def }: { def: QuestionDef }) {
   return (
@@ -184,6 +181,7 @@ export function QuestionField({
             {def.question}
             {suffix}
           </legend>
+          <p className="mt-1 text-sm text-lijngrijs">{def.dataUse}</p>
           <div className="mt-3 grid items-start gap-3 md:grid-cols-3">
             {input.options.map((option) => {
               const OptionIcon = optionIcons?.[option.value];
@@ -248,7 +246,6 @@ export function QuestionField({
           </div>
           {error}
         </fieldset>
-        <p className="mt-3 text-sm text-lijngrijs">{def.dataUse}</p>
       </div>
     );
   } else if (def.fullWidth) {

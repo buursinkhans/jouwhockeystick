@@ -437,11 +437,11 @@ export function QuizForm() {
         )}
       </div>
 
-      <p className="mt-4 min-h-5 text-sm text-red-700" aria-live="polite">
+      <p className="mt-3 text-sm text-red-700 empty:mt-0" aria-live="polite">
         {errorMessage}
       </p>
 
-      <div className="mt-2 flex flex-wrap gap-3">
+      <div className="mt-5 flex flex-wrap gap-3">
         {currentStep > 0 && (
           <Button
             variant="secondary"

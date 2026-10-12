@@ -209,8 +209,6 @@ const answersShape = {
   availability_preference: z
     .enum(['only_direct', 'best_match_later', 'no_preference'])
     .optional(),
-  // I. Context en uitzonderingen
-  left_handed_requirement: yesNoUnknownSchema,
 };
 
 const baseAnswersSchema = z.object(answersShape);
@@ -261,7 +259,6 @@ export const QUESTION_META: Record<QuestionId, QuestionMeta> = {
   budget_band: { routes: ALL_ROUTES, required: true },
   purchase_timing: { routes: ALL_ROUTES, required: false },
   availability_preference: { routes: ALL_ROUTES, required: false },
-  left_handed_requirement: { routes: ALL_ROUTES, required: true },
 };
 
 export const QUESTION_IDS = Object.keys(QUESTION_META) as QuestionId[];

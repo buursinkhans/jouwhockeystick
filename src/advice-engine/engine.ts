@@ -142,7 +142,6 @@ export function getAdvice(
     | 'otherSizeOptions'
     | 'isUncertain'
     | 'noMatchReason'
-    | 'referral'
     | 'excludedCount'
   > = {
     adviceSessionId: options.adviceSessionId ?? '',
@@ -154,20 +153,6 @@ export function getAdvice(
     sizeAdvice: ctx.sizeAdvice,
     methodUrl: METHOD_URL,
   };
-
-  // The catalog only holds regular (right-handed) sticks: showing any of them
-  // here would be showing a wrong product.
-  if (answers.left_handed_requirement === 'yes') {
-    return {
-      ...base,
-      results: [],
-      otherSizeOptions: [],
-      isUncertain: true,
-      noMatchReason: null,
-      referral: 'left_handed',
-      excludedCount: products.length,
-    };
-  }
 
   const { passed, excludedCount, noMatchReason } = applyHardFilters(
     products,
@@ -182,7 +167,6 @@ export function getAdvice(
         noMatchReason === 'length' ? otherSizeOptions(products, ctx) : [],
       isUncertain: true,
       noMatchReason,
-      referral: null,
       excludedCount,
     };
   }
@@ -206,7 +190,6 @@ export function getAdvice(
     isUncertain:
       results[0]?.role !== 'best_match' || ctx.sizeAdvice.confidence === 'low',
     noMatchReason: null,
-    referral: null,
     excludedCount,
   };
 }

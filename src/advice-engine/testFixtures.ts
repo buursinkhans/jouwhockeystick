@@ -115,7 +115,6 @@ export function buildStartAnswers(
     has_current_stick: 'no',
     replacement_reason: 'first_stick',
     budget_band: '75_125',
-    left_handed_requirement: 'no',
     ...overrides,
   };
 }
@@ -138,7 +137,6 @@ export function buildDevelopAnswers(
     has_current_stick: 'yes',
     replacement_reason: 'next_step',
     budget_band: '125_175',
-    left_handed_requirement: 'no',
     ...overrides,
   };
 }
@@ -166,7 +164,6 @@ export function buildPerformanceAnswers(
     has_current_stick: 'yes',
     replacement_reason: 'next_step',
     budget_band: '175_250',
-    left_handed_requirement: 'no',
     ...overrides,
   };
 }

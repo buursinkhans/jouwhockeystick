@@ -640,23 +640,6 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
       ],
     },
   },
-  left_handed_requirement: {
-    id: 'left_handed_requirement',
-    question: 'Is een linkshandige (omgekeerde) stick nodig?',
-    shortLabel: 'linkshandige stick',
-    helpText:
-      'Twijfel je? Kies dan "Weet ik niet"; je krijgt gewoon een advies voor een reguliere stick.',
-    dataUse:
-      'Bij een uitzondering tonen we geen verkeerde stick, maar verwijzen we naar persoonlijke hulp.',
-    input: {
-      kind: 'single',
-      options: [
-        { value: 'no', label: 'Nee' },
-        { value: 'yes', label: 'Ja' },
-        { value: 'unknown', label: 'Weet ik niet' },
-      ],
-    },
-  },
 };
 
 export type ScreenDef = {
@@ -704,15 +687,10 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     {
       id: 'height',
       title: 'Lengte',
-      questions: ['height_cm', 'left_handed_requirement'],
+      questions: ['height_cm'],
       optional: ['height_uncertain', 'junior_grip_needed'],
       // Keep the follow-up about the height directly under the height question.
-      order: [
-        'height_cm',
-        'height_uncertain',
-        'left_handed_requirement',
-        'junior_grip_needed',
-      ],
+      order: ['height_cm', 'height_uncertain', 'junior_grip_needed'],
     },
     {
       ...CURRENT_STICK,
@@ -732,7 +710,7 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     {
       id: 'height',
       title: 'Lengte',
-      questions: ['height_cm', 'left_handed_requirement'],
+      questions: ['height_cm'],
       optional: [
         'height_uncertain',
         'current_length_inch',
@@ -742,7 +720,6 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
         'height_cm',
         'height_uncertain',
         'current_length_inch',
-        'left_handed_requirement',
         'junior_grip_needed',
       ],
     },
@@ -770,14 +747,9 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     {
       id: 'height',
       title: 'Lengte',
-      questions: ['height_cm', 'left_handed_requirement'],
+      questions: ['height_cm'],
       optional: ['height_uncertain', 'current_length_inch'],
-      order: [
-        'height_cm',
-        'height_uncertain',
-        'current_length_inch',
-        'left_handed_requirement',
-      ],
+      order: ['height_cm', 'height_uncertain', 'current_length_inch'],
     },
     {
       id: 'first_touch',

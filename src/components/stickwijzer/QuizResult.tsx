@@ -4,7 +4,6 @@ import type { AdviceAnswers } from '@/advice-engine/answers';
 import type { AdviceResult } from '@/advice-engine/types';
 import {
   ADVICE_DISCLAIMER,
-  LEFT_HANDED_REFERRAL,
   NO_MATCH_TEXT,
   ROUTE_RESULT_COPY,
   SELLER_NOTE,
@@ -63,12 +62,9 @@ export function QuizResult({
 }) {
   const copy = ROUTE_RESULT_COPY[advice.route];
   const hasResults = advice.results.length > 0;
-  const isLeftHanded = advice.referral === 'left_handed';
-  const title = isLeftHanded
-    ? 'Hiervoor helpen we je liever persoonlijk.'
-    : hasResults
-      ? copy.title
-      : 'We hebben nu geen passende stick voor deze antwoorden.';
+  const title = hasResults
+    ? copy.title
+    : 'We hebben nu geen passende stick voor deze antwoorden.';
 
   return (
     <div className="space-y-8">
@@ -89,27 +85,18 @@ export function QuizResult({
         )}
       </div>
 
-      {isLeftHanded ? (
-        <div className="rounded-lg bg-amber-50 px-4 py-3 text-amber-900">
-          <p>{LEFT_HANDED_REFERRAL}</p>
-          <ButtonLink href={INTEREST_HREF} className="mt-3">
-            Vraag persoonlijk advies
-          </ButtonLink>
-        </div>
-      ) : (
-        <section aria-labelledby="size-advice-heading">
-          <h3 id="size-advice-heading" className="text-lg font-semibold">
-            Lengteadvies: {formatInch(advice.sizeAdvice.primaryInch)}
-            {advice.sizeAdvice.alternativeInch !== undefined &&
-              ` (of ${formatInch(advice.sizeAdvice.alternativeInch)})`}
-          </h3>
-          <ul className="mt-2 space-y-1 text-sm text-inkt/80">
-            {sizeAdviceText(advice.sizeAdvice).map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <section aria-labelledby="size-advice-heading">
+        <h3 id="size-advice-heading" className="text-lg font-semibold">
+          Lengteadvies: {formatInch(advice.sizeAdvice.primaryInch)}
+          {advice.sizeAdvice.alternativeInch !== undefined &&
+            ` (of ${formatInch(advice.sizeAdvice.alternativeInch)})`}
+        </h3>
+        <ul className="mt-2 space-y-1 text-sm text-inkt/80">
+          {sizeAdviceText(advice.sizeAdvice).map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      </section>
 
       {hasResults && (
         <section aria-labelledby="results-heading">
@@ -141,7 +128,7 @@ export function QuizResult({
         </section>
       )}
 
-      {!hasResults && !isLeftHanded && (
+      {!hasResults && (
         <section aria-labelledby="no-match-heading">
           <h3 id="no-match-heading" className="sr-only">
             Geen passende stick
@@ -208,7 +195,7 @@ export function QuizResult({
         </p>
       </section>
 
-      {!isLeftHanded && <Feedback onFeedback={onFeedback} />}
+      <Feedback onFeedback={onFeedback} />
 
       <div className="flex flex-wrap gap-3">
         <Button variant="secondary" onClick={onEdit}>

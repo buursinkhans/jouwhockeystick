@@ -439,3 +439,17 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Waarom:** nieuwe modellen (bijv. de collectie voor het volgende seizoen) zo vroeg mogelijk zien, voor de catalogus en voor Instagram ("nieuw in de catalogus").
 
 **Netjes scrapen:** dezelfde regels als voor de winkels: alleen robots.txt en sitemaps, één site tegelijk, 2 seconden tussen verzoeken, één keer per week. adidas.nl blokkeert geautomatiseerde toegang en wordt niet gelezen.
+
+## 2026-10-12 — `ruleSetVersion v6-2026-10-12`: vraag over linkshandige stick verwijderd; startscherm compacter
+
+**Wat:**
+- De vraag "Is een linkshandige (omgekeerde) stick nodig?" is uit alle drie de routes gehaald, met alles wat eraan hing:
+  - de verwijsregel in de engine (bij "ja" geen sticks maar een doorverwijzing naar persoonlijke hulp);
+  - het veld `referral` in het adviesresultaat;
+  - de tekst en het resultaatscherm voor die doorverwijzing.
+  - Oude antwoorden die nog in de sessie staan, worden door het schema genegeerd.
+- **Startscherm:** de routeblokken tonen alleen naam en aantal stappen; "Voor wie", "Waar we op letten" en "Wat je krijgt" staan in een uitklapper. De uitleg over de route staat nu boven de blokken, zodat de knop "Start" (was "Volgende") direct onder de blokken staat.
+
+**Reden:** keuze van de eigenaar; de vraag is voor de doelgroep niet relevant.
+
+**Afwijking van de specificatie:** de complete-instructie noemt linkshandigheid als uitzondering met doorverwijzing. Die volgen we hier bewust niet meer. Elke stick in de catalogus is een reguliere (rechtse) stick.
