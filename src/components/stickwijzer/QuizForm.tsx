@@ -458,7 +458,9 @@ export function QuizForm() {
             ? submitting
               ? 'Bezig met adviseren…'
               : 'Bekijk advies'
-            : 'Volgende'}
+            : currentStep === 0
+              ? 'Start'
+              : 'Volgende'}
         </Button>
       </div>
 

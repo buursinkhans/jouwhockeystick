@@ -8,6 +8,10 @@ export type AnswerValue = string | string[] | number | undefined;
 const OPTION_CLASSES =
   'flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border border-lijngrijs bg-white px-3 py-2 text-sm has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-veld has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50';
 
+/** A route card: a label to choose plus a fold-out with more detail. */
+const OPTION_CARD_CLASSES =
+  'flex flex-col rounded-2xl border border-lijngrijs bg-white p-4 has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:ring-1 has-[:checked]:ring-veld has-[input:focus-visible]:outline has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-veld';
+
 const CARD_CLASSES =
   'flex cursor-pointer flex-col rounded-2xl border border-lijngrijs bg-white p-4 has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:ring-1 has-[:checked]:ring-veld has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-veld';
 
@@ -180,43 +184,65 @@ export function QuestionField({
             {def.question}
             {suffix}
           </legend>
-          <div className="mt-3 grid gap-3 md:grid-cols-3">
+          <div className="mt-3 grid items-start gap-3 md:grid-cols-3">
             {input.options.map((option) => {
               const OptionIcon = optionIcons?.[option.value];
               return (
-                <label key={option.value} className={CARD_CLASSES}>
-                  {OptionIcon && (
-                    <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-krijt text-veld">
-                      <OptionIcon size={22} />
-                    </span>
-                  )}
-                  <span className="flex items-center gap-2 font-semibold">
-                    <input
-                      type="radio"
-                      name={def.id}
-                      value={option.value}
-                      checked={value === option.value}
-                      onChange={() => onChange(option.value)}
-                    />
-                    {option.label}
-                  </span>
-                  {option.details?.map((detail) => (
-                    <span
-                      key={detail.term}
-                      className="mt-3 block text-sm text-inkt/80"
-                    >
-                      <span className="block text-xs font-semibold uppercase tracking-wide text-lijngrijs">
-                        {detail.term}
+                <div key={option.value} className={OPTION_CARD_CLASSES}>
+                  {/* Choosing: the top of the card is the click target. */}
+                  <label className="flex cursor-pointer flex-col">
+                    {OptionIcon && (
+                      <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-krijt text-veld">
+                        <OptionIcon size={22} />
                       </span>
-                      {detail.text}
+                    )}
+                    <span className="flex min-h-11 items-center gap-2 font-semibold">
+                      <input
+                        type="radio"
+                        name={def.id}
+                        value={option.value}
+                        checked={value === option.value}
+                        onChange={() => onChange(option.value)}
+                      />
+                      {option.label}
                     </span>
-                  ))}
-                  {optionMeta?.[option.value] && (
-                    <span className="mt-3 block text-sm font-medium text-veld">
-                      {optionMeta[option.value]}
-                    </span>
+                    {optionMeta?.[option.value] && (
+                      <span className="block text-sm font-medium text-veld">
+                        {optionMeta[option.value]}
+                      </span>
+                    )}
+                  </label>
+                  {/* Reading more: folded away, so the choice itself stays short. */}
+                  {option.details && (
+                    <details className="group mt-2 border-t border-rand pt-1 text-sm">
+                      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 font-semibold text-veld [&::-webkit-details-marker]:hidden">
+                        Meer over deze route
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                          className="shrink-0 transition-transform group-open:rotate-180"
+                        >
+                          <path d="m6 9 6 6 6-6" />
+                        </svg>
+                      </summary>
+                      {option.details.map((detail) => (
+                        <p key={detail.term} className="mt-2 text-inkt/80">
+                          <span className="block text-xs font-semibold uppercase tracking-wide text-lijngrijs">
+                            {detail.term}
+                          </span>
+                          {detail.text}
+                        </p>
+                      ))}
+                    </details>
                   )}
-                </label>
+                </div>
               );
             })}
           </div>
@@ -234,7 +260,7 @@ export function QuestionField({
             {def.question}
             {suffix}
           </legend>
-          <div className="mt-3 grid gap-3 md:grid-cols-3">
+          <div className="mt-3 grid items-start gap-3 md:grid-cols-3">
             {input.options.map((option) => (
               <label
                 key={option.value}
