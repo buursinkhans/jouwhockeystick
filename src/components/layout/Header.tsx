@@ -15,7 +15,7 @@ const NAV_LINKS: NavLink[] = [
 
 export function Header() {
   return (
-    <header className="border-b border-rand bg-white">
+    <header className="border-b border-rand bg-white print:hidden">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-1.5 gap-y-2 px-4 py-3 sm:gap-x-4 sm:px-6 lg:py-4">
         {/*
          * Lockup: 40 px icon on desktop. On mobile 26 px instead of the 32 px
