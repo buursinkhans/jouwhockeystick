@@ -4,6 +4,7 @@ import Script from 'next/script';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { INSTAGRAM } from '@/content/social';
 import {
   CONTACT_EMAIL,
   DEFAULT_DESCRIPTION,
@@ -61,6 +62,8 @@ const siteJsonLd = {
       email: CONTACT_EMAIL,
       // The same icon that is visible in the header.
       logo: `${SITE_URL}/icon-512.png`,
+      // Visible as a link in the footer.
+      sameAs: [INSTAGRAM.url],
     },
     {
       '@type': 'WebSite',

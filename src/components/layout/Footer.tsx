@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Logo } from '@/components/brand/Logo';
 import { CONTACT_EMAIL, SITE_NAME } from '@/lib/site';
+import { INSTAGRAM } from '@/content/social';
+import { InstagramIcon } from '@/components/ui/icons';
 
 const FOOTER_LINKS = [
   { href: '/over-ons', label: 'Over ons' },
@@ -29,6 +31,20 @@ export function Footer() {
           </a>
         </p>
         <p className="mt-4">
+          <a
+            href={INSTAGRAM.url}
+            rel="me noopener noreferrer"
+            target="_blank"
+            className="inline-flex min-h-11 items-center gap-2 font-semibold text-white hover:underline"
+          >
+            <InstagramIcon size={22} />
+            {INSTAGRAM.label}{' '}
+            <span className="font-normal text-nl-negatief">
+              @{INSTAGRAM.handle}
+            </span>
+          </a>
+        </p>
+        <p className="mt-2">
           &copy; {new Date().getFullYear()} {SITE_NAME}
         </p>
       </div>

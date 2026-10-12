@@ -160,3 +160,12 @@ export const FeelIcon = createIcon(
 export const HexIcon = createIcon(
   <path d="M12 2.5 20.2 7.2v9.6L12 21.5l-8.2-4.7V7.2z" />,
 );
+
+/** Generic camera-outline glyph for the Instagram link (no brand logo file). */
+export const InstagramIcon = createIcon(
+  <>
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" />
+  </>,
+);

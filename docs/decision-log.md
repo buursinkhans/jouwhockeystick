@@ -414,3 +414,20 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Hoe:** een aparte pagina *Instagram-studio* (claude.ai-artifact, naast de Agent-bediening) met de planning van de komende 14 dagen, het kwartaalplan, nieuwe modellen van de merken en losse posts. Een geplande taak (de Instagram-planner) vult elke vrijdag de lege dagen (di Kiezen, do Zaal/Veld, za Bewaren) en houdt het kwartaalplan 3 maanden vooruit bij, volgens `docs/instagram.md`. De studio tekent de slides zelf in de huisstijl (1080 × 1350, met een marge die ook een vierkante uitsnede overleeft) en biedt ze aan om te downloaden.
 
 **Bewust niet:** automatisch plaatsen (vraagt een goedgekeurde Meta-app), de Meta Pixel op de site (vraagt cookietoestemming en een aangepaste privacyverklaring), prijzen of voorraad in posts (een geplaatste post wordt niet bijgewerkt), spelers en citaten, verzonnen groeidoelen. Meten gaat via de UTM-link in PostHog en Simple Analytics.
+
+## 2026-10-12 — Instagram (@jouwhockeystick): link en postsblok
+
+**Wat:**
+- **Link:** "Volg ons op Instagram @jouwhockeystick" staat in de footer. De Organization-JSON-LD heeft `sameAs` met het profiel; die link is ook zichtbaar op de pagina.
+- **Postsblok op de homepage** (`InstagramFeed`), onder de uitgelichte sticks. Het toont de laatste 6 posts, met een link naar de post zelf.
+  - Het blok verschijnt pas als er posts zijn én een toegangstoken is ingesteld; daarvoor toont de site niets.
+  - Bij een fout (bijvoorbeeld een verlopen token) verdwijnt het blok stil; de pagina breekt nooit.
+
+**Hoe:**
+- De officiële Instagram API with Instagram Login (`graph.instagram.com`, `/me/media`). Daarvoor zijn een professioneel Instagram-account en een Meta-app van het type Business nodig.
+- Het token staat alleen als omgevingsvariabele `INSTAGRAM_ACCESS_TOKEN` in Netlify, nooit in de code.
+- De lijst wordt elk uur opnieuw opgehaald, omdat de afbeeldings-URL's van Instagram verlopen.
+
+**Privacy:** de afbeeldingen lopen via de eigen afbeeldingsoptimalisatie van de site (`next/image`, alleen `*.cdninstagram.com` en `*.fbcdn.net` zijn toegestaan). Bezoekers laden daardoor niets rechtstreeks van Meta, en er komen geen scripts of cookies van Instagram op de site. De privacyverklaring hoeft daarom niet te veranderen. Er is bewust geen Instagram-embedscript gebruikt: dat laadt code en cookies van Meta.
+
+**Openstaand:** het token verloopt na 60 dagen. Het moet daarvóór worden ververst (handmatig, of later met een geplande GitHub-workflow die het via de Netlify-API bijwerkt).
