@@ -38,6 +38,7 @@ export function QuestionField({
   errorMessage,
   optionMeta,
   optionIcons,
+  selectedAction,
 }: {
   def: QuestionDef;
   value: AnswerValue;
@@ -48,6 +49,8 @@ export function QuestionField({
   optionMeta?: Record<string, string>;
   /** Icon per option, keyed by option value — only used by the card layout. */
   optionIcons?: Record<string, IconComponent>;
+  /** Shown inside the chosen card only — card layout only (e.g. a Start button). */
+  selectedAction?: ReactNode;
 }) {
   const { input } = def;
   const errorId = `${def.id}-error`;
@@ -210,6 +213,7 @@ export function QuestionField({
                       </span>
                     )}
                   </label>
+                  {value === option.value && selectedAction}
                   {/* Reading more: folded away, so the choice itself stays short. */}
                   {option.details && (
                     <details className="group mt-2 border-t border-rand pt-1 text-sm">

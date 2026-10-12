@@ -407,6 +407,26 @@ export function QuizForm() {
             optionIcons={
               id === 'route_self_select' ? ROUTE_OPTION_ICONS : undefined
             }
+            selectedAction={
+              // On mobile the three cards stack, which pushes the Start
+              // button far down; the chosen card gets its own Start button.
+              currentStep === 0 && id === 'route_self_select' ? (
+                <div className="mt-3 md:hidden">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={!canProceed(screen, answers)}
+                  >
+                    Start met deze route
+                  </Button>
+                  {!canProceed(screen, answers) && (
+                    <p className="mt-2 text-xs text-lijngrijs">
+                      Kies eerst hierboven voor wie je een stick zoekt.
+                    </p>
+                  )}
+                </div>
+              ) : undefined
+            }
           />
         ))}
 

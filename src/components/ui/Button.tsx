@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 import Link from 'next/link';
 
 export const buttonBaseClasses =
-  'inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-veld';
+  'inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-veld disabled:cursor-not-allowed disabled:opacity-50';
 export const buttonVariantClasses = {
   primary: 'bg-veld text-white hover:bg-veld/90',
   secondary: 'border border-veld text-veld hover:bg-krijt',
