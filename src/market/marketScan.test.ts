@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  brandProductUrls,
   diffBol,
   diffSites,
   formatMarketReport,
@@ -21,6 +22,20 @@ describe('hockeyUrls', () => {
         'not a url',
       ]),
     ).toEqual(['https://www.daka.nl/p/grays-hockeystick']);
+  });
+});
+
+describe('brandProductUrls', () => {
+  it('keeps product pages that are probably sticks', () => {
+    expect(
+      brandProductUrls([
+        'https://www.grays-hockey.eu/products/gr-5000-probow?variant=1',
+        'https://www.grays-hockey.eu/products/g600-hockey-shoes',
+        'https://www.grays-hockey.eu/products/international-hockey-ball',
+        'https://www.jdhsports.eu/product/x93-pro-bow',
+        'https://www.grays-hockey.eu/pages/about',
+      ]),
+    ).toEqual(['https://www.grays-hockey.eu/products/gr-5000-probow', 'https://www.jdhsports.eu/product/x93-pro-bow']);
   });
 });
 

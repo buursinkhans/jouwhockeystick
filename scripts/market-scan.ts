@@ -1,11 +1,12 @@
 // Weekly market scan (read-only). Reads the public sitemaps of competing
-// shops (hockey pages only) and bol.com's most popular hockey sticks, then
+// shops (hockey pages only), the product pages of the big brands' own shops and bol.com's most popular hockey sticks, then
 // compares with last week's snapshot.
 // Usage: npm run market:scan -- <previous.json|-> <current.json> <report.md>
 // Needs BOL_CLIENT_ID and BOL_CLIENT_SECRET for the bol.com part.
 import { readFileSync, writeFileSync, existsSync, appendFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
 import {
+  brandProductUrls,
   formatMarketReport,
   hockeyUrls,
   isHockeyStickTitle,
@@ -22,10 +23,18 @@ const USER_AGENT = 'jouwhockeystick-marktverkenner/1.0 (+https://jouwhockeystick
 const DELAY_MS = 2000;
 const MAX_SITEMAPS_PER_SITE = 80;
 
-const SITES = [
-  { site: 'PassaSports', host: 'www.passasports.nl' },
-  { site: 'Daka', host: 'www.daka.nl' },
-  { site: 'Vrijbuiter', host: 'www.vrijbuiter.nl' },
+type Site = { site: string; host: string; kind: 'shop' | 'brand' };
+
+/** Shops: pages with "hockey" in the path. Brands: product pages on their own shop, to spot new models. */
+const SITES: Site[] = [
+  { site: 'PassaSports', host: 'www.passasports.nl', kind: 'shop' },
+  { site: 'Daka', host: 'www.daka.nl', kind: 'shop' },
+  { site: 'Vrijbuiter', host: 'www.vrijbuiter.nl', kind: 'shop' },
+  // adidas.nl blocks automated access (see CLAUDE.md), so it is not scanned.
+  { site: 'Grays (merk)', host: 'www.grays-hockey.eu', kind: 'brand' },
+  { site: 'Princess (merk)', host: 'www.princess-hockey.com', kind: 'brand' },
+  { site: 'Brabo (merk)', host: 'brabohockey.com', kind: 'brand' },
+  { site: 'JDH (merk)', host: 'www.jdhsports.eu', kind: 'brand' },
 ];
 const BOL_QUERIES = ['hockeystick', 'zaalhockeystick'];
 
@@ -49,7 +58,7 @@ async function fetchText(url: string, retries = 2): Promise<string> {
   return (gzipped ? gunzipSync(buffer) : buffer).toString('utf8');
 }
 
-async function scanSite({ site, host }: { site: string; host: string }): Promise<SiteSnapshot> {
+async function scanSite({ site, host, kind }: Site): Promise<SiteSnapshot> {
   try {
     const robots = await fetchText(`https://${host}/robots.txt`);
     const queue = sitemapsFromRobots(robots, host);
@@ -72,7 +81,7 @@ async function scanSite({ site, host }: { site: string; host: string }): Promise
       else pages.push(...locs);
     }
     if (seen.size === 0) throw new Error('geen sitemap gevonden');
-    return { site, urls: hockeyUrls(pages) };
+    return { site, urls: kind === 'brand' ? brandProductUrls(pages) : hockeyUrls(pages) };
   } catch (error) {
     return { site, urls: [], error: error instanceof Error ? error.message : String(error) };
   }

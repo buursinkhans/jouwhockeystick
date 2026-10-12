@@ -48,6 +48,28 @@ export function hockeyUrls(urls: string[]): string[] {
   return [...out].sort();
 }
 
+/** Product pages on a brand's own shop: `/product/…` or `/products/…`. */
+const PRODUCT_PATH = /\/products?\//i;
+/** Brand shops also sell balls, bags, shoes, clothing and protection; skip those so the list stays about sticks. */
+const NOT_A_STICK =
+  /(^|[-/])(bal|ball|balls|ballen|bag|bags|tas|backpack|rugzak|schoen|schoenen|shoe|shoes|glove|gloves|handschoen|grip|grips|tape|shirt|short|shorts|skort|rok|sok|sokken|sock|socks|cap|hoodie|jacket|jas|pant|pants|broek|scheenbeschermer|shin|shinguard|shinguards|protector|mask|helmet|helm|keeper|bottle|bidon|cover|hoes)([-/]|$)/i;
+
+/** Brand shop pages that are probably sticks; strip query and hash so URLs compare cleanly. */
+export function brandProductUrls(urls: string[]): string[] {
+  const out = new Set<string>();
+  for (const raw of urls) {
+    try {
+      const url = new URL(raw.trim());
+      url.search = '';
+      url.hash = '';
+      if (PRODUCT_PATH.test(url.pathname) && !NOT_A_STICK.test(url.pathname)) out.add(url.href);
+    } catch {
+      // ignore malformed entries
+    }
+  }
+  return [...out].sort();
+}
+
 const ACCESSORY = /\b(klem|grip|zeemgrip|tape|hoes|tas|bag|set|speelgoed|bal|ballen|scheenbeschermer|handschoen)\b/i;
 
 /** True for an actual hockey stick; bol.com search also returns grips, clamps, tape and toy sets. */
@@ -154,9 +176,9 @@ export function formatMarketReport(previous: MarketSnapshot | undefined, current
       ? `Vergeleken met ${previous.date}. Alleen lezen: openbare sitemaps van concurrenten en de bol.com-API.`
       : 'Nulmeting: dit is de eerste keer. Vanaf volgende week zie je hier wat er veranderd is.',
     '',
-    '## Concurrenten',
+    '## Concurrenten en merken',
     '',
-    '| Winkel | Hockeypagina’s | Nieuw | Verdwenen |',
+    '| Site | Hockeypagina’s | Nieuw | Verdwenen |',
     '|---|---|---|---|',
     ...sites.map((s) =>
       s.error
