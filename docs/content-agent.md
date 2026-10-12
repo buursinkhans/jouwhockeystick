@@ -24,9 +24,16 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 
 - **Hoofdvraag beantwoord in de intro, binnen 80 woorden**, in eigen bewoordingen.
 - **Eén H1 (de titel), daaronder H2/H3.** Kopjes zijn vragen of duidelijke onderwerpen.
-- **Toon:** helder, persoonlijk, eerlijk, deskundig. Je spreekt de lezer aan met "je". Korte zinnen, geen jargon zonder uitleg.
-- **Genuanceerd:** "kan passen bij", "is een logische richting voor". Nooit "de beste", "gegarandeerd", "bewezen". Geen eigen testresultaten; wij testen niet zelf.
-- **Elke feitelijke claim heeft een bron.** Spelregels: FIH-regelboeken (zie `ZAAL_SOURCES` in `src/content/zaal.ts`). Merkclaims: de merksite. Is het onze eigen vertaling naar advies, zeg dat dan ("onze redactionele inschatting").
+- **Toon: vriendelijk, persoonlijk en sprankelend.** Schrijf zoals een enthousiaste hockeyvriend die er verstand van heeft, niet als een rapport. Spreek de lezer aan met "je". Korte zinnen, af en toe een vraag of een uitroep ("Op naar de zaal!"), gewone hockeytaal (sleeppush, aanname) en geen jargon zonder uitleg. Warm en enthousiast, maar niet overdreven: geen superlatieven over producten.
+  - Wel: "Een stick die nu te lang is, maakt oefenen juist moeilijker, en daar gaat het plezier van af."
+  - Niet: "Ons advies is om de huidige hanteerbaarheid zwaarder te laten wegen."
+  - Vermijd zakelijke formuleringen als "redactionele inschatting", "doorgaans", "de geraadpleegde passages". Zeg het gewoon: "onze tip", "meestal", "voor zover bekend".
+- **Genuanceerd, ook als het luchtig is:** "kan mooi passen bij", "een fijn startpunt", "een logische keuze". Nooit "de beste", "gegarandeerd", "bewezen". Geen eigen testresultaten; wij testen niet zelf (zeg dat gewoon, bijvoorbeeld in een korte notitie onderaan).
+- **Elke feitelijke claim is onderbouwd, maar de bron staat onderaan, niet in de tekst.** Zet bronnen alleen in `sources`; die verschijnen als lijst onder het artikel.
+  - Niet in de tekst: "[Bron: …]"-links, "volgens Intersport …", "in openbare bronnen staat …", "een hockeywinkel noemt …".
+  - Verwerk de onderbouwing subtiel. Spelregels stel je gewoon vast ("de kromming mag maximaal 25 mm zijn"); de FIH-regelboeken staan in `sources` (zie `ZAAL_SOURCES` in `src/content/zaal.ts`). Een merk mag je noemen als het over zijn eigen product gaat ("Grays maakt de GX1000 om de basis van hockey mee te leren").
+  - Is het onze eigen vertaling naar advies, maak dat dan vriendelijk duidelijk ("onze tip", "wij zouden …"), en noem het in `sources` als redactioneel uitgangspunt.
+  - Is iets onzeker, zeg dat eerlijk en kort ("zeker weten doen we het niet") in plaats van de bron te citeren.
 - **Geen prijzen, lengtes, carbonpercentages of beschikbaarheid in vaste tekst.** Genereer ze uit de catalogus, zoals `src/content/articles/hockeystick-kinderen-en-beginners.ts` doet (`getFieldProducts`, `getIndoorProducts`, `stickListItem`, `formatEuro`). Zo blijven artikelen kloppen als de catalogus verandert.
 - **Geen kortingsclaims** (EU Omnibus) en geen "review" in titels.
 - **bol.com is de enige winkel.** Andere winkels alleen als bron, en dan staan ze op de `nofollow`-lijst in `src/content/linkPolicy.ts`.
@@ -40,7 +47,7 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 - `publishedAt`: de **publicatiedatum** uit de brief (`YYYY-MM-DD`); staat er geen, dan de datum van vandaag. `updatedAt`: gelijk aan `publishedAt`. Ligt de datum in de toekomst, dan is de pagina tot die dag onzichtbaar op de live site (niet in overzichten, sitemap of `llms.txt`) en alleen in de Netlify-preview te zien, met een melding "Gepland voor …". Op de publicatiedatum bouwt de workflow *Geplande publicatie* de site 's ochtends opnieuw (`src/content/schedule.ts`). Noem de datum in de PR-titel: `Content: <onderwerp> (#<issue>, live <datum>)`.
 - Link alleen naar pagina's die uiterlijk op jouw publicatiedatum live staan (test). Een geplande pagina mag dus naar live pagina's linken, maar een live pagina niet naar een geplande (zet die link pas na de publicatiedatum).
 - Vraagt de eigenaar in de PR om een andere datum (`@claude zet de publicatiedatum op …`), pas dan alleen `publishedAt` en `updatedAt` aan.
-- Elke externe link in de tekst staat ook in `sources` (test).
+- Er staan geen externe links in de tekst (geen `[…](https://…)`, geen "[Bron:"); bronnen staan alleen in `sources`, en elk artikel heeft er minstens één (test). Interne links naar eigen pagina's mogen en moeten wel.
 - `metaDescription`: uniek, inhoudelijk, maximaal 158 tekens.
 - Raakt het artikel een bestaande pagina (bijv. een link of correctie), houd die wijziging klein.
 - Voeg een korte regel toe aan `docs/decision-log.md`: wat, waarom dit onderwerp, en wat bewust niet.

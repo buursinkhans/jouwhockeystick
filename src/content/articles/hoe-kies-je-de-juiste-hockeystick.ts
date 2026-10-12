@@ -9,78 +9,78 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
   slug: 'hoe-kies-je-de-juiste-hockeystick',
   title: 'Hockeystick-begrippen uitgelegd: lengte, bow, carbon en niveau',
   intro:
-    'Bij het kiezen van een hockeystick kom je steeds dezelfde begrippen tegen: lengte in inch, bow-profiel, carbonpercentage en het niveau waarvoor een stick bedoeld is. In het kort: de lengte stem je af op je lichaamslengte, de bow is de kromming die bepaalt hoe makkelijk je onder de bal komt, en carbon maakt een stick stijver. Hieronder leggen we elk begrip uit en verwijzen we naar de pagina waar je er meer over leest.',
+    'Inch, bow, carbon, niveau: wie een stick zoekt, struikelt al snel over het vakjargon. Even in het kort. De lengte stem je af op je lichaamslengte. De bow is de kromming, en die bepaalt hoe makkelijk je onder de bal komt. Carbon maakt een stick stijver. Hieronder leggen we elk begrip rustig uit, met een link naar waar je er meer over leest.',
   sections: [
     {
       heading: 'Lengte (in inch)',
       level: 2,
       body: [
-        'Sticklengtes worden in inch aangegeven. Kinderen spelen met sticks van ongeveer 22 tot 35 inch; voor volwassenen is 36,5 inch de gangbare maat. Een stick die te lang is, zit balcontrole in de weg; een te korte stick kan krachtige slagen lastiger maken.',
-        'Per lichaamslengte zie je de maat in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel).',
+        'Sticklengtes worden in inch aangegeven. Kinderen spelen met sticks van ongeveer 22 tot 35 inch, en voor volwassenen is 36,5 inch de gangbare maat. Te lang? Dan zit de stick je balcontrole in de weg. Te kort? Dan wordt een krachtige slag lastiger.',
+        'Jouw maat vind je in een paar seconden in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel).',
       ],
     },
     {
       heading: 'Bow-profiel (de kromming)',
       level: 2,
       body: [
-        'Het bow-profiel is de kromming van de stick. Hoe lager die kromming ligt, hoe meer de stick op liften en 3D is gericht, en hoe meer aandacht aannemen en vlak passen vragen. Merken gebruiken eigen namen; op deze site delen we ze in zes profielen in, van rustig naar uitgesproken.',
+        'Het bow-profiel is de kromming van je stick. Hoe lager die kromming ligt, hoe meer de stick gemaakt is voor liften en 3D, en hoe meer aandacht je aanname en vlakke passes vragen. Elk merk gebruikt eigen namen, dus wij delen ze in zes profielen in, van rustig tot uitgesproken.',
       ],
     },
     {
       heading: 'Standaard en mid bow',
       level: 3,
       body: [
-        'Een rustig profiel met een beperkte kromming. Doorgaans een logisch startpunt voor beginners en voor spelers die vooral aan aannemen, passen en de slag werken.',
+        'Een rustig profiel met een bescheiden kromming. Een fijn startpunt als je begint, of als je vooral werkt aan aannemen, passen en je slag.',
       ],
     },
     {
       heading: 'Dynabow en pro bow',
       level: 3,
       body: [
-        'Een allround tussenvorm. Dit kan passen bij spelers die de basis beheersen en controle willen combineren met de eerste 3D-acties.',
+        'Een allround tussenvorm. Kan mooi passen als je de basis beheerst en controle wilt combineren met je eerste 3D-acties.',
       ],
     },
     {
       heading: 'Low bow en extreme low bow',
       level: 3,
       body: [
-        'Een lage, uitgesproken kromming gericht op liften, 3D, aerials en de dragflick. Past vaker bij gevorderde spelers; een extreme low bow adviseren we niet als eerste stick.',
-        'Het verschil tussen de twee meest gekozen profielen lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow).',
+        'Een lage, uitgesproken kromming, gemaakt voor liften, 3D, aerials en de sleeppush. Past meestal bij gevorderde spelers. Een extreme low bow raden we als eerste stick niet aan.',
+        'Het verschil tussen de twee populairste profielen lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow).',
       ],
     },
     {
       heading: 'Carbonpercentage',
       level: 2,
       body: [
-        'Carbon maakt een stick stijver. Dat geeft een directere respons, maar een stijve stick is minder vergevingsgezind bij een mishit. Voor spelers die nog volop in ontwikkeling zijn, is een lager carbonpercentage vaak een prettiger startpunt.',
-        'Niet elk merk publiceert een carbonpercentage. Ontbreekt het, dan staat er op deze site "niet vermeld", en nooit een geschatte waarde.',
+        'Carbon maakt een stick stijver. Dat voelt directer, maar een stijve stick vergeeft minder als je de bal net niet goed raakt. Ben je nog volop aan het leren? Dan is minder carbon vaak een fijner startpunt.',
+        'Niet elk merk vermeldt het carbonpercentage. Staat het er niet bij, dan zie je bij ons "niet vermeld". We gaan nooit gokken.',
       ],
     },
     {
       heading: 'Niveau: beginner, gevorderd, ervaren',
       level: 2,
       body: [
-        'Fabrikanten en winkels geven aan voor welk niveau een stick bedoeld is. Wij nemen dat over en markeren het als bron. Voor kinderen en beginners lees je meer in [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
+        'Merken en winkels geven aan voor welk niveau een stick bedoeld is. Wij nemen dat over, en op elke stickpagina zie je waar het vandaan komt. Begin je net, of zoek je voor je kind? Lees dan [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },
     {
       heading: 'Richtprijs',
       level: 2,
       body: [
-        'Bij elk model staat een richtprijs. Dat is geen live prijs: controleer de actuele prijs en voorraad altijd bij de partnerwinkel.',
+        'Bij elk model zie je een richtprijs. Dat is een indicatie, geen live prijs. De actuele prijs en voorraad zie je bij de partnerwinkel.',
       ],
     },
     {
       heading: 'Van begrippen naar een keuze',
       level: 2,
       body: [
-        'Hoe je deze begrippen gebruikt om een stick te kiezen, lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Liever direct een persoonlijk advies? De [stickwijzer](/stickwijzer) vertaalt je antwoorden naar maximaal drie sticks, elk met zichtbare redenen.',
+        'Hoe je met al deze begrippen een stick kiest, lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Liever meteen persoonlijk advies? De [stickwijzer](/stickwijzer) zet je antwoorden om in maximaal drie sticks, elk met de redenen erbij.',
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-09-22',
-  updatedAt: '2026-10-08',
+  updatedAt: '2026-10-12',
   sources: [
     { label: 'FIH Rules of Hockey (technische grenzen aan lengte en gewicht)' },
     {
@@ -93,5 +93,5 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
     },
   ],
   metaDescription:
-    'Wat betekenen lengte in inch, bow-profiel, carbonpercentage en niveau bij een hockeystick? Alle begrippen kort uitgelegd, met verwijzingen naar meer uitleg.',
+    'Wat betekenen lengte in inch, bow-profiel, carbonpercentage en niveau bij een hockeystick? Alle begrippen kort uitgelegd, met links naar meer uitleg.',
 };

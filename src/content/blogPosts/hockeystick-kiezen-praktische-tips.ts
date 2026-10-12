@@ -9,67 +9,67 @@ export const hockeystickKiezenPraktischeTips: Article = {
   slug: 'hockeystick-kiezen-praktische-tips',
   title: 'Zes veelgemaakte fouten bij het kiezen van een hockeystick',
   intro:
-    'De meest gemaakte fouten bij het kiezen van een hockeystick: beginnen bij merk of uiterlijk, een kinderstick op de groei kopen, denken dat meer carbon altijd beter is, een low bow kiezen omdat de profs die gebruiken, alleen op positie kiezen en een ontbrekende specificatie lezen als "nul". Hieronder lees je per fout wat er misgaat en wat je beter kunt doen.',
+    'Iedereen die een stick koopt, trapt er weleens in: kiezen op merk of kleur, een kinderstick op de groei kopen, denken dat meer carbon altijd beter is, een low bow nemen omdat de profs die hebben, alleen op positie kiezen, of een ontbrekend gegeven lezen als "nul". Herkenbaar? Geen zorgen. Per fout lees je hieronder wat er misgaat en hoe het slimmer kan.',
   sections: [
     {
-      heading: '1. Beginnen bij merk of uiterlijk',
+      heading: '1. Kiezen op merk of uiterlijk',
       level: 2,
       body: [
-        'Een merk zegt weinig over of een specifiek model bij jouw lengte, niveau en speelstijl past. Dat verschilt per model, ook binnen hetzelfde merk.',
-        '**Beter:** begin bij jezelf. Hoe lang ben je, hoeveel ervaring heb je, en wat wil je vooral kunnen: aannemen en passen, dribbelen of een harde slag? Laat uiterlijk pas meewegen als maat, gevoel en budget kloppen.',
+        'Die ene stick in je favoriete kleur, van het merk dat je teamgenoot ook heeft: we snappen het helemaal. Maar een merk zegt weinig over of een model bij jouw lengte, niveau en spel past. Zelfs binnen één merk verschillen sticks enorm.',
+        '**Slimmer:** begin bij jezelf. Hoe lang ben je, hoeveel ervaring heb je, en wat wil je vooral kunnen: aannemen en passen, dribbelen of een flinke slag? Laat het uiterlijk pas meebeslissen als maat, gevoel en budget kloppen.',
       ],
     },
     {
       heading: '2. Een kinderstick op de groei kopen',
       level: 2,
       body: [
-        'Een maat groter lijkt voordelig, maar een te lange stick maakt balcontrole en het leren van de techniek lastiger.',
-        '**Beter:** kies de maat die nu past. Is die er niet, dan is één maat korter een redelijk alternatief. Per lichaamslengte zie je de maat in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel).',
+        'Een maat groter, dan doet je kind er langer mee. Klinkt zuinig, maar met een te lange stick worden balcontrole en techniek een stuk lastiger. En dan is het plezier snel weg.',
+        '**Slimmer:** kies de maat die nu past. Is die er niet, dan is één maatje korter prima. Per lichaamslengte zie je de juiste maat in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel).',
       ],
     },
     {
       heading: '3. Denken dat meer carbon altijd beter is',
       level: 2,
       body: [
-        'Meer carbon maakt een stick stijver en directer, maar ook minder vergevingsgezind bij een mishit. Een hoog percentage is alleen een voordeel als je spel daar al om vraagt.',
-        '**Beter:** begin bij de vraag of je de bal prettig kunt aannemen en gecontroleerd kunt passen. Voor de meeste beginnende en veel gevorderde spelers is een gematigd carbonpercentage prettiger.',
+        'Meer carbon maakt een stick stijver en directer, maar ook minder vergevingsgezind als je de bal net niet goed raakt. Veel carbon is pas een voordeel als je spel erom vraagt.',
+        '**Slimmer:** vraag je eerst af of je de bal fijn kunt aannemen en rustig kunt doorspelen. Voor de meeste beginners en veel gevorderde spelers voelt een gemiddeld carbonpercentage prettiger.',
       ],
     },
     {
-      heading: '4. Een low bow kiezen omdat de profs die gebruiken',
+      heading: '4. Een low bow kiezen omdat de profs die hebben',
       level: 2,
       body: [
-        'Een lage kromming helpt bij liften en 3D-acties, maar vraagt meer techniek bij aannemen en vlak passen. Wat bij een international past, past niet automatisch bij jouw spel.',
-        '**Beter:** kies op de acties die jij het meest maakt. Het verschil lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow).',
+        'Een lage kromming helpt bij liften en 3D-acties, maar vraagt meer techniek bij de aanname en vlakke passes. Wat bij een international past, past niet vanzelf bij jou.',
+        '**Slimmer:** kies op de acties die jij het meest maakt. Het verschil lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow).',
       ],
     },
     {
       heading: '5. Alleen op positie kiezen',
       level: 2,
       body: [
-        'Twee verdedigers kunnen heel verschillend spelen: de één verdeelt met korte passes, de ander slaat lange ballen. Positie geeft richting, maar ervaring, speelstijl en comfort wegen minstens zo zwaar.',
-        '**Beter:** zoek op eigenschappen die passen bij wat je in een wedstrijd echt doet. De [stickwijzer](/stickwijzer) vraagt daarom naar je spelacties, niet alleen naar je positie.',
+        'Twee verdedigers kunnen heel verschillend spelen: de één verdeelt met korte passes, de ander jaagt de bal met lange slagen naar voren. Je positie geeft een richting, maar ervaring, speelstijl en comfort wegen minstens zo zwaar.',
+        '**Slimmer:** kijk naar wat je in een wedstrijd echt doet. Daarom vraagt de [stickwijzer](/stickwijzer) naar je spelacties, en niet alleen naar je positie.',
       ],
     },
     {
-      heading: '6. Een ontbrekende specificatie lezen als "nul"',
+      heading: '6. Een ontbrekend gegeven lezen als "nul"',
       level: 2,
       body: [
-        'Niet elk merk publiceert een carbonpercentage of gewicht voor elk model. Ontbreekt het, dan is het onbekend, niet nul.',
-        '**Beter:** vraag het na bij de winkel of het merk voordat je koopt, en vergelijk dan pas. Op deze site staat bij een ontbrekend gegeven altijd "niet vermeld".',
+        'Niet elk merk vermeldt het carbonpercentage of het gewicht van elk model. Staat het er niet bij, dan weet je het gewoon niet. Het betekent niet dat het nul is.',
+        '**Slimmer:** vraag het na bij de winkel of het merk, en vergelijk pas daarna. Bij ons zie je bij een ontbrekend gegeven altijd "niet vermeld", nooit een gok.',
       ],
     },
     {
       heading: 'Kort samengevat',
       level: 2,
       body: [
-        'Kijk eerst naar lengte, ervaring en wat je op het veld belangrijk vindt. Laat carbon en bow-profiel daarna de keuze verfijnen, niet andersom. De hele aanpak, van je spel tot het testen van een stick, lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Wil je direct een persoonlijk advies? Doe de [stickwijzer](/stickwijzer).',
+        'Kijk eerst naar je lengte, je ervaring en wat je op het veld belangrijk vindt. Laat carbon en kromming daarna de keuze verfijnen, niet andersom. De hele aanpak, van je spel tot het testen van een stick, lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Liever meteen een persoonlijk advies? Doe de [stickwijzer](/stickwijzer).',
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-09-27',
-  updatedAt: '2026-10-08',
+  updatedAt: '2026-10-12',
   sources: [
     { label: 'FIH Rules of Hockey (technische grenzen aan lengte en gewicht)' },
     {
@@ -78,5 +78,5 @@ export const hockeystickKiezenPraktischeTips: Article = {
     },
   ],
   metaDescription:
-    'Zes veelgemaakte fouten bij het kiezen van een hockeystick, van op de groei kopen tot blind kiezen voor veel carbon of een low bow, en wat je beter kunt doen.',
+    'Zes veelgemaakte fouten bij het kiezen van een hockeystick, van op de groei kopen tot blind kiezen voor veel carbon of een low bow, en hoe het slimmer kan.',
 };

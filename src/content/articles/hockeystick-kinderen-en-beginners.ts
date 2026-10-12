@@ -24,7 +24,7 @@ export const hockeystickKinderenEnBeginners: Article = {
   slug: 'hockeystick-kinderen-en-beginners',
   title: 'Hockeystick voor kinderen en beginners: waar let je op?',
   intro:
-    'Voor een kind of beginnende hockeyer is een eenvoudige stick meestal de verstandigste keuze: de juiste lengte, een rustig profiel zoals een standaard- of mid bow, weinig of geen carbon en een prijs waarbij je later zonder drempel overstapt. Sticks met veel carbon en een lage kromming zijn ontworpen voor spelers die de basis al beheersen. Hieronder lees je waar je op let en zie je welke junior- en beginnerssticks in onze catalogus staan.',
+    'Een eerste stick hoeft niet ingewikkeld te zijn. Voor een kind of beginner werkt een eenvoudige stick meestal het best: de juiste lengte, een rustig profiel zoals een standaard- of mid bow, weinig of geen carbon, en een prijs waarbij overstappen later geen drama is. Sticks met veel carbon en een lage kromming zijn gemaakt voor spelers die de basis al onder de knie hebben. Hieronder lees je waar je op let, met een overzicht van sticks.',
   sections: [
     {
       heading: 'Wat een eerste stick nodig heeft',
@@ -33,12 +33,10 @@ export const hockeystickKinderenEnBeginners: Article = {
         {
           type: 'list',
           items: [
-            '**Een passende lengte.** Niet op de groei: een te lange stick maakt het leren van de techniek lastiger. [Bron: Intersport — hockeystick kopen](' +
-              INTERSPORT_GUIDE +
-              ')',
-            '**Een rustig profiel.** Een standaard- of mid bow maakt aannemen en vlak passen voorspelbaar.',
-            '**Weinig of geen carbon.** Een soepele stick is vergevingsgezinder bij een mishit dan een stijve.',
-            '**Een redelijke prijs.** Na een seizoen weet een speler veel beter wat hij of zij prettig vindt.',
+            '**Een stick die nu past.** Niet op de groei: met een te lange stick wordt het leren van de techniek een stuk lastiger.',
+            '**Een rustig profiel.** Met een standaard- of mid bow gaan aannemen en vlak passen vanzelfsprekender.',
+            '**Weinig of geen carbon.** Een soepele stick vergeeft het als je de bal net niet goed raakt.',
+            '**Een vriendelijke prijs.** Na een seizoen weet je veel beter wat je fijn vindt. Dan is een volgende stick een leuke stap.',
           ],
         },
       ],
@@ -47,40 +45,38 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'De juiste lengte voor je kind',
       level: 2,
       body: [
-        'De lengte is bij kinderen het belangrijkste. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een logisch startpunt is. Laat je kind de stick daarna vasthouden in een normale hockeyhouding: kan hij of zij ontspannen dribbelen en de stick dicht bij het lichaam houden?',
-        'Is de juiste maat niet te krijgen, dan is één maat korter een redelijk alternatief. Een maat langer raden we af.',
+        'Bij kinderen is de lengte het allerbelangrijkst. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een goed startpunt is. Laat je kind de stick daarna even vasthouden in een normale hockeyhouding: lukt dribbelen ontspannen, en blijft de stick dicht bij het lichaam? Top.',
+        'Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af.',
       ],
     },
     {
       heading: 'Waarom weinig carbon en een rustige kromming?',
       level: 2,
       body: [
-        'Carbon maakt een stick stijver. Dat geeft een directere respons, maar de bal springt bij een minder zuivere aanname ook sneller weg. In koopgidsen worden soepelere sticks daarom gekoppeld aan beginners en controle. [Bron: Intersport — hockeystick kopen](' +
-          INTERSPORT_GUIDE +
-          ')',
-        'Een lage kromming (low bow) helpt bij liften en 3D-acties, maar vraagt meer techniek bij aannemen en vlak passen. Voor een beginner is dat zelden de eerste prioriteit. Het verschil lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow).',
+        'Carbon maakt een stick stijver. Dat voelt directer, maar de bal springt ook sneller weg als je hem niet helemaal zuiver aanneemt. Juist voor beginners en voor controle is een soepele stick daarom zo fijn.',
+        'Een lage kromming (low bow) helpt bij liften en 3D-acties, maar vraagt meer techniek bij het aannemen en vlak passen. Voor een beginner is dat zelden het eerste waar je aan werkt. Het verschil lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow).',
       ],
     },
     {
       heading: 'Wat kost een eerste stick?',
       level: 2,
       body: [
-        `In onze catalogus liggen de richtprijzen van juniorsticks voor beginners ${juniorPriceRange}. Een duurdere stick is niet automatisch beter voor een kind: geef pas meer uit als je kunt uitleggen welke eigenschap je daarmee koopt.`,
+        `In onze catalogus liggen de richtprijzen van juniorsticks voor beginners ${juniorPriceRange}. Duurder is voor een kind niet vanzelf beter. Geef pas meer uit als je weet wat je daarvoor terugkrijgt.`,
       ],
     },
     {
       heading: 'Juniorsticks voor beginners in onze catalogus',
       level: 2,
       body: [
-        'Gesorteerd op richtprijs. Controleer de actuele prijs en de leverbare maat bij de partnerwinkel.',
+        'Op volgorde van richtprijs. Kijk bij de partnerwinkel even naar de actuele prijs en de maten die leverbaar zijn.',
         { type: 'list', items: juniorSticks.map(stickListItem) },
       ],
     },
     {
-      heading: 'Volwassen beginner?',
+      heading: 'Begin je als volwassene?',
       level: 2,
       body: [
-        'Ook als volwassene begin je het makkelijkst met een rustige, soepele stick in 36,5 inch. Deze sticks zijn in onze catalogus gericht op beginners:',
+        'Leuk dat je begint! Ook als volwassene start je het makkelijkst met een rustige, soepele stick in 36,5 inch. Deze sticks uit onze catalogus zijn gemaakt voor beginners:',
         { type: 'list', items: adultSticks.map(stickListItem) },
       ],
     },
@@ -88,20 +84,20 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Zaalhockey',
       level: 3,
       body: [
-        'Gaat je kind ook zaalhockeyen? Een aparte zaalstick is volgens de spelregels niet verplicht. Waar je op let als je er wel een koopt, lees je in [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen). Op de pagina [zaalsticks](/zaalsticks) maak je in drie vragen een eerste selectie.',
+        'Gaat je kind ook de zaal in? Een aparte zaalstick is volgens de spelregels niet verplicht. Wil je er toch een, dan lees je waar je op let in [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen). Bij de [zaalsticks](/zaalsticks) maak je in drie vragen een eerste selectie.',
       ],
     },
     {
       heading: 'Persoonlijk advies in een paar minuten',
       level: 2,
       body: [
-        'De [stickwijzer](/stickwijzer) heeft een eigen route voor een eerste stick. Je vult de lichaamslengte en een paar wensen in en krijgt sticks in de juiste maat, met de redenen erbij. Meer over de hele keuze lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
+        'De [stickwijzer](/stickwijzer) heeft een eigen route voor een eerste stick. Vul de lichaamslengte en een paar wensen in, en je krijgt sticks in de juiste maat, met de redenen erbij. Meer over de hele keuze lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-08',
+  updatedAt: '2026-10-12',
   sources: [
     {
       label:

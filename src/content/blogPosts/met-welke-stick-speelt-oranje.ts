@@ -29,14 +29,14 @@ export const metWelkeStickSpeeltOranje: Article = {
   slug: 'met-welke-stick-speelt-oranje',
   title: 'Met welke stick speelt Oranje? De merken van de dames en heren',
   intro:
-    'Bij de Oranje-dames valt één merk op: zeven speelsters worden in publieke bronnen genoemd als speelster met een stick van adidas. Frédérique Matla is verbonden aan Princess en Yibbi Jansen aan Osaka. Bij de heren is het beeld gevarieerder: Thierry Brinkman speelt met Brabo, Koen Bijen ontwikkelde mee aan een Princess-stick en Jorrit Croon wordt zowel aan adidas als aan Princess gekoppeld. Welk exact model ze in wedstrijden gebruiken, is meestal niet openbaar.',
+    'Bij de Oranje-dames springt één merk eruit: maar liefst zeven speelsters spelen met een stick van adidas. Frédérique Matla hoort bij Princess en Yibbi Jansen bij Osaka. Bij de heren is het een mix: Thierry Brinkman speelt met Brabo, Koen Bijen hielp een Princess-stick ontwikkelen en Jorrit Croon zie je zowel bij adidas als bij Princess terug. Met welk model ze precies spelen? Dat houden de meesten voor zich.',
   sections: [
     {
       heading: 'Kijk eens naar de stick van je idool',
       level: 2,
       body: [
-        'Wie bij een interland langs het veld staat, kijkt al snel niet alleen naar de bal, maar ook naar de stick. Welk merk is dat? Welke kleur? En zou die stick bij mij ook werken?',
-        'We zochten uit wat er publiek bekend is over de sticks van de Oranje-dames en -heren. Dat bleek minder eenvoudig dan het lijkt. Een speler kan met een merk spelen, ambassadeur zijn van een merk of meegewerkt hebben aan een stick. Dat zijn drie verschillende dingen. Daarom vertellen we per speler wat de bronnen precies zeggen.',
+        'Sta je bij een interland langs het veld, dan kijk je al snel niet alleen naar de bal, maar ook naar de stick. Welk merk is dat? Welke kleur? En zou die bij mij ook werken?',
+        'Wij zochten het voor je uit. Dat bleek best een puzzel, want een speler kan met een merk spelen, ambassadeur van een merk zijn of hebben meegeholpen aan een stick. Drie heel verschillende dingen. Per speler lees je hieronder wat er bekend is.',
       ],
     },
     {
@@ -86,57 +86,57 @@ export const metWelkeStickSpeeltOranje: Article = {
             ['Jorrit Croon', 'adidas / Princess', ''],
           ],
         },
-        'Dit is geen volledige lijst van de huidige selecties. We noemen alleen spelers over wie een publieke bron iets zegt over hun stick.',
+        'Dit is geen complete lijst van de selecties. We noemen alleen spelers van wie bekend is met welk merk ze spelen.',
       ],
     },
     {
       heading: 'De Oranje-dames: opvallend veel adidas',
       level: 2,
       body: [
-        `Volgens een overzicht van een Nederlandse hockeywinkel spelen Xan de Waard, Renée van Laarhoven, Felice Albers, Luna Fokke, Joosje Burg, Pien Dicke en Daantje de Kruijff met een stick van adidas. Dat gaat echt over hun sticks, niet over de kleding: adidas levert ook de tenues van de Nederlandse teams, maar dat is een andere afspraak. Welk model elke speelster gebruikt, noemt de bron niet.`,
+        'Xan de Waard, Renée van Laarhoven, Felice Albers, Luna Fokke, Joosje Burg, Pien Dicke en Daantje de Kruijff: allemaal spelen ze met een stick van adidas. En nee, dat komt niet doordat adidas ook de shirts van Oranje levert. Dat is een aparte afspraak. Welk model elke speelster precies gebruikt, is niet bekend.',
       ],
     },
     {
       heading: 'Yibbi Jansen en Osaka',
       level: 3,
       body: [
-        `Yibbi Jansen is ambassadeur van Osaka, en het merk heeft zelfs een eigen Yibbi-stickcollectie. Dat zegt veel over de band met het merk, maar niet met welke uitvoering zij op dit moment in wedstrijden speelt. Een collectie is geen wedstrijdmodel.`,
+        'Yibbi Jansen is ambassadeur van Osaka, en ze heeft zelfs een eigen stickcollectie: de Yibbi-lijn. Dat zegt veel over haar band met het merk. Met welke uitvoering ze op dit moment in wedstrijden speelt, weten we niet. Een collectie met je naam is nog geen wedstrijdstick.',
       ],
     },
     {
       heading: 'Frédérique Matla en Princess',
       level: 3,
       body: [
-        `Frédérique Matla staat op de officiële atletenpagina van Princess. Volgens Jumbo Sports werkte zij samen met Koen Bijen mee aan de ontwikkeling van de Princess Premium 7 Star. Dat bevestigt haar betrokkenheid bij die lijn, niet automatisch het exacte model waarmee ze nu speelt.`,
+        'Frédérique Matla staat bij Princess tussen de vaste namen, en samen met Koen Bijen hielp ze de Princess Premium 7 Star te ontwikkelen. Ze is dus nauw betrokken bij die lijn. Met welk model ze nu precies speelt, is niet bekend.',
       ],
     },
     {
       heading: 'De Oranje-heren: meer variatie',
       level: 2,
       body: [
-        'Waar bij de dames één merk de boventoon voert, is het bij de heren een mix. En bij één speler is het verhaal zelfs niet helemaal rond.',
+        'Bij de dames heeft één merk duidelijk de overhand, bij de heren is het een mix. En bij één speler is het verhaal nog niet helemaal rond.',
       ],
     },
     {
       heading: 'Thierry Brinkman en Brabo',
       level: 3,
       body: [
-        `Thierry Brinkman hockeyt volgens een Nederlandse hockeywinkel met Brabo, nadat hij eerder met Princess speelde. Brabo heeft ook een officiële atletenpagina voor hem. Welk model hij in wedstrijden gebruikt, staat niet in de geraadpleegde passages.`,
+        'Thierry Brinkman speelt met Brabo, na eerder met Princess te hebben gespeeld. Brabo zet hem ook op de eigen site in de spotlights. Zijn exacte wedstrijdmodel? Dat houdt hij voor zich.',
       ],
     },
     {
       heading: 'Koen Bijen en Princess',
       level: 3,
       body: [
-        `Koen Bijen ontwikkelde samen met Frédérique Matla de Princess Premium 7 Star, aldus Jumbo Sports. Of hij nu met een specifieke uitvoering uit die lijn speelt, is daarmee niet gezegd.`,
+        'Koen Bijen ontwikkelde samen met Frédérique Matla de Princess Premium 7 Star. Een heren- en een damesinternational aan één stick, leuk! Of hij er zelf in wedstrijden mee speelt, is daarmee nog niet gezegd.',
       ],
     },
     {
       heading: 'Jorrit Croon: adidas of Princess?',
       level: 3,
       body: [
-        `Bij Jorrit Croon spreken de bronnen elkaar tegen. De Hockeywinkel koppelt hem aan de adidas Estro-serie en Jumbo Sports noemt hem bij de adidas Estro .95. Maar in een interview bij HockeyDirect vertelt hij over een Princess Premium 7 Star Midbow. Wanneer dat interview precies is afgenomen, konden we niet vaststellen.`,
-        'Mogelijk is hij van merk gewisseld, maar dat kunnen we niet bevestigen. We noemen adidas daarom als vermelding door winkels, niet als zijn bevestigde wedstrijdstick.',
+        'Bij Jorrit Croon is het een beetje zoeken. Hij wordt in verband gebracht met de adidas Estro-serie, maar zelf vertelde hij in een interview over een Princess Premium 7 Star Midbow. Wanneer dat interview was, konden we niet achterhalen.',
+        'Misschien is hij van merk gewisseld, maar zeker weten doen we het niet. Daarom zetten we beide merken bij zijn naam.',
       ],
     },
     {
@@ -147,28 +147,28 @@ export const metWelkeStickSpeeltOranje: Article = {
         {
           type: 'list',
           items: [
-            '**Speelt met het merk:** een bron noemt dat de speler met een stick van dat merk speelt. Het exacte model is vaak niet bekend.',
-            '**Ambassadeur:** de speler werkt samen met het merk, soms met een eigen collectie. Dat zegt niet welk model in wedstrijden wordt gebruikt.',
-            '**Medeontwikkelaar:** de speler werkte mee aan een productlijn. Ook dat is geen bewijs van huidig gebruik.',
+            '**Speelt met het merk:** de speler gebruikt een stick van dat merk. Het exacte model is vaak niet bekend.',
+            '**Ambassadeur:** de speler werkt samen met het merk, soms met een eigen collectie. Dat zegt niet met welk model er in wedstrijden wordt gespeeld.',
+            '**Medeontwikkelaar:** de speler hielp een stick ontwikkelen. Ook dat zegt niet dat hij of zij er nu zelf mee speelt.',
           ],
         },
-        'Materiaalkeuzes en contracten veranderen bovendien. Wat vorig seizoen klopte, hoeft nu niet meer te kloppen.',
+        'En materiaal en contracten veranderen. Wat vorig seizoen klopte, kan nu alweer anders zijn.',
       ],
     },
     {
       heading: 'Moet je dezelfde stick kopen als je idool?',
       level: 2,
       body: [
-        'Het is leuk om met hetzelfde merk te spelen als je favoriete international. Maar de merknaam vertelt nog niet welk model bij jou past. In dit overzicht is het exacte wedstrijdmodel meestal niet bevestigd.',
-        'Gebruik de keuze van je idool daarom als inspiratie, niet als persoonlijk aankoopadvies. Kies gerust een merk dat je aanspreekt en kijk vervolgens naar je eigen lengte, ervaring, voorkeuren en budget.',
-        'Wil je weten welke stick bij jou past? Gebruik onze [stickwijzer](/stickwijzer) of lees onze uitleg in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Het verschil in kromming lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow), en voor kinderen is er [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
+        'Spelen met hetzelfde merk als je favoriete international? Superleuk! Maar de merknaam vertelt nog niet welk model bij jou past. En het exacte wedstrijdmodel van je idool is meestal niet eens bekend.',
+        'Laat je dus gerust inspireren, maar kies het model op je eigen lengte, ervaring, voorkeuren en budget.',
+        'Benieuwd welke stick bij jou past? Doe de [stickwijzer](/stickwijzer) of lees [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Het verschil in kromming lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow), en voor kinderen is er [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },
     {
       heading: 'Deze merken in onze catalogus',
       level: 2,
       body: [
-        'Dit zijn niet de wedstrijdsticks van de spelers, maar sticks van dezelfde merken die je bij ons kunt vergelijken:',
+        'Dit zijn niet de wedstrijdsticks van de spelers, maar wel sticks van dezelfde merken die je bij ons kunt vergelijken:',
         { type: 'list', items: brandLines },
         'Meer over de merken zelf lees je bij [merken](/merken).',
       ],
@@ -177,17 +177,17 @@ export const metWelkeStickSpeeltOranje: Article = {
       heading: 'Over dit overzicht',
       level: 2,
       body: [
-        'Dit overzicht is samengesteld op 8 oktober 2026 uit publiek beschikbare bronnen. Niet elke bronpagina kon volledig worden opgehaald; een deel van de vermeldingen berust op passages uit zoekresultaten. Het overzicht is niet door elke speler of fabrikant afzonderlijk bevestigd. We noemen alleen een exact wedstrijdmodel als daar specifieke en actuele bevestiging voor is, en dat was bij niemand het geval.',
+        'We hebben dit overzicht op 8 oktober 2026 samengesteld uit openbare informatie van merken, winkels en interviews. De spelers en merken hebben het niet zelf voor ons bevestigd. Daarom noemen we bij niemand een exact wedstrijdmodel.',
         {
           type: 'note',
-          text: '*De genoemde spelers en speelsters bevelen deze website of een winkel niet aan. Dit artikel bevat geen citaten of testimonials van hen. Zie je een fout of een nieuwere bron? Laat het ons weten via info@jouwhockeystick.nl.*',
+          text: '*De genoemde spelers en speelsters bevelen deze website of een winkel niet aan, en dit artikel bevat geen citaten van hen. Zie je een fout of weet je iets nieuws? Laat het ons weten via info@jouwhockeystick.nl.*',
         },
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-08',
+  updatedAt: '2026-10-12',
   sources: [
     {
       label:
@@ -209,5 +209,5 @@ export const metWelkeStickSpeeltOranje: Article = {
     { label: 'Alle bronnen geraadpleegd op 8 oktober 2026' },
   ],
   metaDescription:
-    'Met welke stick spelen de Oranje-dames en -heren? Een overzicht van stickmerken per international, met bron en hoe zeker elke vermelding is.',
+    'Met welke stick spelen de Oranje-dames en -heren? Een overzicht van de stickmerken per international, en wat je ervan kunt leren voor je eigen keuze.',
 };

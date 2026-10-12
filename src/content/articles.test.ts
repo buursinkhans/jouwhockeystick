@@ -8,8 +8,14 @@ import { articleSchema } from './types';
 
 // Scheduled content is checked too, before it goes live.
 const ALL = [
-  ...getArticlesIncludingScheduled().map((article) => ({ base: '/kennis', article })),
-  ...getBlogPostsIncludingScheduled().map((article) => ({ base: '/blog', article })),
+  ...getArticlesIncludingScheduled().map((article) => ({
+    base: '/kennis',
+    article,
+  })),
+  ...getBlogPostsIncludingScheduled().map((article) => ({
+    base: '/blog',
+    article,
+  })),
 ];
 
 function linksIn(text: string): string[] {
@@ -25,8 +31,10 @@ function internalPathExists(path: string, liveFrom: string): boolean {
   }
   const liveInTime = (a: { slug: string; publishedAt: string }) =>
     a.slug === slug && a.publishedAt <= liveFrom;
-  if (section === 'kennis') return getArticlesIncludingScheduled().some(liveInTime);
-  if (section === 'blog') return getBlogPostsIncludingScheduled().some(liveInTime);
+  if (section === 'kennis')
+    return getArticlesIncludingScheduled().some(liveInTime);
+  if (section === 'blog')
+    return getBlogPostsIncludingScheduled().some(liveInTime);
   if (section === 'sticks')
     return getAllProducts().some((p) => p.slug === slug);
   return false;
@@ -45,7 +53,8 @@ describe('articles and blog posts', () => {
     ({ article }) => {
       // A live page may only link to live pages; a scheduled page to pages live by its date.
       const today = todayInSiteTimeZone();
-      const liveFrom = article.publishedAt > today ? article.publishedAt : today;
+      const liveFrom =
+        article.publishedAt > today ? article.publishedAt : today;
       const text = JSON.stringify([article.intro, article.sections]);
       for (const href of linksIn(text).filter((h) => h.startsWith('/'))) {
         expect(internalPathExists(href, liveFrom), href).toBe(true);
@@ -54,13 +63,14 @@ describe('articles and blog posts', () => {
   );
 
   it.each(ALL)(
-    '$base/$article.slug lists every inline source below the article',
+    '$base/$article.slug keeps sources out of the text and lists them below',
     ({ article }) => {
-      const listed = new Set(article.sources.map((source) => source.url));
-      const text = JSON.stringify(article.sections);
-      for (const href of linksIn(text).filter((h) => h.startsWith('http'))) {
-        expect(listed.has(href), href).toBe(true);
-      }
+      // House style (docs/content-agent.md §3): no "[Bron: …]" links or
+      // external links in the running text; sources go in the list below.
+      const text = JSON.stringify([article.intro, article.sections]);
+      expect(linksIn(text).filter((h) => h.startsWith('http'))).toEqual([]);
+      expect(text).not.toContain('[Bron:');
+      expect(article.sources.length).toBeGreaterThan(0);
     },
   );
 
@@ -72,7 +82,10 @@ describe('articles and blog posts', () => {
   );
 
   it('uses unique slugs per section', () => {
-    for (const list of [getArticlesIncludingScheduled(), getBlogPostsIncludingScheduled()]) {
+    for (const list of [
+      getArticlesIncludingScheduled(),
+      getBlogPostsIncludingScheduled(),
+    ]) {
       const slugs = list.map((a) => a.slug);
       expect(new Set(slugs).size).toBe(slugs.length);
     }

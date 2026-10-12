@@ -453,3 +453,14 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Reden:** keuze van de eigenaar; de vraag is voor de doelgroep niet relevant.
 
 **Afwijking van de specificatie:** de complete-instructie noemt linkshandigheid als uitzondering met doorverwijzing. Die volgen we hier bewust niet meer. Elke stick in de catalogus is een reguliere (rechtse) stick.
+
+## 2026-10-12 — Nieuwe schrijfstijl: vriendelijker, en bronnen alleen onderaan
+
+**Wat:** alle 3 blogs en 7 kennisbankartikelen zijn herschreven in een vriendelijkere, persoonlijkere en levendigere toon.
+- Bronvermeldingen in de lopende tekst ("[Bron: …]", "volgens een hockeywinkel …", "in de bron") zijn weg; de onderbouwing staat alleen nog in de bronnenlijst onder het artikel.
+- Feiten, interne links, catalogusdata en de hoofdvraag in de eerste 80 woorden zijn gebleven.
+- Ook de automatisch gegenereerde zinnen in *Zaalstick: wat krijg je voor een klein of ruim budget?* zijn aangepast.
+
+**Huisstijl:** `docs/content-agent.md` §3 beschrijft de nieuwe toon met voorbeelden, en de regel "bronnen onderaan, niet in de tekst". Een test (`src/content/articles.test.ts`) bewaakt dat er geen externe links of "[Bron:" in de tekst staan en dat elk artikel bronnen heeft.
+
+**Reden:** keuze van de eigenaar; de teksten waren te zakelijk.

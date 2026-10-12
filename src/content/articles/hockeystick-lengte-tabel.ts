@@ -36,10 +36,10 @@ export const hockeystickLengteTabel: Article = {
   slug: 'hockeystick-lengte-tabel',
   title: 'Hockeystick lengte tabel: welke maat stick past bij jouw lengte?',
   intro:
-    'Welke lengte hockeystick heb je nodig? Als richtlijn: kinderen tot ongeveer 1,10 meter spelen meestal met 22 tot 24 inch, kinderen rond 1,40 meter met 32 inch, en vanaf ongeveer 1,63 meter is 36,5 inch de gangbare maat. In de tabel hieronder zie je per lichaamslengte welke sticklengte een logisch startpunt is. Twijfel je tussen twee maten? Kies dan niet de langere om in te groeien.',
+    'Welke lengte stick heb je nodig? Een handig richtsnoer: kinderen tot ongeveer 1,10 meter spelen meestal met 22 tot 24 inch, kinderen rond 1,40 meter met 32 inch, en vanaf zo’n 1,63 meter is 36,5 inch de gangbare maat. In de tabel hieronder vind je jouw maat in een paar seconden. Twijfel je tussen twee maten? Kies dan niet de langere om in te groeien.',
   sections: [
     {
-      heading: 'Lengtetabel: lichaamslengte en sticklengte',
+      heading: 'De lengtetabel',
       level: 2,
       body: [
         {
@@ -47,62 +47,56 @@ export const hockeystickLengteTabel: Article = {
           columns: ['Lichaamslengte', 'Sticklengte', 'Sticklengte in cm'],
           rows: LENGTH_ROWS,
         },
-        'Deze tabel is een redactionele richtlijn, geen officiële norm van een bond of fabrikant. Fabrikanten hanteren soms net andere grenzen; gebruik bij een specifiek model ook de maattabel van de aanbieder. De [stickwijzer](/stickwijzer) gebruikt precies deze tabel en houdt daarnaast rekening met je huidige stick.',
+        'Deze tabel is onze eigen richtlijn, geen officiële norm. Merken hanteren soms net andere grenzen, dus kijk bij een specifiek model ook even naar de maattabel van de winkel. De [stickwijzer](/stickwijzer) werkt met precies deze tabel en kijkt daarnaast naar je huidige stick.',
       ],
     },
     {
       heading: 'Zo gebruik je de tabel',
       level: 2,
       body: [
-        'Meet de lichaamslengte zonder schoenen en zoek de rij die erbij hoort. Controleer daarna in een normale hockeyhouding: kan de speler ontspannen bewegen, dribbelen en de stick dicht bij het lichaam houden? Een stick die te lang is, maakt balcontrole en het leren van de techniek lastiger. [Bron: Intersport — hockeystick kopen](' +
-          INTERSPORT_GUIDE +
-          ')',
+        'Meet de lichaamslengte zonder schoenen en zoek de rij die erbij hoort. Doe daarna de houdingscheck: kan de speler ontspannen bewegen, dribbelen en de stick dicht bij het lichaam houden? Dan zit je goed. Een te lange stick maakt balcontrole en het leren van de techniek een stuk lastiger.',
       ],
     },
     {
       heading: 'Twijfel tussen twee maten',
       level: 3,
       body: [
-        'Valt de lichaamslengte precies op een grens, of staan er in de tabel twee maten, dan kunnen beide passen. De stickwijzer noemt dan ook beide. Laat de houdingscheck hierboven de doorslag geven. Blijf je twijfelen, kies dan liever de kortere maat: een iets kortere stick is goed te hanteren, een te lange stick werkt juist tegen bij aannemen en dribbelen.',
+        'Zit de lichaamslengte precies op een grens, of staan er twee maten in de tabel? Dan kunnen ze allebei passen, en de stickwijzer noemt ze dan ook allebei. Laat de houdingscheck beslissen. Blijf je twijfelen, kies dan de kortere: een iets kortere stick is goed te hanteren, een te lange werkt juist tegen bij aannemen en dribbelen.',
       ],
     },
     {
       heading: 'Koop een kinderstick niet op de groei',
       level: 3,
       body: [
-        'Een maat groter kopen zodat de stick langer meegaat, lijkt voordelig. Toch raden we het af: een kind moet nu met de stick kunnen oefenen. Is de geadviseerde maat niet te krijgen, dan is één maat korter een redelijk alternatief, en nooit een maat langer. Meer tips lees je in [hockeysticks voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
+        'Een maat groter, zodat de stick langer meegaat? Begrijpelijk, maar je kind moet er nú mee kunnen oefenen. Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af. Meer tips vind je bij [hockeysticks voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },
     {
       heading: 'Volwassenen: 36,5 inch of langer?',
       level: 2,
       body: [
-        'Voor volwassenen is 36,5 inch de meest gebruikte lengte. Er zijn ook sticks van 37,5 en 38,5 inch, vooral voor lange spelers. Langer is niet automatisch beter: een langere stick geeft meer bereik, maar vraagt ook meer bij balcontrole dicht bij het lichaam. Vergelijk daarom op hanteerbaarheid en persoonlijke voorkeur. [Bron: Intersport — hockeysticks](' +
-          INTERSPORT_STICKS +
-          ')',
-        'De spelregels stellen een grens: een stick mag volgens de FIH niet langer zijn dan 105 cm, zowel op het veld als in de zaal. [Bron: FIH Rules of Hockey](' +
-          ZAAL_SOURCES.fieldRules.url +
-          ')',
+        'Voor volwassenen is 36,5 inch de meest gekozen lengte. Ben je lang, dan kun je ook kijken naar 37,5 of 38,5 inch. Maar langer is niet vanzelf beter: je hebt meer bereik, maar balcontrole dicht bij je lichaam wordt lastiger. Kies dus vooral wat prettig voelt.',
+        'Er is ook een grens: een stick mag volgens de spelregels niet langer zijn dan 105 cm, op het veld én in de zaal.',
       ],
     },
     {
       heading: 'Geldt dezelfde lengte in de zaal?',
       level: 2,
       body: [
-        'Ja, als uitgangspunt wel. De [zaalkeuze](/zaalsticks) op deze site gebruikt voor kinderen dezelfde tabel. Volwassen zaalsticks zijn meestal te krijgen in 36,5 en 37,5 inch.',
+        'Ja, als startpunt wel. Onze [zaalkeuze](/zaalsticks) gebruikt voor kinderen dezelfde tabel. Volwassen zaalsticks vind je meestal in 36,5 en 37,5 inch.',
       ],
     },
     {
       heading: 'Liever een persoonlijk advies?',
       level: 2,
       body: [
-        'Vul in de [stickwijzer](/stickwijzer) je lichaamslengte, ervaring en speelwensen in. Je krijgt dan niet alleen een maat, maar ook sticks die in die maat te krijgen zijn, met de redenen erbij. Wil je eerst meer weten over de rest van de keuze? Lees dan [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
+        'Vul in de [stickwijzer](/stickwijzer) je lichaamslengte, ervaring en wensen in. Je krijgt dan niet alleen een maat, maar ook sticks die je in die maat kunt krijgen, met de redenen erbij. Wil je eerst meer weten over de rest van de keuze? Lees dan [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-08',
+  updatedAt: '2026-10-12',
   sources: [
     {
       label:

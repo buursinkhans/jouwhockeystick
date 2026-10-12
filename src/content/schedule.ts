@@ -21,7 +21,9 @@ export function todayInSiteTimeZone(now: Date = new Date()): string {
 }
 
 /** True on Netlify deploy previews and branch deploys, and in `next dev`. */
-export function showsScheduledContent(env: NodeJS.ProcessEnv = process.env): boolean {
+export function showsScheduledContent(
+  env: NodeJS.ProcessEnv = process.env,
+): boolean {
   return (
     env.CONTEXT === 'deploy-preview' ||
     env.CONTEXT === 'branch-deploy' ||
@@ -29,7 +31,10 @@ export function showsScheduledContent(env: NodeJS.ProcessEnv = process.env): boo
   );
 }
 
-export function isPublished(item: { publishedAt: string }, today: string = todayInSiteTimeZone()): boolean {
+export function isPublished(
+  item: { publishedAt: string },
+  today: string = todayInSiteTimeZone(),
+): boolean {
   return item.publishedAt <= today;
 }
 
@@ -44,8 +49,14 @@ export function visibleItems<T extends { publishedAt: string }>(
 }
 
 /** Items that go live after `since` and on or before `today` (both YYYY-MM-DD). */
-export function dueItems<T extends { publishedAt: string }>(items: readonly T[], since: string, today: string): T[] {
-  return items.filter((item) => item.publishedAt > since && item.publishedAt <= today);
+export function dueItems<T extends { publishedAt: string }>(
+  items: readonly T[],
+  since: string,
+  today: string,
+): T[] {
+  return items.filter(
+    (item) => item.publishedAt > since && item.publishedAt <= today,
+  );
 }
 
 /** "15 november 2026" */

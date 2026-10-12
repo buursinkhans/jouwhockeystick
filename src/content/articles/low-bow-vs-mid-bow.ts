@@ -22,20 +22,14 @@ export const lowBowVsMidBow: Article = {
   slug: 'low-bow-vs-mid-bow',
   title: 'Low bow of mid bow: welke kromming past bij jou?',
   intro:
-    'Een mid bow heeft een rustige kromming die ongeveer halverwege de stick ligt. Dat maakt aannemen, vlak passen en pushen voorspelbaar, en daarom is het een logisch startpunt voor beginners en allround spelers. Bij een low bow ligt de kromming lager, dichter bij de krul. Dat helpt om onder de bal te komen voor lifts, 3D-acties en aerials, maar vraagt meer techniek bij de aanname. Kies dus op de acties die jij het meest maakt.',
+    'Bij een mid bow zit de kromming ongeveer halverwege de stick. Rustig en voorspelbaar: fijn voor aannemen, vlak passen en pushen, en daarom een mooi startpunt voor beginners en allround spelers. Bij een low bow zit de kromming lager, dichter bij de krul. Daarmee kom je makkelijker onder de bal voor lifts, 3D-acties en aerials, maar de aanname vraagt meer techniek. Kies dus op de acties die jij het meest maakt.',
   sections: [
     {
       heading: 'Wat is de bow van een hockeystick?',
       level: 2,
       body: [
-        'De bow is de kromming van de stick. Volgens de spelregels mag die kromming maximaal 25 mm diep zijn, op het veld en in de zaal. [Bron: FIH Rules of Hockey](' +
-          ZAAL_SOURCES.fieldRules.url +
-          ')',
-        'Omdat de maximale diepte voor iedereen gelijk is, zit het verschil tussen sticks vooral in de **plaats** van de kromming. Een lager geplaatste kromming helpt om onder de bal te komen; een rustiger of hoger geplaatst profiel wordt vaak als startpunt voor beginners geadviseerd. [Bron: PassaHockey — zaalhockeyadvies](' +
-          PASSAHOCKEY_INDOOR +
-          ') · [Bron: Intersport — hockeystick kopen](' +
-          INTERSPORT_GUIDE +
-          ')',
+        'De bow is de kromming van je stick. Hoe diep die mag zijn, is vastgelegd in de spelregels: maximaal 25 mm, op het veld en in de zaal.',
+        'Omdat die grens voor iedereen gelijk is, zit het echte verschil tussen sticks in de **plek** van de kromming. Ligt die laag, dan kom je makkelijker onder de bal. Een rustiger profiel is juist fijn als je nog aan je basis werkt.',
       ],
     },
     {
@@ -47,13 +41,13 @@ export const lowBowVsMidBow: Article = {
           columns: ['Kenmerk', 'Mid bow', 'Low bow'],
           rows: [
             [
-              'Plaats van de kromming',
+              'Plek van de kromming',
               'Ongeveer halverwege',
               'Lager, dichter bij de krul',
             ],
             [
               'Aannemen en vlak passen',
-              'Doorgaans voorspelbaar',
+              'Meestal voorspelbaar',
               'Vraagt meer techniek',
             ],
             [
@@ -62,13 +56,13 @@ export const lowBowVsMidBow: Article = {
               'Makkelijker onder de bal',
             ],
             [
-              'Logische richting voor',
+              'Een logische keuze voor',
               'Beginners en allround spelers',
               'Spelers die de basis beheersen',
             ],
           ],
         },
-        'Dit is een redactionele samenvatting, geen vaste regel. Ook carbon, gewicht en balans bepalen hoe een stick aanvoelt.',
+        'Zie dit als hulpje, niet als wet. Ook carbon, gewicht en balans bepalen hoe een stick in je handen ligt.',
       ],
     },
     {
@@ -78,9 +72,9 @@ export const lowBowVsMidBow: Article = {
         {
           type: 'list',
           items: [
-            'Je begint net of bent nog bezig met de basistechniek.',
-            'Je speelt veel vlakke passes en wilt een voorspelbare aanname.',
-            'Je speelt allround en maakt maar af en toe een lift of 3D-actie.',
+            'Je begint net, of je werkt nog aan je basistechniek.',
+            'Je speelt veel vlakke passes en wilt een aanname waar je op kunt bouwen.',
+            'Je speelt overal een beetje en maakt af en toe een lift of 3D-actie.',
           ],
         },
       ],
@@ -92,33 +86,33 @@ export const lowBowVsMidBow: Article = {
         {
           type: 'list',
           items: [
-            'Je beheerst de basis en wilt vaker liften, scheppen of aerials spelen.',
+            'Je beheerst de basis en wilt vaker liften, scheppen of een aerial spelen.',
             'Je maakt veel 3D-acties of dribbelt graag met de bal van de grond.',
             'Je hebt al met een rustiger profiel gespeeld en weet wat je mist.',
           ],
         },
-        'Een **extreme low bow** gaat nog een stap verder en is een specialistische keuze, bijvoorbeeld voor de dragflick. Die adviseren we niet als eerste stick.',
+        'Een **extreme low bow** gaat nog een stapje verder. Echt iets voor specialisten, bijvoorbeeld voor de sleeppush. Als eerste stick raden we hem niet aan.',
       ],
     },
     {
       heading: 'En pro bow, dynabow of standaard?',
       level: 3,
       body: [
-        'Merken gebruiken eigen namen. Een standaardprofiel (bij Grays bijvoorbeeld Ultrabow) is nog rustiger dan een mid bow. Pro bow en dynabow zijn tussenvormen tussen mid en low bow. Vergelijk daarom niet alleen het woord op de stick, maar ook de omschrijving van het exacte model.',
+        'Elk merk geeft zijn profielen een eigen naam, en dat maakt het soms verwarrend. Een standaardprofiel, zoals de Ultrabow van Grays, is nog rustiger dan een mid bow. Pro bow en dynabow zitten tussen mid en low bow in. Kijk dus niet alleen naar het woord op de stick, maar ook naar de omschrijving van dat ene model.',
       ],
     },
     {
       heading: 'Overstappen van mid bow naar low bow',
       level: 2,
       body: [
-        'Verander niet alles tegelijk. Wie van een soepele mid bow overstapt naar een stijve extreme low bow, merkt veel verschillen tegelijk en weet daarna niet goed wat wel en niet bevalt. Een low bow met een vergelijkbaar carbonpercentage is een rustiger volgende stap.',
+        'Verander niet alles in één keer. Wie van een soepele mid bow meteen naar een stijve extreme low bow springt, merkt tien verschillen tegelijk en weet daarna niet wat er nou beviel. Een low bow met ongeveer hetzelfde carbonpercentage is een rustigere volgende stap.',
       ],
     },
     {
       heading: 'Mid bow sticks in onze catalogus',
       level: 2,
       body: [
-        'Veldsticks voor volwassenen, gesorteerd op richtprijs:',
+        'Veldsticks voor volwassenen, op volgorde van richtprijs:',
         { type: 'list', items: adultFieldSticksWith('midbow') },
       ],
     },
@@ -126,15 +120,15 @@ export const lowBowVsMidBow: Article = {
       heading: 'Low bow sticks in onze catalogus',
       level: 2,
       body: [
-        'Veldsticks voor volwassenen, gesorteerd op richtprijs:',
+        'Veldsticks voor volwassenen, op volgorde van richtprijs:',
         { type: 'list', items: adultFieldSticksWith('lowbow') },
-        'Twijfel je nog? De [stickwijzer](/stickwijzer) vraagt naar je spelacties en ervaring en laat zien welk profiel een logische richting is, met de redenen erbij. Meer over de hele keuze lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
+        'Twijfel je nog? De [stickwijzer](/stickwijzer) vraagt naar je spelacties en ervaring en laat zien welk profiel bij je past, met de redenen erbij. Meer over de hele keuze lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-08',
+  updatedAt: '2026-10-12',
   sources: [
     { label: ZAAL_SOURCES.fieldRules.label, url: ZAAL_SOURCES.fieldRules.url },
     { label: 'PassaHockey — Zaalhockeyadvies', url: PASSAHOCKEY_INDOOR },
