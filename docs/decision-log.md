@@ -431,3 +431,11 @@ Het kleur- en lettertypeadvies van de skill (paars, Barlow) is niet overgenomen:
 **Privacy:** de afbeeldingen lopen via de eigen afbeeldingsoptimalisatie van de site (`next/image`, alleen `*.cdninstagram.com` en `*.fbcdn.net` zijn toegestaan). Bezoekers laden daardoor niets rechtstreeks van Meta, en er komen geen scripts of cookies van Instagram op de site. De privacyverklaring hoeft daarom niet te veranderen. Er is bewust geen Instagram-embedscript gebruikt: dat laadt code en cookies van Meta.
 
 **Openstaand:** het token verloopt na 60 dagen. Het moet daarvóór worden ververst (handmatig, of later met een geplande GitHub-workflow die het via de Netlify-API bijwerkt).
+
+## 2026-10-12 — Marktverkenner volgt ook nieuwe modellen bij de merken
+
+**Wat:** de Marktverkenner leest naast de winkels nu ook de openbare sitemaps van de eigen webshops van Grays, Princess, Brabo en JDH. Daarvan bewaart hij alleen productpagina's die waarschijnlijk een stick zijn (geen ballen, tassen, schoenen, kleding of bescherming; `brandProductUrls`). Nieuwe productpagina's verschijnen in het wekelijkse rapport onder "Nieuw bij <merk> (merk)". De eerste week is een nulmeting.
+
+**Waarom:** nieuwe modellen (bijv. de collectie voor het volgende seizoen) zo vroeg mogelijk zien, voor de catalogus en voor Instagram ("nieuw in de catalogus").
+
+**Netjes scrapen:** dezelfde regels als voor de winkels: alleen robots.txt en sitemaps, één site tegelijk, 2 seconden tussen verzoeken, één keer per week. adidas.nl blokkeert geautomatiseerde toegang en wordt niet gelezen.
