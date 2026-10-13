@@ -12,6 +12,7 @@ Gebruik `gh` voor GitHub (de repo is de huidige repo).
    - `search-console` — zoekverkeer uit Google
    - `bol-feed` — beschikbaarheid en prijzen bij bol.com (draait alleen op verzoek; kan oud zijn)
    - `marktverkenning` — nieuwe hockeypagina's bij PassaSports, Daka en Vrijbuiter en de populairste hockeysticks op bol.com, met de duiding als reactie eronder
+   - `conversie` — wat bezoekers doen: de stickwijzer-trechter, afhaakmomenten per vraag, adviezen zonder passende stick, kliks naar bol.com per plek en stick, dead en rage clicks (PostHog, per bezoeker per dag)
 2. **Wat er al loopt:** open issues met label `content-brief` en open pull requests (`gh pr list`). Zet nooit werk uit dat daar al staat.
 3. **Wat er al op de site staat:** de titels en intro's in `src/content/articles/`, `src/content/blogPosts/` en `src/content/zaal.ts`.
 4. **De catalogus:** `npm run catalog:health`, en waar nodig `src/catalog/products/` (merken, zaal of veld, niveau, prijs, junior of senior).
@@ -22,11 +23,12 @@ Gebruik `gh` voor GitHub (de repo is de huidige repo).
 
 Een kans is iets wat met weinig moeite veel oplevert voor bezoekers en omzet. Rangschik zo:
 
-1. **Iets wat de site schaadt**, zoals een fout in het Technical SEO-rapport of een stick die verborgen dreigt te raken. Dit is werk voor de eigenaar, geen brief.
+1. **Iets wat de site schaadt**, zoals een fout in het Technical SEO-rapport, een stick die verborgen dreigt te raken, of een signaal uit het Conversie-rapport (een afhaakmoment in de stickwijzer, dead clicks, een veelbekeken stickpagina zonder klik). Dit is werk voor de eigenaar, geen brief: noem het onder **Voor jou**, met het getal uit het rapport. Veel adviezen zonder passende stick wijzen op een gat in de catalogus; noem welke oorzaak (lengte, budget) en laat het aanvullen aan de Catalogus-aanvuller en de eigenaar.
 2. **Zoekwoorden die bijna op pagina 1 staan** (Search Console, positie 5–20), zodra er data is.
 3. **Seizoen:** content die binnen 6–8 weken nodig is.
 4. **Markt:** een onderwerp waar concurrenten content over maken en wij niet. Populaire sticks die niet in onze catalogus staan pakt de Catalogus-aanvuller op (dinsdag, label/branch `catalogus/`); daar maak je geen brief voor. Staat er al langer dan een week een catalogus-PR open, noem die onder **Voor jou**.
-5. **Gaten tussen catalogus en content:** een groep sticks (merk, budget, doelgroep) waar bezoekers naar zoeken en die nog geen eigen pagina heeft.
+5. **Wat bezoekers al doen:** een pagina met veel weergaven of kliks naar bol.com (Conversie-rapport) is een goede plek om vanuit nieuwe content naar te linken, of een reden om een verwante vraag uit te werken.
+6. **Gaten tussen catalogus en content:** een groep sticks (merk, budget, doelgroep) waar bezoekers naar zoeken en die nog geen eigen pagina heeft.
 
 Kwaliteit gaat boven volume. Schrijf geen brief die een bestaande pagina herhaalt (zie `docs/content-agent.md` §2); stel dan een uitbreiding van die pagina voor. Geen "beste stick"-lijsten of "review"-titels: we testen niet zelf.
 

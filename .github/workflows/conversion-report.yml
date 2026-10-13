@@ -1,0 +1,46 @@
+# Weekly conversion report (read-only): stickwijzer funnel, drop-off per
+# question, clicks to bol.com and frustration signals from PostHog (EU),
+# written to one GitHub issue. Never changes code, content or the live site.
+name: Conversie-rapport
+
+on:
+  schedule:
+    - cron: '53 5 * * 1' # Mondays 05:53 UTC, before the Orchestrator
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci # the stickwijzer question order uses zod
+      - name: Rapport maken
+        id: report
+        env:
+          POSTHOG_PERSONAL_API_KEY: ${{ secrets.POSTHOG_PERSONAL_API_KEY }}
+          POSTHOG_PROJECT_ID: ${{ vars.POSTHOG_PROJECT_ID }}
+        run: npm run --silent analytics:report > report.md
+        continue-on-error: true
+      - name: Rapport in issue zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create conversie --color D93F0B --description "Wekelijks conversie-rapport (PostHog)" --force
+          number=$(gh issue list --label conversie --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file report.md
+            gh issue comment "$number" --body "Rapport bijgewerkt op $(date -u +%F)."
+          else
+            gh issue create --title "Conversie-rapport" --label conversie --body-file report.md
+          fi
+      - name: Mislukt rapport zichtbaar maken
+        if: steps.report.outcome == 'failure'
+        run: exit 1

@@ -103,6 +103,7 @@ jobs:
           git add src/catalog
           git commit -m "$title"
           git push origin "$branch"
-          gh pr create --base main --head "$branch" --title "$title" --body-file "$RUNNER_TEMP/body.md"
-          # PRs opened with the workflow token do not trigger other workflows; start the quality check explicitly.
+          url=$(gh pr create --base main --head "$branch" --title "$title" --body-file "$RUNNER_TEMP/body.md")
+          # PRs opened with the workflow token do not trigger other workflows; start the quality check and the review explicitly.
           gh workflow run ci.yml --ref "$branch"
+          gh workflow run review.yml -f pr="${url##*/}"

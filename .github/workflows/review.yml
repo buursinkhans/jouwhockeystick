@@ -1,0 +1,90 @@
+# Review-agent: a second pair of eyes on every pull request that touches
+# content or the catalog. Reads the PR, checks it against the handbooks and
+# the source policy, and posts (or updates) one comment with its verdict.
+# Read-only: never pushes, approves, merges or writes "@claude".
+# Re-run on a PR with the label `herbeoordeel`.
+# Runs on the owner's Claude subscription (secret CLAUDE_CODE_OAUTH_TOKEN).
+name: Review-agent
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, labeled]
+    paths:
+      - 'src/content/**'
+      - 'src/catalog/**'
+  # Started by agent workflows whose PRs (opened with the workflow token)
+  # do not trigger pull_request runs, and by hand from the Actions tab.
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'Nummer van de pull request'
+        required: true
+
+concurrency:
+  group: review-${{ github.event.pull_request.number || inputs.pr }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+
+jobs:
+  review:
+    # Only PRs from this repository (forks get no secrets) that are ready for
+    # review; on `labeled` only for the re-review label.
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       !github.event.pull_request.draft &&
+       (github.event.action != 'labeled' || github.event.label.name == 'herbeoordeel'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PR: ${{ github.event.pull_request.number || inputs.pr }}
+    steps:
+      - name: PR-nummer controleren
+        run: |
+          case "$PR" in ''|*[!0-9]*) echo "::error::Geen geldig PR-nummer: $PR"; exit 1;; esac
+      - uses: actions/checkout@v5
+        with:
+          ref: refs/pull/${{ env.PR }}/head
+          fetch-depth: 1
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Je bent de review-agent van jouwhockeystick.nl. Lees docs/review-agent.md en beoordeel pull request #${{ env.PR }} in ${{ github.repository }} volgens dat handboek.
+            De code van de PR staat uitgecheckt in de huidige map. Schrijf je oordeel naar het bestand `review.md` in de root; plaats zelf geen reacties.
+          claude_args: |
+            --max-turns 40
+            --allowedTools "Read,Glob,Grep,Write,WebFetch,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh issue view:*),Bash(npm run catalog:health),Bash(npm run --silent catalog:health)"
+      - name: Oordeel in de PR zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ! -s review.md ]; then
+            printf '%s\n' '<!-- review-agent -->' '**Review-agent:** ik kon deze PR niet beoordelen (geen oordeel geschreven). Zie de run in Actions.' > review.md
+          fi
+          # Never let the review trigger the content-agent.
+          sed -i 's/@claude/claude/g' review.md
+          # One marker on the first line, so the next run updates this comment.
+          sed -i '/<!-- review-agent -->/d' review.md
+          sed -i '1i <!-- review-agent -->' review.md
+          id=$(gh api "repos/${{ github.repository }}/issues/$PR/comments" --paginate \
+            --jq '[.[] | select(.body | startswith("<!-- review-agent -->"))] | last | .id // empty' | tail -n 1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/$id" -F body=@review.md > /dev/null
+          else
+            gh pr comment "$PR" --body-file review.md
+          fi
+          gh label create herbeoordeel --color C5DEF5 --description "Laat de review-agent deze PR opnieuw beoordelen" --force
+          gh pr edit "$PR" --remove-label herbeoordeel || true
