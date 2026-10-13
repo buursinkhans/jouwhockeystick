@@ -550,3 +550,11 @@ De adviesregels zelf zijn niet veranderd.
 **Dashboard:** de rij "Distributie" in de Agent-regiekamer heet nu "Instagram-planner (distributie)" met status *Actief*. De taak draait niet in GitHub Actions, dus het dashboard toont geen runs voor deze rij.
 
 **Bewust niet (nog):** Pinterest (staat op "later"), de nieuwsbrief (wacht op Brevo) en clubs (outreach staat op pauze). De eigenaar plaatst posts zelf; er gaat niets automatisch online.
+
+## 2026-10-13 — Bow-profielvisual in "Low bow of mid bow"
+
+**Wat:** een interactieve, schematische figuur op `/kennis/low-bow-vs-mid-bow`: kies een profiel (standaard, mid bow, pro bow/dynabow, low bow, extreme low bow) en zie waar het diepste punt van de kromming ongeveer ligt, met de andere profielen vaag ter vergelijking en de FIH-grens van 25 mm als lijn. Inline SVG, geen nieuwe dependency. Event `figure_interaction` om te zien of bezoekers de figuur gebruiken.
+
+**Waarom zo:** naar aanleiding van de vraag of we sticks in 3D kunnen tonen (img2threejs). Een 3D-model per stick, nagetekend uit een productfoto, zou het bow-profiel raden en is dan een productclaim zonder bron; daarnaast beeldrechten en extra gewicht op mobiel. Een generieke uitleg zonder productkoppeling heeft die bezwaren niet.
+
+**Bewust niet:** geen koppeling aan specifieke sticks en geen millimeters per profiel. De plek van het diepste punt is een redactionele weergave die het artikel volgt, geen meting; elk profiel is even diep getekend. Dat staat onder de figuur.

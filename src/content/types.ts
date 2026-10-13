@@ -20,6 +20,11 @@ export const articleBlockSchema = z.union([
     type: z.literal('note'),
     text: z.string(),
   }),
+  z.object({
+    /** An interactive explainer figure; see src/components/article. */
+    type: z.literal('figure'),
+    figure: z.literal('bow-profiles'),
+  }),
 ]);
 export type ArticleBlock = z.infer<typeof articleBlockSchema>;
 
