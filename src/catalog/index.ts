@@ -76,6 +76,8 @@ import { malikLowbow4Junior } from './products/malik-lowbow-4-junior';
 import { osakaMidbowHoutIndoorJunior } from './products/osaka-midbow-hout-indoor-junior';
 import { osakaProbowGfIndoorJunior } from './products/osaka-probow-gf-indoor-junior';
 import { graysDb5Composite } from './products/grays-db5-composite';
+import { adidasYoungstar9 } from './products/adidas-youngstar-9';
+import { scoopWdnSeniorVeld } from './products/scoop-wdn-senior-veld';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -152,13 +154,15 @@ const ALL_PRODUCTS: Product[] = [
   osakaMidbowHoutIndoorJunior,
   osakaProbowGfIndoorJunior,
   graysDb5Composite,
+  adidasYoungstar9,
+  scoopWdnSeniorVeld,
 ];
 
 /**
  * Bump whenever product data changes. Stamped on every advice result so an
  * old result can be traced back to the catalog it was calculated from.
  */
-export const CATALOG_VERSION = '2026-10-10';
+export const CATALOG_VERSION = '2026-10-13';
 
 const VERIFICATION_FRESHNESS_MONTHS = 12;
 
