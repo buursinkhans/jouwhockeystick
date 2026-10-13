@@ -78,6 +78,17 @@ import { osakaProbowGfIndoorJunior } from './products/osaka-probow-gf-indoor-jun
 import { graysDb5Composite } from './products/grays-db5-composite';
 import { adidasYoungstar9 } from './products/adidas-youngstar-9';
 import { scoopWdnSeniorVeld } from './products/scoop-wdn-senior-veld';
+import { graysDb8Composite } from './products/grays-db8-composite';
+import { graysDb6Composite } from './products/grays-db6-composite';
+import { graysDb10Composite } from './products/grays-db10-composite';
+import { graysJb8Composite } from './products/grays-jb8-composite';
+import { graysPb8Composite } from './products/grays-pb8-composite';
+import { graysMb8Composite } from './products/grays-mb8-composite';
+import { graysMb7Composite } from './products/grays-mb7-composite';
+import { graysAc800JumbowS } from './products/grays-ac800-jumbow-s';
+import { graysAc700DynabowS } from './products/grays-ac700-dynabow-s';
+import { graysAc600ProbowS } from './products/grays-ac600-probow-s';
+import { graysAc500DynabowS } from './products/grays-ac500-dynabow-s';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -156,6 +167,17 @@ const ALL_PRODUCTS: Product[] = [
   graysDb5Composite,
   adidasYoungstar9,
   scoopWdnSeniorVeld,
+  graysDb8Composite,
+  graysDb6Composite,
+  graysDb10Composite,
+  graysJb8Composite,
+  graysPb8Composite,
+  graysMb8Composite,
+  graysMb7Composite,
+  graysAc800JumbowS,
+  graysAc700DynabowS,
+  graysAc600ProbowS,
+  graysAc500DynabowS,
 ];
 
 /**

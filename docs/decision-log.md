@@ -486,3 +486,19 @@ De methodiekpagina is bijgewerkt met de nieuwe rollen.
 - Oorzaak 2: Grays vermeldt geen carbonpercentages. Daardoor scoort "stickgevoel" neutraal (0,5), wat in de prestatieroute gemiddeld 6 punten scheelt.
 - Getest en verworpen: het gevoel afleiden uit het niveau maakt het voor Grays slechter, want veel Grays-sticks zijn voor ervaren spelers en worden dan als "direct" gelezen.
 - De prijs is geen oorzaak: de beste match is in 19% van de gevallen de goedkoopste kandidaat. Prijs telt alleen mee bij een gelijke score.
+
+## 2026-10-13 — catalogus `2026-10-13`: 11 Grays-veldsticks in het middensegment
+
+**Wat:** de gaten in het Grays-assortiment zijn gevuld met DB 6, DB 8, DB 10, JB 8, PB 8, MB 7, MB 8, AC500, AC600, AC700 en AC800 (€125–350). Er is geen merkbonus en de adviesregels zijn niet gewijzigd. Grays moet het halen op passende sticks, niet op voorrang.
+
+**Bronnen, per gegeven:**
+- Bow, maten, adviesprijs, afbeelding en (waar Grays het noemt) niveau komen van de productpagina's van Grays. Noemt Grays geen niveau, dan staat er een gelabelde redactionele inschatting met de reden erbij.
+- Carbon komt uit het bronnenoverzicht van de eigenaar (Grays_hockeysticks_Claude.pdf). Alleen expliciet genoemde waarden zijn ingevuld: DB 8 en JB 8 (70%). Beperkt bevestigde, tegenstrijdige of onbekende waarden zijn bewust leeg gelaten, met de reden als comment in het productbestand. Niets is afgeleid uit de naam of uit een buurmodel.
+- bol.com geldt alleen voor de leverbaarheid en de link. De Grays-listings op bol.com tonen standaardwaarden ("Beginner", "0% carbon", "Kinderen") die Grays en speciaalzaken tegenspreken.
+- Niet opgenomen: PB 7+ (bol.com noemt "PB 7+", Grays "PB 7"; mogelijk een ander model) en JB 9 (niet leverbaar bij bol.com).
+
+**Effect** (dezelfde simulatie met 435 combinaties):
+- Grays als beste match: van 44 naar 54. Grays staat nu op de vierde plek, het was de zesde.
+- Grays in het advies: van 238 naar 294 plaatsen.
+- Achterstand van de beste Grays op de beste match: van 8,2 naar 7,6 punten.
+- Nog open: in de prestatieroute kost het onbekende carbonpercentage een Grays-stick gemiddeld 7,5 punten op stickgevoel. De grootste volgende winst is het verifiëren van carbonpercentages bij Grays zelf, en niet een aanpassing aan de regels.
