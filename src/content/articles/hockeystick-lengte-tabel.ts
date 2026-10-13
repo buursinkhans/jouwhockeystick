@@ -1,4 +1,4 @@
-import { LENGTH_GUIDE } from '@/advice-engine/sizeAdvice';
+import { LENGTH_GUIDE, alsoFitsInch } from '@/advice-engine/sizeAdvice';
 import type { Article } from '../types';
 import { ZAAL_SOURCES } from '../zaal';
 
@@ -25,9 +25,11 @@ const LENGTH_ROWS = LENGTH_GUIDE.map((band, index) => {
   const height = isLast
     ? `${band.minCm} cm en langer`
     : `${band.minCm}–${band.maxCm} cm`;
+  const also = alsoFitsInch(band);
   return [
     height,
     band.sizes.map(formatInch).join(' of '),
+    also.length > 0 ? also.map(formatInch).join(' of ') : '–',
     band.sizes.map(formatCm).join(' / '),
   ];
 });
@@ -36,7 +38,7 @@ export const hockeystickLengteTabel: Article = {
   slug: 'hockeystick-lengte-tabel',
   title: 'Hockeystick lengte tabel: welke maat stick past bij jouw lengte?',
   intro:
-    'Welke lengte stick heb je nodig? Een handig richtsnoer: kinderen tot ongeveer 1,10 meter spelen meestal met 22 tot 24 inch, kinderen rond 1,40 meter met 32 inch, en vanaf zo’n 1,63 meter is 36,5 inch de gangbare maat. In de tabel hieronder vind je jouw maat in een paar seconden. Twijfel je tussen twee maten? Kies dan niet de langere om in te groeien.',
+    'Welke lengte stick heb je nodig? Een handig richtsnoer: kinderen tot ongeveer 1,10 meter spelen meestal met 22 tot 24 inch, kinderen rond 1,40 meter met 32 inch, en vanaf zo’n 1,63 meter is 36,5 inch de gangbare maat. Ben je 1,85 meter of langer, dan past 37,5 of 38,5 inch vaak beter. In de tabel hieronder vind je jouw maat in een paar seconden. Twijfel je bij een kind? Kies dan niet de langere om in te groeien.',
   sections: [
     {
       heading: 'De lengtetabel',
@@ -44,10 +46,16 @@ export const hockeystickLengteTabel: Article = {
       body: [
         {
           type: 'table',
-          columns: ['Lichaamslengte', 'Sticklengte', 'Sticklengte in cm'],
+          columns: [
+            'Lichaamslengte',
+            'Sticklengte',
+            'Kan ook passen',
+            'Sticklengte in cm',
+          ],
           rows: LENGTH_ROWS,
         },
-        'Deze tabel is onze eigen richtlijn, geen officiële norm. Merken hanteren soms net andere grenzen, dus kijk bij een specifiek model ook even naar de maattabel van de winkel. De [stickwijzer](/stickwijzer) werkt met precies deze tabel en kijkt daarnaast naar je huidige stick.',
+        'Deze tabel is onze eigen richtlijn, geen officiële norm. En eerlijk is eerlijk: de maattabellen van merken lopen flink uiteen. Bij kinderen scheelt het al snel 2 inch, en de ene tabel adviseert een maat langer dan de andere. Daarom staat er per rij ook een maat die kan passen. Bij kinderen is dat altijd de kortere maat, bij volwassenen de maat erboven of eronder.',
+        'Kijk bij een specifiek model ook even naar de maattabel van het merk. De [stickwijzer](/stickwijzer) werkt met precies deze tabel en kijkt daarnaast naar je huidige stick.',
       ],
     },
     {
@@ -75,7 +83,7 @@ export const hockeystickLengteTabel: Article = {
       heading: 'Volwassenen: 36,5 inch of langer?',
       level: 2,
       body: [
-        'Voor volwassenen is 36,5 inch de meest gekozen lengte. Ben je lang, dan kun je ook kijken naar 37,5 of 38,5 inch. Maar langer is niet vanzelf beter: je hebt meer bereik, maar balcontrole dicht bij je lichaam wordt lastiger. Kies dus vooral wat prettig voelt.',
+        'Voor volwassenen is 36,5 inch de meest gekozen lengte. Ben je 1,85 meter of langer, dan is 37,5 inch een logische richting, en vanaf zo’n 1,93 meter 38,5 inch. Merken leggen die grens net verschillend, dus zit je ertussenin, probeer dan beide. Langer is niet vanzelf beter: je hebt meer bereik, maar balcontrole dicht bij je lichaam wordt lastiger. Kies dus vooral wat prettig voelt.',
         'Er is ook een grens: een stick mag volgens de spelregels niet langer zijn dan 105 cm, op het veld én in de zaal.',
       ],
     },
@@ -96,7 +104,7 @@ export const hockeystickLengteTabel: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-12',
+  updatedAt: '2026-10-13',
   sources: [
     {
       label:
@@ -106,6 +114,9 @@ export const hockeystickLengteTabel: Article = {
     {
       label: 'Intersport — Hockeysticks (assortiment en lengtes)',
       url: INTERSPORT_STICKS,
+    },
+    {
+      label: 'Grays — maattabel hockeysticks (lichaamslengte en sticklengte)',
     },
     { label: ZAAL_SOURCES.fieldRules.label, url: ZAAL_SOURCES.fieldRules.url },
     {

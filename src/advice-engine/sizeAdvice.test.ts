@@ -1,26 +1,34 @@
 import { describe, expect, it } from 'vitest';
-import { findShorterSize, getSizeAdvice, matchSize } from './sizeAdvice';
+import {
+  LENGTH_GUIDE,
+  alsoFitsInch,
+  findShorterSize,
+  getSizeAdvice,
+  matchSize,
+} from './sizeAdvice';
 import { buildProduct, sourced } from './testFixtures';
 
 describe('getSizeAdvice', () => {
-  it('gives a single size with high confidence in the middle of a band', () => {
+  it('gives a child the shorter neighbouring size as a fit, never a longer one', () => {
     expect(getSizeAdvice(135)).toEqual({
       primaryInch: 31,
+      alternativeInch: 30,
       confidence: 'high',
-      basis: 'single',
+      basis: 'neighbour',
+    });
+    // Top of a band: still the shorter size, not "op de groei".
+    expect(getSizeAdvice(132)).toMatchObject({
+      primaryInch: 30,
+      alternativeInch: 29,
     });
   });
 
-  it('reports a range instead of false precision on a band edge', () => {
-    expect(getSizeAdvice(132)).toMatchObject({
-      primaryInch: 30,
-      alternativeInch: 31,
-      basis: 'borderline',
-      confidence: 'medium',
-    });
+  it('reports a range with lower confidence on the lower band edge', () => {
     expect(getSizeAdvice(148)).toMatchObject({
       primaryInch: 34,
       alternativeInch: 33,
+      basis: 'borderline',
+      confidence: 'medium',
     });
   });
 
@@ -36,13 +44,47 @@ describe('getSizeAdvice', () => {
     });
   });
 
-  it('advises 36.5 inch from 163 cm, with no longer alternative', () => {
-    expect(getSizeAdvice(174)).toEqual({
+  it('advises 36.5 inch from 163 cm, 37.5 from 185 cm and 38.5 from 193 cm', () => {
+    expect(getSizeAdvice(168)).toMatchObject({
       primaryInch: 36.5,
-      confidence: 'high',
-      basis: 'single',
+      alternativeInch: 35,
     });
-    expect(getSizeAdvice(210).alternativeInch).toBeUndefined();
+    // Adults may get the longer neighbour too.
+    expect(getSizeAdvice(180)).toMatchObject({
+      primaryInch: 36.5,
+      alternativeInch: 37.5,
+      confidence: 'high',
+    });
+    expect(getSizeAdvice(187)).toMatchObject({
+      primaryInch: 37.5,
+      alternativeInch: 36.5,
+    });
+    expect(getSizeAdvice(191)).toMatchObject({
+      primaryInch: 37.5,
+      alternativeInch: 38.5,
+    });
+    expect(getSizeAdvice(205)).toMatchObject({
+      primaryInch: 38.5,
+      alternativeInch: 37.5,
+    });
+  });
+
+  it('lists the same also-fitting sizes as the length table', () => {
+    expect(LENGTH_GUIDE.map(alsoFitsInch)).toEqual([
+      [],
+      [],
+      [],
+      [28],
+      [29],
+      [30],
+      [31],
+      [32],
+      [33],
+      [34],
+      [35, 37.5],
+      [36.5, 38.5],
+      [37.5],
+    ]);
   });
 
   it('lowers confidence when the height is uncertain', () => {
@@ -68,8 +110,8 @@ describe('matchSize / findShorterSize', () => {
 
   it('matches the primary size before the alternative', () => {
     expect(matchSize(product, getSizeAdvice(130))).toBe('primary');
-    expect(matchSize(product, getSizeAdvice(137))).toBe('alternative');
-    expect(matchSize(product, getSizeAdvice(135))).toBe('none');
+    expect(matchSize(product, getSizeAdvice(135))).toBe('alternative');
+    expect(matchSize(product, getSizeAdvice(125))).toBe('none');
   });
 
   it('only ever offers a shorter size, at most one size down', () => {

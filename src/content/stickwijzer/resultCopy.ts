@@ -225,6 +225,10 @@ export function sizeAdviceText(size: SizeAdvice): string[] {
     lines.push(
       `De speler zit op de grens tussen twee maten: ${formatInch(size.primaryInch)} is het uitgangspunt, ${formatInch(size.alternativeInch)} kan ook passen. Pas bij twijfel beide in de hand.`,
     );
+  } else if (size.basis === 'neighbour') {
+    lines.push(
+      `Op basis van de lichaamslengte is ${formatInch(size.primaryInch)} een logische maat. ${formatInch(size.alternativeInch)} kan ook passen: maattabellen van merken verschillen onderling.`,
+    );
   } else {
     lines.push(
       `In deze lengtegroep komen twee maten voor: ${formatInch(size.primaryInch)} is het uitgangspunt, ${formatInch(size.alternativeInch)} kan ook passen.`,

@@ -99,7 +99,7 @@ describe('selectIndoorSticks', () => {
     expect(result).toMatchObject({ matches: [], noMatchReason: 'size' });
   });
 
-  it('offers a child one size shorter — never longer — when the advised size does not exist', () => {
+  it('counts the shorter neighbouring size as a match for a child, never a longer one', () => {
     // 135 cm → 31 inch; the junior stick exists in 33/34 and the cheap one in 30.
     const thirty = buildProduct({
       slug: 'thirty',
@@ -112,13 +112,8 @@ describe('selectIndoorSticks', () => {
       budget: 'geen',
     });
 
-    expect(result.matches).toEqual([]);
-    expect(result.noMatchReason).toBe('size');
     expect(
-      result.shorterSizeMatches.map((match) => [
-        match.product.slug,
-        match.sizeInch,
-      ]),
+      result.matches.map((match) => [match.product.slug, match.sizeInch]),
     ).toEqual([['thirty', 30]]);
   });
 

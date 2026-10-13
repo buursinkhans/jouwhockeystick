@@ -6,12 +6,17 @@ type LengthBand = {
   sizes: readonly [number, ...number[]];
 };
 
-const LAST_BAND: LengthBand = { minCm: 163, maxCm: 210, sizes: [36.5] };
+const ADULT_MIN_CM = 163;
+
+const LAST_BAND: LengthBand = { minCm: 193, maxCm: 210, sizes: [38.5] };
 
 /**
  * Indicative height-to-stick-length mapping (spec §3B). Not a medical or
- * federation standard; edge cases are reported as a range, never as a
- * single precise answer.
+ * federation standard. Brand size charts differ by up to 2–3 inch (Grays
+ * advises longer for children, other charts shorter), so every single-size
+ * band also names a neighbouring size as a fit. For children that is always
+ * the shorter one (never buy "op de groei"); from adult height the nearer
+ * one. See decision log 2026-10-13.
  */
 export const LENGTH_GUIDE: readonly LengthBand[] = [
   { minCm: 95, maxCm: 107, sizes: [22, 24] },
@@ -24,15 +29,30 @@ export const LENGTH_GUIDE: readonly LengthBand[] = [
   { minCm: 143, maxCm: 147, sizes: [33] },
   { minCm: 148, maxCm: 154, sizes: [34] },
   { minCm: 155, maxCm: 162, sizes: [35] },
+  { minCm: 163, maxCm: 184, sizes: [36.5] },
+  { minCm: 185, maxCm: 192, sizes: [37.5] },
   LAST_BAND,
 ];
+
+/**
+ * The other sizes that can fit within a single-size band, as the stickwijzer
+ * offers them (the length table on /kennis is generated from this).
+ */
+export function alsoFitsInch(band: LengthBand): number[] {
+  if (band.sizes.length > 1) return [];
+  const index = LENGTH_GUIDE.indexOf(band);
+  const shorter = LENGTH_GUIDE[index - 1]?.sizes.at(-1);
+  const longer =
+    band.minCm >= ADULT_MIN_CM ? LENGTH_GUIDE[index + 1]?.sizes[0] : undefined;
+  return [shorter, longer].filter((inch) => inch !== undefined);
+}
 
 export type SizeAdvice = {
   primaryInch: number;
   alternativeInch?: number;
   confidence: 'high' | 'medium' | 'low';
   /** Why there is (or isn't) an alternative size. */
-  basis: 'single' | 'two_sizes' | 'borderline';
+  basis: 'single' | 'two_sizes' | 'borderline' | 'neighbour';
   /** Set when the player's current stick length differs from the advice by more than one inch. */
   differsFromCurrentInch?: number;
 };
@@ -59,19 +79,24 @@ export function getSizeAdvice(
     primaryInch = upperHalf ? secondSize : firstSize;
     alternativeInch = upperHalf ? firstSize : secondSize;
     basis = 'two_sizes';
-  } else if (heightCm <= band.minCm && previous) {
-    alternativeInch = previous.sizes.at(-1);
-    basis = 'borderline';
-  } else if (heightCm >= band.maxCm && next) {
-    alternativeInch = next.sizes[0];
-    basis = 'borderline';
+  } else {
+    // A neighbouring size also fits: for children only the shorter one.
+    const upperHalf =
+      band.minCm >= ADULT_MIN_CM && heightCm > (band.minCm + band.maxCm) / 2;
+    const neighbour =
+      (upperHalf ? next?.sizes[0] : previous?.sizes.at(-1)) ??
+      previous?.sizes.at(-1);
+    if (neighbour !== undefined) {
+      alternativeInch = neighbour;
+      basis = heightCm <= band.minCm ? 'borderline' : 'neighbour';
+    }
   }
 
   const confidence: SizeAdvice['confidence'] = options.heightUncertain
     ? 'low'
-    : alternativeInch !== undefined
-      ? 'medium'
-      : 'high';
+    : basis === 'single' || basis === 'neighbour'
+      ? 'high'
+      : 'medium';
 
   const advice: SizeAdvice = { primaryInch, confidence, basis };
   if (alternativeInch !== undefined) {

@@ -502,3 +502,18 @@ De methodiekpagina is bijgewerkt met de nieuwe rollen.
 - Grays in het advies: van 238 naar 294 plaatsen.
 - Achterstand van de beste Grays op de beste match: van 8,2 naar 7,6 punten.
 - Nog open: in de prestatieroute kost het onbekende carbonpercentage een Grays-stick gemiddeld 7,5 punten op stickgevoel. De grootste volgende winst is het verifiëren van carbonpercentages bij Grays zelf, en niet een aanpassing aan de regels.
+
+## 2026-10-13 — `ruleSetVersion v8-2026-10-13`: nieuwe lengtetabel
+
+**Aanleiding:** we hebben onze tabel vergeleken met de maattabel van Grays en met een tweede tabel die de eigenaar vond (bron onbekend, alleen als controle gebruikt). Bij kinderen adviseert Grays 1–2 inch langer dan wij, en de tweede tabel ongeveer 1 inch korter. Onze tabel zit ertussen en blijft daarom het uitgangspunt. Voor lange spelers adviseren beide bronnen 37,5 en 38,5 inch, terwijl wij altijd 36,5 adviseerden.
+
+**Wat:**
+- Nieuwe rijen: 37,5 inch vanaf 185 cm en 38,5 inch vanaf 193 cm. Die grenzen volgen ongeveer Grays (184/193). De tweede tabel legt de grenzen lager (179/189); dat vangen we op met het alternatief.
+- Elke rij met één maat noemt nu ook een maat die kan passen:
+  - Kinderen (tot 163 cm): altijd de kortere buurmaat, nooit een langere. Zo blijft "niet op de groei kopen" overeind.
+  - Volwassenen: de buurmaat aan de dichtstbijzijnde kant, dus 35 of 37,5 bij 36,5.
+- Merken die alleen even maten maken, zoals de Grays Aura (26/28/30/32/34), vallen zo niet meer weg op één inch.
+- De onzekerheid stijgt niet door deze buurmaat. Alleen op de onderste grens van een rij blijft de melding "op de grens tussen twee maten" staan.
+- De tabel op /kennis/hockeystick-lengte-tabel komt uit dezelfde bron (`LENGTH_GUIDE` en `alsoFitsInch`) en heeft een kolom "Kan ook passen". Grays staat als bron onderaan.
+
+**Gevolg:** de aparte "een maat korter"-fallback wordt bij kinderen bijna nooit meer gebruikt, omdat de kortere maat nu gewoon meetelt. Een stick in de buurmaat scoort wel lager op maat dan een stick in de hoofdmaat.

@@ -54,7 +54,7 @@ describe('acceptance scenarios (spec §12) against the real catalog', () => {
     expect(advice.route).toBe('START');
     expect(advice.sizeAdvice).toMatchObject({
       primaryInch: 30,
-      alternativeInch: 31,
+      alternativeInch: 29,
     });
     expect(advice.results.length).toBeGreaterThan(0);
     expect(advice.results.length).toBeLessThanOrEqual(3);
@@ -74,7 +74,7 @@ describe('acceptance scenarios (spec §12) against the real catalog', () => {
     expect(advice.route).toBe('ONTWIKKEL');
     expect(advice.sizeAdvice).toMatchObject({
       primaryInch: 34,
-      alternativeInch: 35,
+      alternativeInch: 33,
     });
     expect(bestOf(advice).role).toBe('best_match');
     for (const result of advice.results) {
@@ -196,19 +196,30 @@ describe('getAdvice', () => {
   });
 
   it('offers a shorter size separately — never as a match — when the advised size does not exist', () => {
-    // 135 cm → 31". Remove every 31" stick so the gap exists regardless of
-    // what the real catalog holds.
-    const without31 = catalog.filter(
-      (product) => !product.lengthsInches.value.includes(31),
+    // 191 cm → 37.5" (or 38.5"). Remove every stick in those sizes so the gap
+    // exists regardless of what the real catalog holds.
+    const withoutLong = catalog.filter(
+      (product) =>
+        !product.lengthsInches.value.some(
+          (inch) => inch === 37.5 || inch === 38.5,
+        ),
     );
-    const advice = getAdvice(buildStartAnswers({ height_cm: 135 }), without31);
+    const advice = getAdvice(
+      buildStartAnswers({
+        height_cm: 191,
+        age_band: '18_plus',
+        advice_goal: 'self',
+      }),
+      withoutLong,
+    );
 
     expect(advice.noMatchReason).toBe('length');
     expect(advice.results).toEqual([]);
     expect(advice.otherSizeOptions.length).toBeGreaterThan(0);
     for (const option of advice.otherSizeOptions) {
       expect(option.role).toBe('other_size');
-      expect(option.sizeInch).toBe(30);
+      expect(option.sizeInch).toBeGreaterThanOrEqual(36);
+      expect(option.sizeInch).toBeLessThan(37.5);
       expect(option.cautions).toContain('OTHER_SIZE');
     }
   });
