@@ -24,7 +24,8 @@ type Agent = {
   status?: string;
 };
 
-/** Every agent, built or planned (planned = the marketing blueprint). */
+/** Every agent, built or planned (planned = the marketing blueprint). A fixed
+ *  `status` without a workflow is a planned agent or a scheduled Claude task. */
 const AGENTS: Agent[] = [
   { id: 'catalogus', naam: 'Catalogus-controle', rol: 'Bewaking', soort: 'Script', start: 'Elke maandag', workflow: 'catalog-health.yml' },
   { id: 'kwaliteit', naam: 'Kwaliteitscontrole', rol: 'Kwaliteit', soort: 'Script', start: 'Bij elke PR', workflow: 'ci.yml' },
@@ -38,7 +39,8 @@ const AGENTS: Agent[] = [
   { id: 'review', naam: 'Review-agent', rol: 'Kwaliteit', soort: 'AI (Claude)', start: 'Bij elke content- of catalogus-PR', workflow: 'review.yml' },
   { id: 'research', naam: 'Zoekwoord-research', rol: 'Analytics', soort: 'AI (Claude)', start: 'Wekelijks', workflow: null, status: 'Gepland' },
   { id: 'links', naam: 'Interne links & CRO', rol: 'Content', soort: 'AI (Claude)', start: 'Tweewekelijks', workflow: null, status: 'Gepland' },
-  { id: 'distributie', naam: 'Distributie', rol: 'Marketing', soort: 'AI (Claude)', start: 'Na publicatie', workflow: null, status: 'Gepland' },
+  // Runs as a scheduled Claude task, not a GitHub workflow, so there are no runs to read here.
+  { id: 'distributie', naam: 'Instagram-planner (distributie)', rol: 'Marketing', soort: 'AI (Claude)', start: 'Elke vrijdag; nieuwe pagina\'s krijgen voorrang', workflow: null, status: 'Actief' },
   { id: 'orchestrator', naam: 'Orchestrator', rol: 'Regie', soort: 'AI (Claude)', start: 'Elke maandag', workflow: 'orchestrator.yml' },
   { id: 'nieuwsbrief', naam: 'Nieuwsbrief (Brevo)', rol: 'Marketing', soort: 'AI (Claude)', start: 'Wekelijks, vanaf ±50 inschrijvers', workflow: null, status: 'Gepland' },
   { id: 'inbox', naam: 'Inbox (Brevo)', rol: 'Marketing', soort: 'AI (Claude)', start: 'Bij binnenkomende mail', workflow: null, status: 'Gepland' },
