@@ -4,6 +4,7 @@ import type { SizeAdvice } from '@/advice-engine/sizeAdvice';
 import type {
   AdviceReason,
   CautionCode,
+  NoAmbitiousReason,
   NoMatchReason,
   ResultRole,
   StickFeel,
@@ -200,6 +201,16 @@ export const LESS_SUITABLE_FOR: Record<ExperienceLevel, string> = {
 export function brandNotFoundText(brand: string): string {
   return `We vonden geen stick van ${brand} die past bij je antwoorden, bijvoorbeeld door de maat, het niveau of je budget. Hieronder zie je sticks van andere merken die wel passen.`;
 }
+
+/** Shown below the results when there is no ambitious choice. */
+export const NO_AMBITIOUS_TEXT: Record<NoAmbitiousReason, string> = {
+  no_step_up:
+    'Die hebben we bewust niet gemaakt: in deze maat en dit budget is er geen stick die een verantwoorde stap verder gaat dan de beste match.',
+  weak_fit:
+    'Die hebben we bewust niet gemaakt: er zijn wel sticks die een stap verder gaan, maar die passen nog niet goed genoeg bij de antwoorden.',
+  brand_preference:
+    'Die plek hebben we gebruikt voor een stick van het huidige merk, of juist van een ander merk om mee te vergelijken.',
+};
 
 export const NO_MATCH_TEXT: Record<NoMatchReason, string> = {
   data: 'We hebben op dit moment geen sticks met volledig gecontroleerde gegevens om uit te adviseren.',

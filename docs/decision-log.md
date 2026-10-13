@@ -517,3 +517,16 @@ De methodiekpagina is bijgewerkt met de nieuwe rollen.
 - De tabel op /kennis/hockeystick-lengte-tabel komt uit dezelfde bron (`LENGTH_GUIDE` en `alsoFitsInch`) en heeft een kolom "Kan ook passen". Grays staat als bron onderaan.
 
 **Gevolg:** de aparte "een maat korter"-fallback wordt bij kinderen bijna nooit meer gebruikt, omdat de kortere maat nu gewoon meetelt. Een stick in de buurmaat scoort wel lager op maat dan een stick in de hoofdmaat.
+
+## 2026-10-13 — melding als er geen ambitieuze keuze is
+
+**Wat:** heeft het advies geen "ambitieuze keuze", dan staat onder de sticks waarom niet (`noAmbitiousReason` in het adviesresultaat):
+- `no_step_up`: in deze maat en dit budget is er geen stick die een verantwoorde stap verder gaat dan de beste match.
+- `weak_fit`: zulke sticks zijn er wel, maar ze scoren onder de 60 punten.
+- `brand_preference`: de plek is gebruikt voor een stick van het huidige merk of van een ander merk.
+
+De adviesregels zelf zijn niet veranderd.
+
+**Reden:** keuze van de eigenaar. Een ontbrekende derde stick moet niet lijken op een fout.
+
+**Onderzocht: komt Brabo te vaak als beste uit?** Over alle profielen niet (54 van 426). Bij ervaren volwassenen met een budget vanaf €125 wint de Brabo Elite Five WTB LB wel in 33–64% van de gevallen. De reden: Brabo noemt hem zelf "for experienced players" en vermeldt expliciet 50% carbon. Daarmee is hij een van de weinige sticks in €125–250 met een bevestigd niveau "ervaren" én een bekend carbonpercentage. Concurrenten met een onbekend carbonpercentage krijgen de helft van de punten voor stickgevoel. Dit is niet aangepast: de data klopt, en een correctie per merk zou het advies sturen. De hefboom is meer geverifieerde carbonpercentages bij andere merken.

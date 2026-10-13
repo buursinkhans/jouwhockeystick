@@ -94,6 +94,15 @@ export type AdviceResultItem = {
 };
 
 /** The first hard-filter stage that left no candidates. */
+/** Why the advice has no ambitious choice (shown to the player). */
+export type NoAmbitiousReason =
+  /** No stick in size and budget is a responsible step up from the best match. */
+  | 'no_step_up'
+  /** Step-up sticks exist but fit the answers too poorly. */
+  | 'weak_fit'
+  /** It made way for a stick of the current or another brand. */
+  | 'brand_preference';
+
 export type NoMatchReason =
   'data' | 'length' | 'experience' | 'safety' | 'budget' | 'availability';
 
@@ -134,6 +143,8 @@ export type AdviceResult = {
   noMatchReason: NoMatchReason | null;
   /** Set when the player asked to stay with a brand; `matched` = a stick of it is in the advice. */
   brandPreference: { brand: Brand; matched: boolean } | null;
+  /** Null when an ambitious choice is shown or there are no results. */
+  noAmbitiousReason: NoAmbitiousReason | null;
   excludedCount: number;
   methodUrl: string;
 };

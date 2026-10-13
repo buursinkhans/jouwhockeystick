@@ -11,6 +11,7 @@ import { findShorterSize, matchSize } from './sizeAdvice';
 import type {
   AdviceResult,
   AdviceResultItem,
+  NoAmbitiousReason,
   PlayerContext,
   ResultRole,
 } from './types';
@@ -67,6 +68,38 @@ function withRole(
   };
 }
 
+/** One responsible step up, and a smaller one while the basics are still forming. */
+function stepUps(
+  candidates: Candidate[],
+  best: Candidate,
+  ctx: PlayerContext,
+): Candidate[] {
+  const maxStep = ctx.learningControl ? 1 : 2;
+  return candidates.filter(
+    (candidate) =>
+      candidate.complexity > best.complexity &&
+      candidate.complexity <= best.complexity + maxStep,
+  );
+}
+
+function noAmbitiousReason(
+  results: AdviceResultItem[],
+  ranked: Candidate[],
+  ctx: PlayerContext,
+): NoAmbitiousReason | null {
+  const [best, ...rest] = ranked;
+  if (!best || results.some((result) => result.role === 'ambitious_choice')) {
+    return null;
+  }
+  const candidates = stepUps(rest, best, ctx);
+  if (candidates.length === 0) {
+    return 'no_step_up';
+  }
+  return candidates.some((candidate) => candidate.score >= AMBITIOUS_MIN_SCORE)
+    ? 'brand_preference'
+    : 'weak_fit';
+}
+
 function assignRoles(
   ranked: Candidate[],
   ctx: PlayerContext,
@@ -91,14 +124,8 @@ function assignRoles(
     results.push(withRole(safe, 'safe_choice', ctx));
   }
 
-  // One responsible step up, and a smaller one while the basics are still forming.
-  const maxStep = ctx.learningControl ? 1 : 2;
-  const ambitious = rest.find(
-    (candidate) =>
-      candidate !== safe &&
-      candidate.score >= AMBITIOUS_MIN_SCORE &&
-      candidate.complexity > best.complexity &&
-      candidate.complexity <= best.complexity + maxStep,
+  const ambitious = stepUps(rest, best, ctx).find(
+    (candidate) => candidate !== safe && candidate.score >= AMBITIOUS_MIN_SCORE,
   );
   if (ambitious) {
     results.push(withRole(ambitious, 'ambitious_choice', ctx));
@@ -190,6 +217,7 @@ export function getAdvice(
     | 'isUncertain'
     | 'noMatchReason'
     | 'brandPreference'
+    | 'noAmbitiousReason'
     | 'excludedCount'
   > = {
     adviceSessionId: options.adviceSessionId ?? '',
@@ -218,6 +246,7 @@ export function getAdvice(
       brandPreference: ctx.preferredBrand
         ? { brand: ctx.preferredBrand, matched: false }
         : null,
+      noAmbitiousReason: null,
       excludedCount,
     };
   }
@@ -249,6 +278,7 @@ export function getAdvice(
           ),
         }
       : null,
+    noAmbitiousReason: noAmbitiousReason(results, ranked, ctx),
     excludedCount,
   };
 }

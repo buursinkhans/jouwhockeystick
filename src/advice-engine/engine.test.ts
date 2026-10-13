@@ -360,3 +360,32 @@ describe('unknown model year', () => {
     }
   });
 });
+
+describe('no ambitious choice', () => {
+  it('says why when no stick is a step up from the best match', () => {
+    const only = buildProduct({ lengthsInches: sourced.lengths([31]) });
+    const advice = getAdvice(buildStartAnswers({ height_cm: 135 }), [only], {
+      now: NOW,
+    });
+    expect(advice.results).toHaveLength(1);
+    expect(advice.noAmbitiousReason).toBe('no_step_up');
+  });
+
+  it('is null whenever an ambitious choice is shown', () => {
+    const catalog = getAllProducts(NOW);
+    for (const height of [132, 154, 174, 185]) {
+      for (const answers of [
+        buildDevelopAnswers({ height_cm: height }),
+        buildPerformanceAnswers({ height_cm: height }),
+      ]) {
+        const advice = getAdvice(answers, catalog, { now: NOW });
+        const hasAmbitious = advice.results.some(
+          (result) => result.role === 'ambitious_choice',
+        );
+        expect(advice.noAmbitiousReason === null).toBe(
+          hasAmbitious || advice.results.length === 0,
+        );
+      }
+    }
+  });
+});

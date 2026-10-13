@@ -5,6 +5,7 @@ import type { AdviceResult } from '@/advice-engine/types';
 import {
   ADVICE_DISCLAIMER,
   brandNotFoundText,
+  NO_AMBITIOUS_TEXT,
   NO_MATCH_TEXT,
   ROUTE_RESULT_COPY,
   SELLER_NOTE,
@@ -130,6 +131,14 @@ export function QuizResult({
               />
             ))}
           </div>
+          {advice.noAmbitiousReason && (
+            <p className="mt-4 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
+              <span className="font-semibold text-inkt">
+                Geen ambitieuze keuze.
+              </span>{' '}
+              {NO_AMBITIOUS_TEXT[advice.noAmbitiousReason]}
+            </p>
+          )}
           {advice.route === 'START' && (
             <p className="mt-4 text-sm text-inkt/80">{START_FOOTNOTE}</p>
           )}
