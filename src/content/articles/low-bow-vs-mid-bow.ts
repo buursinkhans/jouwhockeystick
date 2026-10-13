@@ -30,6 +30,8 @@ export const lowBowVsMidBow: Article = {
       body: [
         'De bow is de kromming van je stick. Hoe diep die mag zijn, is vastgelegd in de spelregels: maximaal 25 mm, op het veld en in de zaal.',
         'Omdat die grens voor iedereen gelijk is, zit het echte verschil tussen sticks in de **plek** van de kromming. Ligt die laag, dan kom je makkelijker onder de bal. Een rustiger profiel is juist fijn als je nog aan je basis werkt.',
+        'Klik hieronder door de profielen en zie waar het diepste punt van de kromming ongeveer ligt.',
+        { type: 'figure', figure: 'bow-profiles' },
       ],
     },
     {
@@ -128,7 +130,7 @@ export const lowBowVsMidBow: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-12',
+  updatedAt: '2026-10-13',
   sources: [
     { label: ZAAL_SOURCES.fieldRules.label, url: ZAAL_SOURCES.fieldRules.url },
     { label: 'PassaHockey — Zaalhockeyadvies', url: PASSAHOCKEY_INDOOR },

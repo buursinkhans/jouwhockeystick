@@ -1,4 +1,5 @@
 import type { Article, ArticleBlock } from '@/content/types';
+import { BowProfileFigure } from './BowProfileFigure';
 import { InlineText } from './InlineText';
 
 function Block({ block }: { block: ArticleBlock }) {
@@ -67,6 +68,8 @@ function Block({ block }: { block: ArticleBlock }) {
           <InlineText text={block.text} />
         </p>
       );
+    case 'figure':
+      return <BowProfileFigure />;
   }
 }
 

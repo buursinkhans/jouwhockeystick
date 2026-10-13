@@ -57,4 +57,10 @@ export type AnalyticsEvent =
       block: 'season' | 'buying';
       target: string;
     }
+  | {
+      /** A choice in an explainer figure in an article (e.g. the bow profiles). */
+      name: 'figure_interaction';
+      figure: 'bow-profiles';
+      option: string;
+    }
   | AdviceAnalyticsEvent;
