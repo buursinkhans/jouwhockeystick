@@ -542,3 +542,11 @@ De adviesregels zelf zijn niet veranderd.
 **Review-agent:** `.github/workflows/review.yml` beoordeelt elke PR die `src/content/` of `src/catalog/` raakt volgens `docs/review-agent.md`: brief, botsing met bestaande pagina's, bron per claim, geen vaste productcijfers in tekst, verboden taal, linkbeleid, en bij catalogus-PR's een steekproef van de specs tegen de bron (WebFetch). Hij zet één reactie in de PR (✅ of ⚠️ met genummerde punten) en werkt die bij een volgende run bij. Opnieuw beoordelen: label `herbeoordeel`. De Catalogus-aanvuller start de review zelf, omdat zijn PR's geen andere workflows starten.
 
 **Bewust niet:** de review-agent wijzigt niets, keurt niets goed en schrijft nooit `@claude` (de workflow haalt het ook weg), zodat agents elkaar niet eindeloos aansturen. De eigenaar beslist of de content-agent de punten oplost. Geen review op pure code-PR's en niet op PR's uit forks.
+
+## 2026-10-13 — Distributie via de Instagram-planner
+
+**Besluit eigenaar:** geen aparte distributie-agent. De Instagram-planner (geplande Claude-taak, elke vrijdag; zie 2026-10-12 — Instagram-studio) doet de distributie. Een /kennis- of /blog-pagina waarvan `publishedAt` in de afgelopen 7 dagen valt en die nog geen post heeft, krijgt de eerstvolgende lege postdag (di, do of za); hooguit twee per run. De zes-weken-regel geldt daar niet. Daarna vult de planner de overige lege dagen zoals voorheen.
+
+**Dashboard:** de rij "Distributie" in de Agent-regiekamer heet nu "Instagram-planner (distributie)" met status *Actief*. De taak draait niet in GitHub Actions, dus het dashboard toont geen runs voor deze rij.
+
+**Bewust niet (nog):** Pinterest (staat op "later"), de nieuwsbrief (wacht op Brevo) en clubs (outreach staat op pauze). De eigenaar plaatst posts zelf; er gaat niets automatisch online.
