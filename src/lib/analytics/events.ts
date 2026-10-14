@@ -63,4 +63,9 @@ export type AnalyticsEvent =
       figure: 'bow-profiles';
       option: string;
     }
+  | {
+      /** The folded optional questions on a stickwijzer screen were opened. */
+      name: 'optional_questions_open';
+      screen: string;
+    }
   | AdviceAnalyticsEvent;

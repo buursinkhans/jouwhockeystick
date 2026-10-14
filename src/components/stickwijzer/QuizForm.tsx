@@ -328,6 +328,40 @@ export function QuizForm() {
   const displayIds = (
     screen.order ?? [...screen.questions, ...(screen.optional ?? [])]
   ).filter((id) => !optionalSet.has(id) || isVisible(id, answers));
+  const requiredIds = displayIds.filter((id) => !optionalSet.has(id));
+  const optionalIds = displayIds.filter((id) => optionalSet.has(id));
+  const renderField = (id: QuestionId, optional: boolean) => (
+    <QuestionField
+      key={id}
+      def={QUESTIONS[id]}
+      value={answers[id]}
+      onChange={(value) => handleChange(id, value)}
+      optional={optional}
+      errorMessage={id === 'height_cm' ? heightError(answers) : undefined}
+      optionMeta={id === 'route_self_select' ? ROUTE_STEP_COUNTS : undefined}
+      optionIcons={id === 'route_self_select' ? ROUTE_OPTION_ICONS : undefined}
+      selectedAction={
+        // On mobile the three cards stack, which pushes the Start
+        // button far down; the chosen card gets its own Start button.
+        currentStep === 0 && id === 'route_self_select' ? (
+          <div className="mt-3 md:hidden">
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={!canProceed(screen, answers)}
+            >
+              Start met deze route
+            </Button>
+            {!canProceed(screen, answers) && (
+              <p className="mt-2 text-xs text-lijngrijs">
+                Kies eerst hierboven voor wie je een stick zoekt.
+              </p>
+            )}
+          </div>
+        ) : undefined
+      }
+    />
+  );
 
   return (
     <form
@@ -393,42 +427,59 @@ export function QuizForm() {
       </h2>
 
       <div className="mt-4 space-y-8">
-        {displayIds.map((id) => (
-          <QuestionField
-            key={id}
-            def={QUESTIONS[id]}
-            value={answers[id]}
-            onChange={(value) => handleChange(id, value)}
-            optional={optionalSet.has(id)}
-            errorMessage={id === 'height_cm' ? heightError(answers) : undefined}
-            optionMeta={
-              id === 'route_self_select' ? ROUTE_STEP_COUNTS : undefined
+        {requiredIds.map((id) => renderField(id, false))}
+
+        {optionalIds.length > 0 && (
+          // Optional questions start folded so a screen shows only what is
+          // needed; they open again when one of them already has an answer.
+          <details
+            key={screen.id}
+            open={
+              optionalIds.some((id) => isAnswered(answers[id])) || undefined
             }
-            optionIcons={
-              id === 'route_self_select' ? ROUTE_OPTION_ICONS : undefined
-            }
-            selectedAction={
-              // On mobile the three cards stack, which pushes the Start
-              // button far down; the chosen card gets its own Start button.
-              currentStep === 0 && id === 'route_self_select' ? (
-                <div className="mt-3 md:hidden">
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={!canProceed(screen, answers)}
-                  >
-                    Start met deze route
-                  </Button>
-                  {!canProceed(screen, answers) && (
-                    <p className="mt-2 text-xs text-lijngrijs">
-                      Kies eerst hierboven voor wie je een stick zoekt.
-                    </p>
-                  )}
-                </div>
-              ) : undefined
-            }
-          />
-        ))}
+            onToggle={(event) => {
+              if (event.currentTarget.open) {
+                trackEvent({
+                  name: 'optional_questions_open',
+                  screen: screen.id,
+                });
+              }
+            }}
+            className="group rounded-2xl border border-rand bg-white"
+          >
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
+              <span>
+                <span className="block font-semibold text-veld">
+                  Advies nog preciezer maken?
+                </span>
+                <span className="block text-sm text-lijngrijs">
+                  {optionalIds.length === 1
+                    ? '1 extra vraag'
+                    : `${optionalIds.length} extra vragen`}
+                  , optioneel:{' '}
+                  {optionalIds.map((id) => QUESTIONS[id].shortLabel).join(', ')}
+                </span>
+              </span>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="shrink-0 text-veld transition-transform group-open:rotate-180"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+            <div className="space-y-8 border-t border-rand px-4 py-5">
+              {optionalIds.map((id) => renderField(id, false))}
+            </div>
+          </details>
+        )}
 
         {suggested && route && suggested !== route && (
           <div

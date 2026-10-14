@@ -611,3 +611,11 @@ Er blijft altijd minstens één stick van een ander merk staan.
 **Effect** (180 profielen die bij Grays willen blijven): Grays staat nu in 140 van de 148 adviezen, eerst in 136. De overige 8 zijn spelers van 158 cm in de prestatieroute: in 35 inch heeft Grays bij ons alleen een beginnersstick, en dat zegt het advies nu ook.
 
 **Ook:** overal staat nu "aerial/scoopen" in plaats van "aerial(s)". Dat is opgenomen in de huisstijl (`docs/content-agent.md` §3).
+
+## 2026-10-14 — optionele vragen dichtgeklapt
+
+**Wat:** op elk scherm van de stickwijzer staan de optionele vragen samen in één dichtgeklapt blok: "Advies nog preciezer maken? · N extra vragen, optioneel: …". Dat blok staat onder de verplichte vragen. Heeft een van die vragen al een antwoord, bijvoorbeeld als je terugbladert, dan staat het blok open. Het openen wordt gemeten met het event `optional_questions_open` (met de scherm-id), zodat we zien of bezoekers de extra vragen gebruiken.
+
+De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk van de huidige stick zitten ook in dit blok.
+
+**Reden:** keuze van de eigenaar. De vragenlijst was voor de gemiddelde bezoeker te overweldigend.
