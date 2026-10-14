@@ -36,21 +36,47 @@ describe('brand preference', () => {
     });
   });
 
-  it('still shows the best stick of the brand when others fit better', () => {
+  it('puts the brand first even when another brand fits better', () => {
     // A developing 154 cm junior: the only Grays that passes is a beginner stick.
     const advice = getAdvice(
       buildDevelopAnswers({ ...loyalTo('Grays'), budget_band: 'gt_250' }),
       catalog,
       { now: NOW },
     );
-    const own = advice.results.find((r) => r.product.brand === 'Grays');
-    expect(own).toBeDefined();
-    expect(advice.results[0]?.product.brand).not.toBe('Grays');
-    expect(own?.role).toBe('same_brand');
+    expect(advice.results[0]?.product.brand).toBe('Grays');
+    expect(advice.results[0]?.role).toBe('same_brand');
+    expect(advice.results[1]?.role).toBe('other_brand');
+    expect(advice.results[1]?.product.brand).not.toBe('Grays');
+    expect(advice.noAmbitiousReason).toBeNull();
     expect(advice.brandPreference).toMatchObject({
       brand: 'Grays',
       matched: true,
     });
+  });
+
+  it('always puts a Grays first for a Grays-loyal player when one exists in the size', () => {
+    for (const height of [120, 132, 145, 158, 172, 185])
+      for (const budget of ['lt_75', '75_125', '175_250'] as const)
+        for (const build of [
+          buildStartAnswers,
+          buildDevelopAnswers,
+          buildPerformanceAnswers,
+        ]) {
+          const advice = getAdvice(
+            build({
+              ...loyalTo('Grays'),
+              budget_band: budget,
+              height_cm: height,
+            }),
+            catalog,
+            { now: NOW },
+          );
+          if (advice.brandPreference?.missReason === 'length') continue;
+          expect(
+            advice.results[0]?.product.brand,
+            `${build.name} ${height} ${budget}`,
+          ).toBe('Grays');
+        }
   });
 
   it('always offers at least one stick of another brand', () => {

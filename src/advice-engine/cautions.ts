@@ -1,6 +1,7 @@
 import { getModelYear } from '@/catalog/modelYear';
 import type { Product } from '@/catalog/types';
 import type { AdviceAnswers } from './answers';
+import { passesExperience } from './hardFilters';
 import { BOW_RANK, deriveAdviceRules } from './productRules';
 import type { CautionCode, PlayerContext, ResultRole } from './types';
 
@@ -32,7 +33,11 @@ export function getCautions(
   if (role === 'ambitious_choice') {
     cautions.push('AMBITIOUS_STEP');
   }
-  // Only the stick of the player's own brand can be shown above budget.
+  // Only the stick of the player's own brand can be shown above budget or
+  // outside the player's level.
+  if (role === 'same_brand' && !passesExperience(product, ctx)) {
+    cautions.push('LEVEL_MISMATCH');
+  }
   if (
     ctx.budget !== null &&
     product.priceIndicativeEur.value > ctx.budget.maxEur

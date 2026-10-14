@@ -619,3 +619,17 @@ Er blijft altijd minstens één stick van een ander merk staan.
 De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk van de huidige stick zitten ook in dit blok.
 
 **Reden:** keuze van de eigenaar. De vragenlijst was voor de gemiddelde bezoeker te overweldigend.
+
+## 2026-10-14 — `ruleSetVersion v10-2026-10-14`: eigen merk altijd eerste keuze; merkvraag verplicht
+
+**Wat (keuze eigenaar):**
+- **Merkvragen verplicht.** "Van welk merk is de huidige stick?" is verplicht zodra iemand een huidige stick heeft. "Wil je bij hetzelfde merk blijven?" is verplicht zodra het merk bekend is. Beide staan dus niet meer in het blok met extra vragen. "Wat bevalt" en "wat moet anders" blijven extra vragen.
+- **Eigen merk altijd eerst.** Kiest iemand "Ja, liefst hetzelfde merk", dan bestaat het advies uit twee sticks:
+  1. "Eerste keuze: jouw merk", met de tekst "Je wilt bij Grays blijven. Daarom adviseren we de Grays X."
+  2. "Kijk ook eens naar", met de best passende stick van een ander merk.
+- **Filters versoepeld voor het eigen merk.** Dat geldt alleen voor de stick van dat merk, in deze volgorde: eerst het budget, dan het niveau. Er staat dan een zichtbare melding bij (`ABOVE_BUDGET`, `LEVEL_MISMATCH`). Maat, gegevens, veiligheid en leverbaarheid worden nooit versoepeld. Heeft het merk geen stick in de geadviseerde maat, dan zegt het advies dat.
+- **Eerlijk bij een minder goede match.** Scoort de stick van het eigen merk onder de 70, dan staat er dat hij op een paar punten minder goed past. Het advies krijgt dan ook de melding "minder zeker".
+- **Melding over de ambitieuze keuze** wordt bij merkvoorkeur niet getoond.
+- **Extra-vragenblok:** het woord "optioneel" is weg uit de samenvatting.
+
+**Afweging:** de eigenaar wil dat een merkvoorkeur altijd terugkomt in het advies. Daar staat tegenover dat de eerste keuze niet altijd de best passende stick is. Dat maken we zichtbaar met de meldingen en met het alternatief van een ander merk. Een test bewaakt dat een speler die bij Grays wil blijven altijd een Grays als eerste keuze krijgt, zolang Grays in die maat een stick heeft.

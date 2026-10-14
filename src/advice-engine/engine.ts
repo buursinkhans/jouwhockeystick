@@ -4,7 +4,7 @@ import type { AdviceAnswers } from './answers';
 import { getCautions } from './cautions';
 import {
   applyHardFilters,
-  passesAllButBudget,
+  passesAllExcept,
   passesNonLengthFilters,
 } from './hardFilters';
 import { buildPlayerContext } from './playerContext';
@@ -139,61 +139,48 @@ function assignRoles(
   return results;
 }
 
-/** Replaces the last result when the list is full, otherwise appends. */
-function withExtra(
-  results: AdviceResultItem[],
-  item: AdviceResultItem,
-): AdviceResultItem[] {
-  return results.length < 3
-    ? [...results, item]
-    : [...results.slice(0, 2), item];
-}
-
 /**
- * When the player wants to stay with a brand (owner's rule: weigh it heavily,
- * but always offer an alternative):
- * 1. the best stick of that brand that passes the filters is always in the
- *    advice, as "same_brand" when it did not make the top results on its own;
- * 2. if none fits the budget, the best one that passes every other filter is
- *    shown, with an above-budget caution;
- * 3. there is always one stick of another brand to compare with.
+ * Owner's rule: a player who wants to stay with a brand always gets a stick
+ * of that brand as the first choice, and the best stick of another brand as
+ * the alternative to compare with. When nothing of the brand passes the
+ * filters, the budget and then the level are relaxed for that brand only,
+ * each with a visible caution. Size, data, safety and availability are never
+ * relaxed; then the advice says why the brand is missing.
  */
-function applyBrandPreference(
-  results: AdviceResultItem[],
+function brandFirstResults(
   ranked: Candidate[],
   products: Product[],
   ctx: PlayerContext,
-): AdviceResultItem[] {
+): AdviceResultItem[] | null {
   const brand = ctx.preferredBrand;
-  if (brand === null || results.length === 0) {
-    return results;
+  if (brand === null) {
+    return null;
   }
-  let adjusted = results;
-  if (!adjusted.some((result) => result.product.brand === brand)) {
-    const own =
-      ranked.find((candidate) => candidate.product.brand === brand) ??
-      bestAboveBudget(products, brand, ctx);
-    if (own) {
-      adjusted = withExtra(adjusted, withRole(own, 'same_brand', ctx));
-    }
+  const own =
+    ranked.find((candidate) => candidate.product.brand === brand) ??
+    bestOfBrand(products, brand, ctx, ['budget']) ??
+    bestOfBrand(products, brand, ctx, ['budget', 'experience']);
+  if (!own) {
+    return null;
   }
-  if (adjusted.every((result) => result.product.brand === brand)) {
-    const other = ranked.find((candidate) => candidate.product.brand !== brand);
-    if (other) {
-      adjusted = withExtra(adjusted, withRole(other, 'other_brand', ctx));
-    }
+  const results = [withRole(own, 'same_brand', ctx)];
+  const other = ranked.find((candidate) => candidate.product.brand !== brand);
+  if (other) {
+    results.push(withRole(other, 'other_brand', ctx));
   }
-  return adjusted;
+  return results;
 }
 
-function bestAboveBudget(
+function bestOfBrand(
   products: Product[],
   brand: Product['brand'],
   ctx: PlayerContext,
+  relaxed: ReadonlyArray<'budget' | 'experience'>,
 ): Candidate | undefined {
   return products
     .filter(
-      (product) => product.brand === brand && passesAllButBudget(product, ctx),
+      (product) =>
+        product.brand === brand && passesAllExcept(product, ctx, relaxed),
     )
     .map((product) => toCandidate(product, ctx, sizeInchFor(product, ctx)))
     .sort(byScore)[0];
@@ -273,6 +260,36 @@ export function getAdvice(
     products,
     ctx,
   );
+  const ranked = passed
+    .map((product) => toCandidate(product, ctx, sizeInchFor(product, ctx)))
+    .sort(byScore);
+  const brandResults = brandFirstResults(ranked, products, ctx);
+  const brandPreference = (results: AdviceResultItem[]) =>
+    ctx.preferredBrand
+      ? {
+          brand: ctx.preferredBrand,
+          matched: results.some(
+            (result) => result.product.brand === ctx.preferredBrand,
+          ),
+          missReason: brandMissReason(products, ctx),
+        }
+      : null;
+
+  if (brandResults) {
+    const first = brandResults[0];
+    return {
+      ...base,
+      results: brandResults,
+      otherSizeOptions: [],
+      isUncertain:
+        (first?.score ?? 0) < BEST_MATCH_MIN_SCORE ||
+        ctx.sizeAdvice.confidence === 'low',
+      noMatchReason: null,
+      brandPreference: brandPreference(brandResults),
+      noAmbitiousReason: null,
+      excludedCount,
+    };
+  }
 
   if (passed.length === 0) {
     return {
@@ -282,28 +299,13 @@ export function getAdvice(
         noMatchReason === 'length' ? otherSizeOptions(products, ctx) : [],
       isUncertain: true,
       noMatchReason,
-      brandPreference: ctx.preferredBrand
-        ? {
-            brand: ctx.preferredBrand,
-            matched: false,
-            missReason: brandMissReason(products, ctx),
-          }
-        : null,
+      brandPreference: brandPreference([]),
       noAmbitiousReason: null,
       excludedCount,
     };
   }
 
-  const ranked = passed
-    .map((product) => toCandidate(product, ctx, sizeInchFor(product, ctx)))
-    .sort(byScore);
-  const results = applyBrandPreference(
-    assignRoles(ranked, ctx),
-    ranked,
-    products,
-    ctx,
-  );
-
+  const results = assignRoles(ranked, ctx);
   return {
     ...base,
     results,
@@ -311,15 +313,7 @@ export function getAdvice(
     isUncertain:
       results[0]?.role !== 'best_match' || ctx.sizeAdvice.confidence === 'low',
     noMatchReason: null,
-    brandPreference: ctx.preferredBrand
-      ? {
-          brand: ctx.preferredBrand,
-          matched: results.some(
-            (result) => result.product.brand === ctx.preferredBrand,
-          ),
-          missReason: brandMissReason(products, ctx),
-        }
-      : null,
+    brandPreference: brandPreference(results),
     noAmbitiousReason: noAmbitiousReason(results, ranked, ctx),
     excludedCount,
   };

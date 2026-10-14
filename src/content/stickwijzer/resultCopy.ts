@@ -3,6 +3,7 @@ import { feelFromCarbon } from '@/advice-engine/carbon';
 import type { SizeAdvice } from '@/advice-engine/sizeAdvice';
 import type {
   AdviceReason,
+  AdviceResultItem,
   CautionCode,
   NoAmbitiousReason,
   NoMatchReason,
@@ -60,8 +61,8 @@ const ROLE_LABELS: Record<ResultRole, string> = {
   ambitious_choice: 'Ambitieuze keuze',
   closest_option: 'Dichtstbijzijnde optie',
   other_size: 'Alternatief in een andere maat',
-  other_brand: 'Alternatief van een ander merk',
-  same_brand: 'Van je huidige merk',
+  other_brand: 'Kijk ook eens naar',
+  same_brand: 'Eerste keuze: jouw merk',
 };
 
 const START_ROLE_LABELS: Partial<Record<ResultRole, string>> = {
@@ -76,7 +77,10 @@ export function roleLabel(role: ResultRole, route: AdviceRoute): string {
   );
 }
 
-export const ROLE_INTRO: Record<ResultRole, string> = {
+const ROLE_INTRO: Record<
+  Exclude<ResultRole, 'same_brand' | 'other_brand'>,
+  string
+> = {
   best_match: 'Een sterke match voor deze antwoorden.',
   safe_choice:
     'Een rustiger of gelijkwaardig alternatief dat niet lastiger speelt dan de beste match.',
@@ -86,11 +90,24 @@ export const ROLE_INTRO: Record<ResultRole, string> = {
     'Geen duidelijke match: dit komt het dichtst in de buurt, maar past op meerdere punten minder goed.',
   other_size:
     'Niet in de geadviseerde maat beschikbaar; dit is één maat korter.',
-  other_brand:
-    'Je wilt bij je merk blijven, prima! Deze stick van een ander merk past ook goed bij je antwoorden. Handig om even mee te vergelijken.',
-  same_brand:
-    'De best passende stick van het merk dat je nu hebt. Hij past minder goed bij je antwoorden dan de sticks hierboven; waar dat zit, zie je bij de aandachtspunten.',
 };
+
+/** The line under the role label; personal for the brand roles. */
+export function roleIntro(item: AdviceResultItem): string {
+  const { brand, name } = item.product;
+  if (item.role === 'same_brand') {
+    // 70 = BEST_MATCH_MIN_SCORE in the engine (not imported: client bundle).
+    const fit =
+      item.score < 70
+        ? ' Op een paar punten past hij minder goed bij je antwoorden; dat zie je bij de aandachtspunten.'
+        : '';
+    return `Je wilt bij ${brand} blijven. Daarom adviseren we de ${name}.${fit}`;
+  }
+  if (item.role === 'other_brand') {
+    return `Het alternatief van ${brand}: van alle andere merken past deze stick het best bij je antwoorden.`;
+  }
+  return ROLE_INTRO[item.role];
+}
 
 export const GOAL_LABELS: Record<Goal, string> = {
   first_touch: 'aannemen en controleren',
@@ -170,6 +187,8 @@ export function reasonText(
 
 /** Always a possibility ("kan"), never an absolute warning or a guarantee. */
 export const CAUTION_TEXT: Record<CautionCode, string> = {
+  LEVEL_MISMATCH:
+    'Deze stick is bedoeld voor een ander niveau dan je antwoorden aangeven. We tonen hem omdat je bij dit merk wilt blijven en het merk in deze maat geen stick voor jouw niveau heeft.',
   ABOVE_BUDGET:
     'Deze stick is duurder dan je opgegeven budget. We tonen hem omdat je bij dit merk wilt blijven en er binnen je budget geen passende stick van is.',
   OTHER_SIZE:

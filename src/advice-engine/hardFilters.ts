@@ -23,7 +23,10 @@ function passesData(product: Product, ctx: PlayerContext): boolean {
   );
 }
 
-function passesExperience(product: Product, ctx: PlayerContext): boolean {
+export function passesExperience(
+  product: Product,
+  ctx: PlayerContext,
+): boolean {
   const rules = deriveAdviceRules(product);
   const player = BAND_ORDER.indexOf(ctx.band);
   if (
@@ -88,18 +91,21 @@ export function passesNonLengthFilters(
 }
 
 /**
- * Every filter except the budget: for the stick of the brand a player wants
- * to stay with, shown above budget with a caution when nothing fits within it.
+ * Every filter except the given stages (never data or length): for the stick
+ * of the brand a player wants to stay with, which is shown with a caution
+ * for each relaxed stage.
  */
-export function passesAllButBudget(
+export function passesAllExcept(
   product: Product,
   ctx: PlayerContext,
+  relaxed: ReadonlyArray<'budget' | 'experience'>,
 ): boolean {
   return (
     passesData(product, ctx) &&
     matchSize(product, ctx.sizeAdvice) !== 'none' &&
     NON_LENGTH_STAGES.every(
-      ([stage, passes]) => stage === 'budget' || passes(product, ctx),
+      ([stage, passes]) =>
+        relaxed.some((r) => r === stage) || passes(product, ctx),
     )
   );
 }

@@ -13,9 +13,9 @@ import { QUESTIONS } from '@/content/stickwijzer/questions';
 import {
   CAUTION_TEXT,
   LESS_SUITABLE_FOR,
-  ROLE_INTRO,
   formatInch,
   reasonText,
+  roleIntro,
   roleLabel,
 } from '@/content/stickwijzer/resultCopy';
 import {
@@ -90,7 +90,7 @@ export function RecommendationCard({
       <p className="text-xs font-semibold uppercase tracking-wide text-veld">
         {roleLabel(item.role, route)}
       </p>
-      <p className="mt-1 text-sm text-lijngrijs">{ROLE_INTRO[item.role]}</p>
+      <p className="mt-1 text-sm text-lijngrijs">{roleIntro(item)}</p>
 
       <div className="mt-4 flex items-start gap-4">
         <ProductImage product={product} className="h-20 w-20 shrink-0" />

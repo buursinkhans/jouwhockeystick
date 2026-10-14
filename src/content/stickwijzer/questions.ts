@@ -689,7 +689,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
 export type ScreenDef = {
   id: string;
   title: string;
-  /** Always visible on the screen. */
+  /** Required; shown unless the question's showWhen hides it. */
   questions: QuestionId[];
   /** Marked as optional; shown below the required questions unless `order` says otherwise. */
   optional?: QuestionId[];
@@ -710,13 +710,14 @@ const AGE_EXPERIENCE: ScreenDef = {
 const CURRENT_STICK: ScreenDef = {
   id: 'current_stick',
   title: 'Huidige stick',
-  questions: ['has_current_stick', 'replacement_reason'],
-  optional: [
+  // The brand questions only show (and are only required) with a current stick.
+  questions: [
+    'has_current_stick',
     'current_stick_brand',
     'brand_loyalty',
-    'current_stick_like',
-    'current_stick_problem',
+    'replacement_reason',
   ],
+  optional: ['current_stick_like', 'current_stick_problem'],
   order: [
     'has_current_stick',
     'current_stick_brand',
@@ -752,11 +753,7 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     {
       ...CURRENT_STICK,
       title: 'Eerste stick of vervanging',
-      optional: [
-        'current_stick_brand',
-        'brand_loyalty',
-        'current_stick_problem',
-      ],
+      optional: ['current_stick_problem'],
       order: [
         'has_current_stick',
         'current_stick_brand',

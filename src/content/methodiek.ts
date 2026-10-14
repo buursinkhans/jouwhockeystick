@@ -15,7 +15,7 @@ export const METHODIEK = {
     'Wij kijken eerst naar wat niet onderhandelbaar is: de juiste sticklengte, de ervaring van de speler, beschikbaarheid in die maat en het budget. Daarna vergelijken we de speelwensen, zoals aannemen, passen, dribbelen, 3D, backhand of dragflick.',
     'Voor beginnende hockeyers adviseren we bewust eenvoudiger. Dan staan maat, hanteerbaarheid, controle en plezier voorop. Een heel stijve of extreem gekromde stick is niet automatisch beter om hockey te leren.',
     'Voor ervaren spelers wegen we meer kenmerken mee, zoals gewenste acties, voorkeur voor een zachter of directer stickgevoel en ervaring met verschillende bow-profielen.',
-    'Wil je bij het merk van je huidige stick blijven? Dan krijgen sticks van dat merk extra punten, en tonen we de best passende stick van dat merk altijd. Past er binnen je budget geen stick van dat merk, dan tonen we de best passende erboven, met die melding erbij. Kan het echt niet, bijvoorbeeld omdat het merk geen stick in jouw maat heeft, dan zeggen we waarom. Er staat altijd minstens één stick van een ander merk bij, zodat je kunt vergelijken.',
+    'Wil je bij het merk van je huidige stick blijven? Dan is een stick van dat merk altijd je eerste keuze, en zetten we het best passende alternatief van een ander merk ernaast. Past er binnen je budget of op jouw niveau geen stick van dat merk, dan tonen we de best passende toch, met die melding erbij. Alleen als het merk geen stick in jouw maat heeft, lukt het niet; dan zeggen we dat.',
   ],
   routes: [
     {
@@ -54,12 +54,12 @@ export const METHODIEK = {
       body: 'Eén verantwoorde stap vooruit. Die tonen we alleen als ervaring en techniek dat toelaten, en nooit om het rijtje vol te maken.',
     },
     {
-      name: 'Van je huidige merk',
-      body: 'Alleen als je bij je merk wilt blijven: de best passende stick van dat merk, als die niet al bovenaan staat. Ook als hij minder goed past, of duurder is dan je budget; dat staat er dan bij.',
+      name: 'Eerste keuze: jouw merk',
+      body: 'Alleen als je bij je merk wilt blijven: de best passende stick van dat merk staat dan altijd bovenaan, ook als hij minder goed past of duurder is dan je budget. Dat staat er dan bij.',
     },
     {
-      name: 'Alternatief van een ander merk',
-      body: 'Alleen als je bij je merk wilt blijven en alle andere sticks van dat merk zijn: de best passende stick van een ander merk, om mee te vergelijken.',
+      name: 'Kijk ook eens naar',
+      body: 'Alleen als je bij je merk wilt blijven: de stick van een ander merk die het best bij je antwoorden past, om mee te vergelijken.',
     },
   ],
   sourceLabels: [

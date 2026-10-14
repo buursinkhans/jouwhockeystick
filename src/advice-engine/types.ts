@@ -50,7 +50,8 @@ export type CautionCode =
   | 'MODEL_YEAR_UNCONFIRMED'
   | 'BIG_BOW_CHANGE'
   | 'DIRECT_FEEL_VIBRATION'
-  | 'ABOVE_BUDGET';
+  | 'ABOVE_BUDGET'
+  | 'LEVEL_MISMATCH';
 
 /** Points per component (already weighted for the route); `total` is 0–100. */
 export type ScoreBreakdown = {

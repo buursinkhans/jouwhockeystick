@@ -262,6 +262,7 @@ export const QUESTION_META: Record<QuestionId, QuestionMeta> = {
   has_current_stick: { routes: ALL_ROUTES, required: true },
   current_stick_like: { routes: ['ONTWIKKEL', 'PRESTATIE'], required: false },
   current_stick_problem: { routes: ALL_ROUTES, required: false },
+  // Conditionally required (see adviceAnswersSchema): only with a current stick.
   current_stick_brand: { routes: ALL_ROUTES, required: false },
   brand_loyalty: { routes: ALL_ROUTES, required: false },
   replacement_reason: { routes: ALL_ROUTES, required: true },
@@ -308,7 +309,17 @@ export function requiredQuestionIds(route: AdviceRoute): QuestionId[] {
 export const adviceAnswersSchema = baseAnswersSchema.superRefine(
   (data, ctx) => {
     const route = routeFromSelfSelect(data.route_self_select);
-    for (const id of requiredQuestionIds(route)) {
+    const required = requiredQuestionIds(route);
+    // Owner's rule: the brand questions are required once there is a stick
+    // (and, for staying with it, once its brand is known).
+    if (data.has_current_stick === 'yes') {
+      required.push('current_stick_brand');
+      const brand = data.current_stick_brand;
+      if (brand !== undefined && brand !== 'other' && brand !== 'unknown') {
+        required.push('brand_loyalty');
+      }
+    }
+    for (const id of required) {
       if (!isAnswered(data[id])) {
         ctx.addIssue({
           code: 'custom',

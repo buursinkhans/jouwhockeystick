@@ -123,8 +123,9 @@ function heightError(answers: Answers): string | undefined {
 
 function canProceed(screen: ScreenDef, answers: Answers): boolean {
   return (
-    screen.questions.every((id) => isAnswered(answers[id])) &&
-    heightError(answers) === undefined
+    screen.questions.every(
+      (id) => !isVisible(id, answers) || isAnswered(answers[id]),
+    ) && heightError(answers) === undefined
   );
 }
 
@@ -327,7 +328,7 @@ export function QuizForm() {
   const optionalSet = new Set(screen.optional ?? []);
   const displayIds = (
     screen.order ?? [...screen.questions, ...(screen.optional ?? [])]
-  ).filter((id) => !optionalSet.has(id) || isVisible(id, answers));
+  ).filter((id) => isVisible(id, answers));
   const requiredIds = displayIds.filter((id) => !optionalSet.has(id));
   const optionalIds = displayIds.filter((id) => optionalSet.has(id));
   const renderField = (id: QuestionId, optional: boolean) => (
@@ -456,7 +457,7 @@ export function QuizForm() {
                   {optionalIds.length === 1
                     ? '1 extra vraag'
                     : `${optionalIds.length} extra vragen`}
-                  , optioneel:{' '}
+                  :{' '}
                   {optionalIds.map((id) => QUESTIONS[id].shortLabel).join(', ')}
                 </span>
               </span>
