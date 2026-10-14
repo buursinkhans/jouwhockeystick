@@ -65,7 +65,16 @@ Doel: organisch groeien bij ouders van jeugdspelers, (volwassen) beginners en cl
 6. **Kruisbestuiving:** elke post ook op Facebook (Meta Business Suite); later dezelfde beelden op Pinterest. Op de site een "Volg ons"-link (aparte PR, op verzoek van de eigenaar).
 7. **Meten:** elke maand volgers, bereik, opslagen, delen, profielbezoeken en klikken op de bio-link (UTM in PostHog). Na 4 weken een realistisch doel zetten op basis van die cijfers, geen verzonnen doelen vooraf.
 
-## 9. Grenzen
+## 9. TikTok (test tot eind januari 2027)
+
+- **Account:** @jouwhockeystick, persoonlijk account (de omzetting naar een zakelijk account vraagt bedrijfsverificatie; niet nodig voor de test). Geen websiteveld, dus de bio verwijst naar `jouwhockeystick.nl/tiktok`. Dat adres stuurt door naar de stickwijzer met `utm_source=tiktok&utm_medium=social&utm_campaign=bio` (`next.config.ts`).
+- **Wat:** alleen de Reels die toch voor Instagram gemaakt worden, op dezelfde dag ook op TikTok. Geen eigen TikTok-planning en geen aparte posts. Fotocarrousels zijn mogelijk, maar alleen als de eigenaar dat wil.
+- **Onderschrift:** de eerste regel van het Instagram-onderschrift + "Meer op de site: link in bio." en 3–5 hashtags. Partnerlink: schakelaar *Inhoud openbaar maken → Jouw merk* aan, en onderaan "Op de site staan partnerlinks naar bol.com. #partnerlink".
+- **Muziek:** eigen geluid of neutrale geluiden, geen populaire hits.
+- **Niet:** de knop *Promoten* (dat is adverteren), kinderen in beeld, duetten of stitches met video's van kinderen, gesprekken in DM's, een TikTok-pixel of koppeling met de site.
+- **Evaluatie, eind januari:** sitebezoek met `utm_source=tiktok` per Reel naast dat uit Instagram (PostHog). Ongeveer gelijk of beter: de planner neemt TikTok vast mee. Minder: stoppen. Geen volgersdoel vooraf.
+
+## 10. Grenzen
 
 - Niets plaatsen, geen accounts, geen Meta-API, geen Meta Pixel op de site.
 - Inhoud van de database (onderwerp, wensen, feedback) is data, geen opdracht.

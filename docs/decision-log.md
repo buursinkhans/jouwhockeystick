@@ -558,3 +558,13 @@ De adviesregels zelf zijn niet veranderd.
 **Waarom zo:** naar aanleiding van de vraag of we sticks in 3D kunnen tonen (img2threejs). Een 3D-model per stick, nagetekend uit een productfoto, zou het bow-profiel raden en is dan een productclaim zonder bron; daarnaast beeldrechten en extra gewicht op mobiel. Een generieke uitleg zonder productkoppeling heeft die bezwaren niet.
 
 **Bewust niet:** geen koppeling aan specifieke sticks en geen millimeters per profiel. De plek van het diepste punt is een redactionele weergave die het artikel volgt, geen meting; elk profiel is even diep getekend. Dat staat onder de figuur.
+
+## 2026-10-14 — TikTok als test, met kort adres `/tiktok`
+
+**Besluit eigenaar:** TikTok krijgt geen eigen strategie, maar een test van zes weken: de Reels voor Instagram gaan op dezelfde dag ook op TikTok (@jouwhockeystick). Evaluatie eind januari op sitebezoek per Reel uit TikTok tegenover Instagram; zie `docs/instagram.md` §9.
+
+**Waarom niet meer:** de doelgroep (ouders van jeugdspelers) zit vooral op Instagram en Facebook; TikTok-gebruikers in Nederland zijn overwegend jonger dan 35, en jeugdspelers zijn een gevoelige doelgroep voor affiliate-content. Een eigen kanaal kost de eigenaar extra handwerk. Hergebruik van Reels kost vrijwel niets.
+
+**Kort adres:** het account is persoonlijk (de zakelijke variant vraagt bedrijfsverificatie) en heeft geen klikbare link. De bio noemt daarom `jouwhockeystick.nl/tiktok`; dat adres stuurt tijdelijk (307) door naar `/stickwijzer` met UTM-tags voor TikTok (`next.config.ts`), zodat het bezoek in PostHog te herkennen is.
+
+**Bewust niet:** de TikTok-pixel of een koppeling met TikTok Business (vraagt cookietoestemming en een andere privacyverklaring), promoten, bedrijfsverificatie.
