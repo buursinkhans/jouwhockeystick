@@ -2,7 +2,11 @@ import { CATALOG_VERSION } from '@/catalog';
 import type { Product } from '@/catalog/types';
 import type { AdviceAnswers } from './answers';
 import { getCautions } from './cautions';
-import { applyHardFilters, passesNonLengthFilters } from './hardFilters';
+import {
+  applyHardFilters,
+  passesAllButBudget,
+  passesNonLengthFilters,
+} from './hardFilters';
 import { buildPlayerContext } from './playerContext';
 import { deriveAdviceRules } from './productRules';
 import { ADVICE_VERSION, METHOD_URL, RULE_SET_VERSION } from './ruleSetVersion';
@@ -12,6 +16,7 @@ import type {
   AdviceResult,
   AdviceResultItem,
   NoAmbitiousReason,
+  NoMatchReason,
   PlayerContext,
   ResultRole,
 } from './types';
@@ -147,14 +152,16 @@ function withExtra(
 /**
  * When the player wants to stay with a brand (owner's rule: weigh it heavily,
  * but always offer an alternative):
- * 1. the best stick of that brand is always in the advice if it fits
- *    reasonably (score ≥ AMBITIOUS_MIN_SCORE), as "same_brand" when it did
- *    not make the top results on its own;
- * 2. there is always one stick of another brand to compare with.
+ * 1. the best stick of that brand that passes the filters is always in the
+ *    advice, as "same_brand" when it did not make the top results on its own;
+ * 2. if none fits the budget, the best one that passes every other filter is
+ *    shown, with an above-budget caution;
+ * 3. there is always one stick of another brand to compare with.
  */
 function applyBrandPreference(
   results: AdviceResultItem[],
   ranked: Candidate[],
+  products: Product[],
   ctx: PlayerContext,
 ): AdviceResultItem[] {
   const brand = ctx.preferredBrand;
@@ -163,11 +170,9 @@ function applyBrandPreference(
   }
   let adjusted = results;
   if (!adjusted.some((result) => result.product.brand === brand)) {
-    const own = ranked.find(
-      (candidate) =>
-        candidate.product.brand === brand &&
-        candidate.score >= AMBITIOUS_MIN_SCORE,
-    );
+    const own =
+      ranked.find((candidate) => candidate.product.brand === brand) ??
+      bestAboveBudget(products, brand, ctx);
     if (own) {
       adjusted = withExtra(adjusted, withRole(own, 'same_brand', ctx));
     }
@@ -179,6 +184,40 @@ function applyBrandPreference(
     }
   }
   return adjusted;
+}
+
+function bestAboveBudget(
+  products: Product[],
+  brand: Product['brand'],
+  ctx: PlayerContext,
+): Candidate | undefined {
+  return products
+    .filter(
+      (product) => product.brand === brand && passesAllButBudget(product, ctx),
+    )
+    .map((product) => toCandidate(product, ctx, sizeInchFor(product, ctx)))
+    .sort(byScore)[0];
+}
+
+function sizeInchFor(product: Product, ctx: PlayerContext): number {
+  return matchSize(product, ctx.sizeAdvice) === 'alternative' &&
+    ctx.sizeAdvice.alternativeInch !== undefined
+    ? ctx.sizeAdvice.alternativeInch
+    : ctx.sizeAdvice.primaryInch;
+}
+
+/** The filter that no stick of the preferred brand passed (null = some did). */
+function brandMissReason(
+  products: Product[],
+  ctx: PlayerContext,
+): NoMatchReason | null {
+  const brand = ctx.preferredBrand;
+  return brand === null
+    ? null
+    : applyHardFilters(
+        products.filter((product) => product.brand === brand),
+        ctx,
+      ).noMatchReason;
 }
 
 /**
@@ -244,7 +283,11 @@ export function getAdvice(
       isUncertain: true,
       noMatchReason,
       brandPreference: ctx.preferredBrand
-        ? { brand: ctx.preferredBrand, matched: false }
+        ? {
+            brand: ctx.preferredBrand,
+            matched: false,
+            missReason: brandMissReason(products, ctx),
+          }
         : null,
       noAmbitiousReason: null,
       excludedCount,
@@ -252,16 +295,14 @@ export function getAdvice(
   }
 
   const ranked = passed
-    .map((product) => {
-      const sizeInch =
-        matchSize(product, ctx.sizeAdvice) === 'alternative' &&
-        ctx.sizeAdvice.alternativeInch !== undefined
-          ? ctx.sizeAdvice.alternativeInch
-          : ctx.sizeAdvice.primaryInch;
-      return toCandidate(product, ctx, sizeInch);
-    })
+    .map((product) => toCandidate(product, ctx, sizeInchFor(product, ctx)))
     .sort(byScore);
-  const results = applyBrandPreference(assignRoles(ranked, ctx), ranked, ctx);
+  const results = applyBrandPreference(
+    assignRoles(ranked, ctx),
+    ranked,
+    products,
+    ctx,
+  );
 
   return {
     ...base,
@@ -276,6 +317,7 @@ export function getAdvice(
           matched: results.some(
             (result) => result.product.brand === ctx.preferredBrand,
           ),
+          missReason: brandMissReason(products, ctx),
         }
       : null,
     noAmbitiousReason: noAmbitiousReason(results, ranked, ctx),

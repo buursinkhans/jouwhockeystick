@@ -46,7 +46,7 @@ export const graysAc600ProbowS: Product = {
     value: 'probow',
     source: 'brand-website',
     sourceLabel:
-      'Grays plaatst dit model in de Probow-familie (Bow: 24.75 @ 200 mm, Apex-kop, Probow-S-profiel voor 3D, sleeppush en aerials).',
+      'Grays plaatst dit model in de Probow-familie (Bow: 24.75 @ 200 mm, Apex-kop, Probow-S-profiel voor 3D, sleeppush en aerial/scoopen).',
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
@@ -75,10 +75,10 @@ export const graysAc600ProbowS: Product = {
     lastVerifiedAt: CHECKED,
   },
   summary:
-    'Een AeroCore-stick van Grays met Probow-S-profiel, voor 3D-acties, aerials en de sleeppush.',
+    'Een AeroCore-stick van Grays met Probow-S-profiel, voor 3D-acties, aerial/scoopen en de sleeppush.',
   strengths: {
     value: [
-      'Probow-S: gemaakt voor 3D en aerials',
+      'Probow-S: gemaakt voor 3D en aerial/scoopen',
       'Schuimkern voor stabiliteit, volgens Grays',
     ],
     source: 'editorial-estimate',

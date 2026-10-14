@@ -78,7 +78,7 @@ export const graysAc800JumbowS: Product = {
   strengths: {
     value: [
       'Schuimkern voor stabiliteit en balans, volgens Grays',
-      'Lage kromming voor liften en aerials',
+      'Lage kromming voor liften en aerial/scoopen',
     ],
     source: 'editorial-estimate',
     sourceLabel: 'Eigen inschatting op basis van de productpagina van Grays.',

@@ -30,7 +30,10 @@ describe('brand preference', () => {
     expect(best?.product.brand).toBe('Grays');
     expect(best?.reasons.map((r) => r.code)).toContain('BRAND_PREFERENCE');
     expect(best?.breakdown.brandFit).toBe(BRAND_PREFERENCE_POINTS);
-    expect(advice.brandPreference).toEqual({ brand: 'Grays', matched: true });
+    expect(advice.brandPreference).toMatchObject({
+      brand: 'Grays',
+      matched: true,
+    });
   });
 
   it('still shows the best stick of the brand when others fit better', () => {
@@ -44,7 +47,10 @@ describe('brand preference', () => {
     expect(own).toBeDefined();
     expect(advice.results[0]?.product.brand).not.toBe('Grays');
     expect(own?.role).toBe('same_brand');
-    expect(advice.brandPreference).toEqual({ brand: 'Grays', matched: true });
+    expect(advice.brandPreference).toMatchObject({
+      brand: 'Grays',
+      matched: true,
+    });
   });
 
   it('always offers at least one stick of another brand', () => {
@@ -98,7 +104,11 @@ describe('brand preference', () => {
     const advice = getAdvice(buildStartAnswers(loyalTo('Malik')), catalog, {
       now: NOW,
     });
-    expect(advice.brandPreference).toEqual({ brand: 'Malik', matched: false });
+    expect(advice.brandPreference).toMatchObject({
+      brand: 'Malik',
+      matched: false,
+    });
+    expect(advice.brandPreference?.missReason).not.toBeNull();
     expect(advice.results.length).toBeGreaterThan(0);
   });
 
@@ -111,5 +121,46 @@ describe('brand preference', () => {
     for (const result of advice.results) {
       expect(result.score).toBeLessThanOrEqual(100);
     }
+  });
+
+  it('shows a stick of the brand above budget, with a caution, when none fits within it', () => {
+    const advice = getAdvice(
+      buildPerformanceAnswers({
+        ...loyalTo('Grays'),
+        advice_goal: 'self',
+        age_band: '18_plus',
+        height_cm: 178,
+        budget_band: 'lt_75',
+      }),
+      catalog,
+      { now: NOW },
+    );
+    const own = advice.results.find((r) => r.product.brand === 'Grays');
+    expect(own?.role).toBe('same_brand');
+    expect(own?.cautions).toContain('ABOVE_BUDGET');
+    expect(advice.results.some((r) => r.product.brand !== 'Grays')).toBe(true);
+    // Only the brand's own stick may exceed the budget.
+    for (const r of advice.results.filter((r) => r.product.brand !== 'Grays')) {
+      expect(r.cautions).not.toContain('ABOVE_BUDGET');
+    }
+  });
+
+  it('explains why when the brand has no stick in the advised size', () => {
+    const noGraysInSize = catalog.filter(
+      (p) => p.brand !== 'Grays' || !p.lengthsInches.value.includes(36.5),
+    );
+    const advice = getAdvice(
+      buildPerformanceAnswers({ ...loyalTo('Grays'), height_cm: 170 }),
+      noGraysInSize.filter(
+        (p) =>
+          p.brand !== 'Grays' || p.lengthsInches.value.every((l) => l < 34),
+      ),
+      { now: NOW },
+    );
+    expect(advice.brandPreference).toEqual({
+      brand: 'Grays',
+      matched: false,
+      missReason: 'length',
+    });
   });
 });

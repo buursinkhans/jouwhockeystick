@@ -83,7 +83,10 @@ export function QuizResult({
           advice.brandPreference &&
           !advice.brandPreference.matched && (
             <p className="mt-3 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
-              {brandNotFoundText(advice.brandPreference.brand)}
+              {brandNotFoundText(
+                advice.brandPreference.brand,
+                advice.brandPreference.missReason,
+              )}
             </p>
           )}
         {hasResults && adviceGoal === 'child' && (

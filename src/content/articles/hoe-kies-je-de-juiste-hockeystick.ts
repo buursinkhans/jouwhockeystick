@@ -44,7 +44,7 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
       heading: 'Low bow en extreme low bow',
       level: 3,
       body: [
-        'Een lage, uitgesproken kromming, gemaakt voor liften, 3D, aerials en de sleeppush. Past meestal bij gevorderde spelers. Een extreme low bow raden we als eerste stick niet aan.',
+        'Een lage, uitgesproken kromming, gemaakt voor liften, 3D, aerial/scoopen en de sleeppush. Past meestal bij gevorderde spelers. Een extreme low bow raden we als eerste stick niet aan.',
         'Het verschil tussen de twee populairste profielen lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow).',
       ],
     },

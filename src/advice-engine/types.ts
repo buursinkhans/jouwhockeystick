@@ -49,7 +49,8 @@ export type CautionCode =
   | 'CARBON_UNKNOWN'
   | 'MODEL_YEAR_UNCONFIRMED'
   | 'BIG_BOW_CHANGE'
-  | 'DIRECT_FEEL_VIBRATION';
+  | 'DIRECT_FEEL_VIBRATION'
+  | 'ABOVE_BUDGET';
 
 /** Points per component (already weighted for the route); `total` is 0–100. */
 export type ScoreBreakdown = {
@@ -141,8 +142,15 @@ export type AdviceResult = {
   otherSizeOptions: AdviceResultItem[];
   isUncertain: boolean;
   noMatchReason: NoMatchReason | null;
-  /** Set when the player asked to stay with a brand; `matched` = a stick of it is in the advice. */
-  brandPreference: { brand: Brand; matched: boolean } | null;
+  /**
+   * Set when the player asked to stay with a brand; `matched` = a stick of it
+   * is in the advice, otherwise `missReason` is the filter no stick of it passed.
+   */
+  brandPreference: {
+    brand: Brand;
+    matched: boolean;
+    missReason: NoMatchReason | null;
+  } | null;
   /** Null when an ambitious choice is shown or there are no results. */
   noAmbitiousReason: NoAmbitiousReason | null;
   excludedCount: number;

@@ -22,7 +22,7 @@ export const lowBowVsMidBow: Article = {
   slug: 'low-bow-vs-mid-bow',
   title: 'Low bow of mid bow: welke kromming past bij jou?',
   intro:
-    'Bij een mid bow zit de kromming ongeveer halverwege de stick. Rustig en voorspelbaar: fijn voor aannemen, vlak passen en pushen, en daarom een mooi startpunt voor beginners en allround spelers. Bij een low bow zit de kromming lager, dichter bij de krul. Daarmee kom je makkelijker onder de bal voor lifts, 3D-acties en aerials, maar de aanname vraagt meer techniek. Kies dus op de acties die jij het meest maakt.',
+    'Bij een mid bow zit de kromming ongeveer halverwege de stick. Rustig en voorspelbaar: fijn voor aannemen, vlak passen en pushen, en daarom een mooi startpunt voor beginners en allround spelers. Bij een low bow zit de kromming lager, dichter bij de krul. Daarmee kom je makkelijker onder de bal voor lifts, 3D-acties en aerial/scoopen, maar de aanname vraagt meer techniek. Kies dus op de acties die jij het meest maakt.',
   sections: [
     {
       heading: 'Wat is de bow van een hockeystick?',
@@ -53,7 +53,7 @@ export const lowBowVsMidBow: Article = {
               'Vraagt meer techniek',
             ],
             [
-              'Liften, 3D en aerials',
+              'Liften, 3D en aerial/scoopen',
               'Kan, maar lastiger',
               'Makkelijker onder de bal',
             ],
@@ -88,7 +88,7 @@ export const lowBowVsMidBow: Article = {
         {
           type: 'list',
           items: [
-            'Je beheerst de basis en wilt vaker liften, scheppen of een aerial spelen.',
+            'Je beheerst de basis en wilt vaker liften of aerial/scoopen.',
             'Je maakt veel 3D-acties of dribbelt graag met de bal van de grond.',
             'Je hebt al met een rustiger profiel gespeeld en weet wat je mist.',
           ],

@@ -32,6 +32,13 @@ export function getCautions(
   if (role === 'ambitious_choice') {
     cautions.push('AMBITIOUS_STEP');
   }
+  // Only the stick of the player's own brand can be shown above budget.
+  if (
+    ctx.budget !== null &&
+    product.priceIndicativeEur.value > ctx.budget.maxEur
+  ) {
+    cautions.push('ABOVE_BUDGET');
+  }
   if (
     carbon !== undefined &&
     carbon >= HIGH_CARBON_CAUTION_THRESHOLD &&

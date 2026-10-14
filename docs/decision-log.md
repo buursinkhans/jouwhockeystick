@@ -596,3 +596,18 @@ Alles staat op de tab *Community* van de Instagram-studio; de eigenaar doet zelf
 - personen op de volglijst (alleen organisaties), winkels of merken;
 - DM's of samenwerkingsvoorstellen aan clubs (club-outreach staat op pauze);
 - Vlaanderen en TikTok-community (later, na een besluit van de eigenaar).
+
+## 2026-10-14 — `ruleSetVersion v9-2026-10-14`: merk van de huidige stick altijd tonen als het kan
+
+**Aanleiding:** de eigenaar koos "bij hetzelfde merk blijven" (Grays) en zag geen Grays in het advies. Uit metingen bleek dat het puntenminimum (60) daar niet de oorzaak was. Het lag aan de harde filters: binnen het budget, of op het juiste niveau in de geadviseerde maat, was er geen Grays.
+
+**Wat:**
+1. De best passende stick van het merk die door de filters komt, staat altijd in het advies. Het minimum van 60 punten vervalt.
+2. Komt geen enkele stick van het merk binnen het budget, dan tonen we de best passende stick die aan alle andere filters voldoet (maat, niveau, veiligheid, leverbaarheid). Daarbij staat de melding `ABOVE_BUDGET`. Alleen de stick van het eigen merk kan zo boven budget komen.
+3. Kan het echt niet, dan zegt het advies waarom (`missReason`): geen stick in deze maat, niet op dit niveau, te stijf voor de opgegeven techniek of niet leverbaar.
+
+Er blijft altijd minstens één stick van een ander merk staan.
+
+**Effect** (180 profielen die bij Grays willen blijven): Grays staat nu in 140 van de 148 adviezen, eerst in 136. De overige 8 zijn spelers van 158 cm in de prestatieroute: in 35 inch heeft Grays bij ons alleen een beginnersstick, en dat zegt het advies nu ook.
+
+**Ook:** overal staat nu "aerial/scoopen" in plaats van "aerial(s)". Dat is opgenomen in de huisstijl (`docs/content-agent.md` §3).

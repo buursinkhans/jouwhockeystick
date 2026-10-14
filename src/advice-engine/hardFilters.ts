@@ -88,6 +88,23 @@ export function passesNonLengthFilters(
 }
 
 /**
+ * Every filter except the budget: for the stick of the brand a player wants
+ * to stay with, shown above budget with a caution when nothing fits within it.
+ */
+export function passesAllButBudget(
+  product: Product,
+  ctx: PlayerContext,
+): boolean {
+  return (
+    passesData(product, ctx) &&
+    matchSize(product, ctx.sizeAdvice) !== 'none' &&
+    NON_LENGTH_STAGES.every(
+      ([stage, passes]) => stage === 'budget' || passes(product, ctx),
+    )
+  );
+}
+
+/**
  * Applies the hard filters in the spec's decision order (§2.2) and reports
  * the first stage that left no candidates, so the UI can explain a no-match
  * with the actual cause instead of a generic message.

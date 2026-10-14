@@ -81,10 +81,10 @@ export const graysJb8Composite: Product = {
     lastVerifiedAt: CHECKED,
   },
   summary:
-    'Een Jumbow-stick van Grays met 70% carbon: een lage kromming voor liften, aerials en de sleeppush.',
+    'Een Jumbow-stick van Grays met 70% carbon: een lage kromming voor liften, aerial/scoopen en de sleeppush.',
   strengths: {
     value: [
-      'Jumbow-profiel voor liften en aerials',
+      'Jumbow-profiel voor liften en aerial/scoopen',
       'Carbonpercentage bevestigd door een winkel',
     ],
     source: 'editorial-estimate',

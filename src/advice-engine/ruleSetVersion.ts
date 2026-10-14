@@ -2,7 +2,7 @@
  * Bump this and log the change with date/reason in docs/decision-log.md
  * whenever hard filters or scoring logic change (source-policy.md §7).
  */
-export const RULE_SET_VERSION = 'v8-2026-10-13';
+export const RULE_SET_VERSION = 'v9-2026-10-14';
 
 /** User-facing version of the keuzehulp, shown on every result. */
 export const ADVICE_VERSION = 'Keuzehulp v1.1';

@@ -89,7 +89,7 @@ export const ROLE_INTRO: Record<ResultRole, string> = {
   other_brand:
     'Je wilt bij je merk blijven, prima! Deze stick van een ander merk past ook goed bij je antwoorden. Handig om even mee te vergelijken.',
   same_brand:
-    'De best passende stick van het merk dat je nu hebt. Hij past iets minder goed bij je antwoorden dan de sticks hierboven, maar is zeker het bekijken waard.',
+    'De best passende stick van het merk dat je nu hebt. Hij past minder goed bij je antwoorden dan de sticks hierboven; waar dat zit, zie je bij de aandachtspunten.',
 };
 
 export const GOAL_LABELS: Record<Goal, string> = {
@@ -98,7 +98,7 @@ export const GOAL_LABELS: Record<Goal, string> = {
   hit: 'de harde slag',
   dribble_3d: 'dribbelen en 3D',
   backhand: 'de backhand',
-  aerial: 'aerials',
+  aerial: 'aerial/scoopen',
   dragflick: 'de dragflick',
   allround: 'allround spel',
 };
@@ -170,6 +170,8 @@ export function reasonText(
 
 /** Always a possibility ("kan"), never an absolute warning or a guarantee. */
 export const CAUTION_TEXT: Record<CautionCode, string> = {
+  ABOVE_BUDGET:
+    'Deze stick is duurder dan je opgegeven budget. We tonen hem omdat je bij dit merk wilt blijven en er binnen je budget geen passende stick van is.',
   OTHER_SIZE:
     'Dit is niet de geadviseerde maat. Een maat korter kan werken, maar pas de stick bij voorkeur eerst in de hand of vraag persoonlijk advies.',
   AMBITIOUS_STEP:
@@ -198,8 +200,28 @@ export const LESS_SUITABLE_FOR: Record<ExperienceLevel, string> = {
 };
 
 /** Shown when the player wants to stay with a brand but none of its sticks fit. */
-export function brandNotFoundText(brand: string): string {
-  return `We vonden geen stick van ${brand} die past bij je antwoorden, bijvoorbeeld door de maat, het niveau of je budget. Hieronder zie je sticks van andere merken die wel passen.`;
+const BRAND_MISS_TEXT: Record<NoMatchReason, (brand: string) => string> = {
+  data: (brand) =>
+    `Van ${brand} hebben we nog geen veldstick met volledige, gecontroleerde gegevens.`,
+  length: (brand) =>
+    `${brand} heeft in onze catalogus geen veldstick in de geadviseerde maat.`,
+  experience: (brand) =>
+    `De sticks van ${brand} in deze maat passen niet bij dit niveau: ze zijn te eenvoudig of juist te specialistisch.`,
+  safety: (brand) =>
+    `De sticks van ${brand} in deze maat zijn te stijf of te specialistisch voor de opgegeven techniek.`,
+  budget: (brand) => `Er is geen stick van ${brand} binnen je budget.`,
+  availability: (brand) =>
+    `De sticks van ${brand} in deze maat zijn nu niet leverbaar.`,
+};
+
+export function brandNotFoundText(
+  brand: string,
+  reason: NoMatchReason | null,
+): string {
+  const why = reason
+    ? BRAND_MISS_TEXT[reason](brand)
+    : `We vonden geen stick van ${brand} die past bij je antwoorden.`;
+  return `${why} Daarom zie je hieronder sticks van andere merken die wel passen.`;
 }
 
 /** Shown below the results when there is no ambitious choice. */

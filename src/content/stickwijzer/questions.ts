@@ -330,7 +330,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
         { value: 'hit', label: 'Harde slag' },
         { value: 'dribble_3d', label: 'Dribbelen en 3D' },
         { value: 'backhand', label: 'Backhand' },
-        { value: 'aerial', label: 'Aerials' },
+        { value: 'aerial', label: 'Aerial/Scoopen' },
         { value: 'dragflick', label: 'Dragflick' },
         { value: 'allround', label: 'Allround' },
       ],
@@ -384,7 +384,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
         { value: 'backhand', label: 'Backhand' },
         { value: 'three_d', label: '3D-acties' },
         { value: 'lift', label: 'Lift' },
-        { value: 'aerial', label: 'Aerial' },
+        { value: 'aerial', label: 'Aerial/Scoopen' },
         { value: 'dragflick', label: 'Dragflick' },
       ],
     },
@@ -412,9 +412,9 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
   },
   skill_aerial: {
     id: 'skill_aerial',
-    question: 'Welke rol hebben aerials?',
-    shortLabel: 'aerials',
-    dataUse: 'Aerials wegen mee in de keuze van het bow-profiel.',
+    question: 'Welke rol speelt aerial/scoopen?',
+    shortLabel: 'aerial/scoopen',
+    dataUse: 'Aerial/scoopen weegt mee in de keuze van het bow-profiel.',
     input: {
       kind: 'single',
       options: [
@@ -843,7 +843,7 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     },
     {
       id: 'skills_special',
-      title: 'Techniek: aerial, backhand en dragflick',
+      title: 'Techniek: aerial/scoopen, backhand en dragflick',
       questions: ['skill_aerial', 'skill_backhand', 'skill_dragflick'],
     },
     {
