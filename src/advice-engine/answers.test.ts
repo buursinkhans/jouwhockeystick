@@ -34,6 +34,25 @@ describe('adviceAnswersSchema', () => {
     ]);
   });
 
+  it('asks why a new stick and its brand only when there is a current stick', () => {
+    const noStick = buildStartAnswers({
+      has_current_stick: 'no',
+      replacement_reason: undefined,
+    });
+    expect(adviceAnswersSchema.safeParse(noStick).success).toBe(true);
+
+    const parsed = adviceAnswersSchema.safeParse(
+      buildDevelopAnswers({
+        replacement_reason: undefined,
+        current_stick_brand: undefined,
+      }),
+    );
+    expect(parsed.error?.issues.map((issue) => issue.path[0])).toEqual([
+      'replacement_reason',
+      'current_stick_brand',
+    ]);
+  });
+
   it('does not require the PRESTATIE skill questions on the START route', () => {
     expect(requiredQuestionIds('START')).not.toContain('skill_hit');
     expect(requiredQuestionIds('START')).not.toContain('primary_goals');

@@ -615,13 +615,14 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
   },
   replacement_reason: {
     id: 'replacement_reason',
-    question: 'Waarom zoek je nu een stick?',
+    question: 'Waarom zoek je nu een nieuwe stick?',
     shortLabel: 'aanleiding',
     dataUse: 'Hiermee stemmen we de uitleg bij het advies af.',
+    // Only with a current stick; without one the answer is always "first stick".
+    showWhen: hasCurrentStick,
     input: {
       kind: 'single',
       options: [
-        { value: 'first_stick', label: 'Eerste stick' },
         { value: 'outgrown', label: 'Uit de maat gegroeid' },
         { value: 'damaged', label: 'Beschadigd' },
         { value: 'next_step', label: 'Volgende stap' },

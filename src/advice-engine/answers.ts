@@ -207,7 +207,8 @@ const answersShape = {
     'next_step',
     'new_season',
     'other',
-  ]),
+  ])
+    .optional(),
   // H. Budget, voorraad en koopvoorkeur
   budget_band: budgetBandSchema,
   purchase_timing: z
@@ -265,7 +266,8 @@ export const QUESTION_META: Record<QuestionId, QuestionMeta> = {
   // Conditionally required (see adviceAnswersSchema): only with a current stick.
   current_stick_brand: { routes: ALL_ROUTES, required: false },
   brand_loyalty: { routes: ALL_ROUTES, required: false },
-  replacement_reason: { routes: ALL_ROUTES, required: true },
+  // Conditionally required (see adviceAnswersSchema): only with a current stick.
+  replacement_reason: { routes: ALL_ROUTES, required: false },
   budget_band: { routes: ALL_ROUTES, required: true },
   purchase_timing: { routes: ALL_ROUTES, required: false },
   availability_preference: { routes: ALL_ROUTES, required: false },
@@ -310,10 +312,11 @@ export const adviceAnswersSchema = baseAnswersSchema.superRefine(
   (data, ctx) => {
     const route = routeFromSelfSelect(data.route_self_select);
     const required = requiredQuestionIds(route);
-    // Owner's rule: the brand questions are required once there is a stick
+    // Owner's rule: why a new stick and the brand questions are required
+    // once there is a stick
     // (and, for staying with it, once its brand is known).
     if (data.has_current_stick === 'yes') {
-      required.push('current_stick_brand');
+      required.push('replacement_reason', 'current_stick_brand');
       const brand = data.current_stick_brand;
       if (brand !== undefined && brand !== 'other' && brand !== 'unknown') {
         required.push('brand_loyalty');

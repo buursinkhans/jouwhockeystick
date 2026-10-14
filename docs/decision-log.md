@@ -633,3 +633,7 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 - **Extra-vragenblok:** het woord "optioneel" is weg uit de samenvatting.
 
 **Afweging:** de eigenaar wil dat een merkvoorkeur altijd terugkomt in het advies. Daar staat tegenover dat de eerste keuze niet altijd de best passende stick is. Dat maken we zichtbaar met de meldingen en met het alternatief van een ander merk. Een test bewaakt dat een speler die bij Grays wil blijven altijd een Grays als eerste keuze krijgt, zolang Grays in die maat een stick heeft.
+
+## 2026-10-14 — "Waarom zoek je nu een nieuwe stick?" alleen bij een huidige stick
+
+**Wat (keuze eigenaar):** deze vraag verschijnt alleen als de speler al een stick heeft, en is dan verplicht. Zonder stick is het altijd een eerste stick, dus de vraag zegt dan niets. De optie "Eerste stick" is uit de antwoorden gehaald. De waarde `first_stick` blijft in het schema, zodat oude opgeslagen antwoorden geldig blijven. De adviesregels gebruiken deze vraag niet; alleen de uitleg verandert.
