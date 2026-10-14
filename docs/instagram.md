@@ -63,7 +63,8 @@ Doel: organisch groeien bij ouders van jeugdspelers, (volwassen) beginners en cl
 4. **Gesprek:** reageer binnen een dag op elke reactie en elk bericht. Stories met een poll of vraagsticker ("welke lengte denk je dat bij 1,40 m past?"). Vragen die vaak terugkomen worden een post of een content-brief.
 5. **Vindbaarheid:** zoekwoorden in naam, bio en onderschrift (Instagram doorzoekt onderschriften), 5–10 relevante hashtags, alt-tekst bij elke slide.
 6. **Kruisbestuiving:** elke post ook op Facebook (Meta Business Suite); later dezelfde beelden op Pinterest. Op de site een "Volg ons"-link (aparte PR, op verzoek van de eigenaar).
-7. **Meten:** elke maand volgers, bereik, opslagen, delen, profielbezoeken en klikken op de bio-link (UTM in PostHog). Na 4 weken een realistisch doel zetten op basis van die cijfers, geen verzonnen doelen vooraf.
+7. **Community:** feedback ophalen via story-vragen en een volglijst van clubaccounts doet de community-agent; zie `docs/instagram-community.md`.
+8. **Meten:** elke maand volgers, bereik, opslagen, delen, profielbezoeken en klikken op de bio-link (UTM in PostHog). Na 4 weken een realistisch doel zetten op basis van die cijfers, geen verzonnen doelen vooraf.
 
 ## 9. TikTok (test tot eind januari 2027)
 
