@@ -578,3 +578,21 @@ De adviesregels zelf zijn niet veranderd.
 **Gaten vullen:** per stick noemt de lijst welke gegevens ontbreken (carbonpercentage, bow-profiel, modeljaar). Noemt de bron ze nu wel, dan vult de hercontroleur ze in. Dat raakt het punt van 13 oktober: een onbekend carbonpercentage kost vooral Grays-sticks punten in het advies.
 
 **Bewust niet:** sticks toevoegen of verwijderen, `bolNotSold`/`bolProductUrl` aanpassen, waarden schatten. Een onbereikbare of tegenstrijdige bron laat het veld en de datum ongemoeid en komt onder *Voor jou*.
+
+## 2026-10-14 — Instagram-community: feedback ophalen en een volglijst van clubs
+
+**Besluit eigenaar:** een agent voor de juiste volgers op Instagram. Eerst Instagram; de komende weken vooral **feedback ophalen**. Samenwerkingen met creators pas over ongeveer vier weken, na zijn sein.
+
+**Wat:** de geplande taak *Instagram-community* (woensdag, of met de knop op de studio) volgt `docs/instagram-community.md`. Elke run:
+- verwerkt de feedback die de eigenaar in de Instagram-studio noteert (zonder namen) tot hooguit 5 thema's met een voorstel;
+- zet hooguit 3 story-vragen (poll, vraagsticker, quiz, slider) klaar, gekoppeld aan de posts van die week en het Conversie-rapport;
+- stelt hooguit 5 clubaccounts voor om te volgen, alleen accounts die de club zelf op haar website noemt (via de KNHB-clubfinder).
+
+Alles staat op de tab *Community* van de Instagram-studio; de eigenaar doet zelf het volgen, reageren en plaatsen.
+
+**Bewust niet:**
+- automatisch volgen, liken, reageren of DM'en (verboden door Meta, risico op een ban, en de doelgroep is voor een deel minderjarig);
+- de Meta-API of instagram.com lezen (handboek Instagram §10);
+- personen op de volglijst (alleen organisaties), winkels of merken;
+- DM's of samenwerkingsvoorstellen aan clubs (club-outreach staat op pauze);
+- Vlaanderen en TikTok-community (later, na een besluit van de eigenaar).
