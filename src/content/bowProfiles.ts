@@ -50,7 +50,7 @@ export const BOW_FIGURE_OPTIONS: BowFigureOption[] = [
     profiles: ['lowbow'],
     peak: 0.25,
     description:
-      'Het diepste punt ligt lager, dichter bij de krul. Zo kom je makkelijker onder de bal voor lifts, 3D-acties en aerials.',
+      'Het diepste punt ligt lager, dichter bij de krul. Zo kom je makkelijker onder de bal voor lifts, 3D-acties en aerial/scoopen.',
   },
   {
     id: 'extreme_lowbow',
