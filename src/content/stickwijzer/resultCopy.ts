@@ -3,8 +3,10 @@ import { feelFromCarbon } from '@/advice-engine/carbon';
 import type { SizeAdvice } from '@/advice-engine/sizeAdvice';
 import type {
   AdviceReason,
+  AdviceResult,
   AdviceResultItem,
   CautionCode,
+  ExperienceBand,
   NoAmbitiousReason,
   NoMatchReason,
   ResultRole,
@@ -29,12 +31,12 @@ export const ROUTE_RESULT_COPY: Record<
   ONTWIKKEL: {
     title: 'Een stick die past bij wat de speler nu wil leren.',
     summary:
-      'We hebben eerst gekeken naar maat, ervaring en budget en daarna naar de doelen en het gewenste stickgevoel. Zo zie je een logische volgende stap, met de afweging erbij.',
+      'We hebben eerst gekeken welke sticks passen bij het niveau, de doelen, het gewenste stickgevoel en het budget, en daarna welke daarvan er in de juiste maat zijn. Zo zie je een logische volgende stap, met de afweging erbij.',
   },
   PRESTATIE: {
     title: 'Een gerichte match op acties, techniek en stickgevoel.',
     summary:
-      'Maat, ervaring en budget zijn vaste voorwaarden. Daarna wegen de acties die vaak voorkomen, het bow-profiel en het gewenste gevoel het zwaarst. Elke keuze heeft een afweging; die staat erbij.',
+      'We kiezen eerst op de stick zelf: de acties die vaak voorkomen, het bow-profiel, het gewenste gevoel en het niveau wegen het zwaarst. Daarna kijken we welke sticks er in de juiste maat en binnen het budget zijn. Elke keuze heeft een afweging; die staat erbij.',
   },
 };
 
@@ -187,6 +189,8 @@ export function reasonText(
 
 /** Always a possibility ("kan"), never an absolute warning or a guarantee. */
 export const CAUTION_TEXT: Record<CautionCode, string> = {
+  BELOW_LEVEL:
+    'Deze stick is bedoeld voor een eenvoudiger niveau dan je antwoorden aangeven. Hij kan prima spelen, maar een stick op jouw niveau past beter bij wat de speler al kan.',
   LEVEL_MISMATCH:
     'Deze stick is bedoeld voor een ander niveau dan je antwoorden aangeven. We tonen hem omdat je bij dit merk wilt blijven en het merk in deze maat geen stick voor jouw niveau heeft.',
   ABOVE_BUDGET:
@@ -225,12 +229,12 @@ const BRAND_MISS_TEXT: Record<NoMatchReason, (brand: string) => string> = {
   length: (brand) =>
     `${brand} heeft in onze catalogus geen veldstick in de geadviseerde maat.`,
   experience: (brand) =>
-    `De sticks van ${brand} in deze maat passen niet bij dit niveau: ze zijn te eenvoudig of juist te specialistisch.`,
+    `De sticks van ${brand} zijn bedoeld voor een hoger niveau dan je antwoorden aangeven.`,
   safety: (brand) =>
-    `De sticks van ${brand} in deze maat zijn te stijf of te specialistisch voor de opgegeven techniek.`,
+    `De sticks van ${brand} zijn te stijf of te specialistisch voor de opgegeven techniek.`,
   budget: (brand) => `Er is geen stick van ${brand} binnen je budget.`,
   availability: (brand) =>
-    `De sticks van ${brand} in deze maat zijn nu niet leverbaar.`,
+    `De sticks van ${brand} die passen zijn nu niet leverbaar.`,
 };
 
 export function brandNotFoundText(
@@ -256,16 +260,59 @@ export const NO_AMBITIOUS_TEXT: Record<NoAmbitiousReason, string> = {
 export const NO_MATCH_TEXT: Record<NoMatchReason, string> = {
   data: 'We hebben op dit moment geen sticks met volledig gecontroleerde gegevens om uit te adviseren.',
   length:
-    'We hebben op dit moment geen passende stick in de geadviseerde maat. We tonen geen andere maat als beste match.',
+    'Er zijn wel sticks die bij de antwoorden passen, maar niet in de geadviseerde maat. We tonen geen andere maat als beste match.',
   experience:
-    'In de geadviseerde maat hebben we op dit moment geen stick die bij de opgegeven ervaring past.',
+    'We hebben op dit moment geen stick die bij de opgegeven ervaring past.',
   safety:
-    'De sticks in deze maat zijn te stijf of te specialistisch voor de opgegeven techniek. We adviseren ze daarom niet.',
+    'De sticks die verder passen zijn te stijf of te specialistisch voor de opgegeven techniek. We adviseren ze daarom niet.',
   budget:
-    'In de geadviseerde maat hebben we op dit moment geen passende stick binnen het opgegeven budget.',
+    'We hebben op dit moment geen passende stick binnen het opgegeven budget.',
   availability:
     'De sticks die verder passen zijn niet als direct leverbaar gemarkeerd. We tonen daarom geen stick in een verkeerde maat.',
 };
+
+const LEVEL_NAMES: Record<ExperienceBand, string> = {
+  starter: 'beginnende speler',
+  developing: 'gevorderde speler',
+  advanced: 'ervaren speler',
+};
+
+/** One line on the level the advice is made for, and why. */
+export function playerLevelText(level: AdviceResult['playerLevel']): string {
+  const name = LEVEL_NAMES[level.band];
+  if (level.basis.base === 'first_season') {
+    return `We adviseren voor een ${name}: de speler speelt nog geen volledig seizoen.`;
+  }
+  const why =
+    level.basis.base === 'age'
+      ? 'op basis van de leeftijd'
+      : 'op basis van het aantal seizoenen';
+  return level.basis.steppedUp
+    ? `We adviseren voor een ${name}: ${why}, en een stap hoger omdat de speler op prestatieniveau speelt of al lang en zeker speelt.`
+    : `We adviseren voor een ${name}, ${why}.`;
+}
+
+/** Model first, size second: the better stick that does not come in this size. */
+export function bestModelOtherSizeText(
+  item: NonNullable<AdviceResult['bestModelOtherSize']>,
+  size: SizeAdvice,
+): string {
+  const { name, lengthsInches } = item.product;
+  const lengths = lengthsInches.value.map(formatInch).join(', ');
+  const why =
+    item.reason === 'higher_level'
+      ? 'past qua niveau beter bij de speler'
+      : 'past op de meeste punten beter bij de antwoorden';
+  const longerOnly = lengthsInches.value.every(
+    (length) => length > size.primaryInch,
+  );
+  // Juniors: never a longer stick just to get this model ("op de groei").
+  const warning =
+    longerOnly && size.primaryInch < 36
+      ? ' Kies niet een langere maat om deze stick toch te nemen.'
+      : '';
+  return `De ${name} ${why}, maar die is er niet in ${formatInch(size.primaryInch)} (wel in ${lengths}).${warning} Hieronder staan de best passende sticks die er wel in de juiste maat zijn.`;
+}
 
 export function sizeAdviceText(size: SizeAdvice): string[] {
   const lines: string[] = [];

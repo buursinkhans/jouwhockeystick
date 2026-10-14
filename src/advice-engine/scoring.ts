@@ -1,6 +1,12 @@
 import type { BowProfile, Product } from '@/catalog/types';
 import type { AdviceAnswers, AdviceRoute, Goal, QuestionId } from './answers';
-import { BOW_RANK, SOFT_MAX_CARBON, deriveAdviceRules } from './productRules';
+import {
+  BOW_RANK,
+  SOFT_MAX_CARBON,
+  deriveAdviceRules,
+  isTooSimple,
+  levelGap,
+} from './productRules';
 import { matchSize } from './sizeAdvice';
 import type {
   AdviceReason,
@@ -10,7 +16,6 @@ import type {
 } from './types';
 
 type Weights = {
-  size: number;
   experience: number;
   goal: number;
   bow: number;
@@ -20,35 +25,35 @@ type Weights = {
 };
 
 /**
- * Points per component and route (spec §6.2). The PRESTATIE column in the
- * spec adds up to 97; the remaining 3 points go to availability, the one
- * ScoreBreakdown component the table has no row for.
+ * Points per component and route. Deliberate deviation from spec §6.2
+ * (owner's rule, 2026-10-14): size is not scored. Every stick that reaches
+ * the score already exists in the advised size, so size points were equal
+ * for all of them and only diluted the real differences. Size is a check
+ * after the stick has been chosen on its characteristics; its points went to
+ * those characteristics.
  */
 export const ROUTE_WEIGHTS: Record<AdviceRoute, Weights> = {
   START: {
-    size: 30,
-    experience: 25,
-    goal: 15,
-    bow: 10,
-    feel: 10,
-    budget: 10,
+    experience: 35,
+    goal: 20,
+    bow: 15,
+    feel: 15,
+    budget: 15,
     availability: 0,
   },
   ONTWIKKEL: {
-    size: 25,
-    experience: 20,
-    goal: 20,
-    bow: 15,
-    feel: 10,
+    experience: 30,
+    goal: 25,
+    bow: 20,
+    feel: 15,
     budget: 10,
     availability: 0,
   },
   PRESTATIE: {
-    size: 20,
-    experience: 15,
-    goal: 25,
-    bow: 15,
-    feel: 15,
+    experience: 20,
+    goal: 30,
+    bow: 20,
+    feel: 20,
     budget: 7,
     availability: 3,
   },
@@ -146,20 +151,22 @@ const GOAL_REASON_THRESHOLD = 0.75;
 const BOW_REASON_THRESHOLD = 0.85;
 
 export type SizeBasis = 'primary' | 'alternative' | 'other_size';
-const SIZE_FIT: Record<SizeBasis, number> = {
-  primary: 1,
-  alternative: 0.6,
-  other_size: 0.3,
-};
+
+/**
+ * Experience fit by how many levels simpler the stick is than the player.
+ * Two levels (a beginner stick for an experienced player) is close to no fit.
+ */
+const LEVEL_GAP_FIT = [1, 0.5, 0.1] as const;
 
 function experienceFit(
   product: Product,
   ctx: PlayerContext,
-): { fit: number; controlFocus: boolean } {
+): { fit: number; controlFocus: boolean; gap: number } {
   const rules = deriveAdviceRules(product);
-  const bandFit = rules.homeBand === ctx.band ? 1 : 0.6;
+  const gap = levelGap(product, ctx.band);
+  const bandFit = LEVEL_GAP_FIT[Math.min(gap, 2)] ?? 0.1;
   if (!ctx.learningControl) {
-    return { fit: bandFit, controlFocus: false };
+    return { fit: bandFit, controlFocus: false, gap };
   }
 
   const carbon = product.carbonPercentage?.value;
@@ -178,6 +185,7 @@ function experienceFit(
   return {
     fit: bandFit * controlFit,
     controlFocus: carbon !== undefined && carbon <= SOFT_MAX_CARBON,
+    gap,
   };
 }
 
@@ -271,6 +279,9 @@ function feelFit(
   return { fit, exactMatch: distance === 0 };
 }
 
+/** Far below the budget: less than half of the lower end of the chosen band. */
+const FAR_BELOW_BUDGET_SHARE = 0.5;
+
 function budgetFit(
   product: Product,
   ctx: PlayerContext,
@@ -281,6 +292,10 @@ function budgetFit(
   const price = product.priceIndicativeEur.value;
   if (price >= ctx.budget.minEur) {
     return { fit: 1, inBand: true };
+  }
+  if (price < ctx.budget.minEur * FAR_BELOW_BUDGET_SHARE) {
+    // Much cheaper than asked: likely a simpler stick than the player is looking for.
+    return { fit: 0.4, inBand: false };
   }
   return { fit: ctx.route === 'START' ? 0.9 : 0.8, inBand: false };
 }
@@ -298,21 +313,36 @@ const round1 = (value: number) => Math.round(value * 10) / 10;
 
 /**
  * Editorial rule, owner's choice: staying with the current brand weighs
- * heavily. Large enough to usually decide between comparable sticks, not so
- * large that a clearly worse fit (size, level) wins. The total stays capped
- * at 100, and the engine always adds one stick of another brand.
+ * heavily. A stick below the player's level range does not earn it, so the
+ * bonus never lifts a stick that is too simple. The engine puts the brand first
+ * anyway when the player wants to stay with it (engine.ts).
  */
 export const BRAND_PREFERENCE_POINTS = 12;
 
+export type ProductScore = {
+  breakdown: ScoreBreakdown;
+  reasons: AdviceReason[];
+  /**
+   * The uncapped total, used for ranking. The shown total is capped at 100,
+   * which would otherwise make sticks of the preferred brand tie at 100.
+   */
+  rankScore: number;
+  /** How many levels simpler the stick is than the player (0 = same level). */
+  levelGap: number;
+  /** The player is above the stick's level range (see isTooSimple). */
+  tooSimple: boolean;
+};
+
 /**
- * Scores a product that already passed the hard filters. Commercial fields
+ * Scores a product on its own characteristics. Size is not scored: it is a
+ * hard filter, checked after the characteristics. Commercial fields
  * (margin, affiliate, sponsoring) are deliberately not an input here.
  */
 export function scoreProduct(
   product: Product,
   ctx: PlayerContext,
   sizeBasisOverride?: SizeBasis,
-): { breakdown: ScoreBreakdown; reasons: AdviceReason[] } {
+): ProductScore {
   const weights = ROUTE_WEIGHTS[ctx.route];
   const bow = product.bowProfile?.value ?? 'midbow';
   const sizeMatch = matchSize(product, ctx.sizeAdvice);
@@ -341,8 +371,11 @@ export function scoreProduct(
       inch: ctx.sizeAdvice.alternativeInch,
     });
   }
+  const tooSimple = isTooSimple(product, ctx.band);
   const brandMatch =
-    ctx.preferredBrand !== null && product.brand === ctx.preferredBrand;
+    ctx.preferredBrand !== null &&
+    product.brand === ctx.preferredBrand &&
+    !tooSimple;
   if (brandMatch) {
     reasons.push({
       code: 'BRAND_PREFERENCE',
@@ -352,10 +385,12 @@ export function scoreProduct(
       },
     });
   }
-  reasons.push({
-    code: 'EXPERIENCE_FIT',
-    evidence: { kind: 'spec', field: 'experienceLevel' },
-  });
+  if (experience.gap === 0) {
+    reasons.push({
+      code: 'EXPERIENCE_FIT',
+      evidence: { kind: 'spec', field: 'experienceLevel' },
+    });
+  }
   if (experience.controlFocus) {
     reasons.push({
       code: 'CONTROL_FOCUS',
@@ -395,7 +430,6 @@ export function scoreProduct(
   }
 
   const breakdown: ScoreBreakdown = {
-    sizeFit: round1(weights.size * SIZE_FIT[sizeBasis]),
     experienceFit: round1(weights.experience * experience.fit),
     skillGoalFit: round1(weights.goal * goal.fit),
     bowFit: round1(weights.bow * bowFitValue),
@@ -406,19 +440,22 @@ export function scoreProduct(
     total: 0,
     explanationTags: reasons.map((reason) => reason.code),
   };
-  breakdown.total = round1(
-    Math.min(
-      100,
-      breakdown.sizeFit +
-        breakdown.experienceFit +
-        breakdown.skillGoalFit +
-        breakdown.bowFit +
-        breakdown.feelFit +
-        breakdown.budgetFit +
-        breakdown.availabilityFit +
-        breakdown.brandFit,
-    ),
+  const rankScore = round1(
+    breakdown.experienceFit +
+      breakdown.skillGoalFit +
+      breakdown.bowFit +
+      breakdown.feelFit +
+      breakdown.budgetFit +
+      breakdown.availabilityFit +
+      breakdown.brandFit,
   );
+  breakdown.total = Math.min(100, rankScore);
 
-  return { breakdown, reasons };
+  return {
+    breakdown,
+    reasons,
+    rankScore,
+    levelGap: experience.gap,
+    tooSimple,
+  };
 }

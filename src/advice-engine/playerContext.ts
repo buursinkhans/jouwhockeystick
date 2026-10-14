@@ -7,16 +7,93 @@ import {
 import { getSizeAdvice } from './sizeAdvice';
 import type {
   ExperienceBand,
+  LevelBasis,
   PlayerContext,
   StickFeel,
   WeightedGoal,
 } from './types';
 
-const BAND_BY_ROUTE: Record<AdviceRoute, ExperienceBand> = {
-  START: 'starter',
-  ONTWIKKEL: 'developing',
-  PRESTATIE: 'advanced',
-};
+const BAND_ORDER: readonly ExperienceBand[] = [
+  'starter',
+  'developing',
+  'advanced',
+];
+
+/** Up to and including 15: the age band sets the starting level. */
+const JUNIOR_AGE_BANDS: ReadonlyArray<AdviceAnswers['age_band']> = [
+  'under_8',
+  '8_10',
+  '11_12',
+  '13_15',
+];
+/** Under 11: starts as a beginner and gets a soft stick by default. */
+const YOUNG_AGE_BANDS: ReadonlyArray<AdviceAnswers['age_band']> = [
+  'under_8',
+  '8_10',
+];
+const FIRST_SEASON: ReadonlyArray<AdviceAnswers['experience_seasons']> = [
+  'trial',
+  'lt_1',
+];
+const PERFORMANCE_LEVELS: ReadonlyArray<
+  NonNullable<AdviceAnswers['playing_level']>
+> = ['selection', 'senior_competitive', 'top'];
+const CONFIDENT_FIRST_TOUCH: ReadonlyArray<
+  NonNullable<AdviceAnswers['first_touch_confidence']>
+> = ['good_under_pressure', 'very_confident'];
+
+/**
+ * A clear sign the player performs above the age-based starting level: the
+ * performance route, a selection/competitive/top team, or 4+ seasons with a
+ * confident first touch.
+ */
+export function hasPerformanceSignal(
+  answers: AdviceAnswers,
+  route: AdviceRoute,
+): boolean {
+  return (
+    route === 'PRESTATIE' ||
+    (answers.playing_level !== undefined &&
+      PERFORMANCE_LEVELS.includes(answers.playing_level)) ||
+    (answers.experience_seasons === '4_plus' &&
+      answers.first_touch_confidence !== undefined &&
+      CONFIDENT_FIRST_TOUCH.includes(answers.first_touch_confidence))
+  );
+}
+
+/**
+ * Owner's rule (2026-10-14): the player's level comes from the answers, not
+ * from the route, which only decides how many questions are asked.
+ * - Less than one season: beginner.
+ * - Juniors (up to 15): the age sets the starting level, under 11 beginner,
+ *   11–15 developing.
+ * - From 16: developing (one season or more).
+ * - A performance signal adds one level, unless the basics are still being
+ *   learned.
+ */
+export function derivePlayerBand(
+  answers: AdviceAnswers,
+  route: AdviceRoute,
+): { band: ExperienceBand; basis: LevelBasis } {
+  if (FIRST_SEASON.includes(answers.experience_seasons)) {
+    return {
+      band: 'starter',
+      basis: { base: 'first_season', steppedUp: false },
+    };
+  }
+  const junior = JUNIOR_AGE_BANDS.includes(answers.age_band);
+  const base: ExperienceBand = YOUNG_AGE_BANDS.includes(answers.age_band)
+    ? 'starter'
+    : 'developing';
+  const stillLearning =
+    answers.first_touch_confidence === 'learning' ||
+    answers.core_skills_stage === 'practicing_basics';
+  const steppedUp = hasPerformanceSignal(answers, route) && !stillLearning;
+  const band = steppedUp
+    ? (BAND_ORDER[BAND_ORDER.indexOf(base) + 1] ?? base)
+    : base;
+  return { band, basis: { base: junior ? 'age' : 'seasons', steppedUp } };
+}
 
 const GOAL_BY_FUN_STYLE: Record<
   NonNullable<AdviceAnswers['fun_style']>,
@@ -114,6 +191,13 @@ function resolveFeelPreference(
   if (problems.includes('too_soft') || problems.includes('little_power')) {
     return 'direct';
   }
+  // Young players without a preference: soft, unless they clearly perform above their age.
+  if (
+    YOUNG_AGE_BANDS.includes(answers.age_band) &&
+    !hasPerformanceSignal(answers, route)
+  ) {
+    return 'soft';
+  }
   return null;
 }
 
@@ -134,10 +218,13 @@ export function buildPlayerContext(
         answers.skill_dragflick !== 'none'
       : (answers.primary_goals ?? []).includes('dragflick');
 
+  const level = derivePlayerBand(answers, route);
+
   return {
     answers,
     route,
-    band: BAND_BY_ROUTE[route],
+    band: level.band,
+    levelBasis: level.basis,
     sizeAdvice: getSizeAdvice(answers.height_cm, {
       heightUncertain: answers.height_uncertain === 'yes',
       currentLengthInch: currentLength,

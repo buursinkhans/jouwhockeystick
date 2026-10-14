@@ -4,7 +4,9 @@ import type { AdviceAnswers } from '@/advice-engine/answers';
 import type { AdviceResult } from '@/advice-engine/types';
 import {
   ADVICE_DISCLAIMER,
+  bestModelOtherSizeText,
   brandNotFoundText,
+  playerLevelText,
   NO_AMBITIOUS_TEXT,
   NO_MATCH_TEXT,
   ROUTE_RESULT_COPY,
@@ -79,6 +81,9 @@ export function QuizResult({
           {title}
         </h2>
         {hasResults && <p className="mt-2 text-inkt/80">{copy.summary}</p>}
+        <p className="mt-2 text-sm text-inkt/80">
+          {playerLevelText(advice.playerLevel)}
+        </p>
         {hasResults &&
           advice.brandPreference &&
           !advice.brandPreference.matched && (
@@ -118,6 +123,14 @@ export function QuizResult({
               : 'Onze aanbevelingen'}
           </h3>
           <PartnerLinkNote />
+          {advice.bestModelOtherSize && (
+            <p className="mt-2 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
+              {bestModelOtherSizeText(
+                advice.bestModelOtherSize,
+                advice.sizeAdvice,
+              )}
+            </p>
+          )}
           {advice.isUncertain && (
             <p className="mt-2 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">
               Dit advies is minder zeker dan we zouden willen. Lees de

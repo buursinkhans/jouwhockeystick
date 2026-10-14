@@ -2,7 +2,7 @@ import { getModelYear } from '@/catalog/modelYear';
 import type { Product } from '@/catalog/types';
 import type { AdviceAnswers } from './answers';
 import { passesExperience } from './hardFilters';
-import { BOW_RANK, deriveAdviceRules } from './productRules';
+import { BOW_RANK, deriveAdviceRules, isTooSimple } from './productRules';
 import type { CautionCode, PlayerContext, ResultRole } from './types';
 
 const HIGH_CARBON_CAUTION_THRESHOLD = 50;
@@ -37,6 +37,9 @@ export function getCautions(
   // outside the player's level.
   if (role === 'same_brand' && !passesExperience(product, ctx)) {
     cautions.push('LEVEL_MISMATCH');
+  }
+  if (isTooSimple(product, ctx.band)) {
+    cautions.push('BELOW_LEVEL');
   }
   if (
     ctx.budget !== null &&

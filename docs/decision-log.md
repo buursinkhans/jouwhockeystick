@@ -637,3 +637,54 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 ## 2026-10-14 — "Waarom zoek je nu een nieuwe stick?" alleen bij een huidige stick
 
 **Wat (keuze eigenaar):** deze vraag verschijnt alleen als de speler al een stick heeft, en is dan verplicht. Zonder stick is het altijd een eerste stick, dus de vraag zegt dan niets. De optie "Eerste stick" is uit de antwoorden gehaald. De waarde `first_stick` blijft in het schema, zodat oude opgeslagen antwoorden geldig blijven. De adviesregels gebruiken deze vraag niet; alleen de uitleg verandert.
+
+## 2026-10-14 — `ruleSetVersion v11-2026-10-14`: eerst de stick, dan de maat; niveau uit de antwoorden
+
+**Aanleiding:** de eigenaar zag dat de stickwijzer kinderen in een selectieteam, met 4 of meer seizoenen, vaak een beginnersstick adviseerde. Een doorrekening van 702 scenario's (3 spelertypes × 13 lengtes × 3 routes × 6 budgetten) bevestigde dat:
+- Het niveau kwam alleen uit de gekozen route. Speelniveau, seizoenen, trainingen en techniekcijfers telden niet mee.
+- Maat leverde iedere stick die door het filter kwam dezelfde 20–30 punten op.
+- Een beginnersstick verloor bij een gevorderde speler maar 8 punten en heette dan nog "beste match".
+- In de prestatieroute gaf de stickwijzer voor kinderen tot 33 inch geen advies, omdat er in die maten alleen beginnerssticks zijn.
+
+**Wat (keuze eigenaar):**
+- **Niveau uit de antwoorden.** De route bepaalt alleen nog welke vragen we stellen (`derivePlayerBand` in `playerContext.ts`).
+  - Minder dan één seizoen: beginner.
+  - Jeugd tot en met 15: de leeftijd is het uitgangspunt. Onder 11 jaar beginner, 11–15 jaar gevorderd.
+  - Vanaf 16: gevorderd.
+  - Eén niveau hoger bij een prestatiesignaal: de prestatieroute, selectie-, competitief of topniveau, of 4+ seizoenen met een zekere aanname. Niet als de speler de aanname of de basis nog leert.
+  - Kinderen onder 11 zonder voorkeur voor stickgevoel krijgen "zacht", tenzij er een prestatiesignaal is.
+- **Maat is geen score meer, maar de laatste controle.** De engine kiest eerst op de stick zelf (niveau, doelen, bow-profiel, gevoel, budget) en kijkt daarna of de stick er in de geadviseerde maat is. De maatpunten zijn verdeeld over de kenmerken:
+
+  | Onderdeel | Start | Ontwikkel | Prestatie |
+  |---|---|---|---|
+  | Ervaring / controle | 35 | 30 | 20 |
+  | Doel / acties | 20 | 25 | 30 |
+  | Bow-profiel | 15 | 20 | 20 |
+  | Stickgevoel | 15 | 15 | 20 |
+  | Budget | 15 | 10 | 7 |
+  | Beschikbaarheid | 0 | 0 | 3 |
+
+  Bij een gelijke score gaat de geadviseerde maat voor de tweede maat. Een langere stick dan geadviseerd blijft bij kinderen uitgesloten.
+- **Te simpel kost punten, te moeilijk blijft een filter.**
+  - Op niveau 100% van de ervaringspunten, één niveau eenvoudiger 50%, twee niveaus eenvoudiger 10%.
+  - Een stick buiten het niveaubereik naar beneden (een beginnersstick voor een ervaren speler) valt niet meer weg, maar is nooit "beste match". Hij heet dan "dichtstbijzijnde optie", met de melding `BELOW_LEVEL`.
+  - De beste match is de hoogst scorende stick binnen het niveaubereik die minstens 70 haalt.
+  - Een stick boven het niveau van de speler blijft uitgesloten, net als de veiligheidsregels.
+- **Eerlijk als de beste stick niet in de maat bestaat** (`bestModelOtherSize`). Past een stick qua niveau beter, of scoort hij minstens 10 punten hoger, maar bestaat hij niet in de geadviseerde maat, dan noemt het resultaat hem. Het gaat om sticks met een maat binnen 2 inch van het advies. Bij kinderen staat erbij dat ze geen langere maat moeten kiezen.
+- **Veel te goedkoop telt mee.** Kost een stick minder dan de helft van de onderkant van het budget, dan krijgt hij 40% van de budgetpunten (was 80%).
+- **Merkbonus.**
+  - De +12 geldt alleen voor sticks binnen het niveaubereik van de speler.
+  - Er wordt gerangschikt op de score zonder plafond. Het plafond van 100 maakte sticks van het eigen merk vaak gelijk, waarna de goedkoopste won in plaats van de best passende.
+  - Bij merkvoorkeur gaat een stick van dat merk op niveau (desnoods boven budget) voor een stick van dat merk die te simpel is.
+- **Resultaat:** het resultaat noemt nu voor welk niveau we adviseren, en waarom.
+- **Methodiek:** de methodiekpagina is bijgewerkt.
+
+**Afwijking van de specificatie:** §6.2 geeft maat 20–30 punten. Dat volgen we bewust niet meer (zie hierboven).
+
+**Effect** (dezelfde 702 scenario's, met de catalogus van vandaag):
+- Selectiekind tot 158 cm, route "Volgende stick": een beginnersstick als "beste match" in 1 van de 60 gevallen (was 50). Zijn er in die maat alleen beginnerssticks (tot en met 33 inch), dan heet de stick nu "dichtstbijzijnde optie", met de melding erbij.
+- Prestatieroute voor kinderen tot 158 cm: altijd een advies (was 50 van de 60 keer geen advies).
+- Beginner (minder dan één seizoen) in de prestatieroute: beginnerssticks (was: sticks voor gevorderden).
+- Volwassen ervaren speler, route "Volgende stick": in 13 van de 18 gevallen een stick voor ervaren spelers (was 0).
+
+**Nog open:** het gat in de catalogus (geen gevorderde juniorsticks tot en met 33 inch). Dit is een aparte opdracht voor de Catalogus-aanvuller.

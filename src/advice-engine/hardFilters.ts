@@ -11,7 +11,6 @@ import type { NoMatchReason, PlayerContext } from './types';
 
 type Stage = Exclude<NoMatchReason, 'length'>;
 
-/** Publication blockers from spec §11: missing bow, source, model year, stock or verification. */
 /**
  * Publication blockers from spec §11, plus: the stickwijzer advises field
  * sticks only. Indoor sticks have their own section without advice rules.
@@ -23,16 +22,18 @@ function passesData(product: Product, ctx: PlayerContext): boolean {
   );
 }
 
+/**
+ * Excludes a stick that is meant for a higher level than the player (too
+ * hard). A stick that is too simple stays in and loses points in the score
+ * instead (owner's rule, 2026-10-14), so a no-match never happens just
+ * because the player is ahead of what the catalog has in that size.
+ */
 export function passesExperience(
   product: Product,
   ctx: PlayerContext,
 ): boolean {
   const rules = deriveAdviceRules(product);
-  const player = BAND_ORDER.indexOf(ctx.band);
-  if (
-    player < BAND_ORDER.indexOf(rules.minBand) ||
-    player > BAND_ORDER.indexOf(rules.maxBand)
-  ) {
+  if (BAND_ORDER.indexOf(ctx.band) < BAND_ORDER.indexOf(rules.minBand)) {
     return false;
   }
   if (ctx.route === 'START') {
@@ -79,7 +80,7 @@ const NON_LENGTH_STAGES: ReadonlyArray<
   ['availability', passesAvailability],
 ];
 
-/** Everything except the length check — used for the shorter-size fallback. */
+/** Everything except the length check — the stick's own characteristics. */
 export function passesNonLengthFilters(
   product: Product,
   ctx: PlayerContext,
@@ -111,9 +112,32 @@ export function passesAllExcept(
 }
 
 /**
- * Applies the hard filters in the spec's decision order (§2.2) and reports
- * the first stage that left no candidates, so the UI can explain a no-match
- * with the actual cause instead of a generic message.
+ * The first filter a product fails, in the order applyHardFilters uses, or
+ * null when it passes all of them.
+ */
+export function firstFailingStage(
+  product: Product,
+  ctx: PlayerContext,
+): NoMatchReason | null {
+  if (!passesData(product, ctx)) {
+    return 'data';
+  }
+  for (const [stage, passes] of NON_LENGTH_STAGES) {
+    if (!passes(product, ctx)) {
+      return stage;
+    }
+  }
+  return matchSize(product, ctx.sizeAdvice) === 'none' ? 'length' : null;
+}
+
+/**
+ * Applies the hard filters and reports the first stage that left no
+ * candidates, so the UI can explain a no-match with the actual cause.
+ *
+ * Owner's rule (2026-10-14): the stick is chosen on its own characteristics
+ * first, and only then do we check whether it exists in the advised size.
+ * So length is the last stage; a "length" no-match means sticks fit the
+ * player but not in this size.
  */
 export function applyHardFilters(
   products: Product[],
@@ -134,18 +158,18 @@ export function applyHardFilters(
     return noMatch('data');
   }
 
-  candidates = candidates.filter(
-    (product) => matchSize(product, ctx.sizeAdvice) !== 'none',
-  );
-  if (candidates.length === 0) {
-    return noMatch('length');
-  }
-
   for (const [stage, passes] of NON_LENGTH_STAGES) {
     candidates = candidates.filter((product) => passes(product, ctx));
     if (candidates.length === 0) {
       return noMatch(stage);
     }
+  }
+
+  candidates = candidates.filter(
+    (product) => matchSize(product, ctx.sizeAdvice) !== 'none',
+  );
+  if (candidates.length === 0) {
+    return noMatch('length');
   }
 
   return {

@@ -47,7 +47,8 @@ export default function MethodiekPage() {
       </dl>
       <p className="mt-3 text-inkt/80">
         We stellen een route voor op basis van leeftijdsgroep en ervaring, maar
-        jij bepaalt welke route je volgt.
+        jij bepaalt welke route je volgt. De route bepaalt welke vragen we
+        stellen; het niveau van het advies halen we uit je antwoorden.
       </p>
 
       <h2 className="mt-10 text-xl font-bold">Lengteadvies</h2>
@@ -98,11 +99,7 @@ export default function MethodiekPage() {
       <h2 className="mt-10 text-xl font-bold">
         Hoe we de overgebleven sticks wegen
       </h2>
-      <p className="mt-3 text-inkt/80">
-        Elke stick krijgt maximaal 100 punten. De verdeling verschilt per route:
-        bij beginners weegt maat en controle zwaarder, bij gevorderden de
-        gewenste acties.
-      </p>
+      <p className="mt-3 text-inkt/80">{METHODIEK.weightsIntro}</p>
       <div className="mt-4 overflow-x-auto">
         <table className="w-full border-collapse text-left text-sm">
           <caption className="sr-only">Puntenverdeling per adviesroute</caption>

@@ -5,6 +5,14 @@ import type { SizeAdvice } from './sizeAdvice';
 export type ExperienceBand = 'starter' | 'developing' | 'advanced';
 export type StickFeel = 'soft' | 'balanced' | 'direct';
 
+/** How the player's level was set (shown on the result). */
+export type LevelBasis = {
+  /** Where the starting level came from. */
+  base: 'first_season' | 'age' | 'seasons';
+  /** One level up for a performance signal. */
+  steppedUp: boolean;
+};
+
 /** Product fields a reason can point at, so the UI can show that field's source and check date. */
 export type SpecField =
   | 'lengthsInches'
@@ -51,11 +59,15 @@ export type CautionCode =
   | 'BIG_BOW_CHANGE'
   | 'DIRECT_FEEL_VIBRATION'
   | 'ABOVE_BUDGET'
-  | 'LEVEL_MISMATCH';
+  | 'LEVEL_MISMATCH'
+  /** The stick is meant for a simpler level than the player's. */
+  | 'BELOW_LEVEL';
 
-/** Points per component (already weighted for the route); `total` is 0–100. */
+/**
+ * Points per component (already weighted for the route); `total` is 0–100.
+ * Size is not a component: it is checked as a hard filter.
+ */
 export type ScoreBreakdown = {
-  sizeFit: number;
   experienceFit: number;
   skillGoalFit: number;
   feelFit: number;
@@ -114,7 +126,9 @@ export type WeightedGoal = { goal: Goal; weight: number };
 export type PlayerContext = {
   answers: AdviceAnswers;
   route: AdviceRoute;
+  /** Player level from the answers (age, seasons, performance signals), not from the route. */
   band: ExperienceBand;
+  levelBasis: LevelBasis;
   sizeAdvice: SizeAdvice;
   goals: WeightedGoal[];
   /** Still building first touch / basics: control weighs heavier than stiffness. */
@@ -136,6 +150,8 @@ export type AdviceResult = {
   catalogVersion: string;
   generatedAt: string;
   route: AdviceRoute;
+  /** The level the advice was made for, and how it was set from the answers. */
+  playerLevel: { band: ExperienceBand; basis: LevelBasis };
   sizeAdvice: SizeAdvice;
   /** At most three: best match (or closest option), safe choice, ambitious choice. */
   results: AdviceResultItem[];
@@ -154,6 +170,17 @@ export type AdviceResult = {
   } | null;
   /** Null when an ambitious choice is shown or there are no results. */
   noAmbitiousReason: NoAmbitiousReason | null;
+  /**
+   * The stick that fits the player best when it does not exist in the
+   * advised size and is clearly better than the best stick that does
+   * (`higher_level`: it is at the player's level and the sticks in the size
+   * are simpler; `better_fit`: a clear score lead). Null otherwise.
+   */
+  bestModelOtherSize: {
+    product: Product;
+    score: number;
+    reason: 'higher_level' | 'better_fit';
+  } | null;
   excludedCount: number;
   methodUrl: string;
 };
