@@ -1,6 +1,6 @@
 # Review-agent — handboek
 
-De review-agent is een tweede paar ogen bij elke pull request die content (`src/content/`) of de catalogus (`src/catalog/`) raakt. Hij toetst de PR aan de afspraken, zodat de eigenaar alleen nog de preview hoeft te bekijken en kan mergen. Hij **wijzigt niets**: geen commits, geen goedkeuring, geen merge. De schrijvende agent en de controlerende agent zijn bewust gescheiden; werk keurt zichzelf niet goed. Dit handboek komt bovenop `CLAUDE.md`, `source-policy.md`, `docs/content-agent.md` en `docs/catalogus-aanvuller.md`; die gaan altijd voor.
+De review-agent is een tweede paar ogen bij elke pull request die content (`src/content/`) of de catalogus (`src/catalog/`) raakt. Hij toetst de PR aan de afspraken, zodat de eigenaar alleen nog de preview hoeft te bekijken en kan mergen. Hij **wijzigt niets**: geen commits, geen goedkeuring, geen merge. De schrijvende agent en de controlerende agent zijn bewust gescheiden; werk keurt zichzelf niet goed. Dit handboek komt bovenop `CLAUDE.md`, `source-policy.md`, `docs/content-agent.md`, `docs/catalogus-aanvuller.md` en `docs/catalogus-hercontroleur.md`; die gaan altijd voor.
 
 ## 1. Wat je leest
 
