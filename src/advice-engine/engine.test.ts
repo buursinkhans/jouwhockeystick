@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CATALOG_VERSION, getAllProducts } from '@/catalog';
+import { getModelYear } from '@/catalog/modelYear';
 import { BEST_MATCH_MIN_SCORE, getAdvice } from './engine';
 import { applyHardFilters } from './hardFilters';
 import { buildPlayerContext } from './playerContext';
@@ -349,14 +350,21 @@ describe('unknown model year', () => {
     expect(advice.results[0]?.cautions).toContain('MODEL_YEAR_UNCONFIRMED');
   });
 
-  it('now offers the bol.com junior sticks for a 33-inch child in the real catalog', () => {
-    // 145 cm → 33 inch: only bol.com listings without a model year exist in 33".
+  it('offers sticks for a 33-inch child in the real catalog, with the caution where the year is missing', () => {
+    // 145 cm → 33 inch (or 32). Size is not scored, so 32-inch sticks with a
+    // known model year compete on equal terms with the 33-inch listings.
     const advice = getAdvice(buildStartAnswers({ height_cm: 145 }), catalog);
 
-    expect(advice.sizeAdvice.primaryInch).toBe(33);
+    expect(advice.sizeAdvice).toMatchObject({
+      primaryInch: 33,
+      alternativeInch: 32,
+    });
     expect(advice.results.length).toBeGreaterThan(0);
     for (const result of advice.results) {
-      expect(result.cautions).toContain('MODEL_YEAR_UNCONFIRMED');
+      expect([32, 33]).toContain(result.sizeInch);
+      if (getModelYear(result.product) === undefined) {
+        expect(result.cautions).toContain('MODEL_YEAR_UNCONFIRMED');
+      }
     }
   });
 });

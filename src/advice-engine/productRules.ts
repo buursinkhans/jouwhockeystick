@@ -96,6 +96,31 @@ export function deriveAdviceRules(product: Product): ProductAdviceRules {
   };
 }
 
+/**
+ * How many levels simpler the stick is than the player (0 = same level).
+ * A stick above the player's level never reaches the score: the experience
+ * filter removes it, so the result is never negative for a scored stick.
+ */
+export function levelGap(product: Product, band: ExperienceBand): number {
+  return Math.max(
+    0,
+    BAND_ORDER.indexOf(band) -
+      BAND_ORDER.indexOf(deriveAdviceRules(product).homeBand),
+  );
+}
+
+/**
+ * The player is above the level range the stick is positioned for (e.g. a
+ * beginner stick for an experienced player). Such a stick can still be
+ * shown, but is never a best match and gets no brand bonus.
+ */
+export function isTooSimple(product: Product, band: ExperienceBand): boolean {
+  return (
+    BAND_ORDER.indexOf(band) >
+    BAND_ORDER.indexOf(deriveAdviceRules(product).maxBand)
+  );
+}
+
 export type AdviceBlocker =
   | 'unverified'
   | 'missing_bow'
