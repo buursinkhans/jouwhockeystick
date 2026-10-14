@@ -18,7 +18,8 @@
     "content:schedule": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/content-schedule.ts",
     "catalog:gaps": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-gaps.ts",
     "analytics:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/conversion-report.ts",
-    "market:scan": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/market-scan.ts"
+    "market:scan": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/market-scan.ts",
+    "catalog:recheck": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-recheck.ts"
   },
   "dependencies": {
     "next": "16.3.6",

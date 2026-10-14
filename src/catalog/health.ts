@@ -32,10 +32,10 @@ export type CatalogHealthReport = {
   nextRecheckDue: string | null;
 };
 
-type SourcedField = { field: string; lastVerifiedAt: string };
+export type SourcedField = { field: string; lastVerifiedAt: string };
 
 /** Every top-level property that carries a lastVerifiedAt. */
-function sourcedFields(product: Product): SourcedField[] {
+export function sourcedFields(product: Product): SourcedField[] {
   const fields: SourcedField[] = [];
   for (const [field, value] of Object.entries(product)) {
     if (
@@ -50,13 +50,13 @@ function sourcedFields(product: Product): SourcedField[] {
   return fields;
 }
 
-function addMonths(date: Date, months: number): Date {
+export function addMonths(date: Date, months: number): Date {
   const result = new Date(date);
   result.setMonth(result.getMonth() + months);
   return result;
 }
 
-function toIsoDate(date: Date): string {
+export function toIsoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 

@@ -568,3 +568,13 @@ De adviesregels zelf zijn niet veranderd.
 **Kort adres:** het account is persoonlijk (de zakelijke variant vraagt bedrijfsverificatie) en heeft geen klikbare link. De bio noemt daarom `jouwhockeystick.nl/tiktok`; dat adres stuurt tijdelijk (307) door naar `/stickwijzer` met UTM-tags voor TikTok (`next.config.ts`), zodat het bezoek in PostHog te herkennen is.
 
 **Bewust niet:** de TikTok-pixel of een koppeling met TikTok Business (vraagt cookietoestemming en een andere privacyverklaring), promoten, bedrijfsverificatie.
+
+## 2026-10-14 — Catalogus-hercontroleur
+
+**Aanleiding:** de catalogus-controle meldt sticks die aan hun kwartaalcontrole toe zijn (bronbeleid §3), maar niemand voerde die uit. Bijna de hele catalogus (±87 sticks, gecontroleerd tussen 26 september en 13 oktober) valt tussen 26 december en 13 januari tegelijk aan.
+
+**Wat:** `src/catalog/recheck.ts` (met tests) en `npm run catalog:recheck` kiezen elke week de sticks waarvan de kwartaalcontrole binnen 28 dagen valt, oudste eerst, hooguit 12. De workflow "Catalogus-hercontrole" draait elke donderdag; Claude controleert ze opnieuw bij de bron volgens `docs/catalogus-hercontroleur.md` en de workflow opent één PR (`hercontrole/<datum>`). Eén hercontrole-PR tegelijk; staat er nog een open, dan slaat hij de week over. Door de horizon van 28 dagen is de eerste run op donderdag 3 december. Bij 12 per week is de laatste groep (gecontroleerd 10–13 oktober) eind januari klaar, een paar weken na de vervaldatum; dat is zonder gevolg voor de site (verbergen gebeurt pas na 12 maanden). Sneller kan door `RECHECK_BATCH_SIZE` te verhogen.
+
+**Gaten vullen:** per stick noemt de lijst welke gegevens ontbreken (carbonpercentage, bow-profiel, modeljaar). Noemt de bron ze nu wel, dan vult de hercontroleur ze in. Dat raakt het punt van 13 oktober: een onbekend carbonpercentage kost vooral Grays-sticks punten in het advies.
+
+**Bewust niet:** sticks toevoegen of verwijderen, `bolNotSold`/`bolProductUrl` aanpassen, waarden schatten. Een onbereikbare of tegenstrijdige bron laat het veld en de datum ongemoeid en komt onder *Voor jou*.
