@@ -25,6 +25,9 @@ export const tkMaxiJunior: Product = {
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl:
+    'https://www.passasports.nl/tk-maxi-junior-126800-pink',
   experienceLevel: {
     value: 'beginner',
     source: 'partner-shop',

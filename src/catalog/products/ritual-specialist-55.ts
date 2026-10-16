@@ -25,6 +25,9 @@ export const ritualSpecialist55: Product = {
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl:
+    'https://www.passasports.nl/ritual-specialist-55-specialist5526',
   experienceLevel: {
     value: 'gevorderd',
     source: 'editorial-estimate',

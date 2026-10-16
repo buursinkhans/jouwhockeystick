@@ -25,6 +25,8 @@ export const adidasFabela302627: Product = {
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl: 'https://www.passasports.nl/adidas-fabela-30-km1348',
   experienceLevel: {
     value: 'beginner',
     source: 'partner-shop',

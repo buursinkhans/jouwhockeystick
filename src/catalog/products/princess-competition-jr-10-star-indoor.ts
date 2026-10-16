@@ -22,6 +22,9 @@ export const princessCompetitionJr10StarIndoor: Product = {
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl:
+    'https://www.passasports.nl/princess-competition-10-star-lowbow-indoor-junior-33066060000',
   experienceLevel: {
     value: 'beginner',
     source: 'editorial-estimate',

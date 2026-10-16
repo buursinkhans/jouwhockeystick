@@ -28,6 +28,9 @@ export const graysAc700DynabowS: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-ac700-dynabow-s-23244',
   experienceLevel: {
     value: 'ervaren',
     source: 'editorial-estimate',

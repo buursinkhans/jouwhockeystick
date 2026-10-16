@@ -28,6 +28,9 @@ export const graysAc500DynabowS: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-ac500-dynabow-s-23246',
   experienceLevel: {
     value: 'gevorderd',
     source: 'brand-website',

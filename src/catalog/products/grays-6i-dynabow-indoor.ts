@@ -25,6 +25,9 @@ export const grays6iDynabowIndoor: Product = {
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-6i-dynabow-indoor-27041',
   experienceLevel: {
     value: 'beginner',
     source: 'partner-shop',

@@ -12,6 +12,8 @@ export const graysJb10Composite: Product = {
     'https://www.grays-hockey.eu/cdn/shop/files/2705263JB10BlueBackMain.jpg?v=1779972697',
   imageSourceUrl:
     'https://www.grays-hockey.eu/collections/jb-jumbow-composite-hockey-sticks/products/jb10-composite-hockey-stick-1',
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-jb-10-27052',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',

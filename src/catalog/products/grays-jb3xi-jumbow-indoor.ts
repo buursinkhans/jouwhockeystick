@@ -24,6 +24,8 @@ export const graysJb3xiJumbowIndoor: Product = {
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-jb3-xi-jumbow-27077',
   experienceLevel: {
     value: 'beginner',
     source: 'partner-shop',

@@ -24,6 +24,8 @@ export const y1LbX2: Product = {
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl: 'https://www.passasports.nl/y1-lb-x2-st-lbw-x2-26',
   experienceLevel: {
     value: 'ervaren',
     source: 'partner-shop',

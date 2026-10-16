@@ -725,3 +725,25 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 - **Commissie:** wordt nergens in de code of tekst aangenomen.
 
 **Nog open:** de privacytekst noemt alleen het bol.com Partnerprogramma. Die passen we alleen aan op uitdrukkelijke opdracht van de eigenaar.
+
+## 2026-10-16 — twee koopknoppen als bol.com én PassaSports de stick verkopen; privacytekst bijgewerkt
+
+**Wat (keuze eigenaar):**
+- **Koopknoppen:** een stick krijgt een knop voor elke winkel die hem verkoopt.
+  - Bij beide winkels: "Bekijk en koop op bol.com" (gevulde knop) en "Bekijk en koop bij PassaSports" (omlijnde knop).
+  - Bij één winkel: alleen die knop.
+  - De prijsregel wordt dan "bekijk actuele prijs bij bol.com of PassaSports".
+- **Sticks gekoppeld:** 17 sticks uit de catalogus die PassaSports ook verkoopt, hebben nu een `passaSportsProductUrl`, gecontroleerd op 2026-10-16: pagina bestaat, juiste model, leverbaar. Het gaat om:
+  - Grays: 4i, 6i, AC500, AC600, AC700, AC800, DB 10, JB 10, JB3Xi en PB 11+;
+  - adidas Fabela .30;
+  - Osaka Pro Tour 40 2.0 Lowbow;
+  - Princess Competition 10 Star LowBow Indoor Junior;
+  - Reece Noxx 600, Ritual Specialist 55, TK Maxi Junior en Y1 LB X.2.
+- **Bewust niet gekoppeld (twijfel):**
+  - Indian Maharadja Blade 10: PassaSports verkoopt de ProBow, wij hebben de midbow.
+  - Indian Maharadja Pro 10 Junior en JDH X93 Pro Bow: meerdere jaargangen of uitvoeringen.
+  - Osaka Pro Tour GF 2.0 Junior: PassaSports noemt een "Grow Bow", wij een midbow.
+  - TK 3 Control Bow Junior Indoor: modelnaam niet eenduidig.
+  - Princess Premium 4K 10 Star: bij PassaSports alleen als zaalstick.
+- **TK Maxi Junior:** de link gaat naar de roze uitvoering. PassaSports heeft een aparte pagina per kleur.
+- **Privacytekst** (in opdracht van de eigenaar): een alinea erbij over PassaSports en TradeTracker, die na een klik cookies kunnen plaatsen voor de toeschrijving. De doorklikzin noemt nu ook PassaSports.

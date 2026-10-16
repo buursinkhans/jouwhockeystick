@@ -34,6 +34,7 @@ export function ProductCard({ product }: { product: Product }) {
         <ProductNotice
           notSoldAtBol={product.bolNotSold !== undefined}
           passaSportsOnly={isPassaSportsOnly(product)}
+          alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
         />
       </div>
       <div className="mt-4">
@@ -45,7 +46,6 @@ export function ProductCard({ product }: { product: Product }) {
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
-          passaSportsOnly={isPassaSportsOnly(product)}
           passaSportsProductUrl={product.passaSportsProductUrl}
           placement="catalogus"
           stack

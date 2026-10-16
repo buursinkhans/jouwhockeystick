@@ -28,6 +28,9 @@ export const graysAc600ProbowS: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-ac600-probow-s-23245',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',

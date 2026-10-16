@@ -25,6 +25,9 @@ export const osakaProTour4020: Product = {
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl:
+    'https://www.passasports.nl/osaka-pro-tour-40-20-lowbow-stk00097',
   experienceLevel: {
     value: 'gevorderd',
     source: 'partner-shop',

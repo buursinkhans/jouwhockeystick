@@ -12,6 +12,8 @@ export const graysPb11PlusComposite: Product = {
     'https://www.grays-hockey.eu/cdn/shop/files/HACA26Composite_20Sticks_20PB11_2b_20Probow_20Plus_20Hockey_20Stick_20Turquoise.jpg?v=1779972721',
   imageSourceUrl:
     'https://www.grays-hockey.eu/collections/pb-probow-plus-composite-hockey-sticks/products/pb11-plus-composite-hockey-stick',
+  // Also sold at PassaSports (checked 2026-10-16): second shop button.
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-pb-11-27060',
   experienceLevel: {
     value: 'ervaren',
     source: 'brand-website',

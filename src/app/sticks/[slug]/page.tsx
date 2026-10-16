@@ -112,6 +112,7 @@ export default async function ProductPage({
         <ProductNotice
           notSoldAtBol={product.bolNotSold !== undefined}
           passaSportsOnly={isPassaSportsOnly(product)}
+          alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
         />
       </div>
       <PartnerLinkNote />
@@ -122,7 +123,6 @@ export default async function ProductPage({
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
-          passaSportsOnly={isPassaSportsOnly(product)}
           passaSportsProductUrl={product.passaSportsProductUrl}
           placement="productpagina"
         />
