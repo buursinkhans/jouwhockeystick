@@ -1,0 +1,48 @@
+# Renders the explainer videos in video/ (Remotion, docs/video.md) and attaches
+# the MP4 files and thumbnail to the run as a download ("Artifacts" at the
+# bottom of the run page). The owner downloads, checks and uploads them
+# himself; nothing is posted automatically.
+name: Video renderen
+
+on:
+  pull_request:
+    paths:
+      - 'video/**'
+      - 'src/advice-engine/sizeAdvice.ts'
+      - 'src/components/brand/logoGeometry.ts'
+      - '.github/workflows/video.yml'
+  # Manual run (Actions → Video renderen → Run workflow), e.g. for a branch
+  # opened by an agent, whose PR does not start other workflows.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: video-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      # Root dependencies: the videos import the length table and brand
+      # colours from src/, which use zod types.
+      - run: npm ci
+      - run: npm install --no-audit --no-fund
+        working-directory: video
+      - run: npm run typecheck
+        working-directory: video
+      - run: npm run render
+        working-directory: video
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video-renders
+          path: video/out/
+          retention-days: 30

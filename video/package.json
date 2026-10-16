@@ -1,0 +1,21 @@
+{
+  "name": "jouwhockeystick-video",
+  "private": true,
+  "description": "Explainer videos for jouwhockeystick.nl, made with Remotion. See docs/video.md.",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts --public-dir=../assets",
+    "typecheck": "tsc --noEmit",
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "typescript": "^5"
+  }
+}

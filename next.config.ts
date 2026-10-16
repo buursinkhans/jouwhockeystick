@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
           '/stickwijzer?utm_source=tiktok&utm_medium=social&utm_campaign=bio',
         permanent: false,
       },
+      // Short address shown in YouTube descriptions and on the channel page
+      // (docs/video.md). Temporary (307), like /tiktok.
+      {
+        source: '/youtube',
+        destination:
+          '/stickwijzer?utm_source=youtube&utm_medium=video&utm_campaign=kanaal',
+        permanent: false,
+      },
     ];
   },
 };
