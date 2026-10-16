@@ -97,7 +97,7 @@ export function LengteVideo({ variant, music }: LengteProps) {
         <Audio
           src={staticFile('video/muziek.mp3')}
           volume={(f) =>
-            interpolate(f, [0, 6, total - 40, total], [0, 0.5, 0.5, 0], {
+            interpolate(f, [0, 6, total - 40, total], [0, 0.7, 0.7, 0], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
             })
@@ -112,9 +112,9 @@ export function LengteVideo({ variant, music }: LengteProps) {
 
 type SfxName = 'whoosh' | 'pop' | 'thud' | 'ding' | 'nope' | 'tick';
 const SFX_VOLUME: Record<SfxName, number> = {
-  whoosh: 0.3,
-  pop: 0.45,
-  thud: 0.55,
+  whoosh: 0.2,
+  pop: 0.4,
+  thud: 0.45,
   ding: 0.4,
   nope: 0.45,
   tick: 0.3,
@@ -226,13 +226,6 @@ function Backdrop({ dark }: { dark: boolean }) {
           strokeWidth="10"
           strokeDasharray="40 40"
           strokeDashoffset={-drift * 2}
-        />
-        <circle
-          cx={width * 0.1 + drift * 0.5}
-          cy={height * 0.12}
-          r={width * 0.05}
-          fill={C.bal}
-          opacity={dark ? 0.35 : 0.18}
         />
       </svg>
     </AbsoluteFill>
@@ -856,8 +849,9 @@ function EndScene() {
           <div
             style={{
               position: 'absolute',
-              right: buttonSize * 0.7,
-              top: -buttonSize * 0.9 - bounce * buttonSize * 1.2,
+              // Bounces next to the button, never over the heading.
+              right: -buttonSize * 1.05,
+              top: buttonSize * 0.94 - bounce * buttonSize * 0.9,
               width: buttonSize * 0.7,
               height: buttonSize * 0.7,
               borderRadius: '50%',
