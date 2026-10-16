@@ -6,9 +6,10 @@ Bestanden (uit de run *Video renderen*, download *video-renders*):
 
 | Bestand | Waar |
 |---|---|
-| `hockeystick-lengte-uitleg.mp4` (16:9, ±55 s) | YouTube (gewone video) |
+| `hockeystick-lengte-uitleg.mp4` (16:9, ±46 s, met muziek) | YouTube (gewone video) |
 | `hockeystick-lengte-thumbnail.png` (1280 × 720) | YouTube-thumbnail van de gewone video |
-| `hockeystick-lengte-short.mp4` (9:16, ±31 s) | YouTube Shorts, Instagram Reels, Facebook Reels, TikTok |
+| `hockeystick-lengte-short.mp4` (9:16, ±24 s, met muziek) | YouTube Shorts, en Reels/TikTok als je onze eigen muziek houdt |
+| `hockeystick-lengte-short-zonder-muziek.mp4` (9:16, alleen geluidseffecten) | Reels/TikTok als je in de app zelf muziek kiest |
 
 ---
 
@@ -26,8 +27,8 @@ Jouw maat én sticks die in die maat te krijgen zijn: doe de gratis stickwijzer 
 De hele lengtetabel met uitleg → https://jouwhockeystick.nl/kennis/hockeystick-lengte-tabel?utm_source=youtube&utm_medium=video&utm_campaign=lengte-tabel
 
 0:00 Meten en drie voorbeelden
-0:23 De hele tabel
-0:35 Twijfel, volwassenen en de stickwijzer
+0:20 De hele tabel
+0:30 Twijfel, volwassenen en de stickwijzer
 
 De tabel is onze eigen richtlijn, geen officiële norm; maattabellen van merken verschillen. Wij testen sticks niet zelf.
 Bronnen: FIH Rules of Hockey (maximale sticklengte), maattabel van Grays (ter vergelijking), redactionele richtlijn van jouwhockeystick.nl.
@@ -78,4 +79,6 @@ Op de site staan partnerlinks naar bol.com; daarvoor krijgen we een kleine vergo
 - **Betaalde promotie:** uit. De video bevat geen betaalde samenwerking; de partnerlink-vermelding staat in de beschrijving.
 - **Gewijzigde of synthetische content:** "Nee" (animatie die we zelf hebben getekend, geen realistische AI-beelden).
 - **Taal:** Nederlands. Ondertiteling is niet nodig: alle tekst staat in beeld.
-- **Muziek:** geen. Wil je later muziek toevoegen, gebruik dan alleen de YouTube Audiobibliotheek en voor Instagram/TikTok hun eigen bibliotheek.
+- **Muziek:** zit er al in (ons eigen nummer, geen licentie nodig). YouTube kan bij het uploaden een melding over "copyright" geven bij automatische controles; dat is bij eigen muziek niet te verwachten. Krijg je toch een claim, betwist hem dan met: "Muziek zelf gemaakt voor jouwhockeystick.nl".
+- **Andere muziek op Instagram/TikTok:** upload `hockeystick-lengte-short-zonder-muziek.mp4` → in de app **Audio/Muziek toevoegen** → kies een nummer. Zakelijke Instagram-accounts zien alleen rechtenvrije muziek; kies op TikTok liefst uit de *Commercial Music Library*. Zet het muziekvolume op ongeveer 50% zodat de geluidseffecten hoorbaar blijven.
+- **Andere muziek op YouTube:** upload de video → YouTube Studio → **Editor** → **Audio** → kies een nummer uit de Audiobibliotheek. Dit vervangt of mengt met het bestaande geluid.
