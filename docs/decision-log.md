@@ -688,3 +688,18 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 - Volwassen ervaren speler, route "Volgende stick": in 13 van de 18 gevallen een stick voor ervaren spelers (was 0).
 
 **Nog open:** het gat in de catalogus (geen gevorderde juniorsticks tot en met 33 inch). Dit is een aparte opdracht voor de Catalogus-aanvuller.
+
+## 2026-10-16 — Video-pilot: explainers met Remotion
+
+**Besluit eigenaar:** explainer-video's voor YouTube en Reels, als pilot van zes weken met één onderwerp (*Welke lengte hockeystick?*). De eigenaar uploadt zelf.
+
+**Wat:**
+- Map `video/` met een los Remotion-project (video in code, React). Eigen `package.json`, buiten de site-build, lint en typecheck van de root. De video's importeren `LENGTH_GUIDE`, de huisstijlkleuren en de lettertypen uit de repo, dus ze kloppen na een nieuwe render altijd met de site.
+- Twee video's en een thumbnail: een Short (9:16, ±31 s) voor YouTube Shorts, Instagram/Facebook Reels en TikTok, en een uitleg (16:9, ±55 s) met de hele tabel voor YouTube.
+- Workflow *Video renderen* rendert bij elke PR die `video/` raakt en zet de bestanden als download bij de run.
+- Kort adres `/youtube` (307) naar de stickwijzer met `utm_source=youtube&utm_medium=video`, zoals `/tiktok`.
+- Handboek `docs/video.md`, uploadteksten in `video/teksten/`, sjabloon *Video-brief*.
+
+**Waarom Remotion:** het past in de bestaande stack (TypeScript, React), Claude kan het schrijven en de cijfers komen uit dezelfde bron als de site. Gratis voor een individu of een bedrijf tot 3 medewerkers; bij groei is een licentie nodig.
+
+**Bewust niet:** voice-over (de eigenaar kan die zelf inspreken), muziek, mensen in beeld, AI-avatars, automatisch uploaden of een YouTube-API, YouTube-embeds op de site (cookies). Nog geen wekelijkse video-agent: eerst de evaluatie eind november.

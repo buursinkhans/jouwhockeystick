@@ -20,6 +20,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Remotion video project with its own dependencies; typechecked by
+    // .github/workflows/video.yml.
+    "video/**",
   ]),
 ]);
 
