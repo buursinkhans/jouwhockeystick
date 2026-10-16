@@ -83,7 +83,7 @@ def kick() -> np.ndarray:
 
 def clap() -> np.ndarray:
     tt = t(0.25)
-    noise = bandpass(RNG.standard_normal(len(tt)), 900, 5000)
+    noise = bandpass(RNG.standard_normal(len(tt)), 800, 3500)
     shape = np.exp(-tt / 0.06)
     for offset in (0.0, 0.012, 0.024):  # three quick hits make a clap
         shape += np.exp(-np.maximum(tt - offset, 0) / 0.006) * (tt >= offset)
@@ -92,8 +92,8 @@ def clap() -> np.ndarray:
 
 def hat(open_: bool = False) -> np.ndarray:
     tt = t(0.2 if open_ else 0.05)
-    noise = highpass(RNG.standard_normal(len(tt)), 7000)
-    return noise * np.exp(-tt / (0.06 if open_ else 0.012)) * 0.25
+    noise = lowpass(highpass(RNG.standard_normal(len(tt)), 6000), 9000)
+    return noise * np.exp(-tt / (0.05 if open_ else 0.01)) * 0.18
 
 
 def pluck(note: int, seconds: float, bright: float = 2600) -> np.ndarray:
@@ -137,8 +137,8 @@ def riser(seconds: float) -> np.ndarray:
     out = np.zeros_like(tt)
     chunk = 1024
     for i in range(0, len(tt), chunk):
-        centre = 500 + 7000 * (i / len(tt)) ** 2
-        seg = bandpass(noise[max(0, i - 4096) : i + chunk], centre * 0.7, min(centre * 1.4, 18000))
+        centre = 400 + 5000 * (i / len(tt)) ** 2
+        seg = bandpass(noise[max(0, i - 4096) : i + chunk], centre * 0.7, min(centre * 1.4, 9000))
         out[i : i + chunk] = seg[-len(out[i : i + chunk]) :]
     return out * (tt / seconds) ** 2 * 0.5
 
@@ -169,13 +169,13 @@ def music() -> np.ndarray:
                 )
             if beat in (1, 3) and not build:
                 place(drums, c, at, 1.1)
+            # Hats only on the off-beat (no 16ths): drive without hiss.
             if not build:
-                for sixteenth in range(4):
-                    accent = 1.0 if sixteenth == 2 else 0.45
-                    place(drums, hat(), at + sixteenth * BEAT / 4, accent)
-                place(drums, hat(open_=True), at + BEAT / 2, 0.9)
+                place(drums, hat(), at + BEAT / 2, 0.55)
+                if beat == 3 and bar % 2 == 1:
+                    place(drums, hat(open_=True), at + BEAT / 2, 0.35)
             # Off-beat supersaw stabs.
-            stab = supersaw(chord, BEAT * 0.4, 5200 if not build else 2200)
+            stab = supersaw(chord, BEAT * 0.4, 3200 if not build else 1800)
             stab *= env(BEAT * 0.4, 0.004, 0.14)
             place(music_, stab, at + BEAT / 2, 0.6)
             # Classic house bass: on the off-beat, root, with a short pickup.
@@ -188,14 +188,14 @@ def music() -> np.ndarray:
         if bar >= 5 and (bar - 5) % 12 < 8:
             for step, idx in enumerate(ARP * 4):
                 note = chord[idx] + 12
-                place(music_, pluck(note, BEAT * 0.22, 4800), start + step * BEAT / 4, 0.17)
+                place(music_, pluck(note, BEAT * 0.22, 2400), start + step * BEAT / 4, 0.12)
         # A riser into the bar after the breakdown.
         if bar == 17:
             place(music_, riser(4 * BEAT), start, 0.7)
 
     mix = drums + music_ * sidechain
     mix = mix[: int(length * SR)]
-    mix = lowpass(mix, 13_000)
+    mix = lowpass(mix, 8_500)  # warm top end
     # Slight stereo width: delay the right channel a few ms.
     right = np.concatenate([np.zeros(int(0.011 * SR)), mix])[: len(mix)]
     stereo = np.stack([mix, 0.8 * mix + 0.2 * right])
