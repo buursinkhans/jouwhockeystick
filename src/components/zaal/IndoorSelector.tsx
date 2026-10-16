@@ -100,6 +100,7 @@ function ResultCard({
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
           passaSportsOnly={isPassaSportsOnly(product)}
+          passaSportsProductUrl={product.passaSportsProductUrl}
           placement="zaalkeuze"
           className="mt-3"
           stack

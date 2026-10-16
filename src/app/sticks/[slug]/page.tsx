@@ -114,7 +114,7 @@ export default async function ProductPage({
           passaSportsOnly={isPassaSportsOnly(product)}
         />
       </div>
-      {!isPassaSportsOnly(product) && <PartnerLinkNote />}
+      <PartnerLinkNote />
 
       <div className="mt-6 flex flex-wrap items-start gap-3">
         <RetailerLinks
@@ -123,6 +123,7 @@ export default async function ProductPage({
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
           passaSportsOnly={isPassaSportsOnly(product)}
+          passaSportsProductUrl={product.passaSportsProductUrl}
           placement="productpagina"
         />
         <ButtonLink

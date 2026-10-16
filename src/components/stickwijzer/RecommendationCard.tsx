@@ -229,6 +229,7 @@ export function RecommendationCard({
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
           passaSportsOnly={isPassaSportsOnly(product)}
+          passaSportsProductUrl={product.passaSportsProductUrl}
           placement="stickwijzer"
         />
       </div>

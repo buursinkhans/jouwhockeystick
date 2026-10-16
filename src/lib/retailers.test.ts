@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { BOL_PARTNER_SITE_ID, RETAILERS, bolPartnerUrl } from './retailers';
+import { getAllProducts } from '@/catalog';
+import { isPassaSportsOnly } from '@/catalog/shop';
+import {
+  BOL_PARTNER_SITE_ID,
+  RETAILERS,
+  bolPartnerUrl,
+  passaSportsTrackingUrl,
+} from './retailers';
 
 /** The bol.com page a partner link eventually lands on. */
 function bolTarget(url: string): URL {
@@ -65,5 +72,50 @@ describe('bol.com retailer', () => {
     const target = 'https://www.bol.com/nl/nl/s/?searchtext=a+b&page=2';
     const url = bolPartnerUrl(target, { subid: 'catalogus', name: 'test' });
     expect(new URL(url).searchParams.get('url')).toBe(target);
+  });
+});
+
+const PASSA_PREFIX =
+  'https://www.passasports.nl/tt/passa-nl/?tt=39608_12_517408_productpagina&r=%2F';
+
+describe('PassaSports retailer (TradeTracker)', () => {
+  it('builds exactly the link the TradeTracker generator gave us', () => {
+    expect(
+      passaSportsTrackingUrl(
+        'https://www.passasports.nl/malik-lowbow-2-ma25101',
+        'productpagina',
+      ),
+    ).toBe(
+      'https://www.passasports.nl/tt/passa-nl/?tt=39608_12_517408_productpagina&r=%2Fmalik-lowbow-2-ma25101',
+    );
+  });
+
+  it('only links to PassaSports product pages, never a search or another site', () => {
+    const base = {
+      productName: 'X',
+      brand: 'Malik',
+      placement: 'stickwijzer',
+    } as const;
+    expect(RETAILERS.passasports.getUrl(base)).toBeNull();
+    expect(
+      RETAILERS.passasports.getUrl({
+        ...base,
+        productUrl: 'https://www.bol.com/nl/nl/p/x/1/',
+      }),
+    ).toBeNull();
+  });
+
+  it('gives every PassaSports-only stick a working partner link', () => {
+    const passaOnly = getAllProducts().filter(isPassaSportsOnly);
+    expect(passaOnly.length).toBeGreaterThan(0);
+    for (const product of passaOnly) {
+      const url = RETAILERS.passasports.getUrl({
+        productName: product.name,
+        brand: product.brand,
+        placement: 'productpagina',
+        productUrl: product.passaSportsProductUrl,
+      });
+      expect(url?.startsWith(PASSA_PREFIX), product.slug).toBe(true);
+    }
   });
 });

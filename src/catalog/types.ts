@@ -115,9 +115,8 @@ export const productSchema = z.object({
    */
   bolNotSold: z.object({ checkedAt: z.string() }).optional(),
   /**
-   * PassaSports product page. Kept for the affiliate link that is being set
-   * up; until then a stick sold only there gets a "koppeling volgt" note
-   * instead of a shop button (see RetailerLinks).
+   * PassaSports product page. A stick that bol.com does not sell links here
+   * through the PassaSports partner programme (see RetailerLinks).
    */
   passaSportsProductUrl: z
     .string()

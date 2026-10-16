@@ -1,9 +1,8 @@
 import type { Product } from './types';
 
 /**
- * bol.com does not sell this stick, but PassaSports does. Temporary state
- * until the PassaSports affiliate link exists: the stick is advised like any
- * other, but has no shop button yet.
+ * bol.com does not sell this stick, but PassaSports does: the shop button
+ * is a PassaSports partner link (TradeTracker) instead of bol.com.
  */
 export function isPassaSportsOnly(product: Product): boolean {
   return (

@@ -46,6 +46,7 @@ export function ProductCard({ product }: { product: Product }) {
           bolProductUrl={product.bolProductUrl}
           notSoldAtBol={product.bolNotSold !== undefined}
           passaSportsOnly={isPassaSportsOnly(product)}
+          passaSportsProductUrl={product.passaSportsProductUrl}
           placement="catalogus"
           stack
         />

@@ -4,16 +4,15 @@ import type { RetailerPlacement } from '@/lib/retailers';
 import {
   PARTNER_LINK_LABEL,
   PARTNER_LINK_URL,
-  PASSASPORTS_PENDING_LABEL,
-  PASSASPORTS_PENDING_NOTE,
+  PASSASPORTS_ONLY_NOTE,
 } from '@/content/partnerLinks';
 import { RetailerLink } from './RetailerLink';
 
 /**
  * The outbound shop CTA for a product: a bol.com partner link to the
- * product page when known, otherwise to a search for this exact model, plus the partner-link disclosure. bol.com is the
- * only shop for now — other shops come back once they have a partner
- * programme we can join.
+ * product page when known, otherwise to a search for this exact model, plus
+ * the partner-link disclosure. A stick that bol.com does not sell but
+ * PassaSports does gets a PassaSports partner link (via TradeTracker).
  */
 export function RetailerLinks({
   brand,
@@ -22,6 +21,7 @@ export function RetailerLinks({
   bolProductUrl,
   notSoldAtBol = false,
   passaSportsOnly = false,
+  passaSportsProductUrl,
   className = '',
   stack = false,
 }: {
@@ -32,8 +32,10 @@ export function RetailerLinks({
   bolProductUrl?: string;
   /** bol.com does not sell this model: show that instead of a link. */
   notSoldAtBol?: boolean;
-  /** Only PassaSports sells it and the link there is not ready yet. */
+  /** Only PassaSports sells it (bol.com does not). */
   passaSportsOnly?: boolean;
+  /** PassaSports product page, for the partner link. */
+  passaSportsProductUrl?: string;
   className?: string;
   /** Stacks the buttons full-width instead of placing them side by side. */
   stack?: boolean;
@@ -41,14 +43,27 @@ export function RetailerLinks({
   const layout = stack ? 'flex flex-col gap-2' : 'flex flex-wrap gap-3';
   const buttonWidth = stack ? 'w-full' : '';
 
-  if (notSoldAtBol && passaSportsOnly) {
+  if (notSoldAtBol && passaSportsOnly && passaSportsProductUrl) {
     return (
       <div className={className}>
-        <p className="text-sm font-semibold text-inkt">
-          {PASSASPORTS_PENDING_LABEL}
-        </p>
-        <p className="mt-1 text-xs text-lijngrijs">
-          {PASSASPORTS_PENDING_NOTE}
+        <div className={layout}>
+          <RetailerLink
+            retailer="passasports"
+            brand={brand}
+            productName={productName}
+            placement={placement}
+            productUrl={passaSportsProductUrl}
+            variant="primary"
+            className={buttonWidth}
+          >
+            Bekijk en koop bij PassaSports
+          </RetailerLink>
+        </div>
+        <p className="mt-1.5 text-xs text-lijngrijs">
+          {PASSASPORTS_ONLY_NOTE}{' '}
+          <Link href={PARTNER_LINK_URL} className="underline hover:text-veld">
+            {PARTNER_LINK_LABEL}
+          </Link>
         </p>
       </div>
     );

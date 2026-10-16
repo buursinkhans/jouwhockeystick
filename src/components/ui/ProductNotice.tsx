@@ -12,12 +12,12 @@ export function ProductNotice({
 }: {
   /** bol.com does not sell this model, so there is no price to check there. */
   notSoldAtBol?: boolean;
-  /** The price is a PassaSports snapshot; no link there yet. */
+  /** The price is a PassaSports snapshot; the shop link goes there. */
   passaSportsOnly?: boolean;
 }) {
   const text =
     notSoldAtBol && passaSportsOnly
-      ? 'Richtprijs van PassaSports · niet verkrijgbaar bij bol.com'
+      ? 'Richtprijs van PassaSports · bekijk actuele prijs bij PassaSports'
       : notSoldAtBol
         ? 'Richtprijs · niet verkrijgbaar bij bol.com'
         : 'Richtprijs · bekijk actuele prijs bij bol.com';

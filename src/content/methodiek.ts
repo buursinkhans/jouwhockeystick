@@ -11,7 +11,7 @@ export const METHODIEK = {
     'Zo werkt de keuzehulp van jouwhockeystick.nl: eerst de stick die bij niveau en speelwensen past, daarna of hij er in de juiste maat is. Met bronlabels en zonder commerciële rangschikking.',
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-01',
-  updatedAt: '2026-10-14',
+  updatedAt: '2026-10-16',
   /** Answers the main question within the first 80 words. */
   intro: [
     'Wij kiezen eerst de stick die past bij de speler: het niveau, de speelwensen (zoals aannemen, passen, dribbelen, 3D, backhand of dragflick), het stickgevoel en het budget. Daarna kijken we of die stick er in de juiste maat is. De maat is dus geen punt in de score, maar een harde voorwaarde: een stick die er niet in jouw maat is, adviseren we niet.',
@@ -84,7 +84,7 @@ export const METHODIEK = {
     },
   ],
   partnerLinks:
-    'De knoppen naar bol.com zijn partnerlinks van het bol.com Partnerprogramma. Koop je via zo’n link, dan kunnen wij een vergoeding krijgen; voor jou verandert de prijs niet. Die vergoeding speelt geen rol in het advies: de score kent geen invoer voor marge, vergoeding of sponsoring, en een stick die niet bij bol.com te koop is, kan net zo goed als beste match uitkomen.',
+    'De knoppen naar bol.com zijn partnerlinks van het bol.com Partnerprogramma. Sticks die bol.com niet verkoopt maar PassaSports wel, krijgen een knop naar PassaSports; dat is een partnerlink via TradeTracker. Koop je via zo’n link, dan kunnen wij een vergoeding krijgen; voor jou verandert de prijs niet. Die vergoeding speelt geen rol in het advies: de score kent geen invoer voor marge, vergoeding, winkel of sponsoring.',
   independence:
     'Marge, affiliatevergoeding of sponsoring is geen onderdeel van de score. Bij een gelijke score gaat de stick in de geadviseerde maat voor, daarna de eenvoudigere en daarna de goedkopere stick.',
   weightsIntro: `Elke stick krijgt maximaal 100 punten, verdeeld over de kenmerken van de stick. De maat telt niet mee in de score: die controleren we apart. Bij beginners weegt het niveau en de controle zwaarder, bij gevorderden de gewenste acties. Een stick die eenvoudiger is dan het niveau van de speler sluiten we niet uit: één niveau eenvoudiger krijgt de helft van de punten voor niveau, twee niveaus eenvoudiger bijna niets, en zo'n stick heet nooit "beste match". Wil je bij je merk blijven, dan krijgen sticks van dat merk op jouw niveau ${BRAND_PREFERENCE_POINTS} punten extra.`,

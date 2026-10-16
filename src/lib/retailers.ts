@@ -1,6 +1,6 @@
 import type { Brand } from '@/catalog/types';
 
-export type RetailerId = 'bolcom';
+export type RetailerId = 'bolcom' | 'passasports';
 
 /** Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert. */
 export type RetailerPlacement =
@@ -36,6 +36,50 @@ export function bolPartnerUrl(
     name,
   });
   return `https://partner.bol.com/click/click?${params.toString()}`;
+}
+
+/**
+ * PassaSports affiliate programme via TradeTracker (campaign "Passasports.nl",
+ * deeplinking and reference tracking). Not secrets — they are part of every
+ * tracking link. Format taken from a link generated in the TradeTracker
+ * dashboard on 2026-10-16:
+ * passasports.nl/tt/passa-nl/?tt=<campaign>_<material>_<site>_<reference>&r=<path>
+ */
+export const PASSASPORTS_TRADETRACKER = {
+  campaignId: '39608',
+  materialId: '12',
+  affiliateSiteId: '517408',
+} as const;
+
+/**
+ * Wraps a PassaSports product URL in a TradeTracker direct-link. The
+ * reference (where on our site the link sits) shows up in TradeTracker's
+ * reports; it may not contain "_", the separator inside `tt`.
+ */
+export function passaSportsTrackingUrl(
+  productUrl: string,
+  reference: string,
+): string | null {
+  let target: URL;
+  try {
+    target = new URL(productUrl);
+  } catch {
+    return null;
+  }
+  if (target.hostname !== 'www.passasports.nl') {
+    return null;
+  }
+  const { campaignId, materialId, affiliateSiteId } = PASSASPORTS_TRADETRACKER;
+  const params = new URLSearchParams({
+    tt: [
+      campaignId,
+      materialId,
+      affiliateSiteId,
+      reference.replaceAll('_', '-'),
+    ].join('_'),
+    r: `${target.pathname}${target.search}`,
+  });
+  return `https://www.passasports.nl/tt/passa-nl/?${params.toString()}`;
 }
 
 export type Retailer = {
@@ -77,5 +121,12 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
         },
       );
     },
+  },
+  passasports: {
+    id: 'passasports',
+    label: 'PassaSports',
+    // Only direct product links: we never send people to a PassaSports search.
+    getUrl: ({ placement, productUrl }) =>
+      productUrl ? passaSportsTrackingUrl(productUrl, placement) : null,
   },
 };

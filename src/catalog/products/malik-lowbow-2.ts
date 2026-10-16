@@ -81,7 +81,7 @@ export const malikLowbow2: Product = {
   pointsOfAttention: {
     value: [
       'Het bow-profiel is niet eenduidig vermeld',
-      'Alleen bij PassaSports gevonden; nog geen bestelkoppeling',
+      'Niet bij bol.com te koop, wel bij PassaSports',
     ],
     source: 'editorial-estimate',
     sourceLabel:

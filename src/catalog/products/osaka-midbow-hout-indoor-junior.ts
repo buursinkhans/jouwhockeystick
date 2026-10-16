@@ -83,7 +83,7 @@ export const osakaMidbowHoutIndoorJunior: Product = {
   pointsOfAttention: {
     value: [
       'De productomschrijving op PassaSports beschrijft een ander model; we gebruiken alleen de kenmerkentabel',
-      'Alleen bij PassaSports gevonden; nog geen bestelkoppeling',
+      'Niet bij bol.com te koop, wel bij PassaSports',
     ],
     source: 'editorial-estimate',
     sourceLabel:

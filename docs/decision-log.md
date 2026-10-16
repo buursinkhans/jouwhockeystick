@@ -711,3 +711,17 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 **Wat:** eigen house-nummer (≈128 BPM, Am–F–C–G) en geluidseffecten, in code gemaakt met `video/audio/genereer.py` en opgeslagen in `assets/video/`. Scènes duren een heel aantal beats, met overgangen op de beat, tekst die woord voor woord binnenkomt, tellers, sticks die invallen, een voortgangsbalk en een openingsslag met de bal. De Short is ingekort tot ±24 s, de uitleg tot ±46 s. Er komt ook een Short *zonder muziek* voor wie in Instagram of TikTok zelf een nummer kiest.
 
 **Waarom eigen muziek:** geen licentie, geen naamsvermelding en geen kans op copyright-claims, op elk platform. Een eerste versie met een pentatonische melodie klonk volgens de eigenaar "Chinees"; die melodie is vervangen door akkoorden en een arpeggio.
+
+## 2026-10-16 — PassaSports-partnerlinks via TradeTracker
+
+**Wat:** het affiliateprogramma van PassaSports is goedgekeurd. Het loopt via TradeTracker: campagne "Passasports.nl", met deeplinking en referentietracking.
+- **Koopknop:** sticks die alleen PassaSports verkoopt (`isPassaSportsOnly`) krijgen nu een knop "Bekijk en koop bij PassaSports". Die vervangt de melding "koppeling volgt".
+- **Linkformaat:** overgenomen van een link die op 2026-10-16 met de linkgenerator in TradeTracker is gemaakt: `https://www.passasports.nl/tt/passa-nl/?tt=39608_12_517408_<referentie>&r=<pad>`. Een test bewaakt dat de site precies die link maakt.
+- **Referentie:** de plek op de site (stickwijzer, productpagina, catalogus, vergelijk, zaalkeuze), net als de sub-ID bij bol.com. Zo zie je in TradeTracker waar verkopen vandaan komen.
+- **Alleen productlinks:** zonder productpagina is er geen knop. We linken nooit naar een zoekpagina van PassaSports.
+- **Linkattributen:** de knop krijgt `rel="noopener noreferrer sponsored"`. Bronlinks naar passasports.nl blijven `nofollow`.
+- **Vermelding:** de partnerlinkzin noemt nu bol.com én PassaSports. Bij de knop staat "Niet te koop bij bol.com, wel bij PassaSports. PassaSports is dan de verkoper." De methodiekpagina legt het uit.
+- **Bij bol.com én PassaSports:** zo'n stick houdt alleen de bol.com-knop.
+- **Commissie:** wordt nergens in de code of tekst aangenomen.
+
+**Nog open:** de privacytekst noemt alleen het bol.com Partnerprogramma. Die passen we alleen aan op uitdrukkelijke opdracht van de eigenaar.
