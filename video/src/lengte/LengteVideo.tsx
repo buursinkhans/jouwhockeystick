@@ -93,6 +93,8 @@ function useLayout() {
     h2: portrait ? 76 : 66,
     body: portrait ? 50 : 42,
     small: portrait ? 34 : 30,
+    // Fixed scale across scenes, so 1,20 m and 1,70 m stay comparable.
+    figure: height * (portrait ? 0.5 : 0.7),
   };
 }
 
@@ -256,7 +258,7 @@ function IntroScene() {
       }}
     >
       <div style={{ transform: `scale(${0.6 + pop * 0.4})`, opacity: pop, transformOrigin: 'left center' }}>
-        <BrandIcon size={portrait ? 190 : 150} />
+        <BrandIcon size={portrait ? 190 : 150} background={C.inkt} />
       </div>
       <Rise delay={6}>
         <Heading size={h1 * 1.1} color={C.wit}>
@@ -273,7 +275,7 @@ function IntroScene() {
 }
 
 function MeasureScene() {
-  const { h2, body, height } = useLayout();
+  const { h2, body, figure } = useLayout();
   const grow = useIn(6);
   const heightCm = 140;
   return (
@@ -299,7 +301,7 @@ function MeasureScene() {
             heightCm={heightCm}
             personProgress={grow}
             sticks={[]}
-            height={height * 0.52}
+            height={figure}
           />
         </div>
       }
@@ -308,7 +310,7 @@ function MeasureScene() {
 }
 
 function ExampleScene({ example, index }: { example: Example; index: number }) {
-  const { h1, body, small, height } = useLayout();
+  const { h1, body, small, figure } = useLayout();
   const stick = useIn(10);
   const label = useIn(16);
   const cm = Math.round(example.drawnInch * CM_PER_INCH);
@@ -342,7 +344,7 @@ function ExampleScene({ example, index }: { example: Example; index: number }) {
         <Figure
           heightCm={example.heightCm}
           sticks={[{ inch: example.drawnInch, progress: stick, color: C.veldblauw }]}
-          height={height * 0.5}
+          height={figure}
         />
       }
     />
@@ -352,7 +354,7 @@ function ExampleScene({ example, index }: { example: Example; index: number }) {
 function TableScene() {
   const { pad, h2, small } = useLayout();
   const frame = useCurrentFrame();
-  const rowSize = small * 1.02;
+  const rowSize = small * 1.12;
   return (
     <AbsoluteFill style={{ padding: pad, paddingTop: pad * 0.7, gap: 26 }}>
       <Rise>
@@ -412,7 +414,7 @@ function TableScene() {
 }
 
 function DoubtScene() {
-  const { h2, body, height } = useLayout();
+  const { h2, body, figure } = useLayout();
   const good = useIn(4);
   const long = useIn(16);
   const cross = useIn(36);
@@ -445,7 +447,7 @@ function DoubtScene() {
             { inch: DOUBT_INCH, progress: good, color: C.veldblauw },
             { inch: tooLong, progress: long, color: C.lijngrijs, crossed: cross },
           ]}
-          height={height * 0.5}
+          height={figure}
         />
       }
     />

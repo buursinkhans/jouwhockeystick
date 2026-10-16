@@ -7,10 +7,17 @@ export const FONT_DISPLAY = 'Bricolage, system-ui, sans-serif';
 export const FONT_BODY = '"Instrument Sans", system-ui, sans-serif';
 
 /** The app icon (same shapes as public/brand/jhs-icon.svg). */
-export function BrandIcon({ size }: { size: number }) {
+export function BrandIcon({
+  size,
+  background = C.veldblauw,
+}: {
+  size: number;
+  /** Use C.inkt on a veldblauw background (the dark icon variant). */
+  background?: string;
+}) {
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden>
-      <rect width="100" height="100" rx="22" fill={C.veldblauw} />
+      <rect width="100" height="100" rx="22" fill={background} />
       <circle
         cx="50"
         cy="122"
@@ -31,7 +38,7 @@ export function BrandIcon({ size }: { size: number }) {
         />
         <path
           d="M51 40 L65 38 M51 47 L65 45"
-          stroke={C.veldblauw}
+          stroke={background}
           strokeWidth="2.2"
           strokeLinecap="round"
         />
@@ -62,7 +69,10 @@ export function SiteName({
         letterSpacing: '-0.01em',
       }}
     >
-      <BrandIcon size={size * 1.5} />
+      <BrandIcon
+        size={size * 1.5}
+        background={color === C.wit ? C.inkt : C.veldblauw}
+      />
       jouwhockeystick.nl
     </div>
   );
