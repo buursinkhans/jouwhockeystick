@@ -118,7 +118,7 @@ export const GOAL_LABELS: Record<Goal, string> = {
   dribble_3d: 'dribbelen en 3D',
   backhand: 'de backhand',
   aerial: 'aerial/scoopen',
-  dragflick: 'de dragflick',
+  dragflick: 'de sleeppush',
   allround: 'allround spel',
 };
 

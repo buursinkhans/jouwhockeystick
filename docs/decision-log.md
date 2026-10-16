@@ -761,3 +761,7 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
   - Aantallen sticks per winkel, berekend uit de catalogus.
   - Link vanuit de footer en de methodiekpagina.
 - **Huisstijl:** de regel "bol.com is de enige winkel" in `docs/content-agent.md` is vervangen door "partnerwinkels bol.com en PassaHockey".
+
+## 2026-10-16 — "sleeppush" in plaats van "dragflick"
+
+**Wat (keuze eigenaar):** overal waar bezoekers het zien, staat nu "sleeppush": in de vragen en antwoordopties van de stickwijzer, de schermtitel, de uitleg bij het advies, de methodiekpagina en de sterke punten van de Ritual Specialist 55. Letterlijke citaten van merken en winkels ("drag flicking") blijven staan. De interne codes (`dragflick`, `skill_dragflick`) zijn niet veranderd, zodat opgeslagen antwoorden en analytics blijven werken. De regel staat ook in de huisstijl (`docs/content-agent.md` §3).

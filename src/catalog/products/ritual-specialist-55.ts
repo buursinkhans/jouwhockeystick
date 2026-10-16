@@ -83,7 +83,7 @@ export const ritualSpecialist55: Product = {
     'Een seniorstick met 55% carbon en low bow, volgens de listing voor spelers "die hun technische vaardigheden en dragflicks verder willen ontwikkelen".',
   strengths: {
     value: [
-      'Low bow met 55% carbon, gericht op techniek, 3D en de dragflick',
+      'Low bow met 55% carbon, gericht op techniek, 3D en de sleeppush',
       'Verkrijgbaar in 36,5"',
     ],
     source: 'editorial-estimate',

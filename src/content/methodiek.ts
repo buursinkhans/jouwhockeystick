@@ -14,7 +14,7 @@ export const METHODIEK = {
   updatedAt: '2026-10-16',
   /** Answers the main question within the first 80 words. */
   intro: [
-    'Wij kiezen eerst de stick die past bij de speler: het niveau, de speelwensen (zoals aannemen, passen, dribbelen, 3D, backhand of dragflick), het stickgevoel en het budget. Daarna kijken we of die stick er in de juiste maat is. De maat is dus geen punt in de score, maar een harde voorwaarde: een stick die er niet in jouw maat is, adviseren we niet.',
+    'Wij kiezen eerst de stick die past bij de speler: het niveau, de speelwensen (zoals aannemen, passen, dribbelen, 3D, backhand of sleeppush), het stickgevoel en het budget. Daarna kijken we of die stick er in de juiste maat is. De maat is dus geen punt in de score, maar een harde voorwaarde: een stick die er niet in jouw maat is, adviseren we niet.',
     'Het niveau halen we uit je antwoorden, niet uit de route die je kiest. Bij de jeugd tot en met 15 jaar is de leeftijd het uitgangspunt: onder 11 jaar adviseren we voor een beginnende speler, van 11 tot en met 15 jaar voor een gevorderde speler. Speelt iemand in een selectieteam, kiest hij de prestatieroute of speelt hij al 4 seizoenen of langer met een zekere aanname, dan adviseren we een niveau hoger. Dat doen we niet als de speler de aanname of de basis nog leert. Wie nog geen seizoen speelt, krijgt altijd een advies voor beginners.',
     'Voor beginnende hockeyers adviseren we bewust eenvoudiger. Dan staan maat, hanteerbaarheid, controle en plezier voorop. Een heel stijve of extreem gekromde stick is niet automatisch beter om hockey te leren.',
     'Voor ervaren spelers wegen we meer kenmerken mee, zoals gewenste acties, voorkeur voor een zachter of directer stickgevoel en ervaring met verschillende bow-profielen.',
@@ -37,9 +37,9 @@ export const METHODIEK = {
   hardFilters: [
     'De stick is bedoeld voor een hoger niveau dan de speler.',
     'De richtprijs ligt boven het budget (tenzij je eerst wilt vergelijken).',
-    'Startroute: extreme low bow, dragflickstick of een stick die alleen voor ervaren spelers is bedoeld.',
+    'Startroute: extreme low bow, sleeppushstick of een stick die alleen voor ervaren spelers is bedoeld.',
     'De eerste aanname is nog in ontwikkeling en de stick heeft ongeveer 85% carbon of meer.',
-    'De dragflick speelt geen rol en de stick is een uitgesproken dragflickstick.',
+    'De sleeppush speelt geen rol en de stick is een uitgesproken sleeppushstick.',
     'Bow-profiel, bron of lengtes ontbreken in onze productgegevens. Een onbekend modeljaar sluit een stick niet uit; dat staat dan als aandachtspunt bij het advies.',
     'Als laatste: de stick is er niet in de geadviseerde maat. Is de stick die het best past er niet in jouw maat, dan zeggen we dat en tonen we de best passende sticks die er wel in jouw maat zijn.',
   ],

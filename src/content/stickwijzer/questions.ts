@@ -331,7 +331,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
         { value: 'dribble_3d', label: 'Dribbelen en 3D' },
         { value: 'backhand', label: 'Backhand' },
         { value: 'aerial', label: 'Aerial/Scoopen' },
-        { value: 'dragflick', label: 'Dragflick' },
+        { value: 'dragflick', label: 'Sleeppush' },
         { value: 'allround', label: 'Allround' },
       ],
     },
@@ -385,7 +385,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
         { value: 'three_d', label: '3D-acties' },
         { value: 'lift', label: 'Lift' },
         { value: 'aerial', label: 'Aerial/Scoopen' },
-        { value: 'dragflick', label: 'Dragflick' },
+        { value: 'dragflick', label: 'Sleeppush' },
       ],
     },
   },
@@ -442,10 +442,10 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
   },
   skill_dragflick: {
     id: 'skill_dragflick',
-    question: 'Welke rol heeft de dragflick?',
-    shortLabel: 'dragflick',
+    question: 'Welke rol heeft de sleeppush?',
+    shortLabel: 'sleeppush',
     dataUse:
-      'Een uitgesproken dragflickstick adviseren we alleen als de dragflick ook echt een rol speelt.',
+      'Een uitgesproken sleeppushstick adviseren we alleen als de sleeppush ook echt een rol speelt.',
     input: {
       kind: 'single',
       options: [
@@ -841,7 +841,7 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     },
     {
       id: 'skills_special',
-      title: 'Techniek: aerial/scoopen, backhand en dragflick',
+      title: 'Techniek: aerial/scoopen, backhand en sleeppush',
       questions: ['skill_aerial', 'skill_backhand', 'skill_dragflick'],
     },
     {
