@@ -92,7 +92,7 @@ export const osakaProbowGfIndoorJunior: Product = {
   pointsOfAttention: {
     value: [
       'Alleen in 34 en 35 inch',
-      'Niet bij bol.com te koop, wel bij PassaSports',
+      'Niet bij bol.com te koop, wel bij PassaHockey',
     ],
     source: 'editorial-estimate',
     sourceLabel:

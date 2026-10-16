@@ -13,6 +13,9 @@
   --color-lijngrijs: #5b6b7f;
   --color-nl-negatief: #c9d6f0;
   --color-rand: #d5deea;
+  /* PassaHockey's red, only for its shop button (white text: 4.5:1). */
+  --color-passa: #ed003b;
+  --color-passa-donker: #c40031;
 }
 
 @theme inline {

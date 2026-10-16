@@ -20,11 +20,11 @@ export function ProductNotice({
 }) {
   const text =
     notSoldAtBol && passaSportsOnly
-      ? 'Richtprijs van PassaSports · bekijk actuele prijs bij PassaSports'
+      ? 'Richtprijs van PassaHockey · bekijk actuele prijs bij PassaHockey'
       : notSoldAtBol
         ? 'Richtprijs · niet verkrijgbaar bij bol.com'
         : alsoAtPassaSports
-          ? 'Richtprijs · bekijk actuele prijs bij bol.com of PassaSports'
+          ? 'Richtprijs · bekijk actuele prijs bij bol.com of PassaHockey'
           : 'Richtprijs · bekijk actuele prijs bij bol.com';
   return <p className="text-xs text-lijngrijs">{text}</p>;
 }

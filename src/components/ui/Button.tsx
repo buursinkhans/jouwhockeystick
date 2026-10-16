@@ -10,6 +10,8 @@ export const buttonVariantClasses = {
   inverse: 'bg-white text-veld hover:bg-krijt',
   /** Orange call to action; dark text keeps the contrast above WCAG AA. */
   accent: 'bg-bal text-inkt hover:bg-bal/90',
+  /** The PassaHockey shop button, in that shop's own red. */
+  passa: 'bg-passa text-white hover:bg-passa-donker',
 } as const;
 const baseClasses = buttonBaseClasses;
 const variantClasses = buttonVariantClasses;

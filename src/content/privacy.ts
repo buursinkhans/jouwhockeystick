@@ -60,9 +60,9 @@ export const PRIVACY = {
       heading: 'Afbeeldingen en links van derden',
       paragraphs: [
         'Productfoto’s en logo’s laden we rechtstreeks van de websites van de merken en van bol.com. Daardoor ontvangt die website, zoals bij elke afbeelding op internet, technische gegevens zoals je IP-adres. Wij krijgen daar niets van te zien.',
-        'Als je doorklikt naar bol.com of PassaSports, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken.',
+        'Als je doorklikt naar bol.com of PassaHockey, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken.',
         'De links naar bol.com lopen via het bol.com Partnerprogramma. Na een klik registreert bol.com dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; bol.com kan daarvoor op zijn eigen website cookies plaatsen. Wij ontvangen daarbij geen gegevens over wie je bent of wat je koopt, alleen geanonimiseerde totalen.',
-        'De links naar PassaSports lopen via het affiliatenetwerk TradeTracker. Na een klik registreren PassaSports en TradeTracker dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; zij kunnen daarvoor cookies plaatsen. Ook hier ontvangen wij geen gegevens over wie je bent.',
+        'De links naar PassaHockey, de hockeywinkel van PassaSports, lopen via het affiliatenetwerk TradeTracker. Na een klik registreren PassaSports en TradeTracker dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; zij kunnen daarvoor cookies plaatsen. Ook hier ontvangen wij geen gegevens over wie je bent.',
       ],
     },
     {

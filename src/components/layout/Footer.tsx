@@ -7,6 +7,10 @@ import { InstagramIcon } from '@/components/ui/icons';
 const FOOTER_LINKS = [
   { href: '/over-ons', label: 'Over ons' },
   { href: '/methodiek', label: 'Zo werkt ons advies' },
+  {
+    href: '/kennis/waar-koop-je-een-hockeystick',
+    label: 'Waar koop je een stick?',
+  },
   { href: '/clubs', label: 'Voor hockeyclubs' },
   { href: '/privacy', label: 'Privacy' },
 ];
@@ -17,8 +21,8 @@ export function Footer() {
       <div className="mx-auto max-w-5xl px-4 py-12 text-sm sm:px-6">
         <Logo variant="wordmark-negative" size={30} tagline />
         <p className="mt-6 max-w-2xl">
-          Aankopen verlopen via bol.com. Getoonde prijzen zijn richtprijzen; de
-          actuele prijs zie je bij de winkel.
+          Aankopen verlopen via bol.com of PassaHockey. Getoonde prijzen zijn
+          richtprijzen; de actuele prijs zie je bij de winkel.
         </p>
         <p className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-semibold text-white">
           {FOOTER_LINKS.map((link) => (

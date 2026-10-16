@@ -82,7 +82,7 @@ export const y1IndoorLowBowC50: Product = {
   pointsOfAttention: {
     value: [
       'Carbonpercentage niet vermeld',
-      'Niet bij bol.com te koop, wel bij PassaSports',
+      'Niet bij bol.com te koop, wel bij PassaHockey',
     ],
     source: 'editorial-estimate',
     sourceLabel:

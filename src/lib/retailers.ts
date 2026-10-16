@@ -124,7 +124,7 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
   },
   passasports: {
     id: 'passasports',
-    label: 'PassaSports',
+    label: 'PassaHockey',
     // Only direct product links: we never send people to a PassaSports search.
     getUrl: ({ placement, productUrl }) =>
       productUrl ? passaSportsTrackingUrl(productUrl, placement) : null,

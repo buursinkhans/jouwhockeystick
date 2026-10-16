@@ -84,7 +84,7 @@ export const METHODIEK = {
     },
   ],
   partnerLinks:
-    'De knoppen naar bol.com zijn partnerlinks van het bol.com Partnerprogramma. Sticks die bol.com niet verkoopt maar PassaSports wel, krijgen een knop naar PassaSports; dat is een partnerlink via TradeTracker. Koop je via zo’n link, dan kunnen wij een vergoeding krijgen; voor jou verandert de prijs niet. Die vergoeding speelt geen rol in het advies: de score kent geen invoer voor marge, vergoeding, winkel of sponsoring.',
+    'De knoppen naar bol.com zijn partnerlinks van het bol.com Partnerprogramma. Verkoopt PassaHockey (de hockeywinkel van PassaSports) de stick ook, dan staat er een tweede knop; dat is een partnerlink via TradeTracker. Koop je via zo’n link, dan kunnen wij een vergoeding krijgen; voor jou verandert de prijs niet. Die vergoeding speelt geen rol in het advies: de score kent geen invoer voor marge, vergoeding, winkel of sponsoring.',
   independence:
     'Marge, affiliatevergoeding of sponsoring is geen onderdeel van de score. Bij een gelijke score gaat de stick in de geadviseerde maat voor, daarna de eenvoudigere en daarna de goedkopere stick.',
   weightsIntro: `Elke stick krijgt maximaal 100 punten, verdeeld over de kenmerken van de stick. De maat telt niet mee in de score: die controleren we apart. Bij beginners weegt het niveau en de controle zwaarder, bij gevorderden de gewenste acties. Een stick die eenvoudiger is dan het niveau van de speler sluiten we niet uit: één niveau eenvoudiger krijgt de helft van de punten voor niveau, twee niveaus eenvoudiger bijna niets, en zo'n stick heet nooit "beste match". Wil je bij je merk blijven, dan krijgen sticks van dat merk op jouw niveau ${BRAND_PREFERENCE_POINTS} punten extra.`,

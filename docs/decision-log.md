@@ -747,3 +747,17 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
   - Princess Premium 4K 10 Star: bij PassaSports alleen als zaalstick.
 - **TK Maxi Junior:** de link gaat naar de roze uitvoering. PassaSports heeft een aparte pagina per kleur.
 - **Privacytekst** (in opdracht van de eigenaar): een alinea erbij over PassaSports en TradeTracker, die na een klik cookies kunnen plaatsen voor de toeschrijving. De doorklikzin noemt nu ook PassaSports.
+
+## 2026-10-16 — PassaHockey-knop in eigen rood; pagina "Waar koop je een hockeystick?"
+
+**Wat (keuze eigenaar):**
+- **Knop:** "Bekijk en koop bij PassaHockey". De link landt in de hockeywinkel van PassaSports, die zichzelf PassaHockey noemt.
+- **Kleur:** het rood van PassaHockey, `#ED003B` (token `passa`, knopvariant `passa`). Witte tekst haalt daarop een contrast van 4,5:1 (WCAG AA). Bij hover wordt het donkerder (`#C40031`).
+- **Teksten:** zichtbare winkelteksten noemen nu PassaHockey: de partnerlinkzin, de prijsregel, de privacytekst, de methodiekpagina, de footer en "Over ons". Waar het om de verkoper gaat, staat "PassaHockey (PassaSports)".
+- **Nieuwe pagina** `/kennis/waar-koop-je-een-hockeystick`:
+  - Een stick koop je overal; via de site kun je bestellen bij bol.com of PassaHockey.
+  - Een vergelijkingstabel met: soort winkel, wie verkoopt, verzendkosten, retourneren en bezorging. Gecontroleerd op 2026-10-16, met bronnen onderaan.
+  - Een korte uitleg dat we via partnerlinks een klein bedrag verdienen, dat jij hetzelfde betaalt, en dat het advies er niet door verandert.
+  - Aantallen sticks per winkel, berekend uit de catalogus.
+  - Link vanuit de footer en de methodiekpagina.
+- **Huisstijl:** de regel "bol.com is de enige winkel" in `docs/content-agent.md` is vervangen door "partnerwinkels bol.com en PassaHockey".

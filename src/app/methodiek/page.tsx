@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { pageMetadata } from '@/lib/site';
 import { CATALOG_VERSION } from '@/catalog';
 import {
@@ -145,6 +146,14 @@ export default function MethodiekPage() {
         Partnerlinks
       </h2>
       <p className="mt-3 text-inkt/80">{METHODIEK.partnerLinks}</p>
+      <p className="mt-2 text-inkt/80">
+        <Link
+          href="/kennis/waar-koop-je-een-hockeystick"
+          className="font-semibold text-veld hover:underline"
+        >
+          Het verschil tussen bol.com en PassaHockey
+        </Link>
+      </p>
 
       <h2 className="mt-10 text-xl font-bold">Maximaal drie aanbevelingen</h2>
       <dl className="mt-4 space-y-3">

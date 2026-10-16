@@ -37,7 +37,7 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 - **Geen prijzen, lengtes, carbonpercentages of beschikbaarheid in vaste tekst.** Genereer ze uit de catalogus, zoals `src/content/articles/hockeystick-kinderen-en-beginners.ts` doet (`getFieldProducts`, `getIndoorProducts`, `stickListItem`, `formatEuro`). Zo blijven artikelen kloppen als de catalogus verandert.
 - **Schrijf "aerial/scoopen"**, niet alleen "aerial": veel spelers kennen de techniek als scoopen.
 - **Geen kortingsclaims** (EU Omnibus) en geen "review" in titels.
-- **bol.com is de enige winkel.** Andere winkels alleen als bron, en dan staan ze op de `nofollow`-lijst in `src/content/linkPolicy.ts`.
+- **Onze partnerwinkels zijn bol.com en PassaHockey** (de hockeywinkel van PassaSports). Hun koopknoppen komen uit de catalogus, niet uit de tekst. Andere winkels alleen als bron, en dan staan ze op de `nofollow`-lijst in `src/content/linkPolicy.ts`.
 - **Interne links:** minimaal één naar de stickwijzer (verplicht, test), en naar de verwante pagina's. Alleen naar pagina's die bestaan (test).
 
 ## 4. Technisch

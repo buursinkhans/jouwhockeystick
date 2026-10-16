@@ -82,7 +82,7 @@ export const y1IndoorMidBowW1: Product = {
   pointsOfAttention: {
     value: [
       'Niveau en carbonpercentage niet vermeld',
-      'Niet bij bol.com te koop, wel bij PassaSports',
+      'Niet bij bol.com te koop, wel bij PassaHockey',
     ],
     source: 'editorial-estimate',
     sourceLabel:

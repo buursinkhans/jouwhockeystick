@@ -77,10 +77,10 @@ export function RetailerLinks({
             productName={productName}
             placement={placement}
             productUrl={passaSportsProductUrl}
-            variant={atBol ? 'secondary' : 'primary'}
+            variant="passa"
             className={buttonWidth}
           >
-            Bekijk en koop bij PassaSports
+            Bekijk en koop bij PassaHockey
           </RetailerLink>
         )}
       </div>
