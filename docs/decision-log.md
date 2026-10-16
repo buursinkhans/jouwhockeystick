@@ -703,3 +703,11 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 **Waarom Remotion:** het past in de bestaande stack (TypeScript, React), Claude kan het schrijven en de cijfers komen uit dezelfde bron als de site. Gratis voor een individu of een bedrijf tot 3 medewerkers; bij groei is een licentie nodig.
 
 **Bewust niet:** voice-over (de eigenaar kan die zelf inspreken), muziek, mensen in beeld, AI-avatars, automatisch uploaden of een YouTube-API, YouTube-embeds op de site (cookies). Nog geen wekelijkse video-agent: eerst de evaluatie eind november.
+
+## 2026-10-16 — Video's levendiger, met eigen muziek
+
+**Besluit eigenaar:** de pilotvideo was te rustig; meer tempo en een standaard muziekje eronder.
+
+**Wat:** eigen house-nummer (≈128 BPM, Am–F–C–G) en geluidseffecten, in code gemaakt met `video/audio/genereer.py` en opgeslagen in `assets/video/`. Scènes duren een heel aantal beats, met overgangen op de beat, tekst die woord voor woord binnenkomt, tellers, sticks die invallen, een voortgangsbalk en een openingsslag met de bal. De Short is ingekort tot ±24 s, de uitleg tot ±46 s. Er komt ook een Short *zonder muziek* voor wie in Instagram of TikTok zelf een nummer kiest.
+
+**Waarom eigen muziek:** geen licentie, geen naamsvermelding en geen kans op copyright-claims, op elk platform. Een eerste versie met een pentatonische melodie klonk volgens de eigenaar "Chinees"; die melodie is vervangen door akkoorden en een arpeggio.

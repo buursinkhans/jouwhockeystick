@@ -84,3 +84,8 @@ export function sizeStepsUp(heightCm: number, steps: number): number {
     bandFor(heightCm);
   return Math.min(...band.sizes);
 }
+
+/** Index in TABLE_ROWS of the row that contains this height. */
+export function rowIndexFor(heightCm: number): number {
+  return LENGTH_GUIDE.indexOf(bandFor(heightCm));
+}

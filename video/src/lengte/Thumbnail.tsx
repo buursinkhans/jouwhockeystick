@@ -40,7 +40,7 @@ export function LengteThumbnail() {
         <div style={{ background: C.krijt, borderRadius: 36, padding: '20px 10px 10px' }}>
           <Figure
             heightCm={example.heightCm}
-            sticks={[{ inch: example.drawnInch, progress: 1, color: C.veldblauw }]}
+            sticks={[{ inch: example.drawnInch, drop: 1, color: C.veldblauw }]}
             height={540}
           />
         </div>

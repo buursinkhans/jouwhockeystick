@@ -8,6 +8,7 @@ on:
   pull_request:
     paths:
       - 'video/**'
+      - 'assets/video/**'
       - 'src/advice-engine/sizeAdvice.ts'
       - 'src/components/brand/logoGeometry.ts'
       - '.github/workflows/video.yml'

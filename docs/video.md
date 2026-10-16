@@ -29,10 +29,11 @@ Eén onderwerp, *Welke lengte hockeystick?*, in twee vormen:
 - Huisstijl: kleuren en logo uit `src/components/brand/logoGeometry.ts`, letters uit `assets/fonts` (Bricolage, Instrument Sans). Oranje is voor de oproep naar de stickwijzer.
 - Taal volgens `docs/content-agent.md` §3: vriendelijk, *je*, korte zinnen, genuanceerd ("kan passen").
 - **Alle tekst staat in beeld**, zodat de video zonder geluid te volgen is. Een voice-over is optioneel en spreekt de eigenaar zelf in.
+- **Tempo:** elke scène duurt een heel aantal beats van de muziek (`BEAT_FRAMES`), zodat de overgangen op de beat vallen. Beweging per scène: tekst die woord voor woord binnenkomt, een teller, iets dat invalt of opspringt. Geen scène langer dan nodig om de tekst te lezen.
 
 ## 4. Vorm
 
-- **Short:** 9:16, 1080 × 1920, 20–40 s. Eerste 3 seconden: de vraag van de kijker. Laatste scène: "Doe de stickwijzer". Houd de onderste 400 px en de rechterrand vrij van belangrijke tekst (daar staan de knoppen van YouTube, Instagram en TikTok).
+- **Short:** 9:16, 1080 × 1920, 20–40 s, met muziek en in een versie *zonder muziek*. Eerste 3 seconden: de vraag van de kijker. Laatste scène: "Doe de stickwijzer". Houd de onderste 400 px en de rechterrand vrij van belangrijke tekst (daar staan de knoppen van YouTube, Instagram en TikTok).
 - **Uitleg:** 16:9, 1920 × 1080, 1–4 min. Mag meer laten zien (bijv. de hele tabel). Hoofdstukken in de beschrijving als elk deel minstens 10 s duurt.
 - **Thumbnail:** 1280 × 720, de vraag in maximaal 4 woorden plus één beeld.
 - Per video een bestand `video/teksten/<onderwerp>.md` met titels, beschrijvingen, tags en onderschriften voor elk platform.
@@ -50,7 +51,7 @@ Eén onderwerp, *Welke lengte hockeystick?*, in twee vormen:
 
 - **YouTube:** *Publiek* op "Nee, niet gemaakt voor kinderen" (de video's zijn voor ouders), geen betaalde promotie, geen synthetische content. Link naar de site via `jouwhockeystick.nl/youtube` (stuurt door naar de stickwijzer met `utm_source=youtube`) of een artikel-URL met `utm_source=youtube&utm_medium=video&utm_campaign=<onderwerp>`.
 - **Instagram, Facebook en TikTok:** dezelfde Short als Reel, met een onderschrift volgens `docs/instagram.md` §4 en §9. Een Reel telt als de wekelijkse Reel uit `docs/instagram.md` §8.
-- **Muziek:** liefst geen. Anders alleen de eigen bibliotheek van het platform; nooit populaire hits in het bestand zelf.
+- **Muziek:** standaard ons eigen nummer `assets/video/muziek.mp3` met geluidseffecten (`sfx-*.mp3`). Die zijn in code gemaakt door `video/audio/genereer.py` (geen samples, geen AI), dus van ons: geen licentie, geen naamsvermelding, geen claims. Andere muziek: alleen uit de eigen bibliotheek van het platform (YouTube Audiobibliotheek, Instagram, TikTok), op de versie *zonder muziek*. Nooit populaire hits in het bestand zelf.
 
 ## 7. Grenzen
 
