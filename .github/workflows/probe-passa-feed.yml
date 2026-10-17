@@ -1,4 +1,4 @@
-# Temporary probe (v2): downloads the PassaHockey feed once and commits a small sample. Branch is deleted afterwards.
+# Temporary probe (v3): downloads the PassaHockey feed once and commits a small sample. Branch is deleted afterwards.
 name: Probe PassaHockey feed
 on:
   push:
@@ -17,8 +17,9 @@ jobs:
           ls -l "$RUNNER_TEMP/feed.xml"
           mkdir -p probe
           head -c 20000 "$RUNNER_TEMP/feed.xml" > probe/head.xml
-          python3 - "$RUNNER_TEMP/feed.xml" <<'PY'
+          python3 - "$RUNNER_TEMP/feed.xml" 2> probe/error.txt <<'PY'
           import sys, json, collections, xml.etree.ElementTree as ET
+          from urllib.parse import urlparse, parse_qs
           path = sys.argv[1]
           tags = collections.Counter(); cats = collections.Counter(); brands = collections.Counter()
           models = {}; samples = []; n = 0; sticks = 0
@@ -51,5 +52,6 @@ jobs:
           json.dump(sorted(models.values(), key=lambda m: m['path']), open('probe/sticks.json', 'w'), ensure_ascii=False, indent=0)
           json.dump({'products': n, 'stickish': sticks, 'fields': tags.most_common(80), 'categories': cats.most_common(60), 'stickBrands': brands.most_common(40), 'samples': samples}, open('probe/summary.json', 'w'), ensure_ascii=False, indent=1)
           PY
+          true
           git config user.name probe; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add probe && git commit -qm "Probe result" && git push -q origin HEAD:probe/passa-feed
