@@ -14,6 +14,8 @@ export const reeceAlphaJr: Product = {
   dataStatus: 'verified',
   bolProductUrl:
     'https://www.bol.com/nl/nl/p/reece-alpha-jr-hockey-stick-hockeystick-maat-29/9300000236284951/',
+  passaSportsProductUrl:
+    'https://www.passasports.nl/reece-alpha-junior-889270-8660',
   imageAlt: 'Reece Alpha JR hockeystick',
   imageUrl: 'https://media.s-bol.com/Rzjz5poxv2WO/ElnK5P4/420x840.jpg',
   imageSourceUrl: SOURCE,

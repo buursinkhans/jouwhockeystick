@@ -17,6 +17,8 @@ export const graysPb8Composite: Product = {
   name: 'Grays PB 8 Composite',
   dataStatus: 'verified',
   bolProductUrl: BOL,
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-probow-8-23265',
   imageAlt: 'Grays PB 8 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAEC25Composite_20Sticks_20PB8_20Probow_20MC_20Black_20Hot_20Red_20Main.jpg?v=1744211488',

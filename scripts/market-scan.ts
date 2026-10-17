@@ -17,17 +17,22 @@ import {
   type MarketSnapshot,
   type SiteSnapshot,
 } from '../src/market/marketScan';
+import { PASSAHOCKEY_FEED_URL, parsePassaFeed } from '../src/catalog/passaFeed';
 
 const USER_AGENT = 'jouwhockeystick-marktverkenner/1.0 (+https://jouwhockeystick.nl)';
 /** Robots.txt of PassaSports asks for 2 s between requests; we use that for every site. */
 const DELAY_MS = 2000;
 const MAX_SITEMAPS_PER_SITE = 80;
 
-type Site = { site: string; host: string; kind: 'shop' | 'brand' };
+type Site = { site: string; host: string; kind: 'shop' | 'brand' | 'feed' };
 
-/** Shops: pages with "hockey" in the path. Brands: product pages on their own shop, to spot new models. */
+/**
+ * Shops: pages with "hockey" in the path. Brands: product pages on their own shop, to spot new models.
+ * Feed: stick pages from a partner's product feed (PassaSports refuses our sitemap requests with 403,
+ * but as a TradeTracker partner we get its PassaHockey feed).
+ */
 const SITES: Site[] = [
-  { site: 'PassaSports', host: 'www.passasports.nl', kind: 'shop' },
+  { site: 'PassaSports', host: 'www.passasports.nl', kind: 'feed' },
   { site: 'Daka', host: 'www.daka.nl', kind: 'shop' },
   { site: 'Vrijbuiter', host: 'www.vrijbuiter.nl', kind: 'shop' },
   // adidas.nl blocks automated access (see CLAUDE.md), so it is not scanned.
@@ -60,6 +65,14 @@ async function fetchText(url: string, retries = 2): Promise<string> {
 
 async function scanSite({ site, host, kind }: Site): Promise<SiteSnapshot> {
   try {
+    if (kind === 'feed') {
+      // The feed is tens of megabytes: allow more time than a sitemap gets.
+      const response = await fetch(PASSAHOCKEY_FEED_URL, { signal: AbortSignal.timeout(300_000) });
+      if (!response.ok) throw new Error(`feed: HTTP ${response.status}`);
+      const urls = parsePassaFeed(await response.text()).map((model) => model.url);
+      if (urls.length === 0) throw new Error('geen sticks in de feed');
+      return { site, urls };
+    }
     const robots = await fetchText(`https://${host}/robots.txt`);
     const queue = sitemapsFromRobots(robots, host);
     if (queue.length === 0) queue.push(`https://${host}/sitemap.xml`);

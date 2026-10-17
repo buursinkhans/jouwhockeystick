@@ -14,6 +14,8 @@ export const graysDb2xiDynabowIndoor: Product = {
   dataStatus: 'verified',
   bolProductUrl:
     'https://www.bol.com/nl/nl/p/grays-db2xi-dynabow-senior-hockeystick-blauw-groen/9300000304766266/',
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-db2-xi-dynabow-27078',
   imageAlt: 'Grays DB2Xi Dynabow Senior Indoor hockeystick',
   imageUrl: 'https://media.s-bol.com/N3RoqEPKxEM6/k2DWmzx/550x543.jpg',
   imageSourceUrl: SOURCE,

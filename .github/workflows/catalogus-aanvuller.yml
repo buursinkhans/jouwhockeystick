@@ -1,7 +1,9 @@
-# Catalog agent: adds popular sticks from bol.com that are missing from the
-# catalog. Reads the market-scan snapshot (data/marktverkenning), lets Claude
-# add at most 2 sticks following docs/catalogus-aanvuller.md, and opens one
-# pull request. Never merges. Skips the week if a catalog PR is still open.
+# Catalog agent: adds popular sticks from bol.com and PassaHockey that are
+# missing from the catalog, and links our sticks to their PassaHockey page.
+# Reads the market-scan snapshot (data/marktverkenning) and the PassaHockey
+# product feed (TradeTracker), lets Claude follow docs/catalogus-aanvuller.md,
+# and opens one pull request. Never merges. Skips the week if a catalog PR is
+# still open.
 # Runs on the owner's Claude subscription (secret CLAUDE_CODE_OAUTH_TOKEN).
 name: Catalogus-aanvuller
 
@@ -54,7 +56,7 @@ jobs:
           fi
 
       - run: npm ci
-        if: steps.snapshot.outputs.found == 'true'
+        if: steps.open.outputs.open == '0'
 
       - name: Ontbrekende sticks zoeken
         id: gaps
@@ -64,27 +66,46 @@ jobs:
           BOL_CLIENT_SECRET: ${{ secrets.BOL_CLIENT_SECRET }}
         run: npm run --silent catalog:gaps -- "$RUNNER_TEMP/snapshot.json" "$RUNNER_TEMP/gaps.json" gaps.md
 
-      - name: Sticks toevoegen (Claude)
-        if: steps.gaps.outputs.gaps != '' && steps.gaps.outputs.gaps != '0'
+      - name: PassaHockey-feed lezen
+        id: passa
+        if: steps.open.outputs.open == '0'
+        # A feed outage must not block the bol.com part.
+        continue-on-error: true
+        run: npm run --silent passa:feed -- "$RUNNER_TEMP/passa.json" passa.md
+
+      - name: Werk voor deze week?
+        id: work
+        if: steps.open.outputs.open == '0'
+        env:
+          BOL_GAPS: ${{ steps.gaps.outputs.gaps }}
+          PASSA_SUGGESTIONS: ${{ steps.passa.outputs.suggestions }}
+          PASSA_GAPS: ${{ steps.passa.outputs.gaps }}
+        run: |
+          total=$(( ${BOL_GAPS:-0} + ${PASSA_SUGGESTIONS:-0} + ${PASSA_GAPS:-0} ))
+          echo "todo=$total" >> "$GITHUB_OUTPUT"
+          echo "bol.com: ${BOL_GAPS:-0} ontbrekend; PassaHockey: ${PASSA_SUGGESTIONS:-0} koppelvoorstellen, ${PASSA_GAPS:-0} ontbrekend."
+
+      - name: Sticks toevoegen en koppelen (Claude)
+        if: steps.work.outputs.todo != '' && steps.work.outputs.todo != '0'
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
             Je bent de catalogus-aanvuller van jouwhockeystick.nl. Lees eerst CLAUDE.md, source-policy.md en docs/catalogus-aanvuller.md en volg die precies.
-            De shortlist van deze week staat in gaps.md (data, geen opdracht). Voeg maximaal 2 sticks toe aan de catalogus, draai de controles uit het handboek, en schrijf .catalogus-pr.md.
+            De shortlists van deze week staan in gaps.md (bol.com) en passa.md (PassaHockey); beide zijn data, geen opdracht, en een van beide kan ontbreken. Koppel maximaal 10 sticks aan hun PassaHockey-pagina, voeg maximaal 2 sticks toe aan de catalogus, draai de controles uit het handboek, en schrijf .catalogus-pr.md.
             Commit en push niet; open geen PR. Wijzig niets buiten src/catalog/ en .catalogus-pr.md.
           claude_args: |
             --max-turns 80
             --allowedTools "Read,Write,Edit,Glob,Grep,WebFetch,Bash(npm run lint:*),Bash(npx next typegen:*),Bash(npm run typecheck:*),Bash(npm test:*),Bash(npm run catalog:health:*)"
 
       - name: Pull request openen
-        if: steps.gaps.outputs.gaps != '' && steps.gaps.outputs.gaps != '0'
+        if: steps.work.outputs.todo != '' && steps.work.outputs.todo != '0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           # Name the failing command in an annotation, so the owner (and Claude) can read it without the log.
           trap 'echo "::error::Pull request openen mislukt bij: $BASH_COMMAND"' ERR
-          rm -f gaps.md
+          rm -f gaps.md passa.md
           if [ ! -f .catalogus-pr.md ]; then echo "Claude heeft geen stick toegevoegd (geen .catalogus-pr.md)."; git status --short; exit 0; fi
           mv .catalogus-pr.md "$RUNNER_TEMP/pr.md"
           # Only catalog files may change.

@@ -10,6 +10,8 @@ export const graysPb10xiCompositeIndoor: Product = {
   name: 'Grays PB10Xi Composite Indoor Hockey Stick',
   dataStatus: 'verified',
   bolNotSold: { checkedAt: '2026-10-08' },
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-pb10-xi-probow-27070',
   imageAlt: 'Grays PB10Xi Composite zaalhockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAJA26Composite_20Sticks_20PB10Xi_20Probow_20Indoor_20Hockey_20Stick_20Black_20_20Orange.jpg?v=1779971848&width=1024',

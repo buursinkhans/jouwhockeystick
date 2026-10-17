@@ -7,6 +7,8 @@ export const graysJb6Composite: Product = {
   dataStatus: 'verified',
   bolProductUrl:
     'https://www.bol.com/nl/nl/p/grays-jb-6-hockeystick-blauw/9300000304766051/',
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-jb-6-27055',
   imageAlt: 'Grays JB 6 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAEE26CompositeSticksJB6JumbowHockeyStickBlue_Silver_e5812b3e-a8af-409f-b288-985053ddd135.jpg?v=1779972516',

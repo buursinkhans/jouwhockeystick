@@ -765,3 +765,17 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 ## 2026-10-16 — "sleeppush" in plaats van "dragflick"
 
 **Wat (keuze eigenaar):** overal waar bezoekers het zien, staat nu "sleeppush": in de vragen en antwoordopties van de stickwijzer, de schermtitel, de uitleg bij het advies, de methodiekpagina en de sterke punten van de Ritual Specialist 55. Letterlijke citaten van merken en winkels ("drag flicking") blijven staan. De interne codes (`dragflick`, `skill_dragflick`) zijn niet veranderd, zodat opgeslagen antwoorden en analytics blijven werken. De regel staat ook in de huisstijl (`docs/content-agent.md` §3).
+
+## 2026-10-17 — PassaHockey-productfeed: koppelen, aanvullen en controleren
+
+**Wat (opdracht eigenaar: "verwerk naast bol.com ook de sticks via PassaSports in de catalogus"):**
+- **Bron:** de productfeed "PassaHockey" (#2490853) van de TradeTracker-campagne Passasports.nl, in XML, elke nacht bijgewerkt. Per maat en kleur één regel (ca. 23.500), waarvan ca. 800 stickpagina's. De feed-URL bevat alleen ons site-ID (517408, staat ook in elke partnerlink) en het feed-ID; hij is geen geheim en staat in `src/catalog/passaFeed.ts`. Geen scrapen: de sitemap van PassaSports weigert automatische toegang (HTTP 403).
+- **`npm run passa:feed`** (alleen lezen) legt de feed naast de catalogus en maakt een rapport met drie delen: onze PassaHockey-links die uitverkocht of verdwenen zijn, koppelvoorstellen (onze stick zonder link, zelfde merk/model/junior-senior/veld-zaal in de feed) en leverbare sticks die we nog niet hebben.
+- **Matchen:** op modelnaam, niet op EAN (de catalogus heeft geen EAN's). Schrijfwijzen worden gelijkgetrokken ("DB 8" = "DB8" = "Dynabow 8", "JB 12+" = "JB+ 12", "Pro Bow" = "ProBow", "LB" = "LowBow"). Een voorstel is nooit automatisch een koppeling: de Catalogus-aanvuller controleert model, bow en jaargang.
+- **Catalogus-aanvuller (dinsdag):** krijgt naast `gaps.md` (bol.com) nu `passa.md`. Per PR maximaal 10 koppelingen en, zoals voorheen, maximaal 2 nieuwe sticks, nu ook uit het assortiment van PassaHockey. Een nieuwe stick die bol.com niet verkoopt, krijgt `bolNotSold` en alleen de PassaHockey-knop. Draait ook als de marktmeting ontbreekt; valt de feed uit, dan gaat het bol.com-deel gewoon door.
+- **Catalogus-controle (maandag):** het issue krijgt een blok "Onze PassaHockey-links" met uitverkochte en verdwenen links.
+- **Marktverkenner:** leest PassaSports voortaan uit de feed (stickpagina's) in plaats van de sitemap. De eerste week is voor PassaSports een nulmeting.
+- **Nu gekoppeld (12 sticks):** alleen voorstellen met precies één PassaHockey-pagina én een "van"-prijs die binnen €5 van onze adviesprijs ligt (zelfde jaargang). Grays JB 6, JB 12+, DB 5, JB 8, PB 8, MB 8, MB 7, PB10Xi en DB2Xi; Princess Competition 1 Star ProBow; Brabo G-Force Elite X One LB JR; Reece Alpha JR. De overige voorstellen (o.a. JDH X93/X1, Brabo Elite Five en X One, Grays DB 6/DB 8/DB 10+) laten we aan de wekelijkse controle met de hand.
+- **Niet meer in de feed:** de PassaHockey-link van de Y1 Indoor Low Bow C50 staat niet in de feed van 17 oktober; de Catalogus-aanvuller zoekt een nieuwe URL of haalt de link weg.
+- **Geen kortingen:** de feed bevat een "van"-prijs. Die gebruiken we alleen om jaargangen te vergelijken, nooit als doorgestreepte prijs of besparing op de site (Omnibus-richtlijn).
+- **Foto's uit de feed:** voorlopig niet gebruikt; de eigenaar beslist nog.
