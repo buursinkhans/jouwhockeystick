@@ -15,6 +15,8 @@ export const graysDb5Composite: Product = {
   name: 'Grays DB 5 Composite Hockey Stick',
   dataStatus: 'verified',
   bolProductUrl: BOL_SOURCE,
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-db-5-27057',
   imageAlt: 'Grays DB 5 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAGE26Composite_20Sticks_20DB5_20Dynabow_20Hockey_20Stick_20Ocean_20Blue_20_20Silver.jpg?v=1779972181&width=1024',

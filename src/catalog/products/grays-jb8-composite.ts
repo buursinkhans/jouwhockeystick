@@ -17,6 +17,8 @@ export const graysJb8Composite: Product = {
   name: 'Grays JB 8 Composite',
   dataStatus: 'verified',
   bolProductUrl: BOL,
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-jumbow-8-23261',
   imageAlt: 'Grays JB 8 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HACC25Composite_20Sticks_20JB8_20Jumbow_20MX_20Black_20Blue_20Main.jpg?v=1744210415',

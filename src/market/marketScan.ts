@@ -173,7 +173,7 @@ export function formatMarketReport(previous: MarketSnapshot | undefined, current
     `# Marktverkenning ${current.date}`,
     '',
     previous
-      ? `Vergeleken met ${previous.date}. Alleen lezen: openbare sitemaps van concurrenten en de bol.com-API.`
+      ? `Vergeleken met ${previous.date}. Alleen lezen: openbare sitemaps van concurrenten, de productfeed van PassaHockey en de bol.com-API.`
       : 'Nulmeting: dit is de eerste keer. Vanaf volgende week zie je hier wat er veranderd is.',
     '',
     '## Concurrenten en merken',

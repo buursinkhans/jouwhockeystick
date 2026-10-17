@@ -21,6 +21,14 @@ jobs:
           node-version: 22
       - name: Rapport maken
         run: npm run --silent catalog:health > report.md
+      - name: PassaHockey-links controleren
+        # Read-only: are our PassaHockey links still in the feed and in stock?
+        run: |
+          if npm run --silent passa:feed -- "$RUNNER_TEMP/passa.json" "$RUNNER_TEMP/passa.md"; then
+            { echo; echo '---'; echo; sed -n '/^## Onze PassaHockey-links/,/^## Voorstellen/p' "$RUNNER_TEMP/passa.md" | sed '$d'; } >> report.md
+          else
+            printf '\n---\n\n## Onze PassaHockey-links\n\n⚠️ De PassaHockey-feed kon deze week niet gelezen worden.\n' >> report.md
+          fi
       - name: Rapport in issue zetten
         env:
           GH_TOKEN: ${{ github.token }}

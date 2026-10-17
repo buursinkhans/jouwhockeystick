@@ -6,6 +6,8 @@ export const graysJb12PlusComposite: Product = {
   name: 'Grays JB 12+ Composite Hockey Stick',
   dataStatus: 'verified',
   bolNotSold: { checkedAt: '2026-10-08' },
+  passaSportsProductUrl:
+    'https://www.passasports.nl/grays-jb-12-27051',
   imageAlt: 'Grays JB 12+ Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HABA26Composite_20Sticks_20JB12_2b_20Jumbow_20Plus_20Hockey_20Stick_20Ocean_20Blue_20_20Silver.jpg?v=1779973059',
