@@ -1,3 +1,4 @@
+import { isSoldAtBol, isBolUnchecked } from '@/catalog/shop';
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllProducts, getProductBySlug } from '@/catalog';
@@ -18,7 +19,7 @@ export default async function VergelijkPage({
   searchParams: Promise<{ a?: string; b?: string }>;
 }) {
   const params = await searchParams;
-  const products = getAllProducts();
+  const products = getAllProducts(new Date(), { includeImported: true });
   const productA = params.a ? getProductBySlug(params.a) : undefined;
   const productB = params.b ? getProductBySlug(params.b) : undefined;
 
@@ -99,7 +100,8 @@ export default async function VergelijkPage({
                     brand={product.brand}
                     productName={product.name}
                     bolProductUrl={product.bolProductUrl}
-                    notSoldAtBol={product.bolNotSold !== undefined}
+                    notSoldAtBol={!isSoldAtBol(product)}
+                    bolUnchecked={isBolUnchecked(product)}
                     passaSportsProductUrl={product.passaSportsProductUrl}
                     placement="vergelijk"
                     className="text-sm"

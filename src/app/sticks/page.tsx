@@ -24,9 +24,9 @@ export default async function SticksPage({
   searchParams: Promise<{ brand?: string }>;
 }) {
   const { brand } = await searchParams;
-  const brands = getAllBrands(new Date(), 'veld');
+  const brands = getAllBrands(new Date(), 'veld', { includeImported: true });
   const activeBrand = isValidBrand(brand, brands) ? brand : undefined;
-  const products = getFieldProducts().filter(
+  const products = getFieldProducts(new Date(), { includeImported: true }).filter(
     (p) => !activeBrand || p.brand === activeBrand,
   );
 

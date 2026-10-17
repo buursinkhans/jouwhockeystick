@@ -1,9 +1,14 @@
 import type { Metadata } from 'next';
-import { isPassaSportsOnly } from '@/catalog/shop';
+import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getAllProducts, getDiscipline, getProductBySlug } from '@/catalog';
+import {
+  getAllProducts,
+  getDiscipline,
+  getProductBySlug,
+  isFeedImport,
+} from '@/catalog';
 import { ProductSpecTable } from '@/components/catalog/ProductSpecTable';
 import { ProductProsAndCons } from '@/components/catalog/ProductProsAndCons';
 import { ProductImage } from '@/components/catalog/ProductImage';
@@ -19,7 +24,9 @@ import { DISCIPLINE_LABELS } from '@/catalog/labels';
 import { absoluteUrl } from '@/lib/site';
 
 export function generateStaticParams() {
-  return getAllProducts().map((product) => ({ slug: product.slug }));
+  return getAllProducts(new Date(), { includeImported: true }).map(
+    (product) => ({ slug: product.slug }),
+  );
 }
 
 export async function generateMetadata({
@@ -37,6 +44,8 @@ export async function generateMetadata({
     title: `${product.name}: specs en advies`,
     description: product.summary,
     path: `/sticks/${slug}`,
+    // Feed-imported sticks have template texts: kept out of Google until enriched by hand.
+    noIndex: isFeedImport(product),
   });
 }
 
@@ -110,7 +119,7 @@ export default async function ProductPage({
       </p>
       <div className="mt-1">
         <ProductNotice
-          notSoldAtBol={product.bolNotSold !== undefined}
+          notSoldAtBol={!isSoldAtBol(product)}
           passaSportsOnly={isPassaSportsOnly(product)}
           alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
         />
@@ -122,7 +131,8 @@ export default async function ProductPage({
           brand={product.brand}
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={product.bolNotSold !== undefined}
+          notSoldAtBol={!isSoldAtBol(product)}
+          bolUnchecked={isBolUnchecked(product)}
           passaSportsProductUrl={product.passaSportsProductUrl}
           placement="productpagina"
         />
@@ -150,7 +160,10 @@ export default async function ProductPage({
 
       <SimilarSticks
         current={product}
-        similar={getSimilarSticks(product, getAllProducts())}
+        similar={getSimilarSticks(
+          product,
+          getAllProducts(new Date(), { includeImported: true }),
+        )}
       />
 
       <p className="mt-6 text-sm">

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { isPassaSportsOnly } from '@/catalog/shop';
+import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import type { AdviceRoute } from '@/advice-engine/answers';
 import type {
   AdviceReason,
@@ -133,7 +133,7 @@ export function RecommendationCard({
         </div>
       </dl>
       <ProductNotice
-        notSoldAtBol={product.bolNotSold !== undefined}
+        notSoldAtBol={!isSoldAtBol(product)}
         passaSportsOnly={isPassaSportsOnly(product)}
         alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
       />
@@ -228,7 +228,8 @@ export function RecommendationCard({
           brand={product.brand}
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={product.bolNotSold !== undefined}
+          notSoldAtBol={!isSoldAtBol(product)}
+          bolUnchecked={isBolUnchecked(product)}
           passaSportsProductUrl={product.passaSportsProductUrl}
           placement="stickwijzer"
         />

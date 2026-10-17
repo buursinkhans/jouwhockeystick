@@ -1,0 +1,67 @@
+# Weekly PassaHockey sync: re-imports the PassaHockey product feed into
+# src/catalog/imported/passahockey.ts (prices, stock, new and vanished sticks)
+# and opens one pull request when anything changed. Never merges; skips the
+# week while an earlier sync PR is still open. See scripts/passa-import.ts.
+name: PassaHockey-sync
+
+on:
+  schedule:
+    - cron: '41 4 * * 3' # Wednesday 04:41 UTC, after the catalog agent on Tuesday
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: passa-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Nog open sync-PR?
+        id: open
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          open=$(gh pr list --state open --json headRefName --jq '[.[] | select(.headRefName | startswith("catalogus/passa-sync-"))] | length')
+          echo "open=$open" >> "$GITHUB_OUTPUT"
+          if [ "$open" -gt 0 ]; then echo "Er staat nog een sync-PR open; deze week niets nieuws."; fi
+
+      - run: npm ci
+        if: steps.open.outputs.open == '0'
+
+      - name: Feed importeren
+        if: steps.open.outputs.open == '0'
+        run: npm run --silent passa:import -- "$RUNNER_TEMP/import.md"
+
+      - name: Pull request openen
+        if: steps.open.outputs.open == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          trap 'echo "::error::Pull request openen mislukt bij: $BASH_COMMAND"' ERR
+          if [ -z "$(git status --porcelain src/catalog/imported)" ]; then echo "Geen wijzigingen."; exit 0; fi
+          other=$(git status --porcelain | awk '{print $2}' | grep -v '^src/catalog/imported/' || true)
+          if [ -n "$other" ]; then echo "::error::Wijzigingen buiten src/catalog/imported/: $other"; exit 1; fi
+          branch="catalogus/passa-sync-$(date -u +%Y-%m-%d)"
+          git config user.name "PassaHockey-sync"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add src/catalog/imported
+          git commit -m "Catalogus: PassaHockey-feed bijgewerkt ($(date -u +%F))"
+          git push origin "$branch"
+          { cat "$RUNNER_TEMP/import.md"; printf '\n\n_Gemaakt door de wekelijkse PassaHockey-sync. Merge om prijzen, voorraad en nieuwe sticks live te zetten; deze workflow merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
+          gh pr create --base main --head "$branch" --title "Catalogus: PassaHockey-feed bijgewerkt ($(date -u +%F))" --body-file "$RUNNER_TEMP/body.md"
+          # PRs opened with the workflow token do not trigger other workflows; start the quality check explicitly.
+          gh workflow run ci.yml --ref "$branch"

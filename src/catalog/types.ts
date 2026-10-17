@@ -84,6 +84,8 @@ export const brandSchema = z.enum([
   'Ravi',
   'Csign',
   'Malik',
+  'Nike',
+  'Yibbi',
 ]);
 export type Brand = z.infer<typeof brandSchema>;
 
@@ -122,6 +124,15 @@ export const productSchema = z.object({
     .string()
     .url()
     .startsWith('https://www.passasports.nl/')
+    .optional(),
+  /**
+   * Set for sticks imported in bulk from a partner's product feed instead of
+   * curated one by one. Their specs come from the feed only; their pages are
+   * noindex, stay out of the sitemap and articles, and bol.com availability
+   * is unknown until checked. Removed once a stick is enriched by hand.
+   */
+  feedImport: z
+    .object({ feed: z.literal('passahockey'), importedAt: z.string() })
     .optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),

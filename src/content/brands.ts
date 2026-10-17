@@ -211,4 +211,22 @@ export const BRAND_PROFILES: BrandProfile[] = [
       'https://www.passasports.nl/hockey/hockeysticks/_brand-Malik',
     hasCatalogProducts: true,
   },
+  {
+    brand: 'Nike',
+    logoBackground: 'light',
+    characteristics:
+      'De Nike-sticks in onze catalogus en hun gegevens komen uit de productfeed van PassaHockey (PassaSports), onze partnerwinkel. We hebben ze nog niet met de eigen website van Nike vergeleken.',
+    characteristicsSourceUrl:
+      'https://www.passasports.nl/hockey/hockeysticks',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Yibbi',
+    logoBackground: 'light',
+    characteristics:
+      'Van Yibbi hebben we geen officiële merkwebsite gecontroleerd. De Yibbi-sticks in onze catalogus en hun gegevens komen uit de productfeed van PassaHockey (PassaSports), onze partnerwinkel. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+    characteristicsSourceUrl:
+      'https://www.passasports.nl/hockey/hockeysticks',
+    hasCatalogProducts: true,
+  },
 ];

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { isPassaSportsOnly } from '@/catalog/shop';
+import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import type { Product } from '@/catalog/types';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { RetailerLinks } from '@/components/ui/RetailerLinks';
@@ -32,7 +32,7 @@ export function ProductCard({ product }: { product: Product }) {
       </p>
       <div className="mt-1">
         <ProductNotice
-          notSoldAtBol={product.bolNotSold !== undefined}
+          notSoldAtBol={!isSoldAtBol(product)}
           passaSportsOnly={isPassaSportsOnly(product)}
           alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
         />
@@ -45,7 +45,8 @@ export function ProductCard({ product }: { product: Product }) {
           brand={product.brand}
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={product.bolNotSold !== undefined}
+          notSoldAtBol={!isSoldAtBol(product)}
+          bolUnchecked={isBolUnchecked(product)}
           passaSportsProductUrl={product.passaSportsProductUrl}
           placement="catalogus"
           stack

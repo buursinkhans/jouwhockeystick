@@ -1,5 +1,6 @@
 'use client';
 
+import { isSoldAtBol } from '@/catalog/shop';
 import { useState } from 'react';
 import Link from 'next/link';
 import type { Product } from '@/catalog/types';
@@ -97,7 +98,7 @@ function ResultCard({
           brand={product.brand}
           productName={product.name}
           bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={product.bolNotSold !== undefined}
+          notSoldAtBol={!isSoldAtBol(product)}
           passaSportsProductUrl={product.passaSportsProductUrl}
           placement="zaalkeuze"
           className="mt-3"

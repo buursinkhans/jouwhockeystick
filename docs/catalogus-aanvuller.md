@@ -24,6 +24,9 @@ Staat een van **onze** PassaHockey-links in deel (a) als "niet meer in de feed",
 
 ## 3. Nieuwe sticks kiezen
 
+**Let op: geïmporteerde sticks.** Bijna het hele leverbare assortiment van PassaHockey staat al op de site als *geïmporteerde* stick (`src/catalog/imported/passahockey.ts`, wekelijks gegenereerd, niet met de hand bewerken). "Nieuwe stick toevoegen" betekent daarom vaak: een geïmporteerde stick **verrijken**. Kopieer hem naar `src/catalog/products/<slug>.ts`, haal `feedImport` weg, vul aan met merkbronnen (§4), schrijf een eigen `summary`, `strengths` en `pointsOfAttention`, zoek bol.com op (§5) en registreer hem in `src/catalog/index.ts`. Bij de volgende sync verdwijnt de geïmporteerde versie vanzelf, en de verrijkte pagina telt dan mee voor Google. Kies dus bij voorkeur sticks waar bezoekers op landen of die de stickwijzer vaak adviseert.
+
+
 - Kies in totaal **maximaal 2** modellen. Voorkeur: eerst de bol.com-lijst (daar weten we wat populair is), daarna `passa.md` deel (c). Kies uit PassaHockey bij voorkeur een merk dat we al voeren en een model dat de stickwijzer nog mist (bijv. een zaalstick of een junior-stick in een prijsklasse waar we weinig hebben).
 - Werk de lijst van boven naar beneden af.
 - Alleen sticks voor clubhockey (veld of zaal). Geen kunststof-, straat- of speelgoedsticks, geen sets, geen accessoires.

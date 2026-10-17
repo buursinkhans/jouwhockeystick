@@ -5,6 +5,7 @@ import {
   PARTNER_LINK_LABEL,
   PARTNER_LINK_URL,
   PASSASPORTS_ONLY_NOTE,
+  PASSASPORTS_SELLER_NOTE,
 } from '@/content/partnerLinks';
 import { RetailerLink } from './RetailerLink';
 
@@ -21,6 +22,7 @@ export function RetailerLinks({
   placement,
   bolProductUrl,
   notSoldAtBol = false,
+  bolUnchecked = false,
   passaSportsProductUrl,
   className = '',
   stack = false,
@@ -32,6 +34,8 @@ export function RetailerLinks({
   bolProductUrl?: string;
   /** bol.com does not sell this model: show that instead of a link. */
   notSoldAtBol?: boolean;
+  /** Feed-imported stick, bol.com not checked: no bol.com button and no claim about bol.com. */
+  bolUnchecked?: boolean;
   /** PassaSports product page: adds a PassaSports partner link next to (or instead of) bol.com. */
   passaSportsProductUrl?: string;
   className?: string;
@@ -86,7 +90,9 @@ export function RetailerLinks({
       </div>
       {/* Short disclosure at every shop button; the full text is on /methodiek. */}
       <p className="mt-1.5 text-xs text-lijngrijs">
-        {!atBol && <>{PASSASPORTS_ONLY_NOTE} </>}
+        {!atBol && (
+          <>{bolUnchecked ? PASSASPORTS_SELLER_NOTE : PASSASPORTS_ONLY_NOTE} </>
+        )}
         <Link href={PARTNER_LINK_URL} className="underline hover:text-veld">
           {PARTNER_LINK_LABEL}
         </Link>

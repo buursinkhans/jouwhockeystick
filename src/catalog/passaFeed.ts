@@ -29,6 +29,8 @@ export type PassaStickModel = {
   eans: string[];
   /** Sizes in inches, ascending; sizes the feed states in another way are left out. */
   sizesInches: number[];
+  /** Sizes in inches that are in stock, ascending. */
+  sizesInStockInches: number[];
   priceMin: number;
   priceMax: number;
   /** True when at least one size is in stock. */
@@ -141,6 +143,7 @@ export function parsePassaFeed(xml: string): PassaStickModel[] {
         ...(record.imageUrl && { imageUrl: record.imageUrl }),
         eans: [],
         sizesInches: [],
+        sizesInStockInches: [],
         priceMin: record.price,
         priceMax: record.price,
         inStock: false,
@@ -155,13 +158,17 @@ export function parsePassaFeed(xml: string): PassaStickModel[] {
     if (size !== null && !model.sizesInches.includes(size)) model.sizesInches.push(size);
     model.priceMin = Math.min(model.priceMin, record.price);
     model.priceMax = Math.max(model.priceMax, record.price);
-    if (prop('availability')[0] === 'in stock' && Number(prop('stock')[0] ?? '0') > 0) model.inStock = true;
+    if (prop('availability')[0] === 'in stock' && Number(prop('stock')[0] ?? '0') > 0) {
+      model.inStock = true;
+      if (size !== null && !model.sizesInStockInches.includes(size)) model.sizesInStockInches.push(size);
+    }
   }
   return [...models.values()]
     .map(({ categoryPaths, ...model }) => ({
       ...model,
       discipline: disciplineFromCategories([...categoryPaths], model.name),
       sizesInches: model.sizesInches.sort((a, b) => a - b),
+      sizesInStockInches: model.sizesInStockInches.sort((a, b) => a - b),
     }))
     .sort((a, b) => a.url.localeCompare(b.url));
 }
