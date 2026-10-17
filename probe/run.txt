@@ -1,0 +1,5 @@
+781 sticks in de feed; 1 linkproblemen, 16 koppelvoorstellen, 704 ontbrekende sticks.
+
+real	0m17.436s
+user	0m1.561s
+sys	0m0.187s
