@@ -776,9 +776,9 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 - **Catalogus-controle (maandag):** het issue krijgt een blok "Onze PassaHockey-links" met uitverkochte en verdwenen links.
 - **Marktverkenner:** leest PassaSports voortaan uit de feed (stickpagina's) in plaats van de sitemap. De eerste week is voor PassaSports een nulmeting.
 - **Nu gekoppeld (12 sticks):** alleen voorstellen met precies één PassaHockey-pagina én een "van"-prijs die binnen €5 van onze adviesprijs ligt (zelfde jaargang). Grays JB 6, JB 12+, DB 5, JB 8, PB 8, MB 8, MB 7, PB10Xi en DB2Xi; Princess Competition 1 Star ProBow; Brabo G-Force Elite X One LB JR; Reece Alpha JR. De overige voorstellen (o.a. JDH X93/X1, Brabo Elite Five en X One, Grays DB 6/DB 8/DB 10+) laten we aan de wekelijkse controle met de hand.
-- **Niet meer in de feed:** de PassaHockey-link van de Y1 Indoor Low Bow C50 staat niet in de feed van 17 oktober; de Catalogus-aanvuller zoekt een nieuwe URL of haalt de link weg.
 - **Geen kortingen:** de feed bevat een "van"-prijs. Die gebruiken we alleen om jaargangen te vergelijken, nooit als doorgestreepte prijs of besparing op de site (Omnibus-richtlijn).
-- **Foto's uit de feed:** voorlopig niet gebruikt; de eigenaar beslist nog.
+- **Foto's uit de feed (keuze eigenaar):** toegestaan, met `imageSourceUrl` naar de PassaHockey-pagina. Volgorde bij een nieuwe stick: merkfoto, dan bol.com, dan PassaHockey. Nu toegevoegd bij de zes sticks die alleen PassaHockey verkoopt en nog geen foto hadden: Malik LowBow 2 en LowBow 4 Junior, Osaka Midbow Hout Indoor Junior en Probow GF Indoor Junior, Y1 Indoor Mid Bow W1 en Y1 Indoor Low Bow C50.
+- **Y1 Indoor Low Bow C50 (keuze eigenaar):** de 2026/2027-uitvoering staat niet meer in de feed. De stick wijst nu naar de 2025/2026-uitvoering "Y1 Indoor IL.C50", met maat (37,5 inch), prijs (€124,95) en modeljaar 2025 uit de feed.
 
 ## 2026-10-17 — Social-studio: één kalender voor alle kanalen, wekelijkse video
 

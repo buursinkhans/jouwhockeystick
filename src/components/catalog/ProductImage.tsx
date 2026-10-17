@@ -3,7 +3,8 @@ import { StickIllustration } from './StickIllustration';
 
 /**
  * Shows the real product photo hotlinked from the brand's own official
- * product page when we have one (imageUrl), otherwise falls back to the
+ * product page, the bol.com listing or the PassaHockey product feed when we
+ * have one (imageUrl), otherwise falls back to the
  * abstract illustration. A plain <img> is used deliberately instead of
  * next/image — these come from several external, uncontrolled hostnames
  * we don't want to hard-configure into next.config's remote patterns, and

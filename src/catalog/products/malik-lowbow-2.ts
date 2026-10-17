@@ -14,6 +14,8 @@ export const malikLowbow2: Product = {
   bolNotSold: { checkedAt: CHECKED },
   passaSportsProductUrl: 'https://www.passasports.nl/malik-lowbow-2-ma25101',
   imageAlt: 'Malik LowBow 2 hockeystick',
+  imageUrl: 'https://cdn.sportshop.com/catalog/product/600/600/2/1/210875_1.jpg',
+  imageSourceUrl: 'https://www.passasports.nl/malik-lowbow-2-ma25101',
   discipline: {
     value: 'veld',
     source: 'partner-shop',

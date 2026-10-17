@@ -15,6 +15,8 @@ export const malikLowbow4Junior: Product = {
   passaSportsProductUrl:
     'https://www.passasports.nl/malik-lowbow-4-junior-ma25103',
   imageAlt: 'Malik LowBow 4 Junior hockeystick',
+  imageUrl: 'https://cdn.sportshop.com/catalog/product/600/600/2/1/210877_1.jpg',
+  imageSourceUrl: 'https://www.passasports.nl/malik-lowbow-4-junior-ma25103',
   discipline: {
     value: 'veld',
     source: 'partner-shop',

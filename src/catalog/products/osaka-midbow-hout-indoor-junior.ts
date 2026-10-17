@@ -16,6 +16,8 @@ export const osakaMidbowHoutIndoorJunior: Product = {
   passaSportsProductUrl:
     'https://www.passasports.nl/osaka-midbow-hout-indoor-junior-stk00398-hotpink',
   imageAlt: 'Osaka Midbow Hout Indoor Junior hockeystick',
+  imageUrl: 'https://cdn.sportshop.com/catalog/product/600/600/3/9/397730_1.jpg',
+  imageSourceUrl: 'https://www.passasports.nl/osaka-midbow-hout-indoor-junior-stk00398-hotpink',
   discipline: {
     value: 'zaal',
     source: 'partner-shop',

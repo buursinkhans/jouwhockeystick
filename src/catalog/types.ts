@@ -97,7 +97,7 @@ export const productSchema = z.object({
    */
   dataStatus: z.enum(['test-data', 'verified']),
   imageAlt: z.string(),
-  /** Direct URL to the product photo on the brand's own official product page — omitted falls back to an illustration. */
+  /** Direct URL to the product photo (brand page, bol.com listing or PassaHockey feed; see imageSourceUrl) — omitted falls back to an illustration. */
   imageUrl: z.string().url().optional(),
   imageSourceUrl: z.string().url().optional(),
   /**
