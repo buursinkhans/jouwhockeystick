@@ -779,3 +779,16 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 - **Niet meer in de feed:** de PassaHockey-link van de Y1 Indoor Low Bow C50 staat niet in de feed van 17 oktober; de Catalogus-aanvuller zoekt een nieuwe URL of haalt de link weg.
 - **Geen kortingen:** de feed bevat een "van"-prijs. Die gebruiken we alleen om jaargangen te vergelijken, nooit als doorgestreepte prijs of besparing op de site (Omnibus-richtlijn).
 - **Foto's uit de feed:** voorlopig niet gebruikt; de eigenaar beslist nog.
+
+## 2026-10-17 — Social-studio: één kalender voor alle kanalen, wekelijkse video
+
+**Besluit eigenaar:** zo veel mogelijk door een agent laten doen, één keer per week vooruit plannen, en alles in één kalender zien.
+
+**Wat:**
+- De *Instagram-studio* heet nu **Social-studio**: dezelfde pagina en database, plus een weekkalender met alle kanalen. Dat zijn Instagram + Facebook (post), Reel, YouTube Shorts, YouTube en TikTok. Per kanaal staat de status *klaar*, *ingepland* of *geplaatst*. Een blok *Plan de week in* laat per programma (Meta Business Suite, YouTube Studio, TikTok Studio) zien wat nog ingepland moet worden.
+- **Woensdag = video.** De *Social-planner* (voorheen Instagram-planner, elke vrijdag) schrijft voor elke woensdag een videoscript met de teksten per kanaal (collection `videos`). De studio animeert het in de browser in de huisstijl, met onze eigen muziek, en de eigenaar downloadt een MP4 (Short 9:16 en YouTube 16:9) plus de thumbnail. Regels: `docs/video.md` §7.
+- Ingeplande items springen na het geplande moment vanzelf op *geplaatst*. Zo hoeft de eigenaar alleen in het weekend te klikken.
+
+**Waarom in de browser en niet via GitHub:** geen PR, merge of render-run per video. De planner schrijft alleen data, net als bij de posts. Remotion in `video/` blijft er voor video's met een eigen animatie.
+
+**Bewust niet:** automatisch plaatsen of een koppeling met de API's van Meta, YouTube of TikTok. Plannen doet de eigenaar zelf, in de eigen programma's van de platforms.

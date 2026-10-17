@@ -2,7 +2,7 @@
 
 Dit handboek geldt voor iedereen die posts voor het Instagram-account van jouwhockeystick.nl maakt: de Instagram-planner van de pagina *Instagram-studio*, Claude in een sessie en de eigenaar zelf. Het komt bovenop `CLAUDE.md`, `source-policy.md` en `docs/content-agent.md`; bij twijfel gaan die voor.
 
-**De eigenaar plaatst elke post zelf.** Claude maakt alleen een voorstel (tekst per slide, onderschrift, hashtags, alt-tekst en link). De Instagram-studio tekent de beelden in de huisstijl. Er gaat nooit iets automatisch online.
+**De eigenaar plaatst elke post zelf.** Claude maakt alleen een voorstel (tekst per slide, onderschrift, hashtags, alt-tekst en link). De Social-studio (voorheen Instagram-studio) tekent de beelden in de huisstijl. Posts gaan via Meta Business Suite tegelijk naar Instagram en Facebook; de eigenaar plant ze in het weekend in voor de week erna. Er gaat nooit iets automatisch online.
 
 ## 1. Waar een post over gaat
 
@@ -47,8 +47,8 @@ Feedback van de eigenaar volg je binnen deze regels. Feedback die ertegen ingaat
 
 ## 7. Planning
 
-- **Ritme:** drie posts per week, rond 19:30. **Dinsdag = Kiezen** (lengte, bow, budget, beginners; leidt naar de stickwijzer). **Donderdag = Zaal** van oktober t/m februari, daarbuiten **Veld**. **Zaterdag = Bewaren** (tabel, checklist, veelgemaakte fouten: posts die mensen opslaan en delen).
-- **Twee weken vooruit:** elke vrijdag vult de Instagram-planner de lege dagen van de komende 14 dagen. Bestaande posts blijven staan.
+- **Ritme:** drie posts per week, rond 19:30, plus op **woensdag een video** (Short, Reel, TikTok en YouTube; zie `docs/video.md` §7). **Dinsdag = Kiezen** (lengte, bow, budget, beginners; leidt naar de stickwijzer). **Donderdag = Zaal** van oktober t/m februari, daarbuiten **Veld**. **Zaterdag = Bewaren** (tabel, checklist, veelgemaakte fouten: posts die mensen opslaan en delen).
+- **Twee weken vooruit:** elke vrijdag vult de Social-planner de lege dagen van de komende 14 dagen, posts en video's. Bestaande posts blijven staan.
 - **Kwartaalplan:** de planner houdt een plan van 3 maanden bij, per week een thema en focus, afgestemd op het seizoen (zaal vóór december, Sinterklaas en kerst als cadeaumoment, start veldseizoen in maart). Ontbreekt een pagina voor een thema, dan staat dat in het plan als idee voor een content-brief; er komt dan geen post over.
 - **Afwisseling:** dezelfde pagina niet vaker dan eens per 6 weken; wissel carrousel en één beeld af (ongeveer 2 op 1).
 - **Nieuw in de catalogus:** hooguit één per week, alleen voor een stick die echt in de catalogus staat (nieuw toegevoegd, of een nieuw model uit de Marktverkenner dat inmiddels is opgenomen). Feiten alleen uit het productbestand; geen prijs, geen "beste", geen "nieuw op de markt" tenzij de bron het modeljaar noemt. Zeg "nieuw in onze catalogus".
