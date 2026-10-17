@@ -1,4 +1,4 @@
-# Temporary probe (v4): runs npm run passa:feed from the feature branch on the real feed and commits the report. Branch is deleted afterwards.
+# Temporary probe (v5): runs npm run passa:feed from the feature branch on the real feed and commits the report. Branch is deleted afterwards.
 name: Probe PassaHockey feed
 on:
   push:
