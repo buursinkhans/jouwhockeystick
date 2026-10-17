@@ -2,7 +2,7 @@
 
 Dit handboek geldt voor iedereen die video's maakt voor jouwhockeystick.nl: Claude in een sessie, de content-agent in GitHub (`@claude`) en de eigenaar. Het komt bovenop `CLAUDE.md`, `source-policy.md`, `docs/content-agent.md` en `docs/instagram.md`; bij twijfel gaan die voor.
 
-**De eigenaar uploadt elke video zelf.** Claude maakt de video in code (Remotion, map `video/`), de workflow *Video renderen* maakt er MP4-bestanden van, en de eigenaar bekijkt, downloadt en plaatst ze. Er gaat nooit iets automatisch online.
+**De eigenaar uploadt of plant elke video zelf in.** Claude maakt de video in code (Remotion, map `video/`), de workflow *Video renderen* maakt er MP4-bestanden van, en de eigenaar bekijkt, downloadt en plaatst ze. Er gaat nooit iets automatisch online.
 
 ## 1. Status: pilot tot eind november 2026
 
@@ -53,7 +53,19 @@ Eén onderwerp, *Welke lengte hockeystick?*, in twee vormen:
 - **Instagram, Facebook en TikTok:** dezelfde Short als Reel, met een onderschrift volgens `docs/instagram.md` §4 en §9. Een Reel telt als de wekelijkse Reel uit `docs/instagram.md` §8.
 - **Muziek:** standaard ons eigen nummer `assets/video/muziek.mp3` met geluidseffecten (`sfx-*.mp3`). Die zijn in code gemaakt door `video/audio/genereer.py` (geen samples, geen AI), dus van ons: geen licentie, geen naamsvermelding, geen claims. Andere muziek: alleen uit de eigen bibliotheek van het platform (YouTube Audiobibliotheek, Instagram, TikTok), op de versie *zonder muziek*. Nooit populaire hits in het bestand zelf.
 
-## 7. Grenzen
+## 7. Wekelijkse video's via de Social-studio
+
+Naast losse video's in `video/` (Remotion, voor onderwerpen met een eigen animatie zoals de lengtetabel) maakt de **Social-planner** elke week een video die de pagina *Social-studio* zelf in de browser animeert. Er is geen code, PR of render-workflow voor nodig.
+
+- **Ritme:** elke **woensdag** één video. Het is één script dat uitkomt als YouTube Short, Reel (Instagram + Facebook), TikTok én YouTube-video (16:9). De Reel telt als de wekelijkse Reel uit `docs/instagram.md` §8.
+- **Tijden:** YouTube-video 17:00, Short, Reel en TikTok 19:30. Wijkt het af, dan staat het per kanaal in `tijden`.
+- **Onderwerp:** één live pagina, volgens §2 en §3. Een pagina krijgt hooguit eens per 6 weken een video. Een video mag over dezelfde pagina gaan als een post, maar niet binnen 7 dagen ervan.
+- **Script:** 5–7 scènes, eerst `opening` (de vraag van de kijker, max 9 woorden), als laatste `slot` (knop naar de stickwijzer), en daartussen `tekst` (max 25 woorden), `lijst` (2–4 punten van max 8 woorden) of `tabel` (max 8 rijen). Woorden tussen `*sterretjes*` in een kop worden oranje. Zonder sterretjes krijgt alleen een vraag een oranje laatste woord. Doel: een Short van 20–40 seconden.
+- **Teksten per kanaal:** YouTube (titel max 70 tekens, beschrijving, 5–8 tags), Short (titel met `#shorts`, korte beschrijving), Reel (onderschrift volgens `docs/instagram.md` §4) en TikTok (volgens `docs/instagram.md` §9). Elke beschrijving en elk onderschrift heeft de partnerlink-vermelding. YouTube linkt via `jouwhockeystick.nl/youtube` en de bronpagina met `utm_source=youtube&utm_medium=video&utm_campaign=<id>`.
+- **Thumbnail:** kop van max 4 woorden, eventueel een oranje label van max 3 woorden.
+- **De eigenaar** downloadt in de Social-studio de Short en de YouTube-video als MP4 plus de thumbnail. Hij plant ze in het weekend in: YouTube Studio voor de video en de Short, Meta Business Suite voor de Reel en TikTok Studio op de computer. Daarna klikt hij per kanaal op *Ingepland*. Na het geplande moment telt de studio het als geplaatst.
+
+## 8. Grenzen
 
 - Niets uploaden, geen YouTube- of Meta-API, geen kanaalinstellingen wijzigen.
 - Geen tracking-pixels of embeds van YouTube op de site zonder apart besluit (cookies en privacyverklaring).
