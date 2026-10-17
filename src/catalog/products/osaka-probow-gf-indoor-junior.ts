@@ -16,6 +16,8 @@ export const osakaProbowGfIndoorJunior: Product = {
   passaSportsProductUrl:
     'https://www.passasports.nl/osaka-probow-gf-indoor-junior-stk00394-hotpink',
   imageAlt: 'Osaka Probow GF Indoor Junior hockeystick',
+  imageUrl: 'https://cdn.sportshop.com/catalog/product/600/600/3/9/397727_1.jpg',
+  imageSourceUrl: 'https://www.passasports.nl/osaka-probow-gf-indoor-junior-stk00394-hotpink',
   discipline: {
     value: 'zaal',
     source: 'partner-shop',

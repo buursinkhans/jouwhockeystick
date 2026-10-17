@@ -776,9 +776,9 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 - **Catalogus-controle (maandag):** het issue krijgt een blok "Onze PassaHockey-links" met uitverkochte en verdwenen links.
 - **Marktverkenner:** leest PassaSports voortaan uit de feed (stickpagina's) in plaats van de sitemap. De eerste week is voor PassaSports een nulmeting.
 - **Nu gekoppeld (12 sticks):** alleen voorstellen met precies één PassaHockey-pagina én een "van"-prijs die binnen €5 van onze adviesprijs ligt (zelfde jaargang). Grays JB 6, JB 12+, DB 5, JB 8, PB 8, MB 8, MB 7, PB10Xi en DB2Xi; Princess Competition 1 Star ProBow; Brabo G-Force Elite X One LB JR; Reece Alpha JR. De overige voorstellen (o.a. JDH X93/X1, Brabo Elite Five en X One, Grays DB 6/DB 8/DB 10+) laten we aan de wekelijkse controle met de hand.
-- **Niet meer in de feed:** de PassaHockey-link van de Y1 Indoor Low Bow C50 staat niet in de feed van 17 oktober; de Catalogus-aanvuller zoekt een nieuwe URL of haalt de link weg.
 - **Geen kortingen:** de feed bevat een "van"-prijs. Die gebruiken we alleen om jaargangen te vergelijken, nooit als doorgestreepte prijs of besparing op de site (Omnibus-richtlijn).
-- **Foto's uit de feed:** voorlopig niet gebruikt; de eigenaar beslist nog.
+- **Foto's uit de feed (keuze eigenaar):** toegestaan, met `imageSourceUrl` naar de PassaHockey-pagina. Volgorde bij een nieuwe stick: merkfoto, dan bol.com, dan PassaHockey. Nu toegevoegd bij de zes sticks die alleen PassaHockey verkoopt en nog geen foto hadden: Malik LowBow 2 en LowBow 4 Junior, Osaka Midbow Hout Indoor Junior en Probow GF Indoor Junior, Y1 Indoor Mid Bow W1 en Y1 Indoor Low Bow C50.
+- **Y1 Indoor Low Bow C50 (keuze eigenaar):** de 2026/2027-uitvoering staat niet meer in de feed. De stick wijst nu naar de 2025/2026-uitvoering "Y1 Indoor IL.C50", met maat (37,5 inch), prijs (€124,95) en modeljaar 2025 uit de feed.
 
 ## 2026-10-17 — Social-studio: één kalender voor alle kanalen, wekelijkse video
 
@@ -792,3 +792,16 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 **Waarom in de browser en niet via GitHub:** geen PR, merge of render-run per video. De planner schrijft alleen data, net als bij de posts. Remotion in `video/` blijft er voor video's met een eigen animatie.
 
 **Bewust niet:** automatisch plaatsen of een koppeling met de API's van Meta, YouTube of TikTok. Plannen doet de eigenaar zelf, in de eigen programma's van de platforms.
+## 2026-10-17 — Bulkimport van het PassaHockey-assortiment
+
+**Wat (keuze eigenaar):** alle sticks die PassaHockey levert en die nog niet in de catalogus staan, komen in één keer op de site. Doel: de stickwijzer en de catalogus adviseren uit het hele aanbod in plaats van uit 87 sticks.
+- **Wat erin komt:** leverbare stickmodellen (kleuren samengenomen) van merken in onze catalogus, plus Nike en Yibbi. Niet: keepersticks, accessoires, babysticks, sticks met alleen een artikelcode als naam, sticks waarvan veld/zaal onbekend is, en sticks met een bekend modeljaar vóór 2025.
+- **Modeljaar:** de feed heeft geen modeljaar. Alleen bij Y1, Ritual en Indian Maharadja staat het jaar betrouwbaar in de artikelcode; daar vullen we `modelYear` in en vallen oudere collecties af. Bij de andere merken blijft het jaar leeg (nooit gokken); "nu leverbaar" is daar de maatstaf.
+- **Specs uit de feed:** kromming uit "Type kromming" in de omschrijving, anders uit de naam; spreken die elkaar tegen, of is het een kromming die we niet kennen (late bow, control bow), dan blijft het leeg. Carbonpercentage uit "Carbonpercentage"/"Percentage carbon". Lengtes, prijs (laagste verkoopprijs), voorraad, veld/zaal, junior/senior en foto uit de losse velden. Bron overal: de PassaHockey-pagina (`partner-shop`).
+- **Eigen inschattingen (gelabeld):** niveau uit carbon en prijs (≥70% carbon of ≥ €200: ervaren; ≥30% of ≥ €80: gevorderd; anders beginner); positie uit de kromming; sterke en aandachtspunten uit vaste, genuanceerde zinnen. Elke stick meldt dat de gegevens van PassaHockey komen en nog niet met het merk zijn vergeleken.
+- **Koopknop:** alleen PassaHockey. bol.com is voor deze sticks niet gecontroleerd; daarom geen bol.com-knop (een zoeklink kan op een ander product landen) en ook geen tekst "niet te koop bij bol.com", maar "PassaHockey (PassaSports) is de verkoper".
+- **Google:** pagina's van geïmporteerde sticks krijgen `noindex` en staan niet in de sitemap, omdat ze sjabloonteksten hebben en de site al pagina's op "Gevonden – niet geïndexeerd" heeft. Ze tellen pas mee als een stick met de hand is verrijkt (dan verdwijnt `feedImport`).
+- **Waar ze verschijnen:** stickwijzer, `/sticks` (met merkfilter), de lijst op `/zaalsticks`, `/vergelijk`, vergelijkbare sticks en hun eigen productpagina. Niet in kennisartikelen, op de homepage, in de zaalkeuzehulp (die draait in de browser; klein houden) en in de sitemap.
+- **Bijhouden:** `npm run passa:import` schrijft `src/catalog/imported/passahockey.ts`. De workflow PassaHockey-sync draait elke woensdag en opent een PR als prijzen, voorraad of het assortiment veranderen; de eigenaar merget (15 Netlify-credits per merge). Breekt de feed af (minder dan 200 sticks), dan stopt de import en blijft de catalogus staan.
+- **Eerste import (17 oktober):** 545 sticks (412 veld, 133 zaal; kromming bekend bij 422, carbon bij 354, foto bij alle). Niet opgenomen: 24 (18 met een modeljaar vóór 2025, 6 met alleen een artikelcode als naam).
+- **Live gezet zonder preview-review**, op uitdrukkelijke opdracht van de eigenaar ("push direct naar Netlify"), na een groene kwaliteitscontrole.

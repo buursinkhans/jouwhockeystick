@@ -51,7 +51,12 @@ function report(date: string, total: number, result: PassaFeedResult): string {
   ];
   if (result.suggestions.length === 0) lines.push('Geen.', '');
   for (const s of result.suggestions) {
-    lines.push(`### \`${s.slug}\` — ${s.name}`, '', ...s.candidates.map((c) => `- ${modelLine(c)}`), '');
+    lines.push(
+      `### \`${s.slug}\` — ${s.name}`,
+      '',
+      ...s.candidates.map((c) => `- ${modelLine(c)}${c.imageUrl ? ` · foto: ${c.imageUrl}` : ''}`),
+      '',
+    );
   }
   lines.push(
     '## Bij PassaHockey, nog niet in onze catalogus',
@@ -63,6 +68,7 @@ function report(date: string, total: number, result: PassaFeedResult): string {
     lines.push(
       `${i + 1}. ${modelLine(m)}`,
       `   - Feed: ${m.description.slice(0, 280).replace(/\s+/g, ' ')}${m.eans.length ? ` (EAN ${m.eans.slice(0, 3).join(', ')})` : ''}`,
+      ...(m.imageUrl ? [`   - Foto: ${m.imageUrl}`] : []),
       ...(m.otherUrls.length ? [`   - Andere kleuren: ${m.otherUrls.join(' · ')}`] : []),
     );
   }
