@@ -1,0 +1,562 @@
+{
+ "products": 23573,
+ "stickish": 2171,
+ "fields": [
+  [
+   "campaignID",
+   23573
+  ],
+  [
+   "name",
+   23573
+  ],
+  [
+   "price",
+   23573
+  ],
+  [
+   "URL",
+   23573
+  ],
+  [
+   "description",
+   23573
+  ],
+  [
+   "categories/category",
+   23573
+  ],
+  [
+   "properties/property[brand]/value",
+   23573
+  ],
+  [
+   "properties/property[color]/value",
+   23573
+  ],
+  [
+   "properties/property[deliveryTime]/value",
+   23573
+  ],
+  [
+   "properties/property[EAN]/value",
+   23573
+  ],
+  [
+   "properties/property[fromPrice]/value",
+   23573
+  ],
+  [
+   "properties/property[stock]/value",
+   23573
+  ],
+  [
+   "properties/property[availability]/value",
+   23573
+  ],
+  [
+   "properties/property[deliveryCosts]/value",
+   23573
+  ],
+  [
+   "properties/property[size]/value",
+   23573
+  ],
+  [
+   "variations",
+   23573
+  ],
+  [
+   "images/image",
+   23572
+  ],
+  [
+   "properties/property[subcategories]/value",
+   23571
+  ],
+  [
+   "properties/property[categoryPath]/value",
+   23559
+  ],
+  [
+   "properties/property[gender]/value",
+   22618
+  ],
+  [
+   "properties/property[sport]",
+   11800
+  ],
+  [
+   "properties/property[sport]/value",
+   11773
+  ],
+  [
+   "properties/property[gender]",
+   955
+  ],
+  [
+   "properties/property[categoryPath]",
+   14
+  ],
+  [
+   "properties/property[subcategories]",
+   2
+  ],
+  [
+   "images",
+   1
+  ]
+ ],
+ "categories": [
+  [
+   "Tiro > Volleybal > Volleybalkleding > Kleding",
+   1714
+  ],
+  [
+   "Kleding > adidas > Entrada > Volleybal > Volleybalkleding > Kleding",
+   1387
+  ],
+  [
+   "Kleding > The Indian Maharadja > Jaipur > Tennis > Tenniskleding > Kleding",
+   908
+  ],
+  [
+   "Kleding > adidas > Squadra > Volleybal > Volleybalkleding > Kleding",
+   798
+  ],
+  [
+   "Kleding > The Indian Maharadja > Tennis > Tenniskleding > Kleding",
+   526
+  ],
+  [
+   "Kleding > Osaka > Training > Hockey > Hockeykleding > Kleding",
+   510
+  ],
+  [
+   "Kleding > The Indian Maharadja > Kadiri > Tennis > Tenniskleding > Kleding",
+   372
+  ],
+  [
+   "Kleding > Reece > Shift > Hockey > Hockeykleding > Kleding",
+   360
+  ],
+  [
+   "Kleding > Osaka > Training > Padel > Padelkleding > Kleding",
+   353
+  ],
+  [
+   "Kleding > adidas > Volleybal > Volleybalkleding > Kleding",
+   314
+  ],
+  [
+   "Park 26 > Volleybal > Volleybalkleding > Kleding",
+   271
+  ],
+  [
+   "Kleding > JDH > Carbon > Hockey > Hockeykleding > Kleding",
+   264
+  ],
+  [
+   "Kleding > JDH > Carbon > Padel > Padelkleding > Kleding",
+   244
+  ],
+  [
+   "Kleding > adidas > Tabela > Volleybal > Volleybalkleding > Kleding",
+   238
+  ],
+  [
+   "Park III > Volleybal > Volleybalkleding > Kleding",
+   238
+  ],
+  [
+   "Park VIII > Volleybal > Volleybalkleding > Kleding",
+   230
+  ],
+  [
+   "Kleding > adidas > Entrada > Hockey > Hockeykleding > Kleding",
+   171
+  ],
+  [
+   "Kleding > Nike > Academy Serie > Volleybal > Volleybalkleding > Kleding",
+   148
+  ],
+  [
+   "Schoenen > ASICS > Upcourt > Volleybal > Volleybalschoenen > Schoenen",
+   147
+  ],
+  [
+   "Kleding > PureLime > Volleybal > Volleybalkleding > Kleding",
+   145
+  ],
+  [
+   "Kleding > Nike > Nike Hockey > Volleybal > Volleybalkleding > Kleding",
+   145
+  ],
+  [
+   "Kleding > Nike > Nike Hockey > Hockey > Hockeykleding > Kleding",
+   144
+  ],
+  [
+   "Schoenen > ASICS > Gel-Rocket > Volleybal > Volleybalschoenen > Schoenen",
+   143
+  ],
+  [
+   "Schoenen > Osaka > Furo > Korfbal > Korfbalschoenen > Schoenen",
+   142
+  ],
+  [
+   "Schoenen > Mizuno > Wave Lightning > Volleybal > Volleybalschoenen > Schoenen",
+   136
+  ],
+  [
+   "Landen > Osaka > KBHB > Hockey > Hockeykleding > Landen",
+   135
+  ],
+  [
+   "Kleding > Osaka > Hockey > Hockeykleding > Kleding",
+   135
+  ],
+  [
+   "Kleding > Reece > Major > Hockey > Hockeykleding > Kleding",
+   135
+  ],
+  [
+   "Kleding > Osaka > Pro > Padel > Padelkleding > Kleding",
+   131
+  ],
+  [
+   "Schoenen > adidas > Ligra > Volleybal > Volleybalschoenen > Schoenen",
+   129
+  ],
+  [
+   "Schoenen > Mizuno > Wave Momentum > Volleybal > Volleybalschoenen > Schoenen",
+   127
+  ],
+  [
+   "Schoenen > adidas > Fabela > Korfbal > Korfbalschoenen > Schoenen",
+   125
+  ],
+  [
+   "Kleding > adidas > Team Base > Volleybal > Volleybalkleding > Kleding",
+   125
+  ],
+  [
+   "Schoenen > adidas > Stabil > Volleybal > Volleybalschoenen > Schoenen",
+   122
+  ],
+  [
+   "Sokken > adidas > Adi Sock > Voetbal > Voetbalkleding > Sokken",
+   117
+  ],
+  [
+   "Schoenen > adidas > Adipower > Korfbal > Korfbalschoenen > Schoenen",
+   116
+  ],
+  [
+   "Schoenen > ASICS > Gel-Peake > Korfbal > Korfbalschoenen > Schoenen",
+   116
+  ],
+  [
+   "Sokken > adidas > Milano > Voetbal > Voetbalkleding > Sokken",
+   116
+  ],
+  [
+   "Accessoires > Nike > Volleybal > Overige volleybalartikelen > Uitrusting > Accessoires",
+   114
+  ],
+  [
+   "Kleding > Reece > Rise > Hockey > Hockeykleding > Kleding",
+   114
+  ],
+  [
+   "Accessoires > MC David > Korfbal > Braces en ondersteuning > Accessoires",
+   112
+  ],
+  [
+   "Kleding > TK > Hockey > Hockeykleding > Kleding",
+   111
+  ],
+  [
+   "Schoenen > Mizuno > Wave Luminous > Volleybal > Volleybalschoenen > Schoenen",
+   111
+  ],
+  [
+   "Schoenen > adidas > Lux > Korfbal > Korfbalschoenen > Schoenen",
+   110
+  ],
+  [
+   "Sokken > Stox > compressie > Running > Hardloopsokken > Sokken",
+   110
+  ],
+  [
+   "Schoenen > Mizuno > Wave Stealth > Volleybal > Volleybalschoenen > Schoenen",
+   107
+  ],
+  [
+   "Schoenen > Osaka > Kai > Korfbal > Korfbalschoenen > Schoenen",
+   104
+  ],
+  [
+   "Schoenen > Puma > Varion > Volleybal > Volleybalschoenen > Schoenen",
+   103
+  ],
+  [
+   "Kleding > adidas > TechFit > Volleybal > Volleybalkleding > Kleding",
+   102
+  ],
+  [
+   "Schoenen > Brabo > Tribute > Korfbal > Korfbalschoenen > Schoenen",
+   102
+  ],
+  [
+   "Schoenen > ASICS > Gel-Tactic > Volleybal > Volleybalschoenen > Schoenen",
+   97
+  ],
+  [
+   "Sokken > adidas > Voetbal > Voetbalkleding > Sokken",
+   96
+  ],
+  [
+   "Schoenen > ASICS > Powerbreak > Volleybal > Volleybalschoenen > Schoenen",
+   95
+  ],
+  [
+   "Sokken > Stanno > Uni > Voetbal > Voetbalkleding > Sokken",
+   95
+  ],
+  [
+   "Tiro > Voetbal > Voetbalkleding > Kleding",
+   91
+  ],
+  [
+   "Kleding > Triumph > Voetbal > Voetbalkleding > Kleding",
+   91
+  ],
+  [
+   "Sokken > Brabo > Hockey > Hockeysokken > Sokken",
+   88
+  ],
+  [
+   "Kleding > Reece > Studio > Hockey > Hockeykleding > Kleding",
+   88
+  ],
+  [
+   "Kleding > Reece > Sheila > Hockey > Hockeykleding > Kleding",
+   88
+  ],
+  [
+   "Kleding > Reece > Elliot > Hockey > Hockeykleding > Kleding",
+   87
+  ]
+ ],
+ "stickBrands": [
+  [
+   "Brabo",
+   385
+  ],
+  [
+   "Osaka",
+   289
+  ],
+  [
+   "The Indian Maharadja",
+   278
+  ],
+  [
+   "adidas",
+   259
+  ],
+  [
+   "Princess",
+   237
+  ],
+  [
+   "Grays",
+   222
+  ],
+  [
+   "JDH",
+   106
+  ],
+  [
+   "TK",
+   94
+  ],
+  [
+   "Y1",
+   83
+  ],
+  [
+   "Ritual",
+   66
+  ],
+  [
+   "Yibbi",
+   56
+  ],
+  [
+   "Nike",
+   39
+  ],
+  [
+   "Reece",
+   36
+  ],
+  [
+   "Malik",
+   11
+  ],
+  [
+   "Obo",
+   7
+  ],
+  [
+   "Gribbid",
+   2
+  ],
+  [
+   "Karakal",
+   1
+  ]
+ ],
+ "samples": [
+  {
+   "campaignID": "39608",
+   "name": "TK C1 Extreme Low Bow Indoor",
+   "price": "163.95",
+   "URL": "https://www.passasports.nl/tt/passa-nl/?tt=39608_2490853_517408_&r=https%3A%2F%2Fwww.passasports.nl%2Ftk-c1-extreme-low-bow-indoor-224001-84%3Fsize%3D10342%26discipline%3D7405",
+   "images/image": "https://cdn.sportshop.com/catalog/product/600/600/2/0/204571_1.jpg",
+   "description": "Belangrijkste kenmerken * Merk: TK * Type kromming: Extreme LowBow * Kleur: Zwart  De TK C1 Extreme Low Bow Indoor is een hoogwaardige indoor hockeystick van TK, ontworpen voor de serieuze hockeyspeler. Deze stick maakt deel uit van de C1-lijn, die bekend staat om zijn innovatieve technologieën en b",
+   "categories/category": "Sticks > TK",
+   "properties/property[brand]/value": "TK",
+   "properties/property[color]/value": "Zwart/Blauw",
+   "properties/property[deliveryTime]/value": "Vandaag voor 21:30 besteld, morgen in huis",
+   "properties/property[EAN]/value": "4055682105754",
+   "properties/property[fromPrice]/value": "219.95",
+   "properties/property[stock]/value": "1",
+   "properties/property[availability]/value": "in stock",
+   "properties/property[categoryPath]/value": "Hockey > Zaalhockey > Zaalhockey sticks",
+   "properties/property[deliveryCosts]/value": "0.00",
+   "properties/property[gender]/value": "Senior",
+   "properties/property[size]/value": "37.5 inch",
+   "properties/property[sport]/value": "Hockey",
+   "properties/property[subcategories]/value": "Sticks",
+   "variations": ""
+  },
+  {
+   "campaignID": "39608",
+   "name": "adidas Fabela .5",
+   "price": "132.95",
+   "URL": "https://www.passasports.nl/tt/passa-nl/?tt=39608_2490853_517408_&r=https%3A%2F%2Fwww.passasports.nl%2Fadidas-fabela-5-cdh024%3Fsize%3D10342%26discipline%3D7405",
+   "images/image": "https://cdn.sportshop.com/catalog/product/600/600/2/0/209785_1.jpg",
+   "description": "Belangrijkste kenmerken * Merk: adidas * Productlijn: Fabela * Type kromming: MidBow * carbonpercentage: 50% * Kleur: Roze  De adidas Fabela .5 is een veelzijdige hockeystick ontworpen voor de allround speler die streeft naar zowel controle als wendbaarheid op het veld. Deel van de Fabela-lijn, deze",
+   "categories/category": "Sticks > adidas > Fabela",
+   "properties/property[brand]/value": "adidas",
+   "properties/property[color]/value": "Roze",
+   "properties/property[deliveryTime]/value": "Vandaag voor 21:30 besteld, morgen in huis",
+   "properties/property[EAN]/value": "5056494424735",
+   "properties/property[fromPrice]/value": "194.95",
+   "properties/property[stock]/value": "1",
+   "properties/property[availability]/value": "in stock",
+   "properties/property[categoryPath]/value": "Hockey > Cyber Monday",
+   "properties/property[deliveryCosts]/value": "0.00",
+   "properties/property[gender]/value": "Senior",
+   "properties/property[size]/value": "37.5 inch",
+   "properties/property[sport]/value": "Hockey",
+   "properties/property[subcategories]/value": "Sticks",
+   "variations": ""
+  },
+  {
+   "campaignID": "39608",
+   "name": "adidas Ina .1",
+   "price": "272.95",
+   "URL": "https://www.passasports.nl/tt/passa-nl/?tt=39608_2490853_517408_&r=https%3A%2F%2Fwww.passasports.nl%2Fadidas-ina-1-cdh006%3Fsize%3D10333%26discipline%3D7405",
+   "images/image": "https://cdn.sportshop.com/catalog/product/600/600/2/0/209789_1.jpg",
+   "description": "Belangrijkste kenmerken * Merk: adidas * Productlijn: Ina * Type kromming: Extreme LowBow * Percentage carbon: 98% * Kleur: Beige  De adidas Ina .1 is een stugge keuze uit de adidas Ina-lijn, ideaal voor de ervaren hockeyer die zoekt naar precisie en controle.   Materiaal & Carbonpercentage De stick",
+   "categories/category": "Sticks > adidas > Ina",
+   "properties/property[brand]/value": "adidas",
+   "properties/property[color]/value": "Beige",
+   "properties/property[deliveryTime]/value": "Vandaag voor 21:30 besteld, morgen in huis",
+   "properties/property[EAN]/value": "5056494423806",
+   "properties/property[fromPrice]/value": "439.95",
+   "properties/property[stock]/value": "1",
+   "properties/property[availability]/value": "in stock",
+   "properties/property[categoryPath]/value": "Hockey > Cyber Monday",
+   "properties/property[deliveryCosts]/value": "0.00",
+   "properties/property[gender]/value": "Senior",
+   "properties/property[size]/value": "36.5 inch",
+   "properties/property[sport]/value": "Hockey",
+   "properties/property[subcategories]/value": "Sticks",
+   "variations": ""
+  },
+  {
+   "campaignID": "39608",
+   "name": "adidas Chaosfury .7",
+   "price": "71.95",
+   "URL": "https://www.passasports.nl/tt/passa-nl/?tt=39608_2490853_517408_&r=https%3A%2F%2Fwww.passasports.nl%2Fadidas-chaosfury-7-cdh026%3Fsize%3D10333%26discipline%3D7405",
+   "images/image": "https://cdn.sportshop.com/catalog/product/600/600/2/0/209775_1.jpg",
+   "description": "Belangrijkste kenmerken * Merk: adidas * Productlijn: Chaos Fury * Type kromming: LowBow * Carbonpercentage: 20% * Kleur: Groen   De adidas Chaosfury .7 is een flexibele hockeystick uit de collectie van adidas. Dit model valt binnen de Chaos Fury-lijn en biedt sporters verbeterde balcontrole en flex",
+   "categories/category": "Sticks > adidas > Chaos Fury",
+   "properties/property[brand]/value": "adidas",
+   "properties/property[color]/value": "Groen/Geel",
+   "properties/property[deliveryTime]/value": "Vandaag voor 21:30 besteld, morgen in huis",
+   "properties/property[EAN]/value": "5056494424865",
+   "properties/property[fromPrice]/value": "109.95",
+   "properties/property[stock]/value": "1",
+   "properties/property[availability]/value": "in stock",
+   "properties/property[categoryPath]/value": "Hockey > Cyber Monday",
+   "properties/property[deliveryCosts]/value": "3.95",
+   "properties/property[gender]/value": "Senior",
+   "properties/property[size]/value": "36.5 inch",
+   "properties/property[sport]/value": "Hockey",
+   "properties/property[subcategories]/value": "Sticks",
+   "variations": ""
+  },
+  {
+   "campaignID": "39608",
+   "name": "adidas VS .6 Hockey Backpack",
+   "price": "48.95",
+   "URL": "https://www.passasports.nl/tt/passa-nl/?tt=39608_2490853_517408_&r=https%3A%2F%2Fwww.passasports.nl%2Fadidas-vs-6-hockey-backpack-cdh105%3Fsize%3D5688%26discipline%3D7405",
+   "images/image": "https://cdn.sportshop.com/catalog/product/600/600/2/0/209731_1.jpg",
+   "description": "Belangrijkste kenmerken * Merk: adidas * Tastype: BackpackDe adidas VS .6 Hockey Backpack is een ideale keuze voor hockeyers die op zoek zijn naar praktische opbergruimte. Deze backpack is ontworpen om hockeysticks en andere benodigdheden gemakkelijk mee te nemen. Dankzij de stevige constructie bied",
+   "categories/category": "Tassen > adidas",
+   "properties/property[brand]/value": "adidas",
+   "properties/property[color]/value": "Zwart/Roze",
+   "properties/property[deliveryTime]/value": "Vandaag voor 21:30 besteld, morgen in huis",
+   "properties/property[EAN]/value": "5056494428016",
+   "properties/property[fromPrice]/value": "64.95",
+   "properties/property[stock]/value": "1",
+   "properties/property[availability]/value": "in stock",
+   "properties/property[categoryPath]/value": "Hockey > Hockeytassen",
+   "properties/property[deliveryCosts]/value": "3.95",
+   "properties/property[gender]/value": "Junior/Senior",
+   "properties/property[size]/value": "ONE-SIZE",
+   "properties/property[sport]/value": "Hockey",
+   "properties/property[subcategories]/value": "Tassen",
+   "variations": ""
+  },
+  {
+   "campaignID": "39608",
+   "name": "adidas VS .6 Hockey Backpack",
+   "price": "54.95",
+   "URL": "https://www.passasports.nl/tt/passa-nl/?tt=39608_2490853_517408_&r=https%3A%2F%2Fwww.passasports.nl%2Fadidas-vs-6-hockey-backpack-cdh106%3Fsize%3D5688%26discipline%3D7405",
+   "images/image": "https://cdn.sportshop.com/catalog/product/600/600/2/0/209732_1.jpg",
+   "description": "Belangrijkste kenmerken * Merk: adidas * Tastype: BackpackDe adidas VS .6 Hockey Backpack is de ideale keuze voor elke hockeyer die op zoek is naar een praktische manier om zijn spullen mee te nemen. Deze backpack biedt voldoende opbergruimte voor je hockeysticks en andere benodigdheden. Dankzij de ",
+   "categories/category": "Tassen > adidas",
+   "properties/property[brand]/value": "adidas",
+   "properties/property[color]/value": "Blauw/Oranje",
+   "properties/property[deliveryTime]/value": "Vandaag voor 21:30 besteld, morgen in huis",
+   "properties/property[EAN]/value": "5056494428023",
+   "properties/property[fromPrice]/value": "64.95",
+   "properties/property[stock]/value": "1",
+   "properties/property[availability]/value": "in stock",
+   "properties/property[categoryPath]/value": "Hockey > Hockeytassen",
+   "properties/property[deliveryCosts]/value": "3.95",
+   "properties/property[gender]/value": "Junior/Senior",
+   "properties/property[size]/value": "ONE-SIZE",
+   "properties/property[sport]/value": "Hockey",
+   "properties/property[subcategories]/value": "Tassen",
+   "variations": ""
+  }
+ ]
+}
