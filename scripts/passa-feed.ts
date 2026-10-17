@@ -56,11 +56,15 @@ function report(date: string, total: number, result: PassaFeedResult): string {
   lines.push(
     '## Bij PassaHockey, nog niet in onze catalogus',
     '',
-    `Leverbare sticks die niets in onze catalogus matchen (${result.gaps.length} in totaal). De feed kent geen populariteit: merken die we al voeren eerst, daarna het grootste aantal maten. Top ${GAP_LIMIT}:`,
+    `Leverbare sticks die niets in onze catalogus matchen (${result.gaps.length} modellen; kleuren samengenomen). De feed kent geen populariteit. Om de beurt veld/zaal en junior/senior; daarbinnen merken die we al voeren eerst, daarna het grootste aantal maten. Top ${GAP_LIMIT}:`,
     '',
   );
   for (const [i, m] of result.gaps.slice(0, GAP_LIMIT).entries()) {
-    lines.push(`${i + 1}. ${modelLine(m)}`, `   - Feed: ${m.description.slice(0, 280).replace(/\s+/g, ' ')}${m.eans.length ? ` (EAN ${m.eans.slice(0, 3).join(', ')})` : ''}`);
+    lines.push(
+      `${i + 1}. ${modelLine(m)}`,
+      `   - Feed: ${m.description.slice(0, 280).replace(/\s+/g, ' ')}${m.eans.length ? ` (EAN ${m.eans.slice(0, 3).join(', ')})` : ''}`,
+      ...(m.otherUrls.length ? [`   - Andere kleuren: ${m.otherUrls.join(' · ')}`] : []),
+    );
   }
   lines.push('', '_Automatisch gegenereerd uit de productfeed van PassaHockey (TradeTracker)._');
   return lines.join('\n');

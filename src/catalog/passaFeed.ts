@@ -46,13 +46,17 @@ type FeedRecord = {
 
 const ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'" };
 
-function decode(text: string): string {
-  const cdata = text.match(/^\s*<!\[CDATA\[([\s\S]*?)\]\]>\s*$/);
-  if (cdata) return (cdata[1] ?? '').trim();
+function decodeEntities(text: string): string {
   return text
     .replace(/&(amp|lt|gt|quot|apos);/g, (_, name: string) => ENTITIES[name] ?? '')
-    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
-    .trim();
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)));
+}
+
+/** Text of an element. The feed escapes some names twice ("O&amp;apos;Geez"), so entities are decoded twice. */
+function decode(text: string): string {
+  const cdata = text.match(/^\s*<!\[CDATA\[([\s\S]*?)\]\]>\s*$/);
+  const raw = cdata ? (cdata[1] ?? '') : decodeEntities(text);
+  return decodeEntities(raw).trim();
 }
 
 function tag(block: string, name: string): string | undefined {
@@ -232,9 +236,15 @@ export type PassaFeedResult = {
   linked: LinkCheck[];
   /** Our sticks without a link where the feed has the same model (one candidate) or possibly (several). */
   suggestions: LinkSuggestion[];
-  /** Sticks in stock at PassaHockey that match nothing in our catalog. */
-  gaps: PassaStickModel[];
+  /** Sticks in stock at PassaHockey that match nothing in our catalog, one per model name. */
+  gaps: PassaGap[];
 };
+
+/** A missing stick; PassaHockey often has a page per colour, listed in `otherUrls`. */
+export type PassaGap = PassaStickModel & { otherUrls: string[] };
+
+/** Field/indoor and junior/senior, so the gap list covers every kind of player instead of one. */
+const segment = (m: PassaStickModel) => `${m.discipline}|${isJunior(m.name) || m.gender === 'Junior' ? 'junior' : 'senior'}`;
 
 const pageKey = (url: string) => url.replace(/[?#].*$/, '').replace(/\/$/, '').toLowerCase();
 
@@ -263,14 +273,40 @@ export function comparePassaFeed(models: readonly PassaStickModel[], catalog: re
   }
 
   const ourBrands = new Set(catalog.map((p) => normalBrand(p.brand)));
-  const gaps = models
-    .filter((m) => m.inStock && !covered.has(m.url) && m.gender !== 'Baby')
-    // No popularity in the feed: brands we already carry first, then the widest size range.
-    .sort(
-      (a, b) =>
-        Number(ourBrands.has(normalBrand(b.brand))) - Number(ourBrands.has(normalBrand(a.brand))) ||
-        b.sizesInches.length - a.sizesInches.length ||
-        a.name.localeCompare(b.name),
+  // One entry per model name: colours are separate pages in the feed.
+  const byName = new Map<string, PassaGap>();
+  for (const m of models) {
+    if (!m.inStock || covered.has(m.url) || m.gender === 'Baby') continue;
+    const key = `${normalBrand(m.brand)}|${m.name.toLowerCase()}`;
+    const existing = byName.get(key);
+    if (!existing) {
+      byName.set(key, { ...m, otherUrls: [] });
+    } else if (m.sizesInches.length > existing.sizesInches.length) {
+      byName.set(key, { ...m, otherUrls: [existing.url, ...existing.otherUrls] });
+    } else {
+      existing.otherUrls.push(m.url);
+    }
+  }
+  // No popularity in the feed: within each kind of stick, brands we already carry first, then
+  // the widest size range; then take turns between the kinds.
+  const bySegment = new Map<string, PassaGap[]>();
+  for (const gap of byName.values()) bySegment.set(segment(gap), [...(bySegment.get(segment(gap)) ?? []), gap]);
+  const queues = [...bySegment.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, list]) =>
+      list.sort(
+        (a, b) =>
+          Number(ourBrands.has(normalBrand(b.brand))) - Number(ourBrands.has(normalBrand(a.brand))) ||
+          b.sizesInches.length - a.sizesInches.length ||
+          a.name.localeCompare(b.name),
+      ),
     );
+  const gaps: PassaGap[] = [];
+  while (queues.some((q) => q.length > 0)) {
+    for (const queue of queues) {
+      const next = queue.shift();
+      if (next) gaps.push(next);
+    }
+  }
   return { linked, suggestions, gaps };
 }

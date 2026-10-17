@@ -160,6 +160,27 @@ describe('isSameModel', () => {
   });
 });
 
+describe('names and colours', () => {
+  const colours = `<products>
+${product({ id: '9', name: 'Brabo O&amp;apos;Geez Hout Junior', page: 'brabo-ogeez-hout-junior-1', size: '28 inch', ean: '201', brand: 'Brabo', gender: 'Junior' })}
+${product({ id: '10', name: 'Brabo O&amp;apos;Geez Hout Junior', page: 'brabo-ogeez-hout-junior-2', size: '30 inch', ean: '202', brand: 'Brabo', gender: 'Junior' })}
+${product({ id: '11', name: 'Brabo O&amp;apos;Geez Hout Junior', page: 'brabo-ogeez-hout-junior-2', size: '32 inch', ean: '203', brand: 'Brabo', gender: 'Junior' })}
+${product({ id: '12', name: 'Brabo Elite 2 Forged Carbon LowBow Indoor', page: 'brabo-elite-2-indoor', size: '36.5 inch', ean: '204', brand: 'Brabo', categoryPaths: ['Hockey &gt; Zaalhockey &gt; Zaalhockey sticks'] })}
+</products>`;
+
+  it('decodes names the feed escaped twice', () => {
+    expect(nth(parsePassaFeed(colours), 0).name).toBe("Brabo O'Geez Hout Junior");
+  });
+
+  it('lists a stick with a page per colour once, and takes turns between kinds of stick', () => {
+    const { gaps } = comparePassaFeed(parsePassaFeed(colours), []);
+    expect(gaps.map((g) => [g.name, g.url, g.otherUrls])).toEqual([
+      ["Brabo O'Geez Hout Junior", 'https://www.passasports.nl/brabo-ogeez-hout-junior-2', ['https://www.passasports.nl/brabo-ogeez-hout-junior-1']],
+      ['Brabo Elite 2 Forged Carbon LowBow Indoor', 'https://www.passasports.nl/brabo-elite-2-indoor', []],
+    ]);
+  });
+});
+
 describe('comparePassaFeed', () => {
   const models = parsePassaFeed(FEED);
 
