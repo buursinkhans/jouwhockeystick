@@ -33,7 +33,7 @@ De lint, typecheck, tests en build draaien al in de Kwaliteitscontrole. Herhaal 
 - **Dubbel:** staat het model er al onder een andere naam in `src/catalog/products/`?
 - **Model, geen maat:** maten en kleuren van één model zijn één product.
 - **Prijs:** adviesprijs van het merk, of de bol.com-prijs op de controledatum met die uitleg. Geen "van"-prijzen of kortingen.
-- **Links en foto's:** `bolProductUrl` is een bol.com-productpagina; een foto alleen van de merkpagina of de gebruikte bol.com-listing, met `imageSourceUrl`.
+- **Links en foto's:** `bolProductUrl` is een bol.com-productpagina; een foto alleen van de merkpagina, de gebruikte bol.com-listing of de PassaHockey-feed (`cdn.sportshop.com`), met `imageSourceUrl`.
 - **Teksten:** `summary`, `strengths` en `pointsOfAttention` zijn genuanceerd ("kan passen bij"), zonder prestatiebeloften.
 - Draai `npm run catalog:health` als je twijfelt over datums of verificatie.
 

@@ -45,7 +45,8 @@ Vul `bowProfile`, `carbonPercentage` en `weightGrams` **alleen** in als een bron
 - `bolProductUrl`: de bol.com-productpagina (`https://www.bol.com/nl/nl/p/…/<16 cijfers>/`) uit `gaps.md`.
 - `passaSportsProductUrl`: de PassaHockey-pagina, als PassaHockey de stick verkoopt (zie §2 voor de regels).
 - Stick uit `passa.md` die niet in `gaps.md` staat: zoek met WebFetch op bol.com (`https://www.bol.com/nl/nl/s/?searchtext=<merk+model>`). Vind je een listing van precies dit model, zet dan `bolProductUrl`. Vind je niets, zet `bolNotSold: { checkedAt: '<vandaag>' }`; dan krijgt de stick alleen de PassaHockey-knop. Kun je bol.com niet bereiken, laat beide weg en meld het in de PR.
-- `imageUrl`: alleen een foto van de officiële productpagina van het merk of van de bol.com-listing die je als bron gebruikt, met `imageSourceUrl`. Anders weglaten. Foto's uit de PassaHockey-feed gebruiken we (nog) niet.
+- `imageUrl`: een foto van de officiële productpagina van het merk, van de bol.com-listing die je als bron gebruikt, of uit de PassaHockey-feed (`imageUrl` in `passa.json`, op `cdn.sportshop.com`), altijd met `imageSourceUrl` (de pagina waar de foto bij hoort). Volgorde: merk, dan bol.com, dan PassaHockey. Geen foto gevonden: weglaten.
+- Een stick die alleen PassaHockey verkoopt en nog geen foto heeft, krijgt bij het koppelen ook de foto uit de feed.
 - `priceIndicativeEur`: de adviesprijs van het merk, of anders de bol.com- of PassaHockey-prijs op de controledatum, met die uitleg in `sourceLabel`. Geen kortingen: ook niet de "van"-prijs uit de feed als doorgestreepte prijs of besparing.
 - `stock`: wat de bron op de controledatum zegt.
 - `summary`, `strengths`, `pointsOfAttention`: kort, Nederlands, genuanceerd ("kan passen bij"). Geen prestatiebeloften.
