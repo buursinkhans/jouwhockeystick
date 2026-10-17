@@ -1,4 +1,4 @@
-# Temporary probe: downloads the PassaHockey feed once and commits a small sample. Branch is deleted afterwards.
+# Temporary probe (v2): downloads the PassaHockey feed once and commits a small sample. Branch is deleted afterwards.
 name: Probe PassaHockey feed
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
           import sys, json, collections, xml.etree.ElementTree as ET
           path = sys.argv[1]
           tags = collections.Counter(); cats = collections.Counter(); brands = collections.Counter()
-          samples = []; n = 0; sticks = 0
+          models = {}; samples = []; n = 0; sticks = 0
           def flat(el, prefix=''):
               out = {}
               for c in el:
@@ -42,7 +42,13 @@ jobs:
                   b = next((v for k, v in f.items() if 'brand' in k.lower()), '')
                   brands[b] += 1
                   if len(samples) < 6: samples.append(f)
+              if f.get('properties/property[subcategories]/value') == 'Sticks':
+                  r = parse_qs(urlparse(f['URL']).query).get('r', [''])[0]
+                  path = urlparse(r).path
+                  m = models.setdefault(path, {'path': path, 'name': f['name'], 'brand': f.get('properties/property[brand]/value',''), 'categoryPath': f.get('properties/property[categoryPath]/value',''), 'category': f.get('categories/category',''), 'gender': f.get('properties/property[gender]/value',''), 'description': f.get('description','')[:300], 'image': f.get('images/image',''), 'variants': []})
+                  m['variants'].append({'ean': f.get('properties/property[EAN]/value',''), 'size': f.get('properties/property[size]/value',''), 'color': f.get('properties/property[color]/value',''), 'price': f['price'], 'fromPrice': f.get('properties/property[fromPrice]/value',''), 'stock': f.get('properties/property[stock]/value',''), 'availability': f.get('properties/property[availability]/value','')})
               el.clear()
+          json.dump(sorted(models.values(), key=lambda m: m['path']), open('probe/sticks.json', 'w'), ensure_ascii=False, indent=0)
           json.dump({'products': n, 'stickish': sticks, 'fields': tags.most_common(80), 'categories': cats.most_common(60), 'stickBrands': brands.most_common(40), 'samples': samples}, open('probe/summary.json', 'w'), ensure_ascii=False, indent=1)
           PY
           git config user.name probe; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
