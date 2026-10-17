@@ -169,7 +169,8 @@ ${product({ id: '12', name: 'Brabo Elite 2 Forged Carbon LowBow Indoor', page: '
 </products>`;
 
   it('decodes names the feed escaped twice', () => {
-    expect(nth(parsePassaFeed(colours), 0).name).toBe("Brabo O'Geez Hout Junior");
+    // Models are sorted by page URL: brabo-elite-… comes before brabo-ogeez-….
+    expect(nth(parsePassaFeed(colours), 1).name).toBe("Brabo O'Geez Hout Junior");
   });
 
   it('lists a stick with a page per colour once, and takes turns between kinds of stick', () => {
