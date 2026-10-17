@@ -1,5 +1,6 @@
 import { getDiscipline } from './discipline';
 import type { Brand, Discipline, Product } from './types';
+import { PASSAHOCKEY_PRODUCTS } from './imported/passahockey';
 
 export { getDiscipline };
 import { graysJb6Composite } from './products/grays-jb6-composite';
@@ -184,7 +185,7 @@ const ALL_PRODUCTS: Product[] = [
  * Bump whenever product data changes. Stamped on every advice result so an
  * old result can be traced back to the catalog it was calculated from.
  */
-export const CATALOG_VERSION = '2026-10-16';
+export const CATALOG_VERSION = '2026-10-17';
 
 const VERIFICATION_FRESHNESS_MONTHS = 12;
 
@@ -206,42 +207,78 @@ export function isProductActive(
 }
 
 /**
- * Every product in the catalog, including inactive ones. Only for internal
- * checks such as the catalog health report — never for pages.
+ * Every hand-curated product in the catalog, including inactive ones. Only for
+ * internal checks such as the catalog health report — never for pages. Sticks
+ * imported in bulk from the PassaHockey feed are separate: getImportedProducts.
  */
 export function getCatalogProducts(): readonly Product[] {
   return ALL_PRODUCTS;
 }
 
-export function getAllProducts(now: Date = new Date()): Product[] {
-  return ALL_PRODUCTS.filter((product) => isProductActive(product, now));
+/** Sticks imported in bulk from the PassaHockey feed (src/catalog/imported/, generated). */
+export function getImportedProducts(): readonly Product[] {
+  return PASSAHOCKEY_PRODUCTS;
 }
 
-export function getFieldProducts(now: Date = new Date()): Product[] {
-  return getAllProducts(now).filter(
+/** True for a stick from the bulk feed import: noindex page, not in the sitemap or articles. */
+export function isFeedImport(product: Product): boolean {
+  return product.feedImport !== undefined;
+}
+
+export type ProductQuery = {
+  /**
+   * Also return the sticks imported from the PassaHockey feed. Off by default,
+   * so articles, the homepage and the sitemap stay on the curated catalog; the
+   * stickwijzer, catalog pages, compare page and product pages turn it on.
+   */
+  includeImported?: boolean;
+};
+
+export function getAllProducts(
+  now: Date = new Date(),
+  { includeImported = false }: ProductQuery = {},
+): Product[] {
+  const products = includeImported
+    ? [...ALL_PRODUCTS, ...PASSAHOCKEY_PRODUCTS]
+    : ALL_PRODUCTS;
+  return products.filter((product) => isProductActive(product, now));
+}
+
+export function getFieldProducts(
+  now: Date = new Date(),
+  query: ProductQuery = {},
+): Product[] {
+  return getAllProducts(now, query).filter(
     (product) => getDiscipline(product) === 'veld',
   );
 }
 
-export function getIndoorProducts(now: Date = new Date()): Product[] {
-  return getAllProducts(now).filter(
+export function getIndoorProducts(
+  now: Date = new Date(),
+  query: ProductQuery = {},
+): Product[] {
+  return getAllProducts(now, query).filter(
     (product) => getDiscipline(product) === 'zaal',
   );
 }
 
+/** Looks in the curated catalog and the feed import, so every product page resolves. */
 export function getProductBySlug(
   slug: string,
   now: Date = new Date(),
 ): Product | undefined {
-  return getAllProducts(now).find((product) => product.slug === slug);
+  return getAllProducts(now, { includeImported: true }).find(
+    (product) => product.slug === slug,
+  );
 }
 
 /** Brands that have at least one active product, optionally within one discipline. */
 export function getAllBrands(
   now: Date = new Date(),
   discipline?: Discipline,
+  query: ProductQuery = {},
 ): Brand[] {
-  const products = getAllProducts(now).filter(
+  const products = getAllProducts(now, query).filter(
     (product) => !discipline || getDiscipline(product) === discipline,
   );
   const brands = new Set(products.map((product) => product.brand));

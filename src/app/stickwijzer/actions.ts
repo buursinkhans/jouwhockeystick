@@ -32,7 +32,7 @@ export async function getAdviceAction(
     };
   }
 
-  const advice = getAdvice(parsed.data, getAllProducts(), {
+  const advice = getAdvice(parsed.data, getAllProducts(new Date(), { includeImported: true }), {
     adviceSessionId: SESSION_ID_PATTERN.test(adviceSessionId)
       ? adviceSessionId
       : '',

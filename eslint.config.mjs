@@ -23,6 +23,8 @@ const eslintConfig = defineConfig([
     // Remotion video project with its own dependencies; typechecked by
     // .github/workflows/video.yml.
     "video/**",
+    // Generated from the PassaHockey feed by scripts/passa-import.ts.
+    "src/catalog/imported/**",
   ]),
 ]);
 

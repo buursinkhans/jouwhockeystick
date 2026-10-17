@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getIndoorProducts } from '@/catalog';
+import type { Product } from '@/catalog/types';
 import { ZAAL, ZAAL_SOURCES } from '@/content/zaal';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
 import { IndoorSelector } from '@/components/zaal/IndoorSelector';
@@ -14,9 +15,14 @@ export const metadata = pageMetadata({
 });
 
 export default function ZaalsticksPage() {
-  const products = [...getIndoorProducts()].sort(
-    (a, b) => a.priceIndicativeEur.value - b.priceIndicativeEur.value,
-  );
+  const byPrice = (a: Product, b: Product) =>
+    a.priceIndicativeEur.value - b.priceIndicativeEur.value;
+  // The selector runs in the browser, so it gets the curated sticks only (a
+  // small payload); the list below shows every indoor stick, imports included.
+  const products = [...getIndoorProducts()].sort(byPrice);
+  const allProducts = [
+    ...getIndoorProducts(new Date(), { includeImported: true }),
+  ].sort(byPrice);
 
   // Describes only what is visible on this page: the article and its author.
   const jsonLd = {
@@ -122,7 +128,7 @@ export default function ZaalsticksPage() {
           {ZAAL.stickwijzerNote}
         </p>
         <div className="mt-6">
-          <ProductGrid products={products} />
+          <ProductGrid products={allProducts} />
         </div>
       </section>
 

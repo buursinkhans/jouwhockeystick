@@ -13,3 +13,7 @@ export const PARTNER_LINK_URL = '/methodiek#partnerlinks';
 /** For sticks that only PassaHockey (PassaSports) sells, not bol.com. */
 export const PASSASPORTS_ONLY_NOTE =
   'Niet te koop bij bol.com, wel bij PassaHockey. PassaHockey (PassaSports) is dan de verkoper.';
+
+/** For feed-imported sticks: we have not checked bol.com, so we say nothing about it. */
+export const PASSASPORTS_SELLER_NOTE =
+  'PassaHockey (PassaSports) is de verkoper.';
