@@ -1,0 +1,43 @@
+# Weekly sales report (read-only, counts only): clicks and orders per place
+# on the site from bol.com and PassaHockey (TradeTracker), written to one
+# GitHub issue with label `verkoop`. The repository is public, so the report
+# never contains revenue or commission. See scripts/sales-report.ts.
+name: Verkooprapport
+
+on:
+  schedule:
+    - cron: '41 5 * * 1' # Mondays 05:41 UTC, before the Orchestrator
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Rapport maken
+        env:
+          BOL_AFFILIATE_CLIENT_ID: ${{ secrets.BOL_AFFILIATE_CLIENT_ID }}
+          BOL_AFFILIATE_CLIENT_SECRET: ${{ secrets.BOL_AFFILIATE_CLIENT_SECRET }}
+          TRADETRACKER_CUSTOMER_ID: ${{ secrets.TRADETRACKER_CUSTOMER_ID }}
+          TRADETRACKER_PASSPHRASE: ${{ secrets.TRADETRACKER_PASSPHRASE }}
+        run: npm run --silent sales:report > report.md
+      - name: Rapport in issue zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create verkoop --color 0E8A16 --description "Wekelijks verkooprapport (alleen aantallen)" --force
+          number=$(gh issue list --label verkoop --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file report.md
+            gh issue comment "$number" --body "Rapport bijgewerkt op $(date -u +%F)."
+          else
+            gh issue create --title "Verkooprapport" --label verkoop --body-file report.md
+          fi

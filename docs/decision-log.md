@@ -865,3 +865,17 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
   | Scoop, Stag, Ravi, Csign | geen eigen website |
 
 - **Test:** `src/content/brandPhilosophy.test.ts` bewaakt dat de bronnen geen winkel of derde partij zijn.
+
+## 2026-10-18 — Verkooprapport (alleen aantallen)
+
+**Wat:** de workflow "Verkooprapport" draait op maandag, vóór de orchestrator. Het rapport komt in één issue met het label `verkoop`.
+- **Bronnen:** de bol.com Affiliate Reporting API (`promotion-report`) en het referentierapport van TradeTracker (`getReportReference`, campagne 39608, site 517408).
+- **Inhoud:**
+  - kliks en bestellingen per plek op de site (sub-ID of referentie);
+  - de tien meest aangeklikte sticks bij bol.com;
+  - de vergelijking met de week ervoor.
+- **Geen bedragen (keuze eigenaar):** de repository is openbaar, dus omzet en commissie staan er niet in. Een test bewaakt dat. De bedragen zie je in de portalen zelf.
+- **Als een bron faalt:** dat staat in het rapport, en het andere deel gaat gewoon door. De sleutels komen nooit in het rapport of in een log.
+- **Plek per klik:** links die geen bekende plek meesturen, zoals de testlink uit het bol-dashboard, staan onder "Overig".
+- **PassaHockey per stick:** TradeTracker toont niet per stick, omdat onze links alleen de plek meesturen.
+- **Ongetest:** het formaat van de TradeTracker-respons is gebouwd volgens de WSDL, maar nog niet met echte gegevens geprobeerd. De eerste run laat zien of het klopt.

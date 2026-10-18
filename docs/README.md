@@ -34,6 +34,7 @@ Deze workflows lezen alleen en maken een rapport, meestal als issue. De orchestr
 |---|---|
 | `search-console.yml` | Kansen per zoekopdracht uit Google Search Console |
 | `technical-seo.yml` | Crawlt de live sitemap op technische SEO-problemen |
+| `sales-report.yml` | Kliks en bestellingen per plek en per stick bij bol.com en PassaHockey (alleen aantallen, want de repo is openbaar) |
 | `conversion-report.yml` | Stickwijzer-trechter, afhaken per vraag en winkelkliks (PostHog) |
 | `marktverkenning.yml` | Nieuwe hockeypagina's bij concurrenten |
 | `passa-sync.yml` | Woensdag: importeert de PassaHockey-productfeed opnieuw (prijzen, voorraad, nieuwe en verdwenen sticks) en opent een PR |
