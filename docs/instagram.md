@@ -1,6 +1,6 @@
 # Instagram — handboek
 
-Dit handboek geldt voor iedereen die posts voor het Instagram-account van jouwhockeystick.nl maakt: de Instagram-planner van de pagina *Instagram-studio*, Claude in een sessie en de eigenaar zelf. Het komt bovenop `CLAUDE.md`, `source-policy.md` en `docs/content-agent.md`; bij twijfel gaan die voor.
+Dit handboek geldt voor iedereen die posts voor het Instagram-account van jouwhockeystick.nl maakt: de Instagram-planner van de pagina *Instagram-studio*, Claude in een sessie en de eigenaar zelf. Het komt bovenop `CLAUDE.md`, `docs/source-policy.md` en `docs/content-agent.md`; bij twijfel gaan die voor.
 
 **De eigenaar plaatst elke post zelf.** Claude maakt alleen een voorstel (tekst per slide, onderschrift, hashtags, alt-tekst en link). De Social-studio (voorheen Instagram-studio) tekent de beelden in de huisstijl. Posts gaan via Meta Business Suite tegelijk naar Instagram en Facebook; de eigenaar plant ze in het weekend in voor de week erna. Er gaat nooit iets automatisch online.
 

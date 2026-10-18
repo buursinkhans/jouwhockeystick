@@ -1,6 +1,6 @@
 # Catalogus-hercontroleur — handboek
 
-De catalogus-hercontroleur houdt de catalogus actueel. Bronbeleid §3 vraagt elk kwartaal een controle van de productdata; de Catalogus-controle *meldt* welke sticks aan de beurt zijn, de hercontroleur *doet* die controle. Hij werkt elke donderdag en levert **één pull request met maximaal 12 sticks**. De eigenaar reviewt en merget. Dit handboek komt bovenop `CLAUDE.md`, `source-policy.md` en `docs/catalogus-aanvuller.md` (§3–§4 over bronnen en het productbestand); die gaan altijd voor.
+De catalogus-hercontroleur houdt de catalogus actueel. Bronbeleid §3 vraagt elk kwartaal een controle van de productdata; de Catalogus-controle *meldt* welke sticks aan de beurt zijn, de hercontroleur *doet* die controle. Hij werkt elke donderdag en levert **één pull request met maximaal 12 sticks**. De eigenaar reviewt en merget. Dit handboek komt bovenop `CLAUDE.md`, `docs/source-policy.md` en `docs/catalogus-aanvuller.md` (§3–§4 over bronnen en het productbestand); die gaan altijd voor.
 
 ## 1. Wat je krijgt
 

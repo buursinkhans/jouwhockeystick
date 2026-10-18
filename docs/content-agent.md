@@ -1,6 +1,6 @@
 # Content-agent — handboek
 
-Dit handboek geldt voor iedereen die content schrijft voor jouwhockeystick.nl: de content-agent in GitHub (`@claude`), Claude in een sessie en de redactie zelf. Het komt bovenop `CLAUDE.md` en `source-policy.md`; bij twijfel gaan die voor.
+Dit handboek geldt voor iedereen die content schrijft voor jouwhockeystick.nl: de content-agent in GitHub (`@claude`), Claude in een sessie en de redactie zelf. Het komt bovenop `CLAUDE.md` en `docs/source-policy.md`; bij twijfel gaan die voor.
 
 ## 1. Hoe een opdracht binnenkomt
 
@@ -17,7 +17,7 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 ## 2. Eerst controleren, dan schrijven
 
 1. **Botst het onderwerp met een bestaande pagina?** Lees de titels en intro's van alle pagina's in `src/content/articles/`, `src/content/blogPosts/`, `src/content/zaal.ts` en de rolverdeling in `docs/decision-log.md` (2026-10-08, SEO-verbeteringen). Beantwoordt een bestaande pagina dezelfde hoofdvraag, schrijf dan geen nieuwe pagina, maar stel in het issue een uitbreiding van die pagina voor.
-2. **Welke feiten zijn nodig, en waar komen ze vandaan?** Alleen uit bronnen die `source-policy.md` §2 toestaat. Productgegevens komen altijd uit de catalogus (`src/catalog`), nooit uit eigen tekst.
+2. **Welke feiten zijn nodig, en waar komen ze vandaan?** Alleen uit bronnen die `docs/source-policy.md` §2 toestaat. Productgegevens komen altijd uit de catalogus (`src/catalog`), nooit uit eigen tekst.
 3. **Kun je de hoofdvraag eerlijk beantwoorden met wat we hebben?** Zo niet: zeg dat in het issue en stop.
 
 ## 3. Regels voor de tekst

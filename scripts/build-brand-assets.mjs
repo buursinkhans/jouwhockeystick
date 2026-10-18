@@ -1,6 +1,6 @@
 /**
  * Builds every logo, icon and favicon file from the brand guideline
- * (jouwhockeystick-logo-merkinstructie.md, v1.0) so they are reproducible:
+ * (docs/merkinstructie.md, v1.0) so they are reproducible:
  *
  *   node scripts/build-brand-assets.mjs
  *

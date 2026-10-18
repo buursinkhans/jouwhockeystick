@@ -1,6 +1,6 @@
 # Business model — jouwhockeystick.nl
 
-**Status:** aanvulling op `jouwhockeystick-ontwikkelinstructie-vscode-claude-code.md`, sectie 2 ("E-commerce").
+**Status:** strategiedocument; de actuele situatie staat in sectie 5. Inhoudsopgave van alle documenten: `docs/README.md`.
 **Doel van dit document:** vastleggen welk verdienmodel de MVP volgt, zodat de technische keuzes (checkout, productfeed, tracking) hierop worden afgestemd in plaats van andersom.
 **Plaats in repo:** `docs/business-model.md`.
 
@@ -8,7 +8,7 @@
 
 ## 1. Gekozen model: contentplatform + affiliate-samenwerking
 
-> **Update 2026-09-26:** de concrete affiliate-partner is nu **bol.com** (via het bol.com Partnerprogramma), niet de hieronder beschreven hypothetische lokale hockeywinkel. Er is nog geen Partnerprogramma-account/tracking-ID; zie `docs/decision-log.md` (2026-09-26) en `CLAUDE.md` — Commerce. De rest van dit document (verdienmodel, `partner-pitch.md`) beschreef het oorspronkelijke idee van een lokale winkelpartner en is voor bol.com niet meer van toepassing — commissiepercentages/afspraken lopen bij bol.com via hun eigen Partnerprogramma-voorwaarden, niet via een zelf onderhandeld contract.
+> **Stand van zaken (2026-10-18):** de site verwijst door naar twee partnerwinkels: **bol.com** (bol.com Partnerprogramma) en **PassaHockey**, de hockeywinkel van PassaSports (via TradeTracker). Er is geen eigen winkel, voorraad of checkout. Hoe de links werken, staat in `src/lib/retailers.ts` en `docs/decision-log.md` (2026-09-26 en 2026-10-16). Hieronder volgt het oorspronkelijke model met een lokale winkelpartner. Dat blijft een mogelijke latere stap, maar is nu niet in gebruik; de pitch daarvoor staat in `docs/archief/partner-pitch.md`.
 
 jouwhockeystick.nl start **niet** als eigen webshop met eigen inkoop, voorraad en checkout. De site bouwt vertrouwen en vindbaarheid op via de stickwijzer en kennisbank, en verwijst de aankoop door naar bol.com.
 
@@ -29,7 +29,7 @@ Dit vervangt voor de MVP de aanname in sectie 2 van de ontwikkelinstructie dat e
 
 ## 2. Verdienmodel
 
-**Commissie op verkoop**, aangevuld met een lead-/afsprakevergoeding voor click & collect (online oriënteren en reserveren, in de winkel passen en afhalen). Zie `partner-pitch.md` voor het voorstel aan de winkel.
+**Commissie op verkoop**, aangevuld met een lead-/afsprakevergoeding voor click & collect (online oriënteren en reserveren, in de winkel passen en afhalen). Zie `docs/archief/partner-pitch.md` voor het voorstel aan de winkel.
 
 | Onderdeel | Uitgangspunt |
 |---|---|
@@ -85,33 +85,19 @@ De ontwikkelinstructie hecht terecht veel waarde aan uitlegbaar advies en betrou
 
 - Vermeld op elke pagina met een productaanbeveling **duidelijk en direct** dat de verkoop via de partnerwinkel loopt.
 - Verklaar niet dat jouwhockeystick.nl de verkoper, garantieverstrekker of retourpartij is.
-- Zie `source-policy.md` voor de volledige bronvermeldings- en transparantie-eisen.
+- Zie `docs/source-policy.md` voor de volledige bronvermeldings- en transparantie-eisen.
 
 ---
 
-## 5. Tussenoplossing: bol.com affiliate zolang er geen leverancier of winkelafspraak is
+## 5. Huidige situatie: twee partnerwinkels
 
-Zolang er geen leverancier, dealeraccount of afspraak met een lokale winkel is, heeft de "Bestel deze stick"-knop geen echte fulfilment achter zich — een bestelling via het huidige mailto-formulier komt nergens terecht. Als tijdelijke oplossing linkt de site in plaats daarvan door naar het bijpassende product op bol.com via het **bol Affiliate Programma**.
+- **bol.com:** elke stick die bol.com verkoopt, krijgt een knop met een partnerlink (site ID en sub-ID per plek op de site).
+- **PassaHockey:** elke stick die PassaHockey verkoopt, krijgt een rode knop met een TradeTracker-link. De referentie is de plek op de site.
+- **Bij beide te koop:** de stick krijgt twee knoppen. De pagina `/kennis/waar-koop-je-een-hockeystick` legt het verschil tussen de winkels uit.
+- **Vergoedingen** lopen via de voorwaarden van die programma's. We nemen ze nergens in code of tekst aan, en ze tellen niet mee in het advies.
+- **Bestellen bij een lokale winkel** blijft een optie voor later (zie hieronder).
 
-### Waarom dit een goede tussenstap is
-- **Geen voorwaarden vooraf.** Het Affiliate Programma staat los van het bol Partnerplatform (waar bol zelf op verkoopt): geen KvK-plicht voor dit specifieke programma, geen voorraad, geen dealercontract nodig — alleen een live, inhoudelijke website die meer biedt dan kale productlinks. De stickwijzer en kennisartikelen voldoen daaraan.
-- **Bezoekers kunnen echt iets kopen.** Dat is eerlijker dan een bestelknop die nergens toe leidt.
-- **Er komt een bescheiden inkomste uit hetzelfde verkeer** dat je toch al probeert te genereren.
-
-### Hoe de commissie werkt
-- Commissie wordt alleen uitgekeerd bij een **aankoop**, niet bij een klik.
-- Standaard cookietijd: **5 dagen** na de klik.
-- Commissie geldt over de **volledige inhoud van de winkelwagen** op het moment van aankoop, niet alleen het aangeklikte product.
-- Commissiepercentage hangt af van de productcategorie: Platinum 7%, Goud 6%, **Zilver ~4% (waarschijnlijk van toepassing op sport/hockeysticks)**, cashback-/dealsites vast 2%. Dit is een aanname; verifieer het exacte percentage voor de categorie sport bij aanmelding.
-
-### Indicatieve opbrengst
-Bij 50 verkopen per maand via de site à gemiddeld €80 op 4% commissie: **circa €160 per maand**. Ter vergelijking: dezelfde verkoop levert via een commissieafspraak met een lokale winkel (8-15%) €6,40-€12 per stick op, en via een eigen privatelabel-marge €20-€50 per stick. Bol.com-affiliate is dus 3 tot 10 keer minder waard per verkoop dan de eigen kanalen — een bijverdienste, geen vervanging van het verdienmodel uit sectie 2.
-
-### Implementatie
-- Vervang de `chooseStick()`-functie op de testpagina: in plaats van door te scrollen naar het eigen bestelformulier, opent de bijpassende bol.com-affiliatelink (nieuw tabblad).
-- Vermeld duidelijk en direct dat dit een link naar een externe verkoper is (eerlijkheid naar de bezoeker, en waarschijnlijk ook een voorwaarde van bol zelf).
-- Zodra er een eigen leverancier of winkelafspraak is: vervang de bol-links terug door de eigen bestelflow uit sectie 2/3.
-- Let op: de huidige 10 sticks in de catalogus zijn voorbeelddata (zie `source-policy.md`). Voor elke bol.com-link moet een daadwerkelijk bestaand, vergelijkbaar bol-product gezocht worden — niet het fictieve model zelf.
+Het eerdere plan voor deze tussenstap, met een mailto-bestelformulier en aannames over bol-commissies, staat in de git-geschiedenis van dit bestand.
 
 ## 6. Latere fases (niet in scope voor MVP)
 

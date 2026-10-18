@@ -1,22 +1,30 @@
 # CLAUDE.md — jouwhockeystick.nl
 
 ## Product
-jouwhockeystick.nl is een Nederlandse, mobiele-first website die hockeyers en ouders helpt een passende hockeystick te kiezen. De catalogus bevat producten van Grays, Brabo, JDH en Princess met specs die rechtstreeks van de officiële merksites zijn gehaald. adidas.nl blokkeert geautomatiseerde toegang (bot-bescherming), dus adidas-producten zijn in plaats daarvan gesourced via bol.com-listings (`source: 'partner-shop'`) — dit staat expliciet vermeld per producteigenschap.
+jouwhockeystick.nl is een Nederlandse, mobiele-first website die hockeyers en ouders helpt een passende hockeystick te kiezen. De catalogus (`src/catalog/products/`) bevat sticks van meerdere merken. Specs komen bij voorkeur van de officiële merksite; waar dat niet kan, van een winkel (`source: 'partner-shop'`), en dat staat per producteigenschap vermeld. Zie `docs/source-policy.md`.
 
 De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking, kennisartikelen en e-commerce. De belangrijkste merkwaarden zijn helder, persoonlijk, eerlijk, energiek, deskundig en verifieerbaar.
 
 ## Testfase-scope
 - Dit is een validatie-MVP: er is GEEN checkout, winkelmand of betaalverwerking. Bouw dit niet, tenzij expliciet gevraagd.
-- Vervang elke verwijzing naar "afrekenen" of "bestellen" door het interesseformulier uit docs/test-mvp-scope.md.
-- Analytics-events (quiz_start, quiz_complete, interest_submit, bolcom_click) zijn in deze fase net zo belangrijk als de functionaliteit zelf. Voeg ze toe bij elke relevante wijziging.
-- Getoonde prijzen zijn de officiële adviesprijzen van de fabrikant (met bron en datum), geen live bol.com-prijzen. Markeer dit zichtbaar op de pagina.
+- Kopen gaat via de partnerwinkels (zie Commerce). Voor vragen en persoonlijk advies is er het interesseformulier op `/interesse`.
+- Analytics-events (quiz_start, quiz_complete, interest_submit, retailer_click; zie `src/lib/analytics/events.ts`) zijn in deze fase net zo belangrijk als de functionaliteit zelf. Voeg ze toe bij elke relevante wijziging.
+- Getoonde prijzen zijn richtprijzen (adviesprijs van de fabrikant of een winkelprijs, met bron en datum), geen live winkelprijzen. Markeer dit zichtbaar op de pagina.
 
 ## Commerce
-- jouwhockeystick.nl verwijst door naar bol.com; er is geen eigen checkout, voorraad of betaalverwerking.
-- bol.com-links lopen via het bol.com Partnerprogramma (site ID 1547833, zie `src/lib/retailers.ts`), met een sub-ID per plek op de site. Elke winkelknop toont een partnerlink-vermelding; vergoedingen spelen geen rol in de adviesscore. bol.com is voorlopig de enige winkel op de site; voeg pas een andere winkel toe als daar een partnerprogramma voor is. Voeg geen fictieve tracking-parameters toe.
-- Iedere productpagina en ieder stickadvies bevat een duidelijke, niet-misleidende vermelding dat bol.com de verkoper is.
-- Geen kortingsclaims (bijv. "X% korting") zonder een echte, verifieerbare eerdere verkoopprijs — dit is wettelijk gereguleerd (EU Omnibus-richtlijn). Toon alleen de adviesprijs.
-- Trackinglinks zijn de enige bron van waarheid voor attributie; hardcode geen commissieaannames in de UI.
+- jouwhockeystick.nl verkoopt zelf niets: er is geen eigen checkout, voorraad of betaalverwerking. De site verwijst door naar twee partnerwinkels:
+  - **bol.com**, via het bol.com Partnerprogramma (site ID 1547833), met een sub-ID per plek op de site;
+  - **PassaHockey** (de hockeywinkel van PassaSports), via TradeTracker (campagne 39608), met de plek op de site als referentie.
+  Beide staan in `src/lib/retailers.ts`. Een stick krijgt een knop voor elke winkel die hem verkoopt: `bolProductUrl` of niet `bolNotSold`, en `passaSportsProductUrl`. Voeg een winkel pas toe als daar een partnerprogramma voor is. Gebruik geen fictieve tracking-parameters.
+- Elke winkelknop toont een partnerlink-vermelding. Iedere productpagina en ieder stickadvies maakt duidelijk dat de winkel de verkoper is. Het verschil tussen de winkels staat op `/kennis/waar-koop-je-een-hockeystick`.
+- Vergoedingen en de winkel spelen geen rol in de adviesscore.
+- Geen kortingsclaims (bijv. "X% korting") zonder een echte, verifieerbare eerdere verkoopprijs; dit is wettelijk gereguleerd (EU Omnibus-richtlijn). Toon alleen de richtprijs.
+- Trackinglinks zijn de enige bron van waarheid voor attributie. Hardcode geen commissieaannames in de UI.
+
+## Documentatie
+- `docs/README.md` is de inhoudsopgave van alle documenten.
+- De specificatie van de keuzehulp is leidend: `docs/spec/keuzehulp-instructie-v1.1.md`. Meld afwijkingen achteraf in `docs/decision-log.md`.
+- Merk en logo: `docs/merkinstructie.md`. Bronbeleid: `docs/source-policy.md`.
 
 ## Kernregels
 - Gebruik TypeScript in strict mode. Vermijd `any`; gebruik expliciete types, discriminated unions en Zod-validatie waar passend.

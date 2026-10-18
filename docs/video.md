@@ -1,6 +1,6 @@
 # Video — handboek
 
-Dit handboek geldt voor iedereen die video's maakt voor jouwhockeystick.nl: Claude in een sessie, de content-agent in GitHub (`@claude`) en de eigenaar. Het komt bovenop `CLAUDE.md`, `source-policy.md`, `docs/content-agent.md` en `docs/instagram.md`; bij twijfel gaan die voor.
+Dit handboek geldt voor iedereen die video's maakt voor jouwhockeystick.nl: Claude in een sessie, de content-agent in GitHub (`@claude`) en de eigenaar. Het komt bovenop `CLAUDE.md`, `docs/source-policy.md`, `docs/content-agent.md` en `docs/instagram.md`; bij twijfel gaan die voor.
 
 **De eigenaar uploadt of plant elke video zelf in.** Claude maakt de video in code (Remotion, map `video/`), de workflow *Video renderen* maakt er MP4-bestanden van, en de eigenaar bekijkt, downloadt en plaatst ze. Er gaat nooit iets automatisch online.
 

@@ -1,6 +1,6 @@
 # Decision log — adviesregels
 
-Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSetVersion`), conform `source-policy.md` §7.
+Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSetVersion`), conform `docs/source-policy.md` §7.
 
 ## 2026-09-22 — introductie `ruleSetVersion v1-2026-09-22`
 
@@ -71,7 +71,7 @@ Vastlegging van wijzigingen aan de adviesengine (hard filters, scoring, `ruleSet
 
 **Belangrijk verschil met de andere merken:** bij Grays/Brabo/JDH/Princess is `priceIndicativeEur` de officiële adviesprijs van het merk zelf. Bij deze twee adidas-producten is het een momentopname van de actuele bol.com-verkoopprijs (expliciet zo gelabeld in `sourceLabel`) — dat is een ander soort getal, en de generieke `ProductNotice`-tekst is daarom aangepast van "Adviesprijs (fabrikant)" naar het neutralere "Richtprijs", zodat er geen onterechte fabrikantsclaim ontstaat voor deze twee producten.
 
-**Reden:** Expliciete opdracht om adidas via bol.com te sourcen nu adidas.nl niet te raadplegen is. bol.com is voor dit project al de aangewezen verkooppartner, en `partner-shop` is een bestaand, toegestaan brontype in het schema (source-policy.md §2) — dit is dus geen nieuwe categorie, alleen de eerste keer dat we hem voor specs gebruiken i.p.v. alleen voor prijs.
+**Reden:** Expliciete opdracht om adidas via bol.com te sourcen nu adidas.nl niet te raadplegen is. bol.com is voor dit project al de aangewezen verkooppartner, en `partner-shop` is een bestaand, toegestaan brontype in het schema (docs/source-policy.md §2) — dit is dus geen nieuwe categorie, alleen de eerste keer dat we hem voor specs gebruiken i.p.v. alleen voor prijs.
 
 **Betrokken bestanden:** `src/catalog/products/adidas-estro-4.ts`, `adidas-estro-75-le.ts`, `src/catalog/index.ts`, `src/components/ui/ProductNotice.tsx`, `src/content/brands.ts`.
 
@@ -805,3 +805,18 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 - **Bijhouden:** `npm run passa:import` schrijft `src/catalog/imported/passahockey.ts`. De workflow PassaHockey-sync draait elke woensdag en opent een PR als prijzen, voorraad of het assortiment veranderen; de eigenaar merget (15 Netlify-credits per merge). Breekt de feed af (minder dan 200 sticks), dan stopt de import en blijft de catalogus staan.
 - **Eerste import (17 oktober):** 545 sticks (412 veld, 133 zaal; kromming bekend bij 422, carbon bij 354, foto bij alle). Niet opgenomen: 24 (18 met een modeljaar vóór 2025, 6 met alleen een artikelcode als naam).
 - **Live gezet zonder preview-review**, op uitdrukkelijke opdracht van de eigenaar ("push direct naar Netlify"), na een groene kwaliteitscontrole.
+
+## 2026-10-18 — documentatie opgeruimd
+
+**Wat (opdracht eigenaar):**
+- **`docs/README.md` is de inhoudsopgave.** De `README.md` in de root beschrijft nu het project in plaats van de standaardtekst van Next.js.
+- **Spec in de repo:** de leidende specificatie staat nu in de repo als `docs/spec/keuzehulp-instructie-v1.1.md`. Eerst stond ze alleen lokaal, buiten git, waardoor de agents op GitHub haar niet konden lezen. Het oude addendum over bronverwijzingen zit volledig in v1.1 (hoofdstuk 9) en staat daarom niet in de repo.
+- **Merkinstructie in de repo:** `docs/merkinstructie.md`, eerst alleen lokaal.
+- **Verplaatst naar `docs/`:** `docs/source-policy.md` en `docs/business-model.md` uit de root, en `docs/archief/partner-pitch.md` naar `docs/archief/`. Alle verwijzingen zijn bijgewerkt, ook in de agent-prompts van de workflows.
+- **`CLAUDE.md` bijgewerkt naar de werkelijkheid:**
+  - twee partnerwinkels (bol.com en PassaHockey);
+  - het event `retailer_click`;
+  - richtprijzen uit merk- of winkelbron;
+  - geen verwijzing meer naar het niet-bestaande `docs/test-mvp-scope.md`;
+  - een nieuwe sectie "Documentatie".
+- **`docs/business-model.md`:** een sectie "Huidige situatie: twee partnerwinkels" vervangt het verouderde plan met het mailto-formulier.

@@ -2,7 +2,7 @@ import type { Product } from '../types';
 
 // Specs sourced from a bol.com listing, not adidas's own site — adidas.nl/.de/.com
 // block automated access. bol.com is this site's designated retail partner, so
-// it's an explicitly allowed source for price/availability (source-policy.md §2);
+// it's an explicitly allowed source for price/availability (docs/source-policy.md §2);
 // technical specs here are exactly as printed on the listing, never invented.
 export const adidasEstro75Le: Product = {
   slug: 'adidas-estro-75-le',

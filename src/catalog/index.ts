@@ -191,7 +191,7 @@ const VERIFICATION_FRESHNESS_MONTHS = 12;
 
 /**
  * A product with no valid source or an expired lastVerifiedAt (older than
- * 12 months) must not be shown as active (source-policy.md §3).
+ * 12 months) must not be shown as active (docs/source-policy.md §3).
  */
 export function isProductActive(
   product: Product,

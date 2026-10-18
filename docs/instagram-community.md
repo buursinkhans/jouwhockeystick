@@ -1,6 +1,6 @@
 # Instagram-community — handboek
 
-De community-agent helpt het Instagram-account @jouwhockeystick aan de juiste volgers: hockeyouders, (volwassen) beginners en hun clubs in Nederland. Hij werkt op de tab *Community* van de pagina *Instagram-studio* en draait elke woensdag (of op verzoek). Dit handboek komt bovenop `CLAUDE.md`, `source-policy.md` en `docs/instagram.md`; die gaan altijd voor.
+De community-agent helpt het Instagram-account @jouwhockeystick aan de juiste volgers: hockeyouders, (volwassen) beginners en hun clubs in Nederland. Hij werkt op de tab *Community* van de pagina *Instagram-studio* en draait elke woensdag (of op verzoek). Dit handboek komt bovenop `CLAUDE.md`, `docs/source-policy.md` en `docs/instagram.md`; die gaan altijd voor.
 
 **De agent zoekt en stelt voor; de eigenaar doet alle interactie zelf.** De agent volgt, liket, reageert en stuurt nooit iets op Instagram, en logt nergens in.
 

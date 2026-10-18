@@ -9,7 +9,7 @@ import type { Product } from './types';
 /**
  * Picks the sticks for this week's re-check (docs/catalogus-hercontroleur.md).
  * A stick is a candidate when its oldest lastVerifiedAt reaches the quarterly
- * re-check (source-policy.md §3) within the horizon. Read-only.
+ * re-check (docs/source-policy.md §3) within the horizon. Read-only.
  */
 
 /** At most this many sticks per pull request, so a review stays doable. */

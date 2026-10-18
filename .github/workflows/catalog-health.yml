@@ -1,4 +1,4 @@
-# Weekly catalog health check (source-policy.md §3). Read-only: it writes the
+# Weekly catalog health check (docs/source-policy.md §3). Read-only: it writes the
 # report to one GitHub issue and never changes code, data or the live site.
 name: Catalogus-controle
 

@@ -1,6 +1,6 @@
 # Catalogus-aanvuller — handboek
 
-De catalogus-aanvuller voegt hockeysticks toe die bij bol.com of PassaHockey te koop zijn maar nog niet in onze catalogus staan. Zonder die sticks kan de stickwijzer ze niet adviseren. Daarnaast koppelt hij sticks uit de catalogus aan hun pagina bij PassaHockey, zodat ze een tweede koopknop krijgen. Hij werkt elke dinsdag, na de Marktverkenner van maandag, en levert **één pull request met maximaal 2 nieuwe sticks en maximaal 10 koppelingen**. De eigenaar reviewt de preview en merget. Dit handboek komt bovenop `CLAUDE.md` en `source-policy.md`; die gaan altijd voor.
+De catalogus-aanvuller voegt hockeysticks toe die bij bol.com of PassaHockey te koop zijn maar nog niet in onze catalogus staan. Zonder die sticks kan de stickwijzer ze niet adviseren. Daarnaast koppelt hij sticks uit de catalogus aan hun pagina bij PassaHockey, zodat ze een tweede koopknop krijgen. Hij werkt elke dinsdag, na de Marktverkenner van maandag, en levert **één pull request met maximaal 2 nieuwe sticks en maximaal 10 koppelingen**. De eigenaar reviewt de preview en merget. Dit handboek komt bovenop `CLAUDE.md` en `docs/source-policy.md`; die gaan altijd voor.
 
 ## 1. Wat je krijgt
 

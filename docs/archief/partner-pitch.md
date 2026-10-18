@@ -1,7 +1,7 @@
 # Samenwerkingsvoorstel — jouwhockeystick.nl × [naam winkel]
 
 **Doel van dit document:** een concreet, bespreekbaar voorstel voor de winkeleigenaar. Vul de tekst tussen [ ] in voordat je dit verstuurt of meeneemt naar een gesprek.
-**Plaats in repo:** `docs/partner-pitch.md` (intern werkdocument; stuur een opgemaakte versie of PDF naar de winkel, niet dit bestand).
+**Plaats in repo:** `docs/archief/partner-pitch.md` (intern werkdocument; stuur een opgemaakte versie of PDF naar de winkel, niet dit bestand).
 
 ---
 

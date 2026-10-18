@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# jouwhockeystick.nl
 
-## Getting Started
+Een Nederlandse website die hockeyers en ouders helpt een passende hockeystick te kiezen: een stickwijzer met uitlegbaar advies, een catalogus met bronnen per gegeven, een kennisbank en een blog. Kopen gaat via partnerwinkels (bol.com en PassaHockey); de site verkoopt zelf niets.
 
-First, run the development server:
+## Snel starten
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run lint
+npm run typecheck
+npm test
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Waar staat wat?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Map | Inhoud |
+|---|---|
+| `src/app/` | Pagina's (Next.js App Router) |
+| `src/advice-engine/` | De adviesregels van de stickwijzer: filters, scores, redenen, lengteadvies |
+| `src/catalog/` | De productcatalogus: één bestand per stick in `products/`, met bron en controledatum per gegeven |
+| `src/content/` | Teksten: kennisartikelen, blogs, vragen van de stickwijzer, methodiek, privacy |
+| `src/components/` | Interface-onderdelen |
+| `src/lib/` | Winkellinks (`retailers.ts`), analytics, site-instellingen |
+| `video/` | Uitlegvideo's in code (Remotion) |
+| `docs/` | Alle afspraken en handboeken; begin bij [`docs/README.md`](docs/README.md) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Regels
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+De regels voor iedereen die aan de site werkt, mens of agent, staan in [`CLAUDE.md`](CLAUDE.md). De specificatie van de stickwijzer staat in [`docs/spec/keuzehulp-instructie-v1.1.md`](docs/spec/keuzehulp-instructie-v1.1.md).

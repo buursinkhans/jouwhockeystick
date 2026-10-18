@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 /**
  * Every verifiable product property is wrapped so it always carries a source,
- * an optional model year, and a last-verified date (source-policy.md §1).
+ * an optional model year, and a last-verified date (docs/source-policy.md §1).
  */
 export const sourceTypeSchema = z.enum([
   'brand-website',
@@ -152,7 +152,7 @@ export const productSchema = z.object({
   priceIndicativeEur: sourcedValueSchema(z.number().positive()),
   stock: sourcedValueSchema(stockStatusSchema),
   summary: z.string(),
-  /** Editorial pros/cons — always marked as our own assessment, never a hard spec (source-policy.md §2). */
+  /** Editorial pros/cons — always marked as our own assessment, never a hard spec (docs/source-policy.md §2). */
   strengths: sourcedValueSchema(z.array(z.string()).min(1)),
   pointsOfAttention: sourcedValueSchema(z.array(z.string()).min(1)),
 });

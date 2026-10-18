@@ -1,6 +1,6 @@
 # Review-agent — handboek
 
-De review-agent is een tweede paar ogen bij elke pull request die content (`src/content/`) of de catalogus (`src/catalog/`) raakt. Hij toetst de PR aan de afspraken, zodat de eigenaar alleen nog de preview hoeft te bekijken en kan mergen. Hij **wijzigt niets**: geen commits, geen goedkeuring, geen merge. De schrijvende agent en de controlerende agent zijn bewust gescheiden; werk keurt zichzelf niet goed. Dit handboek komt bovenop `CLAUDE.md`, `source-policy.md`, `docs/content-agent.md`, `docs/catalogus-aanvuller.md` en `docs/catalogus-hercontroleur.md`; die gaan altijd voor.
+De review-agent is een tweede paar ogen bij elke pull request die content (`src/content/`) of de catalogus (`src/catalog/`) raakt. Hij toetst de PR aan de afspraken, zodat de eigenaar alleen nog de preview hoeft te bekijken en kan mergen. Hij **wijzigt niets**: geen commits, geen goedkeuring, geen merge. De schrijvende agent en de controlerende agent zijn bewust gescheiden; werk keurt zichzelf niet goed. Dit handboek komt bovenop `CLAUDE.md`, `docs/source-policy.md`, `docs/content-agent.md`, `docs/catalogus-aanvuller.md` en `docs/catalogus-hercontroleur.md`; die gaan altijd voor.
 
 ## 1. Wat je leest
 
@@ -18,7 +18,7 @@ De lint, typecheck, tests en build draaien al in de Kwaliteitscontrole. Herhaal 
 - **Brief:** beantwoordt de pagina de hoofdvraag uit de brief, voor de doelgroep uit de brief? Staat er iets in wat volgens de brief er niet in mocht?
 - **Hoofdvraag in de intro**, binnen 80 woorden en in eigen woorden.
 - **Botsing:** beantwoordt een bestaande pagina dezelfde hoofdvraag? Dan hoort het een uitbreiding te zijn, geen nieuwe pagina (zie de rolverdeling in `docs/decision-log.md`, 2026-10-08).
-- **Claims en bronnen:** elke feitelijke claim heeft een bron uit `source-policy.md` §2. Spelregels uit de FIH-regelboeken; merkclaims van de merksite. Redactioneel advies is als zodanig benoemd.
+- **Claims en bronnen:** elke feitelijke claim heeft een bron uit `docs/source-policy.md` §2. Spelregels uit de FIH-regelboeken; merkclaims van de merksite. Redactioneel advies is als zodanig benoemd.
 - **Geen vaste productcijfers in tekst:** prijzen, lengtes, carbonpercentages en beschikbaarheid komen uit de catalogus, niet uit een zin.
 - **Verboden taal:** "de beste", "gegarandeerd", "bewezen", prestatiebeloften, medische claims, kortingsclaims, "review" in een titel, eigen testresultaten.
 - **Winkels:** bol.com is de enige winkel. Andere winkels alleen als bron, en dan op de `nofollow`-lijst in `src/content/linkPolicy.ts`.

@@ -1,6 +1,6 @@
 # Bronbeleid — jouwhockeystick.nl
 
-**Status:** invulling van `docs/source-policy.md`, zoals aangekondigd in de mappenstructuur van `jouwhockeystick-ontwikkelinstructie-vscode-claude-code.md`.
+**Status:** bindend bronbeleid. Inhoudsopgave van alle documenten: `docs/README.md`.
 **Doel:** vastleggen hoe claims over sticks worden onderbouwd, hoe bronnen worden vermeld, en hoe de commerciële relatie met de partnerwinkel transparant blijft. Dit document is bindend voor content, productdata en de adviesengine.
 
 ---
@@ -43,7 +43,7 @@ Dit sluit aan bij `CLAUDE.md`: "Elke producteigenschap moet een bron, modeljaar 
 
 ## 5. Transparantie over de partnerrelatie
 
-Omdat het verdienmodel draait op commissie via de partnerwinkel (zie `business-model.md`), gelden aanvullende regels:
+Omdat het verdienmodel draait op commissie via de partnerwinkel (zie `docs/business-model.md`), gelden aanvullende regels:
 
 - Op elke pagina met een productaanbeveling of prijsvermelding staat **duidelijk en zonder kleine lettertjes** dat de verkoop via de partnerwinkel loopt.
 - De site claimt nergens zelf verkoper, garantieverstrekker of retourpartij te zijn.

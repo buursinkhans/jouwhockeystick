@@ -2,11 +2,11 @@ import { isProductActive } from './index';
 import type { Product } from './types';
 
 /**
- * Catalog health check (source-policy.md §3): which products need a
+ * Catalog health check (docs/source-policy.md §3): which products need a
  * re-check, are hidden, or are incomplete. Read-only; it never changes data.
  */
 
-/** Quarterly re-check of active brands (source-policy.md §3). */
+/** Quarterly re-check of active brands (docs/source-policy.md §3). */
 export const RECHECK_AFTER_MONTHS = 3;
 
 export type HealthIssue =
