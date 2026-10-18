@@ -10,6 +10,21 @@ export const metadata = pageMetadata({
   path: '/merken',
 });
 
+function slugify(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+}
+
+const DUTCH_DATE = new Intl.DateTimeFormat('nl-NL', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+function formatDutchDate(isoDate: string): string {
+  return DUTCH_DATE.format(new Date(`${isoDate}T00:00:00Z`));
+}
+
 function joinDutch(items: string[]): string {
   return items.length <= 1
     ? items.join('')
@@ -28,8 +43,9 @@ export default function MerkenPage() {
       <p className="mt-4 text-lg leading-relaxed text-inkt">
         Op jouwhockeystick.nl vergelijken we sticks van {brandNames.length}{' '}
         merken: {joinDutch(brandNames)}. Hieronder staat per merk kort wat het
-        kenmerkt, en — waar we dat konden bevestigen op officiële bronnen —
-        welke Nederlandse hockeyinternationals het merk sponsort.
+        kenmerkt, hoe het merk zelf over sticks denkt (als het dat op de eigen
+        website uitlegt), en — waar we dat konden bevestigen op officiële
+        bronnen — welke Nederlandse hockeyinternationals het merk sponsort.
       </p>
 
       <div className="mt-10 space-y-8">
@@ -101,6 +117,42 @@ export default function MerkenPage() {
                   </blockquote>
                 ))}
               </div>
+            )}
+
+            {brand.philosophy && (
+              <section
+                aria-labelledby={`filosofie-${slugify(brand.brand)}`}
+                className="mt-5 border-t border-rand pt-4"
+              >
+                <h3
+                  id={`filosofie-${slugify(brand.brand)}`}
+                  className="text-base font-bold"
+                >
+                  Hoe denkt {brand.brand} over sticks?
+                </h3>
+                {brand.philosophy.paragraphs.map((paragraph) => (
+                  <p key={paragraph} className="mt-2 text-sm text-inkt/80">
+                    {paragraph}
+                  </p>
+                ))}
+                <p className="mt-2 text-xs text-lijngrijs">
+                  Zo beschrijft {brand.brand} het zelf op de eigen website
+                  (gecontroleerd op{' '}
+                  {formatDutchDate(brand.philosophy.checkedAt)}
+                  ):{' '}
+                  {brand.philosophy.sources.map((source, index) => (
+                    <span key={source.url}>
+                      {index > 0 && ' · '}
+                      <a
+                        href={source.url}
+                        className="inline-flex min-h-6 items-center hover:underline"
+                      >
+                        {source.label}
+                      </a>
+                    </span>
+                  ))}
+                </p>
+              </section>
             )}
 
             <p className="mt-4 text-sm">

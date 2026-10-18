@@ -835,3 +835,33 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 - Mislukt het, bijvoorbeeld omdat het token al verlopen is of omdat de variabele in Netlify als geheim gemarkeerd staat, dan faalt de workflow en mailt GitHub de eigenaar.
 
 **Kosten:** één extra deploy per maand.
+
+## 2026-10-18 — "Hoe denkt dit merk over sticks?" op /merken
+
+**Wat (opdracht eigenaar):** elk merkprofiel kan een onderwerp "Hoe denkt [merk] over sticks?" hebben (`philosophy` in `src/content/brands.ts`).
+- **Bron:** alleen de eigen website van het merk, gecontroleerd op 2026-10-18. De tekst zegt steeds wat het merk zelf beweert ("volgens Grays …"). Het is geen oordeel van ons en geen bewezen effect. De bronnen staan per merk eronder.
+- **Ingevuld:**
+
+  | Merk | Waar het over gaat |
+  |---|---|
+  | Grays | vorm eerst, elf bows, geschiedenis en AeroCore |
+  | Brabo | praktijkervaring, stijfheidsschaal 1–10 |
+  | Princess | carbon, curve, details en star rating |
+  | Ritual | een stick per speelstijl, klein assortiment, prototypes |
+  | Y1 | samen met spelers ontwikkeld, klimaatneutraal volgens het merk |
+  | Osaka | design als startpunt |
+  | The Indian Maharadja | design en kwaliteit; techniek legt het merk niet uit |
+  | Yibbi | zelfvertrouwen, stick getest op gevoel en balans |
+
+- **Leeg (geen uitleg op de eigen site):**
+
+  | Merk | Reden |
+  |---|---|
+  | adidas | site blokkeert bezoek |
+  | JDH | site gaat over sportkleding |
+  | Reece | site gaat over teamkleding |
+  | TK | alleen productbeschrijvingen |
+  | Malik, Nike | niets gevonden over hun sticks |
+  | Scoop, Stag, Ravi, Csign | geen eigen website |
+
+- **Test:** `src/content/brandPhilosophy.test.ts` bewaakt dat de bronnen geen winkel of derde partij zijn.
