@@ -21,7 +21,8 @@
     "market:scan": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/market-scan.ts",
     "catalog:recheck": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-recheck.ts",
     "passa:feed": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/passa-feed.ts",
-    "passa:import": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/passa-import.ts"
+    "passa:import": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/passa-import.ts",
+    "instagram:refresh": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/instagram-token-refresh.ts"
   },
   "dependencies": {
     "next": "16.3.6",

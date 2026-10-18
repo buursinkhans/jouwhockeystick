@@ -15,7 +15,7 @@ De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking
 - jouwhockeystick.nl verkoopt zelf niets: er is geen eigen checkout, voorraad of betaalverwerking. De site verwijst door naar twee partnerwinkels:
   - **bol.com**, via het bol.com Partnerprogramma (site ID 1547833), met een sub-ID per plek op de site;
   - **PassaHockey** (de hockeywinkel van PassaSports), via TradeTracker (campagne 39608), met de plek op de site als referentie.
-  Beide staan in `src/lib/retailers.ts`. Een stick krijgt een knop voor elke winkel die hem verkoopt: `bolProductUrl` of niet `bolNotSold`, en `passaSportsProductUrl`. Voeg een winkel pas toe als daar een partnerprogramma voor is. Gebruik geen fictieve tracking-parameters.
+  Beide staan in `src/lib/retailers.ts`. Sticks uit de PassaHockey-productfeed (`src/catalog/imported/`, wekelijks bijgewerkt) krijgen alleen de PassaHockey-knop en `noindex` tot ze met de hand zijn verrijkt; zie de decision log van 2026-10-17. Een stick krijgt een knop voor elke winkel die hem verkoopt: `bolProductUrl` of niet `bolNotSold`, en `passaSportsProductUrl`. Voeg een winkel pas toe als daar een partnerprogramma voor is. Gebruik geen fictieve tracking-parameters.
 - Elke winkelknop toont een partnerlink-vermelding. Iedere productpagina en ieder stickadvies maakt duidelijk dat de winkel de verkoper is. Het verschil tussen de winkels staat op `/kennis/waar-koop-je-een-hockeystick`.
 - Vergoedingen en de winkel spelen geen rol in de adviesscore.
 - Geen kortingsclaims (bijv. "X% korting") zonder een echte, verifieerbare eerdere verkoopprijs; dit is wettelijk gereguleerd (EU Omnibus-richtlijn). Toon alleen de richtprijs.

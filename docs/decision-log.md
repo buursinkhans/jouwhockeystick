@@ -820,3 +820,18 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
   - geen verwijzing meer naar het niet-bestaande `docs/test-mvp-scope.md`;
   - een nieuwe sectie "Documentatie".
 - **`docs/business-model.md`:** een sectie "Huidige situatie: twee partnerwinkels" vervangt het verouderde plan met het mailto-formulier.
+
+## 2026-10-18 — Instagram-token automatisch verversen
+
+**Wat (opdracht eigenaar):** de workflow "Instagram-token verversen" draait op de 1e van elke maand. Zo verloopt het token niet meer na 60 dagen, wat anders rond 11 december was gebeurd. De workflow:
+1. leest het token voor productie uit Netlify (`INSTAGRAM_ACCESS_TOKEN`);
+2. vraagt Instagram om een nieuw token (`refresh_access_token`);
+3. zet het nieuwe token terug in Netlify;
+4. start een nieuwe deploy.
+
+**Hoe het veilig blijft:**
+- Het token komt nooit in een log of in de code.
+- Benodigd: de GitHub Secrets `NETLIFY_AUTH_TOKEN` en `NETLIFY_SITE_ID`.
+- Mislukt het, bijvoorbeeld omdat het token al verlopen is of omdat de variabele in Netlify als geheim gemarkeerd staat, dan faalt de workflow en mailt GitHub de eigenaar.
+
+**Kosten:** één extra deploy per maand.

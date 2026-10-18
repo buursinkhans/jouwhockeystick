@@ -7,9 +7,9 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | Document | Waarvoor |
 |---|---|
 | [`spec/keuzehulp-instructie-v1.1.md`](spec/keuzehulp-instructie-v1.1.md) | De specificatie van de stickwijzer: routes, vragen, adviesregels en bronnen. **Leidend**; afwijkingen leggen we vast in de decision log. |
-| [`docs/source-policy.md`](docs/source-policy.md) | Bronbeleid: hoe we claims onderbouwen, bronnen vermelden en de catalogus elk kwartaal controleren. Bindend voor content, productdata en advies. |
+| [`source-policy.md`](source-policy.md) | Bronbeleid: hoe we claims onderbouwen, bronnen vermelden en de catalogus elk kwartaal controleren. Bindend voor content, productdata en advies. |
 | [`merkinstructie.md`](merkinstructie.md) | Logo, kleuren, typografie en tone of voice. `scripts/build-brand-assets.mjs` bouwt de logobestanden hieruit. |
-| [`docs/business-model.md`](docs/business-model.md) | Verdienmodel en strategie. De actuele situatie (bol.com en PassaHockey als partnerwinkels) staat in sectie 5. |
+| [`business-model.md`](business-model.md) | Verdienmodel en strategie. De actuele situatie (bol.com en PassaHockey als partnerwinkels) staat in sectie 5. |
 | [`decision-log.md`](decision-log.md) | Elke wijziging aan adviesregels, catalogus of afspraken, met de reden. Nieuwste onderaan. |
 
 ## Handboeken per agent of taak
@@ -36,6 +36,8 @@ Deze workflows lezen alleen en maken een rapport, meestal als issue. De orchestr
 | `technical-seo.yml` | Crawlt de live sitemap op technische SEO-problemen |
 | `conversion-report.yml` | Stickwijzer-trechter, afhaken per vraag en winkelkliks (PostHog) |
 | `marktverkenning.yml` | Nieuwe hockeypagina's bij concurrenten |
+| `passa-sync.yml` | Woensdag: importeert de PassaHockey-productfeed opnieuw (prijzen, voorraad, nieuwe en verdwenen sticks) en opent een PR |
+| `instagram-token.yml` | Elke maand: ververst het Instagram-token in Netlify en start een nieuwe deploy |
 | `catalog-health.yml` | Welke sticks aan hun kwartaalcontrole toe zijn |
 | `bol-feed-check.yml` | Testrun: zoekt elke stick op in de bol.com-feed |
 | `publicatie.yml` | Bouwt de site opnieuw op de dag dat een gepland artikel live gaat |

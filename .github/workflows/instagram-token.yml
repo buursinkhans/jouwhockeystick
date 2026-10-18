@@ -1,0 +1,28 @@
+# Monthly Instagram token refresh: long-lived tokens expire after 60 days, so
+# this renews the token in Netlify every month and redeploys the site. The
+# token is never printed. If it fails (for example because the token already
+# expired), GitHub e-mails the owner. See scripts/instagram-token-refresh.ts.
+name: Instagram-token verversen
+
+on:
+  schedule:
+    - cron: '17 6 1 * *' # 1st of every month, 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Token verversen
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: npm run --silent instagram:refresh

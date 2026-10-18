@@ -93,6 +93,7 @@ De ontwikkelinstructie hecht terecht veel waarde aan uitlegbaar advies en betrou
 
 - **bol.com:** elke stick die bol.com verkoopt, krijgt een knop met een partnerlink (site ID en sub-ID per plek op de site).
 - **PassaHockey:** elke stick die PassaHockey verkoopt, krijgt een rode knop met een TradeTracker-link. De referentie is de plek op de site.
+- **PassaHockey-productfeed (TradeTracker):** het assortiment van PassaHockey wordt wekelijks geïmporteerd. Prijzen en voorraad van die sticks volgen de feed.
 - **Bij beide te koop:** de stick krijgt twee knoppen. De pagina `/kennis/waar-koop-je-een-hockeystick` legt het verschil tussen de winkels uit.
 - **Vergoedingen** lopen via de voorwaarden van die programma's. We nemen ze nergens in code of tekst aan, en ze tellen niet mee in het advies.
 - **Bestellen bij een lokale winkel** blijft een optie voor later (zie hieronder).
