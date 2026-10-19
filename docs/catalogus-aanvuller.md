@@ -41,6 +41,13 @@ Staat een van **onze** PassaHockey-links in deel (a) als "niet meer in de feed",
 
 Vul `bowProfile`, `carbonPercentage` en `weightGrams` **alleen** in als een bron ze noemt; anders weglaten. Spreken bronnen elkaar tegen, laat het veld weg en leg het uit in een comment.
 
+**Uitzondering voor Grays: carbon uit de PassaHockey-feed** (besluit eigenaar, 2026-10-19). Grays vermeldt zelf geen carbonpercentages, en bol.com toont bij Grays vaak een standaardwaarde (0%).
+- Neem bij elke Grays-stick het carbonpercentage over uit de PassaHockey-feed: de regel "Carbonpercentage: X%" bij dat model.
+- Gebruik `source: 'partner-shop'`, `sourceUrl` de PassaHockey-pagina, en een `sourceLabel` als: "PassaHockey (PassaSports) vermeldt 'Carbonpercentage: X%'; Grays noemt zelf geen percentage."
+- Noemt bol.com een andere waarde, vermeld die in het label, maar gebruik hem niet.
+- Neem de feedwaarde niet over als hij niet past bij de nummering van Grays (4 = 20%, 5 = 30%, 6 = 40%, 7 = 50%, 8 = 70%, 9 = 90%, 10 = 95%; AC-modellen: het getal gedeeld door 10, bijvoorbeeld AC600 = 60%). Een voorbeeld is "Midbow 7 Junior 5%". Laat het veld dan weg en meld het in de PR.
+- Zie `docs/decision-log.md`, 2026-10-19.
+
 ## 5. Het productbestand
 
 - Eén bestand per stick: `src/catalog/products/<slug>.ts`, in dezelfde vorm als bestaande producten (zie bijv. `reece-in-alpha-jr.ts` voor een bol.com-bron en een Grays-product voor een merkbron). Bovenaan een comment met de bron(nen) en `const CHECKED = '<datum van vandaag>'`.

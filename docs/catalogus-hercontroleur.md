@@ -16,7 +16,7 @@ Open de bronnen met WebFetch (merksite eerst; bol.com bij `source: 'partner-shop
 |---|---|
 | **Ongewijzigd** | Zet `lastVerifiedAt` van dat veld op vandaag. |
 | **Gewijzigd** (prijs, lengtes, voorraad, niveau, bow, carbon, gewicht) | Nieuwe waarde, `lastVerifiedAt` vandaag, `sourceLabel` en `sourceUrl` bijgewerkt. Noem oude en nieuwe waarde in de PR. |
-| **Gat gevuld:** een ontbrekend carbonpercentage, bow-profiel of modeljaar wordt nu door de bron genoemd | Invullen met bron, zoals in `docs/catalogus-aanvuller.md` §3–§4. Alleen als de bron het letterlijk noemt. |
+| **Gat gevuld:** een ontbrekend carbonpercentage, bow-profiel of modeljaar wordt nu door de bron genoemd | Invullen met bron, zoals in `docs/catalogus-aanvuller.md` §3–§4. Alleen als de bron het letterlijk noemt. Bij Grays: het carbonpercentage uit de PassaHockey-feed (§4 van dat handboek); controleer bij elke hercontrole of de feed nog dezelfde waarde noemt. |
 | **Bron weg, onbereikbaar of tegenstrijdig** | Niets aanpassen aan dat veld (ook de datum niet). Noem het in de PR onder **Voor jou**. |
 | **Niet meer leverbaar** | `stock` volgens de bron, met datum. De stick blijft in de catalogus; verwijderen beslist de eigenaar. |
 
