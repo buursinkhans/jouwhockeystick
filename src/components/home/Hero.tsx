@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { AnimatedLogoIcon, Logo } from '@/components/brand/Logo';
+import { Logo } from '@/components/brand/Logo';
 import heroPhoto from '@/assets/home/hero-speelster.jpg';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
@@ -17,8 +17,8 @@ const EXAMPLE_REASONS = [
 
 /**
  * A youth player on the pitch (the owner's daughter, published with
- * consent; metadata stripped), with the kind of reasons a result shows and
- * the animated brand icon as a small badge. Illustrative only — no product,
+ * consent; metadata stripped), with the kind of reasons a result shows;
+ * no brand badge (owner's choice). Illustrative only — no product,
  * size or price.
  */
 function HeroVisual() {
@@ -48,12 +48,6 @@ function HeroVisual() {
           </li>
         ))}
       </ul>
-      <div
-        aria-hidden="true"
-        className="absolute -right-3 -bottom-4 flex h-24 w-24 items-center justify-center rounded-full border border-rand bg-white shadow-sm [&>svg]:h-16 [&>svg]:w-16"
-      >
-        <AnimatedLogoIcon size={64} />
-      </div>
     </div>
   );
 }
