@@ -51,6 +51,14 @@ export const ADVICE_DISCLAIMER =
 export const TRANSPARENCY_NOTE =
   'We vertellen niet alleen wát we adviseren, maar ook waarop dat is gebaseerd. Per stick maken we onderscheid tussen gegevens van de fabrikant en onze eigen redactionele adviesregels. Eigen metingen en praktijktests hebben we nog niet; dat staat er dan ook bij.';
 
+/** How many sticks passed the filters, so a visitor sees the advice is a selection. */
+export function candidateCountText(candidates: number, shown: number): string {
+  if (candidates <= shown) {
+    return `Van alle veldsticks in onze catalogus ${candidates === 1 ? 'past er 1' : `passen er ${candidates}`} bij de maat, het niveau en het budget.`;
+  }
+  return `Van alle veldsticks in onze catalogus passen er ${candidates} bij de maat, het niveau en het budget. Hieronder de ${shown === 1 ? 'stick' : `${shown} sticks`} die het best bij je antwoorden ${shown === 1 ? 'past' : 'passen'}.`;
+}
+
 export const SELLER_NOTE =
   'jouwhockeystick.nl verkoopt zelf geen sticks. Je koopt bij de winkel waar je naartoe klikt; die winkel is de verkoper. De getoonde prijs is een richtprijs, geen actuele winkelprijs.';
 

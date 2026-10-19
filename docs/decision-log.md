@@ -1017,3 +1017,13 @@ Gecorrigeerd: de zin "sticks waarvan kerngegevens alleen bij een winkel bekend z
 - **Niet in Google:** de pagina is `noindex` en staat niet in de sitemap.
 - **Kapotte link:** dan volgt een vriendelijke melding met een knop naar de stickwijzer.
 - **Meten:** `advice_shared` (deelmenu of gekopieerd) en `shared_advice_opened` (met `changed`).
+
+## 2026-10-19 — juiste aantal sticks op de homepage; "passen er X" in het advies
+
+**Aanleiding (advies van buiten):** de homepage zei dat de stickwijzer 87 sticks vergelijkt, terwijl de catalogus 469 veldsticks toont.
+
+**Wat klopte:** 469. De stickwijzer adviseert uit alle veldsticks, inclusief de PassaHockey-import. De 87 was een oude telling van alleen de handmatig beheerde sticks, en daarbij ook de zaalsticks. Het voorgestelde onderscheid ("87 in de stickwijzer") zou dus niet kloppen.
+
+**Wat:**
+- De homepage telt nu precies de sticks waaruit de stickwijzer kiest: alle veldsticks, inclusief de import. De tekst luidt "vergelijkt je antwoorden met alle … veldsticks in onze catalogus".
+- Het advies zegt nu hoeveel sticks bij de maat, het niveau en het budget passen (`candidateCount`), en dat daaruit de best passende worden getoond.

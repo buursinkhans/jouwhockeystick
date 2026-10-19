@@ -185,5 +185,7 @@ export type AdviceResult = {
     reason: 'higher_level' | 'better_fit';
   } | null;
   excludedCount: number;
+  /** Field sticks that pass every filter (size, level, budget …) before ranking. */
+  candidateCount: number;
   methodUrl: string;
 };

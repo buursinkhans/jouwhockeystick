@@ -6,6 +6,7 @@ import {
   ADVICE_DISCLAIMER,
   bestModelOtherSizeText,
   brandNotFoundText,
+  candidateCountText,
   playerLevelText,
   NO_AMBITIOUS_TEXT,
   NO_MATCH_TEXT,
@@ -129,6 +130,11 @@ export function QuizResult({
               ? 'Onze aanbeveling'
               : 'Onze aanbevelingen'}
           </h3>
+          {advice.candidateCount > 0 && (
+            <p className="mt-1 text-sm text-inkt/80">
+              {candidateCountText(advice.candidateCount, advice.results.length)}
+            </p>
+          )}
           <PartnerLinkNote />
           {advice.bestModelOtherSize && (
             <p className="mt-2 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">

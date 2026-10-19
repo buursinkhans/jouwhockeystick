@@ -370,6 +370,7 @@ export function getAdvice(
     | 'brandPreference'
     | 'noAmbitiousReason'
     | 'excludedCount'
+    | 'candidateCount'
     | 'bestModelOtherSize'
   > = {
     adviceSessionId: options.adviceSessionId ?? '',
@@ -417,6 +418,7 @@ export function getAdvice(
       noAmbitiousReason: null,
       bestModelOtherSize: modelElsewhere,
       excludedCount,
+      candidateCount: passed.length,
     };
   }
 
@@ -432,6 +434,7 @@ export function getAdvice(
       noAmbitiousReason: null,
       bestModelOtherSize: null,
       excludedCount,
+      candidateCount: passed.length,
     };
   }
 
@@ -447,5 +450,6 @@ export function getAdvice(
     noAmbitiousReason: noAmbitiousReason(results, ranked, ctx),
     bestModelOtherSize: modelElsewhere,
     excludedCount,
+    candidateCount: passed.length,
   };
 }

@@ -199,10 +199,10 @@ export function StickwijzerExplainer({
           title="Een advies dat je kunt navolgen"
         >
           <p>
-            De stickwijzer vergelijkt je antwoorden met de {productCount} sticks
-            in onze catalogus. Sticks die niet passen vallen af; van wat
-            overblijft zie je er maximaal drie, elk met de redenen, de afweging
-            en de bron van elk gegeven.
+            De stickwijzer vergelijkt je antwoorden met alle {productCount}{' '}
+            veldsticks in onze catalogus. Sticks die niet passen vallen af; van
+            wat overblijft zie je er maximaal drie, elk met de redenen, de
+            afweging en de bron van elk gegeven.
           </p>
         </SectionHeading>
         <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
