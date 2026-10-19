@@ -319,6 +319,36 @@ const round1 = (value: number) => Math.round(value * 10) / 10;
  */
 export const BRAND_PREFERENCE_POINTS = 12;
 
+/**
+ * Data certainty (owner's choice, 2026-10-19): a stick we know nothing about
+ * from its brand, whose level is only our estimate (e.g. from price and carbon
+ * in a shop feed), loses a few points against sticks with brand data. This
+ * rewards verified data, never a brand.
+ */
+export const LEVEL_ESTIMATE_DEDUCTION = 3;
+
+const BRAND_CHECKED_FIELDS = [
+  'experienceLevel',
+  'bowProfile',
+  'carbonPercentage',
+  'lengthsInches',
+] as const;
+
+/** How many key specs come from the brand's own website (0–4). */
+export function brandVerifiedCount(product: Product): number {
+  return BRAND_CHECKED_FIELDS.filter(
+    (field) => product[field]?.source === 'brand-website',
+  ).length;
+}
+
+/** True when the level is our estimate and nothing at all comes from the brand. */
+export function isLevelOnlyEstimated(product: Product): boolean {
+  return (
+    product.experienceLevel.source === 'editorial-estimate' &&
+    brandVerifiedCount(product) === 0
+  );
+}
+
 export type ProductScore = {
   breakdown: ScoreBreakdown;
   reasons: AdviceReason[];
@@ -437,6 +467,7 @@ export function scoreProduct(
     budgetFit: round1(weights.budget * budget.fit),
     availabilityFit: round1(weights.availability * availability),
     brandFit: brandMatch ? BRAND_PREFERENCE_POINTS : 0,
+    dataFit: isLevelOnlyEstimated(product) ? -LEVEL_ESTIMATE_DEDUCTION : 0,
     total: 0,
     explanationTags: reasons.map((reason) => reason.code),
   };
@@ -447,7 +478,8 @@ export function scoreProduct(
       breakdown.feelFit +
       breakdown.budgetFit +
       breakdown.availabilityFit +
-      breakdown.brandFit,
+      breakdown.brandFit +
+      breakdown.dataFit,
   );
   breakdown.total = Math.min(100, rankScore);
 

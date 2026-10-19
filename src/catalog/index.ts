@@ -1,6 +1,8 @@
 import { getDiscipline } from './discipline';
 import type { Brand, Discipline, Product } from './types';
 import { PASSAHOCKEY_PRODUCTS } from './imported/passahockey';
+import { PASSAHOCKEY_LIVE_PRICES } from './imported/passaPrices';
+import { withLivePrice } from './livePrice';
 
 export { getDiscipline };
 import { graysJb6Composite } from './products/grays-jb6-composite';
@@ -234,13 +236,18 @@ export type ProductQuery = {
   includeImported?: boolean;
 };
 
+/** Curated sticks, with the current PassaHockey price where the shop sells them. */
+const CURATED_WITH_LIVE_PRICES: Product[] = ALL_PRODUCTS.map((product) =>
+  withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
+);
+
 export function getAllProducts(
   now: Date = new Date(),
   { includeImported = false }: ProductQuery = {},
 ): Product[] {
   const products = includeImported
-    ? [...ALL_PRODUCTS, ...PASSAHOCKEY_PRODUCTS]
-    : ALL_PRODUCTS;
+    ? [...CURATED_WITH_LIVE_PRICES, ...PASSAHOCKEY_PRODUCTS]
+    : CURATED_WITH_LIVE_PRICES;
   return products.filter((product) => isProductActive(product, now));
 }
 

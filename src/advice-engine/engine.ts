@@ -11,7 +11,8 @@ import {
 import { buildPlayerContext } from './playerContext';
 import { deriveAdviceRules } from './productRules';
 import { ADVICE_VERSION, METHOD_URL, RULE_SET_VERSION } from './ruleSetVersion';
-import { scoreProduct, type SizeBasis } from './scoring';
+import {
+  brandVerifiedCount, scoreProduct, type SizeBasis } from './scoring';
 import { findShorterSize, matchSize } from './sizeAdvice';
 import type {
   AdviceResult,
@@ -40,6 +41,8 @@ type Candidate = Omit<AdviceResultItem, 'role' | 'cautions'> & {
   tooSimple: boolean;
   /** 0 = advised size, 1 = second size, 2 = another size. */
   sizeRank: number;
+  /** Key specs that come from the brand itself (0–4). */
+  brandVerified: number;
 };
 
 const SIZE_RANK: Record<SizeBasis, number> = {
@@ -74,18 +77,21 @@ function toCandidate(
     rankScore,
     tooSimple,
     sizeRank: SIZE_RANK[sizeBasis],
+    brandVerified: brandVerifiedCount(product),
   };
 }
 
 /**
  * Highest score first. Size is not scored, so at an equal score the advised
- * size goes before the second size. Further ties go to the simpler, then the
- * cheaper stick — never to a commercial factor.
+ * size goes before the second size. Further ties go to the stick with more
+ * specs verified by its brand (decision log 2026-10-19), then the simpler,
+ * then the cheaper stick — never to a commercial factor.
  */
 function byScore(a: Candidate, b: Candidate): number {
   return (
     b.rankScore - a.rankScore ||
     a.sizeRank - b.sizeRank ||
+    b.brandVerified - a.brandVerified ||
     a.complexity - b.complexity ||
     a.product.priceIndicativeEur.value - b.product.priceIndicativeEur.value ||
     a.product.slug.localeCompare(b.product.slug)

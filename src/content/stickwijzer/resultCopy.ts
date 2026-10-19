@@ -191,6 +191,8 @@ export function reasonText(
 export const CAUTION_TEXT: Record<CautionCode, string> = {
   BELOW_LEVEL:
     'Deze stick is bedoeld voor een eenvoudiger niveau dan je antwoorden aangeven. Hij kan prima spelen, maar een stick op jouw niveau past beter bij wat de speler al kan.',
+  LEVEL_ESTIMATED:
+    'Voor welk niveau deze stick is, hebben we zelf ingeschat: het merk noemt het niet, en we hebben nog geen gegevens van het merk zelf.',
   LEVEL_MISMATCH:
     'Deze stick is bedoeld voor een ander niveau dan je antwoorden aangeven. We tonen hem omdat je bij dit merk wilt blijven en het merk in deze maat geen stick voor jouw niveau heeft.',
   ABOVE_BUDGET:

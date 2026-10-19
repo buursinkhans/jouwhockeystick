@@ -60,6 +60,7 @@ export type CautionCode =
   | 'DIRECT_FEEL_VIBRATION'
   | 'ABOVE_BUDGET'
   | 'LEVEL_MISMATCH'
+  | 'LEVEL_ESTIMATED'
   /** The stick is meant for a simpler level than the player's. */
   | 'BELOW_LEVEL';
 
@@ -76,6 +77,8 @@ export type ScoreBreakdown = {
   availabilityFit: number;
   /** Extra points for the brand the player wants to stay with (0 otherwise). */
   brandFit: number;
+  /** Deduction when we know nothing from the brand and only estimated the level (0 otherwise). */
+  dataFit: number;
   total: number;
   explanationTags: ReasonCode[];
 };

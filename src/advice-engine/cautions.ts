@@ -3,6 +3,7 @@ import type { Product } from '@/catalog/types';
 import type { AdviceAnswers } from './answers';
 import { passesExperience } from './hardFilters';
 import { BOW_RANK, deriveAdviceRules, isTooSimple } from './productRules';
+import { isLevelOnlyEstimated } from './scoring';
 import type { CautionCode, PlayerContext, ResultRole } from './types';
 
 const HIGH_CARBON_CAUTION_THRESHOLD = 50;
@@ -32,6 +33,9 @@ export function getCautions(
   }
   if (role === 'ambitious_choice') {
     cautions.push('AMBITIOUS_STEP');
+  }
+  if (isLevelOnlyEstimated(product)) {
+    cautions.push('LEVEL_ESTIMATED');
   }
   // Only the stick of the player's own brand can be shown above budget or
   // outside the player's level.

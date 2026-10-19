@@ -959,3 +959,34 @@ Ter correctie van eerdere metingen: die van 2026-10-19 (Grays-carbon) rekende zo
 - **Populariteit:** hoe vaak de stickwijzer een stick adviseert, plus of hij bij de populairste sticks op bol.com staat (`npm run catalog:enrich-list`).
 - **Waarom niet de voorraad van PassaHockey:** de feed toont alleen óf een maat leverbaar is (altijd "1"), geen aantallen. PassaHockey kan zijn assortiment ook niet sorteren op populariteit.
 - **Waarom niet allemaal tegelijk vrijgeven:** honderden gelijkende pagina's in één keer kunnen de hele site bij Google schaden. 20 per week, met een eigen tekst, is een tempo dat Google vertrouwt.
+
+## 2026-10-19 — `ruleSetVersion v12-2026-10-19`: actuele PassaHockey-prijs, zekerheid van gegevens telt mee
+
+**Aanleiding (eigenaar):** Grays komt weinig uit de stickwijzer, en de prijzen op de site liggen soms ver boven die van PassaHockey. Een voorbeeld: Grays JB 10 met een adviesprijs van €350 en €290,95 bij PassaHockey.
+
+Een analyse met 570 profielen en de volledige catalogus liet twee oorzaken zien:
+1. **Gelijke stand.** Grays scoorde vaak precies even hoog als de winnaar. Bij gelijke stand won dan de goedkoopste stick, en Grays is meestal net iets duurder.
+2. **Geschat niveau.** Geïmporteerde concurrenten met alleen een geschat niveau, op basis van prijs en carbon, wonnen van sticks met gegevens van het merk.
+
+**Wat:**
+- **Actuele prijs.** Verkoopt PassaHockey een van onze eigen sticks, dan gebruiken site en stickwijzer de laagste leverbare prijs uit de PassaHockey-feed. De eerder vastgelegde adviesprijs staat alleen nog in het bronlabel, nooit als korting of doorgestreepte prijs.
+  - Code: `src/catalog/livePrice.ts`; de prijzen staan in `src/catalog/imported/passaPrices.ts`.
+  - De wekelijkse PassaHockey-synchronisatie werkt ze bij.
+  - Nu: 37 sticks.
+- **Bij gelijke stand telt eerst de betrouwbaarheid van de gegevens.** De stick waarvan meer kerngegevens van het merk zelf komen (niveau, kromming, carbon, lengtes) wint. Daarna pas eenvoud, dan prijs.
+- **Aftrek bij alleen een geschat niveau.** Een stick waarvan we niets van het merk weten en waarvan we het niveau alleen zelf hebben ingeschat, krijgt 3 punten aftrek (`dataFit`). Bij die stick staat de melding `LEVEL_ESTIMATED`: "Voor welk niveau deze stick is, hebben we zelf ingeschat …".
+
+Beide regels belonen betrouwbare gegevens, geen merk.
+
+**Effect** (570 profielen, volledige catalogus inclusief import):
+
+| Groep | Grays als beste match vóór | na |
+|---|---|---|
+| Totaal | 113 (20%) | **171 (30%)**, nu het vaakst van alle merken |
+| Volwassenen die doorgroeien | 35 | 77 |
+| Volwassenen, prestatie | 39 | 64 |
+| Jeugd die doorgroeit | 36 | 29 |
+
+De daling bij de jeugd komt doordat juniorsticks met gegevens van het merk (bijvoorbeeld Princess) nu winnen van geïmporteerde Grays-juniorsticks waarvan we het niveau alleen geschat hebben.
+
+**Nog open:** de Yibbi Midbow GF wint nog vaak bij de jeugd, met een niveau dat alleen op de prijs is geschat. De Catalogus-verrijker neemt deze stick in zijn eerste ronde mee (nummer 2 op de lijst).
