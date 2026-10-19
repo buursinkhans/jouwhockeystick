@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import { AnimatedLogoIcon, Logo } from '@/components/brand/Logo';
+import heroPhoto from '@/assets/home/hero-speelster.jpg';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import { SCREENS } from '@/content/stickwijzer/questions';
@@ -14,22 +16,30 @@ const EXAMPLE_REASONS = [
 ];
 
 /**
- * The large brand icon (merkinstructie §3.2: arc and grip lines from 128 px)
- * with the kind of reasons a result shows. Illustrative only — no product,
+ * A youth player on the pitch (the owner's daughter, published with
+ * consent; metadata stripped), with the kind of reasons a result shows and
+ * the animated brand icon as a small badge. Illustrative only — no product,
  * size or price.
  */
 function HeroVisual() {
   return (
-    <div
-      aria-hidden="true"
-      className="relative mx-auto flex w-full max-w-xs justify-end py-2 sm:justify-center [&>svg]:h-40 [&>svg]:w-40 md:[&>svg]:h-44 md:[&>svg]:w-44"
-    >
-      <AnimatedLogoIcon size={176} />
-      <ul className="absolute top-4 -left-2 space-y-2 sm:-left-6 lg:-left-16">
+    <div className="relative mx-auto w-full max-w-xs sm:max-w-sm">
+      <Image
+        src={heroPhoto}
+        alt="Jeugdspeelster dribbelt met de bal op een kunstgrasveld"
+        priority
+        placeholder="blur"
+        sizes="(min-width: 768px) 384px, 320px"
+        className="aspect-[4/5] w-full rounded-3xl object-cover shadow-sm"
+      />
+      <ul
+        aria-hidden="true"
+        className="absolute bottom-8 -left-3 space-y-2 sm:top-4 sm:bottom-auto sm:-left-8 lg:-left-16"
+      >
         {EXAMPLE_REASONS.map((reason) => (
           <li
             key={reason}
-            className="flex items-center gap-2 rounded-full border border-rand bg-white px-3 py-1.5 text-sm font-semibold text-inkt"
+            className="flex items-center gap-2 rounded-full border border-rand bg-white px-3 py-1.5 text-sm font-semibold text-inkt shadow-sm"
           >
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-veld text-white">
               <CheckIcon size={13} />
@@ -38,6 +48,12 @@ function HeroVisual() {
           </li>
         ))}
       </ul>
+      <div
+        aria-hidden="true"
+        className="absolute -right-3 -bottom-4 flex h-24 w-24 items-center justify-center rounded-full border border-rand bg-white shadow-sm [&>svg]:h-16 [&>svg]:w-16"
+      >
+        <AnimatedLogoIcon size={64} />
+      </div>
     </div>
   );
 }
