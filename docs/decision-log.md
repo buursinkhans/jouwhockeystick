@@ -990,3 +990,12 @@ Beide regels belonen betrouwbare gegevens, geen merk.
 De daling bij de jeugd komt doordat juniorsticks met gegevens van het merk (bijvoorbeeld Princess) nu winnen van geïmporteerde Grays-juniorsticks waarvan we het niveau alleen geschat hebben.
 
 **Nog open:** de Yibbi Midbow GF wint nog vaak bij de jeugd, met een niveau dat alleen op de prijs is geschat. De Catalogus-verrijker neemt deze stick in zijn eerste ronde mee (nummer 2 op de lijst).
+
+## 2026-10-19 — methodiekpagina bijgewerkt (v12)
+
+De methodiekpagina legt nu uit:
+- dat we met de actuele PassaHockey-prijs rekenen als PassaHockey de stick verkoopt;
+- dat bij gelijke score de stick met meer gegevens van het merk voorgaat;
+- dat een stick met alleen een geschat niveau, en zonder gegevens van het merk, 3 punten aftrek krijgt.
+
+Gecorrigeerd: de zin "sticks waarvan kerngegevens alleen bij een winkel bekend zijn, nemen we niet op in een advies" klopte niet meer sinds de import van 17 oktober.

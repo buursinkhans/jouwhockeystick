@@ -1,4 +1,7 @@
-import { BRAND_PREFERENCE_POINTS } from '@/advice-engine/scoring';
+import {
+  BRAND_PREFERENCE_POINTS,
+  LEVEL_ESTIMATE_DEDUCTION,
+} from '@/advice-engine/scoring';
 
 /**
  * Public method page copy (implementation spec §14). The general scientific
@@ -11,7 +14,7 @@ export const METHODIEK = {
     'Zo werkt de keuzehulp van jouwhockeystick.nl: eerst de stick die bij niveau en speelwensen past, daarna of hij er in de juiste maat is. Met bronlabels en zonder commerciële rangschikking.',
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-01',
-  updatedAt: '2026-10-16',
+  updatedAt: '2026-10-19',
   /** Answers the main question within the first 80 words. */
   intro: [
     'Wij kiezen eerst de stick die past bij de speler: het niveau, de speelwensen (zoals aannemen, passen, dribbelen, 3D, backhand of sleeppush), het stickgevoel en het budget. Daarna kijken we of die stick er in de juiste maat is. De maat is dus geen punt in de score, maar een harde voorwaarde: een stick die er niet in jouw maat is, adviseren we niet.',
@@ -36,7 +39,7 @@ export const METHODIEK = {
   ],
   hardFilters: [
     'De stick is bedoeld voor een hoger niveau dan de speler.',
-    'De richtprijs ligt boven het budget (tenzij je eerst wilt vergelijken).',
+    'De prijs ligt boven het budget (tenzij je eerst wilt vergelijken). Verkoopt PassaHockey de stick, dan rekenen we met de prijs die PassaHockey nu vraagt; anders met de adviesprijs van het merk of de winkelprijs op de controledatum.',
     'Startroute: extreme low bow, sleeppushstick of een stick die alleen voor ervaren spelers is bedoeld.',
     'De eerste aanname is nog in ontwikkeling en de stick heeft ongeveer 85% carbon of meer.',
     'De sleeppush speelt geen rol en de stick is een uitgesproken sleeppushstick.',
@@ -76,7 +79,7 @@ export const METHODIEK = {
     },
     {
       name: 'Winkelgegevens',
-      body: 'Gegevens die we alleen bij een winkel konden controleren en niet bij het merk zelf. Sticks waarvan kerngegevens alleen zo bekend zijn, nemen we niet op in een advies.',
+      body: 'Gegevens die we alleen bij een winkel konden controleren en niet bij het merk zelf, bijvoorbeeld uit de productgegevens van PassaHockey. Die sticks tellen mee in het advies. Weten we niets van het merk zelf en is het niveau alleen onze inschatting, dan krijgt de stick een kleine aftrek en staat dat bij het advies.',
     },
     {
       name: 'Eigen meting en praktijktest',
@@ -86,8 +89,8 @@ export const METHODIEK = {
   partnerLinks:
     'De knoppen naar bol.com zijn partnerlinks van het bol.com Partnerprogramma. Verkoopt PassaHockey (de hockeywinkel van PassaSports) de stick ook, dan staat er een tweede knop; dat is een partnerlink via TradeTracker. Koop je via zo’n link, dan kunnen wij een vergoeding krijgen; voor jou verandert de prijs niet. Die vergoeding speelt geen rol in het advies: de score kent geen invoer voor marge, vergoeding, winkel of sponsoring.',
   independence:
-    'Marge, affiliatevergoeding of sponsoring is geen onderdeel van de score. Bij een gelijke score gaat de stick in de geadviseerde maat voor, daarna de eenvoudigere en daarna de goedkopere stick.',
-  weightsIntro: `Elke stick krijgt maximaal 100 punten, verdeeld over de kenmerken van de stick. De maat telt niet mee in de score: die controleren we apart. Bij beginners weegt het niveau en de controle zwaarder, bij gevorderden de gewenste acties. Een stick die eenvoudiger is dan het niveau van de speler sluiten we niet uit: één niveau eenvoudiger krijgt de helft van de punten voor niveau, twee niveaus eenvoudiger bijna niets, en zo'n stick heet nooit "beste match". Wil je bij je merk blijven, dan krijgen sticks van dat merk op jouw niveau ${BRAND_PREFERENCE_POINTS} punten extra.`,
+    'Marge, affiliatevergoeding of sponsoring is geen onderdeel van de score. Bij een gelijke score gaat de stick in de geadviseerde maat voor, daarna de stick waarvan meer gegevens van het merk zelf komen, daarna de eenvoudigere en daarna de goedkopere stick.',
+  weightsIntro: `Elke stick krijgt maximaal 100 punten, verdeeld over de kenmerken van de stick. De maat telt niet mee in de score: die controleren we apart. Bij beginners weegt het niveau en de controle zwaarder, bij gevorderden de gewenste acties. Een stick die eenvoudiger is dan het niveau van de speler sluiten we niet uit: één niveau eenvoudiger krijgt de helft van de punten voor niveau, twee niveaus eenvoudiger bijna niets, en zo'n stick heet nooit "beste match". Wil je bij je merk blijven, dan krijgen sticks van dat merk op jouw niveau ${BRAND_PREFERENCE_POINTS} punten extra. Weten we van een stick niets van het merk zelf en is het niveau alleen onze inschatting, dan gaan er ${LEVEL_ESTIMATE_DEDUCTION} punten af: gegevens van het merk zijn betrouwbaarder dan een schatting.`,
   closing: [
     'Wij vertellen niet alleen wát wij adviseren, maar ook waarop dat advies is gebaseerd. Per stick maken we onderscheid tussen gegevens van de fabrikant, onze eigen metingen, praktijktests en onafhankelijke bronnen. Zo zie je wat vaststaat, wat wij zelf hebben gemeten en waar ervaring of persoonlijke voorkeur meespeelt.',
     'Een stickadvies blijft een hulpmiddel: de juiste maat, techniek, speelstijl en het gevoel in de hand bepalen samen wat voor jou de beste keuze is.',
