@@ -19,6 +19,7 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | [`content-agent.md`](content-agent.md) | Artikelen en blogs schrijven: toon, opbouw, bronnen | Bij elke contentopdracht (issue met label `content-brief`) |
 | [`review-agent.md`](review-agent.md) | Tweede paar ogen bij pull requests over content of catalogus | Bij elke PR die `src/content/` of `src/catalog/` raakt |
 | [`catalogus-aanvuller.md`](catalogus-aanvuller.md) | Populaire sticks toevoegen die nog niet in de catalogus staan | Wekelijks (dinsdag) |
+| [`catalogus-verrijker.md`](catalogus-verrijker.md) | De 20 populairste geïmporteerde PassaHockey-sticks verrijken en vrijgeven voor Google | Wekelijks (donderdag) |
 | [`catalogus-hercontroleur.md`](catalogus-hercontroleur.md) | Productdata elk kwartaal opnieuw controleren | Wekelijks, voor de sticks die aan de beurt zijn |
 | [`orchestrator.md`](orchestrator.md) | Leest alle rapporten en zet het beste werk uit | Wekelijks (maandag) |
 | [`instagram.md`](instagram.md) | Instagram-posts voorstellen in de huisstijl | Via de Instagram-studio |

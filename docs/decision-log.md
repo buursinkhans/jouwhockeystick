@@ -939,3 +939,23 @@ Geen merkbonus en geen wijziging in de adviesregels; alleen de data is volledige
 - de wissel pauzeert zolang de muis op de foto staat;
 - na drie rondes (een minuut) stopt het wisselen;
 - bij "minder beweging" (`prefers-reduced-motion`) staat de foto stil.
+
+## 2026-10-19 — geïmporteerde sticks: correcties en wekelijkse verrijking
+
+**Aanleiding:** een meting met 950 profielen, op dezelfde manier als de live stickwijzer, laat zien dat geïmporteerde PassaHockey-sticks in 846 adviezen voorkomen en in 645 de beste match zijn. Hun gegevens bepalen dus grotendeels het advies.
+
+Ter correctie van eerdere metingen: die van 2026-10-19 (Grays-carbon) rekende zonder de geïmporteerde sticks. Met alles erbij is Grays in 174 van de 950 adviezen de beste match: tweede, na Brabo (205).
+
+**1. Correcties voor alle geïmporteerde sticks tegelijk** (regels in `src/catalog/feedImport.ts`, zodat de wekelijkse synchronisatie ze toepast):
+- **Grays-kromming uit de familienaam.** Jumbow/JB = low bow, Dynabow/DB = dynabow, Probow/PB = probow, Midbow/MB = mid bow. Het "Type kromming" van PassaHockey klopte voor Grays vaak niet; zo stond de JB 10 als "MidBow". Dit corrigeert 31 sticks.
+- **Een juniorstick wordt nooit als "ervaren" ingeschat.** Dat gold voor 5 sticks.
+- **Een onwaarschijnlijk carbonpercentage valt weg:** 80% of meer bij minder dan €80. Bijvoorbeeld "100%" bij een juniorstick van €49 (2 sticks). Het staat dan als aandachtspunt bij de stick.
+- **Keepersticks worden overgeslagen.** Er was er één doorgeglipt.
+- **Resultaat:** de import opnieuw gedraaid op de feed van 2026-10-19 geeft 537 sticks (was 545), met 0 Grays-krommingsfouten, 0 juniorsticks als "ervaren" en 0 keepersticks.
+
+**2. Wekelijkse verrijking (keuze eigenaar):** de nieuwe workflow "Catalogus-verrijker" draait elke donderdag.
+- **Wat hij doet:** hij verrijkt de 20 populairste geïmporteerde sticks. Hij controleert de gegevens bij het merk, schrijft een eigen tekst, kijkt of bol.com de stick verkoopt, en maakt er een handmatig beheerde stick van. Die mag Google indexeren.
+- **Werkwijze:** `docs/catalogus-verrijker.md`. De eigenaar merget; de agent merget nooit zelf.
+- **Populariteit:** hoe vaak de stickwijzer een stick adviseert, plus of hij bij de populairste sticks op bol.com staat (`npm run catalog:enrich-list`).
+- **Waarom niet de voorraad van PassaHockey:** de feed toont alleen óf een maat leverbaar is (altijd "1"), geen aantallen. PassaHockey kan zijn assortiment ook niet sorteren op populariteit.
+- **Waarom niet allemaal tegelijk vrijgeven:** honderden gelijkende pagina's in één keer kunnen de hele site bij Google schaden. 20 per week, met een eigen tekst, is een tempo dat Google vertrouwt.

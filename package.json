@@ -23,7 +23,8 @@
     "passa:feed": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/passa-feed.ts",
     "passa:import": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/passa-import.ts",
     "instagram:refresh": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/instagram-token-refresh.ts",
-    "sales:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/sales-report.ts"
+    "sales:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/sales-report.ts",
+    "catalog:enrich-list": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-enrich-list.ts"
   },
   "dependencies": {
     "next": "16.3.6",

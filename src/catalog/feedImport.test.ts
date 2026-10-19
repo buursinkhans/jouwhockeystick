@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   catalogBrand,
   estimateLevel,
+  graysFamily,
+  isImplausibleCarbon,
   extractBow,
   extractCarbon,
   modelYearFromUrl,
@@ -68,6 +70,45 @@ describe('extracting specs from the feed description', () => {
     expect(estimateLevel(95, 300)).toBe('ervaren');
     expect(estimateLevel(40, 90)).toBe('gevorderd');
     expect(estimateLevel(null, 35)).toBe('beginner');
+  });
+});
+
+describe('import rules (2026-10-19)', () => {
+  it('takes the Grays curve from the family in the name', () => {
+    expect(graysFamily('Grays JB+ 7 Junior')?.bow).toBe('lowbow');
+    expect(graysFamily('Grays DB 4')?.bow).toBe('dynabow');
+    expect(graysFamily('Grays AC900 Probow-S')?.bow).toBe('probow');
+    expect(graysFamily('Grays Midbow 8')?.bow).toBe('midbow');
+    expect(graysFamily('Grays GT 5')).toBeNull();
+    const jb = toImportedProduct(
+      model({
+        url: 'https://www.passasports.nl/grays-jb-5-27056',
+        name: 'Grays JB 5',
+        brand: 'Grays',
+        description: 'Belangrijkste kenmerken * Type kromming: MidBow * Carbonpercentage: 30%',
+      }),
+      '2026-10-19',
+    );
+    expect('product' in jb && jb.product.bowProfile?.value).toBe('lowbow');
+  });
+
+  it('never estimates a junior stick as experienced', () => {
+    expect(estimateLevel(95, 300, true)).toBe('gevorderd');
+    expect(estimateLevel(95, 300)).toBe('ervaren');
+  });
+
+  it('drops a carbon share that cannot match the price', () => {
+    expect(isImplausibleCarbon(100, 48.95)).toBe(true);
+    expect(isImplausibleCarbon(100, 250)).toBe(false);
+    const cheap = toImportedProduct(
+      model({ description: '* Carbonpercentage: 100%', priceMin: 48.95, priceMax: 48.95 }),
+      '2026-10-19',
+    );
+    expect('product' in cheap && cheap.product.carbonPercentage).toBeUndefined();
+  });
+
+  it('skips goalie sticks', () => {
+    expect('skip' in toImportedProduct(model({ name: 'Brabo Goalie F1 Junior' }), '2026-10-19')).toBe(true);
   });
 });
 

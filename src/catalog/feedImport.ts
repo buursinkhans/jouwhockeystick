@@ -44,6 +44,25 @@ export type BowFinding =
   | { bow: BowProfile; from: 'omschrijving' | 'naam' }
   | { bow: null; reason: 'niet vermeld' | 'tegenstrijdig' | 'onbekend type' };
 
+/**
+ * Grays names its curve families in the model name (Jumbow/JB, Dynabow/DB,
+ * Probow/PB, Midbow/MB, Ultrabow). PassaHockey's "Type kromming" often
+ * disagrees for Grays (e.g. "MidBow" for a Jumbow), so for Grays the family
+ * wins (decision log 2026-10-19). Jumbow is a low bow on this site.
+ */
+const GRAYS_FAMILIES: [RegExp, BowProfile, string][] = [
+  [/\b(jumbow|jb\s*\+?\s*\d)/i, 'lowbow', 'Jumbow'],
+  [/\b(dynabow|db\s*\+?\s*\d)/i, 'dynabow', 'Dynabow'],
+  [/\b(probow|pb\s*\+?\s*\d)/i, 'probow', 'Probow'],
+  [/\b(midbow|mb\s*\d)/i, 'midbow', 'Midbow'],
+  [/\bultrabow\b/i, 'ultrabow', 'Ultrabow'],
+];
+
+export function graysFamily(name: string): { bow: BowProfile; family: string } | null {
+  const hit = GRAYS_FAMILIES.find(([pattern]) => pattern.test(name));
+  return hit ? { bow: hit[1], family: hit[2] } : null;
+}
+
 /** Bow from the description, else from the name; omitted when the two disagree or the type is not one of ours. */
 export function extractBow(description: string, name: string): BowFinding {
   const stated = statedBow(description);
@@ -67,6 +86,11 @@ export function extractCarbon(description: string): number | null {
  * Y1 and Ritual end the page with the season ("…-26", "…25"), Indian
  * Maharadja codes start with 10 + the year ("…-10261057" is 2026).
  */
+/** A high carbon share at a low price is almost certainly a feed error. */
+export function isImplausibleCarbon(carbon: number, price: number): boolean {
+  return carbon >= 80 && price < 80;
+}
+
 export function modelYearFromUrl(brand: Brand, url: string): number | null {
   const path = new URL(url).pathname;
   if (brand === 'Y1' || brand === 'Ritual') {
@@ -92,8 +116,9 @@ const isJunior = (model: PassaStickModel) =>
   model.gender === 'Junior' || /\b(junior|jr|kids|kinder)\b/i.test(model.name);
 
 /** Our estimate: carbon and price are the only level signals the feed gives. */
-export function estimateLevel(carbon: number | null, price: number): ExperienceLevel {
-  if ((carbon !== null && carbon >= 70) || price >= 200) return 'ervaren';
+export function estimateLevel(carbon: number | null, price: number, junior = false): ExperienceLevel {
+  // A junior stick is for youth players: never estimated as "ervaren".
+  if ((carbon !== null && carbon >= 70) || price >= 200) return junior ? 'gevorderd' : 'ervaren';
   if ((carbon !== null && carbon >= 30) || price >= 80) return 'gevorderd';
   return 'beginner';
 }
@@ -134,6 +159,7 @@ export function toImportedProduct(
   const brand = catalogBrand(model.brand);
   if (!brand) return skip(`merk "${model.brand}" staat niet in de catalogus`);
   if (!/\s/.test(model.name.trim())) return skip('naam in de feed is een artikelcode');
+  if (/goalie|keeper|\bgk\s*\d*\b/i.test(model.name)) return skip('keepersstick');
   if (model.discipline === 'onbekend') return skip('veld of zaal niet bekend');
   if (model.sizesInStockInches.length === 0) return skip('geen leverbare maat in inches');
   const modelYear = modelYearFromUrl(brand, model.url);
@@ -145,10 +171,13 @@ export function toImportedProduct(
   const fact = (sourceLabel: string) => ({ source, sourceLabel, sourceUrl, ...year, lastVerifiedAt: today });
   const estimate = (sourceLabel: string) => ({ source: 'editorial-estimate' as const, sourceLabel, lastVerifiedAt: today });
 
+  const family = brand === 'Grays' ? graysFamily(model.name) : null;
   const bowFinding = extractBow(model.description, model.name);
-  const bow = bowFinding.bow;
-  const carbon = extractCarbon(model.description);
+  const bow = family ? family.bow : bowFinding.bow;
   const price = model.priceMin;
+  const feedCarbon = extractCarbon(model.description);
+  const carbonDropped = feedCarbon !== null && isImplausibleCarbon(feedCarbon, price);
+  const carbon = carbonDropped ? null : feedCarbon;
   const sizes = model.sizesInStockInches;
   const junior = isJunior(model);
   const kind = model.discipline === 'zaal' ? 'Zaalstick' : 'Veldstick';
@@ -176,13 +205,19 @@ export function toImportedProduct(
   const attention = [
     'Gegevens uit de productomschrijving van PassaHockey; nog niet met de website van het merk vergeleken',
     bow === null ? 'Kromming niet eenduidig vermeld' : null,
-    carbon === null ? 'Carbonpercentage niet vermeld' : null,
+    carbonDropped
+      ? `Carbonpercentage in de feed (${feedCarbon}%) past niet bij de prijs; niet overgenomen`
+      : carbon === null
+        ? 'Carbonpercentage niet vermeld'
+        : null,
     sizes.length === 1 ? 'Bij PassaHockey in één lengte leverbaar' : null,
   ].filter((s): s is string => s !== null);
 
   const bowLabel =
     bow === null
       ? null
+      : family
+        ? `Grays plaatst dit model in de ${family.family}-familie (zie de naam)${family.bow === 'lowbow' ? '; op deze site ingedeeld als low bow' : ''}.`
       : 'from' in bowFinding && bowFinding.from === 'omschrijving'
         ? `PassaHockey vermeldt "Type kromming: ${statedBow(model.description) ?? BOW_LABEL[bow]}".`
         : `De productnaam bij PassaHockey noemt een ${BOW_LABEL[bow]}.`;
@@ -201,11 +236,11 @@ export function toImportedProduct(
       ...fact(`PassaHockey plaatst deze stick bij ${model.discipline === 'zaal' ? 'zaalhockey' : 'de veldhockeysticks'}.`),
     },
     experienceLevel: {
-      value: estimateLevel(carbon, price),
+      value: estimateLevel(carbon, price, junior),
       ...estimate(
         `PassaHockey noemt geen niveau. Eigen inschatting op basis van ${
           carbon !== null ? `het carbonpercentage (${carbon}%) en ` : ''
-        }de prijs (${euro(price)}).`,
+        }de prijs (${euro(price)})${junior ? '; een juniorstick schatten we nooit als "ervaren" in' : ''}.`,
       ),
       ...year,
     },
