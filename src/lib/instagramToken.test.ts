@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { liveEnvValue, parseRefresh } from './instagramToken';
+import {
+  cleanToken,
+  describeToken,
+  liveEnvValue,
+  parseRefresh,
+} from './instagramToken';
 
 describe('liveEnvValue', () => {
   it('prefers the production value, then the shared one, never a preview', () => {
@@ -32,5 +37,20 @@ describe('parseRefresh', () => {
     expect(result).toEqual({
       error: 'Instagram gaf HTTP 400: Error validating access token',
     });
+  });
+});
+
+describe('cleanToken / describeToken', () => {
+  it('strips whitespace and quotes pasted around a token', () => {
+    expect(cleanToken('  "IGAAabc123"\n')).toBe('IGAAabc123');
+  });
+
+  it('describes a token without revealing any of it', () => {
+    const token = 'IGAA' + 'x'.repeat(40);
+    const text = describeToken(token);
+    expect(text).toContain('44 tekens');
+    expect(text).toContain('begint zoals een Instagram-token');
+    expect(text).not.toContain('IGAA');
+    expect(describeToken('********')).toContain('afgeschermd');
   });
 });

@@ -23,6 +23,30 @@ export function liveEnvValue(
   );
 }
 
+/** Removes whitespace, line breaks and quotes pasted around a token. */
+export function cleanToken(raw: string): string {
+  return raw
+    .trim()
+    .replace(/^["']+|["']+$/g, '')
+    .trim();
+}
+
+/**
+ * What a token looks like, without revealing any of it: safe for public
+ * GitHub Actions logs.
+ */
+export function describeToken(token: string): string {
+  const shape = [
+    `${token.length} tekens`,
+    /^IG/.test(token)
+      ? 'begint zoals een Instagram-token'
+      : 'begint níet zoals een Instagram-token (IG…)',
+  ];
+  if (/\s/.test(token)) shape.push('bevat spaties of enters');
+  if (/^\*+$/.test(token)) shape.push('is afgeschermd (alleen sterretjes)');
+  return shape.join(', ');
+}
+
 export type RefreshResponse = {
   access_token?: unknown;
   expires_in?: unknown;

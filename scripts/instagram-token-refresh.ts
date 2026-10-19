@@ -6,6 +6,8 @@
 // Run with: npm run instagram:refresh
 import {
   INSTAGRAM_TOKEN_KEY,
+  cleanToken,
+  describeToken,
   liveEnvValue,
   parseRefresh,
   type NetlifyEnvValue,
@@ -47,7 +49,15 @@ const site = await netlify<{ account_id?: string; name?: string }>(
 if (!site.account_id) fail('geen account_id bij de site gevonden.');
 const envPath = `/accounts/${site.account_id}/env/${INSTAGRAM_TOKEN_KEY}?site_id=${siteId}`;
 
-const variable = await netlify<{ values?: NetlifyEnvValue[] }>(envPath);
+const variable = await netlify<{
+  values?: NetlifyEnvValue[];
+  is_secret?: boolean;
+}>(envPath);
+if (variable.is_secret) {
+  fail(
+    `${INSTAGRAM_TOKEN_KEY} staat in Netlify gemarkeerd als "Contains secret values"; dan geeft Netlify de waarde niet vrij. Zet de variabele opnieuw, zonder dat vinkje.`,
+  );
+}
 const current = liveEnvValue(variable.values ?? []);
 if (!current) {
   fail(
@@ -57,7 +67,8 @@ if (!current) {
 
 const refreshUrl = new URL('https://graph.instagram.com/refresh_access_token');
 refreshUrl.searchParams.set('grant_type', 'ig_refresh_token');
-refreshUrl.searchParams.set('access_token', current.value);
+const currentToken = cleanToken(current.value);
+refreshUrl.searchParams.set('access_token', currentToken);
 const refreshResponse = await fetch(refreshUrl);
 const refreshed = parseRefresh(
   refreshResponse.status,
@@ -65,7 +76,7 @@ const refreshed = parseRefresh(
 );
 if ('error' in refreshed) {
   fail(
-    `${refreshed.error}. Is het token verlopen? Maak dan met de hand een nieuw token en zet het in Netlify.`,
+    `${refreshed.error}. De waarde in Netlify: ${describeToken(currentToken)}. Is het token verlopen of niet goed geplakt? Maak dan met de hand een nieuw token en zet het in Netlify.`,
   );
 }
 
