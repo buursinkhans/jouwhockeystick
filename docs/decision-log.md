@@ -926,3 +926,16 @@ Het aandachtspunt "carbonpercentage niet vermeld" is vervangen door "Grays verme
 Geen merkbonus en geen wijziging in de adviesregels; alleen de data is vollediger.
 
 **Tests:** twee tests gebruikten de JB 6 als voorbeeld van een stick zonder carbonpercentage. Ze gebruiken nu een variant zonder carbon.
+
+## 2026-10-19 — homepage: foto's in de hero
+
+**Wat (keuze eigenaar):** de hero toont twee foto's van een jeugdspeelster: de dochter van de eigenaar, gepubliceerd met toestemming.
+- **Foto's:** beide vierkant bijgesneden. Alle metadata (EXIF) is verwijderd.
+- **Wisselen:** om de 10 seconden met een zachte overgang, zonder knoppen. Het doel is dat er iets beweegt op de homepage.
+- **Labels:** de drie redenen-labels staan op desktop linksboven op de foto, op mobiel eronder, zodat ze stick en bal niet bedekken.
+- **Logo-embleem:** het geanimeerde logo zit niet meer in de hero. De code blijft bestaan.
+
+**Afwijking WCAG 2.2.2 (keuze eigenaar):** bij beeld dat langer dan 5 seconden vanzelf beweegt, vraagt de norm een pauzeknop. Die is er bewust niet. Ter compensatie:
+- de wissel pauzeert zolang de muis op de foto staat;
+- na drie rondes (een minuut) stopt het wisselen;
+- bij "minder beweging" (`prefers-reduced-motion`) staat de foto stil.

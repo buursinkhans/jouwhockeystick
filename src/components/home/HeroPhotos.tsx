@@ -8,7 +8,9 @@ import slag from '@/assets/home/hero-speelster-slag.jpg';
 /**
  * Photos of a youth player (the owner's daughter, published with consent;
  * metadata stripped), both cropped square so they line up. Cross-fades every
- * few seconds; a pause button is always there (WCAG 2.2.2), and with
+ * 10 seconds, without buttons: the point is that something happens on the
+ * homepage (owner's choice, decision log 2026-10-19). Instead of a pause
+ * button it pauses on hover, stops after three rounds, and with
  * prefers-reduced-motion nothing moves on its own.
  */
 const PHOTOS = [
@@ -22,7 +24,9 @@ const PHOTOS = [
   },
 ];
 
-const INTERVAL_MS = 6000;
+const INTERVAL_MS = 10_000;
+/** Stop rotating after this many full rounds, so it doesn't keep distracting. */
+const MAX_ROUNDS = 3;
 
 export function HeroPhotos() {
   const [index, setIndex] = useState(0);
@@ -37,22 +41,24 @@ export function HeroPhotos() {
     return () => query.removeEventListener('change', update);
   }, []);
 
-  const playing = !paused && !reducedMotion;
+  const [steps, setSteps] = useState(0);
+  const finished = steps >= MAX_ROUNDS * PHOTOS.length;
+  const playing = !paused && !reducedMotion && !finished;
   useEffect(() => {
     if (!playing) return;
-    const timer = window.setInterval(
-      () => setIndex((i) => (i + 1) % PHOTOS.length),
-      INTERVAL_MS,
-    );
+    const timer = window.setInterval(() => {
+      setIndex((i) => (i + 1) % PHOTOS.length);
+      setSteps((n) => n + 1);
+    }, INTERVAL_MS);
     return () => window.clearInterval(timer);
   }, [playing]);
 
   return (
     <div
-      role="group"
-      aria-roledescription="carrousel"
-      aria-label="Foto's van een jeugdspeelster"
+      data-hero-photos
       className="relative aspect-square w-full overflow-hidden rounded-3xl shadow-sm"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
     >
       {PHOTOS.map((photo, i) => (
         <Image
@@ -68,47 +74,6 @@ export function HeroPhotos() {
           }`}
         />
       ))}
-
-      <div className="absolute right-2 bottom-2 flex items-center gap-1 rounded-full bg-inkt/60 p-1 backdrop-blur-sm">
-        {PHOTOS.map((photo, i) => (
-          <button
-            key={photo.alt}
-            type="button"
-            onClick={() => setIndex(i)}
-            aria-label={`Foto ${i + 1} van ${PHOTOS.length} tonen`}
-            aria-current={i === index}
-            className="flex h-11 w-7 items-center justify-center"
-          >
-            <span
-              className={`block h-2.5 w-2.5 rounded-full ${
-                i === index ? 'bg-white' : 'bg-white/50'
-              }`}
-            />
-          </button>
-        ))}
-        {!reducedMotion && (
-          <button
-            type="button"
-            onClick={() => setPaused((p) => !p)}
-            aria-label={paused ? 'Foto’s laten wisselen' : 'Foto’s pauzeren'}
-            className="flex h-11 w-11 items-center justify-center text-white"
-          >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              {paused ? (
-                <path d="M8 5v14l11-7z" />
-              ) : (
-                <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
-              )}
-            </svg>
-          </button>
-        )}
-      </div>
     </div>
   );
 }
