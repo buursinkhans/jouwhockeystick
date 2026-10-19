@@ -1027,3 +1027,15 @@ Gecorrigeerd: de zin "sticks waarvan kerngegevens alleen bij een winkel bekend z
 **Wat:**
 - De homepage telt nu precies de sticks waaruit de stickwijzer kiest: alle veldsticks, inclusief de import. De tekst luidt "vergelijkt je antwoorden met alle … veldsticks in onze catalogus".
 - Het advies zegt nu hoeveel sticks bij de maat, het niveau en het budget passen (`candidateCount`), en dat daaruit de best passende worden getoond.
+
+## 2026-10-19 — vertrouwen zichtbaar bovenaan de homepage
+
+**Aanleiding (advies van buiten, eigenaar akkoord):** laat al in het eerste scherm zien waarom bezoekers het advies kunnen vertrouwen.
+
+**Wat:** onder de knop "Start de stickwijzer" staat één regel met vinkjes:
+- "<aantal> veldsticks van <aantal> merken" (automatisch geteld, zoals de stickwijzer ze gebruikt);
+- "Bron bij elk gegeven";
+- "Vergoedingen tellen niet mee in het advies";
+- de link "Zo werkt ons advies →" naar /methodiek.
+
+Bewust níet het woord "onafhankelijk", omdat de site partnerlinks heeft. "Geen account nodig · 6 tot 11 korte stappen" is weg uit de hero; op de stickwijzer-pagina staat al dat je geen account nodig hebt. Op 1366×768 en 390×844 staat de regel boven de vouw.

@@ -2,11 +2,8 @@ import { Logo } from '@/components/brand/Logo';
 import { HeroPhotos } from './HeroPhotos';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
-import { SCREENS } from '@/content/stickwijzer/questions';
-
-const stepCounts = Object.values(SCREENS).map((screens) => screens.length);
-const minSteps = Math.min(...stepCounts);
-const maxSteps = Math.max(...stepCounts);
+import Link from 'next/link';
+import { getAllBrands, getFieldProducts } from '@/catalog';
 
 const EXAMPLE_REASONS = [
   'Juiste stick',
@@ -43,6 +40,40 @@ function HeroVisual() {
 }
 
 /** Homepage hero: primary wordmark with pay-off on a light background (merkinstructie §4). */
+/**
+ * Why the advice can be trusted, visible without scrolling. Every claim is
+ * counted from the catalog or documented on /methodiek; "onafhankelijk" is
+ * avoided on purpose because the site has partner links.
+ */
+function TrustLine() {
+  const now = new Date();
+  const sticks = getFieldProducts(now, { includeImported: true }).length;
+  const brands = getAllBrands(now, 'veld', { includeImported: true }).length;
+  const items = [
+    `${sticks} veldsticks van ${brands} merken`,
+    'Bron bij elk gegeven',
+    'Vergoedingen tellen niet mee in het advies',
+  ];
+  return (
+    <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-inkt/80">
+      {items.map((item) => (
+        <li key={item} className="flex items-center gap-1.5">
+          <CheckIcon size={14} className="shrink-0 text-veld" />
+          {item}
+        </li>
+      ))}
+      <li>
+        <Link
+          href="/methodiek"
+          className="font-semibold text-veld hover:underline"
+        >
+          Zo werkt ons advies →
+        </Link>
+      </li>
+    </ul>
+  );
+}
+
 export function Hero() {
   return (
     <section className="bg-hex-light border-b border-rand bg-krijt">
@@ -59,14 +90,12 @@ export function Hero() {
             budget. Je krijgt maximaal drie sticks, elk met de redenen waarom
             hij past — en eerlijk waar je op inlevert.
           </p>
-          <div className="mt-6 flex flex-wrap items-center gap-4">
+          <div className="mt-6">
             <ButtonLink href="/stickwijzer" variant="accent">
               Start de stickwijzer
             </ButtonLink>
-            <span className="text-sm text-lijngrijs">
-              Geen account nodig · {minSteps} tot {maxSteps} korte stappen
-            </span>
           </div>
+          <TrustLine />
         </div>
         <HeroVisual />
       </div>
