@@ -999,3 +999,9 @@ De methodiekpagina legt nu uit:
 - dat een stick met alleen een geschat niveau, en zonder gegevens van het merk, 3 punten aftrek krijgt.
 
 Gecorrigeerd: de zin "sticks waarvan kerngegevens alleen bij een winkel bekend zijn, nemen we niet op in een advies" klopte niet meer sinds de import van 17 oktober.
+
+## 2026-10-19 — Kennisartikel "Is een hockeystick met meer carbon altijd beter?" (#58)
+
+**Wat:** `/kennis/meer-carbon-hockeystick-beter`, over het carbonpercentage binnen composietsticks (stijfheid, vergevingsgezindheid, niveau, overstappen). De tabel met bereiken per niveau wordt uit de catalogus gegenereerd; een ontbrekend percentage is "niet vermeld" en telt niet mee. Linkt naar de bestaande pagina's over begrippen, veelgemaakte fouten, low bow/mid bow, kinderen en zaalsticks.
+
+**Bewust niet:** vaste percentages per niveau als norm, merk- of modelnamen als aanbeveling, prestatieclaims. De afbakening met brief #36 (materiaal) staat in de tekst zonder link; die link volgt zodra #36 live is.

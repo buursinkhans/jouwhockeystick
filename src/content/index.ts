@@ -7,6 +7,7 @@ import { hoeKiesJeDeJuisteHockeystick } from './articles/hoe-kies-je-de-juiste-h
 import { zaalstickVoorKinderen } from './articles/zaalstick-voor-kinderen';
 import { veldstickZaalhockey } from './articles/veldstick-zaalhockey';
 import { zaalstickBudget } from './articles/zaalstick-budget';
+import { meerCarbonHockeystickBeter } from './articles/meer-carbon-hockeystick-beter';
 import { waarKoopJeEenHockeystick } from './articles/waar-koop-je-een-hockeystick';
 
 /** Listed on /kennis in this order. */
@@ -18,6 +19,7 @@ const ALL_ARTICLES: Article[] = [
   zaalstickBudget,
   lowBowVsMidBow,
   hoeKiesJeDeJuisteHockeystick,
+  meerCarbonHockeystickBeter,
   waarKoopJeEenHockeystick,
 ];
 
