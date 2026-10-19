@@ -879,3 +879,13 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 - **Plek per klik:** links die geen bekende plek meesturen, zoals de testlink uit het bol-dashboard, staan onder "Overig".
 - **PassaHockey per stick:** TradeTracker toont niet per stick, omdat onze links alleen de plek meesturen.
 - **Ongetest:** het formaat van de TradeTracker-respons is gebouwd volgens de WSDL, maar nog niet met echte gegevens geprobeerd. De eerste run laat zien of het klopt.
+
+## 2026-10-19 — Test: explainer-video met AI-presentator (Colossyan)
+
+**Besluit eigenaar:** naast de animatievideo's één explainer met een AI-presentator testen, over de kromming van de stick (`/kennis/low-bow-vs-mid-bow`). Kromming gekozen boven carbon: er staat al een pagina live, het onderwerp is goed in beeld te brengen, en veel merken noemen geen carbonpercentage.
+
+**Tool:** Colossyan (Europees bedrijf, goedkope instap, PowerPoint-import waarbij de sprekersnotities de tekst van de avatar worden). HeyGen viel af omdat het een Amerikaans bedrijf is; een avatar is biometrische data. Claude zelf maakt geen realistische mensen of stemmen.
+
+**Regels:** zie `docs/video.md` §9. Stock-avatar of de eigenaar zelf, AI-vermelding in beeld en in de gesproken tekst, AI-label op elk platform (EU AI Act art. 50, van toepassing sinds 2 augustus 2026). De eigenaar maakt en uploadt zelf.
+
+**Afwijking:** `docs/video.md` §3 sloot AI-avatars en mensen in beeld uit; voor deze ene test geldt een uitzondering. Evaluatie eind november, samen met de video-pilot.

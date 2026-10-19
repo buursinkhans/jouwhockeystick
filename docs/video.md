@@ -24,8 +24,8 @@ Eén onderwerp, *Welke lengte hockeystick?*, in twee vormen:
 - **Alle cijfers komen uit de repo**, net als in de artikelen: importeer de bron (bijv. `LENGTH_GUIDE`) in plaats van getallen over te typen. Dan klopt de video na een nieuwe render altijd met de site.
 - **Geen prijzen, voorraad, percentages per stick of merk- en modelnamen als aanbeveling** in beeld of tekst. Een geplaatste video wordt niet bijgewerkt.
 - Spelregels alleen met de FIH als bron, zoals op de site.
-- **Geen mensen in beeld**: geen spelers, geen kinderen, geen foto's of citaten. Een neutraal silhouet mag.
-- Geen AI-avatars en geen gegenereerde stemmen van bestaande mensen.
+- **Geen mensen in beeld**: geen spelers, geen kinderen, geen foto's of citaten. Een neutraal silhouet mag. Uitzondering: de AI-presentator-test (§9).
+- Geen AI-avatars en geen gegenereerde stemmen van bestaande mensen, behalve in de AI-presentator-test (§9).
 - Huisstijl: kleuren en logo uit `src/components/brand/logoGeometry.ts`, letters uit `assets/fonts` (Bricolage, Instrument Sans). Oranje is voor de oproep naar de stickwijzer.
 - Taal volgens `docs/content-agent.md` §3: vriendelijk, *je*, korte zinnen, genuanceerd ("kan passen").
 - **Alle tekst staat in beeld**, zodat de video zonder geluid te volgen is. Een voice-over is optioneel en spreekt de eigenaar zelf in.
@@ -49,7 +49,7 @@ Eén onderwerp, *Welke lengte hockeystick?*, in twee vormen:
 
 ## 6. Plaatsen
 
-- **YouTube:** *Publiek* op "Nee, niet gemaakt voor kinderen" (de video's zijn voor ouders), geen betaalde promotie, geen synthetische content. Link naar de site via `jouwhockeystick.nl/youtube` (stuurt door naar de stickwijzer met `utm_source=youtube`) of een artikel-URL met `utm_source=youtube&utm_medium=video&utm_campaign=<onderwerp>`.
+- **YouTube:** *Publiek* op "Nee, niet gemaakt voor kinderen" (de video's zijn voor ouders), geen betaalde promotie, geen synthetische content (behalve een video met AI-presentator: dan *Gewijzigde of synthetische content* op "Ja", zie §9). Link naar de site via `jouwhockeystick.nl/youtube` (stuurt door naar de stickwijzer met `utm_source=youtube`) of een artikel-URL met `utm_source=youtube&utm_medium=video&utm_campaign=<onderwerp>`.
 - **Instagram, Facebook en TikTok:** dezelfde Short als Reel, met een onderschrift volgens `docs/instagram.md` §4 en §9. Een Reel telt als de wekelijkse Reel uit `docs/instagram.md` §8.
 - **Muziek:** standaard ons eigen nummer `assets/video/muziek.mp3` met geluidseffecten (`sfx-*.mp3`). Die zijn in code gemaakt door `video/audio/genereer.py` (geen samples, geen AI), dus van ons: geen licentie, geen naamsvermelding, geen claims. Andere muziek: alleen uit de eigen bibliotheek van het platform (YouTube Audiobibliotheek, Instagram, TikTok), op de versie *zonder muziek*. Nooit populaire hits in het bestand zelf.
 
@@ -64,6 +64,16 @@ Naast losse video's in `video/` (Remotion, voor onderwerpen met een eigen animat
 - **Teksten per kanaal:** YouTube (titel max 70 tekens, beschrijving, 5–8 tags), Short (titel met `#shorts`, korte beschrijving), Reel (onderschrift volgens `docs/instagram.md` §4) en TikTok (volgens `docs/instagram.md` §9). Elke beschrijving en elk onderschrift heeft de partnerlink-vermelding. YouTube linkt via `jouwhockeystick.nl/youtube` en de bronpagina met `utm_source=youtube&utm_medium=video&utm_campaign=<id>`.
 - **Thumbnail:** kop van max 4 woorden, eventueel een oranje label van max 3 woorden.
 - **De eigenaar** downloadt in de Social-studio de Short en de YouTube-video als MP4 plus de thumbnail. Hij plant ze in het weekend in: YouTube Studio voor de video en de Short, Meta Business Suite voor de Reel en TikTok Studio op de computer. Daarna klikt hij per kanaal op *Ingepland*. Na het geplande moment telt de studio het als geplaatst.
+
+## 9. Test: explainer met AI-presentator (Colossyan)
+
+Eén video, *Low bow of mid bow?*, bij `/kennis/low-bow-vs-mid-bow`. De eigenaar maakt hem zelf in Colossyan (Europees bedrijf) en uploadt hem zelf. Evaluatie samen met de pilot eind november: sitebezoek met `utm_campaign=bow-profiel` en kijkduur, naast de Remotion-video's.
+
+- **Avatar:** een stock-avatar van Colossyan, of de eigenaar zelf. Nooit een speler, een kind, een bestaand persoon zonder schriftelijke toestemming of een gezicht van internet.
+- **Eerlijk:** de avatar zegt aan het begin dat hij een AI-presentator is, en in elke scène staat "Presentator gemaakt met AI" (EU AI Act art. 50). In YouTube *Gewijzigde of synthetische content* op "Ja", op Instagram, Facebook en TikTok het AI-label aan.
+- **Inhoud:** dezelfde regels als hierboven en als de site: feiten uit de pagina, geen merken of modellen als aanbeveling, geen prijzen, geen "beste". De figuren zijn dezelfde schematische krommingen als op de site.
+- **Werkwijze:** een PowerPoint in de huisstijl met het gesproken script als sprekersnotities; Colossyan maakt van elke dia een scène en van de notities de tekst van de avatar.
+- **Bewust niet:** een eigen avatar op basis van een foto of video van iemand anders, een gekloonde stem, AI-avatars in de wekelijkse video's van de Social-studio. Daarvoor is na de evaluatie een nieuw besluit nodig.
 
 ## 8. Grenzen
 
