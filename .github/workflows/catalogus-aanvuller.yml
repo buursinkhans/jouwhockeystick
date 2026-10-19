@@ -112,7 +112,8 @@ jobs:
           other=$(git status --porcelain | awk '{print $2}' | grep -v '^src/catalog/' || true)
           if [ -n "$other" ]; then echo "::error::Wijzigingen buiten src/catalog/: $other"; exit 1; fi
           if [ -z "$(git status --porcelain)" ]; then echo "Geen wijzigingen."; exit 0; fi
-          branch="catalogus/$(date -u +%Y-%m-%d)"
+          # Date plus UTC time: a second run on the same day must not collide with an earlier (merged, undeleted) branch.
+          branch="catalogus/$(date -u +%Y-%m-%d-%H%M)"
           title=$(head -n 1 "$RUNNER_TEMP/pr.md")
           { tail -n +2 "$RUNNER_TEMP/pr.md"; printf '\n\n_Gemaakt door de Catalogus-aanvuller op basis van de Marktverkenning. Controleer de bronnen in de preview; deze agent merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
           # The Claude step reconfigures git auth; push with the workflow token explicitly.
