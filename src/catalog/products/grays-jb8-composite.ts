@@ -17,8 +17,7 @@ export const graysJb8Composite: Product = {
   name: 'Grays JB 8 Composite',
   dataStatus: 'verified',
   bolProductUrl: BOL,
-  passaSportsProductUrl:
-    'https://www.passasports.nl/grays-jumbow-8-23261',
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-jumbow-8-23261',
   imageAlt: 'Grays JB 8 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HACC25Composite_20Sticks_20JB8_20Jumbow_20MX_20Black_20Blue_20Main.jpg?v=1744210415',
@@ -55,7 +54,7 @@ export const graysJb8Composite: Product = {
     value: 70,
     source: 'partner-shop',
     sourceLabel:
-      'Jumbo Sports noemt expliciet 70% carbon; Grays zelf vermeldt geen percentage.',
+      'Jumbo Sports noemt expliciet 70% carbon; Grays zelf vermeldt geen percentage. PassaHockey vermeldt ook 70% (gecontroleerd 2026-10-19).',
     sourceUrl: 'https://www.jumbosports.com/grays-jumbow-8-3453356802',
     lastVerifiedAt: CHECKED,
   },

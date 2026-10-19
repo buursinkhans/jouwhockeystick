@@ -40,6 +40,14 @@ export const graysJb10Composite: Product = {
       'https://www.grays-hockey.eu/collections/jb-jumbow-composite-hockey-sticks/products/jb10-composite-hockey-stick-1',
     lastVerifiedAt: '2026-09-26',
   },
+  carbonPercentage: {
+    value: 95,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 95%"; Grays noemt zelf geen percentage. bol.com noemt 100%; we houden de waarde van PassaHockey aan, die past bij de nummering van Grays.',
+    sourceUrl: 'https://www.passasports.nl/grays-jb-10-27052',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
@@ -75,7 +83,7 @@ export const graysJb10Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage wordt door Grays niet vermeld, dus lastig te vergelijken op stugheid met merken die dat wel doen',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Prijs aan de hoge kant binnen dit assortiment — vooral interessant als het gebruiksniveau dat rechtvaardigt',
     ],
     source: 'editorial-estimate',

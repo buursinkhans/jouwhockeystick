@@ -52,7 +52,14 @@ export const graysAc800JumbowS: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
-  // carbonPercentage left out: Een vergelijkingsartikel noemt 80%, maar dat is beperkt bevestigd; daarom niet ingevuld.
+  carbonPercentage: {
+    value: 80,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 80%"; Grays noemt zelf geen percentage. bol.com toont 0%, een standaardwaarde die niet klopt voor een composietstick; die gebruiken we niet.',
+    sourceUrl: 'https://www.passasports.nl/grays-ac800-jumbow-s-23243',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5],
     source: 'brand-website',
@@ -89,7 +96,7 @@ export const graysAc800JumbowS: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage niet bevestigd',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Grays noemt geen niveau; dat is onze inschatting',
     ],
     source: 'editorial-estimate',

@@ -7,8 +7,7 @@ export const graysJb6Composite: Product = {
   dataStatus: 'verified',
   bolProductUrl:
     'https://www.bol.com/nl/nl/p/grays-jb-6-hockeystick-blauw/9300000304766051/',
-  passaSportsProductUrl:
-    'https://www.passasports.nl/grays-jb-6-27055',
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-jb-6-27055',
   imageAlt: 'Grays JB 6 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAEE26CompositeSticksJB6JumbowHockeyStickBlue_Silver_e5812b3e-a8af-409f-b288-985053ddd135.jpg?v=1779972516',
@@ -39,6 +38,14 @@ export const graysJb6Composite: Product = {
     sourceUrl:
       'https://www.grays-hockey.eu/collections/jb-jumbow-composite-hockey-sticks/products/jb6-composite-hockey-stick-1',
     lastVerifiedAt: '2026-09-26',
+  },
+  carbonPercentage: {
+    value: 40,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 40%"; Grays noemt zelf geen percentage. bol.com noemt 60%; we houden de waarde van PassaHockey aan, die past bij de nummering van Grays.',
+    sourceUrl: 'https://www.passasports.nl/grays-jb-6-27055',
+    lastVerifiedAt: '2026-10-19',
   },
   lengthsInches: {
     value: [36.5, 37.5],
@@ -75,7 +82,7 @@ export const graysJb6Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage wordt door Grays niet vermeld, dus lastig te vergelijken op stugheid met merken die dat wel doen',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Beperkt tot twee lengtematen (36.5" en 37.5")',
     ],
     source: 'editorial-estimate',

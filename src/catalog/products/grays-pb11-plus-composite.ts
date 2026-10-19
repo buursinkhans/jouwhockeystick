@@ -40,6 +40,14 @@ export const graysPb11PlusComposite: Product = {
       'https://www.grays-hockey.eu/collections/pb-probow-plus-composite-hockey-sticks/products/pb11-plus-composite-hockey-stick',
     lastVerifiedAt: '2026-09-27',
   },
+  carbonPercentage: {
+    value: 95,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 95%"; Grays noemt zelf geen percentage. bol.com noemt 100%; we houden de waarde van PassaHockey aan, die past bij de nummering van Grays.',
+    sourceUrl: 'https://www.passasports.nl/grays-pb-11-27060',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
@@ -75,7 +83,7 @@ export const graysPb11PlusComposite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage wordt door Grays niet vermeld',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Specialistische, dure stick — minder voor de hand liggend als eerste upgrade',
     ],
     source: 'editorial-estimate',

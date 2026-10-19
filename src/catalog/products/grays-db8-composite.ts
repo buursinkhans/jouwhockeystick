@@ -53,7 +53,7 @@ export const graysDb8Composite: Product = {
     value: 70,
     source: 'partner-shop',
     sourceLabel:
-      'Twee gespecialiseerde winkels (HockeyDirect en De Hockeywinkel) noemen expliciet 70% carbon; Grays zelf vermeldt geen percentage.',
+      'Twee gespecialiseerde winkels (HockeyDirect en De Hockeywinkel) noemen expliciet 70% carbon; Grays zelf vermeldt geen percentage. PassaHockey vermeldt ook 70% (gecontroleerd 2026-10-19).',
     sourceUrl: 'https://www.hockeydirect.nl/grays-dynabow-8-27035',
     lastVerifiedAt: CHECKED,
   },

@@ -17,8 +17,7 @@ export const graysMb7Composite: Product = {
   name: 'Grays MB 7 Composite',
   dataStatus: 'verified',
   bolProductUrl: BOL,
-  passaSportsProductUrl:
-    'https://www.passasports.nl/grays-midbow-7-23267',
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-midbow-7-23267',
   imageAlt: 'Grays MB 7 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HADB25Composite_20Sticks_20MB7_20Midbow_20MC_20Black_20Blue_20Main.jpg?v=1744210985',
@@ -52,7 +51,14 @@ export const graysMb7Composite: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
-  // carbonPercentage left out: Winkels spreken elkaar tegen (50% en 70%); daarom niet ingevuld.
+  carbonPercentage: {
+    value: 50,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 50%"; Grays noemt zelf geen percentage. bol.com toont 0%, een standaardwaarde die niet klopt voor een composietstick; die gebruiken we niet.',
+    sourceUrl: 'https://www.passasports.nl/grays-midbow-7-23267',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
@@ -88,7 +94,9 @@ export const graysMb7Composite: Product = {
     lastVerifiedAt: CHECKED,
   },
   pointsOfAttention: {
-    value: ['Carbonpercentage niet eenduidig'],
+    value: [
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
+    ],
     source: 'editorial-estimate',
     sourceLabel: 'Eigen inschatting op basis van de productpagina van Grays.',
     lastVerifiedAt: CHECKED,

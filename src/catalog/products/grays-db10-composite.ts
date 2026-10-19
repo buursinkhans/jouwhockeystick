@@ -52,7 +52,14 @@ export const graysDb10Composite: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
-  // carbonPercentage left out: Een winkel noemt 95% voor de zwart/blauwe uitvoering, bol.com 100% voor de rode; die waarden verschillen en gaan over verschillende uitvoeringen. Daarom niet ingevuld.
+  carbonPercentage: {
+    value: 95,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 95%"; Grays noemt zelf geen percentage. bol.com noemt 100%; we houden de waarde van PassaHockey aan, die past bij de nummering van Grays.',
+    sourceUrl: 'https://www.passasports.nl/grays-db-10-27050',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
@@ -90,7 +97,7 @@ export const graysDb10Composite: Product = {
   pointsOfAttention: {
     value: [
       'Stijf en duur: echt voor ervaren spelers',
-      'Exact carbonpercentage niet eenduidig',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
     ],
     source: 'editorial-estimate',
     sourceLabel: 'Eigen inschatting op basis van de productpagina van Grays.',

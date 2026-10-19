@@ -49,7 +49,14 @@ export const graysDb6Composite: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
-  // carbonPercentage left out: Eén winkeloverzicht noemt 40%, maar dat is niet onafhankelijk bevestigd; daarom niet ingevuld.
+  carbonPercentage: {
+    value: 40,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 40%"; Grays noemt zelf geen percentage. bol.com toont 0%, een standaardwaarde die niet klopt voor een composietstick; die gebruiken we niet.',
+    sourceUrl: 'https://www.passasports.nl/grays-dynabow-6-23273',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5],
     source: 'brand-website',
@@ -86,7 +93,7 @@ export const graysDb6Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage niet bevestigd',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'De productpagina van Grays bevat tekst van een ander model',
     ],
     source: 'editorial-estimate',

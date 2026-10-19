@@ -45,7 +45,7 @@ describe('describeDifference', () => {
 
   it('leaves out a spec that one of the sticks does not state', () => {
     const text = describeDifference(
-      bySlug('grays-jb6-composite'),
+      { ...bySlug('grays-jb6-composite'), carbonPercentage: undefined },
       bySlug('ritual-specialist-55'),
     );
     expect(text).not.toContain('carbon');

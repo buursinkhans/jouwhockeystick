@@ -52,7 +52,14 @@ export const graysAc700DynabowS: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
-  // carbonPercentage left out: Geen betrouwbaar carbonpercentage gevonden; een winkelvermelding van 0% is onvoldoende betrouwbaar.
+  carbonPercentage: {
+    value: 70,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 70%"; Grays noemt zelf geen percentage. bol.com toont 0%, een standaardwaarde die niet klopt voor een composietstick; die gebruiken we niet.',
+    sourceUrl: 'https://www.passasports.nl/grays-ac700-dynabow-s-23244',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5],
     source: 'brand-website',
@@ -89,7 +96,7 @@ export const graysAc700DynabowS: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage onbekend',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Grays noemt geen niveau; dat is onze inschatting',
     ],
     source: 'editorial-estimate',

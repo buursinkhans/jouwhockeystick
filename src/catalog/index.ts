@@ -185,7 +185,7 @@ const ALL_PRODUCTS: Product[] = [
  * Bump whenever product data changes. Stamped on every advice result so an
  * old result can be traced back to the catalog it was calculated from.
  */
-export const CATALOG_VERSION = '2026-10-17';
+export const CATALOG_VERSION = '2026-10-19';
 
 const VERIFICATION_FRESHNESS_MONTHS = 12;
 

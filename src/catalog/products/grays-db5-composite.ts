@@ -4,7 +4,8 @@ import type { Product } from '../types';
 // for bolProductUrl and the stock indication. The listing's carbon percentage
 // (50 %), "Kinderen" target group and 32 inch length are not copied: the
 // brand page does not state a carbon percentage and lists 36.5/37.5 inch.
-const SOURCE = 'https://www.grays-hockey.eu/products/db5-composite-hockey-stick';
+const SOURCE =
+  'https://www.grays-hockey.eu/products/db5-composite-hockey-stick';
 const BOL_SOURCE =
   'https://www.bol.com/nl/nl/p/grays-db-5-hockeystick-oceaanblauw-zilver/9300000304766066/';
 const CHECKED = '2026-10-12';
@@ -15,8 +16,7 @@ export const graysDb5Composite: Product = {
   name: 'Grays DB 5 Composite Hockey Stick',
   dataStatus: 'verified',
   bolProductUrl: BOL_SOURCE,
-  passaSportsProductUrl:
-    'https://www.passasports.nl/grays-db-5-27057',
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-db-5-27057',
   imageAlt: 'Grays DB 5 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAGE26Composite_20Sticks_20DB5_20Dynabow_20Hockey_20Stick_20Ocean_20Blue_20_20Silver.jpg?v=1779972181&width=1024',
@@ -50,6 +50,14 @@ export const graysDb5Composite: Product = {
       'Grays noemt het "Dynabow" met een curvepositie van 24.75 @ 250mm.',
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
+  },
+  carbonPercentage: {
+    value: 30,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 30%"; Grays noemt zelf geen percentage. bol.com noemt 50%; we houden de waarde van PassaHockey aan, die past bij de nummering van Grays.',
+    sourceUrl: 'https://www.passasports.nl/grays-db-5-27057',
+    lastVerifiedAt: '2026-10-19',
   },
   lengthsInches: {
     value: [36.5, 37.5],
@@ -86,7 +94,7 @@ export const graysDb5Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage en gewicht worden door Grays niet vermeld',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Alleen in 36,5" en 37,5" verkrijgbaar',
     ],
     source: 'editorial-estimate',

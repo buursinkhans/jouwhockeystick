@@ -36,6 +36,14 @@ export const graysDb10PlusComposite: Product = {
       'https://www.grays-hockey.eu/collections/db-dynabow-plus-composite-hockey-sticks/products/db10-plus-composite-hockey-stick',
     lastVerifiedAt: '2026-09-27',
   },
+  carbonPercentage: {
+    value: 95,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 95%"; Grays noemt zelf geen percentage.',
+    sourceUrl: 'https://www.passasports.nl/grays-dynabow-10-23250',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
@@ -71,7 +79,7 @@ export const graysDb10PlusComposite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage wordt door Grays niet vermeld',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Grays vermeldt zelf geen specifiek niveau of positie voor dit model — hier ingeschat',
     ],
     source: 'editorial-estimate',

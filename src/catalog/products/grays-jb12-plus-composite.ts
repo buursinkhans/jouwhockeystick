@@ -6,8 +6,7 @@ export const graysJb12PlusComposite: Product = {
   name: 'Grays JB 12+ Composite Hockey Stick',
   dataStatus: 'verified',
   bolNotSold: { checkedAt: '2026-10-08' },
-  passaSportsProductUrl:
-    'https://www.passasports.nl/grays-jb-12-27051',
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-jb-12-27051',
   imageAlt: 'Grays JB 12+ Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HABA26Composite_20Sticks_20JB12_2b_20Jumbow_20Plus_20Hockey_20Stick_20Ocean_20Blue_20_20Silver.jpg?v=1779973059',
@@ -38,6 +37,14 @@ export const graysJb12PlusComposite: Product = {
     sourceUrl:
       'https://www.grays-hockey.eu/collections/jb-jumbow-plus-composite-hockey-sticks/products/jb12-plus-composite-hockey-stick',
     lastVerifiedAt: '2026-09-27',
+  },
+  carbonPercentage: {
+    value: 95,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 95%"; Grays noemt zelf geen percentage.',
+    sourceUrl: 'https://www.passasports.nl/grays-jb-12-27051',
+    lastVerifiedAt: '2026-10-19',
   },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
@@ -74,7 +81,7 @@ export const graysJb12PlusComposite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage wordt door Grays niet vermeld',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Hoogste prijs binnen de Grays-lijn (€450) — vooral interessant als het niveau dat rechtvaardigt',
     ],
     source: 'editorial-estimate',

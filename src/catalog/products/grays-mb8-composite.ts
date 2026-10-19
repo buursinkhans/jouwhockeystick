@@ -17,8 +17,7 @@ export const graysMb8Composite: Product = {
   name: 'Grays MB 8 Composite',
   dataStatus: 'verified',
   bolProductUrl: BOL,
-  passaSportsProductUrl:
-    'https://www.passasports.nl/grays-midbow-8-23266',
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-midbow-8-23266',
   imageAlt: 'Grays MB 8 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HADA25Composite_20Sticks_20MB8_20Midbow_20MC_20Black_20White_20Main.jpg?v=1744210776',
@@ -51,7 +50,14 @@ export const graysMb8Composite: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
-  // carbonPercentage left out: Winkels spreken elkaar tegen (70% en 0%); daarom niet ingevuld.
+  carbonPercentage: {
+    value: 70,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 70%"; Grays noemt zelf geen percentage. bol.com toont 0%, een standaardwaarde die niet klopt voor een composietstick; die gebruiken we niet.',
+    sourceUrl: 'https://www.passasports.nl/grays-midbow-8-23266',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
@@ -88,7 +94,7 @@ export const graysMb8Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage niet eenduidig',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Grays noemt geen niveau; dat is onze inschatting',
     ],
     source: 'editorial-estimate',

@@ -17,8 +17,7 @@ export const graysPb8Composite: Product = {
   name: 'Grays PB 8 Composite',
   dataStatus: 'verified',
   bolProductUrl: BOL,
-  passaSportsProductUrl:
-    'https://www.passasports.nl/grays-probow-8-23265',
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-probow-8-23265',
   imageAlt: 'Grays PB 8 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAEC25Composite_20Sticks_20PB8_20Probow_20MC_20Black_20Hot_20Red_20Main.jpg?v=1744211488',
@@ -52,7 +51,14 @@ export const graysPb8Composite: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
-  // carbonPercentage left out: Eén winkeloverzicht noemt 70%, maar dat is beperkt bevestigd; daarom niet ingevuld.
+  carbonPercentage: {
+    value: 70,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 70%"; Grays noemt zelf geen percentage. bol.com toont 0%, een standaardwaarde die niet klopt voor een composietstick; die gebruiken we niet.',
+    sourceUrl: 'https://www.passasports.nl/grays-probow-8-23265',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5, 38.5],
     source: 'brand-website',
@@ -86,7 +92,7 @@ export const graysPb8Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Carbonpercentage niet bevestigd',
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Bij bol.com was op de controledatum alleen 37,5 inch leverbaar',
     ],
     source: 'editorial-estimate',

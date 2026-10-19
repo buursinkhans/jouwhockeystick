@@ -37,8 +37,12 @@ describe('toRecheckCandidate', () => {
     const urls = candidate?.sourceUrls ?? [];
     expect(new Set(urls).size).toBe(urls.length);
     expect(urls.length).toBeGreaterThan(0);
-    // Grays publishes no carbon percentage for the JB 6.
-    expect(candidate?.gaps).toContain('carbonPercentage');
+    // A stick without a stated carbon percentage reports it as a gap.
+    const withoutCarbon = toRecheckCandidate({
+      ...graysJb6Composite,
+      carbonPercentage: undefined,
+    });
+    expect(withoutCarbon?.gaps).toContain('carbonPercentage');
   });
 });
 
@@ -66,7 +70,10 @@ describe('selectRecheckBatch', () => {
   });
 
   it('works on the real catalog without errors', () => {
-    const batch = selectRecheckBatch(getCatalogProducts(), new Date('2026-12-03'));
+    const batch = selectRecheckBatch(
+      getCatalogProducts(),
+      new Date('2026-12-03'),
+    );
     expect(batch.length).toBeLessThanOrEqual(12);
     expect(formatRecheckList(batch)).toContain('# Hercontrole');
   });

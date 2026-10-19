@@ -889,3 +889,40 @@ De vragen en de adviesregels zelf zijn niet veranderd. De vragen over het merk v
 **Regels:** zie `docs/video.md` §9. Stock-avatar of de eigenaar zelf, AI-vermelding in beeld en in de gesproken tekst, AI-label op elk platform (EU AI Act art. 50, van toepassing sinds 2 augustus 2026). De eigenaar maakt en uploadt zelf.
 
 **Afwijking:** `docs/video.md` §3 sloot AI-avatars en mensen in beeld uit; voor deze ene test geldt een uitzondering. Evaluatie eind november, samen met de video-pilot.
+
+## 2026-10-19 — carbonpercentages van Grays uit de PassaHockey-feed
+
+**Aanleiding (eigenaar):** Grays is een veelgebruikt merk, maar kwam weinig als advies uit de stickwijzer. Een belangrijke oorzaak (zie 2026-10-12 en 2026-10-13): bij de meeste Grays-sticks ontbrak het carbonpercentage, waardoor ze voor stickgevoel maar de helft van de punten kregen.
+
+**Wat:** 15 handmatig beheerde Grays-veldsticks hebben nu een carbonpercentage uit de productfeed van PassaHockey (`source: 'partner-shop'`, gecontroleerd op 2026-10-19).
+
+| Stick | Carbon |
+|---|---|
+| DB 5 | 30% |
+| DB 6, JB 6 | 40% |
+| AC500, MB 7 | 50% |
+| AC600 | 60% |
+| AC700, MB 8, PB 8 | 70% |
+| AC800 | 80% |
+| DB 10, DB 10+, JB 10, JB 12+, PB 11+ | 95% |
+
+Bij DB 8 en JB 8 (al 70% van twee winkels) bevestigt de feed die waarde.
+
+**Waarom de feed en niet bol.com:**
+- De feed is compleet en volgt een vast patroon in de nummering van Grays (4 = 20%, 5 = 30%, 6 = 40%, 7 = 50%, 8 = 70%, 9 = 90%, 10 = 95%).
+- Hij komt overeen met de waarden die het bronnenoverzicht van de eigenaar als expliciet noemde (DB 8 en JB 8: 70%).
+- bol.com toont bij 9 van de 15 sticks 0%, een standaardwaarde die niet kan kloppen voor een composietstick. Bij de overige wijkt bol.com af: DB 5 50%, JB 6 60%, en 100% bij DB 10, JB 10 en PB 11+. Het label van elke stick vermeldt de afwijkende bol-waarde.
+- Eén feedwaarde is bewust niet gebruikt: Midbow 7 Junior 5%, een kennelijke fout. Die stick staat ook niet in onze handmatige catalogus.
+
+Het aandachtspunt "carbonpercentage niet vermeld" is vervangen door "Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey".
+
+**Effect** (simulatie met 435 antwoordcombinaties, zelfde engine):
+
+| | Voor | Na |
+|---|---|---|
+| Grays als beste match | 81 | 123 |
+| Grays in het advies (alle plekken) | 229 | 297 |
+
+Geen merkbonus en geen wijziging in de adviesregels; alleen de data is vollediger.
+
+**Tests:** twee tests gebruikten de JB 6 als voorbeeld van een stick zonder carbonpercentage. Ze gebruiken nu een variant zonder carbon.

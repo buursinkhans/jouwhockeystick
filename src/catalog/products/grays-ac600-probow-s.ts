@@ -53,7 +53,14 @@ export const graysAc600ProbowS: Product = {
     sourceUrl: PAGE,
     lastVerifiedAt: CHECKED,
   },
-  // carbonPercentage left out: Grays en de gevonden winkels noemen geen carbonpercentage.
+  carbonPercentage: {
+    value: 60,
+    source: 'partner-shop',
+    sourceLabel:
+      'PassaHockey (PassaSports) vermeldt "Carbonpercentage: 60%"; Grays noemt zelf geen percentage. bol.com toont 0%, een standaardwaarde die niet klopt voor een composietstick; die gebruiken we niet.',
+    sourceUrl: 'https://www.passasports.nl/grays-ac600-probow-s-23245',
+    lastVerifiedAt: '2026-10-19',
+  },
   lengthsInches: {
     value: [36.5, 37.5],
     source: 'brand-website',
@@ -89,7 +96,9 @@ export const graysAc600ProbowS: Product = {
     lastVerifiedAt: CHECKED,
   },
   pointsOfAttention: {
-    value: ['Carbonpercentage onbekend'],
+    value: [
+      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
+    ],
     source: 'editorial-estimate',
     sourceLabel: 'Eigen inschatting op basis van de productpagina van Grays.',
     lastVerifiedAt: CHECKED,
