@@ -42,8 +42,10 @@ function HeroVisual() {
 /** Homepage hero: primary wordmark with pay-off on a light background (merkinstructie §4). */
 /**
  * Why the advice can be trusted, visible without scrolling. Every claim is
- * counted from the catalog or documented on /methodiek; "onafhankelijk" is
- * avoided on purpose because the site has partner links.
+ * counted from the catalog or documented on /methodiek. "Onafhankelijk
+ * advies" (owner's wording, 2026-10-19) holds because the score has no input
+ * for fees, shop or brand; the partner links are disclosed at every shop
+ * button and explained on /methodiek.
  */
 function TrustLine() {
   const now = new Date();
@@ -52,7 +54,7 @@ function TrustLine() {
   const items = [
     `${sticks} veldsticks van ${brands} merken`,
     'Bron bij elk gegeven',
-    'Vergoedingen tellen niet mee in het advies',
+    'Onafhankelijk advies',
   ];
   return (
     <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-inkt/80">

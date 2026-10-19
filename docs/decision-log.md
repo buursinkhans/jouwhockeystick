@@ -1039,3 +1039,5 @@ Gecorrigeerd: de zin "sticks waarvan kerngegevens alleen bij een winkel bekend z
 - de link "Zo werkt ons advies →" naar /methodiek.
 
 Bewust níet het woord "onafhankelijk", omdat de site partnerlinks heeft. "Geen account nodig · 6 tot 11 korte stappen" is weg uit de hero; op de stickwijzer-pagina staat al dat je geen account nodig hebt. Op 1366×768 en 390×844 staat de regel boven de vouw.
+
+**Aanpassing 2026-10-19 (keuze eigenaar):** "Vergoedingen tellen niet mee in het advies" is bovenaan vervangen door "Onafhankelijk advies". Dat is verdedigbaar, want de score kent geen invoer voor vergoeding, winkel of merk. De partnerlinks blijven bij elke winkelknop vermeld, en /methodiek legt uit hoe het zit.
