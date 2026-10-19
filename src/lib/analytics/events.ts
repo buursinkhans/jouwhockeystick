@@ -68,4 +68,14 @@ export type AnalyticsEvent =
       name: 'optional_questions_open';
       screen: string;
     }
+  | {
+      /** "Deel dit advies": shared via the share sheet or copied link. */
+      name: 'advice_shared';
+      method: 'native' | 'copy';
+    }
+  | {
+      /** A shared advice link was opened; `changed` = sticks differ since sharing. */
+      name: 'shared_advice_opened';
+      changed: boolean;
+    }
   | AdviceAnalyticsEvent;

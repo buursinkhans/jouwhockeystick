@@ -1005,3 +1005,15 @@ Gecorrigeerd: de zin "sticks waarvan kerngegevens alleen bij een winkel bekend z
 **Wat:** `/kennis/meer-carbon-hockeystick-beter`, over het carbonpercentage binnen composietsticks (stijfheid, vergevingsgezindheid, niveau, overstappen). De tabel met bereiken per niveau wordt uit de catalogus gegenereerd; een ontbrekend percentage is "niet vermeld" en telt niet mee. Linkt naar de bestaande pagina's over begrippen, veelgemaakte fouten, low bow/mid bow, kinderen en zaalsticks.
 
 **Bewust niet:** vaste percentages per niveau als norm, merk- of modelnamen als aanbeveling, prestatieclaims. De afbakening met brief #36 (materiaal) staat in de tekst zonder link; die link volgt zodra #36 live is.
+
+## 2026-10-19 — "Deel dit advies"
+
+**Wat (opdracht eigenaar):** onder het advies van de stickwijzer staat een knop "Deel dit advies". Op een telefoon opent het deelmenu (WhatsApp, Berichten, Mail …); op een computer wordt de link gekopieerd.
+
+**Hoe het werkt:**
+- **Het advies zit in de link.** Er wordt niets opgeslagen, er is geen account nodig en er wordt geen e-mailadres gevraagd. De link (`/stickwijzer/advies?a=…&s=…`) bevat de antwoorden uit de stickwijzer en de geadviseerde sticks, maar geen naam of contactgegevens.
+- **De ontvanger ziet het advies opnieuw berekend,** met de prijzen en voorraad van dat moment, en de winkelknoppen met onze partnerlinks.
+- **Als er iets veranderd is:** is een geadviseerde stick niet meer leverbaar, of past een andere nu beter, dan staat dat in een melding boven het advies.
+- **Niet in Google:** de pagina is `noindex` en staat niet in de sitemap.
+- **Kapotte link:** dan volgt een vriendelijke melding met een knop naar de stickwijzer.
+- **Meten:** `advice_shared` (deelmenu of gekopieerd) en `shared_advice_opened` (met `changed`).

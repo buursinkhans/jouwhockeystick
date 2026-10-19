@@ -23,6 +23,7 @@ import {
 } from '@/content/stickwijzer/questions';
 import type { AdviceEventName } from '@/lib/analytics/events';
 import { trackEvent } from '@/lib/analytics/track';
+import { shareHref } from '@/lib/shareAdvice';
 import { Button } from '@/components/ui/Button';
 import { QuestionField, type AnswerValue } from './QuestionField';
 import { QuizResult } from './QuizResult';
@@ -160,6 +161,7 @@ export function QuizForm() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [advice, setAdvice] = useState<AdviceResult | null>(null);
+  const [adviceShareHref, setAdviceShareHref] = useState<string | undefined>();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const isFirstRender = useRef(true);
 
@@ -267,6 +269,12 @@ export function QuizForm() {
     }
 
     setAdvice(result.advice);
+    setAdviceShareHref(
+      shareHref(
+        parsed.data,
+        result.advice.results.map((item) => item.product.slug),
+      ),
+    );
     trackEvent({
       name: 'quiz_complete',
       ruleSetVersion: result.advice.ruleSetVersion,
@@ -304,6 +312,7 @@ export function QuizForm() {
           headingRef={headingRef}
           onEdit={() => setAdvice(null)}
           onRestart={handleRestart}
+          shareHref={adviceShareHref}
           onFeedback={(helpful) =>
             track('advice_feedback_submitted', sessionId, {
               answerKey: helpful ? 'helpful' : 'not_helpful',

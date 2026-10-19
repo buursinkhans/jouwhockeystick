@@ -19,6 +19,7 @@ import {
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { RecommendationCard } from './RecommendationCard';
 import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
+import { ShareAdviceButton } from './ShareAdviceButton';
 
 const INTEREST_HREF = '/interesse?source=stickwijzer-resultaat';
 
@@ -56,6 +57,8 @@ export function QuizResult({
   onEdit,
   onRestart,
   onFeedback,
+  shareHref,
+  shared = false,
 }: {
   advice: AdviceResult;
   adviceGoal: AdviceAnswers['advice_goal'] | undefined;
@@ -63,6 +66,10 @@ export function QuizResult({
   onEdit: () => void;
   onRestart: () => void;
   onFeedback: (helpful: boolean) => void;
+  /** Link to this advice for "Deel dit advies"; no button without it. */
+  shareHref?: string;
+  /** Opened from a shared link: one "do it yourself" button instead of edit/restart. */
+  shared?: boolean;
 }) {
   const copy = ROUTE_RESULT_COPY[advice.route];
   const hasResults = advice.results.length > 0;
@@ -158,6 +165,11 @@ export function QuizResult({
           {advice.route === 'START' && (
             <p className="mt-4 text-sm text-inkt/80">{START_FOOTNOTE}</p>
           )}
+          {shareHref && (
+            <div className="mt-6">
+              <ShareAdviceButton href={shareHref} />
+            </div>
+          )}
         </section>
       )}
 
@@ -231,12 +243,20 @@ export function QuizResult({
       <Feedback onFeedback={onFeedback} />
 
       <div className="flex flex-wrap gap-3">
-        <Button variant="secondary" onClick={onEdit}>
-          Antwoorden aanpassen
-        </Button>
-        <Button variant="secondary" onClick={onRestart}>
-          Opnieuw beginnen
-        </Button>
+        {shared ? (
+          <Button variant="secondary" onClick={onRestart}>
+            Doe de stickwijzer zelf
+          </Button>
+        ) : (
+          <>
+            <Button variant="secondary" onClick={onEdit}>
+              Antwoorden aanpassen
+            </Button>
+            <Button variant="secondary" onClick={onRestart}>
+              Opnieuw beginnen
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );
