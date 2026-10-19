@@ -1,6 +1,5 @@
-import Image from 'next/image';
 import { Logo } from '@/components/brand/Logo';
-import heroPhoto from '@/assets/home/hero-speelster.jpg';
+import { HeroPhotos } from './HeroPhotos';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import { SCREENS } from '@/content/stickwijzer/questions';
@@ -16,25 +15,16 @@ const EXAMPLE_REASONS = [
 ];
 
 /**
- * A youth player on the pitch (the owner's daughter, published with
- * consent; metadata stripped), with the kind of reasons a result shows;
- * no brand badge (owner's choice). Illustrative only — no product,
- * size or price.
+ * Photos of a youth player (see HeroPhotos) with the kind of reasons a
+ * result shows. Illustrative only — no product, size or price.
  */
 function HeroVisual() {
   return (
     <div className="relative mx-auto w-full max-w-xs sm:max-w-sm">
-      <Image
-        src={heroPhoto}
-        alt="Jeugdspeelster dribbelt met de bal op een kunstgrasveld"
-        priority
-        placeholder="blur"
-        sizes="(min-width: 768px) 384px, 320px"
-        className="aspect-[4/5] w-full rounded-3xl object-cover shadow-sm"
-      />
+      <HeroPhotos />
       <ul
         aria-hidden="true"
-        className="absolute bottom-8 -left-3 space-y-2 sm:top-4 sm:bottom-auto sm:-left-8 lg:-left-16"
+        className="mt-3 flex flex-wrap gap-2 sm:absolute sm:top-4 sm:-left-8 sm:mt-0 sm:block sm:space-y-2 lg:-left-16"
       >
         {EXAMPLE_REASONS.map((reason) => (
           <li
