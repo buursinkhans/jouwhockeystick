@@ -6,6 +6,7 @@ export const jdhX93ProBow: Product = {
   name: 'JDH X93 Pro Bow',
   dataStatus: 'verified',
   bolNotSold: { checkedAt: '2026-10-08' },
+  passaSportsProductUrl: 'https://www.passasports.nl/jdh-x93-probow-x93pbgn',
   imageAlt: 'JDH X93 Pro Bow hockeystick',
   imageUrl:
     'https://cdn.prod.website-files.com/66b360ec44fd182804809627/6893309f82d13c2b54d349f4_X93PBGN_teal_6%20.jpg',

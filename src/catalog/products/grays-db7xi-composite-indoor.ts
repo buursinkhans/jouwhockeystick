@@ -11,6 +11,7 @@ export const graysDb7xiCompositeIndoor: Product = {
   dataStatus: 'verified',
   bolProductUrl:
     'https://www.bol.com/nl/nl/p/grays-db7xi-dynabow-senior-hockeystick-rood/9300000304766248/',
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-db7-xi-dynabow-27073',
   imageAlt: 'Grays DB7Xi Composite zaalhockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HAJD26Composite_20Sticks_20DB7Xi_20Dynabow_20Indoor_20Hockey_20Stick_20Red_20_20Silver.jpg?v=1779971676&width=1024',
