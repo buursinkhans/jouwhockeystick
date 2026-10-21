@@ -13,6 +13,7 @@ import {
   SITE_URL,
   pageMetadata,
 } from '@/lib/site';
+import { jsonLdHtml } from '@/lib/jsonLd';
 
 // Self-hosted by next/font at build time: no request to Google from the
 // visitor's browser (merkinstructie §2.2 prefers self-hosting for privacy).
@@ -85,7 +86,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body className="flex min-h-full flex-col bg-krijt font-sans text-inkt">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(siteJsonLd) }}
         />
         <a
           href="#inhoud"

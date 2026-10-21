@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { absoluteUrl } from '@/lib/site';
+import { jsonLdHtml } from '@/lib/jsonLd';
 
 export type Crumb = { label: string; href: string };
 
@@ -23,7 +24,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
     <nav aria-label="Kruimelpad" className="mb-6 text-sm text-lijngrijs">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
       />
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
         {items.map((item, index) => {

@@ -1054,3 +1054,22 @@ Bewust níet het woord "onafhankelijk", omdat de site partnerlinks heeft. "Geen 
 - Geheime sleutels zijn in GitHub na het opslaan niet meer te lezen en worden in logs weggestreept.
 - Pull requests van buitenstaanders krijgen geen sleutels.
 - Geen enkele agent zet zelf "@claude" neer.
+
+## 2026-10-21 — beveiligingscontrole
+
+**Gecontroleerd en in orde:**
+- HTTPS met HSTS en doorverwijzing naar https://jouwhockeystick.nl.
+- Geen sleutels in de code of de git-geschiedenis; `.env`-bestanden staan in `.gitignore`.
+- In de browser alleen openbare waarden: het site-ID van bol.com en de projectsleutel van PostHog.
+- De invoer van stickwijzer en interesseformulier wordt gecontroleerd met Zod. Netlify filtert spam, met een honeypot-veld.
+- Geen database, dus geen Row Level Security nodig.
+- De workflows hebben beperkte rechten, gebruiken geen `pull_request_target` en zetten geen issuetekst ongecontroleerd in een opdracht.
+
+**Opgelost:**
+- **JSON-LD veilig weggeschreven.** De gestructureerde gegevens werden met `JSON.stringify` in een `<script>`-tag gezet. Een naam met `</script>`, bijvoorbeeld uit de PassaHockey-feed, had daarmee code kunnen uitvoeren. Nu loopt het via `jsonLdHtml` (`src/lib/jsonLd.ts`), die `<`, `>` en `&` escapet.
+- **Beveiligingsheaders erbij:** `frame-ancestors 'self'` en `X-Frame-Options` (tegen clickjacking), `Referrer-Policy` en `Permissions-Policy`. De header `X-Powered-By` staat uit.
+- **Pakketten bijgewerkt.** Next.js 16.3.6 → 16.4.2 (een cache-probleem), plus `sharp` en `source-map-js` via `npm audit fix`. Voor wat live draait, meldt `npm audit` nu 0 kwetsbaarheden.
+
+**Bewust niet:**
+- Een volledige Content-Security-Policy. Die vraagt een nonce-opzet voor de inline scripts van Next.js en de analytics, met een risico dat de site breekt; dat is een apart traject.
+- De overgebleven meldingen in de lint-tooling (alleen ontwikkeling). De voorgestelde "fix" is een oude major versie.

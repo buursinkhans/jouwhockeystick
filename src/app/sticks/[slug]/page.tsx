@@ -22,6 +22,7 @@ import { SimilarSticks } from '@/components/catalog/SimilarSticks';
 import { getSimilarSticks } from '@/catalog/similar';
 import { DISCIPLINE_LABELS } from '@/catalog/labels';
 import { absoluteUrl } from '@/lib/site';
+import { jsonLdHtml } from '@/lib/jsonLd';
 
 export function generateStaticParams() {
   return getAllProducts(new Date(), { includeImported: true }).map(
@@ -80,7 +81,7 @@ export default async function ProductPage({
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
       />
       <Breadcrumbs
         items={[

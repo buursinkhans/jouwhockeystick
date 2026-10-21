@@ -27,7 +27,7 @@
     "catalog:enrich-list": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-enrich-list.ts"
   },
   "dependencies": {
-    "next": "16.3.6",
+    "next": "^16.4.2",
     "posthog-js": "^1.438.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
@@ -40,7 +40,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.6",
+    "eslint-config-next": "^16.4.2",
     "eslint-config-prettier": "^10.1.8",
     "opentype.js": "^2.0.0",
     "prettier": "^3.9.8",

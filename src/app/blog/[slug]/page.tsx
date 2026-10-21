@@ -7,6 +7,7 @@ import { ArticleMeta } from '@/components/article/ArticleMeta';
 import { SourceList } from '@/components/article/SourceList';
 import { ScheduledNotice } from '@/components/article/ScheduledNotice';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { jsonLdHtml } from '@/lib/jsonLd';
 
 export function generateStaticParams() {
   return getAllBlogPosts().map((post) => ({ slug: post.slug }));
@@ -57,7 +58,7 @@ export default async function BlogPostPage({
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
       />
       <Breadcrumbs
         items={[

@@ -7,6 +7,7 @@ import { IndoorSelector } from '@/components/zaal/IndoorSelector';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { CheckIcon, InfoIcon } from '@/components/ui/icons';
 import { absoluteUrl, pageMetadata, SITE_NAME } from '@/lib/site';
+import { jsonLdHtml } from '@/lib/jsonLd';
 
 export const metadata = pageMetadata({
   title: ZAAL.title,
@@ -41,7 +42,7 @@ export default function ZaalsticksPage() {
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
       />
       <Breadcrumbs
         items={[
