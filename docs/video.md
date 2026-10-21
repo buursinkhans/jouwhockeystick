@@ -35,7 +35,7 @@ Eén onderwerp, *Welke lengte hockeystick?*, in twee vormen:
 
 - **Short:** 9:16, 1080 × 1920, 20–40 s, met muziek en in een versie *zonder muziek*. Eerste 3 seconden: de vraag van de kijker. Laatste scène: "Doe de stickwijzer". Houd de onderste 400 px en de rechterrand vrij van belangrijke tekst (daar staan de knoppen van YouTube, Instagram en TikTok).
 - **Uitleg:** 16:9, 1920 × 1080, 1–4 min. Mag meer laten zien (bijv. de hele tabel). Hoofdstukken in de beschrijving als elk deel minstens 10 s duurt.
-- **Thumbnail:** 1280 × 720, de vraag in maximaal 4 woorden plus één beeld.
+- **Thumbnail:** de vraag in maximaal 4 woorden plus één beeld, in twee versies: liggend (1280 × 720) voor de YouTube-video en staand (1080 × 1920) voor de Short. YouTube toont een Short in een staand kader en snijdt een liggende thumbnail in het midden af: gebruik bij een Short dus altijd de staande.
 - Per video een bestand `video/teksten/<onderwerp>.md` met titels, beschrijvingen, tags en onderschriften voor elk platform.
 
 ## 5. Hoe een video ontstaat
@@ -62,8 +62,8 @@ Naast losse video's in `video/` (Remotion, voor onderwerpen met een eigen animat
 - **Onderwerp:** één live pagina, volgens §2 en §3. Een pagina krijgt hooguit eens per 6 weken een video. Een video mag over dezelfde pagina gaan als een post, maar niet binnen 7 dagen ervan.
 - **Script:** 5–7 scènes, eerst `opening` (de vraag van de kijker, max 9 woorden), als laatste `slot` (knop naar de stickwijzer), en daartussen `tekst` (max 25 woorden), `lijst` (2–4 punten van max 8 woorden) of `tabel` (max 8 rijen). Woorden tussen `*sterretjes*` in een kop worden oranje. Zonder sterretjes krijgt alleen een vraag een oranje laatste woord. Doel: een Short van 20–40 seconden.
 - **Teksten per kanaal:** YouTube (titel max 70 tekens, beschrijving, 5–8 tags), Short (titel met `#shorts`, korte beschrijving), Reel (onderschrift volgens `docs/instagram.md` §4) en TikTok (volgens `docs/instagram.md` §9). Elke beschrijving en elk onderschrift heeft de partnerlink-vermelding. YouTube linkt via `jouwhockeystick.nl/youtube` en de bronpagina met `utm_source=youtube&utm_medium=video&utm_campaign=<id>`.
-- **Thumbnail:** kop van max 4 woorden, eventueel een oranje label van max 3 woorden.
-- **De eigenaar** downloadt in de Social-studio de Short en de YouTube-video als MP4 plus de thumbnail. Hij plant ze in het weekend in: YouTube Studio voor de video en de Short, Meta Business Suite voor de Reel en TikTok Studio op de computer. Daarna klikt hij per kanaal op *Ingepland*. Na het geplande moment telt de studio het als geplaatst.
+- **Thumbnail:** kop van max 4 woorden, eventueel een oranje label van max 3 woorden. De studio maakt er twee van: *Thumbnail YouTube-video* (1280 × 720) en *Thumbnail Short* (1080 × 1920, alles in het midden). Heeft het script een `bow`-scène, dan staat de tekening van de kromming op de staande thumbnail, anders het stick-logo.
+- **De eigenaar** downloadt in de Social-studio de Short en de YouTube-video als MP4 plus beide thumbnails: de staande bij de Short, de liggende bij de YouTube-video. Hij plant ze in het weekend in: YouTube Studio voor de video en de Short, Meta Business Suite voor de Reel en TikTok Studio op de computer. Daarna klikt hij per kanaal op *Ingepland*. Na het geplande moment telt de studio het als geplaatst.
 
 ## 9. Test: explainer met AI-presentator (Colossyan)
 
