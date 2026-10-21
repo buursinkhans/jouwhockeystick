@@ -1076,7 +1076,7 @@ Bewust níet het woord "onafhankelijk", omdat de site partnerlinks heeft. "Geen 
 
 ## 2026-10-21 — wekelijkse Beveiligingscontrole
 
-**Wat:** Een nieuwe workflow `security.yml` (maandag 05:29 UTC, vóór de Orchestrator). Hij controleert de live site (headers, doorverwijzingen, certificaat), draait `npm audit` en `npm outdated` en zoekt naar sleutels in de code. Het rapport komt in het issue met label `beveiliging`, dat de Orchestrator meeleest. Zijn er updates binnen de huidige versiegrenzen (`npm update` en `npm audit fix --omit=dev`), dan opent hij één PR, maar alleen als lint, typecheck, tests en build slagen.
+**Wat:** Een nieuwe workflow `security.yml` (maandag 05:29 UTC, vóór de Orchestrator). Hij controleert de live site (headers, doorverwijzingen, certificaat), draait `npm audit` en `npm outdated` en zoekt naar sleutels in de code. Het rapport komt in het issue met label `beveiliging`, dat de Orchestrator meeleest. Zijn er updates binnen de huidige versiegrenzen (`npm update` en `npm audit fix`, nooit met `--force`), dan opent hij één PR, maar alleen als lint, typecheck, tests en build slagen.
 
 **Reden:** Verzoek van de eigenaar om de beveiliging en de onderliggende software elke week te laten controleren.
 

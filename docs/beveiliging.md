@@ -16,7 +16,7 @@ De logica staat in `src/security/securityReport.ts` (met tests), het ophalen in 
 ## Wat hij doet
 
 1. **Rapport** in het open issue met label `beveiliging` (één issue dat elke week wordt bijgewerkt). De Orchestrator leest het mee en zet echte problemen onder *Voor jou* in de weekplanning.
-2. **Pull request** (branch `beveiliging/<datum>`) als er updates zijn binnen de versiegrenzen in `package.json`: `npm update` plus `npm audit fix --omit=dev`. Alleen als lint, typecheck, tests en build slagen. Staat er nog een beveiligings-PR open, dan maakt hij geen nieuwe.
+2. **Pull request** (branch `beveiliging/<datum>`) als er updates zijn binnen de versiegrenzen in `package.json`: `npm update` plus `npm audit fix`, nooit met `--force`. Alleen als lint, typecheck, tests en build slagen. Staat er nog een beveiligings-PR open, dan maakt hij geen nieuwe.
 
 ## Wat jij doet
 

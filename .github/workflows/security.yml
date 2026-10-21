@@ -68,7 +68,7 @@ jobs:
         run: |
           # Within the version ranges in package.json only: no major updates.
           npm update
-          npm audit fix --omit=dev || true
+          npm audit fix || true
           if [ -z "$(git status --porcelain -- package.json package-lock.json)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "Niets bij te werken binnen de huidige versiegrenzen."
@@ -80,6 +80,8 @@ jobs:
       - name: Controles (lint, typecheck, tests, build)
         if: steps.update.outputs.changed == 'true'
         run: |
+          # Reinstall from the updated lockfile, so the checks run on exactly what the PR contains.
+          npm ci
           npm run lint
           npx next typegen
           npm run typecheck
