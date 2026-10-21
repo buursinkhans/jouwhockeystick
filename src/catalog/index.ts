@@ -81,6 +81,7 @@ import { osakaProbowGfIndoorJunior } from './products/osaka-probow-gf-indoor-jun
 import { graysDb5Composite } from './products/grays-db5-composite';
 import { adidasYoungstar9 } from './products/adidas-youngstar-9';
 import { scoopWdnSeniorVeld } from './products/scoop-wdn-senior-veld';
+import { scoop48Indoor } from './products/scoop-48-indoor';
 import { graysDb8Composite } from './products/grays-db8-composite';
 import { graysDb6Composite } from './products/grays-db6-composite';
 import { graysDb10Composite } from './products/grays-db10-composite';
@@ -181,13 +182,14 @@ const ALL_PRODUCTS: Product[] = [
   graysAc700DynabowS,
   graysAc600ProbowS,
   graysAc500DynabowS,
+  scoop48Indoor,
 ];
 
 /**
  * Bump whenever product data changes. Stamped on every advice result so an
  * old result can be traced back to the catalog it was calculated from.
  */
-export const CATALOG_VERSION = '2026-10-19';
+export const CATALOG_VERSION = '2026-10-20';
 
 const VERIFICATION_FRESHNESS_MONTHS = 12;
 
