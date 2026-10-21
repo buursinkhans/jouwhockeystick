@@ -22,12 +22,17 @@ concurrency:
 
 jobs:
   claude:
+    # The repository is public: only the owner and people the owner gave
+    # access may start Claude on the owner's subscription. Adding a label
+    # already requires write access, so 'akkoord' needs no extra check.
     if: |
-      (github.event_name == 'issues' && github.event.action == 'opened' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude'))) ||
-      (github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'akkoord' && contains(github.event.issue.labels.*.name, 'content-brief')) ||
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude'))
+      (
+        (github.event_name == 'issues' && github.event.action == 'opened' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude'))) ||
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude'))
+      ) && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association || github.event.review.author_association || github.event.issue.author_association) ||
+      (github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'akkoord' && contains(github.event.issue.labels.*.name, 'content-brief'))
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:

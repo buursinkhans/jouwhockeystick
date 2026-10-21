@@ -1041,3 +1041,16 @@ Gecorrigeerd: de zin "sticks waarvan kerngegevens alleen bij een winkel bekend z
 Bewust níet het woord "onafhankelijk", omdat de site partnerlinks heeft. "Geen account nodig · 6 tot 11 korte stappen" is weg uit de hero; op de stickwijzer-pagina staat al dat je geen account nodig hebt. Op 1366×768 en 390×844 staat de regel boven de vouw.
 
 **Aanpassing 2026-10-19 (keuze eigenaar):** "Vergoedingen tellen niet mee in het advies" is bovenaan vervangen door "Onafhankelijk advies". Dat is verdedigbaar, want de score kent geen invoer voor vergoeding, winkel of merk. De partnerlinks blijven bij elke winkelknop vermeld, en /methodiek legt uit hoe het zit.
+
+## 2026-10-21 — content-agent alleen voor de eigenaar en medewerkers
+
+**Aanleiding (eigenaar):** voorkomen dat anderen het Claude-abonnement van de eigenaar gebruiken.
+
+**Risico:** de repository is openbaar. De content-agent (`claude.yml`) startte op elke "@claude" in een issue of reactie, en dat kan iedereen met een GitHub-account typen. De Claude-actie controleert zelf al op schrijfrechten, maar de workflow startte wel.
+
+**Wat:** de workflow start nu alleen als de schrijver van het issue, de reactie of de review `OWNER`, `MEMBER` of `COLLABORATOR` is. Het label `akkoord` vraagt al schrijfrechten en blijft werken.
+
+**Wat al zo was:**
+- Geheime sleutels zijn in GitHub na het opslaan niet meer te lezen en worden in logs weggestreept.
+- Pull requests van buitenstaanders krijgen geen sleutels.
+- Geen enkele agent zet zelf "@claude" neer.
