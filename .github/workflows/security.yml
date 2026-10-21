@@ -1,0 +1,113 @@
+# Weekly security check: live site (headers, redirects, certificate), known
+# vulnerabilities (npm audit), newer versions (npm outdated) and a scan for
+# keys in the code. Writes the report to one GitHub issue with label
+# `beveiliging`, which the Orchestrator reads. When a vulnerability can be
+# solved safely, or small updates (patch/minor within the current version
+# ranges) are available, it opens one pull request, but only if lint,
+# typecheck, tests and build pass. Never merges; major updates stay manual.
+# See docs/beveiliging.md and scripts/security-check.ts.
+name: Beveiliging
+
+on:
+  schedule:
+    - cron: '29 5 * * 1' # Mondays 05:29 UTC, before the Orchestrator
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: beveiliging
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Controle uitvoeren
+        id: check
+        run: npm run --silent security:check -- "$RUNNER_TEMP/report.md"
+
+      - name: Rapport in issue zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create beveiliging --color B60205 --description "Wekelijkse beveiligingscontrole" --force
+          number=$(gh issue list --label beveiliging --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file "$RUNNER_TEMP/report.md"
+            gh issue comment "$number" --body "Controle bijgewerkt op $(date -u +%F)."
+          else
+            gh issue create --title "Beveiligingscontrole" --label beveiliging --body-file "$RUNNER_TEMP/report.md"
+          fi
+
+      - name: Nog open beveiligings-PR?
+        id: open
+        if: steps.check.outputs.fixable != '0' || steps.check.outputs.updates != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          open=$(gh pr list --state open --json headRefName --jq '[.[] | select(.headRefName | startswith("beveiliging/"))] | length')
+          echo "open=$open" >> "$GITHUB_OUTPUT"
+          if [ "$open" -gt 0 ]; then echo "Er staat nog een beveiligings-PR open; deze week geen nieuwe."; fi
+
+      - name: Veilige updates toepassen
+        id: update
+        if: steps.open.outputs.open == '0'
+        run: |
+          # Within the version ranges in package.json only: no major updates.
+          npm update
+          npm audit fix --omit=dev || true
+          if [ -z "$(git status --porcelain -- package.json package-lock.json)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Niets bij te werken binnen de huidige versiegrenzen."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --stat
+          fi
+
+      - name: Controles (lint, typecheck, tests, build)
+        if: steps.update.outputs.changed == 'true'
+        run: |
+          npm run lint
+          npx next typegen
+          npm run typecheck
+          npm test
+          npm run build
+
+      - name: Pull request openen
+        if: steps.update.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          trap 'echo "::error::Pull request openen mislukt bij: $BASH_COMMAND"' ERR
+          branch="beveiliging/$(date -u +%Y-%m-%d-%H%M)"
+          {
+            echo "Updates van de wekelijkse beveiligingscontrole. Alleen binnen de huidige versiegrenzen (geen grote versies); lint, typecheck, tests en build zijn geslaagd."
+            echo
+            echo '```'
+            git diff -- package.json
+            echo '```'
+            echo
+            echo "Het volledige rapport staat in het issue met label \`beveiliging\`. Mergen zet de updates live; deze agent merget nooit zelf."
+          } > "$RUNNER_TEMP/body.md"
+          git config user.name "Beveiligingscontrole"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add package.json package-lock.json
+          git commit -m "Beveiliging: veilige updates van $(date -u +%F)"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" --title "Beveiliging: veilige updates $(date -u +%F)" --body-file "$RUNNER_TEMP/body.md"
+          # PRs opened with the workflow token do not trigger other workflows; start the quality check explicitly.
+          gh workflow run ci.yml --ref "$branch"

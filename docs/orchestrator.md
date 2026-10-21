@@ -9,6 +9,7 @@ Gebruik `gh` voor GitHub (de repo is de huidige repo).
 1. **De rapporten van deze week**, elk het open issue met dit label (`gh issue list --label <label> --state open`, dan `gh issue view <nummer>`):
    - `catalogus-controle` — stand van de catalogus
    - `technical-seo` — technische fouten op de live site
+   - `beveiliging` — beveiliging van de live site, kwetsbare of verouderde pakketten en sleutels in de code
    - `search-console` — zoekverkeer uit Google
    - `bol-feed` — beschikbaarheid en prijzen bij bol.com (draait alleen op verzoek; kan oud zijn)
    - `marktverkenning` — nieuwe hockeypagina's bij PassaSports, Daka en Vrijbuiter en de populairste hockeysticks op bol.com, met de duiding als reactie eronder
@@ -24,7 +25,7 @@ Gebruik `gh` voor GitHub (de repo is de huidige repo).
 
 Een kans is iets wat met weinig moeite veel oplevert voor bezoekers en omzet. Rangschik zo:
 
-1. **Iets wat de site schaadt**, zoals een fout in het Technical SEO-rapport, een stick die verborgen dreigt te raken, of een signaal uit het Conversie-rapport (een afhaakmoment in de stickwijzer, dead clicks, een veelbekeken stickpagina zonder klik). Dit is werk voor de eigenaar, geen brief: noem het onder **Voor jou**, met het getal uit het rapport. Veel adviezen zonder passende stick wijzen op een gat in de catalogus; noem welke oorzaak (lengte, budget) en laat het aanvullen aan de Catalogus-aanvuller en de eigenaar.
+1. **Iets wat de site schaadt**, zoals een fout in het Technical SEO-rapport, een punt onder Samenvatting in het Beveiligingsrapport (noem een mogelijke sleutel in de code altijd als eerste onder **Voor jou**, zonder de waarde), een beveiligings-PR (branch `beveiliging/`) die openstaat, een stick die verborgen dreigt te raken, of een signaal uit het Conversie-rapport (een afhaakmoment in de stickwijzer, dead clicks, een veelbekeken stickpagina zonder klik). Dit is werk voor de eigenaar, geen brief: noem het onder **Voor jou**, met het getal uit het rapport. Veel adviezen zonder passende stick wijzen op een gat in de catalogus; noem welke oorzaak (lengte, budget) en laat het aanvullen aan de Catalogus-aanvuller en de eigenaar.
 2. **Zoekwoorden die bijna op pagina 1 staan** (Search Console, positie 5–20), zodra er data is.
 3. **Seizoen:** content die binnen 6–8 weken nodig is.
 4. **Markt:** een onderwerp waar concurrenten content over maken en wij niet. Populaire sticks die niet in onze catalogus staan pakt de Catalogus-aanvuller op (dinsdag, label/branch `catalogus/`); daar maak je geen brief voor. Staat er al langer dan een week een catalogus-PR open, noem die onder **Voor jou**. Hetzelfde geldt voor een hercontrole-PR (branch `hercontrole/`, Catalogus-hercontroleur op donderdag): de kwartaalcontrole pak jij niet op, maar een PR die langer dan een week openstaat noem je onder **Voor jou**.

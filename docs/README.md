@@ -34,6 +34,7 @@ Deze workflows lezen alleen en maken een rapport, meestal als issue. De orchestr
 | Workflow | Wat het doet |
 |---|---|
 | `search-console.yml` | Kansen per zoekopdracht uit Google Search Console |
+| `security.yml` | Maandag: beveiliging van de live site, kwetsbaarheden en nieuwere versies van pakketten, sleutels in de code; opent een PR met veilige updates (zie [`beveiliging.md`](beveiliging.md)) |
 | `technical-seo.yml` | Crawlt de live sitemap op technische SEO-problemen |
 | `sales-report.yml` | Kliks en bestellingen per plek en per stick bij bol.com en PassaHockey (alleen aantallen, want de repo is openbaar) |
 | `conversion-report.yml` | Stickwijzer-trechter, afhaken per vraag en winkelkliks (PostHog) |

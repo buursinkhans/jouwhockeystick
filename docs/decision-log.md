@@ -1073,3 +1073,17 @@ Bewust níet het woord "onafhankelijk", omdat de site partnerlinks heeft. "Geen 
 **Bewust niet:**
 - Een volledige Content-Security-Policy. Die vraagt een nonce-opzet voor de inline scripts van Next.js en de analytics, met een risico dat de site breekt; dat is een apart traject.
 - De overgebleven meldingen in de lint-tooling (alleen ontwikkeling). De voorgestelde "fix" is een oude major versie.
+
+## 2026-10-21 — wekelijkse Beveiligingscontrole
+
+**Wat:** Een nieuwe workflow `security.yml` (maandag 05:29 UTC, vóór de Orchestrator). Hij controleert de live site (headers, doorverwijzingen, certificaat), draait `npm audit` en `npm outdated` en zoekt naar sleutels in de code. Het rapport komt in het issue met label `beveiliging`, dat de Orchestrator meeleest. Zijn er updates binnen de huidige versiegrenzen (`npm update` en `npm audit fix --omit=dev`), dan opent hij één PR, maar alleen als lint, typecheck, tests en build slagen.
+
+**Reden:** Verzoek van de eigenaar om de beveiliging en de onderliggende software elke week te laten controleren.
+
+**Belangrijke keuzes:**
+- Grote versies (major, bijv. TypeScript 7 en ESLint 10) gaan nooit automatisch; die staan in het rapport en vragen handwerk.
+- De agent merget nooit. Een merge zet de updates live.
+- Het rapport noemt bij een gevonden sleutel alleen het bestand en de soort, nooit de waarde: de repo is openbaar.
+- Accounts (tweestapsverificatie) kan de agent niet controleren; dat staat in het rapport als werk voor de eigenaar.
+
+**Betrokken bestanden:** `src/security/securityReport.ts`, `scripts/security-check.ts`, `.github/workflows/security.yml`, `docs/beveiliging.md`, `docs/orchestrator.md`.
