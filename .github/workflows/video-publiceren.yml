@@ -50,16 +50,21 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: Playwright en Chromium
+      - name: Playwright, Chromium en ffmpeg
         working-directory: video/studio
+        timeout-minutes: 10
+        # ffmpeg as a fixed static build (npm ffmpeg-static), not via apt: an apt
+        # install hung for 30 minutes on 22 October and cost an upload.
         run: |
-          npm install --no-save --no-audit --no-fund playwright@1.48.2
+          npm install --no-save --no-audit --no-fund playwright@1.48.2 ffmpeg-static@5.2.0
           npx playwright install --with-deps chromium
-      - name: ffmpeg
-        run: command -v ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+          FF="$(node -e "console.log(require('ffmpeg-static'))")"
+          "$FF" -hide_banner -version | head -1
+          echo "FFMPEG_PATH=$FF" >> "$GITHUB_ENV"
       - name: Tests
         run: node --test video/studio/*.test.mjs
       - name: Renderen en inplannen
+        timeout-minutes: 15
         # The script is data: it goes in through the environment, never into the shell.
         env:
           VIDEO_B64: ${{ inputs.video }}

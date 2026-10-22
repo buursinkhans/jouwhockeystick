@@ -4,7 +4,8 @@
 // "Video publiceren" (docs/video.md §10).
 //
 // Needs Playwright (Chromium) and ffmpeg. Chromium comes from Playwright, or
-// from CHROMIUM_PATH when set.
+// from CHROMIUM_PATH when set; ffmpeg from FFMPEG_PATH when set (the workflow
+// uses the static build from the npm package ffmpeg-static), else from PATH.
 
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -129,7 +130,7 @@ export async function render(video, { formats = ['short'], outDir, log = () => {
         if (fs.existsSync(p)) soundFiles[name] = p;
       }
       const mp4 = path.join(outDir, `${video.id || 'video'}-${fmt === 'short' ? 'short' : 'youtube'}.mp4`);
-      run('ffmpeg', ffmpegArgs({ framesPattern: path.join(dir, 'f%05d.jpg'), fps: info.fps, total: info.total, cues: info.cues, volume: info.volume, soundFiles, out: mp4 }));
+      run(process.env.FFMPEG_PATH || 'ffmpeg', ffmpegArgs({ framesPattern: path.join(dir, 'f%05d.jpg'), fps: info.fps, total: info.total, cues: info.cues, volume: info.volume, soundFiles, out: mp4 }));
       result[fmt] = { mp4, seconds: info.total };
       fs.rmSync(dir, { recursive: true, force: true });
     }
