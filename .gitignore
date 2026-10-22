@@ -47,6 +47,8 @@ next-env.d.ts
 # video (Remotion)
 /video/node_modules
 /video/out
+/video/studio/out
+/video/studio/node_modules
 
 # Report of npm run passa:import when run without a path
 /passa-import.md

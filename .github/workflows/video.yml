@@ -40,6 +40,8 @@ jobs:
         working-directory: video
       - run: npm run typecheck
         working-directory: video
+      # Social-studio renderer and YouTube upload (docs/video.md §10).
+      - run: node --test video/studio/*.test.mjs
       - run: npm run render
         working-directory: video
       - uses: actions/upload-artifact@v4
