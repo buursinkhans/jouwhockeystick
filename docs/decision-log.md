@@ -1161,3 +1161,11 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Afwijking van de specificatie:** v1.1 §2 vraagt "één vraag per scherm op mobiel". Dat deden we al niet overal (leeftijd en ervaring stonden al samen). Nu staan er twee tot vier verplichte vragen op een scherm. De reden: elk scherm is een klik "Volgende" en dus een moment om af te haken, en de vragen zijn kort (keuzerondjes). Het maximum van zes inhoudelijke schermen voor Start (§4.1) blijft gehaald.
 
 **Aanvulling (uitslag):** op verzoek van de eigenaar begint de uitslag nu met "Onze aanbeveling(en)" en één regel met de maat ("In maat 34 inch (of 33 inch)") en het aantal passende sticks. Daarna volgen de meldingen (eigen merk, andere maat, onzeker advies), de partnerlinkregel en de sticks met hun winkelknoppen. De uitleg over het niveau, de tip voor ouders en het volledige lengteadvies staan onder de sticks, gevolgd door "Waarom dit advies?". Er is niets weggelaten; alleen de volgorde is anders.
+
+## 2026-10-22 — YouTube: laatste klik met een label op GitHub
+
+**Aanleiding:** de eerste goedkeuring in de Social-studio kwam niet door. De geplande taak *Video-publicatie* mocht de workflow niet starten: de veiligheidscontrole van onbeheerde taken laat een agent niet zelf iets publiceren. Dat is terecht; we omzeilen het niet.
+
+**Besluit eigenaar:** de laatste klik ligt bij de eigenaar, op GitHub. "Klaarzetten voor YouTube" in de studio maakt een goedkeurings-issue (label `video-klaar`); het label `publiceren`, gezet door de eigenaar van de repo, start de workflow. Hetzelfde patroon als PR's mergen.
+
+**Wat verandert:** de workflow start op dat label (met controle op de afzender), leest het script uit het issue, zet het resultaat op hetzelfde issue en sluit het bij succes. Een tweede label op een al ingepland issue doet niets. De taak start geen workflows meer; hij maakt issues en schrijft resultaten terug. De studio toont "Publiceren op GitHub →" en "Status ophalen".

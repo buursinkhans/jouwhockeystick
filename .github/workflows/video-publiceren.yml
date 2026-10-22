@@ -1,7 +1,10 @@
 # Renders an approved Social-studio video and schedules it on YouTube
-# (docs/video.md §10). Started by the scheduled task "Video-publicatie" after
-# the owner clicks "Goedkeuren" in the Social-studio; can also be started by
-# hand (Actions → Video publiceren → Run workflow) with a script.
+# (docs/video.md §10). Normal start: the owner adds the label `publiceren` to an
+# approval issue (label `video-klaar`) that the scheduled task "Video-publicatie"
+# opened after "Klaarzetten voor YouTube" in the Social-studio. Only the
+# repository owner can start it that way: the publish decision is always a human
+# action on GitHub, never an agent's. A manual run (Actions → Run workflow) with a
+# script is possible too.
 #
 # Only YouTube: the Short (9:16) and, when not skipped, the 16:9 video, both
 # private until their publish moment. Instagram, Facebook and TikTok stay
@@ -9,6 +12,8 @@
 name: Video publiceren
 
 on:
+  issues:
+    types: [labeled]
   workflow_dispatch:
     inputs:
       video:
@@ -25,13 +30,19 @@ permissions:
   contents: read
   issues: write
 
-# One video at a time: uploads use the same YouTube quota and result issue.
-concurrency:
-  group: video-publiceren
-  cancel-in-progress: false
-
 jobs:
   publish:
+    # Label start: only the label `publiceren`, only on an approval issue, only when the owner adds it.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.label.name == 'publiceren' &&
+       github.event.sender.login == github.repository_owner &&
+       contains(github.event.issue.labels.*.name, 'video-klaar'))
+    # One video at a time. On the job, not the workflow: every other label event also
+    # starts this workflow (and is skipped), and must not push a waiting upload out of the queue.
+    concurrency:
+      group: video-publiceren
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -53,6 +64,8 @@ jobs:
         env:
           VIDEO_B64: ${{ inputs.video }}
           DRY_RUN: ${{ inputs.test }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
           YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
           YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
