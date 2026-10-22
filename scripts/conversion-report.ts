@@ -200,8 +200,12 @@ async function main() {
     deadClicksByElement: await breakdown(
       config,
       '$dead_click',
-      `concat(toString(properties.$pathname), ' · ', coalesce(arrayElement(elements_chain_elements, 1), '?'), ' · "', substring(coalesce(arrayElement(elements_chain_texts, 1), ''), 1, 40), '"')`,
-    ).catch(() => []),
+      // elements_chain starts with the clicked element: its tag, then its attributes (text="…").
+      `concat(toString(properties.$pathname), ' · ', extract(elements_chain, '^([a-zA-Z0-9-]+)'), ' · "', substring(extract(elements_chain, '^[^;]*?text="([^"]*)"'), 1, 40), '"')`,
+    ).catch((error: unknown) => {
+      console.error(`Dead clicks per element overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
+      return [];
+    }),
     rageClicksByPage: await breakdown(config, '$rageclick', 'properties.$pathname'),
     otherHostEvents: await otherHostEvents(config),
   };
