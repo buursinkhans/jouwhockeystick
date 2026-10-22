@@ -74,27 +74,30 @@ export function QuizResult({
 }) {
   const copy = ROUTE_RESULT_COPY[advice.route];
   const hasResults = advice.results.length > 0;
-  const title = hasResults
-    ? copy.title
-    : 'We hebben nu geen passende stick voor deze antwoorden.';
+  const size = `${formatInch(advice.sizeAdvice.primaryInch)}${advice.sizeAdvice.alternativeInch !== undefined ? ` (of ${formatInch(advice.sizeAdvice.alternativeInch)})` : ''}`;
 
+  // Since 2026-10-22 the result starts with the sticks (and the size in one
+  // line), so the shop buttons come first; the explanation moved down.
   return (
     <div className="space-y-8">
-      <div>
-        <h2
-          ref={headingRef}
-          tabIndex={-1}
-          className="text-2xl font-bold focus:outline-none"
-        >
-          {title}
-        </h2>
-        {hasResults && <p className="mt-2 text-inkt/80">{copy.summary}</p>}
-        <p className="mt-2 text-sm text-inkt/80">
-          {playerLevelText(advice.playerLevel)}
-        </p>
-        {hasResults &&
-          advice.brandPreference &&
-          !advice.brandPreference.matched && (
+      {hasResults && (
+        <section aria-labelledby="results-heading">
+          <h2
+            id="results-heading"
+            ref={headingRef}
+            tabIndex={-1}
+            className="text-2xl font-bold focus:outline-none"
+          >
+            {advice.results.length === 1
+              ? 'Onze aanbeveling'
+              : 'Onze aanbevelingen'}
+          </h2>
+          <p className="mt-2 text-inkt/80">
+            In maat <strong className="text-inkt">{size}</strong>
+            {advice.candidateCount > 0 &&
+              ` · ${candidateCountText(advice.candidateCount, advice.results.length)}`}
+          </p>
+          {advice.brandPreference && !advice.brandPreference.matched && (
             <p className="mt-3 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
               {brandNotFoundText(
                 advice.brandPreference.brand,
@@ -102,40 +105,6 @@ export function QuizResult({
               )}
             </p>
           )}
-        {hasResults && adviceGoal === 'child' && (
-          <p className="mt-2 text-sm text-lijngrijs">
-            Laat je kind de stick zo mogelijk even vasthouden: gevoel en plezier
-            tellen mee.
-          </p>
-        )}
-      </div>
-
-      <section aria-labelledby="size-advice-heading">
-        <h3 id="size-advice-heading" className="text-lg font-semibold">
-          Lengteadvies: {formatInch(advice.sizeAdvice.primaryInch)}
-          {advice.sizeAdvice.alternativeInch !== undefined &&
-            ` (of ${formatInch(advice.sizeAdvice.alternativeInch)})`}
-        </h3>
-        <ul className="mt-2 space-y-1 text-sm text-inkt/80">
-          {sizeAdviceText(advice.sizeAdvice).map((line) => (
-            <li key={line}>{line}</li>
-          ))}
-        </ul>
-      </section>
-
-      {hasResults && (
-        <section aria-labelledby="results-heading">
-          <h3 id="results-heading" className="text-lg font-semibold">
-            {advice.results.length === 1
-              ? 'Onze aanbeveling'
-              : 'Onze aanbevelingen'}
-          </h3>
-          {advice.candidateCount > 0 && (
-            <p className="mt-1 text-sm text-inkt/80">
-              {candidateCountText(advice.candidateCount, advice.results.length)}
-            </p>
-          )}
-          <PartnerLinkNote />
           {advice.bestModelOtherSize && (
             <p className="mt-2 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
               {bestModelOtherSizeText(
@@ -151,6 +120,7 @@ export function QuizResult({
               hand.
             </p>
           )}
+          <PartnerLinkNote />
           <div className="mt-3 space-y-4">
             {advice.results.map((item) => (
               <RecommendationCard
@@ -181,10 +151,15 @@ export function QuizResult({
 
       {!hasResults && (
         <section aria-labelledby="no-match-heading">
-          <h3 id="no-match-heading" className="sr-only">
-            Geen passende stick
-          </h3>
-          <div className="rounded-lg bg-amber-50 px-4 py-3 text-amber-900">
+          <h2
+            id="no-match-heading"
+            ref={headingRef}
+            tabIndex={-1}
+            className="text-2xl font-bold focus:outline-none"
+          >
+            We hebben nu geen passende stick voor deze antwoorden.
+          </h2>
+          <div className="mt-4 rounded-lg bg-amber-50 px-4 py-3 text-amber-900">
             <p>
               {advice.noMatchReason
                 ? NO_MATCH_TEXT[advice.noMatchReason]
@@ -221,6 +196,26 @@ export function QuizResult({
           )}
         </section>
       )}
+
+      <section aria-labelledby="explain-heading" className="text-inkt/80">
+        <h3 id="explain-heading" className="text-lg font-semibold text-inkt">
+          {hasResults ? copy.title : 'Over je antwoorden'}
+        </h3>
+        {hasResults && <p className="mt-2">{copy.summary}</p>}
+        <p className="mt-2 text-sm">{playerLevelText(advice.playerLevel)}</p>
+        {hasResults && adviceGoal === 'child' && (
+          <p className="mt-2 text-sm text-lijngrijs">
+            Laat je kind de stick zo mogelijk even vasthouden: gevoel en plezier
+            tellen mee.
+          </p>
+        )}
+        <h4 className="mt-5 font-semibold text-inkt">Lengteadvies: {size}</h4>
+        <ul className="mt-2 space-y-1 text-sm">
+          {sizeAdviceText(advice.sizeAdvice).map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      </section>
 
       <section
         aria-labelledby="method-heading"
