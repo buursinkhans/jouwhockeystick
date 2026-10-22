@@ -28,11 +28,13 @@ function data(overrides: Partial<ConversionData> = {}): ConversionData {
     feedback: [],
     clicksByPlacement: [c('stickwijzer', 20), c('productpagina', 10)],
     clicksByLinkType: [c('product', 30)],
+    clicksByRetailer: [],
     clicksByProduct: [],
     clicksByPage: [c('/stickwijzer', 20)],
     pageviewsByPage: [c('/', 400), c('/sticks/grays-db-5', 40)],
     homeBlocks: [],
     deadClicksByPage: [],
+    deadClicksByElement: [],
     rageClicksByPage: [],
     otherHostEvents: 0,
     ...overrides,
@@ -115,6 +117,20 @@ describe('formatReport', () => {
     expect(report).toContain('## Stickwijzer-trechter');
     expect(report).toContain('Weinig data');
     expect(report).toContain('12 events van andere adressen');
+  });
+
+  it('shows clicks per shop and dead clicks per element', () => {
+    const report = formatReport(
+      data({
+        clicksByRetailer: [c('bol.com', 6), c('PassaHockey', 4)],
+        deadClicksByElement: [c('/ · li · "Binnen budget"', 9)],
+      }),
+      ORDER,
+    );
+    expect(report).toContain('## Kliks naar de winkels');
+    expect(report).toContain('| PassaHockey | 4 |');
+    expect(report).toContain('/ · li · "Binnen budget"');
+    expect(report).not.toContain('Kliks naar bol.com');
   });
 
   it('escapes pipes in table cells', () => {

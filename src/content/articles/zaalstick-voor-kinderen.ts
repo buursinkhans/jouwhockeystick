@@ -69,7 +69,7 @@ export const zaalstickVoorKinderen: Article = {
       heading: 'Wat is er anders in de zaal?',
       level: 2,
       body: [
-        'In de zaal sla je de bal niet: je speelt hem met een push of een flick. En de bal blijft laag. Alleen bij een schot op doel mag hij bewust omhoog. Het spel draait dus om aannemen, pushen en snelle acties in een kleine ruimte. Meer over de verschillen lees je bij de [zaalsticks](/zaalsticks).',
+        'In de zaal sla je de bal niet: je speelt hem met een push of een flick. En de bal blijft laag. Alleen bij een schot op doel mag hij bewust omhoog. Het spel draait dus om aannemen, pushen en snelle acties in een kleine ruimte. Meer over de verschillen lees je in [zaalhockeystick kiezen](/zaalsticks).',
       ],
     },
     {

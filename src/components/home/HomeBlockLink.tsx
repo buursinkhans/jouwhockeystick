@@ -9,7 +9,7 @@ export function HomeBlockLink({
   block,
   href,
   ...props
-}: { block: 'season' | 'buying'; href: string } & Omit<
+}: { block: 'season' | 'buying' | 'hero'; href: string } & Omit<
   ComponentPropsWithoutRef<typeof Link>,
   'href'
 >) {

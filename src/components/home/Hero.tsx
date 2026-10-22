@@ -1,5 +1,6 @@
 import { Logo } from '@/components/brand/Logo';
 import { HeroPhotos } from './HeroPhotos';
+import { HomeBlockLink } from './HomeBlockLink';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import Link from 'next/link';
@@ -13,16 +14,22 @@ const EXAMPLE_REASONS = [
 
 /**
  * Photos of a youth player (see HeroPhotos) with the kind of reasons a
- * result shows. Illustrative only — no product, size or price.
+ * result shows. Illustrative only — no product, size or price. The reason
+ * chips look like buttons and drew dead clicks (PostHog, October 2026), so
+ * the whole visual leads to the stickwijzer. It repeats the main button, so
+ * it is hidden from screen readers and skipped by the keyboard.
  */
 function HeroVisual() {
   return (
-    <div className="relative mx-auto w-full max-w-xs sm:max-w-sm">
+    <HomeBlockLink
+      block="hero"
+      href="/stickwijzer"
+      aria-hidden="true"
+      tabIndex={-1}
+      className="relative mx-auto block w-full max-w-xs sm:max-w-sm"
+    >
       <HeroPhotos />
-      <ul
-        aria-hidden="true"
-        className="mt-3 flex flex-wrap gap-2 sm:absolute sm:top-4 sm:-left-8 sm:mt-0 sm:block sm:space-y-2 lg:-left-16"
-      >
+      <ul className="mt-3 flex flex-wrap gap-2 sm:absolute sm:top-4 sm:-left-8 sm:mt-0 sm:block sm:space-y-2 lg:-left-16">
         {EXAMPLE_REASONS.map((reason) => (
           <li
             key={reason}
@@ -35,7 +42,7 @@ function HeroVisual() {
           </li>
         ))}
       </ul>
-    </div>
+    </HomeBlockLink>
   );
 }
 

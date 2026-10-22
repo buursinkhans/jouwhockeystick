@@ -25,16 +25,16 @@ export const ZAAL_SOURCES = {
 } as const;
 
 export const ZAAL = {
-  title: 'Zaalsticks: zo kies je een hockeystick voor de zaal',
+  title: 'Zaalhockeystick kiezen: waar let je op in de zaal?',
   navLabel: 'Zaalsticks',
   metaDescription:
-    'Een zaalstick kiezen: wat is er anders in de zaal, gelden er andere eisen voor de stick en waar let je op? Met de regels van de FIH en zaalsticks met bron per gegeven.',
+    'Een zaalhockeystick kiezen: wat is er anders in de zaal, gelden er andere eisen voor de stick en waar let je op? Met de regels van de FIH en alle zaalsticks uit onze catalogus, met bron per gegeven.',
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-05',
-  updatedAt: '2026-10-05',
+  updatedAt: '2026-10-22',
   /** Answers the main question within the first 80 words. */
   intro:
-    'Een zaalstick kies je net als een veldstick op lengte, niveau en gevoel, maar met het zaalspel in gedachten. In de zaal mag je de bal niet slaan en alleen omhoog spelen bij een schot op doel. Zaalhockey draait daardoor om pushen, balcontrole en snelle acties in een kleine ruimte. Voor de stick zelf gelden volgens de spelregels dezelfde maximale eisen als op het veld; merken ontwerpen zaalsticks wel voor dat andere spel.',
+    'Een zaalhockeystick kies je net als een veldstick op lengte, niveau en gevoel, maar met het zaalspel in gedachten. In de zaal mag je de bal niet slaan en alleen omhoog spelen bij een schot op doel. Zaalhockey draait daardoor om pushen, balcontrole en snelle acties in een kleine ruimte. Voor de stick zelf gelden volgens de spelregels dezelfde maximale eisen als op het veld; merken ontwerpen zaalsticks wel voor dat andere spel.',
   differences: {
     heading: 'Wat is er anders in de zaal?',
     items: [
@@ -88,6 +88,34 @@ export const ZAAL = {
     heading: 'Snel een eerste selectie',
     intro:
       'Drie vragen: voor wie, bij een kind de lengte, en het budget. Je ziet meteen welke zaalsticks in de juiste maat en binnen je budget vallen.',
+  },
+  /** Short answers to the questions people search for; details live in the linked articles. */
+  faq: {
+    heading: 'Veelgestelde vragen over de zaalhockeystick',
+    items: [
+      {
+        question:
+          'Wat is het verschil tussen een zaalhockeystick en een veldhockeystick?',
+        answer:
+          'Volgens de spelregels geen: voor beide gelden dezelfde maximale eisen voor dikte, kromming, gewicht en lengte. Het verschil zit in het ontwerp. Merken maken zaalsticks voor pushen, balcontrole en snelle acties in een kleine ruimte, bijvoorbeeld met een kleinere krul. Meer lees je in [kun je met een veldstick zaalhockeyen?](/kennis/veldstick-zaalhockey).',
+      },
+      {
+        question: 'Welke lengte zaalhockeystick heb je nodig?',
+        answer:
+          'Dezelfde lengte als je veldstick. Volwassen zaalsticks vind je meestal in 36,5 en 37,5 inch. Voor kinderen gebruik je de [lengtetabel](/kennis/hockeystick-lengte-tabel), en koop je niet extra groot ‘op de groei’.',
+      },
+      {
+        question: 'Kun je met je veldstick zaalhockeyen?',
+        answer:
+          'Ja, dat mag volgens de spelregels. Een aparte zaalstick is een keuze, geen verplichting. Wat je wint en wat je inlevert lees je in [kun je met een veldstick zaalhockeyen?](/kennis/veldstick-zaalhockey).',
+      },
+    ],
+    /** Built from the catalog on the page, so the numbers never go stale. */
+    price: {
+      question: 'Wat kost een zaalhockeystick?',
+      answer: (count: number, min: string, max: string) =>
+        `In onze catalogus staan ${count} zaalsticks met een richtprijs van ${min} tot ${max}. Waar het verschil in zit en wat je voor je budget kunt verwachten, lees je in [wat krijg je voor een klein of ruim budget?](/kennis/zaalstick-budget).`,
+    },
   },
   catalogHeading: 'Alle zaalsticks in onze catalogus',
   stickwijzerNote:

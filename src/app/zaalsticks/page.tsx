@@ -6,6 +6,7 @@ import { ProductGrid } from '@/components/catalog/ProductGrid';
 import { IndoorSelector } from '@/components/zaal/IndoorSelector';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { CheckIcon, InfoIcon } from '@/components/ui/icons';
+import { InlineText } from '@/components/article/InlineText';
 import { absoluteUrl, pageMetadata, SITE_NAME } from '@/lib/site';
 import { jsonLdHtml } from '@/lib/jsonLd';
 
@@ -24,6 +25,24 @@ export default function ZaalsticksPage() {
   const allProducts = [
     ...getIndoorProducts(new Date(), { includeImported: true }),
   ].sort(byPrice);
+
+  const prices = allProducts.map((p) => p.priceIndicativeEur.value);
+  const euro = (value: number) => `€${Math.round(value)}`;
+  const faq = [
+    ...ZAAL.faq.items,
+    ...(prices.length
+      ? [
+          {
+            question: ZAAL.faq.price.question,
+            answer: ZAAL.faq.price.answer(
+              prices.length,
+              euro(Math.min(...prices)),
+              euro(Math.max(...prices)),
+            ),
+          },
+        ]
+      : []),
+  ];
 
   // Describes only what is visible on this page: the article and its author.
   const jsonLd = {
@@ -53,7 +72,8 @@ export default function ZaalsticksPage() {
       <h1 className="text-3xl font-extrabold sm:text-4xl">{ZAAL.title}</h1>
       <p className="mt-2 text-sm text-lijngrijs">
         Door {ZAAL.author} · gepubliceerd op{' '}
-        <time dateTime={ZAAL.publishedAt}>{ZAAL.publishedAt}</time>
+        <time dateTime={ZAAL.publishedAt}>{ZAAL.publishedAt}</time> · bijgewerkt
+        op <time dateTime={ZAAL.updatedAt}>{ZAAL.updatedAt}</time>
       </p>
       <p className="mt-5 max-w-3xl text-lg text-inkt/80">{ZAAL.intro}</p>
 
@@ -130,6 +150,22 @@ export default function ZaalsticksPage() {
         </p>
         <div className="mt-6">
           <ProductGrid products={allProducts} />
+        </div>
+      </section>
+
+      <section className="mt-12 max-w-3xl" aria-labelledby="zaal-faq-heading">
+        <h2 id="zaal-faq-heading" className="text-2xl font-bold">
+          {ZAAL.faq.heading}
+        </h2>
+        <div className="mt-5 space-y-6">
+          {faq.map((item) => (
+            <div key={item.question}>
+              <h3 className="text-lg font-bold">{item.question}</h3>
+              <p className="mt-2 text-inkt/80">
+                <InlineText text={item.answer} />
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 

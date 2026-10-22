@@ -180,6 +180,22 @@ export function RecommendationCard({
         {LESS_SUITABLE_FOR[product.experienceLevel.value]}
       </p>
 
+      {/*
+        Shop buttons right after the reasons and the points of attention, so
+        on a phone they are not hidden below the sources (2026-10-22).
+      */}
+      <div className="mt-5">
+        <RetailerLinks
+          brand={product.brand}
+          productName={product.name}
+          bolProductUrl={product.bolProductUrl}
+          notSoldAtBol={!isSoldAtBol(product)}
+          bolUnchecked={isBolUnchecked(product)}
+          passaSportsProductUrl={product.passaSportsProductUrl}
+          placement="stickwijzer"
+        />
+      </div>
+
       <details className="mt-4 text-sm">
         <summary className="cursor-pointer select-none font-medium text-veld">
           Bronnen en methode
@@ -223,17 +239,6 @@ export function RecommendationCard({
         </p>
       </details>
 
-      <div className="mt-5">
-        <RetailerLinks
-          brand={product.brand}
-          productName={product.name}
-          bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={!isSoldAtBol(product)}
-          bolUnchecked={isBolUnchecked(product)}
-          passaSportsProductUrl={product.passaSportsProductUrl}
-          placement="stickwijzer"
-        />
-      </div>
       <p className="mt-3 text-sm">
         <Link
           href={`/sticks/${product.slug}`}

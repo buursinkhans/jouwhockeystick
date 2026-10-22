@@ -130,6 +130,25 @@ function canProceed(screen: ScreenDef, answers: Answers): boolean {
   );
 }
 
+/** Required questions on this screen that are still open, in screen order. */
+function missingQuestions(screen: ScreenDef, answers: Answers): QuestionId[] {
+  return screen.questions.filter(
+    (id) => isVisible(id, answers) && !isAnswered(answers[id]),
+  );
+}
+
+/**
+ * Moves the visitor to an open question instead of a disabled button that
+ * does nothing (PostHog counted those clicks as dead clicks).
+ */
+function focusQuestion(id: QuestionId) {
+  const wrapper = document.getElementById(`vraag-${id}`);
+  wrapper?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  wrapper
+    ?.querySelector<HTMLElement>('input:not([disabled]), select, textarea')
+    ?.focus({ preventScroll: true });
+}
+
 /** Drops answers to questions that don't belong to the final route or are hidden. */
 function answersForRoute(answers: Answers, route: AdviceRoute): Answers {
   const cleaned: Record<string, unknown> = {};
@@ -341,36 +360,35 @@ export function QuizForm() {
   const requiredIds = displayIds.filter((id) => !optionalSet.has(id));
   const optionalIds = displayIds.filter((id) => optionalSet.has(id));
   const renderField = (id: QuestionId, optional: boolean) => (
-    <QuestionField
-      key={id}
-      def={QUESTIONS[id]}
-      value={answers[id]}
-      onChange={(value) => handleChange(id, value)}
-      optional={optional}
-      errorMessage={id === 'height_cm' ? heightError(answers) : undefined}
-      optionMeta={id === 'route_self_select' ? ROUTE_STEP_COUNTS : undefined}
-      optionIcons={id === 'route_self_select' ? ROUTE_OPTION_ICONS : undefined}
-      selectedAction={
-        // On mobile the three cards stack, which pushes the Start
-        // button far down; the chosen card gets its own Start button.
-        currentStep === 0 && id === 'route_self_select' ? (
-          <div className="mt-3 md:hidden">
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={!canProceed(screen, answers)}
-            >
-              Start met deze route
-            </Button>
-            {!canProceed(screen, answers) && (
-              <p className="mt-2 text-xs text-lijngrijs">
-                Kies eerst hierboven voor wie je een stick zoekt.
-              </p>
-            )}
-          </div>
-        ) : undefined
-      }
-    />
+    <div key={id} id={`vraag-${id}`} className="scroll-mt-24">
+      <QuestionField
+        def={QUESTIONS[id]}
+        value={answers[id]}
+        onChange={(value) => handleChange(id, value)}
+        optional={optional}
+        errorMessage={id === 'height_cm' ? heightError(answers) : undefined}
+        optionMeta={id === 'route_self_select' ? ROUTE_STEP_COUNTS : undefined}
+        optionIcons={
+          id === 'route_self_select' ? ROUTE_OPTION_ICONS : undefined
+        }
+        selectedAction={
+          // On mobile the three cards stack, which pushes the Start
+          // button far down; the chosen card gets its own Start button.
+          currentStep === 0 && id === 'route_self_select' ? (
+            <div className="mt-3 md:hidden">
+              <Button type="submit" className="w-full">
+                Start met deze route
+              </Button>
+              {!canProceed(screen, answers) && (
+                <p className="mt-2 text-xs text-lijngrijs">
+                  Kies eerst hierboven voor wie je een stick zoekt.
+                </p>
+              )}
+            </div>
+          ) : undefined
+        }
+      />
+    </div>
   );
 
   return (
@@ -379,8 +397,16 @@ export function QuizForm() {
       onSubmit={(event) => {
         event.preventDefault();
         if (!canProceed(screen, answers)) {
+          const [first] = missingQuestions(screen, answers);
+          setErrorMessage(
+            first
+              ? `Beantwoord eerst: ${QUESTIONS[first].question}`
+              : (heightError(answers) ?? null),
+          );
+          focusQuestion(first ?? 'height_cm');
           return;
         }
+        setErrorMessage(null);
         if (isLastStep) {
           void handleSubmit();
         } else {
@@ -531,10 +557,7 @@ export function QuizForm() {
             Vorige
           </Button>
         )}
-        <Button
-          type="submit"
-          disabled={!canProceed(screen, answers) || submitting}
-        >
+        <Button type="submit" disabled={submitting}>
           {isLastStep
             ? submitting
               ? 'Bezig met adviseren…'

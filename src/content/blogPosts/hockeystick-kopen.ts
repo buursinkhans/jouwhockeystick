@@ -42,7 +42,7 @@ export const hockeystickKopen: Article = {
       body: [
         'Een verkeerde maat los je niet op met meer carbon of een duurder model. Juist bij kinderen telt de lengte: met een te lange stick wordt het leren van de techniek een stuk lastiger.',
         'Koop je online? Gebruik de maattabel als startpunt en laat de speler daarna even een stick vasthouden in een normale hockeyhouding. Beweegt hij of zij ontspannen, lukt dribbelen en blijft de stick dicht bij het lichaam? Dan zit je goed.',
-        'In onze [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat past. Nog makkelijker: de [stickwijzer](/stickwijzer) rekent de maat voor je uit en laat meteen sticks zien die je in die lengte kunt krijgen.',
+        'In onze [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat hockeystick past. Nog makkelijker: de [stickwijzer](/stickwijzer) rekent de maat voor je uit en laat meteen sticks zien die je in die lengte kunt krijgen.',
         'Voor volwassenen is 36,5 inch de gangbare maat. Langere sticks bestaan ook, maar langer is niet automatisch beter. Kies wat prettig voelt en goed te hanteren is.',
       ],
     },

@@ -174,10 +174,12 @@ async function main() {
     feedback: await breakdown(config, 'advice_feedback_submitted', 'properties.answerKey'),
     clicksByPlacement: await breakdown(config, 'retailer_click', 'properties.placement'),
     clicksByLinkType: await breakdown(config, 'retailer_click', 'properties.linkType'),
+    clicksByRetailer: await breakdown(config, 'retailer_click', 'properties.retailer'),
     clicksByProduct: await breakdown(
       config,
       'retailer_click',
-      `concat(toString(properties.brand), ' ', toString(properties.productName))`,
+      // Most product names already start with the brand ("Grays Grays JB 10").
+      `if(startsWith(toString(properties.productName), toString(properties.brand)), toString(properties.productName), concat(toString(properties.brand), ' ', toString(properties.productName)))`,
     ),
     clicksByPage: await breakdown(config, 'retailer_click', 'properties.$pathname'),
     pageviewsByPage: await breakdown(config, '$pageview', 'properties.$pathname'),
@@ -187,6 +189,12 @@ async function main() {
       `concat(toString(properties.block), ' → ', toString(properties.target))`,
     ),
     deadClicksByPage: await breakdown(config, '$dead_click', 'properties.$pathname'),
+    // Tag and text of the clicked element. Optional: an empty table when PostHog cannot answer.
+    deadClicksByElement: await breakdown(
+      config,
+      '$dead_click',
+      `concat(toString(properties.$pathname), ' · ', coalesce(arrayElement(elements_chain_elements, 1), '?'), ' · "', substring(coalesce(arrayElement(elements_chain_texts, 1), ''), 1, 40), '"')`,
+    ).catch(() => []),
     rageClicksByPage: await breakdown(config, '$rageclick', 'properties.$pathname'),
     otherHostEvents: await otherHostEvents(config),
   };

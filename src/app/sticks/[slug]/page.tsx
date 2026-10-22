@@ -20,6 +20,8 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ProductFitAndSources } from '@/components/catalog/ProductFitAndSources';
 import { SimilarSticks } from '@/components/catalog/SimilarSticks';
 import { getSimilarSticks } from '@/catalog/similar';
+import { getProductFamily } from '@/catalog/family';
+import { FamilyTable } from '@/components/catalog/FamilyTable';
 import { DISCIPLINE_LABELS } from '@/catalog/labels';
 import { absoluteUrl } from '@/lib/site';
 import { jsonLdHtml } from '@/lib/jsonLd';
@@ -61,6 +63,10 @@ export default async function ProductPage({
   if (!product) {
     notFound();
   }
+
+  const family = product.feedImport
+    ? null
+    : getProductFamily(product, getAllProducts(new Date()));
 
   // Structured data describes only visibly verifiable information on this
   // page, and deliberately omits `offers`/price since the actual purchase
@@ -158,6 +164,8 @@ export default async function ProductPage({
       </div>
 
       <ProductFitAndSources product={product} />
+
+      {family && <FamilyTable current={product} family={family} />}
 
       <SimilarSticks
         current={product}

@@ -1,6 +1,6 @@
 /**
  * Conversion report (read-only): turns weekly PostHog counts into a Dutch
- * report of where visitors drop off and what leads to a click to bol.com.
+ * report of where visitors drop off and what leads to a click to a shop (bol.com or PassaHockey).
  * Pure functions — the PostHog queries live in scripts/conversion-report.ts.
  *
  * PostHog runs cookieless on this site with a server-side hash that changes
@@ -33,6 +33,8 @@ export type ConversionData = {
   feedback: Count[];
   clicksByPlacement: Count[];
   clicksByLinkType: Count[];
+  /** `retailer_click` per shop (bol.com, PassaHockey). */
+  clicksByRetailer: Count[];
   /** `retailer_click` per "brand productName". */
   clicksByProduct: Count[];
   /** `retailer_click` per page path. */
@@ -41,6 +43,8 @@ export type ConversionData = {
   /** `home_block_click` per "block → target". */
   homeBlocks: Count[];
   deadClicksByPage: Count[];
+  /** `$dead_click` per "page · element": which element looks clickable but is not. */
+  deadClicksByElement: Count[];
   rageClicksByPage: Count[];
   /** Events this week from other hosts than the live site (e.g. Netlify previews). */
   otherHostEvents: number;
@@ -60,7 +64,7 @@ export const THRESHOLDS = {
   minFeedback: 5,
   deadClicks: 5,
   rageClicks: 3,
-  /** Stick pages with at least this many views and no click to bol.com. */
+  /** Stick pages with at least this many views and no click to a shop. */
   stickPageViews: 30,
 };
 
@@ -70,7 +74,7 @@ const FUNNEL_STEPS = [
   { key: 'started', label: 'Stickwijzer gestart' },
   { key: 'route', label: 'Route gekozen' },
   { key: 'completed', label: 'Advies gekregen' },
-  { key: 'clicked', label: 'Daarna doorgeklikt naar bol.com' },
+  { key: 'clicked', label: 'Daarna doorgeklikt naar een winkel' },
 ] as const;
 
 const NO_MATCH_LABELS: Record<string, string> = {
@@ -273,8 +277,8 @@ export function formatReport(data: ConversionData, stepOrder: string[]): string 
         ['Bezoekers (per dag geteld)', String(visitors.now), String(visitors.before), change(visitors.now, visitors.before)],
         ['Paginaweergaven', String(pageviews.now), String(pageviews.before), change(pageviews.now, pageviews.before)],
         ['Stickwijzer gestart', String(started.now), String(started.before), change(started.now, started.before)],
-        ['Bezoekers met een klik naar bol.com', String(clickers.now), String(clickers.before), change(clickers.now, clickers.before)],
-        ['Kliks naar bol.com', String(clicks.now), String(clicks.before), change(clicks.now, clicks.before)],
+        ['Bezoekers met een klik naar een winkel', String(clickers.now), String(clickers.before), change(clickers.now, clickers.before)],
+        ['Kliks naar een winkel', String(clicks.now), String(clicks.before), change(clicks.now, clicks.before)],
         ['Doorklikratio (bezoekers)', percent(rate(clickers.now, visitors.now)), percent(rate(clickers.before, visitors.before)), ''],
       ],
     ),
@@ -302,7 +306,11 @@ export function formatReport(data: ConversionData, stepOrder: string[]): string 
     '',
     `Feedback: ${countOf(data.feedback, 'helpful').now} nuttig, ${countOf(data.feedback, 'not_helpful').now} niet nuttig.`,
     '',
-    '## Kliks naar bol.com',
+    '## Kliks naar de winkels',
+    '',
+    '### Per winkel',
+    '',
+    table(['Winkel', 'Deze week', 'Vorige week', 'Verschil'], countRows(data.clicksByRetailer)),
     '',
     '### Per plek',
     '',
@@ -331,6 +339,10 @@ export function formatReport(data: ConversionData, stepOrder: string[]): string 
     '### Dead clicks (klik op iets wat niets doet)',
     '',
     table(['Pagina', 'Deze week', 'Vorige week', 'Verschil'], countRows(data.deadClicksByPage)),
+    '',
+    'Per element (pagina · element · tekst):',
+    '',
+    table(['Element', 'Deze week', 'Vorige week', 'Verschil'], countRows(data.deadClicksByElement)),
     '',
     '### Rage clicks (herhaald snel klikken)',
     '',

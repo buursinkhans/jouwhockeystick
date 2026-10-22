@@ -1087,3 +1087,23 @@ Bewust níet het woord "onafhankelijk", omdat de site partnerlinks heeft. "Geen 
 - Accounts (tweestapsverificatie) kan de agent niet controleren; dat staat in het rapport als werk voor de eigenaar.
 
 **Betrokken bestanden:** `src/security/securityReport.ts`, `scripts/security-check.ts`, `.github/workflows/security.yml`, `docs/beveiliging.md`, `docs/orchestrator.md`.
+
+## 2026-10-22 — Verbeteringen na de eerste Search Console- en conversiecijfers
+
+**Aanleiding:** advies aan de eigenaar op basis van het Search Console-rapport (19 september t/m 16 oktober: 410 vertoningen, gemiddelde positie 24,7) en het conversierapport (12 t/m 18 oktober). De eigenaar vroeg alle adviezen te verwerken.
+
+**Wat:**
+- **/zaalsticks op "zaalhockeystick":** de pagina stond op positie 8–15 voor acht varianten van die zoekterm. De titel is nu "Zaalhockeystick kiezen: waar let je op in de zaal?" en de eerste zin noemt het woord. Er is een blok met veelgestelde vragen bijgekomen; de prijsvraag wordt uit de catalogus berekend. De ankerteksten op de homepage en in drie zaalartikelen zeggen nu "zaalhockeystick kiezen". De zin "een zaalstick is lichter en dunner dan een veldstick" op de homepage is vervangen: volgens de spelregels gelden dezelfde maximale eisen (zie de pagina zelf). Er is geen nieuwe pagina gemaakt; het besluit van 2026-10-08 tegen kannibalisatie blijft staan.
+- **Dead clicks:** de knop "Volgende/Bekijk advies" in de stickwijzer was grijs en deed niets zolang een vraag openstond. Hij is nu altijd klikbaar; een klik met een open vraag noemt die vraag en springt ernaartoe. Op de homepage zagen de drie labels bij de foto eruit als knoppen. De foto met de labels leidt nu naar de stickwijzer (event `home_block_click` met `block: 'hero'`). Hij is voor schermlezers en het toetsenbord verborgen, omdat de hoofdknop er al staat.
+- **Uitslag van de stickwijzer:** de winkelknoppen staan nu direct na de redenen en de aandachtspunten, vóór "Bronnen en methode". Op een telefoon hoef je dus minder ver te scrollen; de aandachtspunten blijven vóór de knop staan.
+- **Krommingsfamilies van Grays:** elke curated Grays-stick met een JB- of DB-familie toont een tabel "De Jumbow-lijn van Grays" (of Dynabow) met carbon, niveau en richtprijs per model, uit de catalogus (`src/catalog/family.ts`). Dit is de "eigen vergelijkende alinea" van 2026-10-08. Hij heeft geen vaste prijzen in de tekst, zodat hij niet veroudert. Alleen curated sticks, want hun gegevens zijn met de hand gecontroleerd.
+- **Blog en lengtetabel:** de blog blijft de hoofdpagina voor "hockeystick kiezen/kopen" (besluit 2026-10-08). De link naar de lengtetabel noemt nu "welke maat hockeystick", voor de zoekvraag "hockeystick maat".
+- **Conversierapport:** de labels zeggen nu "winkel" in plaats van "bol.com", want de kliks naar PassaHockey telden al mee. Er zijn twee tabellen bijgekomen: kliks per winkel en dead clicks per element (pagina, element en tekst). Sticknamen staan er niet meer dubbel in ("Grays Grays JB 10"). Kan PostHog de elementen niet leveren, dan blijft die tabel leeg en draait de rest gewoon door.
+
+**Niet in code:** links van andere sites (clubs, nieuwsbrieven, social bio's). Dat is werk voor de eigenaar.
+
+**Betrokken bestanden:** `src/content/zaal.ts`, `src/app/zaalsticks/page.tsx`, `src/content/home.ts`, `src/content/articles/{veldstick-zaalhockey,zaalstick-voor-kinderen,zaalstick-budget}.ts`, `src/content/blogPosts/hockeystick-kopen.ts`, `src/components/stickwijzer/{QuizForm,RecommendationCard}.tsx`, `src/components/home/{Hero,HomeBlockLink}.tsx`, `src/lib/analytics/events.ts`, `src/catalog/family.ts`, `src/components/catalog/FamilyTable.tsx`, `src/app/sticks/[slug]/page.tsx`, `src/analytics-report/conversion.ts`, `scripts/conversion-report.ts`.
+
+## 2026-10-22 — Catalogus-verrijker: hulpbestand van passa:import
+
+De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm run passa:import` gedraaid, en dat schrijft zonder pad een rapport naar `passa-import.md` in de hoofdmap. De veiligheidscheck "alleen src/catalog/" weigerde daarom. De workflow verwijdert dat bestand nu vóór de check, en `.gitignore` sluit het uit.

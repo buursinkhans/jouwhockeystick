@@ -78,7 +78,8 @@ jobs:
         run: |
           # Name the failing command in an annotation, so the owner (and Claude) can read it without the log.
           trap 'echo "::error::Pull request openen mislukt bij: $BASH_COMMAND"' ERR
-          rm -f verrijken.md
+          # passa:import writes its report to passa-import.md by default.
+          rm -f verrijken.md passa-import.md
           if [ ! -f .catalogus-pr.md ]; then echo "Claude heeft geen stick verrijkt (geen .catalogus-pr.md)."; git status --short; exit 0; fi
           mv .catalogus-pr.md "$RUNNER_TEMP/pr.md"
           # Only catalog files may change.

@@ -20,8 +20,8 @@ export function isIndoorSeason(date: Date = new Date()): boolean {
 export const SEASON_BAND = {
   eyebrow: 'Zaalseizoen',
   heading: 'Het zaalseizoen komt eraan',
-  body: 'Een zaalstick is lichter en dunner dan een veldstick, en de stickwijzer adviseert alleen veldsticks. Kies daarom in 3 vragen een zaalstick in de juiste maat.',
-  cta: { label: 'Naar de zaalkeuze', href: '/zaalsticks' },
+  body: 'Een zaalhockeystick is gemaakt voor pushen en balcontrole in een kleine ruimte, en de stickwijzer adviseert alleen veldsticks. Kies daarom in 3 vragen een zaalstick in de juiste maat.',
+  cta: { label: 'Zaalhockeystick kiezen', href: '/zaalsticks' },
   readMore: {
     prefix: 'Of lees eerst:',
     label: 'Zaalstick voor kinderen: waar let je op?',
@@ -41,6 +41,6 @@ export const BUYING_INTRO = {
   special: {
     heading: 'Een bijzondere stick: de zaalstick',
     body: 'In de zaal speel je laag en kort en mag je niet slaan. Daar tellen een lichte stick en balcontrole meer dan slagkracht.',
-    link: { label: 'Zo kies je een zaalstick', href: '/zaalsticks' },
+    link: { label: 'Zo kies je een zaalhockeystick', href: '/zaalsticks' },
   },
 } as const;

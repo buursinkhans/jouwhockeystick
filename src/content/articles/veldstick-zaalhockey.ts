@@ -31,7 +31,7 @@ export const veldstickZaalhockey: Article = {
       level: 2,
       body: [
         'In de zaal sla je de bal niet: je speelt hem met een push of een flick. En de bal blijft laag. Alleen bij een schot op doel mag hij bewust omhoog. Het spel draait dus om aannemen, pushen en snelle acties in een kleine ruimte.',
-        'Dat verandert niet wat je met je stick *mag*, maar wel wat je ermee *doet*. Je veldstick kan dus gewoon mee; je speelstijl past zich aan. Meer over de verschillen lees je bij de [zaalsticks](/zaalsticks).',
+        'Dat verandert niet wat je met je stick *mag*, maar wel wat je ermee *doet*. Je veldstick kan dus gewoon mee; je speelstijl past zich aan. Meer over de verschillen lees je in [zaalhockeystick kiezen](/zaalsticks).',
       ],
     },
     {
