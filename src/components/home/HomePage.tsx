@@ -1,4 +1,5 @@
-import { getAllProducts, getFieldProducts } from '@/catalog';
+import { getAllProducts } from '@/catalog';
+import { getCatalogStats } from '@/catalog/stats';
 import { isIndoorSeason, type HomeIntroVariant } from '@/content/home';
 import { Hero } from './Hero';
 import { StickwijzerExplainer } from './StickwijzerExplainer';
@@ -11,9 +12,7 @@ export function HomePage({ variant }: { variant: HomeIntroVariant }) {
   const products = getAllProducts();
   // The stickwijzer advises field sticks only, from the whole catalog
   // including the PassaHockey import: count exactly those.
-  const adviceCount = getFieldProducts(new Date(), {
-    includeImported: true,
-  }).length;
+  const adviceCount = getCatalogStats().fieldSticks;
   return (
     <>
       <Hero />

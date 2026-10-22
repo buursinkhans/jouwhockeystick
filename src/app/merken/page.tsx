@@ -1,12 +1,22 @@
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
-import { getAllBrands } from '@/catalog';
+import { getCatalogStats } from '@/catalog/stats';
 import { BRAND_PROFILES } from '@/content/brands';
+
+/** Profiles of the brands that are in the catalog now (src/catalog/stats.ts). */
+function catalogProfiles() {
+  const inCatalog = new Set<string>(getCatalogStats().brands);
+  return BRAND_PROFILES.filter((b) => inCatalog.has(b.brand));
+}
 import { Card } from '@/components/ui/Card';
 
 export const metadata = pageMetadata({
   title: 'Merken',
-  description: `De hockeystickmerken die we vergelijken — ${BRAND_PROFILES.map((b) => b.brand).join(', ')} — met hun belangrijkste kenmerken en Nederlandse hockey-sponsoring.`,
+  description: `De hockeystickmerken die we vergelijken — ${catalogProfiles()
+    .map((b) => b.brand)
+    .join(
+      ', ',
+    )} — met hun belangrijkste kenmerken en Nederlandse hockey-sponsoring.`,
   path: '/merken',
 });
 
@@ -32,10 +42,14 @@ function joinDutch(items: string[]): string {
 }
 
 export default function MerkenPage() {
-  const brandNames = BRAND_PROFILES.map((b) => b.brand);
+  // Count and list only brands that are in the catalog now, so the number
+  // matches the homepage and /sticks (src/catalog/stats.ts).
+  const stats = getCatalogStats();
+  const profiles = catalogProfiles();
+  const brandNames = profiles.map((b) => b.brand);
   // The /sticks brand filter only covers field sticks; indoor-only brands
   // link to the indoor page instead.
-  const fieldBrands = new Set<string>(getAllBrands(new Date(), 'veld'));
+  const fieldBrands = new Set<string>(stats.fieldBrands);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
@@ -49,7 +63,7 @@ export default function MerkenPage() {
       </p>
 
       <div className="mt-10 space-y-8">
-        {BRAND_PROFILES.map((brand) => (
+        {profiles.map((brand) => (
           <Card key={brand.brand}>
             <div className="flex items-center gap-4">
               {brand.logoUrl ? (

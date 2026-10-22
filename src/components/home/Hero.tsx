@@ -4,7 +4,7 @@ import { HomeBlockLink } from './HomeBlockLink';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import Link from 'next/link';
-import { getAllBrands, getFieldProducts } from '@/catalog';
+import { getCatalogStats } from '@/catalog/stats';
 
 const EXAMPLE_REASONS = [
   'Juiste stick',
@@ -55,9 +55,9 @@ function HeroVisual() {
  * button and explained on /methodiek.
  */
 function TrustLine() {
-  const now = new Date();
-  const sticks = getFieldProducts(now, { includeImported: true }).length;
-  const brands = getAllBrands(now, 'veld', { includeImported: true }).length;
+  const stats = getCatalogStats();
+  const sticks = stats.fieldSticks;
+  const brands = stats.fieldBrands.length;
   const items = [
     `${sticks} veldsticks van ${brands} merken`,
     'Bron bij elk gegeven',

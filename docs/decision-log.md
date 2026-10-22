@@ -1142,3 +1142,9 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Waarom niet via vidIQ:** die koppeling kan wel een Reel op Instagram zetten, maar geen eigen video op YouTube, niet inplannen, en werkt alleen in een open gesprek.
 
 **Bewust niet (nog):** Instagram en Facebook via de API van Meta (geen eigen inplanfunctie; wij zouden het moment zelf moeten bewaken), TikTok (beoordeling door TikTok nodig), de *Gerelateerde video* van een Short (niet via de API).
+
+## 2026-10-22 — Eén bron voor de aantallen sticks en merken
+
+**Wat:** de homepage (twee keer) en /merken halen hun aantallen uit `getCatalogStats` (`src/catalog/stats.ts`). Die telt dezelfde lijsten die /sticks en /zaalsticks tonen, inclusief de PassaHockey-import. /merken telde eerst de handgeschreven merkprofielen; nu toont de pagina alleen profielen van merken die op dat moment in de catalogus staan. Verdwijnt een merk uit de feed, dan dalen het aantal op de homepage en op /merken dus samen. Een test (`stats.test.ts`) bewaakt dat de aantallen overeenkomen met de lijsten en dat elk merk in de catalogus een profiel heeft.
+
+**Reden:** verzoek van de eigenaar dat het aantal op de homepage altijd gelijk blijft aan de catalogus.
