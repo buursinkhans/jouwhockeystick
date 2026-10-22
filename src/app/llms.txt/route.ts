@@ -1,6 +1,7 @@
 import { getAllArticles } from '@/content';
 import { getAllBlogPosts } from '@/content/blog';
 import { METHODIEK } from '@/content/methodiek';
+import { ZAAL } from '@/content/zaal';
 import { DEFAULT_DESCRIPTION, SITE_NAME, absoluteUrl } from '@/lib/site';
 
 export const dynamic = 'force-static';
@@ -32,7 +33,7 @@ export function GET() {
     '',
     '## Catalogus',
     `- [Veldhockeysticks](${absoluteUrl('/sticks')}): specificaties met bron en controledatum per stick.`,
-    `- [Zaalsticks](${absoluteUrl('/zaalsticks')}): wat er anders is in de zaal volgens de FIH-regels, en zaalsticks met bron per gegeven.`,
+    `- [${ZAAL.title}](${absoluteUrl('/zaalsticks')}): ${ZAAL.metaDescription}`,
     `- [Merken](${absoluteUrl('/merken')}): de merken in de catalogus.`,
     '',
   ];
