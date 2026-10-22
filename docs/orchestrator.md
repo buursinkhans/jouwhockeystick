@@ -14,7 +14,7 @@ Gebruik `gh` voor GitHub (de repo is de huidige repo).
    - `bol-feed` — beschikbaarheid en prijzen bij bol.com (draait alleen op verzoek; kan oud zijn)
    - `marktverkenning` — nieuwe hockeypagina's bij PassaSports, Daka en Vrijbuiter en de populairste hockeysticks op bol.com, met de duiding als reactie eronder
    - `verkoop` — kliks en bestellingen per plek op de site en per stick, bij bol.com en PassaHockey (alleen aantallen; omzet staat er bewust niet in)
-   - `conversie` — wat bezoekers doen: de stickwijzer-trechter, afhaakmomenten per vraag, adviezen zonder passende stick, kliks naar de winkels (bol.com en PassaHockey) per winkel, plek en stick, dead clicks per pagina en per element, rage clicks (PostHog, per bezoeker per dag)
+   - `conversie` — wat bezoekers doen: de stickwijzer-trechter, afhaakmomenten per vraag, adviezen zonder passende stick, waar bezoekers vandaan komen (Google, social, direct), kliks naar de winkels (bol.com en PassaHockey) per winkel, plek en stick, dead clicks per pagina en per element, rage clicks (PostHog, per bezoeker per dag)
 2. **Wat er al loopt:** open issues met label `content-brief` en open pull requests (`gh pr list`). Zet nooit werk uit dat daar al staat.
 3. **Wat er al op de site staat:** de titels en intro's in `src/content/articles/`, `src/content/blogPosts/` en `src/content/zaal.ts`.
 4. **De catalogus:** `npm run catalog:health`, en waar nodig `src/catalog/products/` (merken, zaal of veld, niveau, prijs, junior of senior).

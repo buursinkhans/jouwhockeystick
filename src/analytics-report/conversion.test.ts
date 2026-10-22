@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   formatReport,
+  groupSources,
   largestDropOff,
   questionDropOff,
   signals,
@@ -34,6 +35,7 @@ function data(overrides: Partial<ConversionData> = {}): ConversionData {
     pageviewsByPage: [c('/', 400), c('/sticks/grays-db-5', 40)],
     homeBlocks: [],
     deadClicksByPage: [],
+    visitorsByReferrer: [],
     deadClicksByElement: [],
     rageClicksByPage: [],
     otherHostEvents: 0,
@@ -104,6 +106,26 @@ describe('signals', () => {
       pageviewsByPage: [c('/', 400)],
     });
     expect(signals(quiet, ORDER)).toEqual([]);
+  });
+});
+
+describe('groupSources', () => {
+  it('groups referring domains into channels', () => {
+    const grouped = groupSources([
+      c('$direct', 20, 15),
+      c('www.google.com', 2),
+      c('www.google.nl', 1),
+      c('utm:tiktok', 3),
+      c('l.instagram.com', 2),
+      c('chatgpt.com', 1),
+      c('hockey.nl', 1),
+    ]);
+    expect(grouped[0]).toEqual({ key: 'Direct', now: 20, before: 15 });
+    expect(grouped).toContainEqual({ key: 'Google', now: 3, before: 0 });
+    expect(grouped).toContainEqual({ key: 'Social: tiktok', now: 3, before: 0 });
+    expect(grouped).toContainEqual({ key: 'Social: instagram', now: 2, before: 0 });
+    expect(grouped).toContainEqual({ key: 'AI-assistent', now: 1, before: 0 });
+    expect(grouped).toContainEqual({ key: 'Andere site: hockey.nl', now: 1, before: 0 });
   });
 });
 

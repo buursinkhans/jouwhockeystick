@@ -183,6 +183,13 @@ async function main() {
     ),
     clicksByPage: await breakdown(config, 'retailer_click', 'properties.$pathname'),
     pageviewsByPage: await breakdown(config, '$pageview', 'properties.$pathname'),
+    // Grouped into channels in the report (sourceLabel). Optional, like the dead-click elements.
+    visitorsByReferrer: await breakdown(
+      config,
+      '$pageview',
+      `if(coalesce(toString(properties.utm_source), '') != '', concat('utm:', toString(properties.utm_source)), coalesce(toString(properties.$referring_domain), '$direct'))`,
+      'visitors',
+    ).catch(() => []),
     homeBlocks: await breakdown(
       config,
       'home_block_click',

@@ -40,6 +40,8 @@ export type ConversionData = {
   /** `retailer_click` per page path. */
   clicksByPage: Count[];
   pageviewsByPage: Count[];
+  /** Visitors (per day) per "utm:<source>" or referring domain ("$direct" when none). */
+  visitorsByReferrer: Count[];
   /** `home_block_click` per "block → target". */
   homeBlocks: Count[];
   deadClicksByPage: Count[];
@@ -69,6 +71,38 @@ export const THRESHOLDS = {
 };
 
 const LIST_LIMIT = 10;
+
+/** Groups a referring domain (or "utm:<source>") into a channel a person recognises. */
+export function sourceLabel(key: string): string {
+  const k = key.toLowerCase();
+  if (k.startsWith('utm:')) {
+    const source = k.slice(4);
+    if (/tiktok|instagram|youtube|facebook/.test(source)) return `Social: ${source}`;
+    return `Campagne: ${source}`;
+  }
+  if (k === '' || k === '$direct') return 'Direct';
+  if (k.includes('jouwhockeystick')) return 'Eigen site';
+  if (/(^|\.)google\./.test(k)) return 'Google';
+  if (/(^|\.)(bing|duckduckgo|ecosia|yahoo)\./.test(k)) return 'Andere zoekmachine';
+  if (/(^|\.)(instagram|facebook|tiktok|youtube|linkedin|pinterest|twitter|whatsapp)\.|(^|\.)(t\.co|x\.com)$/.test(k)) {
+    return `Social: ${k.replace(/^(www|m|l|lm)\./, '').split('.')[0]}`;
+  }
+  if (/(^|\.)(chatgpt|openai|perplexity|copilot|gemini)\.|(^|\.)claude\.ai$/.test(k)) return 'AI-assistent';
+  return `Andere site: ${k.replace(/^www\./, '')}`;
+}
+
+/** Adds up the counts per channel, largest first. */
+export function groupSources(counts: readonly Count[]): Count[] {
+  const totals = new Map<string, Count>();
+  for (const count of counts) {
+    const key = sourceLabel(count.key);
+    const total = totals.get(key) ?? { key, now: 0, before: 0 };
+    total.now += count.now;
+    total.before += count.before;
+    totals.set(key, total);
+  }
+  return [...totals.values()].sort((a, b) => b.now - a.now || b.before - a.before);
+}
 
 const FUNNEL_STEPS = [
   { key: 'started', label: 'Stickwijzer gestart' },
@@ -329,6 +363,12 @@ export function formatReport(data: ConversionData, stepOrder: string[]): string 
     '## Meest bekeken pagina\'s (top 10)',
     '',
     table(['Pagina', 'Deze week', 'Vorige week', 'Verschil'], countRows(data.pageviewsByPage)),
+    '',
+    '## Waar bezoekers vandaan komen',
+    '',
+    table(['Bron', 'Deze week', 'Vorige week', 'Verschil'], countRows(groupSources(data.visitorsByReferrer))),
+    '',
+    '_Per bezoeker per dag. "Direct" is ook een link uit WhatsApp, e-mail of een app, en je eigen bezoeken: die geven geen bron mee._',
     '',
     '## Homepage-blokken',
     '',
