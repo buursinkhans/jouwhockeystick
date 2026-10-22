@@ -1,9 +1,11 @@
 // Entry point of the workflow "Video publiceren" (docs/video.md §10).
-// Input: VIDEO_B64, a base64 JSON video script from the Social-studio, approved by
-// the owner. Renders the Short (and the 16:9 video when it is not skipped),
-// schedules them on YouTube at their date and time, and reports the result as a
-// comment on the issue with label `video-publicatie`, where the scheduled task
-// "Video-publicatie" picks it up and writes it back to the Social-studio.
+// Normal start: the owner adds the label `publiceren` to an approval issue that the
+// scheduled task "Video-publicatie" opened; the script is in that issue
+// (ISSUE_NUMBER + ISSUE_BODY). A manual run can pass VIDEO_B64 (base64 JSON) instead.
+// Renders the Short (and the 16:9 video when it is not skipped), schedules them on
+// YouTube at their date and time, and reports the result as a comment: on the
+// approval issue, or else on the issue with label `video-publicatie`. The task
+// reads it and writes it back to the Social-studio.
 //
 // DRY_RUN=true renders without uploading (a test run).
 
@@ -12,12 +14,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { render } from './render.mjs';
-import { MIN_LEAD_MINUTES, accessToken, metadata, publishMoment, setThumbnail, targets, timeFor, upload, validate, watchUrl } from './youtube.mjs';
+import { MIN_LEAD_MINUTES, accessToken, alreadyScheduled, metadata, publishMoment, scriptFromIssue, setThumbnail, targets, timeFor, upload, validate, watchUrl } from './youtube.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(HERE, 'out');
 const LABEL = 'video-publicatie';
 const dryRun = process.env.DRY_RUN === 'true';
+const issueNr = /^\d+$/.test(process.env.ISSUE_NUMBER || '') ? process.env.ISSUE_NUMBER : null;
 
 function gh(args, input) {
   const r = spawnSync('gh', args, { input, encoding: 'utf8' });
@@ -40,18 +43,41 @@ function report(result) {
   fs.writeFileSync(path.join(OUT, 'result.json'), JSON.stringify(result, null, 2));
   const repo = process.env.GITHUB_REPOSITORY;
   if (!repo) { console.log(JSON.stringify(result, null, 2)); return; }
-  const nr = resultIssue(repo);
+  const nr = issueNr || resultIssue(repo);
   const body = `<!-- video-publicatie id=${result.id} run=${result.run} -->\n**${result.id}** · run ${result.run}${result.dryRun ? ' · test zonder upload' : ''}\n\n\`\`\`json\n${JSON.stringify(result, null, 2)}\n\`\`\``;
   gh(['api', '-X', 'POST', `repos/${repo}/issues/${nr}/comments`, '-F', 'body=@-'], body);
+  if (!issueNr) return;
+  // The approval issue shows the outcome: the start label goes, a result label comes, and a success closes it.
+  const failed = !!result.fout || Object.values(result.kanalen).some((k) => k.status === 'mislukt');
+  try { gh(['api', '-X', 'DELETE', `repos/${repo}/issues/${nr}/labels/publiceren`]); } catch { /* already gone */ }
+  if (result.dryRun || result.herhaling) return;
+  try { gh(['api', '-X', 'POST', `repos/${repo}/labels`, '-f', `name=${failed ? 'mislukt' : 'ingepland'}`, '-f', `color=${failed ? 'B42318' : '1F7A4D'}`]); } catch { /* exists */ }
+  gh(['api', '-X', 'POST', `repos/${repo}/issues/${nr}/labels`, '-f', `labels[]=${failed ? 'mislukt' : 'ingepland'}`]);
+  if (!failed) gh(['api', '-X', 'PATCH', `repos/${repo}/issues/${nr}`, '-f', 'state=closed', '-f', 'state_reason=completed']);
 }
 
 async function main() {
   const result = { id: null, run: process.env.GITHUB_RUN_ID || 'lokaal', dryRun, tijd: new Date().toISOString(), kanalen: {}, fout: null };
-  let video;
-  try {
-    video = JSON.parse(Buffer.from(process.env.VIDEO_B64 || '', 'base64').toString('utf8'));
-  } catch {
-    result.fout = 'De video-gegevens zijn geen geldige JSON.';
+  let video = null;
+  if (issueNr) {
+    video = scriptFromIssue(process.env.ISSUE_BODY);
+    // Label added twice, or added again after success: refuse, so nothing is uploaded twice.
+    const repo = process.env.GITHUB_REPOSITORY;
+    if (repo) {
+      const comments = JSON.parse(gh(['api', `repos/${repo}/issues/${issueNr}/comments?per_page=100`]));
+      if (alreadyScheduled(comments)) {
+        result.id = video && typeof video.id === 'string' ? video.id : 'onbekend';
+        result.fout = 'Deze video is al eerder vanuit dit issue ingepland; er is niets opnieuw geüpload.';
+        result.herhaling = true;
+        report(result);
+        return 1;
+      }
+    }
+  } else {
+    try { video = JSON.parse(Buffer.from(process.env.VIDEO_B64 || '', 'base64').toString('utf8')); } catch { video = null; }
+  }
+  if (!video) {
+    result.fout = 'Geen geldig videoscript gevonden.';
     report(result);
     return 1;
   }

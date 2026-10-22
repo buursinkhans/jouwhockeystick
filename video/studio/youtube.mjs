@@ -159,4 +159,42 @@ export async function setThumbnail(token, videoId, png) {
   if (!res.ok) throw await apiError(res, 'Thumbnail instellen');
 }
 
+/**
+ * The approval issue (docs/video.md §10): the scheduled task opens it with the script;
+ * the owner adds the label `publiceren` to start the upload. The script sits in a
+ * ```json block right after the marker.
+ */
+export const SCRIPT_MARKER = '<!-- video-script -->';
+
+export function issueBody(video) {
+  return [
+    `**${clean(video.titel) || video.id}** · live op ${video.datum} (Short ${timeFor(video, 'shorts')}, YouTube-video ${timeFor(video, 'youtube')})`,
+    '',
+    'Klaargezet in de Social-studio. **Zet het label `publiceren` op dit issue** om de video te laten maken en op YouTube in te plannen, privé tot het geplande moment. Niet doen? Sluit dit issue.',
+    '',
+    SCRIPT_MARKER,
+    '```json',
+    JSON.stringify(video, null, 2),
+    '```',
+  ].join('\n');
+}
+
+/** The script from an approval issue, or null when it is missing or not valid JSON. */
+export function scriptFromIssue(body) {
+  const text = str(body);
+  const at = text.indexOf(SCRIPT_MARKER);
+  if (at < 0) return null;
+  const m = /```json\s*\n([\s\S]*?)\n```/.exec(text.slice(at));
+  if (!m) return null;
+  try { const v = JSON.parse(m[1]); return v && typeof v === 'object' ? v : null; } catch { return null; }
+}
+
+/** True when an earlier result comment on the issue already scheduled something: never upload twice. */
+export function alreadyScheduled(comments) {
+  return (Array.isArray(comments) ? comments : []).some((c) => {
+    const b = str(c && c.body);
+    return b.includes('<!-- video-publicatie ') && /"status":\s*"ingepland"/.test(b);
+  });
+}
+
 export const watchUrl = (target, id) => (target === 'shorts' ? `https://youtube.com/shorts/${id}` : `https://youtu.be/${id}`);

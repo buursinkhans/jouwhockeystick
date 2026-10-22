@@ -84,3 +84,22 @@ test('ffmpegArgs: music, one input per sound cue, length capped', () => {
   assert.equal(args[args.indexOf('-t') + 1], '15.000');
   assert.equal(args.at(-1), 'o.mp4');
 });
+
+test('approval issue: the script survives the round trip, and junk is refused', async () => {
+  const { issueBody, scriptFromIssue } = await import('./youtube.mjs');
+  const body = issueBody(base);
+  assert.match(body, /label `publiceren`/);
+  assert.deepEqual(scriptFromIssue(body), base);
+  assert.equal(scriptFromIssue('geen script'), null);
+  assert.equal(scriptFromIssue('<!-- video-script -->\n```json\n{kapot\n```'), null);
+});
+
+test('alreadyScheduled: a second label never uploads again', async () => {
+  const { alreadyScheduled } = await import('./youtube.mjs');
+  const ok = '<!-- video-publicatie id=x run=1 -->\n```json\n{"kanalen": {"shorts": {"status": "ingepland"}}}\n```';
+  const failed = '<!-- video-publicatie id=x run=1 -->\n```json\n{"kanalen": {"shorts": {"status": "mislukt"}}}\n```';
+  assert.equal(alreadyScheduled([{ body: ok }]), true);
+  assert.equal(alreadyScheduled([{ body: failed }]), false);
+  assert.equal(alreadyScheduled([{ body: 'iemand typt "status": "ingepland"' }]), false);
+  assert.equal(alreadyScheduled(null), false);
+});
