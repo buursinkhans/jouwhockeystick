@@ -1127,3 +1127,18 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Bewust niet:** een volg-oproep aan het begin of halverwege (kost kijkers op het moment dat ze beslissen), meer dan drie Shorts per week vóór de evaluatie, en trending audio (we houden onze eigen muziek; op de versie zonder muziek mag de eigenaar zelf een nummer uit de bibliotheek van het platform kiezen).
 
 **Evaluatie:** eind november, samen met de video-pilot: per hooktype en per soort het aandeel kijkers dat blijft, plus sitebezoek met `utm_source=youtube`.
+
+## 2026-10-22 — Video's automatisch inplannen op YouTube na goedkeuring
+
+**Besluit eigenaar:** "is er echt niet te bouwen dat we dit geautomatiseerd doorzetten naar YouTube en/of Instagram?" → ja, eerst YouTube. Dit vervangt "bewust niet: automatisch plaatsen" uit het besluit van 17 oktober (Social-studio), alleen voor YouTube.
+
+**Wat:**
+- **Goedkeuren** in de Social-studio is de enige poort: zonder klik van de eigenaar gaat er niets naar YouTube. Na goedkeuring is herschrijven vergrendeld (intrekken kan zolang hij nog niet is opgepakt).
+- **Renderen op GitHub** met dezelfde code als de studio: de renderer staat nu in `video/studio/videoart.js` en de studio laadt dat bestand. Headless Chromium tekent elk beeld, ffmpeg voegt muziek en geluidseffecten toe (H.264/AAC, 30 fps).
+- **Workflow *Video publiceren*** uploadt via de YouTube Data API: privé tot het geplande moment, niet voor kinderen, Sport, Nederlands; thumbnail bij de 16:9-video. Volgens de huidige documentatie blijven uploads van een niet-geverifieerd API-project niet meer op privé staan, en heeft uploaden een eigen quotum (100 per dag).
+- **Geplande taak *Video-publicatie*** verbindt studio en workflow (direct na goedkeuren, plus elke ochtend 09:41) en schrijft het resultaat terug.
+- **Sleutels** alleen als GitHub-secrets (`YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET`, `YOUTUBE_REFRESH_TOKEN`); de eigenaar maakt ze eenmalig aan volgens `docs/video.md` §10.
+
+**Waarom niet via vidIQ:** die koppeling kan wel een Reel op Instagram zetten, maar geen eigen video op YouTube, niet inplannen, en werkt alleen in een open gesprek.
+
+**Bewust niet (nog):** Instagram en Facebook via de API van Meta (geen eigen inplanfunctie; wij zouden het moment zelf moeten bewaken), TikTok (beoordeling door TikTok nodig), de *Gerelateerde video* van een Short (niet via de API).

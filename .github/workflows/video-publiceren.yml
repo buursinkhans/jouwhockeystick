@@ -1,0 +1,67 @@
+# Renders an approved Social-studio video and schedules it on YouTube
+# (docs/video.md §10). Started by the scheduled task "Video-publicatie" after
+# the owner clicks "Goedkeuren" in the Social-studio; can also be started by
+# hand (Actions → Video publiceren → Run workflow) with a script.
+#
+# Only YouTube: the Short (9:16) and, when not skipped, the 16:9 video, both
+# private until their publish moment. Instagram, Facebook and TikTok stay
+# manual; the MP4s are attached to the run for that.
+name: Video publiceren
+
+on:
+  workflow_dispatch:
+    inputs:
+      video:
+        description: 'Videoscript uit de Social-studio (JSON, base64)'
+        required: true
+        type: string
+      test:
+        description: 'Alleen renderen, niet uploaden'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+# One video at a time: uploads use the same YouTube quota and result issue.
+concurrency:
+  group: video-publiceren
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Playwright en Chromium
+        working-directory: video/studio
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.48.2
+          npx playwright install --with-deps chromium
+      - name: ffmpeg
+        run: command -v ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+      - name: Tests
+        run: node --test video/studio/*.test.mjs
+      - name: Renderen en inplannen
+        # The script is data: it goes in through the environment, never into the shell.
+        env:
+          VIDEO_B64: ${{ inputs.video }}
+          DRY_RUN: ${{ inputs.test }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: node video/studio/publish.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: video-bestanden
+          path: video/studio/out/
+          retention-days: 14
+          if-no-files-found: ignore
