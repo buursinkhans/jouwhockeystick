@@ -61,9 +61,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          # PRs from the content-agent are opened by claude[bot]; without this
-          # the action refuses to run for a non-human actor. Only this bot.
-          allowed_bots: 'claude'
+          # PRs from the content-agent are opened by claude[bot]; the catalog
+          # agents start this review with the workflow token (github-actions[bot]).
+          # Without this the action refuses to run for a non-human actor. Only these bots.
+          allowed_bots: 'claude,github-actions'
           prompt: |
             Je bent de review-agent van jouwhockeystick.nl. Lees docs/review-agent.md en beoordeel pull request #${{ env.PR }} in ${{ github.repository }} volgens dat handboek.
             De code van de PR staat uitgecheckt in de huidige map. Schrijf je oordeel naar het bestand `review.md` in de root; plaats zelf geen reacties.

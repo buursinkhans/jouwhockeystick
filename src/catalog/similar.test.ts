@@ -12,6 +12,14 @@ function bySlug(slug: string): Product {
   return product;
 }
 
+/** A fixed price, so the test does not break when the weekly PassaHockey prices change. */
+function withPrice(product: Product, value: number): Product {
+  return {
+    ...product,
+    priceIndicativeEur: { ...product.priceIndicativeEur, value },
+  };
+}
+
 describe('getSimilarSticks', () => {
   it('returns up to three other sticks for every product', () => {
     for (const product of products) {
@@ -35,8 +43,8 @@ describe('getSimilarSticks', () => {
 describe('describeDifference', () => {
   it('states price, carbon, bow and level differences from catalog data', () => {
     const text = describeDifference(
-      bySlug('brabo-elite-x-one-lb'),
-      bySlug('brabo-elite-five-wtb-lb'),
+      withPrice(bySlug('brabo-elite-x-one-lb'), 400),
+      withPrice(bySlug('brabo-elite-five-wtb-lb'), 250),
     );
     expect(text).toBe(
       '€150 lagere richtprijs, minder carbon (50% tegen 100%) en ook een low bow.',
