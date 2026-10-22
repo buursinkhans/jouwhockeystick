@@ -24,6 +24,7 @@ import {
 import type { AdviceEventName } from '@/lib/analytics/events';
 import { trackEvent } from '@/lib/analytics/track';
 import { shareHref } from '@/lib/shareAdvice';
+import { remainingTimeText } from '@/content/stickwijzer/progress';
 import { Button } from '@/components/ui/Button';
 import { QuestionField, type AnswerValue } from './QuestionField';
 import { QuizResult } from './QuizResult';
@@ -191,6 +192,11 @@ export function QuizForm() {
   const currentStep = Math.min(stepIndex, screens.length - 1);
   const screen = screens[currentStep] ?? FIRST_SCREEN;
   const isLastStep = currentStep === screens.length - 1;
+  // Required questions from this screen on that are still unanswered.
+  const questionsLeft = screens
+    .slice(currentStep)
+    .flatMap((s) => s.questions)
+    .filter((id) => isVisible(id, answers) && !isAnswered(answers[id])).length;
 
   useEffect(() => {
     writeProgress(
@@ -419,6 +425,7 @@ export function QuizForm() {
         Stap {currentStep + 1}
         {route ? ` van ${screens.length}` : ''}
         {route ? ` · ${ROUTE_LABELS[route]}` : ''}
+        {route ? ` · ${remainingTimeText(questionsLeft, isLastStep)}` : ''}
       </p>
       {route && (
         // Thin line with an orange ball that moves along, echoing the logo

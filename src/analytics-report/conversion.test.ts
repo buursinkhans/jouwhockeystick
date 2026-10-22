@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   formatReport,
   groupSources,
+  routeFunnel,
   largestDropOff,
   questionDropOff,
   signals,
@@ -35,6 +36,8 @@ function data(overrides: Partial<ConversionData> = {}): ConversionData {
     pageviewsByPage: [c('/', 400), c('/sticks/grays-db-5', 40)],
     homeBlocks: [],
     deadClicksByPage: [],
+    questionsByRoute: [],
+    adviceByRoute: [],
     visitorsByReferrer: [],
     deadClicksByElement: [],
     rageClicksByPage: [],
@@ -106,6 +109,31 @@ describe('signals', () => {
       pageviewsByPage: [c('/', 400)],
     });
     expect(signals(quiet, ORDER)).toEqual([]);
+  });
+});
+
+describe('routeFunnel', () => {
+  it('shows per screen how many visitors of a route got through', () => {
+    const funnel = routeFunnel(
+      {
+        questionsByRoute: [c('START|age_band', 10), c('START|has_current_stick', 8), c('START|budget_band', 4)],
+        adviceByRoute: [c('START', 4)],
+      },
+      'START',
+      [
+        { title: 'Over de speler', questionId: 'age_band' },
+        { title: 'Eerste stick of vervanging', questionId: 'has_current_stick' },
+        { title: 'Budget', questionId: 'budget_band' },
+      ],
+    );
+    expect(funnel.map((row) => row.now)).toEqual([10, 8, 4, 4]);
+    expect(funnel[2]?.fromPrevious).toBe(0.5);
+    expect(funnel.at(-1)?.title).toBe('Advies gekregen');
+  });
+
+  it('is left out of the report for a route nobody took', () => {
+    const report = formatReport(data(), ORDER, { PRESTATIE: [{ title: 'Niveau en doelen', questionId: 'primary_goals' }] });
+    expect(report).not.toContain('Route Prestatie');
   });
 });
 

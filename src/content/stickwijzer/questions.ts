@@ -703,11 +703,20 @@ export const FIRST_SCREEN: ScreenDef = {
   title: 'Voor wie en welke route',
   questions: ['advice_goal', 'route_self_select'],
 };
-const AGE_EXPERIENCE: ScreenDef = {
-  id: 'age_experience',
-  title: 'Leeftijd en ervaring',
-  questions: ['age_band', 'experience_seasons'],
-};
+/**
+ * Age, experience and height on one screen (2026-10-22: fewer screens, same
+ * questions). Keeps the id 'age_experience': the route suggestion hangs on it.
+ */
+function playerScreen(optional: QuestionId[]): ScreenDef {
+  return {
+    id: 'age_experience',
+    title: 'Over de speler',
+    questions: ['age_band', 'experience_seasons', 'height_cm'],
+    optional,
+    // The height follow-ups stay directly under the height question.
+    order: ['age_band', 'experience_seasons', 'height_cm', ...optional],
+  };
+}
 const CURRENT_STICK: ScreenDef = {
   id: 'current_stick',
   title: 'Huidige stick',
@@ -736,21 +745,15 @@ const BUDGET: ScreenDef = {
 };
 
 /**
- * Screens per route. START is capped at six screens (spec §4.1); the longer
- * routes ask one required question per screen where that stays workable.
+ * Screens per route. START is capped at six screens (spec §4.1). Since
+ * 2026-10-22 short screens are combined: the same questions on fewer screens
+ * (START 5, ONTWIKKEL 6, PRESTATIE 7), because every "Volgende" is a moment
+ * to drop off (decision log).
  */
 export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
   START: [
     FIRST_SCREEN,
-    AGE_EXPERIENCE,
-    {
-      id: 'height',
-      title: 'Lengte',
-      questions: ['height_cm'],
-      optional: ['height_uncertain', 'junior_grip_needed'],
-      // Keep the follow-up about the height directly under the height question.
-      order: ['height_cm', 'height_uncertain', 'junior_grip_needed'],
-    },
+    playerScreen(['height_uncertain', 'junior_grip_needed']),
     {
       ...CURRENT_STICK,
       title: 'Eerste stick of vervanging',
@@ -772,67 +775,38 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
   ],
   ONTWIKKEL: [
     FIRST_SCREEN,
-    AGE_EXPERIENCE,
-    {
-      id: 'height',
-      title: 'Lengte',
-      questions: ['height_cm'],
-      optional: [
-        'height_uncertain',
-        'current_length_inch',
-        'junior_grip_needed',
-      ],
-      order: [
-        'height_cm',
-        'height_uncertain',
-        'current_length_inch',
-        'junior_grip_needed',
-      ],
-    },
+    playerScreen([
+      'height_uncertain',
+      'current_length_inch',
+      'junior_grip_needed',
+    ]),
     {
       id: 'first_touch',
-      title: 'Aannemen',
-      questions: ['first_touch_confidence'],
+      title: 'Aannemen en basis',
+      questions: ['first_touch_confidence', 'core_skills_stage'],
       optional: ['playing_level', 'training_frequency'],
     },
-    { id: 'core_skills', title: 'Basis', questions: ['core_skills_stage'] },
-    { id: 'goals', title: 'Ontwikkeldoelen', questions: ['primary_goals'] },
     {
-      id: 'fun',
-      title: 'Speelstijl',
-      questions: ['fun_style'],
+      id: 'goals',
+      title: 'Doelen, speelstijl en gevoel',
+      questions: ['primary_goals', 'fun_style', 'feel_preference'],
       optional: ['positions'],
     },
-    { id: 'feel', title: 'Stickgevoel', questions: ['feel_preference'] },
     CURRENT_STICK,
     BUDGET,
   ],
   PRESTATIE: [
     FIRST_SCREEN,
-    AGE_EXPERIENCE,
-    {
-      id: 'height',
-      title: 'Lengte',
-      questions: ['height_cm'],
-      optional: ['height_uncertain', 'current_length_inch'],
-      order: ['height_cm', 'height_uncertain', 'current_length_inch'],
-    },
-    {
-      id: 'first_touch',
-      title: 'Aannemen',
-      questions: ['first_touch_confidence'],
-      optional: ['playing_level', 'training_frequency'],
-    },
+    playerScreen(['height_uncertain', 'current_length_inch']),
     {
       id: 'goals',
-      title: 'Doelen',
-      questions: ['primary_goals'],
-      optional: ['positions'],
-    },
-    {
-      id: 'match_actions',
-      title: 'Wedstrijdacties',
-      questions: ['match_actions_frequency'],
+      title: 'Niveau en doelen',
+      questions: [
+        'first_touch_confidence',
+        'primary_goals',
+        'match_actions_frequency',
+      ],
+      optional: ['playing_level', 'training_frequency', 'positions'],
     },
     {
       id: 'skills_ground',
@@ -841,13 +815,13 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     },
     {
       id: 'skills_special',
-      title: 'Techniek: aerial/scoopen, backhand en sleeppush',
-      questions: ['skill_aerial', 'skill_backhand', 'skill_dragflick'],
-    },
-    {
-      id: 'feel',
-      title: 'Stickgevoel',
-      questions: ['feel_preference'],
+      title: 'Aerial/scoopen, backhand, sleeppush en stickgevoel',
+      questions: [
+        'skill_aerial',
+        'skill_backhand',
+        'skill_dragflick',
+        'feel_preference',
+      ],
       optional: [
         'bow_experience',
         'vibration_sensitivity',

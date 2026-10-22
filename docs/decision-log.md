@@ -1148,3 +1148,14 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Wat:** de homepage (twee keer) en /merken halen hun aantallen uit `getCatalogStats` (`src/catalog/stats.ts`). Die telt dezelfde lijsten die /sticks en /zaalsticks tonen, inclusief de PassaHockey-import. /merken telde eerst de handgeschreven merkprofielen; nu toont de pagina alleen profielen van merken die op dat moment in de catalogus staan. Verdwijnt een merk uit de feed, dan dalen het aantal op de homepage en op /merken dus samen. Een test (`stats.test.ts`) bewaakt dat de aantallen overeenkomen met de lijsten en dat elk merk in de catalogus een profiel heeft.
 
 **Reden:** verzoek van de eigenaar dat het aantal op de homepage altijd gelijk blijft aan de catalogus.
+
+## 2026-10-22 — Stickwijzer: minder schermen, dezelfde vragen (wacht op go van de eigenaar)
+
+**Aanleiding:** de eigenaar vindt de stickwijzer lang, maar wil hem niet "te eenvoudig" maken. De data is nog te dun om vragen te schrappen (10 starts, 5 adviezen in een week).
+
+**Wat:**
+- **Schermen samengevoegd, geen vraag geschrapt.** Leeftijd, ervaring en lengte staan op één scherm "Over de speler" (id `age_experience`, waar de routesuggestie aan hangt). Ontwikkel: aannemen en basis samen, en doelen, speelstijl en gevoel samen. Prestatie: aannemen, doelen en wedstrijdacties samen, en het stickgevoel bij het tweede techniekscherm. Start gaat van 6 naar 5 schermen, Ontwikkel van 10 naar 6 en Prestatie van 11 naar 7.
+- **Resterende tijd** naast de stapteller: "nog ongeveer 1 minuut" of "laatste stap". Gerekend op ongeveer 10 seconden per verplichte vraag die nog open staat (`src/content/stickwijzer/progress.ts`).
+- **Conversierapport per route en scherm:** hoeveel bezoekers per route elk scherm afronden, en hoeveel daarna een advies krijgen. Het rapport herkent een scherm aan de eerste verplichte vraag die altijd gesteld wordt. Na ongeveer 50 starts laat dit zien welk scherm of welke vraag echt kost; pas dan schrappen we gericht.
+
+**Afwijking van de specificatie:** v1.1 §2 vraagt "één vraag per scherm op mobiel". Dat deden we al niet overal (leeftijd en ervaring stonden al samen). Nu staan er twee tot vier verplichte vragen op een scherm. De reden: elk scherm is een klik "Volgende" en dus een moment om af te haken, en de vragen zijn kort (keuzerondjes). Het maximum van zes inhoudelijke schermen voor Start (§4.1) blijft gehaald.

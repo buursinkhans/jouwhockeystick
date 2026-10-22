@@ -12,6 +12,7 @@ import {
   type ConversionData,
   type Count,
   type Period,
+  type ScreenStep,
 } from '../src/analytics-report/conversion';
 
 const DAY = 86_400_000;
@@ -158,6 +159,21 @@ function commonStepOrder(): QuestionId[] {
   return order;
 }
 
+/**
+ * Per route, the screens after the route choice, each recognised by its first
+ * required question that is always asked (not one that depends on an answer).
+ */
+function routeScreenSteps(): Record<string, ScreenStep[]> {
+  const result: Record<string, ScreenStep[]> = {};
+  for (const [route, screens] of Object.entries(SCREENS)) {
+    result[route] = screens.slice(1).flatMap((screen) => {
+      const questionId = screen.questions.find((id) => QUESTIONS[id].showWhen === undefined);
+      return questionId ? [{ title: screen.title, questionId }] : [];
+    });
+  }
+  return result;
+}
+
 async function main() {
   const config = readConfig();
   // Sequential on purpose: PostHog allows only a few concurrent queries.
@@ -170,6 +186,13 @@ async function main() {
     ],
     funnel: await funnel(config),
     questions: await breakdown(config, 'question_answered', 'properties.questionId', 'visitors'),
+    questionsByRoute: await breakdown(
+      config,
+      'question_answered',
+      `concat(toString(properties.route), '|', toString(properties.questionId))`,
+      'visitors',
+    ),
+    adviceByRoute: await breakdown(config, 'advice_completed', 'properties.route', 'visitors'),
     adviceOutcomes: await breakdown(config, 'advice_completed', 'properties.answerKey'),
     feedback: await breakdown(config, 'advice_feedback_submitted', 'properties.answerKey'),
     clicksByPlacement: await breakdown(config, 'retailer_click', 'properties.placement'),
@@ -209,7 +232,7 @@ async function main() {
     rageClicksByPage: await breakdown(config, '$rageclick', 'properties.$pathname'),
     otherHostEvents: await otherHostEvents(config),
   };
-  console.log(formatReport(data, commonStepOrder()));
+  console.log(formatReport(data, commonStepOrder(), routeScreenSteps()));
 }
 
 main().catch((error: unknown) => {

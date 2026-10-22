@@ -27,6 +27,10 @@ export type ConversionData = {
   funnel: Count[];
   /** Visitor-days that answered each question (`question_answered`). */
   questions: Count[];
+  /** `question_answered` visitors per "ROUTE|questionId" (sent when a screen is left with Volgende). */
+  questionsByRoute: Count[];
+  /** `advice_completed` visitors per route. */
+  adviceByRoute: Count[];
   /** `advice_completed` per answerKey: `match` or the no-match reason. */
   adviceOutcomes: Count[];
   /** `advice_feedback_submitted` per answerKey (`helpful` / `not_helpful`). */
@@ -272,7 +276,35 @@ export function signals(data: ConversionData, stepOrder: string[]): string[] {
   return found;
 }
 
-export function formatReport(data: ConversionData, stepOrder: string[]): string {
+/** One screen of a route, recognised by a required question that is always asked. */
+export type ScreenStep = { title: string; questionId: string };
+
+const ROUTE_NAMES: Record<string, string> = { START: 'Start', ONTWIKKEL: 'Ontwikkel', PRESTATIE: 'Prestatie' };
+
+/**
+ * Per route: how many visitors finished each screen, and the share of the
+ * screen before. Shows where in a route people stop, not only which question.
+ */
+export function routeFunnel(
+  data: Pick<ConversionData, 'questionsByRoute' | 'adviceByRoute'>,
+  route: string,
+  steps: readonly ScreenStep[],
+): { title: string; now: number; fromPrevious: number | null }[] {
+  const rows = [
+    ...steps.map((step) => ({ title: step.title, now: countOf(data.questionsByRoute, `${route}|${step.questionId}`).now })),
+    { title: 'Advies gekregen', now: countOf(data.adviceByRoute, route).now },
+  ];
+  return rows.map((row, index) => {
+    const previous = index === 0 ? null : (rows[index - 1]?.now ?? 0);
+    return { ...row, fromPrevious: previous ? row.now / previous : null };
+  });
+}
+
+export function formatReport(
+  data: ConversionData,
+  stepOrder: string[],
+  routeSteps: Record<string, readonly ScreenStep[]> = {},
+): string {
   const visitors = countOf(data.funnel, 'visitors');
   const started = countOf(data.funnel, 'started');
   const clickers = countOf(data.funnel, 'clickers');
@@ -334,6 +366,19 @@ export function formatReport(data: ConversionData, stepOrder: string[]): string 
     '',
     table(['Vraag', 'Bezoekers', 't.o.v. vorige stap'], steps),
     '',
+    ...Object.entries(routeSteps).flatMap(([route, routeStepList]) => {
+      const funnel = routeFunnel(data, route, routeStepList);
+      if ((funnel[0]?.now ?? 0) === 0) return [];
+      return [
+        `### Route ${ROUTE_NAMES[route] ?? route}: per scherm`,
+        '',
+        table(
+          ['Scherm afgerond', 'Bezoekers', 't.o.v. vorig scherm'],
+          funnel.map((row) => [row.title, String(row.now), percent(row.fromPrevious)]),
+        ),
+        '',
+      ];
+    }),
     '### Uitkomst van het advies',
     '',
     table(['Uitkomst', 'Deze week', 'Vorige week', 'Verschil'], countRows(data.adviceOutcomes, (key) => NO_MATCH_LABELS[key] ?? key)),
