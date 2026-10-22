@@ -9,7 +9,7 @@ export const BRAND_PAYOFF = 'Eerlijk stickadvies op maat';
 export const DEFAULT_TITLE =
   'jouwhockeystick.nl — vind de hockeystick die bij je past';
 export const DEFAULT_DESCRIPTION =
-  'Doorloop de stickwijzer en krijg een uitlegbaar advies voor een hockeystick die past bij lengte, ervaring, speelwensen en budget — met redenen en bronnen per stick.';
+  'Onafhankelijk advies voor een hockeystick die past bij lengte, ervaring, speelwensen en budget. Doe de stickwijzer en zie per stick de redenen en bronnen.';
 
 /** Search results cut titles and descriptions off around these lengths. */
 const MAX_TITLE_LENGTH = 60;

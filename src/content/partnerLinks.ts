@@ -6,7 +6,7 @@
 export const PARTNER_LINK_LABEL = 'Partnerlink';
 
 export const PARTNER_LINK_NOTE =
-  'Links naar bol.com en PassaHockey zijn partnerlinks: we kunnen een vergoeding krijgen als je via zo’n link koopt. Dat beïnvloedt het advies niet.';
+  'Links naar bol.com en PassaHockey zijn partnerlinks: we kunnen een vergoeding krijgen als je via zo’n link koopt. Ons advies blijft onafhankelijk: vergoeding en winkel tellen niet mee.';
 
 export const PARTNER_LINK_URL = '/methodiek#partnerlinks';
 
