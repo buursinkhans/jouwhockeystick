@@ -93,6 +93,8 @@ import { graysAc800JumbowS } from './products/grays-ac800-jumbow-s';
 import { graysAc700DynabowS } from './products/grays-ac700-dynabow-s';
 import { graysAc600ProbowS } from './products/grays-ac600-probow-s';
 import { graysAc500DynabowS } from './products/grays-ac500-dynabow-s';
+import { indianMaharadjaYukiNeonNightHoutJunior } from './products/indian-maharadja-yuki-neon-night-hout-junior-10261053';
+import { indianMaharadjaYukiTangyTwistHoutJunior } from './products/indian-maharadja-yuki-tangy-twist-hout-junior-10261052';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -183,6 +185,8 @@ const ALL_PRODUCTS: Product[] = [
   graysAc600ProbowS,
   graysAc500DynabowS,
   scoop48Indoor,
+  indianMaharadjaYukiNeonNightHoutJunior,
+  indianMaharadjaYukiTangyTwistHoutJunior,
 ];
 
 /**
