@@ -10,7 +10,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from 'remotion';
-import { BrandIcon, C, FONT_BODY, FONT_DISPLAY, Pill, SiteName } from '../brand';
+import { C, FONT_BODY, FONT_DISPLAY, Pill, SiteName } from '../brand';
 import {
   ADULT_ROWS,
   CM_PER_INCH,
@@ -55,11 +55,12 @@ function scenesFor(variant: Variant): Scene[] {
     render: () => <ExampleScene example={example} index={index} />,
   }));
   return [
-    { id: 'intro', beats: long ? 8 : 6, dark: true, render: () => <IntroScene /> },
-    { id: 'meten', beats: long ? 8 : 7, render: () => <MeasureScene /> },
+    // The hook is on screen from the first frame, so the intro can be short (docs/video.md §7a).
+    { id: 'intro', beats: long ? 7 : 5, dark: true, render: () => <IntroScene /> },
+    { id: 'meten', beats: long ? 8 : 6, render: () => <MeasureScene /> },
     ...examples,
     ...(long ? [{ id: 'tabel', beats: 22, render: () => <TableScene /> }] : []),
-    { id: 'twijfel', beats: long ? 12 : 10, render: () => <DoubtScene /> },
+    { id: 'twijfel', beats: long ? 12 : 9, render: () => <DoubtScene /> },
     ...(long ? [{ id: 'volwassenen', beats: 13, render: () => <AdultScene /> }] : []),
     { id: 'slot', beats: long ? 11 : 8, dark: true, render: () => <EndScene /> },
   ];
@@ -282,7 +283,10 @@ function Rise({
   );
 }
 
-/** Kinetic heading: words punch in one by one; `accent` words turn orange. */
+/**
+ * Kinetic heading: words punch in one by one; `accent` words turn orange.
+ * `instant`: the hook. The whole heading is readable on frame 0, with a short punch.
+ */
 function Words({
   text,
   size,
@@ -290,6 +294,7 @@ function Words({
   color = C.inkt,
   accent = [],
   stagger = 2,
+  instant = false,
 }: {
   text: string;
   size: number;
@@ -297,12 +302,18 @@ function Words({
   color?: string;
   accent?: string[];
   stagger?: number;
+  instant?: boolean;
 }) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const punch = instant
+    ? interpolate(frame, [0, 9], [1.06, 1], { extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic) })
+    : 1;
   return (
     <div
       style={{
+        transform: `scale(${punch})`,
+        transformOrigin: 'left top',
         fontFamily: FONT_DISPLAY,
         fontWeight: 800,
         fontSize: size,
@@ -315,11 +326,13 @@ function Words({
       }}
     >
       {text.split(' ').map((word, index) => {
-        const p = spring({
-          frame: frame - delay - index * stagger,
-          fps,
-          config: { damping: 12, stiffness: 180 },
-        });
+        const p = instant
+          ? 1
+          : spring({
+              frame: frame - delay - index * stagger,
+              fps,
+              config: { damping: 12, stiffness: 180 },
+            });
         return (
           <span
             key={`${word}-${index}`}
@@ -522,17 +535,16 @@ function IntroScene() {
           />
         )}
       </div>
-      <BrandIcon size={portrait ? 130 : 110} background={C.inkt} />
       <Words
-        text="Welke lengte hockeystick past bij je kind?"
-        size={h1 * 1.05}
+        text="Is de stick van je kind te lang?"
+        size={h1 * 1.15}
         color={C.wit}
-        accent={['kind?']}
-        delay={3}
+        accent={['lang?']}
+        instant
       />
       <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap' }}>
         {chips.map((chip, index) => (
-          <PopPill key={chip} delay={b(4) + index * 4} size={small * 1.25} tilt={index % 2 ? 3 : -3}>
+          <PopPill key={chip} delay={b(1.5) + index * 4} size={small * 1.25} tilt={index % 2 ? 3 : -3}>
             {chip}
           </PopPill>
         ))}
@@ -865,6 +877,24 @@ function EndScene() {
         <Body size={body} color={C.nlNegatief}>
           Gratis, zonder account, op jouwhockeystick.nl
         </Body>
+      </Rise>
+      {/* Follow call: once, under the button (docs/video.md §7a). */}
+      <Rise delay={b(4)}>
+        <div
+          style={{
+            alignSelf: 'flex-start',
+            display: 'inline-block',
+            border: `4px solid ${C.wit}`,
+            borderRadius: 999,
+            padding: `${small * 0.35}px ${small * 0.9}px`,
+            fontFamily: FONT_BODY,
+            fontWeight: 600,
+            fontSize: small * 1.1,
+            color: C.wit,
+          }}
+        >
+          + Volg voor meer stick-tips
+        </div>
       </Rise>
       <div
         style={{

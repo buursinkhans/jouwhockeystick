@@ -1107,3 +1107,23 @@ Bewust níet het woord "onafhankelijk", omdat de site partnerlinks heeft. "Geen 
 ## 2026-10-22 — Catalogus-verrijker: hulpbestand van passa:import
 
 De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm run passa:import` gedraaid, en dat schrijft zonder pad een rapport naar `passa-import.md` in de hoofdmap. De veiligheidscheck "alleen src/catalog/" weigerde daarom. De workflow verwijdert dat bestand nu vóór de check, en `.gitignore` sluit het uit.
+
+## 2026-10-22 — Shorts: hook op het eerste beeld, drie per week, lijstjes en algemene hockey
+
+**Aanleiding (cijfers YouTube Analytics via vidIQ, 17–22 oktober):** de Short over de lengte had 138 weergaven, maar maar 16 kijkers bleven langer dan een paar seconden (YouTube vergelijkt: begin ±55% van vergelijkbare Shorts). Wie bleef, keek gemiddeld 60%, en het einde scoorde beter dan vergelijkbare Shorts. 131 van de 147 weergaven kwamen uit de Shorts-feed; de lange video's kregen er samen 9. Kleine aantallen: een signaal, geen bewijs.
+
+**Besluit eigenaar:** inzetten op betere hooks, de frequentie "wat opvoeren, niet overdreven", ook lijstjes en algemene hockey, en vaker oproepen om te volgen.
+
+**Wat:**
+- **Hook vanaf frame 1:** de Social-studio toont de kop van de eerste scène direct en volledig (met een korte punch), in plaats van woord voor woord. Kortere opening (4–7 beats). De Remotion-video over de lengte kreeg hetzelfde, met de kop "Is de stick van je kind te lang?".
+- **Ritme:** drie Shorts per week (ma lijstje, wo kennis, vr algemene hockey of kennis). Alleen woensdag ook een lange YouTube-video. Doel 13–20 seconden.
+- **Hooktypes** in het veld `hook` (vraag, fout, getal, mythe, vergelijking, resultaat), afwisselend, zodat we per type kunnen meten.
+- **Lijstjes** in een nieuwe scène `item`. Sticklijstjes noemen modellen (keuze eigenaar), maar zonder "beste", ranking, prijs of oordeel; alleen vaste specificaties uit de catalogus, minstens twee merken. Dit is een bewuste uitzondering op de regel "geen modelnamen als aanbeveling" in `docs/video.md` §3. De regel "geen beste-stickclaims" blijft staan.
+- **Algemene hockey** mag, hooguit 1 op de 3 video's, met FIH als bron voor spelregels en zonder personen.
+- **Volg-oproep** één keer, in de slot-scène onder de knop naar de stickwijzer ("Volg voor 3 stick-tips per week"), plus dezelfde zin in de beschrijving van de Short.
+- **Gerelateerde video:** elke Short linkt in YouTube Studio naar de nieuwste YouTube-video.
+- Regels: `docs/video.md` §7 en §7a. De Social-planner (geplande taak) is bijgewerkt.
+
+**Bewust niet:** een volg-oproep aan het begin of halverwege (kost kijkers op het moment dat ze beslissen), meer dan drie Shorts per week vóór de evaluatie, en trending audio (we houden onze eigen muziek; op de versie zonder muziek mag de eigenaar zelf een nummer uit de bibliotheek van het platform kiezen).
+
+**Evaluatie:** eind november, samen met de video-pilot: per hooktype en per soort het aandeel kijkers dat blijft, plus sitebezoek met `utm_source=youtube`.
