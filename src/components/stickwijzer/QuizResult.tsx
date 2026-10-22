@@ -79,7 +79,7 @@ export function QuizResult({
   // Since 2026-10-22 the result starts with the sticks (and the size in one
   // line), so the shop buttons come first; the explanation moved down.
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" data-advice-result>
       {hasResults && (
         <section aria-labelledby="results-heading">
           <h2

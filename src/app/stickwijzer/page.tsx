@@ -18,16 +18,19 @@ export const metadata = pageMetadata({
 
 export default function StickwijzerPage() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+    // Once the result shows (QuizResult sets data-advice-result), the intro
+    // about answering questions is hidden with CSS only, so it stays in the
+    // server-rendered HTML for search engines (2026-10-22).
+    <div className="group/stickwijzer mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold">Stickwijzer</h1>
-      <p className="mt-2 text-inkt/80">
+      <p className="mt-2 text-inkt/80 group-has-[[data-advice-result]]/stickwijzer:hidden">
         Beantwoord een paar vragen over lengte, ervaring, speelwensen en budget.
         Je krijgt maximaal drie sticks met per stick de redenen, de afweging en
         de bronnen. Het advies is onafhankelijk: winkel en vergoeding tellen
-        niet mee. Het is een hulpmiddel, geen garantie, en positie is
-        nooit de beslissende factor.
+        niet mee. Het is een hulpmiddel, geen garantie, en positie is nooit de
+        beslissende factor.
       </p>
-      <p className="mt-2 text-sm text-lijngrijs">
+      <p className="mt-2 text-sm text-lijngrijs group-has-[[data-advice-result]]/stickwijzer:hidden">
         Je hebt geen account nodig. We vragen geen naam, e-mailadres of
         geboortedatum.{' '}
         <Link
