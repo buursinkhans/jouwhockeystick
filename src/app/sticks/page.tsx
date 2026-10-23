@@ -1,13 +1,20 @@
-import { pageMetadata } from '@/lib/site';
+import { absoluteUrl, pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllBrands, getFieldProducts } from '@/catalog';
+import { pickVaried } from '@/catalog/picks';
+import { isJuniorStick } from '@/catalog/similar';
 import type { Brand } from '@/catalog/types';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
+import { TrackedBlock } from '@/components/catalog/TrackedBlock';
+import { InlineText } from '@/components/article/InlineText';
+import { plainText } from '@/components/article/inlineMarkup';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { VELD, veldFaq } from '@/content/veld';
+import { jsonLdHtml } from '@/lib/jsonLd';
 
 export const metadata = pageMetadata({
-  title: 'Veldhockeysticks',
-  description:
-    'Bekijk alle veldhockeysticks in de catalogus van jouwhockeystick.nl, met richtprijzen en sterke/aandachtspunten per stick.',
+  title: VELD.seoTitle,
+  description: VELD.metaDescription,
   path: '/sticks',
 });
 
@@ -24,25 +31,121 @@ export default async function SticksPage({
   searchParams: Promise<{ brand?: string }>;
 }) {
   const { brand } = await searchParams;
-  const brands = getAllBrands(new Date(), 'veld', { includeImported: true });
+  const now = new Date();
+  const brands = getAllBrands(now, 'veld', { includeImported: true });
   const activeBrand = isValidBrand(brand, brands) ? brand : undefined;
-  const products = getFieldProducts(new Date(), { includeImported: true }).filter(
+  const allProducts = getFieldProducts(now, { includeImported: true });
+  const products = allProducts.filter(
     (p) => !activeBrand || p.brand === activeBrand,
   );
+  // The landing blocks only on the unfiltered page; with a brand chosen the
+  // visitor wants the list (the canonical stays /sticks either way).
+  const showLanding = !activeBrand;
+  // Hand-checked sticks only for the picks: their specs come with sources.
+  const curated = getFieldProducts(now);
+  const faq = veldFaq(
+    allProducts,
+    curated.filter((p) => !isJuniorStick(p)),
+  );
+
+  // Describes only the questions and answers visible on this page.
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    url: absoluteUrl('/sticks'),
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: plainText(item.answer) },
+    })),
+  };
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-bold">Veldhockeysticks</h1>
+      {showLanding && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqJsonLd) }}
+        />
+      )}
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Veldhockeysticks', href: '/sticks' },
+        ]}
+      />
+      <h1 className="text-3xl font-extrabold sm:text-4xl">{VELD.title}</h1>
+      <p className="mt-2 text-sm text-lijngrijs">
+        Door {VELD.author} · gepubliceerd op{' '}
+        <time dateTime={VELD.publishedAt}>{VELD.publishedAt}</time> · bijgewerkt
+        op <time dateTime={VELD.updatedAt}>{VELD.updatedAt}</time>
+      </p>
+      <TrackedBlock page="sticks" block="intro">
+        <p className="mt-5 max-w-3xl text-lg text-inkt/80">
+          <InlineText text={VELD.intro} />
+        </p>
+      </TrackedBlock>
+
+      {showLanding && (
+        <section className="mt-10" aria-labelledby="veld-levels-heading">
+          <h2 id="veld-levels-heading" className="text-2xl font-bold">
+            {VELD.levels.heading}
+          </h2>
+          <p className="mt-2 max-w-3xl text-inkt/80">{VELD.levels.intro}</p>
+          <TrackedBlock page="sticks" block="levels">
+            {VELD.levels.groups.map((group) => {
+              const picks = pickVaried(
+                curated.filter((p) => p.experienceLevel.value === group.level),
+              );
+              return picks.length ? (
+                <div key={group.level} className="mt-6">
+                  <h3 className="text-lg font-semibold">{group.heading}</h3>
+                  <div className="mt-3">
+                    <ProductGrid products={picks} />
+                  </div>
+                </div>
+              ) : null;
+            })}
+            <p className="mt-6">
+              <a
+                href="#alle-veldsticks"
+                className="font-semibold text-veld hover:underline"
+              >
+                {VELD.levels.allLink} ({allProducts.length}) ↓
+              </a>
+            </p>
+          </TrackedBlock>
+        </section>
+      )}
+
+      {showLanding && (
+        <section className="mt-12 max-w-3xl" aria-labelledby="veld-faq-heading">
+          <h2 id="veld-faq-heading" className="text-2xl font-bold">
+            {VELD.faq.heading}
+          </h2>
+          <TrackedBlock page="sticks" block="faq">
+            <div className="mt-5 space-y-6">
+              {faq.map((item) => (
+                <div key={item.question}>
+                  <h3 className="text-lg font-bold">{item.question}</h3>
+                  <p className="mt-2 text-inkt/80">
+                    <InlineText text={item.answer} />
+                  </p>
+                </div>
+              ))}
+            </div>
+          </TrackedBlock>
+        </section>
+      )}
+
+      <h2
+        id="alle-veldsticks"
+        className="mt-12 scroll-mt-24 text-2xl font-bold"
+      >
+        Alle veldhockeysticks in onze catalogus
+      </h2>
       <p className="mt-2 max-w-2xl text-lijngrijs">
-        Twijfel je welke bij je past? Doorloop de{' '}
-        <Link
-          href="/stickwijzer"
-          className="font-semibold text-veld hover:underline"
-        >
-          stickwijzer
-        </Link>{' '}
-        voor een persoonlijk advies. Zoek je een stick voor de zaal? Bekijk dan
-        de{' '}
+        Filter op merk. Zoek je een stick voor de zaal? Bekijk dan de{' '}
         <Link
           href="/zaalsticks"
           className="font-semibold text-veld hover:underline"
@@ -80,10 +183,10 @@ export default async function SticksPage({
         ))}
       </div>
 
-      <h2 className="mt-8 text-xl font-bold">
+      <h3 className="mt-8 text-xl font-bold">
         {activeBrand ? `${activeBrand}-veldsticks` : 'Alle veldsticks'}{' '}
         <span className="font-normal text-lijngrijs">({products.length})</span>
-      </h2>
+      </h3>
       <div className="mt-4">
         <ProductGrid products={products} />
       </div>

@@ -1182,3 +1182,21 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 ## 2026-10-23 — "Onafhankelijk" minder vaak herhalen
 
 **Wat (besluit eigenaar):** het te vaak herhalen dat vergoeding geen rol speelt maakt het juist minder geloofwaardig. "Onafhankelijk advies" blijft bovenaan de homepage staan, en /methodiek legt het volledig uit. Weggehaald uit de intro van de stickwijzer, de footer en het blok "Zaalsticks per budget". De regel bij de winkelknoppen zegt nu alleen dat het partnerlinks zijn en dat we een vergoeding kunnen krijgen, met de link "Meer uitleg". Die vermelding blijft verplicht (CLAUDE.md, Commerce). Dit draait een deel van de wijziging van 2026-10-22 terug.
+
+## 2026-10-23 — /sticks als landingspagina voor "veldhockeystick(s)"
+
+**Aanleiding:** Search Console: /sticks had 143 vertoningen op een gemiddelde positie van 37, voor onder meer "veldhockeystick" en "veldhockeysticks". De pagina was alleen een lijst.
+
+**Wat:**
+- **Inhoud in `src/content/veld.ts`**, met dezelfde opzet als `zaal.ts`. H1 "Veldhockeysticks vergelijken"; `<title>` "Veldhockeysticks vergelijken: lengte, bow, carbon en niveau", met een eigen meta-omschrijving. De intro noemt "veldhockeystick" in de eerste 80 woorden en linkt naar de stickwijzer, de lengtetabel, low bow of mid bow, meer carbon, en /blog/hockeystick-kopen.
+- **Blok "Veldsticks per niveau"** (beginner, gevorderd, ervaren): 2–3 curated sticks per niveau, met dezelfde regels als "Zaalsticks per budget". Die regels staan nu op één plek, in `pickVaried` (`src/catalog/picks.ts`); `tierPicks` gebruikt die ook. Het niveau-veld bestaat voor elke stick, dus indelen op budget was niet nodig.
+- **Vijf veelgestelde vragen** (lengte, bow, carbon, prijs, het verschil met een zaalstick), met FAQPage-structured data uit dezelfde zichtbare tekst. Carbon en prijzen worden uit de catalogus berekend (`veldFaq`).
+- De merkfilter en de volledige lijst staan eronder. Met een merkfilter actief verdwijnen de nieuwe blokken, zodat je direct de gefilterde lijst ziet. De canonical blijft /sticks.
+- **Nieuw event `catalog_block_click`** (page, block, target) voor kliks in de intro, de niveaus en de FAQ. Een klik op een winkelknop telt als target "winkel"; de partnerlink zelf zit niet in het event, want die klik telt al als `retailer_click`.
+- De linktest controleert nu ook de pagina-teksten van /sticks en /zaalsticks.
+
+**Bewust niet:**
+- Geen "kiezen" of "kopen" als hoofdterm (die zijn van /blog/hockeystick-kopen, besluit 2026-10-08).
+- Geen nieuwe URL, geen wijziging aan de blog, geen "beste"-claims of ranking.
+- Geen FAQPage op /zaalsticks: de brief nam aan dat die er al was, maar dat was niet zo. Dat is een aparte keuze.
+- `catalog_block_click` staat nog niet als tabel in het conversierapport.

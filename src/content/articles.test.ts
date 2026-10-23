@@ -5,6 +5,8 @@ import { getArticlesIncludingScheduled } from './index';
 import { getBlogPostsIncludingScheduled } from './blog';
 import { todayInSiteTimeZone } from './schedule';
 import { articleSchema } from './types';
+import { VELD, veldFaq } from './veld';
+import { ZAAL } from './zaal';
 
 // Scheduled content is checked too, before it goes live.
 const ALL = [
@@ -39,6 +41,24 @@ function internalPathExists(path: string, liveFrom: string): boolean {
     return getAllProducts().some((p) => p.slug === slug);
   return false;
 }
+
+describe('copy of the catalog landing pages', () => {
+  // /sticks and /zaalsticks render the same inline links as articles.
+  const pages = [
+    {
+      page: '/sticks',
+      text: JSON.stringify([VELD, veldFaq(getAllProducts(), getAllProducts())]),
+    },
+    { page: '/zaalsticks', text: JSON.stringify(ZAAL) },
+  ];
+
+  it.each(pages)('$page only links to pages that exist', ({ text }) => {
+    const today = todayInSiteTimeZone();
+    for (const href of linksIn(text).filter((h) => h.startsWith('/'))) {
+      expect(internalPathExists(href, today), href).toBe(true);
+    }
+  });
+});
 
 describe('articles and blog posts', () => {
   it.each(ALL)(

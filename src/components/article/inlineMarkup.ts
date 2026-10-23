@@ -34,3 +34,10 @@ export function parseInline(source: string): InlineNode[] {
   }
   return nodes;
 }
+
+/** The visible text of inline markup, e.g. for structured data. */
+export function plainText(source: string): string {
+  return parseInline(source)
+    .map((node) => node.text)
+    .join('');
+}
