@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getIndoorProducts } from '@/catalog';
+import { INDOOR_TIERS, tierPicks } from '@/catalog/indoorTiers';
 import type { Product } from '@/catalog/types';
 import { ZAAL, ZAAL_SOURCES } from '@/content/zaal';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
@@ -77,7 +78,34 @@ export default function ZaalsticksPage() {
       </p>
       <p className="mt-5 max-w-3xl text-lg text-inkt/80">{ZAAL.intro}</p>
 
-      <section className="mt-10" aria-labelledby="zaal-selector-heading">
+      <section className="mt-10" aria-labelledby="zaal-picks-heading">
+        <h2 id="zaal-picks-heading" className="text-2xl font-bold">
+          {ZAAL.picks.heading}
+        </h2>
+        <p className="mt-2 max-w-3xl text-inkt/80">{ZAAL.picks.intro}</p>
+        {INDOOR_TIERS.map((tier) => {
+          // Hand-checked sticks only: their specs come with sources.
+          const picks = tierPicks(products, tier);
+          return picks.length ? (
+            <div key={tier.id} className="mt-6">
+              <h3 className="text-lg font-semibold">{tier.heading}</h3>
+              <div className="mt-3">
+                <ProductGrid products={picks} />
+              </div>
+            </div>
+          ) : null;
+        })}
+        <p className="mt-6">
+          <a
+            href="#alle-zaalsticks"
+            className="font-semibold text-veld hover:underline"
+          >
+            {ZAAL.picks.allLink} ({allProducts.length}) ↓
+          </a>
+        </p>
+      </section>
+
+      <section className="mt-12" aria-labelledby="zaal-selector-heading">
         <h2 id="zaal-selector-heading" className="text-2xl font-bold">
           {ZAAL.selector.heading}
         </h2>
@@ -143,7 +171,9 @@ export default function ZaalsticksPage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-2xl font-bold">{ZAAL.catalogHeading}</h2>
+        <h2 id="alle-zaalsticks" className="scroll-mt-24 text-2xl font-bold">
+          {ZAAL.catalogHeading}
+        </h2>
         <p className="mt-3 flex max-w-3xl items-start gap-2 rounded-xl bg-white p-4 text-sm text-inkt/80 ring-1 ring-rand">
           <InfoIcon size={18} className="mt-0.5 shrink-0 text-veld" />
           {ZAAL.stickwijzerNote}

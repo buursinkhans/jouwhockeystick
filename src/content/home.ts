@@ -19,7 +19,7 @@ export function isIndoorSeason(date: Date = new Date()): boolean {
 
 export const SEASON_BAND = {
   eyebrow: 'Zaalseizoen',
-  heading: 'Het zaalseizoen komt eraan',
+  heading: 'Zaalhockeystick kiezen voor het zaalseizoen',
   body: 'Een zaalhockeystick is gemaakt voor pushen en balcontrole in een kleine ruimte, en de stickwijzer adviseert alleen veldsticks. Kies daarom in 3 vragen een zaalstick in de juiste maat.',
   cta: { label: 'Zaalhockeystick kiezen', href: '/zaalsticks' },
   readMore: {

@@ -117,6 +117,12 @@ export const ZAAL = {
         `In onze catalogus staan ${count} zaalsticks met een richtprijs van ${min} tot ${max}. Waar het verschil in zit en wat je voor je budget kunt verwachten, lees je in [wat krijg je voor een klein of ruim budget?](/kennis/zaalstick-budget).`,
     },
   },
+  picks: {
+    heading: 'Zaalsticks per budget',
+    intro:
+      'Een eerste keuze per prijsgroep, één stick per merk: eerst de zaalsticks waarvan we de meeste gegevens van het merk zelf hebben, daarna de laagste prijs, en steeds minstens één voor volwassenen. Er speelt geen populariteit of vergoeding mee. Alle zaalsticks staan verderop.',
+    allLink: 'Bekijk alle zaalsticks',
+  },
   catalogHeading: 'Alle zaalsticks in onze catalogus',
   stickwijzerNote:
     'De stickwijzer geeft op dit moment alleen advies voor veldsticks. Voor zaalsticks vergelijk je hieronder zelf, van laag naar hoog in prijs. Bij elke stick staat of een gegeven van het merk komt of van een winkel-listing op bol.com.',

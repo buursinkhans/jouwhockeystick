@@ -1169,3 +1169,12 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Besluit eigenaar:** de laatste klik ligt bij de eigenaar, op GitHub. "Klaarzetten voor YouTube" in de studio maakt een goedkeurings-issue (label `video-klaar`); het label `publiceren`, gezet door de eigenaar van de repo, start de workflow. Hetzelfde patroon als PR's mergen.
 
 **Wat verandert:** de workflow start op dat label (met controle op de afzender), leest het script uit het issue, zet het resultaat op hetzelfde issue en sluit het bij succes. Een tweede label op een al ingepland issue doet niets. De taak start geen workflows meer; hij maakt issues en schrijft resultaten terug. De studio toont "Publiceren op GitHub →" en "Status ophalen".
+
+## 2026-10-23 — Zaalhockeystick: kop op de homepage en keuze per budget op /zaalsticks
+
+**Wat:**
+- De kop van het zaalblok op de homepage (oktober t/m februari) is nu "Zaalhockeystick kiezen voor het zaalseizoen" in plaats van "Het zaalseizoen komt eraan". "Zaalhockeystick" is de zoekterm met de meeste vertoningen.
+- Bovenaan /zaalsticks staat een blok "Zaalsticks per budget" met per prijsgroep (onder €50, €50–100, vanaf €100) twee of drie sticks. Gekozen uit de curated catalogus: niet "niet beschikbaar", één per merk, eerst de meeste gegevens van het merk zelf, dan de laagste prijs, en minstens één volwassen stick als de groep die heeft. Populariteit en vergoeding spelen geen rol. Daaronder een link naar de volledige lijst.
+- De prijsgroepen staan op één plek (`src/catalog/indoorTiers.ts`), en het artikel "Zaalstick: wat krijg je voor een klein of ruim budget?" gebruikt ze ook.
+
+**Reden:** advies na de Search Console-cijfers. Bezoekers zagen eerst een lijst van 164 sticks; nu zien ze eerst een korte keuze.

@@ -1,4 +1,5 @@
 import { getIndoorProducts } from '@/catalog';
+import { INDOOR_TIERS, inTier } from '@/catalog/indoorTiers';
 import { BOW_LABELS } from '@/catalog/labels';
 import type { Product } from '@/catalog/types';
 import type { Article } from '../types';
@@ -14,23 +15,12 @@ type Tier = {
 const indoorSticks = getIndoorProducts().sort(byPrice);
 const price = (product: Product) => product.priceIndicativeEur.value;
 
-const tiers: Tier[] = [
-  {
-    heading: 'Onder €50',
-    label: 'onder €50',
-    products: indoorSticks.filter((p) => price(p) < 50),
-  },
-  {
-    heading: 'Van €50 tot €100',
-    label: 'tussen €50 en €100',
-    products: indoorSticks.filter((p) => price(p) >= 50 && price(p) < 100),
-  },
-  {
-    heading: 'Vanaf €100',
-    label: 'vanaf €100',
-    products: indoorSticks.filter((p) => price(p) >= 100),
-  },
-];
+// Same price groups as the picks on /zaalsticks (src/catalog/indoorTiers.ts).
+const tiers: Tier[] = INDOOR_TIERS.map((tier) => ({
+  heading: tier.heading,
+  label: tier.label,
+  products: indoorSticks.filter((p) => inTier(p, tier)),
+}));
 
 const inch = (value: number) => String(value).replace('.', ',');
 
