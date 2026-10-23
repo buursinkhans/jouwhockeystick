@@ -1216,3 +1216,7 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Gevolg:** wordt een geïmporteerde stick met de hand verrijkt (`feedImport` verdwijnt), dan verhuist hij vanzelf naar /sticks en komt hij in de sitemap. Oude links blijven werken via de doorverwijzing.
 
 **Bewust niet:** geen nofollow op de links, geen wijziging aan de import, de stickwijzer of de Netlify-instellingen.
+
+**Risico en controle (na review):** omdat robots.txt /aanbod/ afsluit, kan Google de `noindex` op die pagina's niet meer lezen. URL's waar veel naar gelinkt wordt, kunnen daardoor toch in de index komen als "Geïndexeerd, maar geblokkeerd door robots.txt", zonder inhoud. Dat risico nemen we bewust: zonder blokkade moet Google elke pagina ophalen om de noindex te zien, en dat was juist het probleem. Oude `/sticks/<geïmporteerd>`-URL's die Google al kent, verwijzen door naar /aanbod en vallen daarna uit de index.
+- **Controle:** kijk over 3 tot 4 weken in Search Console → Pagina's. "Gevonden – momenteel niet geïndexeerd" hoort te dalen. Verschijnen er /aanbod-URL's onder "Geïndexeerd, maar geblokkeerd door robots.txt", haal dan de `Disallow` weg en laat alleen de noindex staan.
+- **Search Console-rapport:** `src/seo/searchConsole.ts` kijkt alleen naar /sticks/-pagina's. Dat blijft zo: /aanbod wordt niet geïndexeerd en hoort daar niet in te staan. Het conversierapport telt /aanbod wel mee, omdat bezoekers die pagina's wel zien.
