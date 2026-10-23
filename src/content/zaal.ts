@@ -120,7 +120,7 @@ export const ZAAL = {
   picks: {
     heading: 'Zaalsticks per budget',
     intro:
-      'Een eerste keuze per prijsgroep, één stick per merk: eerst de zaalsticks waarvan we de meeste gegevens van het merk zelf hebben, daarna de laagste prijs, en steeds minstens één voor volwassenen. Er speelt geen populariteit of vergoeding mee. Alle zaalsticks staan verderop.',
+      'Per prijsgroep een paar zaalsticks om mee te beginnen, van verschillende merken en steeds met minstens één voor volwassenen. Alle zaalsticks staan verderop.',
     allLink: 'Bekijk alle zaalsticks',
   },
   catalogHeading: 'Alle zaalsticks in onze catalogus',
