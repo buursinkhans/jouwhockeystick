@@ -79,7 +79,7 @@ export const princessPremium4k10StarSg9Lb: Product = {
     'Het topmodel van Princess, door het merk zelf op "Expert"-niveau gepositioneerd, met een volledig carbon (4K) opbouw en een expliciete low-bow.',
   strengths: {
     value: [
-      'Door Princess zelf op "Expert"-niveau gepositioneerd, met volledig carbon (4K): een stijve, directe stick',
+      'Door Princess zelf op "Expert"-niveau gepositioneerd, met volledig carbon (4K)',
       'Exacte curvegegevens vermeld (24mm curve op 200mm) — precies te vergelijken',
     ],
     source: 'editorial-estimate',

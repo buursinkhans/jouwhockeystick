@@ -70,7 +70,7 @@ export const graysJb10Composite: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   summary:
-    'Het topmodel in de Grays Jumbow-lijn, door Grays zelf gepositioneerd als internationaal wedstrijdniveau — kan een logische richting zijn voor ervaren spelers die een stijve low-bow-stick zoeken.',
+    'Het topmodel in de Grays Jumbow-lijn, door Grays zelf gepositioneerd als internationaal wedstrijdniveau — kan een logische richting zijn voor ervaren spelers.',
   strengths: {
     value: [
       'Door Grays zelf omschreven als vertrouwd op internationaal niveau',

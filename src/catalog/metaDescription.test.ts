@@ -5,7 +5,7 @@ import { productMetaDescription } from './metaDescription';
 
 /** Absolute or promotional words (CLAUDE.md: no absolute performance claims). */
 const CLAIM_WORDS =
-  /\b(maximale?|dominan\w*|beste|perfect\w*|ultie\w*|gegarandeerd|garantie|ideaal|ideale|ideal|superieur\w*|onverslaanbaar|ongeëvenaard)\b/i;
+  /\b(maximale?|dominan\w*|beste|perfect\w*|ultie\w*|gegarandeerd|garantie|ideaal|ideale|ideal|superieur\w*|onverslaanbaar|ongeëvenaard)\b|\bzo \w+ mogelijke?\b/i;
 
 const all = getAllProducts(new Date(), { includeImported: true });
 
@@ -57,6 +57,23 @@ describe('carbon wording', () => {
     const scoop = getProductBySlug('scoop-wdn-junior-indoor')!;
     expect(productMetaDescription(scoop)).toMatch(
       /^Zaalstick van Scoop met mid bow, zonder carbon, voor beginnende spelers\./,
+    );
+  });
+});
+
+describe('estimates', () => {
+  it('leaves out an estimated bow and says "kan passen bij" for an estimated level', () => {
+    const jb10 = getProductBySlug('grays-jb10-composite')!;
+    const text = productMetaDescription({
+      ...jb10,
+      bowProfile: { ...jb10.bowProfile!, source: 'editorial-estimate' },
+      experienceLevel: {
+        ...jb10.experienceLevel,
+        source: 'editorial-estimate',
+      },
+    });
+    expect(text).toMatch(
+      /^Veldstick van Grays met 95% carbon, kan passen bij ervaren spelers\./,
     );
   });
 });

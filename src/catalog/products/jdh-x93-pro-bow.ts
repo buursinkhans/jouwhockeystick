@@ -73,7 +73,7 @@ export const jdhX93ProBow: Product = {
     'Een hoog-carbon stick met medium curve ("Pro Bow"), gericht op snelle bewegingen en precieze passes — kan een logische richting zijn voor ervaren spelers die een pro-georiënteerd model zoeken.',
   strengths: {
     value: [
-      'Zeer hoog carbonpercentage (95%): een stijve, directe stick',
+      'Zeer hoog carbonpercentage (95%)',
       'Breed lengteaanbod tot 38.5"',
     ],
     source: 'editorial-estimate',

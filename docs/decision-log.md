@@ -1227,16 +1227,17 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 
 **Wat:**
 - **`productMetaDescription`** (`src/catalog/metaDescription.ts`) bouwt de description uit discipline, merk, bow, carbon, niveau en lengtes, gevolgd door "Bekijk specs, passende lengte en vergelijkbare sticks." Bijvoorbeeld: "Veldstick van Grays met low bow en 95% carbon, voor ervaren spelers. In 36,5, 37,5 en 38,5 inch. Bekijk specs, …".
-  - Carbon staat er alleen in als het van het merk of een winkel-listing komt (niet bij een eigen inschatting); bij 0% staat er "zonder carbon".
+  - Bow en carbon staan er alleen in als ze van het merk of een winkel-listing komen; een eigen inschatting staat (met label) op de pagina, maar niet als feit in de description. Bij 0% carbon staat er "zonder carbon".
+  - Is het niveau een eigen inschatting, dan staat er "kan passen bij …" in plaats van "voor …" (22 curated sticks).
   - Een ontbrekend gegeven wordt weggelaten, nooit geschat.
   - Past de tekst niet binnen 158 tekens (`MAX_DESCRIPTION_LENGTH`, nu geëxporteerd uit `src/lib/site.ts`), dan valt eerst de lengteregel weg en daarna de slotzin.
   - Geldt ook voor geïmporteerde sticks (noindex). De title blijft "[naam]: specs en advies".
-- **Herschreven (9 teksten in 8 sticks):**
-  - Eigen wervende woorden: "maximale dominantie", "maximale power en respons" en "D-dominantie" in Grays JB 10, JB 12+, Brabo Elite X One LB, JDH X93 Pro Bow en Princess Premium 4K 10 Star.
+- **Herschreven (10 teksten in 8 sticks):**
+  - Eigen wervende woorden: "maximale dominantie", "maximale power en respons", "een zo krachtig mogelijke stick" en "D-dominantie" in Grays JB 10, JB 12+, Brabo Elite X One LB, JDH X93 Pro Bow en Princess Premium 4K 10 Star. Die zinnen stoppen nu bij het feit (bijv. "Volledig carbon (100%)"), zonder nieuwe eigenschap zoals "stijf" die geen bron noemt (opmerking van de Review-agent).
   - Citaten met "ideal/ideale/ideaal" in Grays PB9i, Scoop WDN Junior en Indian Maharadja Arctic Wood: de inhoud van het citaat en de bron blijven, het wervende woord verdwijnt.
   - Citaten in `sourceLabel` (het bewijs bij een gegeven) blijven letterlijk staan.
 - **Tests:**
-  - Voor alle 545+ sticks: de description past binnen de maximale lengte, bevat geen "undefined", "null" of "NaN" en geen claimwoorden.
+  - Voor alle 545+ sticks: de description past binnen de maximale lengte, bevat geen "undefined", "null" of "NaN" en geen claimwoorden (waaronder "zo … mogelijk").
   - De eigen teksten van de curated sticks (summary, sterke punten, aandachtspunten) bevatten geen claimwoorden.
 
 **Bewust niet:** geen wijziging aan titels, URL's, prijzen of structured data; geen offers, rating of review.

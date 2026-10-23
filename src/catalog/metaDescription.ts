@@ -5,10 +5,11 @@ import type { ExperienceLevel, Product } from './types';
 
 /**
  * The meta description of a stick page, built from catalog data only
- * (decision log 2026-10-23): discipline, brand, bow, carbon (only with a
- * source), level and lengths, then a fixed closing sentence. It no longer
- * uses product.summary, which can contain brand marketing. A missing value is
- * left out, never estimated. Parts are dropped from the end until it fits.
+ * (decision log 2026-10-23): discipline, brand, bow and carbon (only from the
+ * brand or a shop), level (nuanced when estimated) and lengths, then a fixed
+ * closing sentence. It no longer uses product.summary, which can contain
+ * brand marketing. A missing value is left out, never estimated. Parts are
+ * dropped from the end until it fits.
  */
 const CLOSING = 'Bekijk specs, passende lengte en vergelijkbare sticks.';
 
@@ -35,10 +36,14 @@ function lengthsText(lengths: readonly number[]): string | null {
 
 export function productMetaDescription(product: Product): string {
   const kind = getDiscipline(product) === 'zaal' ? 'Zaalstick' : 'Veldstick';
-  const bow = product.bowProfile
-    ? (BOW_LABELS[product.bowProfile.value].split(' / ')[0] ?? '').toLowerCase()
-    : null;
-  // Only a carbon percentage that comes from the brand or a shop listing.
+  // Bow and carbon only when they come from the brand or a shop listing: our
+  // own estimate is shown (and labelled) on the page, not stated as a fact here.
+  const bow =
+    product.bowProfile && product.bowProfile.source !== 'editorial-estimate'
+      ? (
+          BOW_LABELS[product.bowProfile.value].split(' / ')[0] ?? ''
+        ).toLowerCase()
+      : null;
   const carbon =
     product.carbonPercentage &&
     product.carbonPercentage.source !== 'editorial-estimate'
@@ -48,9 +53,13 @@ export function productMetaDescription(product: Product): string {
   if (carbon === 0) detail += ', zonder carbon';
   else if (carbon !== null)
     detail += `${bow ? ' en' : ' met'} ${carbon}% carbon`;
-  const first = `${kind} van ${product.brand}${detail}, voor ${
-    LEVEL_AUDIENCE[product.experienceLevel.value]
-  }.`;
+  // The level is always known, but often our estimate: then "kan passen bij".
+  const audience = LEVEL_AUDIENCE[product.experienceLevel.value];
+  const level =
+    product.experienceLevel.source === 'editorial-estimate'
+      ? `kan passen bij ${audience}`
+      : `voor ${audience}`;
+  const first = `${kind} van ${product.brand}${detail}, ${level}.`;
   const parts = [
     first,
     lengthsText(product.lengthsInches.value),
