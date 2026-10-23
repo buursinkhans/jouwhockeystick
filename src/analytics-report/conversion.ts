@@ -76,11 +76,22 @@ export const THRESHOLDS = {
 
 const LIST_LIMIT = 10;
 
+/**
+ * Short utm_source values the apps add themselves (Instagram tags its bio
+ * link with `utm_source=ig`), mapped to the full network name.
+ */
+const UTM_SOURCE_ALIASES: Record<string, string> = {
+  ig: 'instagram',
+  fb: 'facebook',
+  yt: 'youtube',
+};
+
 /** Groups a referring domain (or "utm:<source>") into a channel a person recognises. */
 export function sourceLabel(key: string): string {
   const k = key.toLowerCase();
   if (k.startsWith('utm:')) {
-    const source = k.slice(4);
+    const raw = k.slice(4);
+    const source = UTM_SOURCE_ALIASES[raw] ?? raw;
     if (/tiktok|instagram|youtube|facebook/.test(source)) return `Social: ${source}`;
     return `Campagne: ${source}`;
   }

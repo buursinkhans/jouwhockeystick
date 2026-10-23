@@ -155,6 +155,18 @@ describe('groupSources', () => {
     expect(grouped).toContainEqual({ key: 'AI-assistent', now: 1, before: 0 });
     expect(grouped).toContainEqual({ key: 'Andere site: hockey.nl', now: 1, before: 0 });
   });
+
+  it('treats the short sources the apps add themselves as social', () => {
+    const grouped = groupSources([
+      c('utm:ig', 3),
+      c('l.instagram.com', 2),
+      c('utm:fb', 1),
+      c('utm:yt', 1),
+    ]);
+    expect(grouped).toContainEqual({ key: 'Social: instagram', now: 5, before: 0 });
+    expect(grouped).toContainEqual({ key: 'Social: facebook', now: 1, before: 0 });
+    expect(grouped).toContainEqual({ key: 'Social: youtube', now: 1, before: 0 });
+  });
 });
 
 describe('formatReport', () => {
