@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { QuestionDef } from '@/content/stickwijzer/questions';
 import { InfoIcon } from '@/components/ui/icons';
 import type { IconComponent } from './stickwijzerIcons';
@@ -53,6 +53,8 @@ export function QuestionField({
   selectedAction?: ReactNode;
 }) {
   const { input } = def;
+  /** Set when a visitor taps an extra option on a full multi-choice question. */
+  const [overMax, setOverMax] = useState(false);
   const errorId = `${def.id}-error`;
   const describedBy = [
     def.helpText ? `${def.id}-help` : null,
@@ -148,6 +150,11 @@ export function QuestionField({
         <p className="mt-1 text-sm text-lijngrijs">
           Kies er maximaal {input.max}.
         </p>
+        {/*
+          Options stay tappable when the maximum is reached: disabled
+          options did nothing on tap and drew rage clicks (PostHog,
+          October 2026). An extra tap now explains what to do instead.
+        */}
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           {input.options.map((option) => {
             const checked = selected.includes(option.value);
@@ -157,20 +164,29 @@ export function QuestionField({
                   type="checkbox"
                   value={option.value}
                   checked={checked}
-                  disabled={!checked && atMax}
-                  onChange={(event) =>
+                  onChange={(event) => {
+                    if (event.target.checked && atMax) {
+                      setOverMax(true);
+                      return;
+                    }
+                    setOverMax(false);
                     onChange(
                       event.target.checked
                         ? [...selected, option.value]
                         : selected.filter((item) => item !== option.value),
-                    )
-                  }
+                    );
+                  }}
                 />
                 {option.label}
               </label>
             );
           })}
         </div>
+        <p className="mt-2 text-sm font-medium text-inkt" role="status">
+          {overMax && atMax
+            ? `Je hebt er al ${input.max} gekozen. Haal er eerst één weg om een andere te kiezen.`
+            : ''}
+        </p>
         {error}
       </fieldset>
     );
