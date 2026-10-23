@@ -87,7 +87,7 @@ export const ZAAL = {
   selector: {
     heading: 'Snel een eerste selectie',
     intro:
-      'Drie vragen: voor wie, bij een kind de lengte, en het budget. Je ziet meteen welke zaalsticks in de juiste maat en binnen je budget vallen.',
+      'Kies voor wie en je budget, en je ziet meteen de zaalsticks in de juiste maat.',
   },
   /** Short answers to the questions people search for; details live in the linked articles. */
   faq: {

@@ -78,6 +78,16 @@ export default function ZaalsticksPage() {
       </p>
       <p className="mt-5 max-w-3xl text-lg text-inkt/80">{ZAAL.intro}</p>
 
+      <section className="mt-6" aria-labelledby="zaal-selector-heading">
+        <h2 id="zaal-selector-heading" className="text-xl font-bold">
+          {ZAAL.selector.heading}
+        </h2>
+        <p className="mt-1 text-sm text-inkt/80">{ZAAL.selector.intro}</p>
+        <div className="mt-3">
+          <IndoorSelector products={products} />
+        </div>
+      </section>
+
       <section className="mt-10" aria-labelledby="zaal-picks-heading">
         <h2 id="zaal-picks-heading" className="text-2xl font-bold">
           {ZAAL.picks.heading}
@@ -103,16 +113,6 @@ export default function ZaalsticksPage() {
             {ZAAL.picks.allLink} ({allProducts.length}) ↓
           </a>
         </p>
-      </section>
-
-      <section className="mt-12" aria-labelledby="zaal-selector-heading">
-        <h2 id="zaal-selector-heading" className="text-2xl font-bold">
-          {ZAAL.selector.heading}
-        </h2>
-        <p className="mt-2 max-w-3xl text-inkt/80">{ZAAL.selector.intro}</p>
-        <div className="mt-5">
-          <IndoorSelector products={products} />
-        </div>
       </section>
 
       <section className="mt-12">

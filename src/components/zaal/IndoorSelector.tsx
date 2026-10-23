@@ -20,7 +20,7 @@ import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
 import { trackEvent } from '@/lib/analytics/track';
 
 const OPTION_CLASSES =
-  'flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border border-lijngrijs bg-white px-4 py-2.5 text-sm font-semibold has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-veld';
+  'flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-lijngrijs bg-white px-3.5 py-1.5 text-sm font-semibold has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-veld';
 
 const PLAYERS: Array<{ value: IndoorPlayer; label: string }> = [
   { value: 'adult', label: 'Volwassene' },
@@ -121,6 +121,7 @@ export function IndoorSelector({ products }: { products: Product[] }) {
   const [submitted, setSubmitted] = useState<{ budget: IndoorBudget } | null>(
     null,
   );
+  const [missing, setMissing] = useState<string | null>(null);
 
   const heightCm = height === '' ? undefined : Number(height);
   const heightValid =
@@ -133,8 +134,17 @@ export function IndoorSelector({ products }: { products: Product[] }) {
 
   function showSelection() {
     if (!complete || player === null || budget === null) {
+      // No disabled button that does nothing: say what is still missing.
+      setMissing(
+        player === null
+          ? 'Kies eerst voor wie de stick is.'
+          : player === 'child' && !heightValid
+            ? `Vul de lengte van het kind in (${MIN_HEIGHT} tot ${MAX_HEIGHT} cm).`
+            : 'Kies eerst een budget.',
+      );
       return;
     }
+    setMissing(null);
     const result = selectIndoorSticks(products, {
       player,
       heightCm: player === 'child' ? heightCm : undefined,
@@ -152,79 +162,104 @@ export function IndoorSelector({ products }: { products: Product[] }) {
   }
 
   return (
-    <div className="rounded-3xl border border-rand bg-white p-6 sm:p-8">
+    <div className="rounded-3xl border border-rand bg-white p-4 sm:p-6">
       <form
         noValidate
-        className="grid gap-6 lg:grid-cols-3"
+        className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
           showSelection();
         }}
       >
-        <fieldset>
-          <legend className="font-bold">1. Voor wie is de stick?</legend>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {PLAYERS.map((option) => (
-              <label key={option.value} className={OPTION_CLASSES}>
-                <input
-                  type="radio"
-                  name="indoor-player"
-                  value={option.value}
-                  checked={player === option.value}
-                  onChange={() => setPlayer(option.value)}
-                />
-                {option.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        <div>
-          <label htmlFor="indoor-height" className="block font-bold">
-            2. Lengte van het kind
-          </label>
-          {player === 'child' ? (
-            <>
-              <div className="mt-3 flex items-center gap-2">
-                <input
-                  id="indoor-height"
-                  type="number"
-                  inputMode="numeric"
-                  min={MIN_HEIGHT}
-                  max={MAX_HEIGHT}
-                  value={height}
-                  onChange={(event) => setHeight(event.target.value)}
-                  aria-describedby="indoor-height-help"
-                  aria-invalid={
-                    height !== '' && !heightValid ? true : undefined
-                  }
-                  className="w-28 rounded-xl border border-lijngrijs bg-white px-3 py-2.5"
-                />
-                <span className="text-sm text-lijngrijs">
-                  cm, met schoenen aan
-                </span>
-              </div>
-              <p
-                id="indoor-height-help"
-                className="mt-2 text-xs text-lijngrijs"
-              >
-                {height !== '' && !heightValid
-                  ? `Vul een hele lengte in tussen ${MIN_HEIGHT} en ${MAX_HEIGHT} cm.`
-                  : 'Hiermee bepalen we de sticklengte, net als in de stickwijzer.'}
+        <div
+          role="radiogroup"
+          aria-labelledby="indoor-player-label"
+          className="sm:grid sm:grid-cols-[6rem_1fr] sm:items-start sm:gap-4"
+        >
+          <p
+            id="indoor-player-label"
+            className="mb-2 font-bold sm:mb-0 sm:pt-2"
+          >
+            Voor wie?
+          </p>
+          <div>
+            <div className="flex flex-wrap gap-2">
+              {PLAYERS.map((option) => (
+                <label key={option.value} className={OPTION_CLASSES}>
+                  <input
+                    type="radio"
+                    name="indoor-player"
+                    value={option.value}
+                    checked={player === option.value}
+                    onChange={() => {
+                      setPlayer(option.value);
+                      setMissing(null);
+                    }}
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+            {player === 'adult' && (
+              <p className="mt-2 text-xs text-lijngrijs">
+                {`We zoeken in ${formatInch(36.5)} en ${formatInch(37.5)}.`}
               </p>
-            </>
-          ) : (
-            <p className="mt-3 text-sm text-lijngrijs">
-              {player === 'adult'
-                ? `Voor volwassenen zoeken we in ${formatInch(36.5)} en ${formatInch(37.5)}.`
-                : 'Alleen nodig bij een kind.'}
-            </p>
-          )}
+            )}
+            {player === 'child' && (
+              <div className="mt-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <label
+                    htmlFor="indoor-height"
+                    className="text-sm font-semibold"
+                  >
+                    Lengte van het kind
+                  </label>
+                  <input
+                    id="indoor-height"
+                    type="number"
+                    inputMode="numeric"
+                    min={MIN_HEIGHT}
+                    max={MAX_HEIGHT}
+                    value={height}
+                    onChange={(event) => {
+                      setHeight(event.target.value);
+                      setMissing(null);
+                    }}
+                    aria-describedby="indoor-height-help"
+                    aria-invalid={
+                      height !== '' && !heightValid ? true : undefined
+                    }
+                    className="w-24 rounded-lg border border-lijngrijs bg-white px-3 py-1.5"
+                  />
+                  <span className="text-sm text-lijngrijs">
+                    cm, met schoenen
+                  </span>
+                </div>
+                <p
+                  id="indoor-height-help"
+                  className="mt-1 text-xs text-lijngrijs"
+                >
+                  {height !== '' && !heightValid
+                    ? `Vul een hele lengte in tussen ${MIN_HEIGHT} en ${MAX_HEIGHT} cm.`
+                    : 'Hiermee bepalen we de sticklengte, net als in de stickwijzer.'}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
-        <fieldset>
-          <legend className="font-bold">3. Wat is je budget?</legend>
-          <div className="mt-3 flex flex-wrap gap-2">
+        <div
+          role="radiogroup"
+          aria-labelledby="indoor-budget-label"
+          className="sm:grid sm:grid-cols-[6rem_1fr] sm:items-start sm:gap-4"
+        >
+          <p
+            id="indoor-budget-label"
+            className="mb-2 font-bold sm:mb-0 sm:pt-2"
+          >
+            Budget
+          </p>
+          <div className="flex flex-wrap gap-2">
             {(Object.keys(INDOOR_BUDGETS) as IndoorBudget[]).map((key) => (
               <label key={key} className={OPTION_CLASSES}>
                 <input
@@ -232,18 +267,22 @@ export function IndoorSelector({ products }: { products: Product[] }) {
                   name="indoor-budget"
                   value={key}
                   checked={budget === key}
-                  onChange={() => setBudget(key)}
+                  onChange={() => {
+                    setBudget(key);
+                    setMissing(null);
+                  }}
                 />
                 {INDOOR_BUDGETS[key].label}
               </label>
             ))}
           </div>
-        </fieldset>
+        </div>
 
-        <div className="lg:col-span-3">
-          <Button type="submit" disabled={!complete}>
-            Toon zaalsticks
-          </Button>
+        <div className="flex flex-wrap items-center gap-3 sm:pl-[7rem]">
+          <Button type="submit">Toon zaalsticks</Button>
+          <p className="text-sm text-red-700 empty:hidden" aria-live="polite">
+            {missing}
+          </p>
         </div>
       </form>
 
