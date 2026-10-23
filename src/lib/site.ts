@@ -13,7 +13,7 @@ export const DEFAULT_DESCRIPTION =
 
 /** Search results cut titles and descriptions off around these lengths. */
 const MAX_TITLE_LENGTH = 60;
-const MAX_DESCRIPTION_LENGTH = 158;
+export const MAX_DESCRIPTION_LENGTH = 158;
 
 export function absoluteUrl(path: string): string {
   return new URL(path, SITE_URL).toString();

@@ -65,7 +65,7 @@ export const graysPb9iIndoor: Product = {
     lastVerifiedAt: CHECKED,
   },
   summary:
-    'De goedkoopste zaalstick op de eigen website van Grays, met een Probow-profiel dat Grays omschrijft als "ideal for close control, dribbling & drag flicking".',
+    'De goedkoopste zaalstick op de eigen website van Grays, met een Probow-profiel dat Grays richt op "close control, dribbling & drag flicking".',
   strengths: {
     value: [
       'Laagste adviesprijs van de zaalsticks op de Grays-website',

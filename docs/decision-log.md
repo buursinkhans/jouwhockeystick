@@ -1220,3 +1220,23 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Risico en controle (na review):** omdat robots.txt /aanbod/ afsluit, kan Google de `noindex` op die pagina's niet meer lezen. URL's waar veel naar gelinkt wordt, kunnen daardoor toch in de index komen als "Geïndexeerd, maar geblokkeerd door robots.txt", zonder inhoud. Dat risico nemen we bewust: zonder blokkade moet Google elke pagina ophalen om de noindex te zien, en dat was juist het probleem. Oude `/sticks/<geïmporteerd>`-URL's die Google al kent, verwijzen door naar /aanbod en vallen daarna uit de index.
 - **Controle:** kijk over 3 tot 4 weken in Search Console → Pagina's. "Gevonden – momenteel niet geïndexeerd" hoort te dalen. Verschijnen er /aanbod-URL's onder "Geïndexeerd, maar geblokkeerd door robots.txt", haal dan de `Disallow` weg en laat alleen de noindex staan.
 - **Search Console-rapport:** `src/seo/searchConsole.ts` kijkt alleen naar /sticks/-pagina's. Dat blijft zo: /aanbod wordt niet geïndexeerd en hoort daar niet in te staan. Het conversierapport telt /aanbod wel mee, omdat bezoekers die pagina's wel zien.
+
+## 2026-10-23 — Meta description van stickpagina's uit catalogusdata; wervende formuleringen herschreven
+
+**Aanleiding:** de meta description van /sticks/[slug] en /aanbod/[slug] was gelijk aan `product.summary`. Die bevat soms merkentaal, zoals "maximale dominantie op het veld" bij de Grays JB 10. Dat botst met de regel tegen absolute prestatieclaims (CLAUDE.md).
+
+**Wat:**
+- **`productMetaDescription`** (`src/catalog/metaDescription.ts`) bouwt de description uit discipline, merk, bow, carbon, niveau en lengtes, gevolgd door "Bekijk specs, passende lengte en vergelijkbare sticks." Bijvoorbeeld: "Veldstick van Grays met low bow en 95% carbon, voor ervaren spelers. In 36,5, 37,5 en 38,5 inch. Bekijk specs, …".
+  - Carbon staat er alleen in als het van het merk of een winkel-listing komt (niet bij een eigen inschatting); bij 0% staat er "zonder carbon".
+  - Een ontbrekend gegeven wordt weggelaten, nooit geschat.
+  - Past de tekst niet binnen 158 tekens (`MAX_DESCRIPTION_LENGTH`, nu geëxporteerd uit `src/lib/site.ts`), dan valt eerst de lengteregel weg en daarna de slotzin.
+  - Geldt ook voor geïmporteerde sticks (noindex). De title blijft "[naam]: specs en advies".
+- **Herschreven (9 teksten in 8 sticks):**
+  - Eigen wervende woorden: "maximale dominantie", "maximale power en respons" en "D-dominantie" in Grays JB 10, JB 12+, Brabo Elite X One LB, JDH X93 Pro Bow en Princess Premium 4K 10 Star.
+  - Citaten met "ideal/ideale/ideaal" in Grays PB9i, Scoop WDN Junior en Indian Maharadja Arctic Wood: de inhoud van het citaat en de bron blijven, het wervende woord verdwijnt.
+  - Citaten in `sourceLabel` (het bewijs bij een gegeven) blijven letterlijk staan.
+- **Tests:**
+  - Voor alle 545+ sticks: de description past binnen de maximale lengte, bevat geen "undefined", "null" of "NaN" en geen claimwoorden.
+  - De eigen teksten van de curated sticks (summary, sterke punten, aandachtspunten) bevatten geen claimwoorden.
+
+**Bewust niet:** geen wijziging aan titels, URL's, prijzen of structured data; geen offers, rating of review.

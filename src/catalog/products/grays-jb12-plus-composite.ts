@@ -68,10 +68,10 @@ export const graysJb12PlusComposite: Product = {
     lastVerifiedAt: '2026-09-27',
   },
   summary:
-    'Het topmodel binnen de Grays Jumbow-lijn, door Grays zelf gericht op spelers die meer willen op het gebied van D-dominantie, luchtballen en strafcorners.',
+    'Het topmodel binnen de Grays Jumbow-lijn, door Grays zelf gericht op spelers die meer willen in de cirkel, bij luchtballen en strafcorners.',
   strengths: {
     value: [
-      "Door Grays gepositioneerd voor spelers die 'meer' willen: D-dominantie, luchtballen en strafcorners",
+      "Door Grays gepositioneerd voor spelers die 'meer' willen in de cirkel, bij luchtballen en strafcorners",
       'Zelfde low-bow curvepositie als de andere Jumbow-modellen, dus herkenbaar balgevoel bij een upgrade',
     ],
     source: 'editorial-estimate',

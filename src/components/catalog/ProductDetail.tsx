@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { productPath } from '@/catalog/paths';
+import { productMetaDescription } from '@/catalog/metaDescription';
 import type { Product } from '@/catalog/types';
 import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import { pageMetadata } from '@/lib/site';
@@ -31,7 +32,8 @@ export function productPageMetadata(product: Product): Metadata {
   // "review" is deliberately not used: we do not test sticks ourselves.
   return pageMetadata({
     title: `${product.name}: specs en advies`,
-    description: product.summary,
+    // Built from catalog data, not the summary (decision log 2026-10-23).
+    description: productMetaDescription(product),
     path: productPath(product),
     // Feed-imported sticks have template texts: kept out of Google until enriched by hand.
     noIndex: isFeedImport(product),
