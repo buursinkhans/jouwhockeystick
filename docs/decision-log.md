@@ -1241,3 +1241,25 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
   - De eigen teksten van de curated sticks (summary, sterke punten, aandachtspunten) bevatten geen claimwoorden.
 
 **Bewust niet:** geen wijziging aan titels, URL's, prijzen of structured data; geen offers, rating of review.
+
+## 2026-10-23 — Core Web Vitals: /stickwijzer zonder verspringing, lichtere winkelknoppen
+
+**Aanleiding:** PageSpeed Insights (mobiel, 23-10). /zaalsticks: prestaties 76, LCP 2,9 s, CLS 0,121. /stickwijzer (14:18): prestaties 71, LCP 3,4 s, CLS 0,401.
+
+**Gemeten (Lighthouse 12 mobiel, lokale productiebuild, 2 runs per pagina):**
+- **/stickwijzer:** CLS 0,401, bevestigd. De keuzehulp laadt alleen in de browser, met als plaatshouder één regel tekst. Zodra stap 1 verschijnt (op mobiel ongeveer 1250 px hoog), schuift de sectie "Drie routes in de stickwijzer" naar beneden.
+- **/zaalsticks:** CLS 0,000 lokaal én live, ook met echte netwerkvertraging. De 0,121 van PageSpeed kon ik niet reproduceren.
+- **LCP:** op /zaalsticks en /sticks is het LCP-element de introalinea. De echte render duurt lokaal ongeveer 0,17 s; de 3–3,8 s van Lighthouse is een schatting op een gesimuleerd traag netwerk. Die schatting wordt vooral bepaald door het CSS-bestand (dat het tekenen blokkeert), het vooraf geladen Bricolage-lettertype (77 KB), JavaScript en het aantal elementen (6322 op /zaalsticks, vooral de volledige lijst).
+- **Blokkeertijd (TBT):** elke winkelknop (`RetailerLink`) was een eigen client component; op /zaalsticks en /sticks zijn dat er honderden.
+
+**Wat:**
+- **/stickwijzer:** de plaatshouder neemt tijdens het laden minstens één schermhoogte in op mobiel (`min-h-[100svh]`) en 34rem op bredere schermen. De sectie eronder staat daardoor al buiten beeld en verspringt niet zichtbaar.
+  - Bewust geen server-gerenderde stap 1: een bezoeker met opgeslagen voortgang zou dan eerst stap 1 zien en daarna naar de juiste stap springen.
+  - `ssr: false`, de vragen, de logica en de events zijn ongewijzigd.
+- **Winkelknoppen:** `RetailerLink` is gewone server-HTML met `data-`-kenmerken. Eén `RetailerClickTracker` in de layout stuurt `retailer_click` met dezelfde velden. Per saldo is er niet meer client-code: er komt één component bij en er gaat er één weg, maar het draait één keer in plaats van honderden keren.
+
+**Bewust niet:**
+- Foto's blijven gehotlinkt.
+- Geen wijziging aan headers, CSP of netlify.toml.
+- De zaallijst is niet ingekort.
+- Het lettertype is niet aangepast. Bricolage zonder optische-maat-as of zonder preload zou de geschatte LCP verlagen, maar is een merkkeuze (merkinstructie). Dat is een voorstel aan de eigenaar, net als de lengte van de lijsten.

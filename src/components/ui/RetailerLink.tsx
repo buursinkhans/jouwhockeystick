@@ -1,5 +1,3 @@
-'use client';
-
 import type { ReactNode } from 'react';
 import type { Brand } from '@/catalog/types';
 import {
@@ -7,7 +5,6 @@ import {
   type RetailerId,
   type RetailerPlacement,
 } from '@/lib/retailers';
-import { trackEvent } from '@/lib/analytics/track';
 import { buttonBaseClasses, buttonVariantClasses } from './Button';
 
 type Props = {
@@ -22,6 +19,12 @@ type Props = {
   children: ReactNode;
 };
 
+/**
+ * A shop button. Plain server-rendered HTML since 2026-10-23: the click is
+ * reported by RetailerClickTracker (one listener for the whole site) from the
+ * data attributes, so the hundreds of buttons on /sticks and /zaalsticks no
+ * longer each start up in the browser. The retailer_click event is unchanged.
+ */
 export function RetailerLink({
   retailer,
   brand,
@@ -53,16 +56,11 @@ export function RetailerLink({
       target="_blank"
       rel="noopener noreferrer sponsored"
       className={`${variantClass} ${className}`.trim()}
-      onClick={() =>
-        trackEvent({
-          name: 'retailer_click',
-          retailer,
-          brand,
-          productName,
-          placement,
-          linkType: productUrl ? 'product' : 'search',
-        })
-      }
+      data-retailer={retailer}
+      data-brand={brand}
+      data-product-name={productName}
+      data-placement={placement}
+      data-link-type={productUrl ? 'product' : 'search'}
     >
       {children}
     </a>
