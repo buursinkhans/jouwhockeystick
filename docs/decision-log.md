@@ -1178,3 +1178,7 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 - De prijsgroepen staan op één plek (`src/catalog/indoorTiers.ts`), en het artikel "Zaalstick: wat krijg je voor een klein of ruim budget?" gebruikt ze ook.
 
 **Reden:** advies na de Search Console-cijfers. Bezoekers zagen eerst een lijst van 164 sticks; nu zien ze eerst een korte keuze.
+
+## 2026-10-23 — "Onafhankelijk" minder vaak herhalen
+
+**Wat (besluit eigenaar):** het te vaak herhalen dat vergoeding geen rol speelt maakt het juist minder geloofwaardig. "Onafhankelijk advies" blijft bovenaan de homepage staan, en /methodiek legt het volledig uit. Weggehaald uit de intro van de stickwijzer, de footer en het blok "Zaalsticks per budget". De regel bij de winkelknoppen zegt nu alleen dat het partnerlinks zijn en dat we een vergoeding kunnen krijgen, met de link "Meer uitleg". Die vermelding blijft verplicht (CLAUDE.md, Commerce). Dit draait een deel van de wijziging van 2026-10-22 terug.
