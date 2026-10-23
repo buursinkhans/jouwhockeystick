@@ -93,7 +93,9 @@ window.VideoArt = (() => {
     for (let size = maxSize; size >= minSize; size -= 2) {
       ctx.font = `${weight} ${size}px ${family}`;
       const lines = wrapWords(ctx, text, maxW);
-      if (lines.length * size * lh <= maxH) return { size, lines, lh, font: ctx.font, height: lines.length * size * lh };
+      // A single long word (Dutch compounds like "zaalhockeystick") cannot wrap: it must fit on its own, with 7% room for the hook's punch.
+      const widest = lines.reduce((m, l) => Math.max(m, ...l.map((wd) => wd.width)), 0);
+      if (lines.length * size * lh <= maxH && widest <= maxW / 1.07) return { size, lines, lh, font: ctx.font, height: lines.length * size * lh };
     }
     ctx.font = `${weight} ${minSize}px ${family}`;
     const max = Math.max(1, Math.floor(maxH / (minSize * lh)));
