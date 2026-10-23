@@ -79,7 +79,7 @@ export const scoopWdnJuniorIndoor: Product = {
     lastVerifiedAt: CHECKED,
   },
   summary:
-    'Een houten junior-zaalstick met mid bow en grote Maxi-kop, volgens de listing de "ideale hockeystick voor de jongere generatie hockeyers".',
+    'Een houten junior-zaalstick met mid bow en grote Maxi-kop, volgens de listing bedoeld voor "de jongere generatie hockeyers".',
   strengths: {
     value: [
       'Laagste prijs van alle zaalsticks in onze catalogus',

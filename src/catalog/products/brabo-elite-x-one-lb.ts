@@ -69,10 +69,10 @@ export const braboEliteXOneLb: Product = {
     lastVerifiedAt: '2026-09-26',
   },
   summary:
-    'Het topmodel van de Brabo Elite-serie met 100% carbon — door Brabo zelf gericht op ervaren spelers die een zo krachtig mogelijke stick zoeken.',
+    'Het topmodel van de Brabo Elite-serie met 100% carbon — door Brabo zelf gericht op ervaren spelers.',
   strengths: {
     value: [
-      'Volledig carbon (100%) voor maximale power en respons',
+      'Volledig carbon (100%)',
       'Low-bow profiel van dezelfde Elite-serie als de instapvarianten, dus vertrouwd balgevoel bij een upgrade',
     ],
     source: 'editorial-estimate',

@@ -78,7 +78,7 @@ export const indianMaharadjaArcticWoodIndoor: Product = {
     lastVerifiedAt: CHECKED,
   },
   summary:
-    'Een houten zaalstick met mid bow (22 mm), volgens de listing "ideaal voor beginnende spelers die hun basisvaardigheden en technieken willen ontwikkelen tijdens het zaalseizoen".',
+    'Een houten zaalstick met mid bow (22 mm), volgens de listing bedoeld voor "beginnende spelers die hun basisvaardigheden en technieken willen ontwikkelen tijdens het zaalseizoen".',
   strengths: {
     value: [
       'Uitdrukkelijk gericht op beginnende zaalspelers',
