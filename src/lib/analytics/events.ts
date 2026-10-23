@@ -59,6 +59,16 @@ export type AnalyticsEvent =
       target: string;
     }
   | {
+      /**
+       * A click in a content block on a catalog page (2026-10-23: the
+       * landing blocks on /sticks), like home_block_click for the homepage.
+       */
+      name: 'catalog_block_click';
+      page: 'sticks';
+      block: 'intro' | 'levels' | 'faq';
+      target: string;
+    }
+  | {
       /** A choice in an explainer figure in an article (e.g. the bow profiles). */
       name: 'figure_interaction';
       figure: 'bow-profiles';
