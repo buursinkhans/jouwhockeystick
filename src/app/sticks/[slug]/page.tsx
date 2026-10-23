@@ -1,35 +1,20 @@
 import type { Metadata } from 'next';
-import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
-import { pageMetadata } from '@/lib/site';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
+import { getAllProducts, isFeedImport } from '@/catalog';
+import { PRODUCT_SECTIONS } from '@/catalog/paths';
+import { resolveProductRoute } from '@/catalog/productRoute';
 import {
-  getAllProducts,
-  getDiscipline,
-  getProductBySlug,
-  isFeedImport,
-} from '@/catalog';
-import { ProductSpecTable } from '@/components/catalog/ProductSpecTable';
-import { ProductProsAndCons } from '@/components/catalog/ProductProsAndCons';
-import { ProductImage } from '@/components/catalog/ProductImage';
-import { ProductNotice } from '@/components/ui/ProductNotice';
-import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
-import { ButtonLink } from '@/components/ui/Button';
-import { RetailerLinks } from '@/components/ui/RetailerLinks';
-import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { ProductFitAndSources } from '@/components/catalog/ProductFitAndSources';
-import { SimilarSticks } from '@/components/catalog/SimilarSticks';
-import { getSimilarSticks } from '@/catalog/similar';
-import { getProductFamily } from '@/catalog/family';
-import { FamilyTable } from '@/components/catalog/FamilyTable';
-import { DISCIPLINE_LABELS } from '@/catalog/labels';
-import { absoluteUrl } from '@/lib/site';
-import { jsonLdHtml } from '@/lib/jsonLd';
+  ProductDetail,
+  productPageMetadata,
+} from '@/components/catalog/ProductDetail';
 
+const SECTION = PRODUCT_SECTIONS.curated;
+
+/** Prebuilt: the sticks that belong here. Other slugs redirect or 404 on demand. */
 export function generateStaticParams() {
-  return getAllProducts(new Date(), { includeImported: true }).map(
-    (product) => ({ slug: product.slug }),
-  );
+  return getAllProducts(new Date(), { includeImported: true })
+    .filter((product) => !isFeedImport(product))
+    .map((product) => ({ slug: product.slug }));
 }
 
 export async function generateMetadata({
@@ -37,19 +22,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const product = getProductBySlug(slug);
-  if (!product) {
-    return {};
-  }
-  // "review" is deliberately not used: we do not test sticks ourselves.
-  return pageMetadata({
-    title: `${product.name}: specs en advies`,
-    description: product.summary,
-    path: `/sticks/${slug}`,
-    // Feed-imported sticks have template texts: kept out of Google until enriched by hand.
-    noIndex: isFeedImport(product),
-  });
+  const route = resolveProductRoute((await params).slug, SECTION);
+  return route.kind === 'page' ? productPageMetadata(route.product) : {};
 }
 
 export default async function ProductPage({
@@ -57,132 +31,9 @@ export default async function ProductPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
-  const product = getProductBySlug(slug);
-
-  if (!product) {
-    notFound();
-  }
-
-  const family = product.feedImport
-    ? null
-    : getProductFamily(product, getAllProducts(new Date()));
-
-  // Structured data describes only visibly verifiable information on this
-  // page, and deliberately omits `offers`/price since the actual purchase
-  // and any live pricing happens on bol.com, not on this page.
-  // No Review or AggregateRating either: we have not tested the sticks.
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    brand: { '@type': 'Brand', name: product.brand },
-    description: product.summary,
-    category: DISCIPLINE_LABELS[getDiscipline(product)],
-    url: absoluteUrl(`/sticks/${product.slug}`),
-    ...(product.imageUrl && { image: product.imageUrl }),
-  };
-
-  return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
-      />
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          getDiscipline(product) === 'zaal'
-            ? { label: 'Zaalsticks', href: '/zaalsticks' }
-            : { label: 'Sticks', href: '/sticks' },
-          { label: product.name, href: `/sticks/${product.slug}` },
-        ]}
-      />
-      <div className="flex items-start gap-6">
-        <div className="shrink-0">
-          <ProductImage
-            product={product}
-            className="h-40 w-40 sm:h-48 sm:w-48"
-          />
-          {product.imageUrl && product.imageSourceUrl && (
-            <p className="mt-1 text-center text-xs text-lijngrijs">
-              <a href={product.imageSourceUrl} className="hover:underline">
-                Foto: {product.brand}
-              </a>
-            </p>
-          )}
-        </div>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-veld">
-            {product.brand}
-          </p>
-          <h1 className="mt-1 text-3xl font-bold">{product.name}</h1>
-          <p className="mt-4 text-inkt/80">{product.summary}</p>
-        </div>
-      </div>
-
-      <p className="mt-6 text-2xl font-bold">
-        €{product.priceIndicativeEur.value.toFixed(2)}
-      </p>
-      <div className="mt-1">
-        <ProductNotice
-          notSoldAtBol={!isSoldAtBol(product)}
-          passaSportsOnly={isPassaSportsOnly(product)}
-          alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
-        />
-      </div>
-      <PartnerLinkNote />
-
-      <div className="mt-6 flex flex-wrap items-start gap-3">
-        <RetailerLinks
-          brand={product.brand}
-          productName={product.name}
-          bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={!isSoldAtBol(product)}
-          bolUnchecked={isBolUnchecked(product)}
-          passaSportsProductUrl={product.passaSportsProductUrl}
-          placement="productpagina"
-        />
-        <ButtonLink
-          href={`/interesse?product=${product.slug}&source=productpagina`}
-          variant="secondary"
-        >
-          Stel een vraag
-        </ButtonLink>
-      </div>
-
-      <h2 className="mt-10 text-xl font-bold">
-        Sterke punten &amp; aandachtspunten
-      </h2>
-      <div className="mt-4">
-        <ProductProsAndCons product={product} />
-      </div>
-
-      <h2 className="mt-10 text-xl font-bold">Specificaties</h2>
-      <div className="mt-4">
-        <ProductSpecTable product={product} />
-      </div>
-
-      <ProductFitAndSources product={product} />
-
-      {family && <FamilyTable current={product} family={family} />}
-
-      <SimilarSticks
-        current={product}
-        similar={getSimilarSticks(
-          product,
-          getAllProducts(new Date(), { includeImported: true }),
-        )}
-      />
-
-      <p className="mt-6 text-sm">
-        <Link
-          href={`/vergelijk?a=${product.slug}`}
-          className="font-semibold text-veld hover:underline"
-        >
-          Vergelijk deze stick met een andere
-        </Link>
-      </p>
-    </div>
-  );
+  const route = resolveProductRoute((await params).slug, SECTION);
+  if (route.kind === 'not-found') notFound();
+  // 308: a stick that changed place (imported ↔ kept by hand) keeps its links.
+  if (route.kind === 'redirect') permanentRedirect(route.to);
+  return <ProductDetail product={route.product} />;
 }

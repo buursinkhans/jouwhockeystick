@@ -1,5 +1,6 @@
 'use client';
 
+import { productPath } from '@/catalog/paths';
 import { isSoldAtBol } from '@/catalog/shop';
 import { useState } from 'react';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ function ResultCard({
           {product.brand}
         </p>
         <h4 className="mt-1 font-bold">
-          <Link href={`/sticks/${product.slug}`} className="hover:underline">
+          <Link href={productPath(product)} className="hover:underline">
             {product.name}
           </Link>
         </h4>

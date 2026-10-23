@@ -1,3 +1,4 @@
+import { productPath } from '@/catalog/paths';
 import Link from 'next/link';
 import type { Product } from '@/catalog/types';
 import type { SimilarStick } from '@/catalog/similar';
@@ -40,7 +41,7 @@ export function SimilarSticks({
               </p>
               <h3 className="font-bold">
                 <Link
-                  href={`/sticks/${product.slug}`}
+                  href={productPath(product)}
                   className="hover:underline"
                 >
                   {product.name}

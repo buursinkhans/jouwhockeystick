@@ -1,3 +1,4 @@
+import { productPath } from '@/catalog/paths';
 import type { MetadataRoute } from 'next';
 import { getAllProducts } from '@/catalog';
 import type { Product } from '@/catalog/types';
@@ -34,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...STATIC_PATHS.map((path) => ({ url: absoluteUrl(path) })),
     { url: absoluteUrl('/methodiek'), lastModified: METHODIEK.updatedAt },
     ...getAllProducts().map((product) => ({
-      url: absoluteUrl(`/sticks/${product.slug}`),
+      url: absoluteUrl(productPath(product)),
       lastModified: lastVerified(product),
     })),
     ...getAllArticles().map((article) => ({
