@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getAllProducts, getFieldProducts } from '@/catalog';
+import { isJuniorStick } from '@/catalog/similar';
 import { pickVaried } from '@/catalog/picks';
 import { plainText } from '@/components/article/inlineMarkup';
 import { VELD, veldFaq } from './veld';
@@ -18,7 +19,10 @@ describe('/sticks landing copy', () => {
   });
 
   it('has five FAQ answers with numbers from the catalog', () => {
-    const faq = veldFaq(getFieldProducts(now, { includeImported: true }));
+    const faq = veldFaq(
+      getFieldProducts(now, { includeImported: true }),
+      getFieldProducts(now).filter((p) => !isJuniorStick(p)),
+    );
     expect(faq).toHaveLength(5);
     expect(faq.map((item) => item.answer).join(' ')).not.toContain('undefined');
   });

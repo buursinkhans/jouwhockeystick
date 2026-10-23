@@ -2,6 +2,7 @@ import { absoluteUrl, pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllBrands, getFieldProducts } from '@/catalog';
 import { pickVaried } from '@/catalog/picks';
+import { isJuniorStick } from '@/catalog/similar';
 import type { Brand } from '@/catalog/types';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
 import { TrackedBlock } from '@/components/catalog/TrackedBlock';
@@ -42,7 +43,10 @@ export default async function SticksPage({
   const showLanding = !activeBrand;
   // Hand-checked sticks only for the picks: their specs come with sources.
   const curated = getFieldProducts(now);
-  const faq = veldFaq(allProducts);
+  const faq = veldFaq(
+    allProducts,
+    curated.filter((p) => !isJuniorStick(p)),
+  );
 
   // Describes only the questions and answers visible on this page.
   const faqJsonLd = {

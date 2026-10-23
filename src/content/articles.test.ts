@@ -47,7 +47,7 @@ describe('copy of the catalog landing pages', () => {
   const pages = [
     {
       page: '/sticks',
-      text: JSON.stringify([VELD, veldFaq(getAllProducts())]),
+      text: JSON.stringify([VELD, veldFaq(getAllProducts(), getAllProducts())]),
     },
     { page: '/zaalsticks', text: JSON.stringify(ZAAL) },
   ];

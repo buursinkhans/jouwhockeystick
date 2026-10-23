@@ -37,7 +37,7 @@ export const VELD = {
     length: {
       question: 'Welke lengte veldhockeystick heb je nodig?',
       answer:
-        'Dat hangt vooral af van je lichaamslengte. Voor volwassenen is 36,5 inch de gangbare maat; voor kinderen zie je per lichaamslengte de maat in de [lengtetabel](/kennis/hockeystick-lengte-tabel). Koop een kinderstick niet extra groot ‘op de groei’. De [stickwijzer](/stickwijzer) rekent de maat voor je uit.',
+        'Dat hangt vooral af van je lichaamslengte. In de [lengtetabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat past, voor kinderen en volwassenen. Koop een kinderstick niet extra groot ‘op de groei’. De [stickwijzer](/stickwijzer) rekent de maat voor je uit.',
     },
     bow: {
       question: 'Welke bow past bij een veldhockeystick?',
@@ -48,7 +48,7 @@ export const VELD = {
       question: 'Hoeveel carbon heb je nodig in een veldhockeystick?',
       /** Range computed from the catalog on the page. */
       answer: (min: number, max: number) =>
-        `Minder dan je misschien denkt. Carbon maakt een stick stijver: de bal gaat harder weg, maar aannemen wordt lastiger. Voor beginners kan weinig carbon goed passen; meer carbon is een logische richting voor ervaren spelers. In onze catalogus loopt het carbonpercentage van veldsticks van ${min}% tot ${max}%. Meer lees je in [meer carbon is niet altijd beter](/kennis/meer-carbon-hockeystick-beter).`,
+        `Minder dan je misschien denkt. Meer carbon maakt een stick stijver en directer, maar ook minder vergevingsgezind. Voor beginners kan weinig carbon goed passen; meer carbon is een logische richting voor ervaren spelers. Bij de volwassen veldsticks die we met de hand hebben gecontroleerd, loopt het carbonpercentage van ${min}% tot ${max}%. Meer lees je in [meer carbon is niet altijd beter](/kennis/meer-carbon-hockeystick-beter).`,
     },
     price: {
       question: 'Wat kost een veldhockeystick?',
@@ -73,13 +73,19 @@ const LEVEL_LABEL: Record<ExperienceLevel, string> = {
 };
 
 /**
- * The FAQ on /sticks, with the numbers computed from the field sticks the
- * page lists, so they never go stale (no prices or carbon in the copy).
+ * The FAQ on /sticks, with the numbers computed from the catalog so they
+ * never go stale (no prices or carbon in the copy). Prices and the count come
+ * from all field sticks the page lists; the carbon range only from the
+ * hand-checked adult field sticks, like the carbon article (feed values are
+ * not checked by hand, source policy).
  */
-export function veldFaq(products: readonly Product[]): FaqItem[] {
+export function veldFaq(
+  products: readonly Product[],
+  checkedAdult: readonly Product[],
+): FaqItem[] {
   const { faq } = VELD;
   const items: FaqItem[] = [faq.length, faq.bow];
-  const carbon = products
+  const carbon = checkedAdult
     .map((p) => p.carbonPercentage?.value)
     .filter((value): value is number => value !== undefined);
   if (carbon.length) {
