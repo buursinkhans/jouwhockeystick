@@ -26,12 +26,14 @@ export const ZAAL_SOURCES = {
 
 export const ZAAL = {
   title: 'Zaalhockeystick kiezen: waar let je op in de zaal?',
+  /** Search-result title (<title>), aimed at the queries in Search Console; the H1 stays `title`. */
+  seoTitle: 'Zaalhockeystick kiezen en kopen: zaalsticks vergeleken',
   navLabel: 'Zaalsticks',
   metaDescription:
-    'Een zaalhockeystick kiezen: wat is er anders in de zaal, gelden er andere eisen voor de stick en waar let je op? Met de regels van de FIH en alle zaalsticks uit onze catalogus, met bron per gegeven.',
+    'Welke zaalhockeystick past bij jou of je kind? Lengte, bow en budget uitgelegd, met de zaalsticks uit onze catalogus naast elkaar, met richtprijs en bron.',
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-05',
-  updatedAt: '2026-10-22',
+  updatedAt: '2026-10-23',
   /** Answers the main question within the first 80 words. */
   intro:
     'Een zaalhockeystick kies je net als een veldstick op lengte, niveau en gevoel, maar met het zaalspel in gedachten. In de zaal mag je de bal niet slaan en alleen omhoog spelen bij een schot op doel. Zaalhockey draait daardoor om pushen, balcontrole en snelle acties in een kleine ruimte. Voor de stick zelf gelden volgens de spelregels dezelfde maximale eisen als op het veld; merken ontwerpen zaalsticks wel voor dat andere spel.',

@@ -11,7 +11,7 @@ import { absoluteUrl, pageMetadata, SITE_NAME } from '@/lib/site';
 import { jsonLdHtml } from '@/lib/jsonLd';
 
 export const metadata = pageMetadata({
-  title: ZAAL.title,
+  title: ZAAL.seoTitle,
   description: ZAAL.metaDescription,
   path: '/zaalsticks',
 });
