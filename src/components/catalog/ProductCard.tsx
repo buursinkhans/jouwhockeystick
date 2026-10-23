@@ -1,3 +1,4 @@
+import { productPath } from '@/catalog/paths';
 import Link from 'next/link';
 import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import type { Product } from '@/catalog/types';
@@ -20,7 +21,7 @@ export function ProductCard({ product }: { product: Product }) {
         {product.brand}
       </p>
       <h3 className="mt-1 text-lg leading-snug font-bold">
-        <Link href={`/sticks/${product.slug}`} className="hover:underline">
+        <Link href={productPath(product)} className="hover:underline">
           {product.name}
         </Link>
       </h3>

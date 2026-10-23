@@ -1,3 +1,4 @@
+import { productPath } from '@/catalog/paths';
 import Link from 'next/link';
 import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import type { AdviceRoute } from '@/advice-engine/answers';
@@ -96,7 +97,7 @@ export function RecommendationCard({
         <ProductImage product={product} className="h-20 w-20 shrink-0" />
         <div>
           <h4 className="text-lg font-bold">
-            <Link href={`/sticks/${product.slug}`} className="hover:underline">
+            <Link href={productPath(product)} className="hover:underline">
               {product.name}
             </Link>
           </h4>
@@ -241,7 +242,7 @@ export function RecommendationCard({
 
       <p className="mt-3 text-sm">
         <Link
-          href={`/sticks/${product.slug}`}
+          href={productPath(product)}
           className="font-semibold text-veld hover:underline"
         >
           Bekijk alle specificaties

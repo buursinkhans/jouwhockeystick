@@ -1,3 +1,4 @@
+import { productPath } from '@/catalog/paths';
 import Link from 'next/link';
 import type { ProductFamily } from '@/catalog/family';
 import { EXPERIENCE_LABELS } from '@/catalog/labels';
@@ -73,7 +74,7 @@ export function FamilyTable({
                       </span>
                     ) : (
                       <Link
-                        href={`/sticks/${p.slug}`}
+                        href={productPath(p)}
                         className="text-veld hover:underline"
                       >
                         {shortName(p)}

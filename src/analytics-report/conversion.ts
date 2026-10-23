@@ -274,7 +274,8 @@ export function signals(data: ConversionData, stepOrder: string[]): string[] {
   const quietStickPages = data.pageviewsByPage
     .filter(
       (count) =>
-        count.key.startsWith('/sticks/') &&
+        // Product pages: kept by hand (/sticks) and imported (/aanbod, since 2026-10-23).
+        (count.key.startsWith('/sticks/') || count.key.startsWith('/aanbod/')) &&
         count.now >= THRESHOLDS.stickPageViews &&
         !clickedPages.has(count.key),
     )

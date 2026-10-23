@@ -1,3 +1,4 @@
+import { productPath } from '@/catalog/paths';
 import { isSoldAtBol, isBolUnchecked } from '@/catalog/shop';
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
@@ -89,7 +90,7 @@ export default async function VergelijkPage({
                 <ProductImage product={product} className="mx-auto h-20 w-20" />
                 <p className="mt-2 font-semibold">
                   <Link
-                    href={`/sticks/${product.slug}`}
+                    href={productPath(product)}
                     className="hover:underline"
                   >
                     {product.name}

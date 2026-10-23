@@ -1200,3 +1200,23 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 - Geen nieuwe URL, geen wijziging aan de blog, geen "beste"-claims of ranking.
 - Geen FAQPage op /zaalsticks: de brief nam aan dat die er al was, maar dat was niet zo. Dat is een aparte keuze.
 - `catalog_block_click` staat nog niet als tabel in het conversierapport.
+
+## 2026-10-23 — Geïmporteerde sticks op /aanbod, dicht voor crawlers (aanvulling op 2026-10-17, onderdeel Google)
+
+**Aanleiding:** Search Console (23 oktober) toont 72 pagina's "Gevonden – momenteel niet geïndexeerd", en dat aantal stijgt. De geïmporteerde PassaHockey-sticks hadden al `noindex` en stonden niet in de sitemap. Maar /sticks, /zaalsticks, /vergelijk en "vergelijkbare sticks" linken ernaar, dus Google moest ze ophalen om de noindex te zien. Dat kost crawlbudget dat beter naar de pagina's gaat die we wel geïndexeerd willen hebben.
+
+**Wat:**
+- **Eigen pad:** geïmporteerde sticks staan op `/aanbod/<slug>`, gecontroleerde sticks blijven op `/sticks/<slug>`. Beide routes gebruiken dezelfde paginacomponent (`ProductDetail`). De noindex blijft staan.
+- **robots.txt:** `Disallow: /aanbod/`; de rest is ongewijzigd.
+- **Doorverwijzingen (308):** `/sticks/<geïmporteerd>` gaat naar `/aanbod/…`, en `/aanbod/<inmiddels met de hand verrijkt>` gaat naar `/sticks/…`. Een onbekende slug geeft een 404. De beslissing staat in `resolveProductRoute` (`src/catalog/productRoute.ts`).
+- **Eén helper voor alle productlinks:** `productPath(product)` (`src/catalog/paths.ts`) wordt gebruikt in de lijsten, /vergelijk, vergelijkbare sticks, de stickwijzer-uitslag, de zaalkeuze, de breadcrumbs, de canonical, de structured data, de sitemap en artikellinks. `paths.ts` haalt de catalogus niet binnen, zodat browsercomponenten (de zaalkeuze) hem zonder extra gewicht kunnen gebruiken.
+- **Partnerlinks:** de sub-ID's en referenties hangen aan de plek (`placement`), niet aan het pad. Op /aanbod is dat nog steeds "productpagina", dus het conversie- en verkooprapport blijven vergelijkbaar. Het signaal "veelbekeken stickpagina zonder klik" in het conversierapport telt /aanbod nu ook mee.
+- **Sitemap:** bevat nog steeds alleen gecontroleerde sticks; een test bewaakt dat er geen /aanbod-URL in komt.
+
+**Gevolg:** wordt een geïmporteerde stick met de hand verrijkt (`feedImport` verdwijnt), dan verhuist hij vanzelf naar /sticks en komt hij in de sitemap. Oude links blijven werken via de doorverwijzing.
+
+**Bewust niet:** geen nofollow op de links, geen wijziging aan de import, de stickwijzer of de Netlify-instellingen.
+
+**Risico en controle (na review):** omdat robots.txt /aanbod/ afsluit, kan Google de `noindex` op die pagina's niet meer lezen. URL's waar veel naar gelinkt wordt, kunnen daardoor toch in de index komen als "Geïndexeerd, maar geblokkeerd door robots.txt", zonder inhoud. Dat risico nemen we bewust: zonder blokkade moet Google elke pagina ophalen om de noindex te zien, en dat was juist het probleem. Oude `/sticks/<geïmporteerd>`-URL's die Google al kent, verwijzen door naar /aanbod en vallen daarna uit de index.
+- **Controle:** kijk over 3 tot 4 weken in Search Console → Pagina's. "Gevonden – momenteel niet geïndexeerd" hoort te dalen. Verschijnen er /aanbod-URL's onder "Geïndexeerd, maar geblokkeerd door robots.txt", haal dan de `Disallow` weg en laat alleen de noindex staan.
+- **Search Console-rapport:** `src/seo/searchConsole.ts` kijkt alleen naar /sticks/-pagina's. Dat blijft zo: /aanbod wordt niet geïndexeerd en hoort daar niet in te staan. Het conversierapport telt /aanbod wel mee, omdat bezoekers die pagina's wel zien.

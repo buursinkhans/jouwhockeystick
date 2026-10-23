@@ -1,3 +1,4 @@
+import { productPath } from '@/catalog/paths';
 import type { Product } from '@/catalog/types';
 
 /**
@@ -9,7 +10,7 @@ export function stickListItem(product: Product): string {
   const lengths = product.lengthsInches.value
     .map((length) => `${String(length).replace('.', ',')}"`)
     .join(', ');
-  return `[${product.name}](/sticks/${product.slug}) — richtprijs €${price}, lengte ${lengths}`;
+  return `[${product.name}](${productPath(product)}) — richtprijs €${price}, lengte ${lengths}`;
 }
 
 export function byPrice(a: Product, b: Product): number {
