@@ -4,7 +4,6 @@ import Script from 'next/script';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { RetailerClickTracker } from '@/components/analytics/RetailerClickTracker';
 import { INSTAGRAM } from '@/content/social';
 import {
   CONTACT_EMAIL,
@@ -100,8 +99,6 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
           {children}
         </main>
         <Footer />
-        {/* One listener for all shop buttons (retailer_click), see RetailerLink. */}
-        <RetailerClickTracker />
         {/* Simple Analytics: cookieless, no visitor ids. Events go through src/lib/analytics/track.ts. */}
         <Script
           src="https://scripts.simpleanalyticscdn.com/latest.js"
