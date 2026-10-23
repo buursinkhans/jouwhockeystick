@@ -93,7 +93,9 @@ window.VideoArt = (() => {
     for (let size = maxSize; size >= minSize; size -= 2) {
       ctx.font = `${weight} ${size}px ${family}`;
       const lines = wrapWords(ctx, text, maxW);
-      if (lines.length * size * lh <= maxH) return { size, lines, lh, font: ctx.font, height: lines.length * size * lh };
+      // A single long word (Dutch compounds like "zaalhockeystick") cannot wrap: it must fit on its own, with 7% room for the hook's punch.
+      const widest = lines.reduce((m, l) => Math.max(m, ...l.map((wd) => wd.width)), 0);
+      if (lines.length * size * lh <= maxH && widest <= maxW / 1.07) return { size, lines, lh, font: ctx.font, height: lines.length * size * lh };
     }
     ctx.font = `${weight} ${minSize}px ${family}`;
     const max = Math.max(1, Math.floor(maxH / (minSize * lh)));
@@ -220,7 +222,8 @@ window.VideoArt = (() => {
     ctx.font = block.font; ctx.textBaseline = 'top';
     // The whole block punches in from its top-left corner, so word spacing stays intact.
     const punch = 1 + 0.06 * (1 - ease(t / 0.3));
-    const pulse = 1 + 0.05 * Math.exp(-((t % BEAT) / 0.1));
+    // The accent words pulse on the beat, but only after the opening punch: frame 0 stays clean.
+    const pulse = t < 0.4 ? 1 : 1 + 0.04 * Math.exp(-((t % BEAT) / 0.1));
     ctx.save();
     ctx.translate(x, y); ctx.scale(punch, punch);
     block.lines.forEach((line, li) => {
@@ -229,8 +232,9 @@ window.VideoArt = (() => {
         ctx.fillStyle = wd.accent ? C.bal : color;
         if (wd.accent && pulse > 1.001) {
           ctx.save();
-          ctx.translate(wd.x, ly + block.size / 2); ctx.scale(pulse, pulse);
-          ctx.fillText(wd.w, 0, -block.size / 2);
+          // Pulse from the middle of the word, so it never runs into its neighbours.
+          ctx.translate(wd.x + wd.width / 2, ly + block.size / 2); ctx.scale(pulse, pulse);
+          ctx.fillText(wd.w, -wd.width / 2, -block.size / 2);
           ctx.restore();
         } else ctx.fillText(wd.w, wd.x, ly);
       }
