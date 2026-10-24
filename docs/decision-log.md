@@ -1326,3 +1326,16 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 - De Lighthouse-scores wisselen sterk tussen runs op dezelfde code; zie de tabel in de PR.
 
 **Bewust niet:** geïmporteerde sticks blijven in de stickwijzer, /vergelijk en vergelijkbare sticks; geen wijziging aan /aanbod, robots.txt of de sitemap; het lettertype blijft (merkkeuze); geen nieuwe dependencies.
+
+## 2026-10-24 — Vaste AI-trainer "Daan" (Synthesia) in de lengte-Short
+
+**Wat:** Een tweede AI-presentator-test naast de Colossyan-test (`docs/video.md` §9): een vaste, verzonnen AI-trainer, *Daan*, gemaakt in Synthesia (Londen). Hij doet alleen de opening en de afsluiting van een nieuwe Short over sticklengte (`video/src/lengte-trainer/`); de uitleg, de tabel en de houdingscheck maken we in Remotion. Script: Claude Doc "Videoscript: Welke lengte hockeystick? (AI-trainer, Short)".
+
+**Reden:** Besluit van de eigenaar (24 oktober). Een gezicht in beeld kan beter werken in Shorts en Reels. De cijfers blijven uit `LENGTH_GUIDE` komen, zodat de video niet afwijkt van de site; Synthesia gratis heeft te weinig credits voor de hele video.
+
+**Belangrijke keuzes:**
+- De tabel in de briefing week af van de site (bijv. 165 cm: 35 tegenover 36,5 inch). We gebruiken de tabel van de site, samengevat in 7 rijen.
+- Daan zegt dat hij een AI-trainer is, en in elke scène staat "Presentator gemaakt met AI" (EU AI Act art. 50). Geen echte spelers of kinderen in beeld: de houding is het silhouet uit `Figure`.
+- Alleen een native Nederlandse stem (nl-NL). De stemmen die Synthesia's videomaker zelf kon kiezen, klonken buitenlands en zijn niet gebruikt. De eigenaar heeft daarom zijn eigen stem in Synthesia ingesproken; die stem gebruiken we voor Daan. Dat is een uitzondering op "geen gekloonde stem" (§9), omdat het zijn eigen stem is en hij er zelf voor kiest.
+
+**Betrokken bestanden:** `video/src/lengte-trainer/*`, `video/src/lengte/LengteVideo.tsx` (helpers geëxporteerd), `video/src/Root.tsx`, `video/render.mjs`, `video/teksten/hockeystick-lengte-trainer.md`, `docs/video.md`.

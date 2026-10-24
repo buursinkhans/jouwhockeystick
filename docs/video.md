@@ -97,6 +97,15 @@ Eén video, *Low bow of mid bow?*, bij `/kennis/low-bow-vs-mid-bow`. De eigenaar
 - **Werkwijze:** een PowerPoint in de huisstijl met het gesproken script als sprekersnotities; Colossyan maakt van elke dia een scène en van de notities de tekst van de avatar.
 - **Bewust niet:** een eigen avatar op basis van een foto of video van iemand anders, een gekloonde stem, AI-avatars in de wekelijkse video's van de Social-studio. Daarvoor is na de evaluatie een nieuw besluit nodig.
 
+### 9a. Tweede test: vaste AI-trainer Daan (Synthesia)
+
+Sinds 24 oktober 2026 (besluit eigenaar, zie de decision log). Een verzonnen AI-trainer, *Daan*, gemaakt in Synthesia, doet de opening en de afsluiting van de Short *Welke sticklengte past bij je kind?* (`lengte-trainer-short`). De rest is Remotion, met de cijfers uit `LENGTH_GUIDE`.
+
+- Dezelfde regels als §9: Daan zegt dat hij een AI-trainer is, in elke scène staat "Presentator gemaakt met AI", en bij het uploaden staat het AI-label aan.
+- Eén vast uiterlijk en één native Nederlandse stem (nl-NL): de eigen stem van de eigenaar, die hij zelf in Synthesia heeft ingesproken (zijn keuze, 24 oktober). Nooit een buitenlands accent, het gezicht van een bestaand persoon of de stem van iemand anders.
+- De clip staat in `assets/video/trainer/`; `TRAINER_CLIP_READY` en `TAKES` in `video/src/lengte-trainer/data.ts` zeggen waar de twee takes zitten. Zonder clip rendert de video met een placeholder.
+- Evaluatie samen met de pilot eind november. Daan in de wekelijkse video's van de Social-studio vraagt een nieuw besluit.
+
 ## 10. Automatisch inplannen op YouTube
 
 Sinds 22 oktober 2026 (besluit eigenaar). De eigenaar keurt goed; de rest gaat vanzelf.
