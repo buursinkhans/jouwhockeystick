@@ -1,15 +1,18 @@
 import { absoluteUrl, pageMetadata } from '@/lib/site';
 import Link from 'next/link';
-import { getAllBrands, getFieldProducts } from '@/catalog';
+import { getAllBrands, getFieldProducts, isFeedImport } from '@/catalog';
 import { pickVaried } from '@/catalog/picks';
 import { isJuniorStick } from '@/catalog/similar';
 import type { Brand } from '@/catalog/types';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
+import { ImportedSticks } from '@/components/catalog/ImportedSticks';
+import { getCatalogStats } from '@/catalog/stats';
 import { TrackedBlock } from '@/components/catalog/TrackedBlock';
 import { InlineText } from '@/components/article/InlineText';
 import { plainText } from '@/components/article/inlineMarkup';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { VELD, veldFaq } from '@/content/veld';
+import { splitListNote } from '@/content/catalogLists';
 import { jsonLdHtml } from '@/lib/jsonLd';
 
 export const metadata = pageMetadata({
@@ -35,9 +38,17 @@ export default async function SticksPage({
   const brands = getAllBrands(now, 'veld', { includeImported: true });
   const activeBrand = isValidBrand(brand, brands) ? brand : undefined;
   const allProducts = getFieldProducts(now, { includeImported: true });
-  const products = allProducts.filter(
-    (p) => !activeBrand || p.brand === activeBrand,
-  );
+  // With a brand chosen, every stick of that brand (the list is short).
+  // Without, only the hand-checked sticks are in the HTML; the imported ones
+  // load after a click (ImportedSticks), which keeps the page light
+  // (decision log 2026-10-24).
+  const products = activeBrand
+    ? allProducts.filter((p) => p.brand === activeBrand)
+    : allProducts.filter((p) => !isFeedImport(p));
+  const importedCount = activeBrand
+    ? 0
+    : allProducts.filter(isFeedImport).length;
+  const total = getCatalogStats(now).fieldSticks;
   // The landing blocks only on the unfiltered page; with a brand chosen the
   // visitor wants the list (the canonical stays /sticks either way).
   const showLanding = !activeBrand;
@@ -111,7 +122,7 @@ export default async function SticksPage({
                 href="#alle-veldsticks"
                 className="font-semibold text-veld hover:underline"
               >
-                {VELD.levels.allLink} ({allProducts.length}) ↓
+                {VELD.levels.allLink} ({total}) ↓
               </a>
             </p>
           </TrackedBlock>
@@ -185,11 +196,23 @@ export default async function SticksPage({
 
       <h3 className="mt-8 text-xl font-bold">
         {activeBrand ? `${activeBrand}-veldsticks` : 'Alle veldsticks'}{' '}
-        <span className="font-normal text-lijngrijs">({products.length})</span>
+        <span className="font-normal text-lijngrijs">
+          ({activeBrand ? products.length : total})
+        </span>
       </h3>
+      {importedCount > 0 && (
+        <p className="mt-2 max-w-3xl text-sm text-inkt/80">
+          {splitListNote(products.length, importedCount)}
+        </p>
+      )}
       <div className="mt-4">
         <ProductGrid products={products} />
       </div>
+      <ImportedSticks
+        page="sticks"
+        file="aanbod-veld.json"
+        count={importedCount}
+      />
     </div>
   );
 }

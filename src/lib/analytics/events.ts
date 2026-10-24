@@ -64,8 +64,9 @@ export type AnalyticsEvent =
        * landing blocks on /sticks), like home_block_click for the homepage.
        */
       name: 'catalog_block_click';
-      page: 'sticks';
-      block: 'intro' | 'levels' | 'faq';
+      page: 'sticks' | 'zaalsticks';
+      /** 'aanbod' = the button that loads the imported PassaHockey sticks (target 'aanbod-laden'). */
+      block: 'intro' | 'levels' | 'faq' | 'aanbod';
       target: string;
     }
   | {

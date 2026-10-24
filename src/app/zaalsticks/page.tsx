@@ -1,9 +1,11 @@
 import Link from 'next/link';
-import { getIndoorProducts } from '@/catalog';
+import { getIndoorProducts, isFeedImport } from '@/catalog';
 import { INDOOR_TIERS, tierPicks } from '@/catalog/indoorTiers';
 import type { Product } from '@/catalog/types';
 import { ZAAL, ZAAL_SOURCES } from '@/content/zaal';
+import { splitListNote } from '@/content/catalogLists';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
+import { ImportedSticks } from '@/components/catalog/ImportedSticks';
 import { IndoorSelector } from '@/components/zaal/IndoorSelector';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { CheckIcon, InfoIcon } from '@/components/ui/icons';
@@ -27,6 +29,8 @@ export default function ZaalsticksPage() {
     ...getIndoorProducts(new Date(), { includeImported: true }),
   ].sort(byPrice);
 
+  const checkedIndoor = allProducts.filter((p) => !isFeedImport(p));
+  const importedIndoor = allProducts.filter(isFeedImport);
   const prices = allProducts.map((p) => p.priceIndicativeEur.value);
   const euro = (value: number) => `€${Math.round(value)}`;
   const faq = [
@@ -178,9 +182,20 @@ export default function ZaalsticksPage() {
           <InfoIcon size={18} className="mt-0.5 shrink-0 text-veld" />
           {ZAAL.stickwijzerNote}
         </p>
+        {importedIndoor.length > 0 && (
+          <p className="mt-4 max-w-3xl text-sm text-inkt/80">
+            {splitListNote(checkedIndoor.length, importedIndoor.length)}
+          </p>
+        )}
         <div className="mt-6">
-          <ProductGrid products={allProducts} />
+          {/* Hand-checked sticks in the HTML; the imported ones after a click (decision log 2026-10-24). */}
+          <ProductGrid products={checkedIndoor} />
         </div>
+        <ImportedSticks
+          page="zaalsticks"
+          file="aanbod-zaal.json"
+          count={importedIndoor.length}
+        />
       </section>
 
       <section className="mt-12 max-w-3xl" aria-labelledby="zaal-faq-heading">

@@ -1301,3 +1301,28 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 - **/zaalsticks:** de eerste FAQ linkt naar het artikel met de ankertekst "verschil tussen een veld- en zaalstick".
 
 **Bewust niet:** geen claim "lichter en dunner" (verwijderd op 2026-10-22; een test bewaakt dat); geen nieuwe URL; geen vaste getallen in de tekst.
+
+## 2026-10-24 — /sticks en /zaalsticks: geïmporteerde sticks pas na een klik
+
+**Aanleiding:** de Core Web Vitals-meting van 2026-10-23 wees de volledige lijsten aan als de grootste oorzaak van de trage meting: /sticks 470 sticks (3,7 MB HTML), /zaalsticks 164 (1,45 MB).
+
+**Besluit eigenaar:** de lijsten splitsen. De gecontroleerde sticks blijven direct op de pagina; de geïmporteerde PassaHockey-sticks laden pas na een klik. Het lettertype blijft zoals het is (merkkeuze).
+
+**Wat:**
+- **De server-HTML** van /sticks en /zaalsticks bevat de intro, de keuzeblokken en alle gecontroleerde sticks, met hun links naar /sticks/<slug>; via die links vindt Google de indexeerbare pagina's.
+  - Daaronder staat de knop "Toon ook X sticks uit het aanbod van PassaHockey", met X berekend uit de catalogus.
+- **Aanpak:** na de klik haalt `ImportedSticks` (client) tegelijk twee dingen op: het statische JSON-bestand `/data/aanbod-veld.json` of `/data/aanbod-zaal.json` (`src/app/data/[file]/route.ts`, `force-static`, `X-Robots-Tag: noindex`), en de code van `ProductGrid` (dynamische import). Daarmee rendert hij dezelfde kaarten als de lijst erboven.
+  - Waarom niet een aparte route met server-gerenderde HTML: dan moet er HTML in de pagina worden gezet buiten React om, en tellen de winkelknoppen daarin niet mee voor `retailer_click`.
+  - Waarom niet een tweede versie van de kaart: `ProductCard` werkt al in de browser, dus er is maar één kaart om bij te houden.
+  - De geïmporteerde sticks zitten niet meer in de HTML of de React-gegevens van de eerste paginalading. Een test (`listSplit.test.ts`) rendert de pagina's en controleert dat geen enkele geïmporteerde slug in de HTML staat. De React-gegevens zitten in dezelfde HTML-respons van de build; daar is met `curl` gecontroleerd dat ook geen geïmporteerde slug voorkomt. `ImportedSticks` krijgt alleen het aantal mee.
+- **Met een merkfilter** (/sticks?brand=…) staan alle sticks van dat merk direct op de pagina, geïmporteerde ook, en is er geen knop.
+- **Aantallen:** "Bekijk alle veldsticks (N)" en de kop van de lijst blijven het totaal uit `getCatalogStats` tonen (besluit 2026-10-22). Op /zaalsticks rekent de prijsvraag in de FAQ nog steeds over alle zaalsticks.
+  - Omdat de kop het totaal noemt en de lijst eerst alleen de gecontroleerde sticks toont, staat eronder: "Hieronder staan de X sticks die we met de hand hebben gecontroleerd. De Y sticks uit het aanbod van PassaHockey laad je met de knop onder de lijst." (`splitListNote`). Zo zegt de pagina eerlijk wat er staat (opmerking van de Review-agent).
+- **Event:** `catalog_block_click` met `block: 'aanbod'`, `target: 'aanbod-laden'` en `page: 'sticks' | 'zaalsticks'`.
+
+**Gemeten (lokale productiebuild, Lighthouse 12 mobiel, 4 runs voor /sticks en /zaalsticks):**
+- **HTML:** /sticks van 3,70 MB naar 0,65 MB (gecomprimeerd 113 naar 50 KB), /zaalsticks van 1,45 naar 0,39 MB (72 naar 40 KB).
+- **Elementen:** /sticks van 16.974 naar 2.871, /zaalsticks van 6.315 naar 1.352.
+- De Lighthouse-scores wisselen sterk tussen runs op dezelfde code; zie de tabel in de PR.
+
+**Bewust niet:** geïmporteerde sticks blijven in de stickwijzer, /vergelijk en vergelijkbare sticks; geen wijziging aan /aanbod, robots.txt of de sitemap; het lettertype blijft (merkkeuze); geen nieuwe dependencies.
