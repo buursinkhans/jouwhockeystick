@@ -24,7 +24,7 @@ export async function generateMetadata({
     return {};
   }
   return pageMetadata({
-    title: article.title,
+    title: article.seoTitle ?? article.title,
     description: article.metaDescription,
     path: `/kennis/${slug}`,
   });

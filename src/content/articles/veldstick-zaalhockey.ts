@@ -1,4 +1,5 @@
-import { getIndoorProducts } from '@/catalog';
+import { getFieldProducts, getIndoorProducts } from '@/catalog';
+import { disciplineDifferences } from '../disciplineCompare';
 import type { Article } from '../types';
 import { ZAAL_SOURCES } from '../zaal';
 import { byPrice, stickListItem } from '../catalogLinks';
@@ -8,6 +9,12 @@ const buyableIndoor = getIndoorProducts()
   .sort(byPrice);
 const cheapest = buyableIndoor[0];
 
+// Computed from the hand-checked sticks only: feed values are not checked by hand.
+const differences = disciplineDifferences(
+  getFieldProducts(),
+  getIndoorProducts(),
+);
+
 const priceSentence = cheapest
   ? `De goedkoopste zaalstick in onze catalogus die bij bol.com te koop is: ${stickListItem(cheapest)}. Controleer de actuele prijs en de leverbare maat bij de winkel.`
   : 'We hebben op dit moment geen zaalsticks in onze catalogus die bij bol.com te koop zijn.';
@@ -15,24 +22,45 @@ const priceSentence = cheapest
 export const veldstickZaalhockey: Article = {
   slug: 'veldstick-zaalhockey',
   title: 'Kun je met een veldstick zaalhockeyen?',
+  seoTitle: 'Veldstick of zaalstick: wat is het verschil?',
   intro:
-    'Ja, dat kan! Voor zaal- en veldsticks gelden dezelfde maximale eisen, dus een aparte zaalstick is niet verplicht. Het spel is wel anders: in de zaal mag je de bal niet slaan. Je veldstick is daarom een prima start, en een zaalstick is vooral iets voor wie vaker de zaal in gaat. Twijfel je? Vraag even bij je club of er afspraken gelden.',
+    'Ja, dat kan! Het verschil tussen een veld- en zaalstick zit niet in de spelregels: volgens de FIH gelden voor beide dezelfde maximale eisen, dus een aparte zaalstick is niet verplicht. Het verschil zit in het spel: in de zaal mag je de bal niet slaan en blijft hij laag. Voor je stick betekent dat: je veldstick is een prima start, en een zaalstick is vooral iets voor wie vaker de zaal in gaat.',
   sections: [
     {
-      heading: 'Mag een veldstick in de zaal?',
+      heading: 'Wat is het verschil tussen een veld- en zaalstick?',
       level: 2,
+      body: [
+        'Kort gezegd: de spelregels zijn gelijk, het spel is anders, en de sticks verschillen vooral in ontwerp. Hieronder de drie punten op een rij.',
+      ],
+    },
+    {
+      heading: 'De spelregels: dezelfde eisen',
+      level: 3,
       body: [
         'Ja. Voor de zaal en het veld gelden dezelfde maximale eisen: een stick moet door een ring van 51 mm passen, de kromming mag maximaal 25 mm zijn, en de stick mag niet zwaarder zijn dan 737 gram en niet langer dan 105 cm.',
         'Een zaalstick is dus geen spelregel. Of je club of competitie nog eigen afspraken heeft, kunnen wij niet voor je checken. Vraag het gewoon even bij je club of trainer.',
       ],
     },
     {
-      heading: 'Wat is anders aan het zaalspel?',
-      level: 2,
+      heading: 'Het gebruik: push en flick, geen slag',
+      level: 3,
       body: [
         'In de zaal sla je de bal niet: je speelt hem met een push of een flick. En de bal blijft laag. Alleen bij een schot op doel mag hij bewust omhoog. Het spel draait dus om aannemen, pushen en snelle acties in een kleine ruimte.',
         'Dat verandert niet wat je met je stick *mag*, maar wel wat je ermee *doet*. Je veldstick kan dus gewoon mee; je speelstijl past zich aan. Meer over de verschillen lees je in [zaalhockeystick kiezen](/zaalsticks).',
       ],
+    },
+    {
+      heading: 'De sticks: wat onze catalogus laat zien',
+      level: 3,
+      body: differences.length
+        ? [
+            'We vergelijken hier alleen de sticks die we met de hand hebben gecontroleerd. De getallen worden uit onze catalogus berekend en veranderen mee als die verandert.',
+            { type: 'list', items: differences },
+            'Merken ontwerpen zaalsticks voor het spel binnen. Een verschil in de catalogus is dus een keuze van het merk, geen eis van de spelregels.',
+          ]
+        : [
+            'Merken ontwerpen zaalsticks voor het spel binnen, bijvoorbeeld met een kleinere kop. Een verschil is dus een keuze van het merk, geen eis van de spelregels.',
+          ],
     },
     {
       heading: 'Wanneer is je veldstick genoeg?',
@@ -76,7 +104,7 @@ export const veldstickZaalhockey: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-11',
-  updatedAt: '2026-10-12',
+  updatedAt: '2026-10-24',
   sources: [
     {
       label: ZAAL_SOURCES.indoorRules.label,
@@ -97,5 +125,5 @@ export const veldstickZaalhockey: Article = {
     },
   ],
   metaDescription:
-    'Mag je met een veldstick zaalhockeyen? Ja: voor zaal en veld gelden dezelfde stickeisen. Lees wanneer een zaalstick wel een logische keuze kan zijn.',
+    'Het verschil tussen een veld- en zaalstick: dezelfde spelregels, een ander spel. Mag je met je veldstick zaalhockeyen, en wanneer is een zaalstick een logische keuze?',
 };

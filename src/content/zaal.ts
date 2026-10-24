@@ -99,7 +99,7 @@ export const ZAAL = {
         question:
           'Wat is het verschil tussen een zaalhockeystick en een veldhockeystick?',
         answer:
-          'Volgens de spelregels geen: voor beide gelden dezelfde maximale eisen voor dikte, kromming, gewicht en lengte. Het verschil zit in het ontwerp. Merken maken zaalsticks voor pushen, balcontrole en snelle acties in een kleine ruimte, bijvoorbeeld met een kleinere krul. Meer lees je in [kun je met een veldstick zaalhockeyen?](/kennis/veldstick-zaalhockey).',
+          'Volgens de spelregels geen: voor beide gelden dezelfde maximale eisen voor dikte, kromming, gewicht en lengte. Het verschil zit in het ontwerp. Merken maken zaalsticks voor pushen, balcontrole en snelle acties in een kleine ruimte, bijvoorbeeld met een kleinere krul. Meer over het [verschil tussen een veld- en zaalstick](/kennis/veldstick-zaalhockey).',
       },
       {
         question: 'Welke lengte zaalhockeystick heb je nodig?',

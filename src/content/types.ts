@@ -39,6 +39,8 @@ export type ArticleSection = z.infer<typeof articleSectionSchema>;
 export const articleSchema = z.object({
   slug: z.string(),
   title: z.string(),
+  /** Search-result title (<title>) when it should differ from the H1 `title`, like ZAAL.seoTitle. */
+  seoTitle: z.string().optional(),
   /** Must answer the main question within the first ~80 words (GEO/SEO rule). */
   intro: z.string(),
   sections: z.array(articleSectionSchema),
