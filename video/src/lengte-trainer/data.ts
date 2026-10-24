@@ -40,8 +40,8 @@ export const COMPACT_ROWS: CompactRow[] = GROUP_STARTS_CM.map((start, index) => 
 export const TRAINER_CLIP = 'video/trainer/lengte-trainer.mp4';
 
 /**
- * False until the clip is in assets/video/trainer/: the video then shows a
- * placeholder where the trainer stands, so the rest can be reviewed already.
+ * False until the clip is in assets/video/trainer/. Without it the video opens
+ * with a text hook and ends on the end card, without the AI label.
  */
 export const TRAINER_CLIP_READY = false;
 

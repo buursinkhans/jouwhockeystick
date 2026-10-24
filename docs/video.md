@@ -103,7 +103,7 @@ Sinds 24 oktober 2026 (besluit eigenaar, zie de decision log). Een verzonnen AI-
 
 - Dezelfde regels als §9: Daan zegt dat hij een AI-trainer is, in elke scène staat "Presentator gemaakt met AI", en bij het uploaden staat het AI-label aan.
 - Eén vast uiterlijk en één native Nederlandse stem (nl-NL): de eigen stem van de eigenaar, die hij zelf in Synthesia heeft ingesproken (zijn keuze, 24 oktober). Nooit een buitenlands accent, het gezicht van een bestaand persoon of de stem van iemand anders.
-- De clip staat in `assets/video/trainer/`; `TRAINER_CLIP_READY` en `TAKES` in `video/src/lengte-trainer/data.ts` zeggen waar de twee takes zitten. Zonder clip rendert de video met een placeholder.
+- De clip staat in `assets/video/trainer/`; `TRAINER_CLIP_READY` en `TAKES` in `video/src/lengte-trainer/data.ts` zeggen waar de twee takes zitten. Zonder clip opent de video met een tekst en eindigt hij op de eindkaart, zonder AI-label. Het gratis pakket van Synthesia kan geen MP4 downloaden; de clip vraagt dus een betaald pakket (besluit eigenaar).
 - Evaluatie samen met de pilot eind november. Daan in de wekelijkse video's van de Social-studio vraagt een nieuw besluit.
 
 ## 10. Automatisch inplannen op YouTube

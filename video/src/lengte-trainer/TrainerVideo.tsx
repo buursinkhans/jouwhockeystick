@@ -52,26 +52,36 @@ type Scene = {
 const takeFrames = (take: { from: number; to: number }) => Math.round((take.to - take.from) * FPS);
 
 function scenes(): Scene[] {
+  // Without the Synthesia clip the video still works: a text hook opens it and
+  // the end card closes it, with no AI label (there is no presenter).
+  const intro: Scene = TRAINER_CLIP_READY
+    ? {
+        id: 'intro',
+        frames: takeFrames(TAKES.intro),
+        trainer: true,
+        render: () => (
+          <TrainerScene take={TAKES.intro} captions={CAPTIONS.intro}>
+            <Hook />
+          </TrainerScene>
+        ),
+      }
+    : { id: 'intro', frames: b(5), dark: true, render: () => <TextHookScene /> };
+  const outro: Scene[] = TRAINER_CLIP_READY
+    ? [
+        {
+          id: 'outro',
+          frames: takeFrames(TAKES.outro),
+          trainer: true,
+          render: () => <TrainerScene take={TAKES.outro} captions={CAPTIONS.outro} />,
+        },
+      ]
+    : [];
   return [
-    {
-      id: 'intro',
-      frames: takeFrames(TAKES.intro),
-      trainer: true,
-      render: () => (
-        <TrainerScene take={TAKES.intro} captions={CAPTIONS.intro}>
-          <Hook />
-        </TrainerScene>
-      ),
-    },
+    intro,
     { id: 'lang-kort', frames: b(14), render: () => <LongShortScene /> },
     { id: 'tabel', frames: b(20), render: () => <CompactTableScene /> },
     { id: 'houding', frames: b(12), render: () => <PostureScene /> },
-    {
-      id: 'outro',
-      frames: takeFrames(TAKES.outro),
-      trainer: true,
-      render: () => <TrainerScene take={TAKES.outro} captions={CAPTIONS.outro} />,
-    },
+    ...outro,
     { id: 'eindkaart', frames: b(8), dark: true, render: () => <EndCard /> },
   ];
 }
@@ -115,7 +125,7 @@ export function TrainerVideo({ music }: TrainerProps) {
           </Sequence>
         );
       })}
-      <AiLabel />
+      {TRAINER_CLIP_READY && <AiLabel />}
       <Progress total={total} />
       {music && <Audio src={staticFile('video/muziek.mp3')} volume={musicVolume} />}
     </AbsoluteFill>
@@ -220,49 +230,29 @@ function TrainerScene({
   const frames = takeFrames(take);
   return (
     <AbsoluteFill>
-      {TRAINER_CLIP_READY ? (
-        <OffthreadVideo
-          src={staticFile(TRAINER_CLIP)}
-          startFrom={Math.round(take.from * FPS)}
-          endAt={Math.round(take.to * FPS)}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        />
-      ) : (
-        <TrainerPlaceholder />
-      )}
+      <OffthreadVideo
+        src={staticFile(TRAINER_CLIP)}
+        startFrom={Math.round(take.from * FPS)}
+        endAt={Math.round(take.to * FPS)}
+        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      />
       {children}
       <Captions lines={captions} frames={frames} />
     </AbsoluteFill>
   );
 }
 
-/** Stands in for the Synthesia clip until it is added. */
-function TrainerPlaceholder() {
-  const { body } = useLayout();
+/** Opening without the trainer: the hook, readable in full on frame 0. */
+function TextHookScene() {
+  const { pad, h1, body } = useLayout();
   return (
-    <AbsoluteFill
-      style={{
-        background: `linear-gradient(180deg, ${C.veldblauw} 0%, ${C.inkt} 100%)`,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <div
-        style={{
-          border: `4px dashed ${C.nlNegatief}`,
-          borderRadius: 24,
-          padding: body * 0.6,
-          color: C.nlNegatief,
-          fontFamily: FONT_BODY,
-          fontWeight: 600,
-          fontSize: body,
-          textAlign: 'center',
-        }}
-      >
-        Hier komt Daan
-        <br />
-        (clip uit Synthesia)
-      </div>
+    <AbsoluteFill style={{ padding: pad, justifyContent: 'center', gap: 40 }}>
+      <Words text="Welke sticklengte past bij je kind?" size={h1 * 1.1} color={C.wit} accent={['kind?']} instant />
+      <Rise delay={b(1.5)}>
+        <Body size={body} color={C.nlNegatief}>
+          In 3 stappen: lengte, houding en niet op de groei.
+        </Body>
+      </Rise>
     </AbsoluteFill>
   );
 }

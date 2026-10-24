@@ -1,12 +1,12 @@
 # Uploadteksten — Welke sticklengte past bij je kind? (AI-trainer, Short)
 
-Bronpagina: `/kennis/hockeystick-lengte-tabel`. De maten komen uit `LENGTH_GUIDE` (`src/advice-engine/sizeAdvice.ts`), samengevat in 7 rijen. De trainer *Daan* is een verzonnen AI-presentator uit Synthesia (`docs/video.md` §9a).
+Bronpagina: `/kennis/hockeystick-lengte-tabel`. De maten komen uit `LENGTH_GUIDE` (`src/advice-engine/sizeAdvice.ts`), samengevat in 7 rijen. De trainer *Daan* is een verzonnen AI-presentator uit Synthesia (`docs/video.md` §9a). **Zolang zijn clip er niet in zit** (`TRAINER_CLIP_READY = false`), opent de video met een tekst en zit er geen AI in: haal dan de AI-regels hieronder weg en zet de AI-labels uit.
 
 Bestanden (uit de run *Video renderen*, download *video-renders*):
 
 | Bestand | Waar |
 |---|---|
-| `hockeystick-lengte-trainer-short.mp4` (9:16, ±36 s, met muziek) | YouTube Shorts, en Reels/TikTok als je onze eigen muziek houdt |
+| `hockeystick-lengte-trainer-short.mp4` (9:16, ±36 s met trainer, ±28 s zonder; met muziek) | YouTube Shorts, en Reels/TikTok als je onze eigen muziek houdt |
 | `hockeystick-lengte-trainer-short-zonder-muziek.mp4` | Reels/TikTok als je in de app zelf muziek kiest |
 
 ---
@@ -50,7 +50,7 @@ Op de site staan partnerlinks naar bol.com en PassaHockey; daarvoor krijgen we e
 ## Instellingen bij het uploaden
 
 - **YouTube → Publiek:** "Nee, het is niet gemaakt voor kinderen" (de video is voor ouders).
-- **YouTube → Gewijzigde of synthetische content: "Ja"** (realistische AI-presentator).
-- **Instagram, Facebook en TikTok:** zet het AI-label aan.
+- **YouTube → Gewijzigde of synthetische content:** "Ja" met trainer (realistische AI-presentator), "Nee" zonder.
+- **Instagram, Facebook en TikTok:** AI-label aan met trainer, uit zonder.
 - **Betaalde promotie:** uit.
 - Link naar de site met `utm_source=youtube&utm_medium=video&utm_campaign=lengte-trainer` (of via `jouwhockeystick.nl/youtube`).
