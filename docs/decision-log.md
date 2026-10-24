@@ -1336,6 +1336,6 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Belangrijke keuzes:**
 - De tabel in de briefing week af van de site (bijv. 165 cm: 35 tegenover 36,5 inch). We gebruiken de tabel van de site, samengevat in 7 rijen.
 - Daan zegt dat hij een AI-trainer is, en in elke scène staat "Presentator gemaakt met AI" (EU AI Act art. 50). Geen echte spelers of kinderen in beeld: de houding is het silhouet uit `Figure`.
-- Alleen een native Nederlandse stem (nl-NL); Synthesia's eigen keuze klonk buitenlands en is niet gebruikt.
+- Alleen een native Nederlandse stem (nl-NL). De stemmen die Synthesia's videomaker zelf kon kiezen, klonken buitenlands en zijn niet gebruikt. De eigenaar heeft daarom zijn eigen stem in Synthesia ingesproken; die stem gebruiken we voor Daan. Dat is een uitzondering op "geen gekloonde stem" (§9), omdat het zijn eigen stem is en hij er zelf voor kiest.
 
 **Betrokken bestanden:** `video/src/lengte-trainer/*`, `video/src/lengte/LengteVideo.tsx` (helpers geëxporteerd), `video/src/Root.tsx`, `video/render.mjs`, `video/teksten/hockeystick-lengte-trainer.md`, `docs/video.md`.
