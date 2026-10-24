@@ -23,7 +23,7 @@ describe('server HTML of the catalog lists (decision log 2026-10-24)', () => {
     for (const p of all.filter((p) => !isFeedImport(p)))
       expect(links, p.slug).toContain(productPath(p));
     for (const p of all.filter(isFeedImport))
-      expect(links.has(productPath(p)), p.slug).toBe(false);
+      expect(html, p.slug).not.toContain(p.slug);
     expect(html).toContain(
       `Toon ook ${all.filter(isFeedImport).length} sticks uit het aanbod van PassaHockey`,
     );
@@ -36,7 +36,7 @@ describe('server HTML of the catalog lists (decision log 2026-10-24)', () => {
     for (const p of all.filter((p) => !isFeedImport(p)))
       expect(links, p.slug).toContain(productPath(p));
     for (const p of all.filter(isFeedImport))
-      expect(links.has(productPath(p)), p.slug).toBe(false);
+      expect(html, p.slug).not.toContain(p.slug);
   });
 
   it('with a brand filter, /sticks shows every stick of that brand, imported ones too', async () => {

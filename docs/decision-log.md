@@ -1314,9 +1314,10 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 - **Aanpak:** na de klik haalt `ImportedSticks` (client) tegelijk twee dingen op: het statische JSON-bestand `/data/aanbod-veld.json` of `/data/aanbod-zaal.json` (`src/app/data/[file]/route.ts`, `force-static`, `X-Robots-Tag: noindex`), en de code van `ProductGrid` (dynamische import). Daarmee rendert hij dezelfde kaarten als de lijst erboven.
   - Waarom niet een aparte route met server-gerenderde HTML: dan moet er HTML in de pagina worden gezet buiten React om, en tellen de winkelknoppen daarin niet mee voor `retailer_click`.
   - Waarom niet een tweede versie van de kaart: `ProductCard` werkt al in de browser, dus er is maar één kaart om bij te houden.
-  - De geïmporteerde sticks zitten niet meer in de HTML of de React-gegevens van de eerste paginalading. Een test bewaakt dat.
+  - De geïmporteerde sticks zitten niet meer in de HTML of de React-gegevens van de eerste paginalading. Een test (`listSplit.test.ts`) rendert de pagina's en controleert dat geen enkele geïmporteerde slug in de HTML staat. De React-gegevens zitten in dezelfde HTML-respons van de build; daar is met `curl` gecontroleerd dat ook geen geïmporteerde slug voorkomt. `ImportedSticks` krijgt alleen het aantal mee.
 - **Met een merkfilter** (/sticks?brand=…) staan alle sticks van dat merk direct op de pagina, geïmporteerde ook, en is er geen knop.
 - **Aantallen:** "Bekijk alle veldsticks (N)" en de kop van de lijst blijven het totaal uit `getCatalogStats` tonen (besluit 2026-10-22). Op /zaalsticks rekent de prijsvraag in de FAQ nog steeds over alle zaalsticks.
+  - Omdat de kop het totaal noemt en de lijst eerst alleen de gecontroleerde sticks toont, staat eronder: "Hieronder staan de X sticks die we met de hand hebben gecontroleerd. De Y sticks uit het aanbod van PassaHockey laad je met de knop onder de lijst." (`splitListNote`). Zo zegt de pagina eerlijk wat er staat (opmerking van de Review-agent).
 - **Event:** `catalog_block_click` met `block: 'aanbod'`, `target: 'aanbod-laden'` en `page: 'sticks' | 'zaalsticks'`.
 
 **Gemeten (lokale productiebuild, Lighthouse 12 mobiel, 4 runs voor /sticks en /zaalsticks):**

@@ -12,6 +12,7 @@ import { InlineText } from '@/components/article/InlineText';
 import { plainText } from '@/components/article/inlineMarkup';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { VELD, veldFaq } from '@/content/veld';
+import { splitListNote } from '@/content/catalogLists';
 import { jsonLdHtml } from '@/lib/jsonLd';
 
 export const metadata = pageMetadata({
@@ -199,6 +200,11 @@ export default async function SticksPage({
           ({activeBrand ? products.length : total})
         </span>
       </h3>
+      {importedCount > 0 && (
+        <p className="mt-2 max-w-3xl text-sm text-inkt/80">
+          {splitListNote(products.length, importedCount)}
+        </p>
+      )}
       <div className="mt-4">
         <ProductGrid products={products} />
       </div>
