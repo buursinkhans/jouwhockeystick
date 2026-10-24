@@ -56,10 +56,10 @@ export const veldstickZaalhockey: Article = {
         ? [
             'We vergelijken hier alleen de sticks die we met de hand hebben gecontroleerd. De getallen worden uit onze catalogus berekend en veranderen mee als die verandert.',
             { type: 'list', items: differences },
-            'Merken ontwerpen zaalsticks voor het spel binnen. Een verschil in de catalogus is dus een keuze van het merk, geen eis van de spelregels.',
+            'Onze lezing: omdat de spelregels voor beide gelijk zijn, komt een verschil in de catalogus voort uit de keuzes van merken, niet uit de regels. Grays beschrijft zijn zaalsticks bijvoorbeeld met een kleinere kop voor snelle acties in een kleine ruimte (zie de bronnen onderaan).',
           ]
         : [
-            'Merken ontwerpen zaalsticks voor het spel binnen, bijvoorbeeld met een kleinere kop. Een verschil is dus een keuze van het merk, geen eis van de spelregels.',
+            'Onze lezing: omdat de spelregels voor beide gelijk zijn, is een verschil tussen sticks een keuze van het merk, niet een eis van de regels. Grays beschrijft zijn zaalsticks bijvoorbeeld met een kleinere kop voor snelle acties in een kleine ruimte (zie de bronnen onderaan).',
           ],
     },
     {
