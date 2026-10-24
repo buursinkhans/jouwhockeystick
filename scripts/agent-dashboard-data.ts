@@ -33,6 +33,7 @@ const AGENTS: Agent[] = [
   { id: 'searchconsole', naam: 'Search Console-rapport', rol: 'Analytics', soort: 'Script', start: 'Elke maandag', workflow: 'search-console.yml' },
   { id: 'content', naam: 'Content-agent', rol: 'Content', soort: 'AI (Claude)', start: 'Op akkoord of @claude', workflow: 'claude.yml' },
   { id: 'beveiliging', naam: 'Beveiligingscontrole', rol: 'Bewaking', soort: 'Script', start: 'Elke maandag', workflow: 'security.yml' },
+  { id: 'indexnow', naam: 'IndexNow', rol: 'Bewaking', soort: 'Script', start: 'Na elke deploy', workflow: 'indexnow.yml' },
   { id: 'techseo', naam: 'Technical SEO', rol: 'Bewaking', soort: 'Script', start: 'Elke maandag', workflow: 'technical-seo.yml' },
   { id: 'markt', naam: 'Marktverkenner', rol: 'Analytics', soort: 'Script + AI (Claude)', start: 'Elke maandag', workflow: 'marktverkenning.yml' },
   { id: 'catalogusaanvuller', naam: 'Catalogus-aanvuller', rol: 'Data', soort: 'Script + AI (Claude)', start: 'Elke dinsdag', workflow: 'catalogus-aanvuller.yml' },
