@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { getIndoorProducts } from '@/catalog';
+import { getIndoorProducts, isFeedImport } from '@/catalog';
 import { INDOOR_TIERS, tierPicks } from '@/catalog/indoorTiers';
 import type { Product } from '@/catalog/types';
 import { ZAAL, ZAAL_SOURCES } from '@/content/zaal';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
+import { ImportedSticks } from '@/components/catalog/ImportedSticks';
 import { IndoorSelector } from '@/components/zaal/IndoorSelector';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { CheckIcon, InfoIcon } from '@/components/ui/icons';
@@ -179,8 +180,14 @@ export default function ZaalsticksPage() {
           {ZAAL.stickwijzerNote}
         </p>
         <div className="mt-6">
-          <ProductGrid products={allProducts} />
+          {/* Hand-checked sticks in the HTML; the imported ones after a click (decision log 2026-10-24). */}
+          <ProductGrid products={allProducts.filter((p) => !isFeedImport(p))} />
         </div>
+        <ImportedSticks
+          page="zaalsticks"
+          file="aanbod-zaal.json"
+          count={allProducts.filter(isFeedImport).length}
+        />
       </section>
 
       <section className="mt-12 max-w-3xl" aria-labelledby="zaal-faq-heading">
