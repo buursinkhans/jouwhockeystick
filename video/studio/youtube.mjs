@@ -17,6 +17,10 @@ const TIME = /^\d{2}:\d{2}$/;
 const str = (v) => (typeof v === 'string' ? v : '');
 // YouTube refuses < and > in titles and descriptions.
 const clean = (v) => str(v).replace(/[<>]/g, '').trim();
+// Scripts from the Social-studio can hold an escaped "\n" (backslash + n) instead of a real
+// line break. YouTube then shows the backslashes and glues the next word onto
+// a link (seen in PostHog as utm_campaign "…-lengte\n\nOns", October 2026).
+const cleanText = (v) => clean(str(v).replace(/\\r\\n|\\n/g, '\n'));
 
 /** Problems with the script, in Dutch for the result; empty when it can be published. */
 export function validate(video) {
@@ -73,10 +77,10 @@ export function metadata(video, target, publishAt) {
   if (target === 'shorts') {
     title = clean(sh.titel) || clean(yt.titel) || clean(video.titel);
     if (title && !/#shorts/i.test(title)) title = `${title} #shorts`;
-    description = clean(sh.beschrijving) || clean(yt.beschrijving);
+    description = cleanText(sh.beschrijving) || cleanText(yt.beschrijving);
   } else {
     title = clean(yt.titel) || clean(video.titel);
-    description = clean(yt.beschrijving);
+    description = cleanText(yt.beschrijving);
   }
   if (!title) throw new Error('Geen titel in het script.');
   if (title.length > 100) title = title.slice(0, 99).trimEnd() + '…';

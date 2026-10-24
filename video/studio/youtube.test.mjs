@@ -103,3 +103,9 @@ test('alreadyScheduled: a second label never uploads again', async () => {
   assert.equal(alreadyScheduled([{ body: 'iemand typt "status": "ingepland"' }]), false);
   assert.equal(alreadyScheduled(null), false);
 });
+
+test('metadata: escaped line breaks in a description become real ones', () => {
+  const at = new Date('2026-10-25T17:00:00Z');
+  const m = metadata({ ...base, short: { titel: 'Zaalstick', beschrijving: 'Tabel: https://jouwhockeystick.nl/x?utm_campaign=lengte\\n\\nOns advies' } }, 'shorts', at);
+  assert.equal(m.snippet.description, 'Tabel: https://jouwhockeystick.nl/x?utm_campaign=lengte\n\nOns advies');
+});
