@@ -1281,3 +1281,23 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
   - Met de hand te starten met `changed` of `all`. Alleen `contents: read`, geen secrets.
 
 **Bewust niet:** geen Google-ping (Google doet niet mee aan IndexNow, en de oude sitemap-ping is uitgezet); geen wijziging aan netlify.toml, DNS, robots.txt of de inhoud van de sitemap; geen URL's buiten de sitemap.
+
+## 2026-10-24 — /kennis/veldstick-zaalhockey beantwoordt "verschil veldhockey zaalhockey stick"
+
+**Aanleiding:** Search Console: "verschil veldhockey zaalhockey stick" staat gemiddeld op positie 21. Het bestaande artikel beantwoordt die vraag, maar noemde het verschil niet expliciet. Er komt geen nieuwe pagina.
+
+**Wat:**
+- **Optionele `seoTitle` in het Article-type** (zoals `ZAAL.seoTitle`), gebruikt in de metadata van /kennis en /blog. Dit artikel krijgt "Veldstick of zaalstick: wat is het verschil?"; de H1 ("Kun je met een veldstick zaalhockeyen?") en de URL blijven gelijk.
+- **Intro:** noemt "verschil" en het antwoord in de eerste 80 woorden. De regels zijn gelijk (FIH), het spel verschilt, en dat betekent iets voor je stick.
+- **Bovenaan een H2 "Wat is het verschil tussen een veld- en zaalstick?"**, met drie H3's:
+  - de spelregels (de bestaande FIH-tekst);
+  - het gebruik (push en flick, geen slag, de bal laag);
+  - de sticks volgens onze catalogus.
+  - De twee oude H2's "Mag een veldstick in de zaal?" en "Wat is anders aan het zaalspel?" zijn daarin opgegaan; hun tekst is behouden.
+- **Catalogusvergelijking** (`src/content/disciplineCompare.ts`): lengte, gewicht, meest voorkomende kromming en carbon van veld- tegenover zaalsticks, berekend uit de catalogus.
+  - Alleen de sticks die we met de hand hebben gecontroleerd. De feedwaarden zijn niet met de hand nagekeken, en met de import erbij verschuiven de bereiken sterk: bij zaalsticks loopt carbon dan tot 95% in plaats van 30%. De tekst zegt dat erbij.
+  - Een punt valt weg als een kant minder dan 3 sticks met dat gegeven heeft. Gewicht staat nu bij te weinig sticks en wordt daarom niet getoond.
+  - Alles staat als "in onze catalogus", niet als algemene waarheid.
+- **/zaalsticks:** de eerste FAQ linkt naar het artikel met de ankertekst "verschil tussen een veld- en zaalstick".
+
+**Bewust niet:** geen claim "lichter en dunner" (verwijderd op 2026-10-22; een test bewaakt dat); geen nieuwe URL; geen vaste getallen in de tekst.
