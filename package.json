@@ -25,7 +25,8 @@
     "instagram:refresh": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/instagram-token-refresh.ts",
     "sales:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/sales-report.ts",
     "catalog:enrich-list": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-enrich-list.ts",
-    "security:check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/security-check.ts"
+    "security:check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/security-check.ts",
+    "indexnow": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/indexnow.ts"
   },
   "dependencies": {
     "next": "^16.4.2",

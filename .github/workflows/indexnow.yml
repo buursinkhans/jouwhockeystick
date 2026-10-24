@@ -1,0 +1,70 @@
+# IndexNow: tells Bing and the other IndexNow search engines which pages are
+# new or changed, once a production deploy is live. Netlify does not report
+# its deploys to GitHub (no deployment_status), so this starts on a push to
+# main and waits until https://jouwhockeystick.nl/version.txt shows this
+# commit (or a newer one). Only URLs from the live sitemap are sent; one
+# request per deploy. No secrets: the IndexNow key is public by design.
+# See scripts/indexnow.ts and the decision log of 2026-10-24.
+name: IndexNow
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'changed = pagina''s van de laatste commit, all = de hele sitemap'
+        type: choice
+        options: [changed, all]
+        default: changed
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Wachten tot de deploy live staat
+        id: live
+        if: github.event_name == 'push'
+        run: |
+          sha="${{ github.sha }}"
+          for attempt in $(seq 1 50); do
+            live=$(curl -fsS --max-time 20 https://jouwhockeystick.nl/version.txt | tr -d '[:space:]' || true)
+            # Live is this commit, or a newer one that contains it.
+            if [ "$live" = "$sha" ] || { [ -n "$live" ] && git merge-base --is-ancestor "$sha" "$live" 2>/dev/null; }; then
+              echo "Live: $live"
+              echo "ready=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "Nog niet live (nu: ${live:-onbekend}); poging $attempt van 50."
+            sleep 30
+          done
+          echo "::warning::Deze commit stond na 25 minuten niet live (Netlify-build mislukt of overgeslagen?). Niets gemeld."
+          echo "ready=false" >> "$GITHUB_OUTPUT"
+
+      - name: Gewijzigde pagina's melden
+        if: github.event_name == 'push' && steps.live.outputs.ready == 'true'
+        run: npm run --silent indexnow -- changed "${{ github.event.before }}" "${{ github.sha }}"
+
+      - name: Handmatig melden
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ inputs.mode }}" = "all" ]; then
+            npm run --silent indexnow -- all
+          else
+            npm run --silent indexnow -- changed "${{ github.sha }}~1" "${{ github.sha }}"
+          fi

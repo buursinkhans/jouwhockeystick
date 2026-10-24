@@ -1263,3 +1263,21 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 - Geen wijziging aan headers, CSP of netlify.toml.
 - Het lettertype is niet aangepast. Bricolage zonder optische-maat-as of zonder preload zou de geschatte LCP verlagen, maar is een merkkeuze (merkinstructie). Dat is een voorstel aan de eigenaar.
 - De lijsten zijn niet ingekort. De lengte van de lijsten op /zaalsticks (164) en /sticks (470) is de grootste oorzaak van de trage meting op die pagina's; een kortere eerste weergave met "toon alle" is een voorstel aan de eigenaar.
+
+## 2026-10-24 — IndexNow: Bing automatisch melden welke pagina's veranderd zijn
+
+**Aanleiding:** Bing Webmaster Tools (23-10) toont pagina's als "Discovered but not crawled". De eigenaar moest indexering met de hand aanvragen.
+
+**Wat:**
+- **Sleutel:** `public/<sleutel>.txt`, met de sleutel als inhoud; dezelfde waarde staat in `src/seo/indexnow.ts`. **Deze sleutel is geen geheim:** het IndexNow-protocol vraagt hem openbaar op de eigen site, zodat Bing kan controleren dat de melding van de eigenaar van het domein komt. Hij hoort dus niet in GitHub Secrets; de regel "geen secrets in code" gaat over echte geheimen.
+- **`npm run indexnow`** (`scripts/indexnow.ts`, zonder nieuwe dependencies):
+  - `changed <before> <after>` vertaalt de gewijzigde bestanden naar pagina's. Productbestand → /sticks/<slug>, artikel → /kennis/<slug>, blog → /blog/<slug>, de eigen `page.tsx` van een vaste route → die route, en de inhoudsbestanden van /zaalsticks, /sticks, /, /methodiek, /merken, /clubs en /privacy.
+  - Gedeelde code (layout, componenten, `[slug]`-routes, de import) telt niet mee; die stuurt geen volledige lijst.
+  - `all` stuurt de hele sitemap; alleen met de hand.
+  - Altijd gefilterd op de live sitemap, dus nooit /aanbod (geïmporteerde sticks), /interesse of /stickwijzer/advies. Eén verzoek per run; de URL's en de HTTP-status (200/202 = goed) staan in het log. `--dry-run` logt zonder te versturen.
+- **Workflow `indexnow.yml`:** Netlify meldt zijn deploys niet aan GitHub (geen `deployment_status`, geen status op de commit). De workflow start daarom na een push naar `main` en wacht tot `/version.txt` deze commit of een nieuwere laat zien, met een time-out van 25 minuten.
+  - `/version.txt` (`src/app/version.txt/route.ts`) toont de commit van de build (`COMMIT_REF` van Netlify). De repo is openbaar, dus dat zegt niets geheims.
+  - Komt de commit niet live (build mislukt of overgeslagen), dan meldt hij niets en geeft hij een waarschuwing.
+  - Met de hand te starten met `changed` of `all`. Alleen `contents: read`, geen secrets.
+
+**Bewust niet:** geen Google-ping (Google doet niet mee aan IndexNow, en de oude sitemap-ping is uitgezet); geen wijziging aan netlify.toml, DNS, robots.txt of de inhoud van de sitemap; geen URL's buiten de sitemap.
