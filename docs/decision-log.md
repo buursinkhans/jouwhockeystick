@@ -1327,6 +1327,18 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 
 **Bewust niet:** geïmporteerde sticks blijven in de stickwijzer, /vergelijk en vergelijkbare sticks; geen wijziging aan /aanbod, robots.txt of de sitemap; het lettertype blijft (merkkeuze); geen nieuwe dependencies.
 
+## 2026-10-24 — Paden met dubbele schuine strepen: 308 naar enkele strepen
+
+**Aanleiding:** een PageSpeed-meting op https://jouwhockeystick.nl//stickwijzer crashte met "This page couldn't load": `SecurityError: Failed to execute 'replaceState' on 'History': A history state object with URL 'https://stickwijzer/' cannot be created`. De router van Next.js leest "//stickwijzer" als de host "stickwijzer".
+
+**Oorzaak:** lokaal stuurt `next start` zulke paden zelf al door met een 308. Live niet: Netlify serveert de gecachete pagina voor "//stickwijzer" rechtstreeks uit de CDN-cache (`Cache-Status: "Netlify Edge"; hit`, status 200). De Next-server, en dus zijn doorverwijzing, komt dan niet aan bod.
+
+**Wat:** `src/proxy.ts` (Next 16; voorheen middleware) stuurt een pad met twee of meer opeenvolgende schuine strepen met een 308 door naar hetzelfde pad met enkele strepen, met behoud van de query string. De logica staat in `collapseSlashes` (`src/lib/slashes.ts`).
+- **Waarom de proxy en niet `redirects` in next.config.ts:** die redirects voert de Next-server uit, en die wordt bij een cachetreffer op Netlify niet aangeroepen. De proxy wordt met @netlify/plugin-nextjs een Edge Function, en die draait vóór de cache.
+- **Smalle matcher:** `/(/.*)` en `/(.*//.*)`. Gecontroleerd op de gebouwde regex: hij raakt //stickwijzer, ///zaalsticks en /kennis//…, en niet /stickwijzer, /, /sticks/<slug>, /_next/static/… of /data/…. Normale verzoeken komen de proxy dus niet tegen.
+
+**Bewust niet:** geen wijziging aan netlify.toml, DNS, beveiligingsheaders of andere redirects.
+
 ## 2026-10-24 — Vaste AI-trainer "Daan" (Synthesia) in de lengte-Short
 
 **Wat:** Een tweede AI-presentator-test naast de Colossyan-test (`docs/video.md` §9): een vaste, verzonnen AI-trainer, *Daan*, gemaakt in Synthesia (Londen). Hij doet alleen de opening en de afsluiting van een nieuwe Short over sticklengte (`video/src/lengte-trainer/`); de uitleg, de tabel en de houdingscheck maken we in Remotion. Script: Claude Doc "Videoscript: Welke lengte hockeystick? (AI-trainer, Short)".
