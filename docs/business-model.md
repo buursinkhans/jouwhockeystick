@@ -1,6 +1,6 @@
 # Business model — jouwhockeystick.nl
 
-**Status:** strategiedocument; de actuele situatie staat in sectie 5. Inhoudsopgave van alle documenten: `docs/README.md`.
+**Status:** strategiedocument; de actuele situatie staat in sectie 5, de uitbreiding met meer partnerprogramma's in sectie 5a. Inhoudsopgave van alle documenten: `docs/README.md`.
 **Doel van dit document:** vastleggen welk verdienmodel de MVP volgt, zodat de technische keuzes (checkout, productfeed, tracking) hierop worden afgestemd in plaats van andersom.
 **Plaats in repo:** `docs/business-model.md`.
 
@@ -95,17 +95,71 @@ De ontwikkelinstructie hecht terecht veel waarde aan uitlegbaar advies en betrou
 - **PassaHockey:** elke stick die PassaHockey verkoopt, krijgt een rode knop met een TradeTracker-link. De referentie is de plek op de site.
 - **PassaHockey-productfeed (TradeTracker):** het assortiment van PassaHockey wordt wekelijks geïmporteerd. Prijzen en voorraad van die sticks volgen de feed.
 - **Bij beide te koop:** de stick krijgt twee knoppen. De pagina `/kennis/waar-koop-je-een-hockeystick` legt het verschil tussen de winkels uit.
-- **Vergoedingen** lopen via de voorwaarden van die programma's. We nemen ze nergens in code of tekst aan, en ze tellen niet mee in het advies.
+- **Vergoedingen** lopen via de voorwaarden van die programma's: volgens de eigenaar 7% bij bol.com (categorie Sport) en 5% bij PassaHockey. Deze percentages staan alleen in dit document als rekengrondslag; ze komen nergens in code of sitetekst, en ze tellen niet mee in het advies.
 - **Bestellen bij een lokale winkel** blijft een optie voor later (zie hieronder).
 
 Het eerdere plan voor deze tussenstap, met een mailto-bestelformulier en aannames over bol-commissies, staat in de git-geschiedenis van dit bestand.
+
+## 5a. Uitbreiding met meer partnerprogramma's (stand 2026-10-25)
+
+**Waarom:** nu valt een bezoeker af als bol.com of PassaHockey een stick niet verkoopt. Met meer winkels krijgt vrijwel elke stick een koopknop, en wordt een prijsvergelijking per stick mogelijk (zie hieronder). Dit is de uitwerking van "meerdere partnerwinkels" uit sectie 6.
+
+**Aanmeldingen bij affiliatenetwerken:**
+
+| Netwerk | Account | Opmerking |
+|---|---|---|
+| bol.com Partnerprogramma | actief | site ID 1547833 |
+| TradeTracker | actief | PassaHockey (campagne 39608) |
+| Daisycon | aangemaakt 2026-10-24 | media "jouwhockeystick" (441384) geverifieerd via bestand in `public/` (PR #91) |
+| Awin | aangemaakt 2026-10-24 | |
+| Odyssey Partnerships | aangevraagd | nodig voor Decathlon NL; vóór gebruik checken waar het bedrijf zit en waar de data staat (EU-afspraak) |
+
+**Programma's per winkel:**
+
+| Winkel | Netwerk | Status | Bekend (bron: openbare pagina's, nog te bevestigen in het dashboard) |
+|---|---|---|---|
+| HockeyCity.nl | TradeTracker | aangevraagd | hockeyspecialist voor junioren; 100 dagen cookie |
+| Jumbo Sports | Daisycon | aangevraagd | golf- en hockeywinkel; productfeed en deeplinks; 100 dagen meetduur |
+| DAKA | Daisycon | aangevraagd | algemene sportwinkel met hockey; 5–7%, 30 dagen cookie; productfeed onbekend |
+| Plutosport NL | Awin | aangevraagd | adverteerder-ID 8342; hockey-assortiment en feed nog te controleren |
+| Decathlon NL | Odyssey Partnerships | na goedkeuring Odyssey-account | tot 7%, 30 dagen cookie, productfeed; verkoopt via de marketplace o.a. Grays |
+
+**Afgevallen of onzeker:**
+- **Hockeygear.eu:** bestaat niet meer.
+- **Playhockey.shop:** volgens affi.io op TradeTracker, maar niet zichtbaar in het dashboard. Alleen via een directe mail te bevestigen.
+- **Hockeydirect:** programma's op Daisycon en TradeTracker gesloten. Eventueel direct mailen.
+- **Hockeyspullen.nl, Intersport NL:** geen programma gevonden.
+- **Decathlon via Awin:** het NL-programma op Awin is gesloten; Decathlon NL loopt via Odyssey.
+
+**Les:** overzichtssites zoals affi.io lopen achter. Alleen het dashboard van het netwerk of de eigen pagina van de winkel telt als bron.
+
+**Spelregels bij uitbreiding:**
+1. Een winkel krijgt pas een knop op de site als het programma is goedgekeurd (CLAUDE.md: "Voeg een winkel pas toe als daar een partnerprogramma voor is").
+2. Per goedgekeurd programma vastleggen: commissie, cookieduur, productfeed (ja/nee), deeplinks (ja/nee).
+3. Niet dezelfde winkel via meerdere netwerken aanmelden: dat levert geen extra omzet op, wel extra administratie.
+4. Niet meer netwerken dan nodig. Elk netwerk heeft een eigen uitbetalingsdrempel en een eigen feed om te onderhouden.
+5. Elke nieuwe winkel op de site is een besluit in `docs/decision-log.md`. Extra trackingdomeinen kunnen gevolgen hebben voor de privacy- en cookietekst; die wordt alleen op expliciete opdracht van de eigenaar aangepast.
+
+**Volgende stap: prijsvergelijking per stick (idee, nog niet besloten)**
+
+Per stick tonen bij welke partnerwinkel hij te koop is, met prijs en datum, gesorteerd op prijs.
+
+- **Waarom interessant:** zoekopdrachten als "[merk model] prijs" hebben hoge koopintentie; elke stick krijgt een koopknop; het past bij "Eerlijk stickadvies op maat", ook als de goedkoopste winkel minder commissie oplevert.
+- **Risico's:** sticks koppelen tussen winkels (andere namen, lengtes en collectiejaren, vaak geen EAN). Een verkeerde koppeling schaadt het vertrouwen meer dan geen vergelijking.
+- **Regels:** sorteren op prijs, nooit op commissie; uitleggen hoe gesorteerd wordt en dat de site per klik verdient; geen "goedkoopst!"-belofte, wel "laagste prijs in de feeds op [datum]"; vermelden of verzendkosten meetellen. Dit vraagt een aanpassing van de regel in CLAUDE.md dat getoonde prijzen richtprijzen zijn.
+- **Kosten:** elke prijsupdate is een live-zetting (15 Netlify-credits). Wekelijks bijwerken kost ongeveer 60 credits per maand, dagelijks ongeveer 450; wekelijks volstaat voor sticks.
+
+**Aanpak:**
+1. Wachten op goedkeuring van de programma's hierboven.
+2. Overlapmeting: hoeveel sticks uit de catalogus zijn bij twee of meer winkels te koop, en hoeveel verschilt de prijs? Bij minder dan zo'n 20% overlap, of verschillen van een paar euro, levert de vergelijking weinig op.
+3. Bij een positieve uitkomst: klein starten met een blok "Waar te koop" op de stickpagina, niet op de homepage en niet in de stickwijzer.
 
 ## 6. Latere fases (niet in scope voor MVP)
 
 Deze opties blijven denkbaar zodra verkeer, conversie en vertrouwen bewezen zijn:
 
 1. **Margedeling in plaats van commissie** — vraagt inzage in inkoopprijzen van de winkel.
-2. **Meerdere partnerwinkels** — vermindert afhankelijkheid van één partij, vergroot complexiteit in feed- en attributiebeheer.
+2. **Meerdere partnerwinkels** — vermindert afhankelijkheid van één partij, vergroot complexiteit in feed- en attributiebeheer. Wordt nu uitgewerkt, zie sectie 5a.
 3. **Eigen merk (private label)** — zie de losse businesscase (`Businesscase_hockeysticks.xlsx`) voor de cijfers hierachter. Bouwt voort op dezelfde content- en verkeersbasis.
 4. **Eigen webshop met checkout** — pas zinvol bij voldoende volume en een duidelijke reden om van het partnermodel af te wijken (bijv. de partnerwinkel kan niet meeschalen).
 
@@ -117,5 +171,7 @@ Deze opties blijven denkbaar zodra verkeer, conversie en vertrouwen bewezen zijn
 - Of de winkel een productfeed kan leveren, en in welk formaat.
 - Welke dealercontracten van de winkel (Grays en anderen) beperkingen opleggen aan online prijsvermelding of promotie.
 - Realistisch verkeer- en conversievolume voor de eerste 6 maanden (nul-meting nodig).
-- Exact commissiepercentage van het bol Affiliate Programma voor de categorie sport/hockeysticks (aanname: Zilver, ~4%).
+- ~~Exact commissiepercentage van het bol Affiliate Programma voor de categorie sport/hockeysticks (aanname: Zilver, ~4%).~~ Bekend: 7% op Sport (eigenaar, 2026-10-25). PassaHockey: 5%.
+- Commissie, cookieduur en productfeed van de aangevraagde programma's (sectie 5a), zodra ze zijn goedgekeurd.
+- Hoeveel sticks uit de catalogus bij meer dan één partnerwinkel te koop zijn (overlapmeting, sectie 5a).
 - Welke bol.com-producten daadwerkelijk overeenkomen met de sticks in de catalogus, zodra die catalogus met echte data wordt gevuld.
