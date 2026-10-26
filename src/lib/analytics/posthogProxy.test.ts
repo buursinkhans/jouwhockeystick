@@ -7,7 +7,9 @@ describe('PostHog reverse proxy (decision log 2026-10-26)', () => {
   it('sends the SDK to our own path, rewritten to the EU hosts', async () => {
     expect(POSTHOG_API_HOST).toBe(POSTHOG_PROXY_PATH);
     const rewrites = await nextConfig.rewrites!();
-    const list = Array.isArray(rewrites) ? rewrites : rewrites.afterFiles;
+    const list = Array.isArray(rewrites)
+      ? rewrites
+      : (rewrites.afterFiles ?? []);
     const destinations = list.map((r) => r.destination);
     expect(destinations).toContain(
       'https://eu-assets.i.posthog.com/static/:path*',
