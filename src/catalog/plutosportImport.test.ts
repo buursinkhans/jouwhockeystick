@@ -95,4 +95,15 @@ describe('plutosportGaps', () => {
     );
     expect(gaps.map((g) => g.key)).toEqual(['b']);
   });
+
+  it('leaves out other colours of a model that is already matched', () => {
+    const gaps = plutosportGaps(
+      [
+        model({ key: 'pb-010', brand: 'Brabo', name: 'Brabo Pure 20 PB Hockeystick Senior', url: 'https://www.plutosport.nl/brabo-pure-20-pb-hockeystick-senior-315-63461-010' }),
+        model({ key: 'pb-020', brand: 'Brabo', name: 'Brabo Pure 20 PB Hockeystick Senior', url: 'https://www.plutosport.nl/brabo-pure-20-pb-hockeystick-senior-315-63461-020' }),
+      ],
+      new Set(['pb-010']),
+    );
+    expect(gaps).toEqual([]);
+  });
 });

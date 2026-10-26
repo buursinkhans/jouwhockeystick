@@ -53,10 +53,12 @@ export function modelNameKey(model: PlutoStickModel): string {
  * 'zeker' or 'twijfel'), one per model name.
  */
 export function plutosportGaps(models: readonly PlutoStickModel[], matchedKeys: ReadonlySet<string>): PlutoStickModel[] {
+  // A matched page in one colour covers the same model in every colour: Plutosport has a page per colour.
+  const matchedNames = new Set(models.filter((m) => matchedKeys.has(m.key)).map(modelNameKey));
   const byName = new Map<string, PlutoStickModel>();
   for (const model of models) {
-    if (!model.inStock || matchedKeys.has(model.key)) continue;
     const key = modelNameKey(model);
+    if (!model.inStock || matchedKeys.has(model.key) || matchedNames.has(key)) continue;
     const existing = byName.get(key);
     if (
       !existing ||
