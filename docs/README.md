@@ -7,9 +7,10 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | Document | Waarvoor |
 |---|---|
 | [`spec/keuzehulp-instructie-v1.1.md`](spec/keuzehulp-instructie-v1.1.md) | De specificatie van de stickwijzer: routes, vragen, adviesregels en bronnen. **Leidend**; afwijkingen leggen we vast in de decision log. |
+| [`spec/prijsvergelijking.md`](spec/prijsvergelijking.md) | Prijsvergelijking per stick: spelregels, gegevensmodel, koppelen tussen winkels en de architectuurkeuze. Besloten 2026-10-26, nog niet gebouwd. |
 | [`source-policy.md`](source-policy.md) | Bronbeleid: hoe we claims onderbouwen, bronnen vermelden en de catalogus elk kwartaal controleren. Bindend voor content, productdata en advies. |
 | [`merkinstructie.md`](merkinstructie.md) | Logo, kleuren, typografie en tone of voice. `scripts/build-brand-assets.mjs` bouwt de logobestanden hieruit. |
-| [`business-model.md`](business-model.md) | Verdienmodel en strategie. De actuele situatie (bol.com en PassaHockey als partnerwinkels) staat in sectie 5. |
+| [`business-model.md`](business-model.md) | Verdienmodel en strategie. De actuele situatie staat in sectie 5; de partnerprogramma's per winkel in sectie 5a. |
 | [`decision-log.md`](decision-log.md) | Elke wijziging aan adviesregels, catalogus of afspraken, met de reden. Nieuwste onderaan. |
 
 ## Handboeken per agent of taak
