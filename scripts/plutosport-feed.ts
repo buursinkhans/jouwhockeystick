@@ -179,9 +179,13 @@ function report(
     '',
     none.length ? none.map((r) => `\`${r.slug}\` (${r.match.note})`).join(' · ') : 'Geen.',
     '',
+    '## Hockeysticks bij Plutosport per merk',
+    '',
+    ...stickBrands(models).map(([brand, count, inStock]) => `- ${brand}: ${count} modellen, ${inStock} op voorraad`),
+    '',
     `## Bij Plutosport op voorraad, niet gekoppeld (${unmatched.length})`,
     '',
-    `Sticks die niets in onze catalogus matchen; de eerste ${Math.min(UNMATCHED_LIMIT, unmatched.length)} op merk en naam.`,
+    `Sticks die niets in onze catalogus matchen; de eerste ${Math.min(UNMATCHED_LIMIT, unmatched.length)} op merk en naam. De volledige lijst staat in het bestand \`plutosport-sticks\` bij de workflow-run.`,
     '',
     ...unmatched
       .sort((a, b) => a.brand.localeCompare(b.brand) || a.name.localeCompare(b.name))
@@ -190,6 +194,30 @@ function report(
     '',
     '_Automatisch gegenereerd uit de productfeed van Plutosport (Awin) en die van PassaHockey (TradeTracker)._',
   ];
+  return lines.join('\n');
+}
+
+/** [brand, models, in stock], most models first. */
+function stickBrands(models: readonly PlutoStickModel[]): [string, number, number][] {
+  const brands = new Map<string, [number, number]>();
+  for (const m of models) {
+    const [count, inStock] = brands.get(m.brand || 'merk onbekend') ?? [0, 0];
+    brands.set(m.brand || 'merk onbekend', [count + 1, inStock + Number(m.inStock)]);
+  }
+  return [...brands.entries()]
+    .map(([brand, [count, inStock]]): [string, number, number] => [brand, count, inStock])
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+}
+
+/** Every stick model in the feed, for checking the matcher by hand (workflow artifact, not the issue). */
+function stickList(models: readonly PlutoStickModel[], rows: readonly OverlapRow[]): string {
+  const matchedBy = new Map(rows.flatMap((r) => (r.match.model && r.match.level !== 'geen' ? [[r.match.model.key, `${r.match.level}: ${r.slug}`] as const] : [])));
+  const lines = ['| Merk | Naam | Veld/zaal | Junior | Prijs | Voorraad | EAN | Koppeling | Pagina |', '|---|---|---|---|---|---|---|---|---|'];
+  for (const m of [...models].sort((a, b) => a.brand.localeCompare(b.brand) || a.name.localeCompare(b.name))) {
+    lines.push(
+      `| ${cell(m.brand)} | ${cell(m.name)} | ${m.discipline} | ${m.junior ? 'ja' : 'nee'} | ${euro(m.inStockPriceMin ?? m.priceMin)} | ${m.inStock ? 'ja' : 'nee'} | ${m.eans.length} | ${matchedBy.get(m.key) ?? '–'} | ${m.url} |`,
+    );
+  }
   return lines.join('\n');
 }
 
@@ -205,7 +233,7 @@ function feedProfile(collector: PlutosportCollector, models: readonly PlutoStick
     '## De feed',
     '',
     `- ${tally.rows} regels in de feed: ${p.pages.size} verschillende productpagina's, ${p.parents.size} verschillende parent_product_id's, ${p.rowsWithSize} regels met een maat (Fashion:size), ${p.rowsInStock} regels op voorraad.`,
-    `- ${tally.stickRows} regels zijn hockeysticks volgens ons filter. Overgeslagen: ${tally.notForSale} niet te koop (is_for_sale), ${tally.invalid} ongeldig (Zod), ${tally.notEuro} niet in euro.`,
+    `- ${tally.stickRows} regels zijn hockeysticks volgens ons filter. Overgeslagen: ${tally.notForSale} niet te koop (is_for_sale), ${tally.invalid} ongeldig (Zod), ${tally.notEuro} niet in euro, ${tally.notDutchShop} met een productpagina buiten plutosport.nl.`,
     `- ${models.length} stickmodellen na het samenvoegen van lengtes (parent_product_id of productpagina); ${models.filter((m) => m.inStock).length} op voorraad.`,
     `- Kolommen in de feed (${p.columns.length}): ${p.columns.map((column) => `\`${column}\``).join(', ')}`,
     '',
@@ -218,6 +246,12 @@ function feedProfile(collector: PlutosportCollector, models: readonly PlutoStick
     '### De hele feed per categorie',
     '',
     ...top(p.categories, 30),
+    '',
+    '### Domein van de productpagina',
+    '',
+    'We koppelen alleen naar plutosport.nl. Staan hier andere domeinen, dan haalt de taalinstelling in Awin ook andere Plutosport-sites binnen.',
+    '',
+    ...top(p.hosts, 10),
     '',
     '### De hele feed per merk',
     '',
@@ -284,6 +318,7 @@ async function main() {
 
   const date = new Date().toISOString().slice(0, 10);
   writeFileSync(mdPath, report(date, collector, models, rows, passaSource));
+  writeFileSync(mdPath.replace(/(\.md)?$/, '-sticks.md'), stickList(models, rows));
   const summary = overlapSummary(rows);
   console.log(
     `${collector.tally.rows} regels, ${models.length} stickmodellen; ${summary.multiShopSure} van ${summary.sticks} sticks bij 2+ winkels.`,
