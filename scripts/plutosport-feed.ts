@@ -1,0 +1,265 @@
+// Plutosport feed and overlap measurement (read-only, phase 0 of
+// docs/spec/prijsvergelijking.md): downloads the Awin product feed of
+// Plutosport, keeps the hockey sticks, matches them with our curated catalog
+// and writes a Dutch Markdown report: per stick bol.com yes/no, the
+// PassaHockey price, the Plutosport price plus shipping, stock and how sure
+// the match is. Never changes the catalog or the site.
+// Usage: npm run plutosport:feed -- [report.md] [feed.csv(.gz)] [passa.xml]
+// The feed URL comes from AWIN_PLUTOSPORT_FEED_URL (a GitHub secret). It
+// contains an API key: it is never printed, logged or written to the report.
+import { createReadStream, readFileSync, writeFileSync } from 'node:fs';
+import { Readable } from 'node:stream';
+import type { ReadableStream as WebReadableStream } from 'node:stream/web';
+import { createGunzip } from 'node:zlib';
+import { getDiscipline } from '../src/catalog/discipline';
+import { getCatalogProducts } from '../src/catalog/index';
+import { PASSAHOCKEY_LIVE_PRICES } from '../src/catalog/imported/passaPrices';
+import { livePricesFromFeed } from '../src/catalog/livePrice';
+import { getModelYear } from '../src/catalog/modelYear';
+import { PASSAHOCKEY_FEED_URL, parsePassaFeed, type PassaStickModel } from '../src/catalog/passaFeed';
+import {
+  PlutosportCollector,
+  matchStick,
+  overlapSummary,
+  type OverlapRow,
+  type PlutoStickModel,
+} from '../src/catalog/plutosportFeed';
+import { CsvReader } from '../src/lib/csv';
+import { PLUTOSPORT_SHIPPING, shippingCostEur } from '../src/lib/retailers';
+
+/** Plutosport's whole assortment is far bigger; fewer rows means a broken or truncated feed. */
+const MIN_FEED_ROWS = 1000;
+/** Plutosport sells dozens of hockey stick models; fewer means the filter or the feed changed. */
+const MIN_STICK_MODELS = 15;
+const UNMATCHED_LIMIT = 20;
+
+const FEED_ENV = 'AWIN_PLUTOSPORT_FEED_URL';
+
+/** Removes the feed URL (and its query, which holds the key) from any text that may be printed. */
+function redact(text: string): string {
+  const url = process.env[FEED_ENV]?.trim();
+  let safe = text;
+  if (url) {
+    safe = safe.split(url).join('[feed-URL]');
+    const query = url.split('?')[1];
+    if (query) safe = safe.split(query).join('[…]');
+  }
+  return safe.replace(/https?:\/\/[^\s"']*awin[^\s"']*/gi, '[Awin-URL]');
+}
+
+async function* chunks(source: AsyncIterable<Buffer | Uint8Array>): AsyncGenerator<Buffer> {
+  for await (const chunk of source) yield Buffer.from(chunk);
+}
+
+/** The feed as text chunks; gunzips when the data starts with the gzip magic bytes. */
+async function* feedText(source: AsyncIterable<Buffer | Uint8Array>): AsyncGenerator<string> {
+  const iterator = chunks(source)[Symbol.asyncIterator]();
+  const first = await iterator.next();
+  if (first.done) return;
+  const rest = Readable.from(
+    (async function* () {
+      yield first.value;
+      for (let next = await iterator.next(); !next.done; next = await iterator.next()) yield next.value;
+    })(),
+  );
+  const gzip = first.value[0] === 0x1f && first.value[1] === 0x8b;
+  const stream = gzip ? rest.pipe(createGunzip()) : rest;
+  if (gzip) rest.on('error', (error) => stream.destroy(error));
+  const decoder = new TextDecoder('utf-8');
+  for await (const chunk of stream) yield decoder.decode(chunk as Buffer, { stream: true });
+  const tail = decoder.decode();
+  if (tail) yield tail;
+}
+
+async function openFeed(localPath: string | undefined): Promise<AsyncIterable<Buffer | Uint8Array>> {
+  if (localPath) return createReadStream(localPath);
+  const url = process.env[FEED_ENV]?.trim();
+  if (!url) throw new Error(`${FEED_ENV} ontbreekt (GitHub-secret).`);
+  let response: Response;
+  try {
+    response = await fetch(url, { signal: AbortSignal.timeout(600_000) });
+  } catch (error) {
+    // Network errors can carry the URL in their cause; report only the kind.
+    throw new Error(`Plutosport-feed niet opgehaald (${error instanceof Error ? error.name : 'netwerkfout'}).`);
+  }
+  if (!response.ok || !response.body) throw new Error(`Plutosport-feed niet opgehaald (HTTP ${response.status}).`);
+  return Readable.fromWeb(response.body as WebReadableStream<Uint8Array>);
+}
+
+async function readPlutosport(localPath: string | undefined): Promise<PlutosportCollector> {
+  const collector = new PlutosportCollector();
+  const reader = new CsvReader();
+  for await (const text of feedText(await openFeed(localPath))) {
+    for (const row of reader.push(text)) collector.add(row);
+  }
+  for (const row of reader.end()) collector.add(row);
+  return collector;
+}
+
+async function readPassa(localPath: string | undefined): Promise<PassaStickModel[] | null> {
+  try {
+    if (localPath) return parsePassaFeed(readFileSync(localPath, 'utf8'));
+    const response = await fetch(PASSAHOCKEY_FEED_URL, { signal: AbortSignal.timeout(300_000) });
+    if (!response.ok) return null;
+    const models = parsePassaFeed(await response.text());
+    return models.length ? models : null;
+  } catch {
+    return null;
+  }
+}
+
+const euro = (n: number) => `€${n.toFixed(2).replace('.', ',')}`;
+const percent = (part: number, whole: number) => (whole ? `${Math.round((part / whole) * 100)}%` : '–');
+const cell = (text: string) => text.replace(/\|/g, '/').replace(/\s+/g, ' ');
+
+function plutoCell(row: OverlapRow): string {
+  if (row.plutoPrice === null) return row.match.model ? 'niet op voorraad' : '–';
+  const shipping =
+    row.plutoShipping === null ? ' + verzending onbekend' : row.plutoShipping === 0 ? ' (gratis verzending)' : ` + ${euro(row.plutoShipping)}`;
+  return `${euro(row.plutoPrice)}${shipping}`;
+}
+
+function stockCell(model: PlutoStickModel | undefined): string {
+  if (!model) return '–';
+  if (!model.inStock) return 'uitverkocht';
+  return model.sizesInStock.length ? `${model.sizesInStock.join(', ')}` : 'op voorraad (lengtes onbekend)';
+}
+
+function report(
+  date: string,
+  collector: PlutosportCollector,
+  models: readonly PlutoStickModel[],
+  rows: readonly OverlapRow[],
+  passaSource: string,
+): string {
+  const summary = overlapSummary(rows);
+  const { tally } = collector;
+  const sure = rows.filter((r) => r.match.level === 'zeker');
+  const doubt = rows.filter((r) => r.match.level === 'twijfel');
+  const none = rows.filter((r) => r.match.level === 'geen');
+  const matchedKeys = new Set(rows.flatMap((r) => (r.match.model && r.match.level !== 'geen' ? [r.match.model.key] : [])));
+  const unmatched = models.filter((m) => m.inStock && !matchedKeys.has(m.key));
+  const s = PLUTOSPORT_SHIPPING;
+
+  const lines = [
+    `# Plutosport-feed en overlapmeting (${date})`,
+    '',
+    'Fase 0 van `docs/spec/prijsvergelijking.md`. Alleen lezen: dit rapport verandert niets aan de catalogus of de site. Prijzen zijn feedprijzen op de meetdatum; zet ze nooit als korting op de site.',
+    '',
+    '## Samenvatting',
+    '',
+    `- **Bij 2 of meer partnerwinkels te koop:** ${summary.multiShopSure} van ${summary.sticks} gecontroleerde sticks (**${percent(summary.multiShopSure, summary.sticks)}**), met alleen zekere Plutosport-koppelingen. Als alle twijfelgevallen kloppen: ${summary.multiShopIfDoubtsHold} (${percent(summary.multiShopIfDoubtsHold, summary.sticks)}).`,
+    summary.medianDifference === null
+      ? '- **Mediaan prijsverschil PassaHockey ↔ Plutosport:** niet te berekenen (geen stick met een zekere koppeling en een prijs bij allebei).'
+      : `- **Mediaan prijsverschil PassaHockey ↔ Plutosport:** ${euro(summary.medianDifference)} op de stickprijs, ${euro(summary.medianDifferenceWithShipping ?? 0)} als je de Plutosport-verzending meetelt (${summary.priced} sticks met een prijs bij allebei; Plutosport is bij ${summary.plutoCheaper} daarvan goedkoper). De verzendkosten van PassaHockey staan nog niet in \`retailers.ts\` en tellen hier niet mee.`,
+    `- **Koppelingen:** ${sure.length} zeker (${sure.filter((r) => r.match.method === 'ean').length} via EAN, ${sure.filter((r) => r.match.method === 'naam').length} via naam), ${doubt.length} twijfel, ${none.length} geen.`,
+    `- **bol.com** telt mee als we een bol.com-productpagina koppelen (voorraad niet gecontroleerd); **PassaHockey** en **Plutosport** als de feed de stick op voorraad heeft.`,
+    `- **Verzending Plutosport:** ${s.costEur === null ? 'onbekend' : euro(s.costEur)}${s.freeFromEur === null ? '' : `, gratis vanaf ${euro(s.freeFromEur)}`}. ${s.note} Bron: ${s.sourceUrl} (gelezen ${s.checkedAt}).`,
+    `- **PassaHockey-prijzen en EAN's:** ${passaSource}`,
+    '',
+    '## De feed',
+    '',
+    `- ${tally.rows} regels in de feed; ${tally.stickRows} daarvan zijn hockeysticks volgens het filter.`,
+    `- Overgeslagen: ${tally.notForSale} niet te koop (is_for_sale), ${tally.invalid} ongeldig (Zod), ${tally.notEuro} niet in euro.`,
+    `- ${models.length} stickmodellen na het samenvoegen van lengtes (parent_product_id of productpagina); ${models.filter((m) => m.inStock).length} op voorraad.`,
+    '',
+    'Categorieën van de rijen die het filter als hockeystick hield (controleer of hier geen ballen, tassen of grips tussen staan):',
+    '',
+    ...[...collector.categoryCounts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 20)
+      .map(([category, count]) => `- ${cell(category)} (${count})`),
+    '',
+    '## Per gecontroleerde stick',
+    '',
+    '| Stick | bol.com | PassaHockey | Plutosport | Voorraad Plutosport | Koppeling |',
+    '|---|---|---|---|---|---|',
+    ...rows.map(
+      (r) =>
+        `| \`${r.slug}\` | ${r.bol} | ${r.passaPrice === null ? '–' : euro(r.passaPrice)} | ${plutoCell(r)} | ${cell(stockCell(r.match.model))} | ${r.match.level}${r.match.method ? ` (${r.match.method})` : ''} |`,
+    ),
+    '',
+    '## Twijfel: met de hand bevestigen',
+    '',
+    doubt.length ? 'Per stick de beste kandidaat bij Plutosport en waarom die niet zeker is.' : 'Geen.',
+    '',
+    ...doubt.map((r) => `- \`${r.slug}\` (${r.name}) → **${r.match.model?.name ?? '?'}** — ${r.match.model?.url ?? ''}\n  - ${r.match.note}`),
+    '',
+    '## Geen koppeling',
+    '',
+    none.length ? none.map((r) => `\`${r.slug}\` (${r.match.note})`).join(' · ') : 'Geen.',
+    '',
+    `## Bij Plutosport op voorraad, niet gekoppeld (${unmatched.length})`,
+    '',
+    `Sticks die niets in onze catalogus matchen; de eerste ${Math.min(UNMATCHED_LIMIT, unmatched.length)} op merk en naam.`,
+    '',
+    ...unmatched
+      .sort((a, b) => a.brand.localeCompare(b.brand) || a.name.localeCompare(b.name))
+      .slice(0, UNMATCHED_LIMIT)
+      .map((m) => `- ${m.name} (${m.brand || 'merk onbekend'}; ${m.discipline}; ${euro(m.inStockPriceMin ?? m.priceMin)}) — ${m.url}`),
+    '',
+    '_Automatisch gegenereerd uit de productfeed van Plutosport (Awin) en die van PassaHockey (TradeTracker)._',
+  ];
+  return lines.join('\n');
+}
+
+async function main() {
+  const [mdPath = 'plutosport.md', feedPath, passaPath] = process.argv.slice(2);
+  const [collector, passaModels] = await Promise.all([readPlutosport(feedPath), readPassa(passaPath)]);
+  if (collector.tally.rows < MIN_FEED_ROWS) {
+    throw new Error(`Maar ${collector.tally.rows} regels in de Plutosport-feed (verwacht minstens ${MIN_FEED_ROWS}); meting afgebroken.`);
+  }
+  const models = collector.result();
+  if (models.length < MIN_STICK_MODELS) {
+    throw new Error(
+      `Maar ${models.length} hockeystickmodellen in de Plutosport-feed (verwacht minstens ${MIN_STICK_MODELS}); is het filter of de feed veranderd? Meting afgebroken.`,
+    );
+  }
+
+  const curated = getCatalogProducts();
+  const passaByUrl = new Map((passaModels ?? []).map((m) => [m.url, m]));
+  const passaPrices = passaModels ? livePricesFromFeed(curated, passaModels) : PASSAHOCKEY_LIVE_PRICES.prices;
+  const passaSource = passaModels
+    ? 'uit de PassaHockey-feed van vandaag.'
+    : `PassaHockey-feed niet bereikbaar; prijzen van de laatste sync (${PASSAHOCKEY_LIVE_PRICES.date}), zonder EAN-koppeling.`;
+
+  const rows: OverlapRow[] = curated.map((product) => {
+    const passa = product.passaSportsProductUrl ? passaByUrl.get(product.passaSportsProductUrl.split('?')[0] ?? '') : undefined;
+    const bow = product.bowProfile?.value;
+    const modelYear = getModelYear(product);
+    const match = matchStick(
+      {
+        slug: product.slug,
+        brand: product.brand,
+        name: product.name,
+        discipline: getDiscipline(product),
+        ...(bow && { bow }),
+        ...(modelYear && { modelYear }),
+        eans: passa?.eans ?? [],
+      },
+      models,
+    );
+    const plutoPrice = match.model?.inStockPriceMin ?? null;
+    return {
+      slug: product.slug,
+      name: product.name,
+      bol: product.bolProductUrl ? 'ja' : product.bolNotSold ? 'nee' : 'onbekend',
+      passaPrice: passaPrices[product.slug] ?? null,
+      match,
+      plutoPrice: match.level === 'geen' ? null : plutoPrice,
+      plutoShipping: plutoPrice === null ? null : shippingCostEur(PLUTOSPORT_SHIPPING, plutoPrice),
+    };
+  });
+
+  const date = new Date().toISOString().slice(0, 10);
+  writeFileSync(mdPath, report(date, collector, models, rows, passaSource));
+  const summary = overlapSummary(rows);
+  console.log(
+    `${collector.tally.rows} regels, ${models.length} stickmodellen; ${summary.multiShopSure} van ${summary.sticks} sticks bij 2+ winkels.`,
+  );
+}
+
+main().catch((error: unknown) => {
+  console.error(redact(error instanceof Error ? error.message : String(error)));
+  process.exitCode = 1;
+});

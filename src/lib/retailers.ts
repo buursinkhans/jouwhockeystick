@@ -82,6 +82,35 @@ export function passaSportsTrackingUrl(
   return `https://www.passasports.nl/tt/passa-nl/?${params.toString()}`;
 }
 
+/**
+ * Shipping for one stick, from the shop's public delivery terms, until a feed
+ * states it (docs/spec/prijsvergelijking.md §7.1). `costEur: null` means
+ * unknown, and the site then says so.
+ */
+export type ShippingTerms = {
+  costEur: number | null;
+  /** Free shipping from this order value; null when the shop has no threshold. */
+  freeFromEur: number | null;
+  sourceUrl: string;
+  checkedAt: string;
+  note: string;
+};
+
+/** Plutosport has no delivery_cost in its Awin feed. */
+export const PLUTOSPORT_SHIPPING: ShippingTerms = {
+  costEur: 6.95,
+  freeFromEur: 75,
+  sourceUrl: 'https://www.plutosport.nl/bezorgen-afhalen',
+  checkedAt: '2026-10-26',
+  note: 'Laagste tarief in Nederland (bezorgen bij een DHL ServicePoint); overdag thuisbezorgen kost €7,95, \'s avonds €8,95.',
+};
+
+/** Shipping for an order of one item at this price; null when unknown. */
+export function shippingCostEur(terms: ShippingTerms, priceEur: number): number | null {
+  if (terms.freeFromEur !== null && priceEur >= terms.freeFromEur) return 0;
+  return terms.costEur;
+}
+
 export type Retailer = {
   id: RetailerId;
   label: string;
