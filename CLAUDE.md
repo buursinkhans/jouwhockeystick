@@ -12,10 +12,11 @@ De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking
 - Getoonde prijzen zijn richtprijzen (adviesprijs van de fabrikant of een winkelprijs, met bron en datum), geen live winkelprijzen. Markeer dit zichtbaar op de pagina.
 
 ## Commerce
-- jouwhockeystick.nl verkoopt zelf niets: er is geen eigen checkout, voorraad of betaalverwerking. De site verwijst door naar twee partnerwinkels:
+- jouwhockeystick.nl verkoopt zelf niets: er is geen eigen checkout, voorraad of betaalverwerking. De site verwijst door naar drie partnerwinkels:
   - **bol.com**, via het bol.com Partnerprogramma (site ID 1547833), met een sub-ID per plek op de site;
-  - **PassaHockey** (de hockeywinkel van PassaSports), via TradeTracker (campagne 39608), met de plek op de site als referentie.
-  Beide staan in `src/lib/retailers.ts`. Sticks uit de PassaHockey-productfeed (`src/catalog/imported/`, wekelijks bijgewerkt) krijgen alleen de PassaHockey-knop en `noindex` tot ze met de hand zijn verrijkt; zie de decision log van 2026-10-17. Een stick krijgt een knop voor elke winkel die hem verkoopt: `bolProductUrl` of niet `bolNotSold`, en `passaSportsProductUrl`. Voeg een winkel pas toe als daar een partnerprogramma voor is. Gebruik geen fictieve tracking-parameters.
+  - **PassaHockey** (de hockeywinkel van PassaSports), via TradeTracker (campagne 39608), met de plek op de site als referentie;
+  - **Plutosport**, via Awin (adverteerder 8342, publisher 3132918), met een deeplink (`cread.php`) en de plek op de site als `clickref`. Alleen sticks met een zekere koppeling uit de Plutosport-feed (`src/catalog/offers/matches.ts`, wekelijks bijgewerkt in de PassaHockey-sync) krijgen deze knop; zie de decision log van 2026-10-27.
+  Alle drie staan in `src/lib/retailers.ts`. Sticks uit de PassaHockey-productfeed (`src/catalog/imported/`, wekelijks bijgewerkt) krijgen alleen de PassaHockey-knop en `noindex` tot ze met de hand zijn verrijkt; zie de decision log van 2026-10-17. Een stick krijgt een knop voor elke winkel die hem verkoopt: `bolProductUrl` of niet `bolNotSold`, `passaSportsProductUrl` en `plutosportProductUrl`. Voeg een winkel pas toe als daar een partnerprogramma voor is. Gebruik geen fictieve tracking-parameters.
 - Elke winkelknop toont een partnerlink-vermelding. Iedere productpagina en ieder stickadvies maakt duidelijk dat de winkel de verkoper is. Het verschil tussen de winkels staat op `/kennis/waar-koop-je-een-hockeystick`.
 - Vergoedingen en de winkel spelen geen rol in de adviesscore.
 - Geen kortingsclaims (bijv. "X% korting") zonder een echte, verifieerbare eerdere verkoopprijs; dit is wettelijk gereguleerd (EU Omnibus-richtlijn). Toon alleen de richtprijs.

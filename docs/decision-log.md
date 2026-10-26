@@ -1395,3 +1395,17 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Bewust niet:** geen Plutosport-knop op de site (dat is PR 2, na akkoord op het rapport), geen van-/voorprijzen of kortingskolommen in de feed, geen wijziging aan de adviesscore, `ruleSetVersion` of privacytekst, geen nieuwe dependency (de CSV-lezer en gzip gebruiken alleen Node).
 
 **Aanvulling (2026-10-26, na de eerste run):** de feed is in Awin gefilterd op hockey (eigenaar), dus klein; de eerste run stopte op 93 regels. De ondergrens voor het aantal regels is daarom 50 (een kapotte download), en het aantal stickmodellen (minstens 15) is de echte controle. Het rapport toont nu altijd wat er in de feed zit (kolommen, productpagina's, parent-ID's, regels met maat en op voorraad, de hele feed per categorie en per merk), ook als de meting wordt afgebroken. Zo is te zien of het Awin-filter of ons filter sticks mist.
+
+## 2026-10-27 — Plutosport als derde partnerwinkel (knop, nog geen prijzen)
+
+**Wat:** sticks die Plutosport verkoopt, krijgen een knop "Bekijk en koop bij Plutosport" naast bol.com en PassaHockey: op de stickpagina, de catalogus, het stickadvies, de zaalkeuze en de vergelijkpagina. `retailer_click` krijgt `retailer: 'plutosport'`. Prijzen van Plutosport tonen we nog niet en er is nog geen blok "Waar te koop"; de richtprijsregel blijft gelden.
+
+**Welke sticks:** alleen koppelingen die de matcher 'zeker' noemt (`spec/prijsvergelijking.md` §3.1), met een leverbare stick bij Plutosport. Ze staan in `src/catalog/offers/matches.ts` (gegenereerd), los van de productdata; de catalogus voegt `plutosportProductUrl` toe aan het product. Bij de eerste meting: 39 sticks, 5 gecontroleerde en 34 geïmporteerde PassaHockey-sticks, bijna allemaal via dezelfde EAN. Twijfelgevallen krijgen geen knop; ze staan als lijstje in de PR om met de hand te bevestigen.
+
+**Trackinglink:** een Awin-deeplink, `https://www.awin1.com/cread.php?awinmid=8342&awinaffid=3132918&clickref=<plek>&ued=<productpagina>`. Niet de `pclick.php`-link uit de feed: de documentatie van Awin beschrijft `clickref` bij deeplinks, maar zegt niet dat het op `pclick.php` werkt. `src/lib/retailers.ts` accepteert alleen productpagina's op plutosport.nl (geen zoek- of categoriepagina, geen andere landensite, geen query) en valt nooit terug op een zoekopdracht. awin1.com is een nieuw trackingdomein; de privacy- en cookietekst is bewust niet aangepast (besluit eigenaar).
+
+**Opmaak:** de Plutosport-knop heeft dezelfde opmaak als die van bol.com; geen winkel krijgt een opvallender knop vanwege de vergoeding. De vermelding bij de knoppen noemt nu alle winkels die de stick verkopen ("Niet te koop bij bol.com, wel bij PassaHockey (PassaSports) en Plutosport. De winkel waar je koopt, is dan de verkoper."). Ook de partnerlink-zin en de uitleg op /methodiek noemen Plutosport.
+
+**Wekelijks:** de PassaHockey-sync (woensdag) draait na de import ook de Plutosport-feed en neemt een gewijzigde `matches.ts` mee in dezelfde PR (optie A: geen extra live-zetting). Mislukt de download bij Awin, dan blijven de koppelingen zoals ze waren.
+
+**Bewust niet:** geen wijziging aan de adviesscore of `ruleSetVersion`, geen commissie in de UI, geen kortingsclaims, geen privacy- of cookietekst. Het artikel `/kennis/waar-koop-je-een-hockeystick` noemt Plutosport nog niet.
