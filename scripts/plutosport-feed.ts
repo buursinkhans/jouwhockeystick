@@ -27,8 +27,11 @@ import {
 import { CsvReader } from '../src/lib/csv';
 import { PLUTOSPORT_SHIPPING, shippingCostEur } from '../src/lib/retailers';
 
-/** Plutosport's whole assortment is far bigger; fewer rows means a broken or truncated feed. */
-const MIN_FEED_ROWS = 1000;
+/**
+ * The feed is filtered in Awin to hockey products (owner, 2026-10-26), so it is
+ * small; fewer rows than this means a broken or truncated download.
+ */
+const MIN_FEED_ROWS = 50;
 /** Plutosport sells dozens of hockey stick models; fewer means the filter or the feed changed. */
 const MIN_STICK_MODELS = 15;
 const UNMATCHED_LIMIT = 20;
@@ -133,7 +136,6 @@ function report(
   passaSource: string,
 ): string {
   const summary = overlapSummary(rows);
-  const { tally } = collector;
   const sure = rows.filter((r) => r.match.level === 'zeker');
   const doubt = rows.filter((r) => r.match.level === 'twijfel');
   const none = rows.filter((r) => r.match.level === 'geen');
@@ -157,19 +159,7 @@ function report(
     `- **Verzending Plutosport:** ${s.costEur === null ? 'onbekend' : euro(s.costEur)}${s.freeFromEur === null ? '' : `, gratis vanaf ${euro(s.freeFromEur)}`}. ${s.note} Bron: ${s.sourceUrl} (gelezen ${s.checkedAt}).`,
     `- **PassaHockey-prijzen en EAN's:** ${passaSource}`,
     '',
-    '## De feed',
-    '',
-    `- ${tally.rows} regels in de feed; ${tally.stickRows} daarvan zijn hockeysticks volgens het filter.`,
-    `- Overgeslagen: ${tally.notForSale} niet te koop (is_for_sale), ${tally.invalid} ongeldig (Zod), ${tally.notEuro} niet in euro.`,
-    `- ${models.length} stickmodellen na het samenvoegen van lengtes (parent_product_id of productpagina); ${models.filter((m) => m.inStock).length} op voorraad.`,
-    '',
-    'Categorieën van de rijen die het filter als hockeystick hield (controleer of hier geen ballen, tassen of grips tussen staan):',
-    '',
-    ...[...collector.categoryCounts.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 20)
-      .map(([category, count]) => `- ${cell(category)} (${count})`),
-    '',
+    ...feedProfile(collector, models),
     '## Per gecontroleerde stick',
     '',
     '| Stick | bol.com | PassaHockey | Plutosport | Voorraad Plutosport | Koppeling |',
@@ -203,17 +193,58 @@ function report(
   return lines.join('\n');
 }
 
+/** What the feed holds: totals, what our filter kept, and the whole feed by category and brand. */
+function feedProfile(collector: PlutosportCollector, models: readonly PlutoStickModel[]): string[] {
+  const { tally, feedProfile: p } = collector;
+  const top = (map: ReadonlyMap<string, number>, limit: number) =>
+    [...map.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .slice(0, limit)
+      .map(([key, count]) => `- ${cell(key)} (${count})`);
+  return [
+    '## De feed',
+    '',
+    `- ${tally.rows} regels in de feed: ${p.pages.size} verschillende productpagina's, ${p.parents.size} verschillende parent_product_id's, ${p.rowsWithSize} regels met een maat (Fashion:size), ${p.rowsInStock} regels op voorraad.`,
+    `- ${tally.stickRows} regels zijn hockeysticks volgens ons filter. Overgeslagen: ${tally.notForSale} niet te koop (is_for_sale), ${tally.invalid} ongeldig (Zod), ${tally.notEuro} niet in euro.`,
+    `- ${models.length} stickmodellen na het samenvoegen van lengtes (parent_product_id of productpagina); ${models.filter((m) => m.inStock).length} op voorraad.`,
+    `- Kolommen in de feed (${p.columns.length}): ${p.columns.map((column) => `\`${column}\``).join(', ')}`,
+    '',
+    '### Categorieën die ons filter als hockeystick hield',
+    '',
+    'Controleer of hier geen ballen, tassen of grips tussen staan.',
+    '',
+    ...(collector.categoryCounts.size ? top(collector.categoryCounts, 20) : ['Geen.']),
+    '',
+    '### De hele feed per categorie',
+    '',
+    ...top(p.categories, 30),
+    '',
+    '### De hele feed per merk',
+    '',
+    ...top(p.brands, 30),
+    '',
+  ];
+}
+
 async function main() {
   const [mdPath = 'plutosport.md', feedPath, passaPath] = process.argv.slice(2);
   const [collector, passaModels] = await Promise.all([readPlutosport(feedPath), readPassa(passaPath)]);
-  if (collector.tally.rows < MIN_FEED_ROWS) {
-    throw new Error(`Maar ${collector.tally.rows} regels in de Plutosport-feed (verwacht minstens ${MIN_FEED_ROWS}); meting afgebroken.`);
-  }
   const models = collector.result();
-  if (models.length < MIN_STICK_MODELS) {
-    throw new Error(
-      `Maar ${models.length} hockeystickmodellen in de Plutosport-feed (verwacht minstens ${MIN_STICK_MODELS}); is het filter of de feed veranderd? Meting afgebroken.`,
+  const tooSmall =
+    collector.tally.rows < MIN_FEED_ROWS
+      ? `Maar ${collector.tally.rows} regels in de Plutosport-feed (verwacht minstens ${MIN_FEED_ROWS}).`
+      : models.length < MIN_STICK_MODELS
+        ? `Maar ${models.length} hockeystickmodellen in de Plutosport-feed (verwacht minstens ${MIN_STICK_MODELS}); is het filter of de feed veranderd?`
+        : null;
+  if (tooSmall) {
+    // Still show what the feed holds, so the owner can see whether the Awin filter or our filter is the cause.
+    writeFileSync(
+      mdPath,
+      [`# Plutosport-feed: meting afgebroken`, '', `${tooSmall} Er is niet gekoppeld.`, '', ...feedProfile(collector, models)].join('\n'),
     );
+    console.error(tooSmall);
+    process.exitCode = 1;
+    return;
   }
 
   const curated = getCatalogProducts();

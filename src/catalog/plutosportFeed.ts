@@ -172,10 +172,33 @@ export class PlutosportCollector {
   readonly tally: FeedTally = { rows: 0, stickRows: 0, notForSale: 0, invalid: 0, notEuro: 0 };
   /** How many stick rows each category combination had: shows the owner what the filter kept. */
   readonly categoryCounts = new Map<string, number>();
+  /** What the whole feed holds, sticks or not: shows whether the Awin filter lets through what we expect. */
+  readonly feedProfile = {
+    columns: [] as string[],
+    categories: new Map<string, number>(),
+    brands: new Map<string, number>(),
+    parents: new Set<string>(),
+    pages: new Set<string>(),
+    rowsWithSize: 0,
+    rowsInStock: 0,
+  };
   private readonly models = new Map<string, PlutoStickModel>();
+
+  private profile(raw: CsvRow): void {
+    const p = this.feedProfile;
+    if (p.columns.length === 0) p.columns = Object.keys(raw);
+    const count = (map: Map<string, number>, key: string) => map.set(key, (map.get(key) ?? 0) + 1);
+    count(p.categories, categoryText(raw) || '(geen categorie)');
+    count(p.brands, raw.brand_name?.trim() || '(geen merk)');
+    if (raw.parent_product_id?.trim()) p.parents.add(raw.parent_product_id.trim());
+    if (raw.merchant_deep_link) p.pages.add(pageUrl(raw.merchant_deep_link.trim()).toLowerCase());
+    if (raw['Fashion:size']?.trim()) p.rowsWithSize++;
+    if (YES.test(raw.in_stock?.trim() ?? '') || Number(raw.stock_quantity ?? '') > 0) p.rowsInStock++;
+  }
 
   add(raw: CsvRow): void {
     this.tally.rows++;
+    this.profile(raw);
     if (!isHockeyStickRow(raw)) return;
     this.tally.stickRows++;
     if (!isForSale(raw)) {
