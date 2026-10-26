@@ -1339,6 +1339,26 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 
 **Bewust niet:** geen wijziging aan netlify.toml, DNS, beveiligingsheaders of andere redirects.
 
+## 2026-10-26 — PostHog via ons eigen domein (reverse proxy)
+
+**Aanleiding:** PostHog → Web analytics → Installation Health meldt "Reverse proxy: some metrics may not be accurate". Adblockers blokkeren verzoeken naar eu.i.posthog.com, ook de cookieloze meting.
+
+**Besluit eigenaar (26-10-2026):** PostHog-verkeer via het eigen domein laten lopen, inclusief akkoord op een aanpassing van de privacytekst.
+
+**Wat:**
+- **Rewrites in `next.config.ts`** volgens PostHogs Next.js-handleiding voor de EU: `/p8k/static/*` en `/p8k/array/*` gaan naar eu-assets.i.posthog.com, de rest van `/p8k/*` naar eu.i.posthog.com. Het pad `/p8k` is bewust neutraal; "ingest" of "posthog" staan op blokkeerlijsten.
+  - `api_host` is nu `/p8k`; `ui_host` blijft https://eu.posthog.com.
+  - De cookieloze instellingen zijn ongewijzigd.
+- **`skipTrailingSlashRedirect: true`**, op advies van PostHog. Hun API-paden eindigen op een slash, en zonder deze instelling zou elke meting eerst een 308 krijgen. Om toch één URL per pagina te houden, staat er een expliciete redirect "/pagina/" → "/pagina" voor alles behalve `/p8k`; dat deed Next.js eerst zelf.
+- **IP-adres:** PostHog gebruikt in de cookieloze modus het IP-adres (gehasht met een dagelijks wisselende salt, samen met browser en domein) om unieke bezoekers per dag te tellen. De rewrite van Next.js geeft de headers van het verzoek ongewijzigd door, en Netlify zet daarin `X-Forwarded-For` met het IP van de bezoeker. PostHog krijgt dus, net als vóór de proxy, het IP-adres; zonder dat zouden alle bezoekers als één bezoeker tellen. Er gaan geen extra gegevens mee.
+- **Privacytekst (versie 1.3, 26-10-2026):** één zin erbij: "De metingen voor PostHog gaan via ons eigen domein naar PostHog in de Europese Unie." De voorgestelde toevoeging dat PostHog het IP-adres daardoor niet ontvangt, staat er niet in, omdat dat niet klopt (zie hierboven).
+- **CSP/headers:** niet gewijzigd. De CSP bevat alleen `frame-ancestors` (besluit 2026-10-21), dus er is geen connect-src of script-src die eu.i.posthog.com toestaat of nu zou moeten weghalen.
+- **Conversierapport:** werkt ongewijzigd. Het filtert op `properties.$host`, en dat zet de browser uit het adres van de pagina, niet uit het adres waar het verzoek heen gaat.
+
+**Netlify:** op Netlify voert de Next-server de rewrites uit. Elk verzoek naar `/p8k` is dus een functie-aanroep. Schatting: 4–8 verzoeken per paginaweergave (config en flags bij het laden, en gebundelde events voor pageview, klikken, heatmap en pageleave); scripts blijven in de browsercache. Dat is ongeveer 4.000–8.000 verzoeken per 1.000 paginaweergaven.
+
+**Bewust niet:** geen wijziging aan src/proxy.ts, netlify.toml, DNS of Simple Analytics; geen cookies, opslag of opnames; het IP-adres niet weggefilterd (dan werkt de cookieloze telling niet meer).
+
 ## 2026-10-26 — Prijsvergelijking per stick: besluit en spelregels (nog niet gebouwd)
 
 **Aanleiding:** met Plutosport (Awin) is er naast bol.com en PassaHockey een derde goedgekeurd partnerprogramma; HockeyCity, Jumbo Sports, DAKA en Decathlon zijn aangevraagd. Daarmee is vergelijken per stick haalbaar: na het advies ("welke stick past?") helpt de site ook met "waar koop ik hem?".
