@@ -239,7 +239,7 @@ function feedProfile(collector: PlutosportCollector, models: readonly PlutoStick
   return [
     '## De feed',
     '',
-    `- ${tally.rows} regels in de feed: ${p.pages.size} verschillende productpagina's, ${p.parents.size} verschillende parent_product_id's, ${p.rowsWithSize} regels met een maat (Fashion:size), ${p.rowsInStock} regels op voorraad.`,
+    `- ${tally.rows} regels in de feed: ${p.pages.size} verschillende productpagina's, ${p.parents.size} verschillende parent_product_id's, ${p.rowsWithSize} regels met een maat (Fashion:size), ${p.rowsWithDimensions} met dimensions, ${p.rowsInStock} regels op voorraad.`,
     `- ${tally.stickRows} regels zijn hockeysticks volgens ons filter. Overgeslagen: ${tally.notForSale} niet te koop (is_for_sale), ${tally.invalid} ongeldig (Zod), ${tally.notEuro} niet in euro, ${tally.notDutchShop} met een productpagina buiten plutosport.nl.`,
     `- ${models.length} stickmodellen na het samenvoegen van lengtes (parent_product_id of productpagina); ${models.filter((m) => m.inStock).length} op voorraad.`,
     `- Kolommen in de feed (${p.columns.length}): ${p.columns.map((column) => `\`${column}\``).join(', ')}`,

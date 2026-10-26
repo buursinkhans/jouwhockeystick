@@ -195,7 +195,16 @@ const hostOf = (url: string | undefined) => {
 };
 
 /** Columns that may hold the stick length; which one Plutosport fills is checked per run. */
-export const SIZE_COLUMNS = ['Fashion:size', 'dimensions', 'size_stock_status', 'size_stock_amount'] as const;
+export const SIZE_COLUMNS = [
+  'Fashion:size',
+  'dimensions',
+  'size_stock_status',
+  'size_stock_amount',
+  // Article numbers: Plutosport has one row per length but no size column, so the length may be coded here.
+  'merchant_product_id',
+  'mpn',
+  'model_number',
+] as const;
 
 /** Collects stick rows into models; feed rows go in one by one, so the feed never sits in memory as a whole. */
 export class PlutosportCollector {
@@ -212,6 +221,7 @@ export class PlutosportCollector {
     parents: new Set<string>(),
     pages: new Set<string>(),
     rowsWithSize: 0,
+    rowsWithDimensions: 0,
     rowsInStock: 0,
   };
   /** Most common values of the size-like columns in stick rows: shows where the feed puts the length. */
@@ -228,6 +238,7 @@ export class PlutosportCollector {
     if (raw.parent_product_id?.trim()) p.parents.add(raw.parent_product_id.trim());
     if (raw.merchant_deep_link) p.pages.add(pageUrl(raw.merchant_deep_link.trim()).toLowerCase());
     if (raw['Fashion:size']?.trim()) p.rowsWithSize++;
+    if (raw.dimensions?.trim()) p.rowsWithDimensions++;
     if (YES.test(raw.in_stock?.trim() ?? '') || Number(raw.stock_quantity ?? '') > 0) p.rowsInStock++;
   }
 
