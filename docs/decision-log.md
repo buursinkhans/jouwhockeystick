@@ -1393,3 +1393,18 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Beveiliging:** de feed-URL bevat een API-sleutel en staat alleen in het GitHub-secret `AWIN_PLUTOSPORT_FEED_URL`. Het script print hem nooit; foutmeldingen noemen alleen de HTTP-status of het soort fout.
 
 **Bewust niet:** geen Plutosport-knop op de site (dat is PR 2, na akkoord op het rapport), geen van-/voorprijzen of kortingskolommen in de feed, geen wijziging aan de adviesscore, `ruleSetVersion` of privacytekst, geen nieuwe dependency (de CSV-lezer en gzip gebruiken alleen Node).
+
+## 2026-10-26 — Hockeyschoenen als sectie, geen aparte site
+
+**Besluit eigenaar:** hockeyschoenen komen als sectie `/hockeyschoenen` op jouwhockeystick.nl. Het domein jouwhockeyschoen(en).nl is geregistreerd, maar er komt geen tweede site. Een doorverwijzing volgt alleen op expliciete opdracht (DNS).
+
+**Waarom:**
+- Alles is herbruikbaar: wijzer-opzet, catalogusmodel, agents, partnerlinks en de autoriteit van het domein.
+- Per verkoop blijft er veel minder over: ca. €2,20 per paar tegen €4,75 per stick. Dat komt door de lagere prijs en doordat de commissie vervalt bij retour (35% verondersteld).
+- Een sectie voegt in de businesscase ca. 25% commissie toe tegen bijna geen kosten. Cijfers: `business-model.md` §5b.
+
+**Marktverkenning:** de Marktverkenner kon deze vraag niet beantwoorden. Hij scant alleen sticks (`marketScan.ts` filtert schoenen er bewust uit) en meet geen zoekvolume. Daarom is eenmalig met de hand verkend: Decathlon (ca. 400 paren, keuzegids), Plutosport (ca. 240), Daka (125, €31–€160, pasvormadvies per merk), schoenen.nl (422 paren van ca. 10 winkels). Geen van hen combineert ondergrond, pasvorm per merk en groeimarge in één keuzehulp.
+
+**Plan:** issue #100 (schoenenwijzer, 5 tot 8 artikelen, aparte schoenencatalogus, meetpunten na 3 maanden).
+
+**Bewust niet:** nog geen code, geen DNS, geen wijziging aan de stickwijzer, adviesscore of `ruleSetVersion`, en de Marktverkenner nog niet uitgebreid (pas als de sectie doorgaat).
