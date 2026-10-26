@@ -30,7 +30,7 @@ const GENERIC = new Set([
   'met', 'van', 'the', 'cadeau',
 ]);
 
-const COLOURS = new Set([
+export const COLOURS = new Set([
   'zwart', 'wit', 'blauw', 'rood', 'roze', 'groen', 'oranje', 'geel', 'paars', 'zilver', 'grijs', 'goud', 'navy',
   'mintgroen', 'oceaanblauw', 'lichtblauw', 'donkerblauw', 'black', 'white', 'blue', 'red', 'pink', 'green',
   'orange', 'yellow', 'purple', 'silver', 'grey', 'gray', 'gold', 'light', 'dark', 'grijsbrown', 'brown',

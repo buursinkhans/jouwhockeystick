@@ -1377,3 +1377,19 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Bewust niet:** nog geen code, geen nieuwe winkel op de site, geen wijziging aan privacy- of cookietekst (nieuwe trackingdomeinen alleen op expliciete opdracht), geen wijziging aan de adviesscore of `ruleSetVersion`.
 
 **Volgende stap:** fase 0, de overlapmeting met de feeds van bol.com, PassaHockey en Plutosport (`business-model.md` §5a: bij minder dan zo'n 20% overlap levert vergelijken weinig op).
+
+## 2026-10-26 — Plutosport-feed en overlapmeting (fase 0 prijsvergelijking)
+
+**Wat:** een script en een handmatige workflow (`scripts/plutosport-feed.ts`, `.github/workflows/plutosport-feed.yml`) lezen de productfeed van Plutosport (Awin, CSV met gzip), houden alleen de veld- en zaalhockeysticks over en koppelen die aan onze gecontroleerde catalogus. Het rapport komt in één issue (label `plutosport-feed`): per stick bol.com ja/nee, de PassaHockey-prijs, de Plutosport-prijs plus verzending, de voorraad en de koppelzekerheid, met bovenaan het aandeel sticks dat bij 2 of meer winkels te koop is en het mediane prijsverschil. Er verandert niets aan de site.
+
+**Koppelen** (`src/catalog/plutosportFeed.ts`, volgens `spec/prijsvergelijking.md` §3.1):
+- **EAN eerst.** Onze catalogus heeft geen EAN's; die komen uit de PassaHockey-feed, via de PassaHockey-pagina van de stick. Zo is de EAN-route alleen beschikbaar voor sticks die we aan PassaHockey koppelen.
+- **Dan de naam:** merk, modelwoorden (dezelfde normalisatie als de PassaHockey-feed, dus "PB" = Pro Bow en "JB 12+" = "JB12+"), veld/zaal, junior/senior, bow en collectiejaar ("2025/26" en "25/26" = 2025, zoals onze modeljaren).
+- **Zeker** alleen bij dezelfde EAN, of als merk, model, bow en jaar allemaal kloppen. **Twijfel** als er iets ontbreekt (geen jaar aan een van beide kanten, bow niet vermeld, extra woorden in de naam zoals "TT" of "+"). **Geen** bij een andere bow, discipline, leeftijdsgroep of jaargang.
+- Lengtes worden samengevoegd via `parent_product_id`, anders via de productpagina.
+
+**Verzendkosten:** de feed heeft geen `delivery_cost`. In `src/lib/retailers.ts` staat daarom een vast bedrag uit de openbare voorwaarden van Plutosport (https://www.plutosport.nl/bezorgen-afhalen, gelezen 2026-10-26): €6,95 (laagste tarief, DHL ServicePoint), gratis vanaf €75.
+
+**Beveiliging:** de feed-URL bevat een API-sleutel en staat alleen in het GitHub-secret `AWIN_PLUTOSPORT_FEED_URL`. Het script print hem nooit; foutmeldingen noemen alleen de HTTP-status of het soort fout.
+
+**Bewust niet:** geen Plutosport-knop op de site (dat is PR 2, na akkoord op het rapport), geen van-/voorprijzen of kortingskolommen in de feed, geen wijziging aan de adviesscore, `ruleSetVersion` of privacytekst, geen nieuwe dependency (de CSV-lezer en gzip gebruiken alleen Node).

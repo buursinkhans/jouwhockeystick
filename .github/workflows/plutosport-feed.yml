@@ -1,0 +1,51 @@
+# Plutosport feed and overlap measurement (read-only, phase 0 of
+# docs/spec/prijsvergelijking.md). Reads the Awin product feed of Plutosport,
+# matches its hockey sticks with our curated catalog and writes the report to
+# one GitHub issue. Never opens a pull request and never changes the site.
+# Started by hand via Actions → "Plutosport-feed (overlapmeting)" → Run workflow.
+name: Plutosport-feed (overlapmeting)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Feed lezen en koppelen
+        id: feed
+        env:
+          # Contains an API key: only the script reads it, it never prints it.
+          AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
+        run: |
+          if ! npm run --silent plutosport:feed -- report.md 2> error.txt; then
+            { printf '# Plutosport-feed: meting mislukt\n\n'; cat error.txt; } > report.md
+            exit 1
+          fi
+        continue-on-error: true
+      - name: Rapport in issue zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create plutosport-feed --color F28C00 --force
+          number=$(gh issue list --label plutosport-feed --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file report.md
+            gh issue comment "$number" --body "Meting opnieuw gedraaid op $(date -u +%F)."
+          else
+            gh issue create --title "Plutosport-feed en overlapmeting" --label plutosport-feed --body-file report.md
+          fi
+      - name: Mislukte meting zichtbaar maken
+        if: steps.feed.outcome == 'failure'
+        run: exit 1

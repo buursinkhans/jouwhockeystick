@@ -45,6 +45,7 @@ Deze workflows lezen alleen en maken een rapport, meestal als issue. De orchestr
 | `instagram-token.yml` | Elke maand: ververst het Instagram-token in Netlify en start een nieuwe deploy |
 | `catalog-health.yml` | Welke sticks aan hun kwartaalcontrole toe zijn |
 | `bol-feed-check.yml` | Testrun: zoekt elke stick op in de bol.com-feed |
+| `plutosport-feed.yml` | Met de hand: leest de Plutosport-feed (Awin), koppelt de hockeysticks aan de catalogus en meet de overlap tussen de winkels (fase 0 van `spec/prijsvergelijking.md`) |
 | `publicatie.yml` | Bouwt de site opnieuw op de dag dat een gepland artikel live gaat |
 | `ci.yml` | Lint, typecheck, tests en build bij elke pull request |
 
