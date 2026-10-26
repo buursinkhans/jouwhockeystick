@@ -36,6 +36,8 @@ export function ProductCard({ product }: { product: Product }) {
           notSoldAtBol={!isSoldAtBol(product)}
           passaSportsOnly={isPassaSportsOnly(product)}
           alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
+
+          alsoAtPlutosport={product.plutosportProductUrl !== undefined}
         />
       </div>
       <div className="mt-4">
@@ -49,6 +51,8 @@ export function ProductCard({ product }: { product: Product }) {
           notSoldAtBol={!isSoldAtBol(product)}
           bolUnchecked={isBolUnchecked(product)}
           passaSportsProductUrl={product.passaSportsProductUrl}
+
+          plutosportProductUrl={product.plutosportProductUrl}
           placement="catalogus"
           stack
         />

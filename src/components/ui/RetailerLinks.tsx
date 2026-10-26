@@ -4,17 +4,19 @@ import type { RetailerPlacement } from '@/lib/retailers';
 import {
   PARTNER_LINK_LABEL,
   PARTNER_LINK_URL,
-  PASSASPORTS_ONLY_NOTE,
-  PASSASPORTS_SELLER_NOTE,
+  SHOP_SELLER_NAMES,
+  notAtBolNote,
+  sellerNote,
 } from '@/content/partnerLinks';
 import { RetailerLink } from './RetailerLink';
 
 /**
  * The outbound shop CTA for a product: a bol.com partner link to the
  * product page when known, otherwise to a search for this exact model, plus
- * the partner-link disclosure, plus a PassaSports partner link (via
- * TradeTracker) when PassaSports sells the stick. Each shop that sells it
- * gets a button.
+ * a PassaSports partner link (via TradeTracker) and a Plutosport partner
+ * link (via Awin) when those shops sell the stick, plus the partner-link
+ * disclosure. Each shop that sells it gets a button; no shop gets a more
+ * prominent one because of its commission.
  */
 export function RetailerLinks({
   brand,
@@ -24,6 +26,7 @@ export function RetailerLinks({
   notSoldAtBol = false,
   bolUnchecked = false,
   passaSportsProductUrl,
+  plutosportProductUrl,
   className = '',
   stack = false,
 }: {
@@ -38,6 +41,8 @@ export function RetailerLinks({
   bolUnchecked?: boolean;
   /** PassaSports product page: adds a PassaSports partner link next to (or instead of) bol.com. */
   passaSportsProductUrl?: string;
+  /** Plutosport product page ('zeker' feed match): adds a Plutosport partner link. */
+  plutosportProductUrl?: string;
   className?: string;
   /** Stacks the buttons full-width instead of placing them side by side. */
   stack?: boolean;
@@ -47,8 +52,13 @@ export function RetailerLinks({
 
   const atBol = !notSoldAtBol;
   const atPassaSports = passaSportsProductUrl !== undefined;
+  const atPlutosport = plutosportProductUrl !== undefined;
+  const otherShops = [
+    ...(atPassaSports ? [SHOP_SELLER_NAMES.passasports] : []),
+    ...(atPlutosport ? [SHOP_SELLER_NAMES.plutosport] : []),
+  ];
 
-  if (!atBol && !atPassaSports) {
+  if (!atBol && otherShops.length === 0) {
     return (
       <div className={className}>
         <p className="text-sm font-medium text-lijngrijs">
@@ -87,11 +97,24 @@ export function RetailerLinks({
             Bekijk en koop bij PassaHockey
           </RetailerLink>
         )}
+        {atPlutosport && (
+          <RetailerLink
+            retailer="plutosport"
+            brand={brand}
+            productName={productName}
+            placement={placement}
+            productUrl={plutosportProductUrl}
+            variant="primary"
+            className={buttonWidth}
+          >
+            Bekijk en koop bij Plutosport
+          </RetailerLink>
+        )}
       </div>
       {/* Short disclosure at every shop button; the full text is on /methodiek. */}
       <p className="mt-1.5 text-xs text-lijngrijs">
         {!atBol && (
-          <>{bolUnchecked ? PASSASPORTS_SELLER_NOTE : PASSASPORTS_ONLY_NOTE} </>
+          <>{bolUnchecked ? sellerNote(otherShops) : notAtBolNote(otherShops)} </>
         )}
         <Link href={PARTNER_LINK_URL} className="underline hover:text-veld">
           {PARTNER_LINK_LABEL}

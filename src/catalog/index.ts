@@ -3,6 +3,8 @@ import type { Brand, Discipline, Product } from './types';
 import { PASSAHOCKEY_PRODUCTS } from './imported/passahockey';
 import { PASSAHOCKEY_LIVE_PRICES } from './imported/passaPrices';
 import { withLivePrice } from './livePrice';
+import { withPlutosport } from './offers';
+import { PLUTOSPORT_MATCHES } from './offers/matches';
 
 export { getDiscipline };
 import { graysJb6Composite } from './products/grays-jb6-composite';
@@ -242,9 +244,20 @@ export type ProductQuery = {
   includeImported?: boolean;
 };
 
-/** Curated sticks, with the current PassaHockey price where the shop sells them. */
+/**
+ * Curated sticks, with the current PassaHockey price where the shop sells
+ * them and the Plutosport page where the feed match is 'zeker'.
+ */
 const CURATED_WITH_LIVE_PRICES: Product[] = ALL_PRODUCTS.map((product) =>
-  withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
+  withPlutosport(
+    withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
+    PLUTOSPORT_MATCHES,
+  ),
+);
+
+/** Imported PassaHockey sticks, with the Plutosport page where the feed match is 'zeker'. */
+const IMPORTED_WITH_OFFERS: Product[] = PASSAHOCKEY_PRODUCTS.map((product) =>
+  withPlutosport(product, PLUTOSPORT_MATCHES),
 );
 
 export function getAllProducts(
@@ -252,7 +265,7 @@ export function getAllProducts(
   { includeImported = false }: ProductQuery = {},
 ): Product[] {
   const products = includeImported
-    ? [...CURATED_WITH_LIVE_PRICES, ...PASSAHOCKEY_PRODUCTS]
+    ? [...CURATED_WITH_LIVE_PRICES, ...IMPORTED_WITH_OFFERS]
     : CURATED_WITH_LIVE_PRICES;
   return products.filter((product) => isProductActive(product, now));
 }

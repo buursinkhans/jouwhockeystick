@@ -29,7 +29,7 @@ jobs:
           # Contains an API key: only the script reads it, it never prints it.
           AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
         run: |
-          if ! npm run --silent plutosport:feed -- report.md 2> error.txt; then
+          if ! npm run --silent plutosport:feed -- report.md --write-matches 2> error.txt; then
             # The script writes its own report when the feed is too small; otherwise only the error.
             [ -s report.md ] || { printf '# Plutosport-feed: meting mislukt\n\n'; cat error.txt; } > report.md
             exit 1
@@ -40,7 +40,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: plutosport-sticks
-          path: report-sticks.md
+          path: |
+            report-sticks.md
+            report-koppelingen.md
+            src/catalog/offers/matches.ts
           retention-days: 14
       - name: Rapport in issue zetten
         env:
