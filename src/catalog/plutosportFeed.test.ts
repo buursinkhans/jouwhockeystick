@@ -37,6 +37,7 @@ function row(overrides: Partial<CsvRow> = {}): CsvRow {
 function model(overrides: Partial<PlutoStickModel> = {}): PlutoStickModel {
   return {
     key: 'parent:P1',
+    description: '',
     name: 'Grays JB12+ Jumbow Hockeystick 2025/26',
     brand: 'Grays',
     modelText: '',

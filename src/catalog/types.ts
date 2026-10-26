@@ -142,7 +142,7 @@ export const productSchema = z.object({
    * is unknown until checked. Removed once a stick is enriched by hand.
    */
   feedImport: z
-    .object({ feed: z.literal('passahockey'), importedAt: z.string() })
+    .object({ feed: z.enum(['passahockey', 'plutosport']), importedAt: z.string() })
     .optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),

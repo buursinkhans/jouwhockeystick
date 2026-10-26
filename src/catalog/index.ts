@@ -1,6 +1,7 @@
 import { getDiscipline } from './discipline';
 import type { Brand, Discipline, Product } from './types';
 import { PASSAHOCKEY_PRODUCTS } from './imported/passahockey';
+import { PLUTOSPORT_PRODUCTS } from './imported/plutosport';
 import { PASSAHOCKEY_LIVE_PRICES } from './imported/passaPrices';
 import { withLivePrice } from './livePrice';
 import { withPlutosport } from './offers';
@@ -230,6 +231,11 @@ export function getImportedProducts(): readonly Product[] {
   return PASSAHOCKEY_PRODUCTS;
 }
 
+/** Sticks imported in bulk from the Plutosport feed that PassaHockey does not sell (generated). */
+export function getPlutosportImportedProducts(): readonly Product[] {
+  return PLUTOSPORT_PRODUCTS;
+}
+
 /** True for a stick from the bulk feed import: noindex page, not in the sitemap or articles. */
 export function isFeedImport(product: Product): boolean {
   return product.feedImport !== undefined;
@@ -255,10 +261,14 @@ const CURATED_WITH_LIVE_PRICES: Product[] = ALL_PRODUCTS.map((product) =>
   ),
 );
 
-/** Imported PassaHockey sticks, with the Plutosport page where the feed match is 'zeker'. */
-const IMPORTED_WITH_OFFERS: Product[] = PASSAHOCKEY_PRODUCTS.map((product) =>
-  withPlutosport(product, PLUTOSPORT_MATCHES),
-);
+/**
+ * Imported sticks: PassaHockey's (with the Plutosport page where the feed
+ * match is 'zeker'), then the Plutosport sticks that PassaHockey does not sell.
+ */
+const IMPORTED_WITH_OFFERS: Product[] = [
+  ...PASSAHOCKEY_PRODUCTS.map((product) => withPlutosport(product, PLUTOSPORT_MATCHES)),
+  ...PLUTOSPORT_PRODUCTS,
+];
 
 export function getAllProducts(
   now: Date = new Date(),

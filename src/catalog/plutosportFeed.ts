@@ -39,6 +39,7 @@ export const plutosportRowSchema = z.object({
   currency: optionalText,
   description: optionalText,
   merchant_image_url: optionalText,
+  aw_image_url: optionalText,
   brand_name: optionalText,
   product_model: optionalText,
   model_number: optionalText,
@@ -152,6 +153,10 @@ export type PlutoStickModel = {
   inStock: boolean;
   categories: string[];
   lastUpdated?: string;
+  /** Product photo from the shop (merchant_image_url, else Awin's copy). */
+  imageUrl?: string;
+  /** The shop's description, for specs it states there (carbon percentage). */
+  description: string;
 };
 
 const pageUrl = (url: string) => url.replace(/[?#].*$/, '').replace(/\/$/, '');
@@ -272,6 +277,8 @@ export class PlutosportCollector {
         brand: row.brand_name ?? '',
         modelText: [row.product_model, row.model_number].filter(Boolean).join(' '),
         specText: [row.specifications, row.product_short_description].filter(Boolean).join(' | '),
+        description: row.description ?? '',
+        ...((row.merchant_image_url ?? row.aw_image_url) && { imageUrl: row.merchant_image_url ?? row.aw_image_url }),
         url,
         awDeepLink: row.aw_deep_link,
         discipline: /zaal|indoor/i.test(text) ? 'zaal' : 'veld',
