@@ -219,10 +219,10 @@ function stickBrands(models: readonly PlutoStickModel[]): [string, number, numbe
 /** Every stick model in the feed, for checking the matcher by hand (workflow artifact, not the issue). */
 function stickList(models: readonly PlutoStickModel[], rows: readonly OverlapRow[]): string {
   const matchedBy = new Map(rows.flatMap((r) => (r.match.model && r.match.level !== 'geen' ? [[r.match.model.key, `${r.match.level}: ${r.slug}`] as const] : [])));
-  const lines = ['| Merk | Naam | Veld/zaal | Junior | Prijs | Voorraad | EAN | Koppeling | Pagina |', '|---|---|---|---|---|---|---|---|---|'];
+  const lines = ['| Merk | Naam | Veld/zaal | Junior | Prijs | Voorraad | Lengtes op voorraad | EAN | Koppeling | Pagina |', '|---|---|---|---|---|---|---|---|---|---|'];
   for (const m of [...models].sort((a, b) => a.brand.localeCompare(b.brand) || a.name.localeCompare(b.name))) {
     lines.push(
-      `| ${cell(m.brand)} | ${cell(m.name)} | ${m.discipline} | ${m.junior ? 'ja' : 'nee'} | ${euro(m.inStockPriceMin ?? m.priceMin)} | ${m.inStock ? 'ja' : 'nee'} | ${m.eans.length} | ${matchedBy.get(m.key) ?? '–'} | ${m.url} |`,
+      `| ${cell(m.brand)} | ${cell(m.name)} | ${m.discipline} | ${m.junior ? 'ja' : 'nee'} | ${euro(m.inStockPriceMin ?? m.priceMin)} | ${m.inStock ? 'ja' : 'nee'} | ${m.sizesInStock.join(', ') || '–'} | ${m.eans.length} | ${matchedBy.get(m.key) ?? '–'} | ${m.url} |`,
     );
   }
   return lines.join('\n');
