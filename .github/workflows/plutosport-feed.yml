@@ -30,7 +30,8 @@ jobs:
           AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
         run: |
           if ! npm run --silent plutosport:feed -- report.md 2> error.txt; then
-            { printf '# Plutosport-feed: meting mislukt\n\n'; cat error.txt; } > report.md
+            # The script writes its own report when the feed is too small; otherwise only the error.
+            [ -s report.md ] || { printf '# Plutosport-feed: meting mislukt\n\n'; cat error.txt; } > report.md
             exit 1
           fi
         continue-on-error: true

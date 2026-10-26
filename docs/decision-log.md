@@ -1393,3 +1393,5 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Beveiliging:** de feed-URL bevat een API-sleutel en staat alleen in het GitHub-secret `AWIN_PLUTOSPORT_FEED_URL`. Het script print hem nooit; foutmeldingen noemen alleen de HTTP-status of het soort fout.
 
 **Bewust niet:** geen Plutosport-knop op de site (dat is PR 2, na akkoord op het rapport), geen van-/voorprijzen of kortingskolommen in de feed, geen wijziging aan de adviesscore, `ruleSetVersion` of privacytekst, geen nieuwe dependency (de CSV-lezer en gzip gebruiken alleen Node).
+
+**Aanvulling (2026-10-26, na de eerste run):** de feed is in Awin gefilterd op hockey (eigenaar), dus klein; de eerste run stopte op 93 regels. De ondergrens voor het aantal regels is daarom 50 (een kapotte download), en het aantal stickmodellen (minstens 15) is de echte controle. Het rapport toont nu altijd wat er in de feed zit (kolommen, productpagina's, parent-ID's, regels met maat en op voorraad, de hele feed per categorie en per merk), ook als de meting wordt afgebroken. Zo is te zien of het Awin-filter of ons filter sticks mist.
