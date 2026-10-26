@@ -104,6 +104,8 @@ export default async function VergelijkPage({
                     notSoldAtBol={!isSoldAtBol(product)}
                     bolUnchecked={isBolUnchecked(product)}
                     passaSportsProductUrl={product.passaSportsProductUrl}
+
+                    plutosportProductUrl={product.plutosportProductUrl}
                     placement="vergelijk"
                     className="text-sm"
                     stack

@@ -189,6 +189,9 @@ const hostOf = (url: string | undefined) => {
   }
 };
 
+/** Columns that may hold the stick length; which one Plutosport fills is checked per run. */
+export const SIZE_COLUMNS = ['Fashion:size', 'dimensions', 'size_stock_status', 'size_stock_amount'] as const;
+
 /** Collects stick rows into models; feed rows go in one by one, so the feed never sits in memory as a whole. */
 export class PlutosportCollector {
   readonly tally: FeedTally = { rows: 0, stickRows: 0, notForSale: 0, invalid: 0, notEuro: 0, notDutchShop: 0 };
@@ -206,6 +209,8 @@ export class PlutosportCollector {
     rowsWithSize: 0,
     rowsInStock: 0,
   };
+  /** Most common values of the size-like columns in stick rows: shows where the feed puts the length. */
+  readonly sizeColumnValues = new Map<string, Map<string, number>>();
   private readonly models = new Map<string, PlutoStickModel>();
 
   private profile(raw: CsvRow): void {
@@ -226,6 +231,13 @@ export class PlutosportCollector {
     this.profile(raw);
     if (!isHockeyStickRow(raw)) return;
     this.tally.stickRows++;
+    for (const column of SIZE_COLUMNS) {
+      const value = raw[column]?.trim();
+      if (!value) continue;
+      const values = this.sizeColumnValues.get(column) ?? new Map<string, number>();
+      values.set(value, (values.get(value) ?? 0) + 1);
+      this.sizeColumnValues.set(column, values);
+    }
     if (!isForSale(raw)) {
       this.tally.notForSale++;
       return;

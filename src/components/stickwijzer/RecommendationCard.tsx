@@ -137,6 +137,8 @@ export function RecommendationCard({
         notSoldAtBol={!isSoldAtBol(product)}
         passaSportsOnly={isPassaSportsOnly(product)}
         alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
+
+        alsoAtPlutosport={product.plutosportProductUrl !== undefined}
       />
 
       <h5 className="mt-5 text-sm font-semibold">Waarom deze stick past</h5>
@@ -193,6 +195,8 @@ export function RecommendationCard({
           notSoldAtBol={!isSoldAtBol(product)}
           bolUnchecked={isBolUnchecked(product)}
           passaSportsProductUrl={product.passaSportsProductUrl}
+
+          plutosportProductUrl={product.plutosportProductUrl}
           placement="stickwijzer"
         />
       </div>
