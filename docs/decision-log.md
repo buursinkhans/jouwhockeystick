@@ -1358,3 +1358,22 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 **Netlify:** op Netlify voert de Next-server de rewrites uit. Elk verzoek naar `/p8k` is dus een functie-aanroep. Schatting: 4–8 verzoeken per paginaweergave (config en flags bij het laden, en gebundelde events voor pageview, klikken, heatmap en pageleave); scripts blijven in de browsercache. Dat is ongeveer 4.000–8.000 verzoeken per 1.000 paginaweergaven.
 
 **Bewust niet:** geen wijziging aan src/proxy.ts, netlify.toml, DNS of Simple Analytics; geen cookies, opslag of opnames; het IP-adres niet weggefilterd (dan werkt de cookieloze telling niet meer).
+
+## 2026-10-26 — Prijsvergelijking per stick: besluit en spelregels (nog niet gebouwd)
+
+**Aanleiding:** met Plutosport (Awin) is er naast bol.com en PassaHockey een derde goedgekeurd partnerprogramma; HockeyCity, Jumbo Sports, DAKA en Decathlon zijn aangevraagd. Daarmee is vergelijken per stick haalbaar: na het advies ("welke stick past?") helpt de site ook met "waar koop ik hem?".
+
+**Besluit eigenaar:** de prijsvergelijking komt er, als tweede stap na het advies. Eerst de spelregels en de architectuur vastleggen, dan bouwen in fasen.
+
+**Wat (alleen documentatie):**
+- **Spelregels** in `CLAUDE.md` (Commerce): sorteren op totaalprijs inclusief verzending, nooit op commissie; alle winkelknoppen gelijk; alleen de actuele feedprijs met datum; geen van-/voorprijzen of kortingsclaims; bedrag verbergen als de prijs ouder is dan 14 dagen; uitleg over sortering en vergoeding bij het blok; alleen bevestigde koppelingen en goedgekeurde programma's.
+- **Architectuurnotitie** `docs/spec/prijsvergelijking.md`: gegevensmodel, koppelen van sticks tussen winkels, drie opties om prijzen actueel te houden en een gefaseerde aanpak.
+- **Partnertabel** in `docs/business-model.md` §5a bijgewerkt met commissie, cookieduur en status per winkel volgens de dashboards.
+
+**Advies architectuur (keuze eigenaar bij merge):** optie A, meeliften op de wekelijkse sync-PR. Kost geen extra Netlify-credits, want de wekelijkse merge gebeurt al, en elke prijswijziging blijft via PR, CI en preview lopen. Optie B (dagelijks, zonder PR) pas als metingen laten zien dat wekelijks te traag is; dat vraagt een apart besluit over prijsdata zonder PR en een Netlify-sleutel. Optie C (prijzen in de browser) valt af omdat de prijzen dan niet in de server-HTML staan.
+
+**Waarom de commissie geen rol speelt:** Jumbo Sports biedt 12% en 100 dagen cookie, ruim meer dan de rest. Juist daarom liggen de sorteerregels vast voordat Jumbo live gaat: de volgorde moet uitlegbaar blijven ("Eerlijk stickadvies op maat"), en de Europese consumentenregels vragen dat een vergelijker vertelt waarop hij rangschikt.
+
+**Bewust niet:** nog geen code, geen nieuwe winkel op de site, geen wijziging aan privacy- of cookietekst (nieuwe trackingdomeinen alleen op expliciete opdracht), geen wijziging aan de adviesscore of `ruleSetVersion`.
+
+**Volgende stap:** fase 0, de overlapmeting met de feeds van bol.com, PassaHockey en Plutosport (`business-model.md` §5a: bij minder dan zo'n 20% overlap levert vergelijken weinig op).

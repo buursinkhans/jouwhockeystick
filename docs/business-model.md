@@ -100,7 +100,7 @@ De ontwikkelinstructie hecht terecht veel waarde aan uitlegbaar advies en betrou
 
 Het eerdere plan voor deze tussenstap, met een mailto-bestelformulier en aannames over bol-commissies, staat in de git-geschiedenis van dit bestand.
 
-## 5a. Uitbreiding met meer partnerprogramma's (stand 2026-10-25)
+## 5a. Uitbreiding met meer partnerprogramma's (stand 2026-10-26)
 
 **Waarom:** nu valt een bezoeker af als bol.com of PassaHockey een stick niet verkoopt. Met meer winkels krijgt vrijwel elke stick een koopknop, en wordt een prijsvergelijking per stick mogelijk (zie hieronder). Dit is de uitwerking van "meerdere partnerwinkels" uit sectie 6.
 
@@ -114,15 +114,17 @@ Het eerdere plan voor deze tussenstap, met een mailto-bestelformulier en aanname
 | Awin | aangemaakt 2026-10-24 | |
 | Odyssey Partnerships | aangevraagd | nodig voor Decathlon NL; vóór gebruik checken waar het bedrijf zit en waar de data staat (EU-afspraak) |
 
-**Programma's per winkel:**
+**Programma's per winkel (stand 2026-10-26, opgave eigenaar uit de dashboards):**
 
-| Winkel | Netwerk | Status | Bekend (bron: openbare pagina's, nog te bevestigen in het dashboard) |
-|---|---|---|---|
-| HockeyCity.nl | TradeTracker | aangevraagd | hockeyspecialist voor junioren; 100 dagen cookie |
-| Jumbo Sports | Daisycon | aangevraagd | golf- en hockeywinkel; productfeed en deeplinks; 100 dagen meetduur |
-| DAKA | Daisycon | aangevraagd | algemene sportwinkel met hockey; 5–7%, 30 dagen cookie; productfeed onbekend |
-| Plutosport NL | Awin | aangevraagd | adverteerder-ID 8342; hockey-assortiment en feed nog te controleren |
-| Decathlon NL | Odyssey Partnerships | na goedkeuring Odyssey-account | tot 7%, 30 dagen cookie, productfeed; verkoopt via de marketplace o.a. Grays |
+| Winkel | Netwerk | Commissie | Cookieduur | Status | Opmerking |
+|---|---|---|---|---|---|
+| bol.com | bol.com Partnerprogramma | 7% (Sport) | 5 dagen | goedgekeurd, live | |
+| PassaHockey | TradeTracker | 5% | 14 dagen | goedgekeurd, live | |
+| Plutosport NL | Awin | 5% | 15 dagen | goedgekeurd, nog niet op de site | adverteerder-ID 8342; hockey-assortiment en feed nog te controleren |
+| HockeyCity.nl | TradeTracker | 5% | onbekend | aangevraagd | hockeyspecialist voor junioren; openbare pagina noemt 100 dagen cookie; productfeed onbekend |
+| Jumbo Sports | Daisycon | 12% | 100 dagen | aangevraagd | golf- en hockeywinkel; productfeed en deeplinks |
+| DAKA | Daisycon | 5% | 30 dagen | aangevraagd | algemene sportwinkel met hockey; productfeed onbekend |
+| Decathlon NL | Odyssey Partnerships | onbekend | onbekend | aangevraagd | verkoopt via de marketplace o.a. Grays; EU-check Odyssey nodig |
 
 **Afgevallen of onzeker:**
 - **Hockeygear.eu:** bestaat niet meer.
@@ -140,7 +142,7 @@ Het eerdere plan voor deze tussenstap, met een mailto-bestelformulier en aanname
 4. Niet meer netwerken dan nodig. Elk netwerk heeft een eigen uitbetalingsdrempel en een eigen feed om te onderhouden.
 5. Elke nieuwe winkel op de site is een besluit in `docs/decision-log.md`. Extra trackingdomeinen kunnen gevolgen hebben voor de privacy- en cookietekst; die wordt alleen op expliciete opdracht van de eigenaar aangepast.
 
-**Volgende stap: prijsvergelijking per stick (idee, nog niet besloten)**
+**Volgende stap: prijsvergelijking per stick (besloten 2026-10-26; uitwerking en architectuur in `docs/spec/prijsvergelijking.md`)**
 
 Per stick tonen bij welke partnerwinkel hij te koop is, met prijs en datum, gesorteerd op prijs.
 
