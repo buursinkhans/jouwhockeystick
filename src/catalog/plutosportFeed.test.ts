@@ -11,6 +11,7 @@ import {
   type CatalogStick,
   type OverlapRow,
   type PlutoStickModel,
+  yearFromArticleCode,
 } from './plutosportFeed';
 
 function row(overrides: Partial<CsvRow> = {}): CsvRow {
@@ -179,6 +180,21 @@ describe('matchStick', () => {
   it('is sure on the same EAN, whatever the name', () => {
     const result = matchStick(stick({ eans: ['5056323712345'] }), [model({ name: 'GR JB12+ 36.5', eans: ['5056323712345'] })]);
     expect(result).toMatchObject({ level: 'zeker', method: 'ean' });
+  });
+
+  it('doubts an EAN match when Plutosport calls it senior and we call it junior', () => {
+    const osaka = stick({ slug: 'osaka-probow-gf-indoor-junior', brand: 'Osaka', name: 'Osaka Probow GF Indoor Junior', discipline: 'zaal', eans: ['8719'] });
+    const result = matchStick(osaka, [model({ brand: 'Osaka', name: 'Osaka Pro Bow GF Indoor Hockeystick Senior', discipline: 'zaal', eans: ['8719'] })]);
+    expect(result).toMatchObject({ level: 'twijfel', method: 'ean' });
+  });
+
+  it('reads the year from The Indian Maharadja article code in the page name', () => {
+    expect(yearFromArticleCode('https://www.plutosport.nl/the-indian-maharadja-blade-10-hockeystick-senior-10231006', 'The Indian Maharadja')).toBe(2023);
+    expect(yearFromArticleCode('https://www.plutosport.nl/the-indian-maharadja-red-hockeystick-junior-10221065-jr', 'The Indian Maharadja')).toBe(2022);
+    expect(yearFromArticleCode('https://www.plutosport.nl/osaka-pro-bow-25-10231006', 'Osaka')).toBeNull();
+    const blade = stick({ slug: 'indian-maharadja-blade-10', brand: 'The Indian Maharadja', name: 'The Indian Maharadja Blade 10', bow: undefined, modelYear: 2025 });
+    const old = model({ brand: 'The Indian Maharadja', name: 'The Indian Maharadja Blade 10 Hockeystick Senior', url: 'https://www.plutosport.nl/the-indian-maharadja-blade-10-hockeystick-senior-10231006' });
+    expect(matchStick(blade, [old]).note).toContain('2023');
   });
 
   it('is sure on brand, model, bow and year written differently ("JB 12+" vs "JB12+ Jumbow 2025/26")', () => {

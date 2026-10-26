@@ -355,6 +355,17 @@ export function bowInName(name: string, brand: string): BowProfile | null {
   return named ?? (tokens.has('jumbow') ? 'lowbow' : null);
 }
 
+/**
+ * The Indian Maharadja article codes start with 10 + the year, also in
+ * Plutosport's page names ("…-blade-10-hockeystick-senior-10231006" is 2023,
+ * "…-10221065-jr" is 2022), as in feedImport's modelYearFromUrl.
+ */
+export function yearFromArticleCode(url: string, brand: string): number | null {
+  if (!sameBrand(brand, 'The Indian Maharadja')) return null;
+  const year = url.match(/-10(2\d)\d{4}(?:-[a-z]+)?\/?$/i)?.[1];
+  return year ? 2000 + Number(year) : null;
+}
+
 /** How many different bow types a text mentions. */
 const bowCount = (text: string) =>
   new Set((text.match(/\b(?:extreme\s*-?\s*low|low|mid|pro|ultra|dyna|jum)\s*-?\s*bow\b/gi) ?? []).map((m) => m.toLowerCase().replace(/[\s-]/g, ''))).size;
@@ -403,7 +414,7 @@ function compare(stick: CatalogStick, model: PlutoStickModel): Comparison {
   const theirBow = bowInName(theirText, model.brand || stick.brand) ?? (specBow && bowCount(model.specText) === 1 ? specBow : null);
   if (stick.bow && theirBow && stick.bow !== theirBow) return null;
 
-  const theirYear = seasonYear(theirText);
+  const theirYear = seasonYear(theirText) ?? yearFromArticleCode(model.url, model.brand || stick.brand);
   if (stick.modelYear && theirYear && stick.modelYear !== theirYear) return { otherYear: theirYear };
 
   const reasons: string[] = [];
@@ -435,7 +446,16 @@ export function matchStick(stick: CatalogStick, models: readonly PlutoStickModel
   const byEan = models.filter((model) => model.eans.some((ean) => ours.has(ean))).sort(preferred);
   const [eanHit] = byEan;
   if (eanHit) {
-    return { slug: stick.slug, level: 'zeker', method: 'ean', model: eanHit, note: 'EAN gelijk aan die bij PassaHockey' };
+    // PassaHockey puts junior and senior lengths on one page; Plutosport may split them.
+    return isJunior(stick.name) === eanHit.junior
+      ? { slug: stick.slug, level: 'zeker', method: 'ean', model: eanHit, note: 'EAN gelijk aan die bij PassaHockey' }
+      : {
+          slug: stick.slug,
+          level: 'twijfel',
+          method: 'ean',
+          model: eanHit,
+          note: `EAN gelijk aan die bij PassaHockey, maar Plutosport noemt hem ${eanHit.junior ? 'junior' : 'senior'} en wij niet`,
+        };
   }
 
   const exact: PlutoStickModel[] = [];
