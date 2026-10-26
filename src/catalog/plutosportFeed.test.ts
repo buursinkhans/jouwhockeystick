@@ -8,6 +8,7 @@ import {
   overlapSummary,
   sameBrand,
   seasonYear,
+  sizeFromArticleNumber,
   type CatalogStick,
   type OverlapRow,
   type PlutoStickModel,
@@ -163,6 +164,22 @@ describe('helpers', () => {
     expect(seasonYear('Grays GR 2026')).toBe(2026);
     expect(seasonYear('Princess Competition 1 Star PROBOW Pi/Wh')).toBeNull();
     expect(seasonYear('Osaka Pro Tour 40 2.0')).toBeNull();
+  });
+
+  it('reads the length from Plutosport article numbers', () => {
+    expect(sizeFromArticleNumber('10221001_36 1/2')).toBe('36,5');
+    expect(sizeFromArticleNumber('10221065-JR_31')).toBe('31');
+    expect(sizeFromArticleNumber('10201041_18')).toBe('18');
+    expect(sizeFromArticleNumber('STK00415_37.5')).toBe('37,5');
+    expect(sizeFromArticleNumber('315-65002-000')).toBeNull();
+    expect(sizeFromArticleNumber('ABC_XL')).toBeNull();
+    expect(sizeFromArticleNumber('ABC_95')).toBeNull();
+    expect(sizeFromArticleNumber(undefined)).toBeNull();
+    const [m] = collectSticks([
+      row({ 'Fashion:size': undefined, merchant_product_id: '10221001_36 1/2' }),
+      row({ 'Fashion:size': undefined, merchant_product_id: '10221001_37 1/2', in_stock: '0', stock_quantity: '0' }),
+    ]);
+    expect(m).toMatchObject({ sizes: ['36,5', '37,5'], sizesInStock: ['36,5'] });
   });
 
   it('normalises lengths and brand names', () => {

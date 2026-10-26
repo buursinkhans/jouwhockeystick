@@ -32,6 +32,7 @@ const price = z
  */
 export const plutosportRowSchema = z.object({
   aw_product_id: optionalText,
+  merchant_product_id: optionalText,
   aw_deep_link: z.string().trim().url(),
   merchant_deep_link: z.string().trim().url(),
   product_name: z.string().trim().min(1),
@@ -115,6 +116,19 @@ function rowInStock(row: PlutosportRow): boolean {
 }
 
 /** "36.5", "36,5 inch", '36.5"' → "36,5"; other sizes (S, M, 90 cm) are kept as written. */
+/**
+ * Plutosport fills neither Fashion:size nor dimensions; the length ends its
+ * article number instead: "10221001_36 1/2" is 36,5 inch, "10221065-JR_31"
+ * is 31 inch (feed check 2026-10-27). Only plausible stick lengths (18–39).
+ */
+export function sizeFromArticleNumber(articleNumber: string | undefined): string | null {
+  const match = articleNumber?.trim().match(/_(\d{2})(?:\s*1\/2|[.,]5)?$/);
+  if (!match?.[1]) return null;
+  const inches = Number(match[1]);
+  if (inches < 18 || inches > 39) return null;
+  return /1\/2|[.,]5$/.test(articleNumber ?? '') ? `${inches},5` : `${inches}`;
+}
+
 export function normalSize(size: string | undefined): string | null {
   if (!size) return null;
   const inch = size.match(/^(\d{2})(?:[.,](\d))?\s*(?:inch|in|"|”)?$/i);
@@ -278,7 +292,7 @@ export class PlutosportCollector {
     const url = pageUrl(row.merchant_deep_link);
     const key = `page:${url.toLowerCase()}`;
     const inStock = rowInStock(row);
-    const size = normalSize(row['Fashion:size']);
+    const size = normalSize(row['Fashion:size']) ?? sizeFromArticleNumber(row.merchant_product_id);
     let model = this.models.get(key);
     if (!model) {
       const text = `${row.product_name} | ${categories}`;
