@@ -233,6 +233,12 @@ describe('matchStick', () => {
     expect(matchStick(db, [model({ name: 'Grays DB10+ Dynabow Hockeystick 2025/26' })]).level).toBe('twijfel');
   });
 
+  it('knows a youth stick by its lengths when "Junior" is not in our name', () => {
+    const youngstar = stick({ slug: 'adidas-youngstar-9', brand: 'adidas', name: 'adidas Youngstar .9 Hockeystick', bow: undefined, modelYear: undefined, junior: true });
+    const result = matchStick(youngstar, [model({ brand: 'Adidas', name: 'Adidas Youngstar .9 Wood Hockeystick Junior', junior: true })]);
+    expect(result.level).toBe('twijfel');
+  });
+
   it('never matches junior with senior', () => {
     const reece = stick({ slug: 'reece-alpha-jr', brand: 'Reece', name: 'Reece Alpha JR', bow: undefined, modelYear: undefined });
     expect(matchStick(reece, [model({ brand: 'Reece', name: 'Reece Alpha Hockeystick Senior' })]).level).toBe('geen');

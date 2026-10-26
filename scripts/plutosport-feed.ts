@@ -3,8 +3,11 @@
 // Plutosport, keeps the hockey sticks, matches them with our curated catalog
 // and writes a Dutch Markdown report: per stick bol.com yes/no, the
 // PassaHockey price, the Plutosport price plus shipping, stock and how sure
-// the match is. Never changes the catalog or the site.
-// Usage: npm run plutosport:feed -- [report.md] [feed.csv(.gz)] [passa.xml]
+// the match is. Without flags it only reads. With --write-matches it writes
+// the 'zeker' matches (src/catalog/offers/matches.ts, the Plutosport buttons),
+// with --write-import the Plutosport sticks we do not have yet
+// (src/catalog/imported/plutosport.ts); the weekly PassaHockey sync uses both.
+// Usage: npm run plutosport:feed -- [report.md] [feed.csv(.gz)] [passa.xml] [--write-matches] [--write-import]
 // The feed URL comes from AWIN_PLUTOSPORT_FEED_URL (a GitHub secret). It
 // contains an API key: it is never printed, logged or written to the report.
 import { createReadStream, readFileSync, writeFileSync } from 'node:fs';
@@ -20,7 +23,7 @@ import { livePricesFromFeed } from '../src/catalog/livePrice';
 import { getModelYear } from '../src/catalog/modelYear';
 import type { PlutosportMatch, PlutosportMatches } from '../src/catalog/offers/index';
 import { PLUTOSPORT_MATCHES } from '../src/catalog/offers/matches';
-import { PASSAHOCKEY_FEED_URL, parsePassaFeed, type PassaStickModel } from '../src/catalog/passaFeed';
+import { PASSAHOCKEY_FEED_URL, isJunior, parsePassaFeed, type PassaStickModel } from '../src/catalog/passaFeed';
 import {
   PlutosportCollector,
   SIZE_COLUMNS,
@@ -30,6 +33,7 @@ import {
   type PlutoStickModel,
   type StickMatch,
 } from '../src/catalog/plutosportFeed';
+import { isJuniorStick } from '../src/catalog/similar';
 import type { Product } from '../src/catalog/types';
 import { CsvReader } from '../src/lib/csv';
 import { PLUTOSPORT_SHIPPING, isPlutosportProductPage, shippingCostEur } from '../src/lib/retailers';
@@ -416,6 +420,7 @@ async function main() {
         ...(bow && { bow }),
         ...(modelYear && { modelYear }),
         eans: passa?.eans ?? [],
+        junior: isJunior(product.name) || isJuniorStick(product),
       },
       models,
     );

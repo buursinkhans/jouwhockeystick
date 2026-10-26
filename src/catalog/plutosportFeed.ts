@@ -361,6 +361,8 @@ export type CatalogStick = {
   modelYear?: number;
   /** EANs we know for this stick: from the PassaHockey feed, via its PassaHockey page. */
   eans: readonly string[];
+  /** A youth stick; defaults to "junior" in the name. Our lengths tell it too (a 31" stick named without "Junior"). */
+  junior?: boolean;
 };
 
 export type MatchLevel = 'zeker' | 'twijfel' | 'geen';
@@ -446,7 +448,7 @@ type Comparison = { reasons: string[] } | { otherYear: number } | null;
 function compare(stick: CatalogStick, model: PlutoStickModel): Comparison {
   if (!sameBrand(stick.brand, model.brand || model.name.split(/\s+/)[0] || '')) return null;
   if (stick.discipline !== model.discipline) return null;
-  if (isJunior(stick.name) !== model.junior) return null;
+  if ((stick.junior ?? isJunior(stick.name)) !== model.junior) return null;
   const ours = modelTokens(withoutYears(stick.name), stick.brand);
   if (ours.length === 0) return null;
   const theirText = `${model.name} ${model.modelText}`;
@@ -491,7 +493,7 @@ export function matchStick(stick: CatalogStick, models: readonly PlutoStickModel
   const [eanHit] = byEan;
   if (eanHit) {
     // PassaHockey puts junior and senior lengths on one page; Plutosport may split them.
-    return isJunior(stick.name) === eanHit.junior
+    return (stick.junior ?? isJunior(stick.name)) === eanHit.junior
       ? { slug: stick.slug, level: 'zeker', method: 'ean', model: eanHit, note: 'EAN gelijk aan die bij PassaHockey' }
       : {
           slug: stick.slug,
