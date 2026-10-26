@@ -73,7 +73,7 @@ const OTHER_SPORT = /\b(ijshockey|ice\s*hockey|floorball|unihockey|straathockey|
 
 /** Hockey products that are not a field or indoor player stick. */
 const NOT_A_STICK =
-  /\b(?:stick|hockey)?(?:tas|tassen|bag|bags|backpack|rugzak|hoes|hoezen|sleeve|grip|grips|tape|bal|ballen|ball|balls|keeper\w*|goalie\w*|bescherm\w*|handschoen\w*|schoen\w*|sokken|kousen|bidon|bitje|mondbeschermer)\b|\bmini\s*stick|\bministick/i;
+  /\b(?:stick|hockey)?(?:tas|tassen|bag|bags|backpack|rugzak|hoes|hoezen|sleeve|grip|grips|tape|bal|ballen|ball|balls|keeper\w*|goalie\w*|bescherm\w*|handschoen\w*|schoen\w*|sokken|kousen|bidon|bitje|mondbeschermer|shin\w*|guard\w*|glove\w*|shoe\w*|socks?|bottle|mouthguard\w*|cover\w*|holder)\b|\bmini\s*stick|\bministick/i;
 
 const STICK = /hockeystick|\bsticks?\b/i;
 
@@ -165,11 +165,30 @@ export type FeedTally = {
   notForSale: number;
   invalid: number;
   notEuro: number;
+  /** Product page on another Plutosport site (.com, .de, .be): not the Dutch shop we link to. */
+  notDutchShop: number;
+};
+
+/** The shop we link to; Plutosport runs the same assortment on other domains per country and language. */
+export const isDutchShopUrl = (url: string) => {
+  try {
+    return /^(www\.)?plutosport\.nl$/i.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+};
+
+const hostOf = (url: string | undefined) => {
+  try {
+    return url ? new URL(url.trim()).hostname.toLowerCase() : '(geen link)';
+  } catch {
+    return '(ongeldige link)';
+  }
 };
 
 /** Collects stick rows into models; feed rows go in one by one, so the feed never sits in memory as a whole. */
 export class PlutosportCollector {
-  readonly tally: FeedTally = { rows: 0, stickRows: 0, notForSale: 0, invalid: 0, notEuro: 0 };
+  readonly tally: FeedTally = { rows: 0, stickRows: 0, notForSale: 0, invalid: 0, notEuro: 0, notDutchShop: 0 };
   /** How many stick rows each category combination had: shows the owner what the filter kept. */
   readonly categoryCounts = new Map<string, number>();
   /** What the whole feed holds, sticks or not: shows whether the Awin filter lets through what we expect. */
@@ -177,6 +196,8 @@ export class PlutosportCollector {
     columns: [] as string[],
     categories: new Map<string, number>(),
     brands: new Map<string, number>(),
+    /** Domain of the product pages: the language setting in Awin can bring in other Plutosport sites. */
+    hosts: new Map<string, number>(),
     parents: new Set<string>(),
     pages: new Set<string>(),
     rowsWithSize: 0,
@@ -190,6 +211,7 @@ export class PlutosportCollector {
     const count = (map: Map<string, number>, key: string) => map.set(key, (map.get(key) ?? 0) + 1);
     count(p.categories, categoryText(raw) || '(geen categorie)');
     count(p.brands, raw.brand_name?.trim() || '(geen merk)');
+    count(p.hosts, hostOf(raw.merchant_deep_link));
     if (raw.parent_product_id?.trim()) p.parents.add(raw.parent_product_id.trim());
     if (raw.merchant_deep_link) p.pages.add(pageUrl(raw.merchant_deep_link.trim()).toLowerCase());
     if (raw['Fashion:size']?.trim()) p.rowsWithSize++;
@@ -213,6 +235,10 @@ export class PlutosportCollector {
     const row = parsed.data;
     if (row.currency && row.currency.toUpperCase() !== 'EUR') {
       this.tally.notEuro++;
+      return;
+    }
+    if (!isDutchShopUrl(row.merchant_deep_link)) {
+      this.tally.notDutchShop++;
       return;
     }
     const categories = categoryText(raw) || '(geen categorie)';

@@ -113,6 +113,21 @@ describe('collectSticks', () => {
     });
   });
 
+  it('keeps only product pages on plutosport.nl (the English feed can bring in other domains)', () => {
+    const models = collectSticks([
+      row(),
+      row({ parent_product_id: 'P2', merchant_deep_link: 'https://www.plutosport.com/grays-jb12-plus' }),
+      row({ parent_product_id: 'P3', merchant_deep_link: 'https://www.plutosport.de/grays-jb12-plus' }),
+    ]);
+    expect(models.map((m) => m.key)).toEqual(['parent:P1']);
+  });
+
+  it('drops English names of accessories too', () => {
+    for (const product_name of ['Grays Hockey Shin Guards', 'Grays Hockey Gloves', 'Grays Stick Cover', 'Adidas Hockey Shoes']) {
+      expect(isHockeyStickRow(row({ product_name, merchant_product_category_path: 'Hockey > Sticks' })), product_name).toBe(false);
+    }
+  });
+
   it('groups by product page when parent_product_id is missing', () => {
     const models = collectSticks([
       row({ parent_product_id: '', 'Fashion:size': '36.5' }),
