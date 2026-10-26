@@ -35,6 +35,13 @@ jobs:
             exit 1
           fi
         continue-on-error: true
+      - name: Volledige stickslijst bewaren
+        if: hashFiles('report-sticks.md') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: plutosport-sticks
+          path: report-sticks.md
+          retention-days: 14
       - name: Rapport in issue zetten
         env:
           GH_TOKEN: ${{ github.token }}

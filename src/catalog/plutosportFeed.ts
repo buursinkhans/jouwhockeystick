@@ -125,7 +125,10 @@ const sizeValue = (size: string) => Number(size.replace(',', '.'));
 const bySize = (a: string, b: string) => sizeValue(a) - sizeValue(b) || a.localeCompare(b);
 
 export type PlutoStickModel = {
-  /** parent_product_id, else the product page: one model with its lengths. */
+  /**
+   * The product page: one model with its lengths. Not parent_product_id:
+   * Plutosport gives each length its own parent ID (first run, 2026-10-26).
+   */
   key: string;
   name: string;
   brand: string;
@@ -245,7 +248,7 @@ export class PlutosportCollector {
     this.categoryCounts.set(categories, (this.categoryCounts.get(categories) ?? 0) + 1);
 
     const url = pageUrl(row.merchant_deep_link);
-    const key = row.parent_product_id ? `parent:${row.parent_product_id}` : `page:${url.toLowerCase()}`;
+    const key = `page:${url.toLowerCase()}`;
     const inStock = rowInStock(row);
     const size = normalSize(row['Fashion:size']);
     let model = this.models.get(key);
