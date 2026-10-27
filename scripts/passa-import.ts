@@ -9,7 +9,7 @@ import { getDiscipline } from '../src/catalog/discipline';
 import { getCatalogProducts } from '../src/catalog/index';
 import { MIN_MODEL_YEAR, toImportedProduct, type ImportSkip } from '../src/catalog/feedImport';
 import { PASSAHOCKEY_FEED_URL, comparePassaFeed, parsePassaFeed } from '../src/catalog/passaFeed';
-import { livePricesFromFeed } from '../src/catalog/livePrice';
+import { liveLengthsFromFeed, livePricesFromFeed } from '../src/catalog/livePrice';
 import type { Product } from '../src/catalog/types';
 
 const OUT = 'src/catalog/imported/passahockey.ts';
@@ -78,6 +78,8 @@ async function main() {
   // Current prices of our own (curated) PassaHockey sticks: the site uses these
   // instead of the brand's list price (src/catalog/livePrice.ts).
   const livePrices = livePricesFromFeed(curated, models);
+  // Lengths in stock, for the size choice in "Waar te koop" (decision log 2026-10-27).
+  const liveLengths = liveLengthsFromFeed(curated, models);
   writeFileSync(
     PRICES_OUT,
     [
@@ -85,7 +87,7 @@ async function main() {
       '// Current price per curated stick that links to PassaHockey; see src/catalog/livePrice.ts.',
       "import type { LivePrices } from '../livePrice';",
       '',
-      `export const PASSAHOCKEY_LIVE_PRICES: LivePrices = ${JSON.stringify({ date: today, prices: livePrices })};`,
+      `export const PASSAHOCKEY_LIVE_PRICES: LivePrices = ${JSON.stringify({ date: today, prices: livePrices, lengths: liveLengths })};`,
       '',
     ].join('\n'),
   );

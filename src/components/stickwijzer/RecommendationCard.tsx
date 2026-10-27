@@ -1,6 +1,9 @@
 import { productPath } from '@/catalog/paths';
 import Link from 'next/link';
-import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
+import { isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
+import { getOffers, lowestTotal } from '@/catalog/offers';
+import { euro, shopCount } from '@/content/offers';
+import { WhereToBuy } from '@/components/offers/WhereToBuy';
 import type { AdviceRoute } from '@/advice-engine/answers';
 import type {
   AdviceReason,
@@ -26,7 +29,6 @@ import {
 } from '@/sources/productSources';
 import { Card } from '@/components/ui/Card';
 import { ProductNotice } from '@/components/ui/ProductNotice';
-import { RetailerLinks } from '@/components/ui/RetailerLinks';
 import { AlertIcon, CheckIcon } from '@/components/ui/icons';
 import { ProductImage } from '@/components/catalog/ProductImage';
 
@@ -85,6 +87,8 @@ export function RecommendationCard({
   const modelYear = getModelYear(product);
   const carbon = product.carbonPercentage?.value;
   const sources = buildProductSourceRecords(product);
+  const offers = getOffers(product);
+  const lowest = lowestTotal(offers, { size: item.sizeInch, now: new Date() });
 
   return (
     <Card>
@@ -110,12 +114,21 @@ export function RecommendationCard({
           <dt className="text-lijngrijs">Maat</dt>
           <dd className="font-semibold">{formatInch(item.sizeInch)}</dd>
         </div>
-        <div>
-          <dt className="text-lijngrijs">Richtprijs</dt>
-          <dd className="font-semibold">
-            €{product.priceIndicativeEur.value.toFixed(2)}
-          </dd>
-        </div>
+        {lowest !== null ? (
+          <div>
+            <dt className="text-lijngrijs">Prijs</dt>
+            <dd className="font-semibold">
+              vanaf {euro(lowest)} bij {shopCount(offers.length)}
+            </dd>
+          </div>
+        ) : (
+          <div>
+            <dt className="text-lijngrijs">Richtprijs</dt>
+            <dd className="font-semibold">
+              €{product.priceIndicativeEur.value.toFixed(2)}
+            </dd>
+          </div>
+        )}
         <div>
           <dt className="text-lijngrijs">Bow-profiel</dt>
           <dd>
@@ -133,13 +146,15 @@ export function RecommendationCard({
           <dd>{modelYear ?? 'Niet bevestigd'}</dd>
         </div>
       </dl>
-      <ProductNotice
-        notSoldAtBol={!isSoldAtBol(product)}
-        passaSportsOnly={isPassaSportsOnly(product)}
-        alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
-
-        alsoAtPlutosport={product.plutosportProductUrl !== undefined}
-      />
+      {lowest === null && (
+        // Only with the indicative price: a current shop price says where it comes from in "Waar te koop".
+        <ProductNotice
+          notSoldAtBol={!isSoldAtBol(product)}
+          passaSportsOnly={isPassaSportsOnly(product)}
+          alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
+          alsoAtPlutosport={product.plutosportProductUrl !== undefined}
+        />
+      )}
 
       <h5 className="mt-5 text-sm font-semibold">Waarom deze stick past</h5>
       <ul className="mt-2 space-y-3">
@@ -188,16 +203,11 @@ export function RecommendationCard({
         on a phone they are not hidden below the sources (2026-10-22).
       */}
       <div className="mt-5">
-        <RetailerLinks
-          brand={product.brand}
-          productName={product.name}
-          bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={!isSoldAtBol(product)}
-          bolUnchecked={isBolUnchecked(product)}
-          passaSportsProductUrl={product.passaSportsProductUrl}
-
-          plutosportProductUrl={product.plutosportProductUrl}
+        <WhereToBuy
+          product={product}
           placement="stickwijzer"
+          variant="compact"
+          size={item.sizeInch}
         />
       </div>
 

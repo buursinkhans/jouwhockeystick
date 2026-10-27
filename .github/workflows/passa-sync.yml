@@ -56,6 +56,16 @@ jobs:
           AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
         run: npm run --silent plutosport:feed -- "$RUNNER_TEMP/pluto.md" --write-matches --write-import
 
+      # bol.com prices for "Waar te koop", after the imports so new sticks are
+      # included. A failing API keeps last week's prices (scripts/bol-prices.ts).
+      - name: bol.com-prijzen bijwerken
+        if: steps.open.outputs.open == '0'
+        continue-on-error: true
+        env:
+          BOL_CLIENT_ID: ${{ secrets.BOL_CLIENT_ID }}
+          BOL_CLIENT_SECRET: ${{ secrets.BOL_CLIENT_SECRET }}
+        run: npm run --silent bol:prices -- "$RUNNER_TEMP/bol-prices.md"
+
       - name: Pull request openen
         if: steps.open.outputs.open == '0'
         env:
@@ -72,7 +82,7 @@ jobs:
           git add src/catalog/imported src/catalog/offers
           git commit -m "Catalogus: PassaHockey-feed bijgewerkt ($(date -u +%F))"
           git push origin "$branch"
-          { cat "$RUNNER_TEMP/import.md"; if [ -f "$RUNNER_TEMP/pluto-koppelingen.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/pluto-koppelingen.md"; fi; printf '\n\n_Gemaakt door de wekelijkse PassaHockey-sync. Merge om prijzen, voorraad en nieuwe sticks live te zetten; deze workflow merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
+          { cat "$RUNNER_TEMP/import.md"; if [ -f "$RUNNER_TEMP/pluto-koppelingen.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/pluto-koppelingen.md"; fi; if [ -f "$RUNNER_TEMP/bol-prices.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/bol-prices.md"; fi; printf '\n\n_Gemaakt door de wekelijkse PassaHockey-sync. Merge om prijzen, voorraad en nieuwe sticks live te zetten; deze workflow merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
           gh pr create --base main --head "$branch" --title "Catalogus: PassaHockey-feed bijgewerkt ($(date -u +%F))" --body-file "$RUNNER_TEMP/body.md"
           # PRs opened with the workflow token do not trigger other workflows; start the quality check explicitly.
           gh workflow run ci.yml --ref "$branch"

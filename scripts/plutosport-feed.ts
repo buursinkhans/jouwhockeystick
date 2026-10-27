@@ -167,7 +167,7 @@ function report(
       : `- **Mediaan prijsverschil PassaHockey ↔ Plutosport:** ${euro(summary.medianDifference)} op de stickprijs, ${euro(summary.medianDifferenceWithShipping ?? 0)} als je de Plutosport-verzending meetelt (${summary.priced} sticks met een prijs bij allebei; Plutosport is bij ${summary.plutoCheaper} daarvan goedkoper). De verzendkosten van PassaHockey staan nog niet in \`retailers.ts\` en tellen hier niet mee.`,
     `- **Koppelingen:** ${sure.length} zeker (${sure.filter((r) => r.match.method === 'ean').length} via EAN, ${sure.filter((r) => r.match.method === 'naam').length} via naam), ${doubt.length} twijfel, ${none.length} geen.`,
     `- **bol.com** telt mee als we een bol.com-productpagina koppelen (voorraad niet gecontroleerd); **PassaHockey** en **Plutosport** als de feed de stick op voorraad heeft.`,
-    `- **Verzending Plutosport:** ${s.costEur === null ? 'onbekend' : euro(s.costEur)}${s.freeFromEur === null ? '' : `, gratis vanaf ${euro(s.freeFromEur)}`}. ${s.note} Bron: ${s.sourceUrl} (gelezen ${s.checkedAt}).`,
+    `- **Verzending Plutosport:** ${s.note} Bron: ${s.sourceUrl} (gelezen ${s.checkedAt}).`,
     `- **PassaHockey-prijzen en EAN's:** ${passaSource}`,
     '',
     ...feedProfile(collector, models),
@@ -295,7 +295,13 @@ function matchesFile(date: string, matches: readonly ProductMatch[]): { source: 
     const model = match.model;
     if (match.level !== 'zeker' || !model?.inStock || !match.method) continue;
     if (!isPlutosportProductPage(new URL(model.url))) continue;
-    sure[product.slug] = { productUrl: model.url, method: match.method };
+    const lengths = model.sizesInStock.map((size) => Number(size.replace(',', '.'))).filter((n) => n >= 18 && n <= 39);
+    sure[product.slug] = {
+      productUrl: model.url,
+      method: match.method,
+      ...(model.inStockPriceMin !== null && { priceEur: model.inStockPriceMin }),
+      ...(lengths.length > 0 && { lengths }),
+    };
   }
   const data: PlutosportMatches = { date, matches: sure };
   const source = [

@@ -42,6 +42,18 @@ export type AnalyticsEvent =
       placement: string;
       /** Direct product page or a search; to compare their conversion. */
       linkType: 'product' | 'search';
+      /** In "Waar te koop": place in the sorted list (1 = top), number of shops, and whether an amount was shown. */
+      position?: number;
+      offerCount?: number;
+      priceShown?: boolean;
+    }
+  | {
+      /** The "Waar te koop" block came into view (once per page view and placement). */
+      name: 'offer_block_view';
+      placement: string;
+      offerCount: number;
+      /** Shops in the block with a current price. */
+      pricedCount: number;
     }
   | {
       /** The short indoor selector on /zaalsticks; no personal data. */

@@ -9,7 +9,7 @@ De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking
 - Dit is een validatie-MVP: er is GEEN checkout, winkelmand of betaalverwerking. Bouw dit niet, tenzij expliciet gevraagd.
 - Kopen gaat via de partnerwinkels (zie Commerce). Voor vragen en persoonlijk advies is er het interesseformulier op `/interesse`.
 - Analytics-events (quiz_start, quiz_complete, interest_submit, retailer_click; zie `src/lib/analytics/events.ts`) zijn in deze fase net zo belangrijk als de functionaliteit zelf. Voeg ze toe bij elke relevante wijziging.
-- Getoonde prijzen zijn richtprijzen (adviesprijs van de fabrikant of een winkelprijs, met bron en datum), geen live winkelprijzen. Markeer dit zichtbaar op de pagina.
+- Prijzen: op de stickpagina en in het stickadvies staan de actuele feedprijzen van de partnerwinkels in het blok "Waar te koop" (zie Commerce, Prijsvergelijking). Heeft een stick geen actuele winkelprijs (geen prijs in een feed, of ouder dan 14 dagen), en op plekken zonder dat blok (catalogus, vergelijkpagina, artikelen), dan toon je de richtprijs: adviesprijs van de fabrikant of een winkelprijs, met bron en datum, zichtbaar gemarkeerd als richtprijs.
 
 ## Commerce
 - jouwhockeystick.nl verkoopt zelf niets: er is geen eigen checkout, voorraad of betaalverwerking. De site verwijst door naar drie partnerwinkels:
@@ -21,12 +21,14 @@ De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking
 - Vergoedingen en de winkel spelen geen rol in de adviesscore.
 - Geen kortingsclaims (bijv. "X% korting") zonder een echte, verifieerbare eerdere verkoopprijs; dit is wettelijk gereguleerd (EU Omnibus-richtlijn). Toon alleen de richtprijs.
 - Trackinglinks zijn de enige bron van waarheid voor attributie. Hardcode geen commissieaannames in de UI.
-- **Prijsvergelijking per stick** (besloten 2026-10-26, nog niet gebouwd; zie `docs/spec/prijsvergelijking.md`). Zodra het blok "Waar te koop" bestaat, gelden daar deze regels, en vervangen ze daar de richtprijsregel uit Testfase-scope:
+- **Prijsvergelijking per stick** (besloten 2026-10-26, fase 1 gebouwd 2026-10-27; zie `docs/spec/prijsvergelijking.md`). Het blok "Waar te koop" (`src/components/offers/WhereToBuy.tsx`, gegevens in `src/catalog/offers/`) staat op de stickpagina en in elk stickadvies. Daar gelden deze regels, en vervangen ze de richtprijsregel uit Testfase-scope:
   - Sorteer op totaalprijs (prijs plus verzendkosten). Nooit op commissie, cookieduur of netwerk; alle winkelknoppen zien er hetzelfde uit.
   - Toon alleen de actuele feedprijs met de datum waarop die is gelezen. Geen van-/voorprijzen, doorgestreepte bedragen, kortingspercentages of "goedkoopst"-claims.
   - Is een prijs ouder dan 14 dagen, verberg dan het bedrag en toon alleen de knop.
   - Leg bij het blok in één zin uit hoe gesorteerd wordt en dat de site per aankoop een vergoeding krijgt.
   - Toon een winkel alleen bij een bevestigde koppeling (zelfde model en modeljaar) en alleen als het partnerprogramma is goedgekeurd en in de decision log staat.
+  - Structured data (`Offer`/`AggregateOffer`) alleen voor prijzen die in het blok zichtbaar zijn en niet ouder dan 14 dagen.
+  - Verzendkosten: vast bedrag per winkel uit de openbare voorwaarden, met bron en datum, in `src/lib/retailers.ts` (`SHIPPING`); onbekend is `null` en staat er zo bij.
 
 ## Documentatie
 - `docs/README.md` is de inhoudsopgave van alle documenten.

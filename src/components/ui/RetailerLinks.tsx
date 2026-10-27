@@ -78,7 +78,7 @@ export function RetailerLinks({
             productName={productName}
             placement={placement}
             productUrl={bolProductUrl}
-            variant="primary"
+            variant="shop"
             className={buttonWidth}
           >
             Bekijk en koop op bol.com
@@ -91,7 +91,7 @@ export function RetailerLinks({
             productName={productName}
             placement={placement}
             productUrl={passaSportsProductUrl}
-            variant="passa"
+            variant="shop"
             className={buttonWidth}
           >
             Bekijk en koop bij PassaHockey
@@ -104,7 +104,7 @@ export function RetailerLinks({
             productName={productName}
             placement={placement}
             productUrl={plutosportProductUrl}
-            variant="primary"
+            variant="shop"
             className={buttonWidth}
           >
             Bekijk en koop bij Plutosport
