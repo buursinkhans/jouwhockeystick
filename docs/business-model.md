@@ -1,6 +1,6 @@
 # Business model — jouwhockeystick.nl
 
-**Status:** strategiedocument; de actuele situatie staat in sectie 5, de uitbreiding met meer partnerprogramma's in sectie 5a. Inhoudsopgave van alle documenten: `docs/README.md`.
+**Status:** strategiedocument; de actuele situatie staat in sectie 5, de uitbreiding met meer partnerprogramma's in sectie 5a, hockeyschoenen in sectie 5b. Inhoudsopgave van alle documenten: `docs/README.md`.
 **Doel van dit document:** vastleggen welk verdienmodel de MVP volgt, zodat de technische keuzes (checkout, productfeed, tracking) hierop worden afgestemd in plaats van andersom.
 **Plaats in repo:** `docs/business-model.md`.
 
@@ -156,6 +156,28 @@ Per stick tonen bij welke partnerwinkel hij te koop is, met prijs en datum, geso
 2. Overlapmeting: hoeveel sticks uit de catalogus zijn bij twee of meer winkels te koop, en hoeveel verschilt de prijs? Bij minder dan zo'n 20% overlap, of verschillen van een paar euro, levert de vergelijking weinig op.
 3. Bij een positieve uitkomst: klein starten met een blok "Waar te koop" op de stickpagina, niet op de homepage en niet in de stickwijzer.
 
+## 5b. Uitbreiding: hockeyschoenen als sectie (besluit 2026-10-26)
+
+**Besluit eigenaar:** hockeyschoenen worden een sectie `/hockeyschoenen` op jouwhockeystick.nl, géén aparte site. Het domein jouwhockeyschoen(en).nl is geregistreerd; het wordt pas een doorverwijzing op expliciete opdracht (DNS). Plan en meetpunten: issue #100.
+
+**Rekengrondslag** (businesscase `jouwhockeystick-businesscase.xlsx`, tabblad Schoenen; zelfde methode als sticks):
+
+| | Sticks | Schoenen |
+|---|---|---|
+| Verkocht per jaar in NL (schatting) | ca. 190.000 | ca. 200.000 paren |
+| Marktwaarde (incl. btw) | ca. €17,8 mln | ca. €12,6 mln |
+| Gemiddelde aankoopprijs | ca. €94 | ca. €63 |
+| Retour en annulering (geen commissie) | 10% | 35% |
+| Commissie per verkoop | ca. €4,75 | ca. €2,20 |
+| Haalbaar marktaandeel | scenario 1 / 3 / 6% | de helft daarvan |
+| Commissie per maand (scenario 1 / 3 / 6%) | €752 / €2.255 / €4.509 | €184 / €553 / €1.105 |
+
+**Conclusie:** een sectie voegt ca. 25% toe aan de commissie, tegen bijna geen extra kosten. Een aparte site zou dubbele vaste kosten en eigen autoriteitsopbouw vragen voor een lagere opbrengst per bezoeker.
+
+**Waarom retour zwaar telt:** bij bol.com wordt de commissie afgewezen als een bestelling binnen 30 dagen retour gaat of wordt geannuleerd ([FAQ](https://affiliate.bol.com/nl/veelgestelde-vragen/)). Bij online schoenen gaat 30% tot 60% retour (Shoppingtomorrow/TNO, "Get rid of returns"). Maatadvies in de schoenenwijzer verlaagt de retouren en is dus ook commercieel van belang.
+
+**Beslismoment:** ca. 3 maanden na livegang (eind februari 2027), op de meetpunten in issue #100.
+
 ## 6. Latere fases (niet in scope voor MVP)
 
 Deze opties blijven denkbaar zodra verkeer, conversie en vertrouwen bewezen zijn:
@@ -176,4 +198,5 @@ Deze opties blijven denkbaar zodra verkeer, conversie en vertrouwen bewezen zijn
 - ~~Exact commissiepercentage van het bol Affiliate Programma voor de categorie sport/hockeysticks (aanname: Zilver, ~4%).~~ Bekend: 7% op Sport (eigenaar, 2026-10-25). PassaHockey: 5%.
 - Commissie, cookieduur en productfeed van de aangevraagde programma's (sectie 5a), zodra ze zijn goedgekeurd.
 - Hoeveel sticks uit de catalogus bij meer dan één partnerwinkel te koop zijn (overlapmeting, sectie 5a).
+- Hockeyschoenen (sectie 5b): paren per speler per jaar, retourpercentage via onze links, haalbaar marktaandeel naast sticks, en of de PassaHockey- en Plutosport-feeds schoenen bevatten.
 - Welke bol.com-producten daadwerkelijk overeenkomen met de sticks in de catalogus, zodra die catalogus met echte data wordt gevuld.
