@@ -25,7 +25,7 @@ describe('server HTML of the catalog lists (decision log 2026-10-24)', () => {
     for (const p of all.filter(isFeedImport))
       expect(html, p.slug).not.toContain(p.slug);
     expect(html).toContain(
-      `Toon ook ${all.filter(isFeedImport).length} sticks uit het aanbod van PassaHockey`,
+      `Toon ook ${all.filter(isFeedImport).length} sticks uit het aanbod van PassaHockey en Plutosport`,
     );
   });
 

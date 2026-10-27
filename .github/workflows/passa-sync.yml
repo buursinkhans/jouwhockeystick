@@ -45,15 +45,16 @@ jobs:
         if: steps.open.outputs.open == '0'
         run: npm run --silent passa:import -- "$RUNNER_TEMP/import.md"
 
-      # Plutosport shop buttons ('zeker' matches) in the same weekly PR, so they
-      # cost no extra deploy (docs/spec/prijsvergelijking.md §4, option A). A
-      # failing Awin download leaves the matches as they were.
-      - name: Plutosport-koppelingen bijwerken
+      # Plutosport shop buttons ('zeker' matches) and the Plutosport sticks that
+      # PassaHockey does not sell (src/catalog/imported/plutosport.ts) in the
+      # same weekly PR, so they cost no extra deploy (docs/spec/prijsvergelijking.md
+      # §4, option A). A failing Awin download leaves both as they were.
+      - name: Plutosport-koppelingen en -import bijwerken
         if: steps.open.outputs.open == '0'
         continue-on-error: true
         env:
           AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
-        run: npm run --silent plutosport:feed -- "$RUNNER_TEMP/pluto.md" --write-matches
+        run: npm run --silent plutosport:feed -- "$RUNNER_TEMP/pluto.md" --write-matches --write-import
 
       - name: Pull request openen
         if: steps.open.outputs.open == '0'

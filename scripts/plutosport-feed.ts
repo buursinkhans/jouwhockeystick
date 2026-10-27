@@ -3,8 +3,11 @@
 // Plutosport, keeps the hockey sticks, matches them with our curated catalog
 // and writes a Dutch Markdown report: per stick bol.com yes/no, the
 // PassaHockey price, the Plutosport price plus shipping, stock and how sure
-// the match is. Never changes the catalog or the site.
-// Usage: npm run plutosport:feed -- [report.md] [feed.csv(.gz)] [passa.xml]
+// the match is. Without flags it only reads. With --write-matches it writes
+// the 'zeker' matches (src/catalog/offers/matches.ts, the Plutosport buttons),
+// with --write-import the Plutosport sticks we do not have yet
+// (src/catalog/imported/plutosport.ts); the weekly PassaHockey sync uses both.
+// Usage: npm run plutosport:feed -- [report.md] [feed.csv(.gz)] [passa.xml] [--write-matches] [--write-import]
 // The feed URL comes from AWIN_PLUTOSPORT_FEED_URL (a GitHub secret). It
 // contains an API key: it is never printed, logged or written to the report.
 import { createReadStream, readFileSync, writeFileSync } from 'node:fs';
@@ -12,13 +15,15 @@ import { Readable } from 'node:stream';
 import type { ReadableStream as WebReadableStream } from 'node:stream/web';
 import { createGunzip } from 'node:zlib';
 import { getDiscipline } from '../src/catalog/discipline';
-import { getCatalogProducts, getImportedProducts } from '../src/catalog/index';
+import { getCatalogProducts, getImportedProducts, getPlutosportImportedProducts } from '../src/catalog/index';
+import type { ImportSkip } from '../src/catalog/feedImport';
+import { plutosportGaps, toPlutosportProduct } from '../src/catalog/plutosportImport';
 import { PASSAHOCKEY_LIVE_PRICES } from '../src/catalog/imported/passaPrices';
 import { livePricesFromFeed } from '../src/catalog/livePrice';
 import { getModelYear } from '../src/catalog/modelYear';
 import type { PlutosportMatch, PlutosportMatches } from '../src/catalog/offers/index';
 import { PLUTOSPORT_MATCHES } from '../src/catalog/offers/matches';
-import { PASSAHOCKEY_FEED_URL, parsePassaFeed, type PassaStickModel } from '../src/catalog/passaFeed';
+import { PASSAHOCKEY_FEED_URL, isJunior, parsePassaFeed, type PassaStickModel } from '../src/catalog/passaFeed';
 import {
   PlutosportCollector,
   SIZE_COLUMNS,
@@ -28,6 +33,7 @@ import {
   type PlutoStickModel,
   type StickMatch,
 } from '../src/catalog/plutosportFeed';
+import { isJuniorStick } from '../src/catalog/similar';
 import type { Product } from '../src/catalog/types';
 import { CsvReader } from '../src/lib/csv';
 import { PLUTOSPORT_SHIPPING, isPlutosportProductPage, shippingCostEur } from '../src/lib/retailers';
@@ -217,10 +223,10 @@ function stickBrands(models: readonly PlutoStickModel[]): [string, number, numbe
 /** Every stick model in the feed, for checking the matcher by hand (workflow artifact, not the issue). */
 function stickList(models: readonly PlutoStickModel[], rows: readonly OverlapRow[]): string {
   const matchedBy = new Map(rows.flatMap((r) => (r.match.model && r.match.level !== 'geen' ? [[r.match.model.key, `${r.match.level}: ${r.slug}`] as const] : [])));
-  const lines = ['| Merk | Naam | Veld/zaal | Junior | Prijs | Voorraad | EAN | Koppeling | Pagina |', '|---|---|---|---|---|---|---|---|---|'];
+  const lines = ['| Merk | Naam | Veld/zaal | Junior | Prijs | Voorraad | Lengtes op voorraad | EAN | Koppeling | Pagina |', '|---|---|---|---|---|---|---|---|---|---|'];
   for (const m of [...models].sort((a, b) => a.brand.localeCompare(b.brand) || a.name.localeCompare(b.name))) {
     lines.push(
-      `| ${cell(m.brand)} | ${cell(m.name)} | ${m.discipline} | ${m.junior ? 'ja' : 'nee'} | ${euro(m.inStockPriceMin ?? m.priceMin)} | ${m.inStock ? 'ja' : 'nee'} | ${m.eans.length} | ${matchedBy.get(m.key) ?? '–'} | ${m.url} |`,
+      `| ${cell(m.brand)} | ${cell(m.name)} | ${m.discipline} | ${m.junior ? 'ja' : 'nee'} | ${euro(m.inStockPriceMin ?? m.priceMin)} | ${m.inStock ? 'ja' : 'nee'} | ${m.sizesInStock.join(', ') || '–'} | ${m.eans.length} | ${matchedBy.get(m.key) ?? '–'} | ${m.url} |`,
     );
   }
   return lines.join('\n');
@@ -237,7 +243,7 @@ function feedProfile(collector: PlutosportCollector, models: readonly PlutoStick
   return [
     '## De feed',
     '',
-    `- ${tally.rows} regels in de feed: ${p.pages.size} verschillende productpagina's, ${p.parents.size} verschillende parent_product_id's, ${p.rowsWithSize} regels met een maat (Fashion:size), ${p.rowsInStock} regels op voorraad.`,
+    `- ${tally.rows} regels in de feed: ${p.pages.size} verschillende productpagina's, ${p.parents.size} verschillende parent_product_id's, ${p.rowsWithSize} regels met een maat (Fashion:size), ${p.rowsWithDimensions} met dimensions, ${p.rowsInStock} regels op voorraad.`,
     `- ${tally.stickRows} regels zijn hockeysticks volgens ons filter. Overgeslagen: ${tally.notForSale} niet te koop (is_for_sale), ${tally.invalid} ongeldig (Zod), ${tally.notEuro} niet in euro, ${tally.notDutchShop} met een productpagina buiten plutosport.nl.`,
     `- ${models.length} stickmodellen na het samenvoegen van lengtes (parent_product_id of productpagina); ${models.filter((m) => m.inStock).length} op voorraad.`,
     `- Kolommen in de feed (${p.columns.length}): ${p.columns.map((column) => `\`${column}\``).join(', ')}`,
@@ -333,9 +339,47 @@ function matchesReport(sure: PlutosportMatches, matches: readonly ProductMatch[]
   ].join('\n');
 }
 
+const IMPORT_PATH = 'src/catalog/imported/plutosport.ts';
+
+function importFile(date: string, products: readonly Product[]): string {
+  return [
+    '// GENERATED by `npm run plutosport:feed -- --write-import` from the Plutosport product feed (Awin).',
+    '// Do not edit by hand: the weekly sync overwrites this file. To curate a stick, copy it',
+    '// to src/catalog/products/, remove `feedImport` and register it in src/catalog/index.ts.',
+    "import type { Product } from '../types';",
+    '',
+    `export const PLUTOSPORT_IMPORT_DATE = '${date}';`,
+    '',
+    'export const PLUTOSPORT_PRODUCTS: Product[] = [',
+    ...products.map((p) => `  ${JSON.stringify(p)},`),
+    '];',
+    '',
+  ].join('\n');
+}
+
+function importReport(products: readonly Product[], skips: readonly ImportSkip[]): string {
+  const before = new Set(getPlutosportImportedProducts().map((p) => p.slug));
+  const now = new Set(products.map((p) => p.slug));
+  const added = products.filter((p) => !before.has(p.slug));
+  const gone = [...before].filter((slug) => !now.has(slug));
+  const reasons = new Map<string, number>();
+  for (const s of skips) reasons.set(s.reason.replace(/"[^"]*"/, '"…"'), (reasons.get(s.reason.replace(/"[^"]*"/, '"…"')) ?? 0) + 1);
+  return [
+    '## Plutosport-import',
+    '',
+    `${products.length} sticks van Plutosport die PassaHockey niet verkoopt en die niet in onze catalogus staan, staan in de catalogus met alleen een Plutosport-knop (pagina op /aanbod, noindex).`,
+    '',
+    `- **Nieuw:** ${added.length ? added.map((p) => `${p.name} (\`${p.slug}\`)`).join(', ') : 'geen'}`,
+    `- **Verdwenen** (niet meer leverbaar of nu gekoppeld): ${gone.length ? gone.map((slug) => `\`${slug}\``).join(', ') : 'geen'}`,
+    `- **Overgeslagen:** ${reasons.size ? [...reasons.entries()].map(([reason, count]) => `${reason}: ${count}`).join(', ') : 'geen'}`,
+    '',
+  ].join('\n');
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const writeMatches = args.includes('--write-matches');
+  const writeImport = args.includes('--write-import');
   const [mdPath = 'plutosport.md', feedPath, passaPath] = args.filter((arg) => !arg.startsWith('--'));
   const [collector, passaModels] = await Promise.all([readPlutosport(feedPath), readPassa(passaPath)]);
   const models = collector.result();
@@ -376,6 +420,7 @@ async function main() {
         ...(bow && { bow }),
         ...(modelYear && { modelYear }),
         eans: passa?.eans ?? [],
+        junior: isJunior(product.name) || isJuniorStick(product),
       },
       models,
     );
@@ -400,11 +445,39 @@ async function main() {
   const matches = products.map((product) => ({ product, match: matchProduct(product) }));
   writeFileSync(mdPath, report(date, collector, models, rows, passaSource));
   writeFileSync(mdPath.replace(/(\.md)?$/, '-sticks.md'), stickList(models, rows));
+  const extra: string[] = [];
   if (writeMatches) {
     const sure = matchesFile(date, matches);
     writeFileSync(MATCHES_PATH, sure.source);
-    writeFileSync(mdPath.replace(/(\.md)?$/, '-koppelingen.md'), matchesReport(sure.matches, matches));
+    extra.push(matchesReport(sure.matches, matches));
   }
+  if (writeImport) {
+    // Every Plutosport model a catalog stick matched, also as 'twijfel': never import those, or a stick appears twice.
+    // Also an older collection of a stick we already have (PassaHockey sells 2026, Plutosport still 2025):
+    // two near-identical sticks would only confuse the stickwijzer.
+    const matchedKeys = new Set(
+      matches.flatMap(({ match }) => [
+        ...(match.model && match.level !== 'geen' ? [match.model.key] : []),
+        ...(match.olderCollectionKeys ?? []),
+      ]),
+    );
+    const taken = new Set(products.map((p) => p.slug));
+    const imported: Product[] = [];
+    const skips: ImportSkip[] = [];
+    for (const gap of plutosportGaps(models, matchedKeys)) {
+      const result = toPlutosportProduct(gap, date);
+      if ('skip' in result) skips.push(result.skip);
+      else if (taken.has(result.product.slug)) skips.push({ url: gap.url, name: gap.name, reason: 'slug bestaat al' });
+      else {
+        taken.add(result.product.slug);
+        imported.push(result.product);
+      }
+    }
+    imported.sort((a, b) => a.slug.localeCompare(b.slug));
+    writeFileSync(IMPORT_PATH, importFile(date, imported));
+    extra.push(importReport(imported, skips));
+  }
+  if (extra.length) writeFileSync(mdPath.replace(/(\.md)?$/, '-koppelingen.md'), extra.join('\n'));
   const summary = overlapSummary(rows);
   console.log(
     `${collector.tally.rows} regels, ${models.length} stickmodellen; ${summary.multiShopSure} van ${summary.sticks} sticks bij 2+ winkels.`,

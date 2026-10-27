@@ -32,6 +32,7 @@ const price = z
  */
 export const plutosportRowSchema = z.object({
   aw_product_id: optionalText,
+  merchant_product_id: optionalText,
   aw_deep_link: z.string().trim().url(),
   merchant_deep_link: z.string().trim().url(),
   product_name: z.string().trim().min(1),
@@ -39,6 +40,7 @@ export const plutosportRowSchema = z.object({
   currency: optionalText,
   description: optionalText,
   merchant_image_url: optionalText,
+  aw_image_url: optionalText,
   brand_name: optionalText,
   product_model: optionalText,
   model_number: optionalText,
@@ -114,6 +116,19 @@ function rowInStock(row: PlutosportRow): boolean {
 }
 
 /** "36.5", "36,5 inch", '36.5"' → "36,5"; other sizes (S, M, 90 cm) are kept as written. */
+/**
+ * Plutosport fills neither Fashion:size nor dimensions; the length ends its
+ * article number instead: "10221001_36 1/2" is 36,5 inch, "10221065-JR_31"
+ * is 31 inch (feed check 2026-10-27). Only plausible stick lengths (18–39).
+ */
+export function sizeFromArticleNumber(articleNumber: string | undefined): string | null {
+  const match = articleNumber?.trim().match(/_(\d{2})(?:\s*1\/2|[.,]5)?$/);
+  if (!match?.[1]) return null;
+  const inches = Number(match[1]);
+  if (inches < 18 || inches > 39) return null;
+  return /1\/2|[.,]5$/.test(articleNumber ?? '') ? `${inches},5` : `${inches}`;
+}
+
 export function normalSize(size: string | undefined): string | null {
   if (!size) return null;
   const inch = size.match(/^(\d{2})(?:[.,](\d))?\s*(?:inch|in|"|”)?$/i);
@@ -152,6 +167,10 @@ export type PlutoStickModel = {
   inStock: boolean;
   categories: string[];
   lastUpdated?: string;
+  /** Product photo from the shop (merchant_image_url, else Awin's copy). */
+  imageUrl?: string;
+  /** The shop's description, for specs it states there (carbon percentage). */
+  description: string;
 };
 
 const pageUrl = (url: string) => url.replace(/[?#].*$/, '').replace(/\/$/, '');
@@ -190,7 +209,16 @@ const hostOf = (url: string | undefined) => {
 };
 
 /** Columns that may hold the stick length; which one Plutosport fills is checked per run. */
-export const SIZE_COLUMNS = ['Fashion:size', 'dimensions', 'size_stock_status', 'size_stock_amount'] as const;
+export const SIZE_COLUMNS = [
+  'Fashion:size',
+  'dimensions',
+  'size_stock_status',
+  'size_stock_amount',
+  // Article numbers: Plutosport has one row per length but no size column, so the length may be coded here.
+  'merchant_product_id',
+  'mpn',
+  'model_number',
+] as const;
 
 /** Collects stick rows into models; feed rows go in one by one, so the feed never sits in memory as a whole. */
 export class PlutosportCollector {
@@ -207,6 +235,7 @@ export class PlutosportCollector {
     parents: new Set<string>(),
     pages: new Set<string>(),
     rowsWithSize: 0,
+    rowsWithDimensions: 0,
     rowsInStock: 0,
   };
   /** Most common values of the size-like columns in stick rows: shows where the feed puts the length. */
@@ -223,6 +252,7 @@ export class PlutosportCollector {
     if (raw.parent_product_id?.trim()) p.parents.add(raw.parent_product_id.trim());
     if (raw.merchant_deep_link) p.pages.add(pageUrl(raw.merchant_deep_link.trim()).toLowerCase());
     if (raw['Fashion:size']?.trim()) p.rowsWithSize++;
+    if (raw.dimensions?.trim()) p.rowsWithDimensions++;
     if (YES.test(raw.in_stock?.trim() ?? '') || Number(raw.stock_quantity ?? '') > 0) p.rowsInStock++;
   }
 
@@ -262,7 +292,7 @@ export class PlutosportCollector {
     const url = pageUrl(row.merchant_deep_link);
     const key = `page:${url.toLowerCase()}`;
     const inStock = rowInStock(row);
-    const size = normalSize(row['Fashion:size']);
+    const size = normalSize(row['Fashion:size']) ?? sizeFromArticleNumber(row.merchant_product_id);
     let model = this.models.get(key);
     if (!model) {
       const text = `${row.product_name} | ${categories}`;
@@ -272,6 +302,8 @@ export class PlutosportCollector {
         brand: row.brand_name ?? '',
         modelText: [row.product_model, row.model_number].filter(Boolean).join(' '),
         specText: [row.specifications, row.product_short_description].filter(Boolean).join(' | '),
+        description: row.description ?? '',
+        ...((row.merchant_image_url ?? row.aw_image_url) && { imageUrl: row.merchant_image_url ?? row.aw_image_url }),
         url,
         awDeepLink: row.aw_deep_link,
         discipline: /zaal|indoor/i.test(text) ? 'zaal' : 'veld',
@@ -329,6 +361,8 @@ export type CatalogStick = {
   modelYear?: number;
   /** EANs we know for this stick: from the PassaHockey feed, via its PassaHockey page. */
   eans: readonly string[];
+  /** A youth stick; defaults to "junior" in the name. Our lengths tell it too (a 31" stick named without "Junior"). */
+  junior?: boolean;
 };
 
 export type MatchLevel = 'zeker' | 'twijfel' | 'geen';
@@ -340,6 +374,8 @@ export type StickMatch = {
   model?: PlutoStickModel;
   /** Why it is not 'zeker' (or how it is): shown in the report. */
   note: string;
+  /** Plutosport pages of the same model in an older collection than ours: never imported next to ours. */
+  olderCollectionKeys?: string[];
 };
 
 /**
@@ -414,17 +450,20 @@ type Comparison = { reasons: string[] } | { otherYear: number } | null;
 function compare(stick: CatalogStick, model: PlutoStickModel): Comparison {
   if (!sameBrand(stick.brand, model.brand || model.name.split(/\s+/)[0] || '')) return null;
   if (stick.discipline !== model.discipline) return null;
-  if (isJunior(stick.name) !== model.junior) return null;
+  if ((stick.junior ?? isJunior(stick.name)) !== model.junior) return null;
   const ours = modelTokens(withoutYears(stick.name), stick.brand);
   if (ours.length === 0) return null;
   const theirText = `${model.name} ${model.modelText}`;
   const theirs = new Set(modelTokens(withoutYears(theirText), model.brand || stick.brand));
-  if (!ours.every((token) => theirs.has(token))) return null;
+  // Bow words are compared as a bow, not as model words: Plutosport often leaves the bow out of the name.
+  const oursCore = ours.filter((token) => !BOW_TOKENS.has(token));
+  if (oursCore.length === 0 || !oursCore.every((token) => theirs.has(token))) return null;
 
   // The name first; the specifications only when they name exactly one bow (not a list of options).
   const specBow = extractBow('', model.specText).bow;
   const theirBow = bowInName(theirText, model.brand || stick.brand) ?? (specBow && bowCount(model.specText) === 1 ? specBow : null);
-  if (stick.bow && theirBow && stick.bow !== theirBow) return null;
+  const ourBow = stick.bow ?? bowInName(stick.name, stick.brand);
+  if (ourBow && theirBow && ourBow !== theirBow) return null;
 
   const theirYear = seasonYear(theirText) ?? yearFromArticleCode(model.url, model.brand || stick.brand);
   if (stick.modelYear && theirYear && stick.modelYear !== theirYear) return { otherYear: theirYear };
@@ -437,7 +476,7 @@ function compare(stick: CatalogStick, model: PlutoStickModel): Comparison {
   if (extra.length) reasons.push(`extra in de naam bij Plutosport: ${extra.join(', ')}`);
   if (!stick.modelYear) reasons.push('modeljaar niet bekend in onze catalogus');
   else if (!theirYear) reasons.push('geen modeljaar in de naam bij Plutosport');
-  if (stick.bow && !theirBow) reasons.push('bow niet in de naam bij Plutosport');
+  if (ourBow && !theirBow) reasons.push('bow niet in de naam bij Plutosport');
   return { reasons };
 }
 
@@ -459,7 +498,7 @@ export function matchStick(stick: CatalogStick, models: readonly PlutoStickModel
   const [eanHit] = byEan;
   if (eanHit) {
     // PassaHockey puts junior and senior lengths on one page; Plutosport may split them.
-    return isJunior(stick.name) === eanHit.junior
+    return (stick.junior ?? isJunior(stick.name)) === eanHit.junior
       ? { slug: stick.slug, level: 'zeker', method: 'ean', model: eanHit, note: 'EAN gelijk aan die bij PassaHockey' }
       : {
           slug: stick.slug,
@@ -473,14 +512,26 @@ export function matchStick(stick: CatalogStick, models: readonly PlutoStickModel
   const exact: PlutoStickModel[] = [];
   const doubtful: { model: PlutoStickModel; reasons: string[] }[] = [];
   const otherYears = new Set<number>();
+  const older: string[] = [];
   for (const model of models) {
     const result = compare(stick, model);
     if (result === null) continue;
-    if ('otherYear' in result) otherYears.add(result.otherYear);
-    else if (result.reasons.length === 0) exact.push(model);
+    if ('otherYear' in result) {
+      otherYears.add(result.otherYear);
+      if (stick.modelYear && result.otherYear < stick.modelYear) older.push(model.key);
+    } else if (result.reasons.length === 0) exact.push(model);
     else doubtful.push({ model, reasons: result.reasons });
   }
+  const match = byName(stick, exact, doubtful, otherYears);
+  return older.length ? { ...match, olderCollectionKeys: older } : match;
+}
 
+function byName(
+  stick: CatalogStick,
+  exact: PlutoStickModel[],
+  doubtful: { model: PlutoStickModel; reasons: string[] }[],
+  otherYears: ReadonlySet<number>,
+): StickMatch {
   if (exact.length) {
     exact.sort(preferred);
     const [best] = exact as [PlutoStickModel];

@@ -57,9 +57,9 @@ export function ImportedSticks({
     return (
       <div className="mt-6">
         <p className="text-sm text-lijngrijs">
-          Uit het aanbod van PassaHockey ({products.length}). Deze gegevens
-          komen uit de productfeed van de winkel en zijn nog niet met de hand
-          gecontroleerd.
+          Uit het aanbod van PassaHockey en Plutosport ({products.length}).
+          Deze gegevens komen uit de productfeed van de winkel en zijn nog niet
+          met de hand gecontroleerd.
         </p>
         <div className="mt-4">
           <Grid products={products} />
@@ -77,7 +77,7 @@ export function ImportedSticks({
       >
         {state.kind === 'loading'
           ? 'Bezig met laden…'
-          : `Toon ook ${count} sticks uit het aanbod van PassaHockey`}
+          : `Toon ook ${count} sticks uit het aanbod van PassaHockey en Plutosport`}
       </Button>
       {state.kind === 'error' && (
         <p className="mt-2 text-sm text-red-700">
