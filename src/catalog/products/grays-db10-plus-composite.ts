@@ -6,6 +6,7 @@ export const graysDb10PlusComposite: Product = {
   name: 'Grays DB 10+ Composite Hockey Stick',
   dataStatus: 'verified',
   bolNotSold: { checkedAt: '2026-10-08' },
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-dynabow-10-23250',
   imageAlt: 'Grays DB 10+ Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HABA25Composite_20Sticks_20DB10_20Dynabow_20MC_20Black_20Gold_20Main.jpg?v=1744209643',

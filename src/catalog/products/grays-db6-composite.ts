@@ -17,6 +17,7 @@ export const graysDb6Composite: Product = {
   name: 'Grays DB 6 Composite',
   dataStatus: 'verified',
   bolProductUrl: BOL,
+  passaSportsProductUrl: 'https://www.passasports.nl/grays-dynabow-6-23273',
   imageAlt: 'Grays DB 6 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HABG25Composite_20Sticks_20DB6_20Dynabow_20MC_20Black_20Blue_20Main.jpg?v=1744213236',

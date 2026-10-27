@@ -17,7 +17,6 @@ export const graysMb7Composite: Product = {
   name: 'Grays MB 7 Composite',
   dataStatus: 'verified',
   bolProductUrl: BOL,
-  passaSportsProductUrl: 'https://www.passasports.nl/grays-midbow-7-23267',
   imageAlt: 'Grays MB 7 Composite hockeystick',
   imageUrl:
     'https://www.grays-hockey.eu/cdn/shop/files/HADB25Composite_20Sticks_20MB7_20Midbow_20MC_20Black_20Blue_20Main.jpg?v=1744210985',
