@@ -1506,3 +1506,16 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Waarom:** de eerste meting (#107) telde 540 modellen bij PassaHockey, waaronder slippers (Adilette), schoenverzorging en volleybal- en korfbalschoenen. PassaHockey hangt één schoen in veel categorieën, en elk pad met "hockey" telde mee (bijv. "Hockey > Black Friday"). Bij Plutosport zaten er twee sticks tussen, en de overlap op naam was 0 omdat de winkels hun schoenen anders noemen.
 
 **Wat:** een schoen telt alleen nog mee als minstens één categoriepad zelf over hockeyschoenen gaat ("Hockey > Hockeyschoenen", "Hockey > Zaalhockey > Zaalhockey schoenen", "Hockey > Schoenen > Veldhockey"), of als de naam "hockeyschoen" bevat. Paden met accessoires of verzorging, en namen met stick, slipper of sandaal vallen af. Veld of zaal volgt alleen uit die hockeyschoenenpaden. De overlap tussen de winkels wordt nu op EAN bepaald; beide feeds hebben bij elk model een EAN.
+
+## 2026-10-27 — "Waar te koop" compacter, onder elke stick
+
+**Waarom:** het eerste ontwerp (een kaart per winkel met een eigen knop) werd te lang. Er komen nog minstens drie partnerwinkels bij. De eigenaar wilde het compacter, met een duidelijke call to action. Na een opzet in twee varianten koos hij variant A: de bovenste rij met een iets dikkere rand, niet gevuld.
+
+**Wat:**
+- **Rijen:** elke winkel is één aanklikbare rij (min. 56 px hoog) met "Koop bij [winkel]", daaronder verzending en voorraad, en rechts de prijs incl. verzending. Volgorde zoals eerder: laagste prijs incl. verzending bovenaan (`sortOffers`). De bovenste rij met een actuele prijs heeft een rand van 2 px in veldblauw, de andere 1 px lichtgrijs. Die nadruk volgt alleen de prijs, nooit de vergoeding; CLAUDE.md en `spec/prijsvergelijking.md` zijn daarop aangepast. Nergens "goedkoopst" of "beste prijs".
+- **Stickpagina:** maatknoppen, drie rijen, de rest achter "Toon nog N winkels".
+- **Stickwijzer-advies:** twee rijen in de geadviseerde maat en "Vergelijk alle N winkels" naar de stickpagina.
+- **Onder elke stickkaart** (catalogus, vergelijkpagina, zaalkeuze): één rij met de winkel met de laagste prijs incl. verzending, en "Vergelijk alle N winkels" als er meer zijn. Zonder winkel staat de richtprijs er, met "nog geen partnerwinkel bekend". De losse knoppen (`RetailerLinks`) en de knopvarianten `passa` en `shop` zijn weg.
+- **Onder elk blok:** één regel "Op prijs incl. verzending · gelezen op [datum] · Partnerlink, de winkel is de verkoper" en de uitklapper "Hoe we vergelijken".
+
+**Meten:** ongewijzigd. `retailer_click` met `position`, `offerCount` en `priceShown`; `offer_block_view` op de stickpagina en in het advies, niet op de honderden kaarten in de catalogus.

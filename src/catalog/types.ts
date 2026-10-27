@@ -118,7 +118,7 @@ export const productSchema = z.object({
   bolNotSold: z.object({ checkedAt: z.string() }).optional(),
   /**
    * PassaSports product page. A stick that bol.com does not sell links here
-   * through the PassaSports partner programme (see RetailerLinks).
+   * through the PassaSports partner programme (see getOffers in src/catalog/offers).
    */
   passaSportsProductUrl: z
     .string()

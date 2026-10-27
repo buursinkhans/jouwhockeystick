@@ -10,13 +10,6 @@ export const buttonVariantClasses = {
   inverse: 'bg-white text-veld hover:bg-krijt',
   /** Orange call to action; dark text keeps the contrast above WCAG AA. */
   accent: 'bg-bal text-inkt hover:bg-bal/90',
-  /** The PassaHockey shop button, in that shop's own red. No longer used for shop links (2026-10-27). */
-  passa: 'bg-passa text-white hover:bg-passa-donker',
-  /**
-   * Every shop button: the same outline in veldblauw for every shop, so no
-   * shop stands out (docs/spec/prijsvergelijking.md §2 rule 2).
-   */
-  shop: 'min-h-11 border-2 border-veld bg-white text-veld hover:bg-krijt',
 } as const;
 const baseClasses = buttonBaseClasses;
 const variantClasses = buttonVariantClasses;

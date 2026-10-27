@@ -1,11 +1,11 @@
 import { productPath } from '@/catalog/paths';
-import { isSoldAtBol, isBolUnchecked } from '@/catalog/shop';
+
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllProducts, getProductBySlug } from '@/catalog';
 import { buildCompareRows } from '@/catalog/compare';
 import { ProductImage } from '@/components/catalog/ProductImage';
-import { RetailerLinks } from '@/components/ui/RetailerLinks';
+import { OfferSummary } from '@/components/offers/WhereToBuy';
 
 export const metadata = pageMetadata({
   title: 'Vergelijk hockeysticks',
@@ -97,19 +97,7 @@ export default async function VergelijkPage({
                   </Link>
                 </p>
                 <div className="mt-2">
-                  <RetailerLinks
-                    brand={product.brand}
-                    productName={product.name}
-                    bolProductUrl={product.bolProductUrl}
-                    notSoldAtBol={!isSoldAtBol(product)}
-                    bolUnchecked={isBolUnchecked(product)}
-                    passaSportsProductUrl={product.passaSportsProductUrl}
-
-                    plutosportProductUrl={product.plutosportProductUrl}
-                    placement="vergelijk"
-                    className="text-sm"
-                    stack
-                  />
+                  <OfferSummary product={product} placement="vergelijk" />
                 </div>
               </div>
             ))}

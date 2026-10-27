@@ -1,14 +1,12 @@
 import { productPath } from '@/catalog/paths';
 import Link from 'next/link';
-import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import type { Product } from '@/catalog/types';
-import { ProductNotice } from '@/components/ui/ProductNotice';
-import { RetailerLinks } from '@/components/ui/RetailerLinks';
+import { OfferSummary } from '@/components/offers/WhereToBuy';
 import { ProductImage } from './ProductImage';
 import { ProductProsAndCons } from './ProductProsAndCons';
 
 /**
- * Fills the height of its grid cell, with the shop buttons pinned to the
+ * Fills the height of its grid cell, with the shop row pinned to the
  * bottom, so cards in one row line up regardless of text length.
  */
 export function ProductCard({ product }: { product: Product }) {
@@ -28,34 +26,11 @@ export function ProductCard({ product }: { product: Product }) {
       <p className="mt-2 line-clamp-3 text-sm text-lijngrijs">
         {product.summary}
       </p>
-      <p className="mt-3 text-xl font-bold">
-        €{product.priceIndicativeEur.value.toFixed(2)}
-      </p>
-      <div className="mt-1">
-        <ProductNotice
-          notSoldAtBol={!isSoldAtBol(product)}
-          passaSportsOnly={isPassaSportsOnly(product)}
-          alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
-
-          alsoAtPlutosport={product.plutosportProductUrl !== undefined}
-        />
-      </div>
       <div className="mt-4">
         <ProductProsAndCons product={product} limit={1} stacked />
       </div>
-      <div className="mt-auto pt-5">
-        <RetailerLinks
-          brand={product.brand}
-          productName={product.name}
-          bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={!isSoldAtBol(product)}
-          bolUnchecked={isBolUnchecked(product)}
-          passaSportsProductUrl={product.passaSportsProductUrl}
-
-          plutosportProductUrl={product.plutosportProductUrl}
-          placement="catalogus"
-          stack
-        />
+      <div className="mt-auto pt-4">
+        <OfferSummary product={product} placement="catalogus" />
       </div>
     </article>
   );

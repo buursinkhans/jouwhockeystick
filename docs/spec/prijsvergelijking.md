@@ -22,7 +22,7 @@ Na het advies ("welke stick past bij mij?") helpt de site met de tweede vraag: "
 ## 2. Spelregels (vastgelegd in CLAUDE.md)
 
 1. **Sorteren op totaalprijs** (prijs plus verzendkosten voor één stick). Nooit op commissie, cookieduur of netwerk. Bij gelijke prijs: de winkel waarvan we de prijs het recentst lazen, daarna alfabetisch.
-2. **Commissie speelt nergens een rol**: niet in de adviesscore, niet in de volgorde, niet in welke winkel een opvallende knop krijgt. Alle winkelknoppen zien er hetzelfde uit.
+2. **Commissie speelt nergens een rol**: niet in de adviesscore, niet in de volgorde, niet in welke winkel een opvallende knop krijgt. Alle winkelrijen zien er hetzelfde uit; alleen de bovenste (laagste prijs incl. verzending) heeft een iets dikkere rand (besluit eigenaar 2026-10-27).
 3. **Uitleg op de pagina**: één zin bij het blok ("Gesorteerd op prijs incl. verzending. We verdienen een vergoeding als je via een link koopt; dat verandert de volgorde niet.") met een link naar de volledige uitleg op /methodiek.
 4. **Alleen de actuele feedprijs.** Geen van-/voorprijzen, geen doorgestreepte bedragen, geen "X% korting", geen "goedkoopst!". Wel: "laagste prijs in de feeds op [datum]".
 5. **Datum altijd zichtbaar**: "Prijs gelezen op [datum]". Is de prijs ouder dan 14 dagen, dan verbergen we het bedrag en tonen we alleen de knop ("Bekijk de actuele prijs bij [winkel]").

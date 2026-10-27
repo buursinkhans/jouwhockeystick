@@ -22,7 +22,8 @@ De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking
 - Geen kortingsclaims (bijv. "X% korting") zonder een echte, verifieerbare eerdere verkoopprijs; dit is wettelijk gereguleerd (EU Omnibus-richtlijn). Toon alleen de richtprijs.
 - Trackinglinks zijn de enige bron van waarheid voor attributie. Hardcode geen commissieaannames in de UI.
 - **Prijsvergelijking per stick** (besloten 2026-10-26, fase 1 gebouwd 2026-10-27; zie `docs/spec/prijsvergelijking.md`). Het blok "Waar te koop" (`src/components/offers/WhereToBuy.tsx`, gegevens in `src/catalog/offers/`) staat op de stickpagina en in elk stickadvies. Daar gelden deze regels, en vervangen ze de richtprijsregel uit Testfase-scope:
-  - Sorteer op totaalprijs (prijs plus verzendkosten). Nooit op commissie, cookieduur of netwerk; alle winkelknoppen zien er hetzelfde uit.
+  - Sorteer op totaalprijs (prijs plus verzendkosten): de laagste staat bovenaan. Nooit op commissie, cookieduur of netwerk.
+  - Alle winkelrijen zien er hetzelfde uit ("Koop bij [winkel]"), behalve dat de bovenste rij, de laagste prijs incl. verzending, een iets dikkere rand heeft. Die nadruk volgt alleen de prijs, nooit de vergoeding, en heet nergens "goedkoopst" of "beste prijs".
   - Toon alleen de actuele feedprijs met de datum waarop die is gelezen. Geen van-/voorprijzen, doorgestreepte bedragen, kortingspercentages of "goedkoopst"-claims.
   - Is een prijs ouder dan 14 dagen, verberg dan het bedrag en toon alleen de knop.
   - Leg bij het blok in één zin uit hoe gesorteerd wordt en dat de site per aankoop een vergoeding krijgt.
