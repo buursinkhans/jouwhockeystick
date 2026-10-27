@@ -1490,3 +1490,19 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 - `retailer_click` krijgt in het blok `position`, `offerCount` en `priceShown`.
 
 **Bewust niet:** geen kortings- of "goedkoopst"-teksten, geen van-/voorprijzen, geen wijziging aan de adviesscore of `ruleSetVersion`, geen privacytekst. Een stick zonder bevestigde winkelpagina krijgt geen bol.com-zoeklink meer in het blok (spelregel 6). Dat zijn nu 5 gecontroleerde sticks; die tonen "We kennen nog geen partnerwinkel".
+
+## 2026-10-27 — Schoenen in de feeds: eenmalige controle (stap 2 plan /hockeyschoenen)
+
+**Wat:** een script en een handmatige workflow (`scripts/shoe-feed-check.ts`, `.github/workflows/schoenen-feedcheck.yml`, Actions → "Schoenen in de feeds") tellen de hockeyschoenen in de PassaHockey-feed (TradeTracker) en de Plutosport-feed (Awin). Per winkel: aantal modellen, veld/zaal, junior, merken, prijsbereik en mediaan van wat op voorraad is, aandeel met EAN, en de categorieteksten waarop het filter heeft geselecteerd. Het rapport komt in één issue (label `schoenen-feed`). Plan: #100.
+
+**Hoe:** de logica staat los in `src/catalog/shoeFeed.ts`, met tests. Hij gebruikt de bestaande feedlezers (`parseRecord` uit `passaFeed.ts` is daarvoor geëxporteerd). Een schoen is een product met "hockey" in categorie of naam en "schoen/shoe" in de categorie (of "hockeyschoen" in de naam), zonder sokken, inlegzolen, handschoenen, keeper- of ijshockeyspullen.
+
+**Beveiliging:** de Plutosport-feed-URL bevat een API-sleutel en komt alleen uit het secret `AWIN_PLUTOSPORT_FEED_URL`; het script print hem nooit.
+
+**Bewust niet:** geen schoenen in de catalogus of op de site, geen wijziging aan de stickfilters (`isPlayerStick`, `isHockeyStickRow`, `marketScan.ts`), de adviesscore of de privacytekst. bol.com wordt nog niet gemeten.
+
+## 2026-10-27 — Schoenen in de feeds: strenger filter na de eerste meting
+
+**Waarom:** de eerste meting (#107) telde 540 modellen bij PassaHockey, waaronder slippers (Adilette), schoenverzorging en volleybal- en korfbalschoenen. PassaHockey hangt één schoen in veel categorieën, en elk pad met "hockey" telde mee (bijv. "Hockey > Black Friday"). Bij Plutosport zaten er twee sticks tussen, en de overlap op naam was 0 omdat de winkels hun schoenen anders noemen.
+
+**Wat:** een schoen telt alleen nog mee als minstens één categoriepad zelf over hockeyschoenen gaat ("Hockey > Hockeyschoenen", "Hockey > Zaalhockey > Zaalhockey schoenen", "Hockey > Schoenen > Veldhockey"), of als de naam "hockeyschoen" bevat. Paden met accessoires of verzorging, en namen met stick, slipper of sandaal vallen af. Veld of zaal volgt alleen uit die hockeyschoenenpaden. De overlap tussen de winkels wordt nu op EAN bepaald; beide feeds hebben bij elk model een EAN.

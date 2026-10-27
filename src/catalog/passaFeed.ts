@@ -37,7 +37,7 @@ export type PassaStickModel = {
   inStock: boolean;
 };
 
-type FeedRecord = {
+export type FeedRecord = {
   name: string;
   price: number;
   url: string;
@@ -66,7 +66,7 @@ function tag(block: string, name: string): string | undefined {
   return match ? decode(match[1] ?? '') : undefined;
 }
 
-function parseRecord(block: string): FeedRecord | null {
+export function parseRecord(block: string): FeedRecord | null {
   const name = tag(block, 'name');
   const url = tag(block, 'URL');
   const price = Number(tag(block, 'price'));
