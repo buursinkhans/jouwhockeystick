@@ -453,7 +453,14 @@ async function main() {
   }
   if (writeImport) {
     // Every Plutosport model a catalog stick matched, also as 'twijfel': never import those, or a stick appears twice.
-    const matchedKeys = new Set(matches.flatMap(({ match }) => (match.model && match.level !== 'geen' ? [match.model.key] : [])));
+    // Also an older collection of a stick we already have (PassaHockey sells 2026, Plutosport still 2025):
+    // two near-identical sticks would only confuse the stickwijzer.
+    const matchedKeys = new Set(
+      matches.flatMap(({ match }) => [
+        ...(match.model && match.level !== 'geen' ? [match.model.key] : []),
+        ...(match.olderCollectionKeys ?? []),
+      ]),
+    );
     const taken = new Set(products.map((p) => p.slug));
     const imported: Product[] = [];
     const skips: ImportSkip[] = [];

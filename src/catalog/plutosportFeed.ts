@@ -374,6 +374,8 @@ export type StickMatch = {
   model?: PlutoStickModel;
   /** Why it is not 'zeker' (or how it is): shown in the report. */
   note: string;
+  /** Plutosport pages of the same model in an older collection than ours: never imported next to ours. */
+  olderCollectionKeys?: string[];
 };
 
 /**
@@ -453,12 +455,15 @@ function compare(stick: CatalogStick, model: PlutoStickModel): Comparison {
   if (ours.length === 0) return null;
   const theirText = `${model.name} ${model.modelText}`;
   const theirs = new Set(modelTokens(withoutYears(theirText), model.brand || stick.brand));
-  if (!ours.every((token) => theirs.has(token))) return null;
+  // Bow words are compared as a bow, not as model words: Plutosport often leaves the bow out of the name.
+  const oursCore = ours.filter((token) => !BOW_TOKENS.has(token));
+  if (oursCore.length === 0 || !oursCore.every((token) => theirs.has(token))) return null;
 
   // The name first; the specifications only when they name exactly one bow (not a list of options).
   const specBow = extractBow('', model.specText).bow;
   const theirBow = bowInName(theirText, model.brand || stick.brand) ?? (specBow && bowCount(model.specText) === 1 ? specBow : null);
-  if (stick.bow && theirBow && stick.bow !== theirBow) return null;
+  const ourBow = stick.bow ?? bowInName(stick.name, stick.brand);
+  if (ourBow && theirBow && ourBow !== theirBow) return null;
 
   const theirYear = seasonYear(theirText) ?? yearFromArticleCode(model.url, model.brand || stick.brand);
   if (stick.modelYear && theirYear && stick.modelYear !== theirYear) return { otherYear: theirYear };
@@ -471,7 +476,7 @@ function compare(stick: CatalogStick, model: PlutoStickModel): Comparison {
   if (extra.length) reasons.push(`extra in de naam bij Plutosport: ${extra.join(', ')}`);
   if (!stick.modelYear) reasons.push('modeljaar niet bekend in onze catalogus');
   else if (!theirYear) reasons.push('geen modeljaar in de naam bij Plutosport');
-  if (stick.bow && !theirBow) reasons.push('bow niet in de naam bij Plutosport');
+  if (ourBow && !theirBow) reasons.push('bow niet in de naam bij Plutosport');
   return { reasons };
 }
 
@@ -507,14 +512,26 @@ export function matchStick(stick: CatalogStick, models: readonly PlutoStickModel
   const exact: PlutoStickModel[] = [];
   const doubtful: { model: PlutoStickModel; reasons: string[] }[] = [];
   const otherYears = new Set<number>();
+  const older: string[] = [];
   for (const model of models) {
     const result = compare(stick, model);
     if (result === null) continue;
-    if ('otherYear' in result) otherYears.add(result.otherYear);
-    else if (result.reasons.length === 0) exact.push(model);
+    if ('otherYear' in result) {
+      otherYears.add(result.otherYear);
+      if (stick.modelYear && result.otherYear < stick.modelYear) older.push(model.key);
+    } else if (result.reasons.length === 0) exact.push(model);
     else doubtful.push({ model, reasons: result.reasons });
   }
+  const match = byName(stick, exact, doubtful, otherYears);
+  return older.length ? { ...match, olderCollectionKeys: older } : match;
+}
 
+function byName(
+  stick: CatalogStick,
+  exact: PlutoStickModel[],
+  doubtful: { model: PlutoStickModel; reasons: string[] }[],
+  otherYears: ReadonlySet<number>,
+): StickMatch {
   if (exact.length) {
     exact.sort(preferred);
     const [best] = exact as [PlutoStickModel];

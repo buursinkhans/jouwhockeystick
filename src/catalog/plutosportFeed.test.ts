@@ -264,6 +264,14 @@ describe('matchStick', () => {
     expect(matchStick(adidas, [model({ ...plain, specText: 'Kies uit Low Bow of Mid Bow' })]).level).toBe('twijfel');
   });
 
+  it('marks an older collection of our stick, so it is never imported next to ours', () => {
+    const sword = stick({ slug: 'indian-maharadja-sword-20-lowbow-10261014', brand: 'The Indian Maharadja', name: 'Indian Maharadja Sword 20 LowBow', bow: undefined, modelYear: 2026 });
+    const result = matchStick(sword, [
+      model({ key: 'old', brand: 'The Indian Maharadja', name: 'The Indian Maharadja Sword 20 Hockeystick Senior', url: 'https://www.plutosport.nl/the-indian-maharadja-sword-20-hockeystick-senior-10251020' }),
+    ]);
+    expect(result).toMatchObject({ level: 'geen', olderCollectionKeys: ['old'] });
+  });
+
   it('doubts when the year is missing on one side', () => {
     expect(matchStick(stick({ modelYear: undefined }), [model()]).level).toBe('twijfel');
     expect(matchStick(stick(), [model({ name: 'Grays JB12+ Jumbow Hockeystick' })]).level).toBe('twijfel');
