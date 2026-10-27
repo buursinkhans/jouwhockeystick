@@ -74,7 +74,7 @@ export function OfferList({
           const fresh = isPriceFresh(offer, now);
           const stock = stockLine({ inStock: offer.inStock, lengths: offer.lengths, size });
           return (
-            <li key={offer.retailer} className="rounded-2xl border border-lijngrijs/50 bg-white p-4">
+            <li key={offer.retailer} className="rounded-2xl border border-rand bg-krijt p-4">
               <div className="flex items-baseline justify-between gap-3">
                 <span className="font-semibold">{label}</span>
                 {fresh ? (

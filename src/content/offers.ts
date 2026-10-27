@@ -6,6 +6,8 @@
 export const OFFER_TEXT = {
   heading: 'Waar te koop',
   none: 'We kennen nog geen partnerwinkel die deze stick verkoopt. Het advies blijft staan; vraag ernaar bij je hockeywinkel.',
+  /** On a stick page there is no advice to keep. */
+  noneOnPage: 'We kennen nog geen partnerwinkel die deze stick verkoopt. Vraag ernaar bij je hockeywinkel.',
   sortNote: 'op prijs incl. verzending',
   sizeLegend: 'Jouw maat',
   noCurrentPrice: 'prijs niet actueel',

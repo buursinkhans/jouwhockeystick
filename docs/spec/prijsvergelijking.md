@@ -1,6 +1,14 @@
 # Prijsvergelijking per stick — architectuurnotitie
 
-**Status:** voorstel, 2026-10-26. Nog niets gebouwd. De eigenaar kiest de architectuur (§4) bij het mergen van de PR waarin deze notitie staat; het besluit staat in `docs/decision-log.md` (2026-10-26).
+**Status:** fase 0 en fase 1 gebouwd (2026-10-27), met optie A uit §4.
+- **Fase 0**, de overlapmeting: issue #99.
+- **Fase 1**, het blok "Waar te koop" op de stickpagina en in elk stickadvies: `src/components/offers/WhereToBuy.tsx`, met gegevens uit `src/catalog/offers/`.
+
+De besluiten staan in `docs/decision-log.md` (2026-10-26 en 2026-10-27).
+
+**Afwijkingen van dit voorstel in fase 1:**
+- Het blok staat voor álle sticks, niet alleen voor de 20–30 meest geadviseerde. Het kost niets extra: de prijzen gaan mee in de wekelijkse PR.
+- Bij bol.com tonen we alleen sticks met een bevestigde bol.com-pagina, nooit een zoeklink.
 **Samenhang:** `docs/business-model.md` §5a (partnerprogramma's), `CLAUDE.md` (Commerce), `src/lib/retailers.ts`, `src/catalog/livePrice.ts`.
 
 ---

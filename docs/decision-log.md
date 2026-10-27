@@ -1447,3 +1447,46 @@ Babysticks (18 inch) en keepersticks slaan we over.
 **Plan:** issue #100 (schoenenwijzer, 5 tot 8 artikelen, aparte schoenencatalogus, meetpunten na 3 maanden).
 
 **Bewust niet:** nog geen code, geen DNS, geen wijziging aan de stickwijzer, adviesscore of `ruleSetVersion`, en de Marktverkenner nog niet uitgebreid (pas als de sectie doorgaat).
+
+## 2026-10-27 — Prijsvergelijking fase 1: blok "Waar te koop"
+
+**Wat:** het blok "Waar te koop" vervangt de losse winkelknoppen op de stickpagina en in elk stickadvies (`docs/spec/prijsvergelijking.md`, fase 1; ontwerp "Funnel advies naar winkel").
+- **Volledige versie op de stickpagina:**
+  - per winkel een kaart met de totaalprijs en daaronder prijs + verzending en de voorraad in de gekozen maat;
+  - een knop "Naar [winkel]";
+  - maatknoppen; de stickwijzer stuurt de geadviseerde maat mee met `?maat=`.
+- **Compacte versie in de advieskaart:**
+  - de twee bovenste winkels in de geadviseerde maat;
+  - "Vergelijk alle N winkels" naar `#waar-te-koop` op de stickpagina, alleen bij 3 of meer winkels.
+- **Beide versies:**
+  - de regel "N partnerwinkels · op prijs incl. verzending · gelezen op [datum]";
+  - de uitklapper "Hoe we vergelijken";
+  - de partnerlink-vermelding en "de winkel is de verkoper".
+- **Prijsveld:** de advieskaart en de stickpagina tonen "vanaf €X bij N partnerwinkels" als er een actuele prijs is, anders de richtprijs zoals voorheen.
+
+**Gegevens** (`src/catalog/offers/`, alles via de wekelijkse sync-PR, optie A):
+- **bol.com:** de prijs via de Marketing Catalog API (`scripts/bol-prices.ts`, nieuw bestand `bolPrices.ts`). Alleen sticks met een bevestigde bol.com-pagina; zonder prijs staat bol.com er zonder bedrag. Geeft de API minder dan de helft van de prijzen van vorige week terug, dan blijft het oude bestand staan.
+- **PassaHockey:** prijs en (nieuw) leverbare lengtes in `passaPrices.ts`. Voor geïmporteerde sticks de feedgegevens van de stick zelf.
+- **Plutosport:** prijs en lengtes (nieuw) in `matches.ts`. Voor geïmporteerde sticks de feedgegevens van de stick zelf.
+- **Verzendkosten**, de goedkoopste standaardoptie per winkel, met bron en datum in `src/lib/retailers.ts`:
+  - PassaHockey: €5,95 onder €25, €3,95 tot en met €79, gratis daarboven (passasports.nl/faq-verzenden-bezorgen);
+  - Plutosport: €6,95, gratis vanaf €75 (plutosport.nl/bezorgen-afhalen);
+  - bol.com: gratis vanaf €25, daaronder onbekend (€2,99 als bol.com verstuurt, niets bij een partner).
+
+**Sortering** (`src/catalog/offers/sort.ts`, met tests):
+1. Op totaalprijs (prijs + verzending; onbekende verzendkosten tellen als €0 en staan er zo bij).
+2. Een winkel zonder de gekozen maat komt onder de winkels die hem wel hebben. Een winkel die geen lengtes noemt (bol.com), telt als "maat kiezen bij de winkel".
+3. Zonder prijs of met een prijs ouder dan 14 dagen (hele kalenderdagen) onderaan, zonder bedrag, met de knop "Bekijk de actuele prijs".
+4. Bij een gelijke prijs eerst de recentst gelezen prijs, dan alfabetisch.
+
+Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaald bij het bouwen van de pagina; door de wekelijkse deploy is een prijs normaal hooguit 7 dagen oud.
+
+**Opmaak:** alle winkelknoppen zijn een outline in veldblauw (`variant="shop"`), ook op de catalogus- en vergelijkpagina's. De rode PassaHockey-knop vervalt, zodat geen winkel opvallender is.
+
+**Structured data:** op de stickpagina `Offer` (één winkel) of `AggregateOffer` (meer), alleen voor prijzen die zichtbaar en niet ouder dan 14 dagen zijn; anders geen `offers`.
+
+**Meten:**
+- nieuw event `offer_block_view`: blok in beeld, met plek, aantal winkels en aantal winkels met prijs;
+- `retailer_click` krijgt in het blok `position`, `offerCount` en `priceShown`.
+
+**Bewust niet:** geen kortings- of "goedkoopst"-teksten, geen van-/voorprijzen, geen wijziging aan de adviesscore of `ruleSetVersion`, geen privacytekst. Een stick zonder bevestigde winkelpagina krijgt geen bol.com-zoeklink meer in het blok (spelregel 6). Dat zijn nu 5 gecontroleerde sticks; die tonen "We kennen nog geen partnerwinkel".

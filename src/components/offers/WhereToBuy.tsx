@@ -136,13 +136,13 @@ export function WhereToBuy({
   }
 
   return (
-    <section id={OFFER_ANCHOR} aria-labelledby="waar-te-koop-kop" className="mt-8 scroll-mt-24 rounded-2xl bg-krijt p-4 sm:p-6">
+    <section id={OFFER_ANCHOR} aria-labelledby="waar-te-koop-kop" className="mt-8 scroll-mt-24 rounded-2xl border border-rand bg-white p-4 shadow-sm sm:p-6">
       <OfferBlockView placement={placement} offerCount={offers.length} pricedCount={pricedCount}>
         <h2 id="waar-te-koop-kop" className="text-2xl font-bold">
           {OFFER_TEXT.heading}
         </h2>
         {offers.length === 0 ? (
-          <p className="mt-2 text-inkt/80">{OFFER_TEXT.none}</p>
+          <p className="mt-2 text-inkt/80">{OFFER_TEXT.noneOnPage}</p>
         ) : (
           <>
             <p className="mt-1 text-sm text-inkt/75">{summaryLine(offers, now)}</p>
