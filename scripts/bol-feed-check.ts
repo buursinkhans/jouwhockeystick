@@ -10,9 +10,9 @@ const TOKEN_URL = 'https://login.bol.com/token?grant_type=client_credentials';
 /** The API allows 10 requests per second per endpoint; stay well below. */
 const PAUSE_MS = 250;
 
-type Json = Record<string, unknown>;
+export type Json = Record<string, unknown>;
 
-type BolProduct = {
+export type BolProduct = {
   ean?: string;
   title?: string;
   url?: string;
@@ -72,7 +72,7 @@ async function requestToken(
   });
 }
 
-async function getToken(): Promise<string> {
+export async function getToken(): Promise<string> {
   const rawId = process.env.BOL_CLIENT_ID;
   const rawSecret = process.env.BOL_CLIENT_SECRET;
   if (!rawId || !rawSecret) {
@@ -115,7 +115,7 @@ async function getToken(): Promise<string> {
 }
 
 /** GET with one retry on 429. Returns null on 404 (unknown product). */
-async function get(path: string, token: string): Promise<Json | null> {
+export async function get(path: string, token: string): Promise<Json | null> {
   for (let attempt = 0; attempt < 2; attempt++) {
     await sleep(PAUSE_MS);
     const response = await fetch(`${API}${path}`, {
@@ -142,12 +142,12 @@ export function bolProductIdFromUrl(url: string): string | null {
 }
 
 /** The to-ean response shape is not documented in detail; take the first EAN-like value. */
-function findEan(body: Json): string | null {
+export function findEan(body: Json): string | null {
   const match = JSON.stringify(body).match(/"(\d{13})"/);
   return match?.[1] ?? null;
 }
 
-function asBolProduct(value: unknown): BolProduct {
+export function asBolProduct(value: unknown): BolProduct {
   return (typeof value === 'object' && value !== null ? value : {}) as BolProduct;
 }
 

@@ -19,6 +19,10 @@ type Props = {
   productUrl?: string;
   className?: string;
   variant?: keyof typeof buttonVariantClasses;
+  /** In "Waar te koop": the place in the sorted list, the number of shops and whether an amount was shown. */
+  offer?: { position: number; offerCount: number; priceShown: boolean };
+  /** Accessible name when the visible text alone does not name the shop. */
+  ariaLabel?: string;
   children: ReactNode;
 };
 
@@ -30,6 +34,8 @@ export function RetailerLink({
   productUrl,
   className = '',
   variant,
+  offer,
+  ariaLabel,
   children,
 }: Props) {
   const url = RETAILERS[retailer].getUrl({
@@ -52,6 +58,7 @@ export function RetailerLink({
       href={url}
       target="_blank"
       rel="noopener noreferrer sponsored"
+      aria-label={ariaLabel}
       className={`${variantClass} ${className}`.trim()}
       onClick={() =>
         trackEvent({
@@ -61,6 +68,11 @@ export function RetailerLink({
           productName,
           placement,
           linkType: productUrl ? 'product' : 'search',
+          ...(offer && {
+            position: offer.position,
+            offerCount: offer.offerCount,
+            priceShown: offer.priceShown,
+          }),
         })
       }
     >

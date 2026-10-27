@@ -133,13 +133,18 @@ export function plutosportTrackingUrl(
 
 /**
  * Shipping for one stick, from the shop's public delivery terms, until a feed
- * states it (docs/spec/prijsvergelijking.md §7.1). `costEur: null` means
- * unknown, and the site then says so.
+ * states it (docs/spec/prijsvergelijking.md §7.1). The first tier whose
+ * bound the price stays under applies; `costEur: null` means unknown, and the
+ * site then says so. Always the cheapest standard option (a pick-up point
+ * where the shop has one), the same for every shop.
  */
 export type ShippingTerms = {
-  costEur: number | null;
-  /** Free shipping from this order value; null when the shop has no threshold. */
-  freeFromEur: number | null;
+  tiers: readonly {
+    /** Applies while the order value is below this (or up to and including it, with `inclusive`); null = no upper bound. */
+    belowEur: number | null;
+    inclusive?: boolean;
+    costEur: number | null;
+  }[];
   sourceUrl: string;
   checkedAt: string;
   note: string;
@@ -147,17 +152,54 @@ export type ShippingTerms = {
 
 /** Plutosport has no delivery_cost in its Awin feed. */
 export const PLUTOSPORT_SHIPPING: ShippingTerms = {
-  costEur: 6.95,
-  freeFromEur: 75,
+  tiers: [
+    { belowEur: 75, costEur: 6.95 },
+    { belowEur: null, costEur: 0 },
+  ],
   sourceUrl: 'https://www.plutosport.nl/bezorgen-afhalen',
   checkedAt: '2026-10-26',
-  note: 'Laagste tarief in Nederland (bezorgen bij een DHL ServicePoint); overdag thuisbezorgen kost €7,95, \'s avonds €8,95.',
+  note: "Laagste tarief in Nederland (bezorgen bij een DHL ServicePoint), gratis vanaf €75; overdag thuisbezorgen kost €7,95, 's avonds €8,95.",
+};
+
+/** "Boven de €79" is free, so €79 itself still pays €3,95. */
+export const PASSASPORTS_SHIPPING: ShippingTerms = {
+  tiers: [
+    { belowEur: 25, costEur: 5.95 },
+    { belowEur: 79, inclusive: true, costEur: 3.95 },
+    { belowEur: null, costEur: 0 },
+  ],
+  sourceUrl: 'https://www.passasports.nl/faq-verzenden-bezorgen',
+  checkedAt: '2026-10-27',
+  note: 'Afhalen bij een DHL ServicePoint: €5,95 onder €25, €3,95 tot en met €79, gratis daarboven; thuisbezorgen kost €1 extra.',
+};
+
+/**
+ * From €25 bol.com charges nothing; below that it depends on the seller
+ * (€2,99 when bol.com ships, nothing when a partner ships), so unknown.
+ */
+export const BOL_SHIPPING: ShippingTerms = {
+  tiers: [
+    { belowEur: 25, costEur: null },
+    { belowEur: null, costEur: 0 },
+  ],
+  sourceUrl: 'https://www.bol.com/nl/nl/klantenservice/a/5711226101301248/bezorgopties-en-kosten',
+  checkedAt: '2026-10-27',
+  note: 'Geen verzendkosten vanaf €25; daaronder €2,99 als bol.com verstuurt en niets als een partner verstuurt.',
+};
+
+export const SHIPPING: Record<RetailerId, ShippingTerms> = {
+  bolcom: BOL_SHIPPING,
+  passasports: PASSASPORTS_SHIPPING,
+  plutosport: PLUTOSPORT_SHIPPING,
 };
 
 /** Shipping for an order of one item at this price; null when unknown. */
 export function shippingCostEur(terms: ShippingTerms, priceEur: number): number | null {
-  if (terms.freeFromEur !== null && priceEur >= terms.freeFromEur) return 0;
-  return terms.costEur;
+  for (const tier of terms.tiers) {
+    if (tier.belowEur === null) return tier.costEur;
+    if (tier.inclusive ? priceEur <= tier.belowEur : priceEur < tier.belowEur) return tier.costEur;
+  }
+  return null;
 }
 
 export type Retailer = {

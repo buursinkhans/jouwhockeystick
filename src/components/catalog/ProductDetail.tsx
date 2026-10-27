@@ -2,7 +2,11 @@ import type { Metadata } from 'next';
 import { productPath } from '@/catalog/paths';
 import { productMetaDescription } from '@/catalog/metaDescription';
 import type { Product } from '@/catalog/types';
-import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
+import { isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
+import { getOffers, isPriceFresh, lowestTotal } from '@/catalog/offers';
+import { RETAILERS } from '@/lib/retailers';
+import { euro, shopCount } from '@/content/offers';
+import { OFFER_ANCHOR, WhereToBuy } from '@/components/offers/WhereToBuy';
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllProducts, getDiscipline, isFeedImport } from '@/catalog';
@@ -10,9 +14,7 @@ import { ProductSpecTable } from '@/components/catalog/ProductSpecTable';
 import { ProductProsAndCons } from '@/components/catalog/ProductProsAndCons';
 import { ProductImage } from '@/components/catalog/ProductImage';
 import { ProductNotice } from '@/components/ui/ProductNotice';
-import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
 import { ButtonLink } from '@/components/ui/Button';
-import { RetailerLinks } from '@/components/ui/RetailerLinks';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ProductFitAndSources } from '@/components/catalog/ProductFitAndSources';
 import { SimilarSticks } from '@/components/catalog/SimilarSticks';
@@ -45,10 +47,32 @@ export function ProductDetail({ product }: { product: Product }) {
     ? null
     : getProductFamily(product, getAllProducts(new Date()));
 
-  // Structured data describes only visibly verifiable information on this
-  // page, and deliberately omits `offers`/price since the actual purchase
-  // and any live pricing happens on bol.com, not on this page.
-  // No Review or AggregateRating either: we have not tested the sticks.
+  const now = new Date();
+  const offers = getOffers(product);
+  const lowest = lowestTotal(offers, { size: null, now });
+  // Offers only for prices visible in "Waar te koop" and at most 14 days old
+  // (CLAUDE.md, Prijsvergelijking); the price is the shop's price, shipping
+  // is shown apart. No Review or AggregateRating: we have not tested the sticks.
+  const fresh = offers.filter((o) => isPriceFresh(o, now) && o.priceEur !== null);
+  const prices = fresh.map((o) => o.priceEur as number);
+  const offersJsonLd =
+    fresh.length === 1 && fresh[0]
+      ? {
+          '@type': 'Offer',
+          price: fresh[0].priceEur?.toFixed(2),
+          priceCurrency: 'EUR',
+          availability: fresh[0].inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          seller: { '@type': 'Organization', name: RETAILERS[fresh[0].retailer].label },
+        }
+      : fresh.length > 1
+        ? {
+            '@type': 'AggregateOffer',
+            lowPrice: Math.min(...prices).toFixed(2),
+            highPrice: Math.max(...prices).toFixed(2),
+            offerCount: fresh.length,
+            priceCurrency: 'EUR',
+          }
+        : null;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -58,6 +82,7 @@ export function ProductDetail({ product }: { product: Product }) {
     category: DISCIPLINE_LABELS[getDiscipline(product)],
     url: absoluteUrl(productPath(product)),
     ...(product.imageUrl && { image: product.imageUrl }),
+    ...(offersJsonLd && { offers: offersJsonLd }),
   };
 
   return (
@@ -98,32 +123,36 @@ export function ProductDetail({ product }: { product: Product }) {
         </div>
       </div>
 
-      <p className="mt-6 text-2xl font-bold">
-        €{product.priceIndicativeEur.value.toFixed(2)}
-      </p>
-      <div className="mt-1">
-        <ProductNotice
-          notSoldAtBol={!isSoldAtBol(product)}
-          passaSportsOnly={isPassaSportsOnly(product)}
-          alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
+      {lowest !== null ? (
+        // A current shop price exists: say where it starts and point to the shops.
+        <p className="mt-6 text-2xl font-bold">
+          <a href={`#${OFFER_ANCHOR}`} className="hover:underline">
+            vanaf {euro(lowest)}
+          </a>{' '}
+          <span className="text-base font-normal text-inkt/75">
+            bij {shopCount(offers.length)}, incl. verzending
+          </span>
+        </p>
+      ) : (
+        <>
+          {/* No current shop price: the indicative price stays (CLAUDE.md, Testfase-scope). */}
+          <p className="mt-6 text-2xl font-bold">
+            €{product.priceIndicativeEur.value.toFixed(2)}
+          </p>
+          <div className="mt-1">
+            <ProductNotice
+              notSoldAtBol={!isSoldAtBol(product)}
+              passaSportsOnly={isPassaSportsOnly(product)}
+              alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
+              alsoAtPlutosport={product.plutosportProductUrl !== undefined}
+            />
+          </div>
+        </>
+      )}
 
-          alsoAtPlutosport={product.plutosportProductUrl !== undefined}
-        />
-      </div>
-      <PartnerLinkNote />
+      <WhereToBuy product={product} placement="productpagina" variant="full" />
 
-      <div className="mt-6 flex flex-wrap items-start gap-3">
-        <RetailerLinks
-          brand={product.brand}
-          productName={product.name}
-          bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={!isSoldAtBol(product)}
-          bolUnchecked={isBolUnchecked(product)}
-          passaSportsProductUrl={product.passaSportsProductUrl}
-
-          plutosportProductUrl={product.plutosportProductUrl}
-          placement="productpagina"
-        />
+      <div className="mt-6">
         <ButtonLink
           href={`/interesse?product=${product.slug}&source=productpagina`}
           variant="secondary"
