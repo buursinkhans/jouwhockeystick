@@ -1457,3 +1457,9 @@ Babysticks (18 inch) en keepersticks slaan we over.
 **Beveiliging:** de Plutosport-feed-URL bevat een API-sleutel en komt alleen uit het secret `AWIN_PLUTOSPORT_FEED_URL`; het script print hem nooit.
 
 **Bewust niet:** geen schoenen in de catalogus of op de site, geen wijziging aan de stickfilters (`isPlayerStick`, `isHockeyStickRow`, `marketScan.ts`), de adviesscore of de privacytekst. bol.com wordt nog niet gemeten.
+
+## 2026-10-27 — Schoenen in de feeds: strenger filter na de eerste meting
+
+**Waarom:** de eerste meting (#107) telde 540 modellen bij PassaHockey, waaronder slippers (Adilette), schoenverzorging en volleybal- en korfbalschoenen. PassaHockey hangt één schoen in veel categorieën, en elk pad met "hockey" telde mee (bijv. "Hockey > Black Friday"). Bij Plutosport zaten er twee sticks tussen, en de overlap op naam was 0 omdat de winkels hun schoenen anders noemen.
+
+**Wat:** een schoen telt alleen nog mee als minstens één categoriepad zelf over hockeyschoenen gaat ("Hockey > Hockeyschoenen", "Hockey > Zaalhockey > Zaalhockey schoenen", "Hockey > Schoenen > Veldhockey"), of als de naam "hockeyschoen" bevat. Paden met accessoires of verzorging, en namen met stick, slipper of sandaal vallen af. Veld of zaal volgt alleen uit die hockeyschoenenpaden. De overlap tussen de winkels wordt nu op EAN bepaald; beide feeds hebben bij elk model een EAN.

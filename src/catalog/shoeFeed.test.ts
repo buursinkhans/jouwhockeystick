@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   PlutoShoeCollector,
+  eansIn,
   isHockeyShoe,
   normalShoeSize,
   parsePassaShoes,
@@ -18,7 +19,7 @@ function passaProduct(o: { name: string; price: number; r: string; path: string;
 describe('isHockeyShoe', () => {
   it('keeps hockey shoes and drops sticks, socks, keeper gear and other sports', () => {
     expect(isHockeyShoe(['Hockey > Schoenen'], 'Adidas Hockey Youngstar')).toBe(true);
-    expect(isHockeyShoe(['Sport > Schoenen'], 'Asics Gel-Hockey Typhoon')).toBe(true);
+    expect(isHockeyShoe(['Sport > Schoenen'], 'Asics Typhoon Hockeyschoen')).toBe(true);
     expect(isHockeyShoe(['Hockey > Sticks'], 'Grays GR7000')).toBe(false);
     expect(isHockeyShoe(['Hockey > Kleding'], 'Hockeysokken Brabo')).toBe(false);
     expect(isHockeyShoe(['Hockey > Keeper'], 'Keeper schoen overshoe')).toBe(false);
@@ -27,10 +28,20 @@ describe('isHockeyShoe', () => {
     expect(isHockeyShoe(['Hardlopen > Schoenen'], 'Nike Pegasus')).toBe(false);
   });
 
+  it('needs a path that is itself about hockey shoes, not any hockey path (first run, 2026-10-27)', () => {
+    expect(isHockeyShoe(['Schoenen', 'Hockey > Black Friday', 'Volleybal > Volleybalschoenen'], 'adidas Crazyflight 7')).toBe(false);
+    expect(isHockeyShoe(['Schoenen', 'Hockey > Accessoires > Kledingaccessoires'], 'adidas Adilette Aqua')).toBe(false);
+    expect(isHockeyShoe(['Hockey > Accessoires > Schoenaccessoires'], 'Smellwell Active')).toBe(false);
+    expect(isHockeyShoe(['Schoenen', 'Hockey > Schoenen > Veldhockey'], 'Adidas DF24 Compo 6 Hockeystick Junior')).toBe(false);
+    expect(isHockeyShoe(['Schoenen', 'Korfbal > Korfbalschoenen', 'Hockey > Zaalhockey > Zaalhockey schoenen'], 'Asics Gel-Rocket')).toBe(true);
+    expect(isHockeyShoe(['Schoenen', 'Hockey > Sale > Hockeyschoenen'], 'Grays Flash 3.0')).toBe(true);
+  });
+
   it('calls a shoe indoor from the category or the name', () => {
     expect(shoeDiscipline(['Hockey > Zaalhockey > Schoenen'], 'Brabo Tribute')).toBe('zaal');
     expect(shoeDiscipline(['Hockey > Schoenen'], 'Brabo Tribute Indoor')).toBe('zaal');
     expect(shoeDiscipline(['Hockey > Schoenen'], 'Brabo Tribute')).toBe('veld');
+    expect(shoeDiscipline(['Hockey > Hockeyschoenen', 'Volleybal > Indoor'], 'adidas Crazyflight')).toBe('veld');
   });
 });
 
@@ -57,7 +68,7 @@ describe('parsePassaShoes', () => {
     const shoes = parsePassaShoes(`<products>${xml}</products>`);
     expect(shoes).toHaveLength(2);
     const fabela = shoes.find((s) => s.name === 'Adidas Fabela Zone');
-    expect(fabela).toMatchObject({ discipline: 'veld', sizes: ['38', '40'], priceMin: 79.95, priceMax: 89.95, inStock: true, hasEan: true, junior: false });
+    expect(fabela).toMatchObject({ discipline: 'veld', sizes: ['38', '40'], priceMin: 79.95, priceMax: 89.95, inStock: true, eans: ['4066000000001'], junior: false });
     expect(shoes.find((s) => s.name.startsWith('Brabo'))).toMatchObject({ discipline: 'zaal', junior: true });
   });
 });
@@ -89,7 +100,7 @@ describe('PlutoShoeCollector', () => {
 });
 
 describe('summarizeShoes and shoeOverlap', () => {
-  const base = { shop: 'Plutosport' as const, sizes: [], hasEan: false, categories: ['Hockey > Schoenen'], junior: false };
+  const base = { shop: 'Plutosport' as const, sizes: [], eans: [] as string[], categories: ['Hockey > Schoenen'], junior: false };
   const models = [
     { ...base, url: 'a', name: 'Adidas Fabela Zone', brand: 'Adidas', discipline: 'veld' as const, priceMin: 60, priceMax: 60, inStock: true },
     { ...base, url: 'b', name: 'Asics Typhoon', brand: 'Asics', discipline: 'veld' as const, priceMin: 100, priceMax: 100, inStock: true },
@@ -105,8 +116,13 @@ describe('summarizeShoes and shoeOverlap', () => {
     expect(s.categories).toEqual([{ text: 'Hockey > Schoenen', models: 4 }]);
   });
 
-  it('finds the same model at both shops on brand and name', () => {
-    const passa = [{ ...models[0]!, shop: 'PassaHockey' as const, name: 'adidas  Fabela-Zone', url: 'p' }];
-    expect(shoeOverlap(passa, models)).toBe(1);
+  it('finds the same shoe at both shops by EAN, whatever the names', () => {
+    const pluto = [{ ...models[0]!, eans: ['4066000000001', '4066000000002'] }, { ...models[1]!, eans: ['4550000000009'] }];
+    const passa = [{ ...models[0]!, shop: 'PassaHockey' as const, name: 'adidas Fabela Zone 2.1 Hockeyschoenen Dames', url: 'p', eans: ['4066000000002'] }];
+    expect(shoeOverlap(passa, pluto)).toBe(1);
+  });
+
+  it('reads EAN-13 and GTIN-14 as the same code', () => {
+    expect(eansIn('04066000000001, 4066000000001 x')).toEqual(['4066000000001']);
   });
 });

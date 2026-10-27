@@ -22,7 +22,8 @@ export type ShoeModel = {
   discipline: ShoeDiscipline;
   junior: boolean;
   sizes: string[];
-  hasEan: boolean;
+  /** EAN/GTIN codes of all sizes: the reliable way to find the same shoe at two shops. */
+  eans: string[];
   priceMin: number;
   priceMax: number;
   inStock: boolean;
@@ -32,8 +33,10 @@ export type ShoeModel = {
 
 /** Other sports and products that say "hockey" or "schoen" but are not a hockey shoe. */
 const NOT_A_HOCKEY_SHOE =
-  /\b(ijshockey|ice\s*hockey|floorball|unihockey|inline\s*hockey|straathockey|schaats\w*|skates?|keeper\w*|goalie\w*|sok|sokken|socks?|veters?|laces?|inlegzool\w*|insoles?|zolen|handschoen\w*|glove\w*|schoenentas|shoebag|schoenzak)\b/i;
+  /\b(ijshockey|ice\s*hockey|floorball|unihockey|inline\s*hockey|straathockey|schaats\w*|skates?|keeper\w*|goalie\w*|sok|sokken|socks?|slipper\w*|sandal\w*|adilette|veters?|laces?|inlegzool\w*|insoles?|zolen|handschoen\w*|glove\w*|schoenentas|shoebag|schoenzak)\b/i;
 const SHOE = /schoen|shoe|\bfootwear\b/i;
+/** Paths that mention hockey and shoes but hold other things: other sports, shoe care and accessories. */
+const OTHER_SPORT_PATH = /ijshockey|ice\s*hockey|floorball|unihockey|inline|accessoire|verzorging/i;
 const INDOOR = /zaal|indoor/i;
 
 /** Shoe sizes as shops write them: "38", "38,5", "38 2/3", "UK 6", "EU 40". Unknown formats are kept as written. */
@@ -59,20 +62,35 @@ const sizeValue = (size: string) => {
 };
 const bySize = (a: string, b: string) => sizeValue(a) - sizeValue(b) || a.localeCompare(b);
 
-/** A hockey shoe, decided on category texts and the product name. */
+/**
+ * A category path that is itself about hockey shoes ("Hockey > Hockeyschoenen",
+ * "Hockey > Zaalhockey > Zaalhockey schoenen", "Hockey > Schoenen > Veldhockey").
+ * Shops put one shoe in many paths: a volleyball shoe in "Hockey > Black Friday"
+ * or a slipper in "Hockey > Accessoires" is not a hockey shoe (first run, 2026-10-27).
+ */
+export const isHockeyShoePath = (path: string) => /hockey/i.test(path) && SHOE.test(path) && !OTHER_SPORT_PATH.test(path);
+
+/** A hockey shoe: at least one hockey-shoe category path, or "hockeyschoen" in the name; never a stick or accessory. */
 export function isHockeyShoe(categoryTexts: readonly string[], name: string): boolean {
-  const categories = categoryTexts.join(' | ');
-  const all = `${categories} | ${name}`;
-  if (!/hockey/i.test(all)) return false;
-  if (NOT_A_HOCKEY_SHOE.test(all)) return false;
-  return SHOE.test(categories) || /hockeyschoen|hockey\s*shoe/i.test(name);
+  if (/hockeystick|\bstick\b/i.test(name)) return false;
+  if (NOT_A_HOCKEY_SHOE.test(name)) return false;
+  const shoePaths = categoryTexts.filter(isHockeyShoePath);
+  if (shoePaths.some((path) => NOT_A_HOCKEY_SHOE.test(path))) return false;
+  return shoePaths.length > 0 || /hockeyschoen|hockey\s*shoe/i.test(name);
 }
 
+/** Field or indoor, from the hockey-shoe paths only (other paths may say "indoor" for volleyball). */
 export function shoeDiscipline(categoryTexts: readonly string[], name: string): ShoeDiscipline {
-  if (categoryTexts.some((text) => INDOOR.test(text)) || INDOOR.test(name)) return 'zaal';
-  if (categoryTexts.some((text) => /hockey/i.test(text)) || /hockey/i.test(name)) return 'veld';
+  const shoePaths = categoryTexts.filter(isHockeyShoePath);
+  const hockeyShoe = shoePaths.length > 0 || /hockey/i.test(name);
+  if (shoePaths.some((path) => INDOOR.test(path)) || (hockeyShoe && INDOOR.test(name))) return 'zaal';
+  if (shoePaths.length > 0 || /hockeyschoen|hockey\s*shoe/i.test(name)) return 'veld';
   return 'onbekend';
 }
+
+/** EAN-8/13 and GTIN-14 codes in a text; leading zeros of a GTIN-14 are dropped so it equals the EAN-13. */
+export const eansIn = (text: string) =>
+  [...new Set((text.match(/\d{8,14}/g) ?? []).map((code) => code.replace(/^0+(?=\d{13}$)/, '')))];
 
 type Draft = ShoeModel & { categorySet: Set<string>; sizeSet: Set<string> };
 
@@ -80,17 +98,18 @@ function finish(drafts: Iterable<Draft>): ShoeModel[] {
   return [...drafts]
     .map(({ categorySet, sizeSet, ...model }) => ({
       ...model,
-      categories: [...categorySet].sort(),
+      categories: [...categorySet].filter(isHockeyShoePath).sort(),
       sizes: [...sizeSet].sort(bySize),
       discipline: shoeDiscipline([...categorySet], model.name),
+      eans: [...model.eans].sort(),
     }))
     .sort((a, b) => a.url.localeCompare(b.url));
 }
 
 function addVariant(
   drafts: Map<string, Draft>,
-  base: Omit<ShoeModel, 'discipline' | 'sizes' | 'categories' | 'priceMin' | 'priceMax' | 'inStock' | 'hasEan'>,
-  variant: { price: number; size: string | null; inStock: boolean; ean: boolean; categories: readonly string[] },
+  base: Omit<ShoeModel, 'discipline' | 'sizes' | 'categories' | 'priceMin' | 'priceMax' | 'inStock' | 'eans'>,
+  variant: { price: number; size: string | null; inStock: boolean; eans: readonly string[]; categories: readonly string[] },
 ): void {
   let draft = drafts.get(base.url);
   if (!draft) {
@@ -99,7 +118,7 @@ function addVariant(
       discipline: 'onbekend',
       sizes: [],
       categories: [],
-      hasEan: false,
+      eans: [],
       priceMin: variant.price,
       priceMax: variant.price,
       inStock: false,
@@ -113,7 +132,7 @@ function addVariant(
   draft.priceMin = Math.min(draft.priceMin, variant.price);
   draft.priceMax = Math.max(draft.priceMax, variant.price);
   draft.inStock ||= variant.inStock;
-  draft.hasEan ||= variant.ean;
+  for (const ean of variant.eans) if (!draft.eans.includes(ean)) draft.eans.push(ean);
   draft.junior ||= base.junior;
 }
 
@@ -136,7 +155,7 @@ export function parsePassaShoes(xml: string): ShoeModel[] {
         price: record.price,
         size: normalShoeSize(prop('size')[0]),
         inStock: prop('availability')[0] === 'in stock' && Number(prop('stock')[0] ?? '0') > 0,
-        ean: Boolean(prop('EAN')[0]),
+        eans: eansIn(prop('EAN').join(' ')),
         categories,
       },
     );
@@ -187,7 +206,7 @@ export class PlutoShoeCollector {
         price,
         size: plutoSize(row),
         inStock: plutoInStock(row),
-        ean: /\d{8,14}/.test(`${row.ean ?? ''} ${row.product_GTIN ?? ''}`),
+        eans: eansIn(`${row.ean ?? ''} ${row.product_GTIN ?? ''}`),
         categories,
       },
     );
@@ -238,7 +257,7 @@ export function summarizeShoes(models: readonly ShoeModel[]): ShoeSummary {
     zaal: models.filter((m) => m.discipline === 'zaal').length,
     onbekend: models.filter((m) => m.discipline === 'onbekend').length,
     junior: models.filter((m) => m.junior).length,
-    withEan: models.filter((m) => m.hasEan).length,
+    withEan: models.filter((m) => m.eans.length > 0).length,
     brands: countBy(models.map((m) => m.brand || 'onbekend')).map(({ key, count }) => ({ brand: key, models: count })),
     price: prices.length
       ? {
@@ -253,10 +272,8 @@ export function summarizeShoes(models: readonly ShoeModel[]): ShoeSummary {
   };
 }
 
-const normal = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-
-/** Models sold by both shops, compared on brand and name (rough: no EAN or model year). */
+/** Models of shop B that shop A also sells: same EAN for at least one size. */
 export function shoeOverlap(a: readonly ShoeModel[], b: readonly ShoeModel[]): number {
-  const keys = new Set(a.map((m) => `${normal(m.brand)}|${normal(m.name).replace(normal(m.brand), '').trim()}`));
-  return b.filter((m) => keys.has(`${normal(m.brand)}|${normal(m.name).replace(normal(m.brand), '').trim()}`)).length;
+  const eans = new Set(a.flatMap((m) => m.eans));
+  return b.filter((m) => m.eans.some((ean) => eans.has(ean))).length;
 }
