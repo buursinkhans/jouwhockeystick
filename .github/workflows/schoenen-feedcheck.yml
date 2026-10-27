@@ -1,0 +1,44 @@
+# Hockey shoes in the partner feeds (read-only; step 2 of the /hockeyschoenen
+# plan, issue #100). Counts the hockey shoes in the PassaHockey and Plutosport
+# feeds and writes the report to one GitHub issue. Never opens a pull request
+# and never changes the site.
+# Started by hand via Actions → "Schoenen in de feeds" → Run workflow.
+name: Schoenen in de feeds
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Feeds lezen
+        env:
+          # Contains an API key: only the script reads it, it never prints it.
+          AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
+        run: npm run --silent shoes:feed-check -- report.md
+        continue-on-error: true
+      - name: Rapport in issue zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -s report.md ] || printf '# Schoenen in de feeds: meting mislukt\n\nZie de log van de workflow.\n' > report.md
+          gh label create schoenen-feed --color 1846A3 --description "Hockeyschoenen in de partnerfeeds" --force
+          number=$(gh issue list --label schoenen-feed --state open --json number --jq '.[0].number')
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file report.md
+            gh issue comment "$number" --body "Meting opnieuw gedraaid op $(date -u +%F)."
+          else
+            gh issue create --title "Hockeyschoenen in de partnerfeeds" --label schoenen-feed --body-file report.md
+          fi
