@@ -39,6 +39,7 @@ import { indianMaharadjaArcticWoodIndoor } from './products/indian-maharadja-arc
 import { tk3ControlBowJuniorIndoor } from './products/tk-3-control-bow-junior-indoor';
 import { adidasYoungstar102627 } from './products/adidas-youngstar-10-2627';
 import { graysImpulseGtJunior } from './products/grays-impulse-gt-junior';
+import { braboOgeezPinkAquaJuniorIndoor } from './products/brabo-ogeez-pink-aqua-junior-indoor';
 import { braboOgeezSnowleopardJunior } from './products/brabo-ogeez-snowleopard-junior';
 import { osakaProTourGf20Junior } from './products/osaka-pro-tour-gf-20-junior';
 import { tkMaxiJunior } from './products/tk-maxi-junior';
@@ -190,6 +191,7 @@ const ALL_PRODUCTS: Product[] = [
   scoop48Indoor,
   indianMaharadjaYukiNeonNightHoutJunior,
   indianMaharadjaYukiTangyTwistHoutJunior,
+  braboOgeezPinkAquaJuniorIndoor,
 ];
 
 /**
