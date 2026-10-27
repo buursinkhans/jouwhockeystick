@@ -1447,3 +1447,13 @@ Babysticks (18 inch) en keepersticks slaan we over.
 **Plan:** issue #100 (schoenenwijzer, 5 tot 8 artikelen, aparte schoenencatalogus, meetpunten na 3 maanden).
 
 **Bewust niet:** nog geen code, geen DNS, geen wijziging aan de stickwijzer, adviesscore of `ruleSetVersion`, en de Marktverkenner nog niet uitgebreid (pas als de sectie doorgaat).
+
+## 2026-10-27 — Schoenen in de feeds: eenmalige controle (stap 2 plan /hockeyschoenen)
+
+**Wat:** een script en een handmatige workflow (`scripts/shoe-feed-check.ts`, `.github/workflows/schoenen-feedcheck.yml`, Actions → "Schoenen in de feeds") tellen de hockeyschoenen in de PassaHockey-feed (TradeTracker) en de Plutosport-feed (Awin). Per winkel: aantal modellen, veld/zaal, junior, merken, prijsbereik en mediaan van wat op voorraad is, aandeel met EAN, en de categorieteksten waarop het filter heeft geselecteerd. Het rapport komt in één issue (label `schoenen-feed`). Plan: #100.
+
+**Hoe:** de logica staat los in `src/catalog/shoeFeed.ts`, met tests. Hij gebruikt de bestaande feedlezers (`parseRecord` uit `passaFeed.ts` is daarvoor geëxporteerd). Een schoen is een product met "hockey" in categorie of naam en "schoen/shoe" in de categorie (of "hockeyschoen" in de naam), zonder sokken, inlegzolen, handschoenen, keeper- of ijshockeyspullen.
+
+**Beveiliging:** de Plutosport-feed-URL bevat een API-sleutel en komt alleen uit het secret `AWIN_PLUTOSPORT_FEED_URL`; het script print hem nooit.
+
+**Bewust niet:** geen schoenen in de catalogus of op de site, geen wijziging aan de stickfilters (`isPlayerStick`, `isHockeyStickRow`, `marketScan.ts`), de adviesscore of de privacytekst. bol.com wordt nog niet gemeten.
