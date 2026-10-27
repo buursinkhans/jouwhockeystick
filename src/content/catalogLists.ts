@@ -5,5 +5,5 @@
  * (decision log 2026-10-24).
  */
 export function splitListNote(checked: number, imported: number): string {
-  return `Hieronder staan de ${checked} sticks die we met de hand hebben gecontroleerd. De ${imported} sticks uit het aanbod van PassaHockey laad je met de knop onder de lijst.`;
+  return `Hieronder staan de ${checked} sticks die we met de hand hebben gecontroleerd. De ${imported} sticks uit het aanbod van PassaHockey en Plutosport laad je met de knop onder de lijst.`;
 }

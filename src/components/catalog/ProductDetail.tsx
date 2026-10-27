@@ -106,6 +106,8 @@ export function ProductDetail({ product }: { product: Product }) {
           notSoldAtBol={!isSoldAtBol(product)}
           passaSportsOnly={isPassaSportsOnly(product)}
           alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
+
+          alsoAtPlutosport={product.plutosportProductUrl !== undefined}
         />
       </div>
       <PartnerLinkNote />
@@ -118,6 +120,8 @@ export function ProductDetail({ product }: { product: Product }) {
           notSoldAtBol={!isSoldAtBol(product)}
           bolUnchecked={isBolUnchecked(product)}
           passaSportsProductUrl={product.passaSportsProductUrl}
+
+          plutosportProductUrl={product.plutosportProductUrl}
           placement="productpagina"
         />
         <ButtonLink

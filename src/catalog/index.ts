@@ -1,8 +1,11 @@
 import { getDiscipline } from './discipline';
 import type { Brand, Discipline, Product } from './types';
 import { PASSAHOCKEY_PRODUCTS } from './imported/passahockey';
+import { PLUTOSPORT_PRODUCTS } from './imported/plutosport';
 import { PASSAHOCKEY_LIVE_PRICES } from './imported/passaPrices';
 import { withLivePrice } from './livePrice';
+import { withPlutosport } from './offers';
+import { PLUTOSPORT_MATCHES } from './offers/matches';
 
 export { getDiscipline };
 import { graysJb6Composite } from './products/grays-jb6-composite';
@@ -228,6 +231,11 @@ export function getImportedProducts(): readonly Product[] {
   return PASSAHOCKEY_PRODUCTS;
 }
 
+/** Sticks imported in bulk from the Plutosport feed that PassaHockey does not sell (generated). */
+export function getPlutosportImportedProducts(): readonly Product[] {
+  return PLUTOSPORT_PRODUCTS;
+}
+
 /** True for a stick from the bulk feed import: noindex page, not in the sitemap or articles. */
 export function isFeedImport(product: Product): boolean {
   return product.feedImport !== undefined;
@@ -242,17 +250,32 @@ export type ProductQuery = {
   includeImported?: boolean;
 };
 
-/** Curated sticks, with the current PassaHockey price where the shop sells them. */
+/**
+ * Curated sticks, with the current PassaHockey price where the shop sells
+ * them and the Plutosport page where the feed match is 'zeker'.
+ */
 const CURATED_WITH_LIVE_PRICES: Product[] = ALL_PRODUCTS.map((product) =>
-  withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
+  withPlutosport(
+    withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
+    PLUTOSPORT_MATCHES,
+  ),
 );
+
+/**
+ * Imported sticks: PassaHockey's (with the Plutosport page where the feed
+ * match is 'zeker'), then the Plutosport sticks that PassaHockey does not sell.
+ */
+const IMPORTED_WITH_OFFERS: Product[] = [
+  ...PASSAHOCKEY_PRODUCTS.map((product) => withPlutosport(product, PLUTOSPORT_MATCHES)),
+  ...PLUTOSPORT_PRODUCTS,
+];
 
 export function getAllProducts(
   now: Date = new Date(),
   { includeImported = false }: ProductQuery = {},
 ): Product[] {
   const products = includeImported
-    ? [...CURATED_WITH_LIVE_PRICES, ...PASSAHOCKEY_PRODUCTS]
+    ? [...CURATED_WITH_LIVE_PRICES, ...IMPORTED_WITH_OFFERS]
     : CURATED_WITH_LIVE_PRICES;
   return products.filter((product) => isProductActive(product, now));
 }

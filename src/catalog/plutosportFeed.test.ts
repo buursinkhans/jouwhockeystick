@@ -8,9 +8,11 @@ import {
   overlapSummary,
   sameBrand,
   seasonYear,
+  sizeFromArticleNumber,
   type CatalogStick,
   type OverlapRow,
   type PlutoStickModel,
+  yearFromArticleCode,
 } from './plutosportFeed';
 
 function row(overrides: Partial<CsvRow> = {}): CsvRow {
@@ -36,6 +38,7 @@ function row(overrides: Partial<CsvRow> = {}): CsvRow {
 function model(overrides: Partial<PlutoStickModel> = {}): PlutoStickModel {
   return {
     key: 'parent:P1',
+    description: '',
     name: 'Grays JB12+ Jumbow Hockeystick 2025/26',
     brand: 'Grays',
     modelText: '',
@@ -113,6 +116,29 @@ describe('collectSticks', () => {
     });
   });
 
+  it('keeps only product pages on plutosport.nl (the English feed can bring in other domains)', () => {
+    const models = collectSticks([
+      row(),
+      row({ parent_product_id: 'P2', merchant_deep_link: 'https://www.plutosport.com/grays-jb12-plus' }),
+      row({ parent_product_id: 'P3', merchant_deep_link: 'https://www.plutosport.de/grays-jb12-plus' }),
+    ]);
+    expect(models.map((m) => m.key)).toEqual(['page:https://www.plutosport.nl/grays-jb12-plus']);
+  });
+
+  it('drops English names of accessories too', () => {
+    for (const product_name of ['Grays Hockey Shin Guards', 'Grays Hockey Gloves', 'Grays Stick Cover', 'Adidas Hockey Shoes']) {
+      expect(isHockeyStickRow(row({ product_name, merchant_product_category_path: 'Hockey > Sticks' })), product_name).toBe(false);
+    }
+  });
+
+  it('groups by product page, also when every length has its own parent_product_id', () => {
+    const models = collectSticks([
+      row({ parent_product_id: 'P1', 'Fashion:size': '36.5' }),
+      row({ parent_product_id: 'P2', 'Fashion:size': '37.5', merchant_deep_link: 'https://www.plutosport.nl/grays-jb12-plus?size=37.5' }),
+    ]);
+    expect(models).toHaveLength(1);
+  });
+
   it('groups by product page when parent_product_id is missing', () => {
     const models = collectSticks([
       row({ parent_product_id: '', 'Fashion:size': '36.5' }),
@@ -140,6 +166,22 @@ describe('helpers', () => {
     expect(seasonYear('Osaka Pro Tour 40 2.0')).toBeNull();
   });
 
+  it('reads the length from Plutosport article numbers', () => {
+    expect(sizeFromArticleNumber('10221001_36 1/2')).toBe('36,5');
+    expect(sizeFromArticleNumber('10221065-JR_31')).toBe('31');
+    expect(sizeFromArticleNumber('10201041_18')).toBe('18');
+    expect(sizeFromArticleNumber('STK00415_37.5')).toBe('37,5');
+    expect(sizeFromArticleNumber('315-65002-000')).toBeNull();
+    expect(sizeFromArticleNumber('ABC_XL')).toBeNull();
+    expect(sizeFromArticleNumber('ABC_95')).toBeNull();
+    expect(sizeFromArticleNumber(undefined)).toBeNull();
+    const [m] = collectSticks([
+      row({ 'Fashion:size': undefined, merchant_product_id: '10221001_36 1/2' }),
+      row({ 'Fashion:size': undefined, merchant_product_id: '10221001_37 1/2', in_stock: '0', stock_quantity: '0' }),
+    ]);
+    expect(m).toMatchObject({ sizes: ['36,5', '37,5'], sizesInStock: ['36,5'] });
+  });
+
   it('normalises lengths and brand names', () => {
     expect(normalSize('36.5')).toBe('36,5');
     expect(normalSize('36,5 inch')).toBe('36,5');
@@ -158,6 +200,21 @@ describe('matchStick', () => {
     expect(result).toMatchObject({ level: 'zeker', method: 'ean' });
   });
 
+  it('doubts an EAN match when Plutosport calls it senior and we call it junior', () => {
+    const osaka = stick({ slug: 'osaka-probow-gf-indoor-junior', brand: 'Osaka', name: 'Osaka Probow GF Indoor Junior', discipline: 'zaal', eans: ['8719'] });
+    const result = matchStick(osaka, [model({ brand: 'Osaka', name: 'Osaka Pro Bow GF Indoor Hockeystick Senior', discipline: 'zaal', eans: ['8719'] })]);
+    expect(result).toMatchObject({ level: 'twijfel', method: 'ean' });
+  });
+
+  it('reads the year from The Indian Maharadja article code in the page name', () => {
+    expect(yearFromArticleCode('https://www.plutosport.nl/the-indian-maharadja-blade-10-hockeystick-senior-10231006', 'The Indian Maharadja')).toBe(2023);
+    expect(yearFromArticleCode('https://www.plutosport.nl/the-indian-maharadja-red-hockeystick-junior-10221065-jr', 'The Indian Maharadja')).toBe(2022);
+    expect(yearFromArticleCode('https://www.plutosport.nl/osaka-pro-bow-25-10231006', 'Osaka')).toBeNull();
+    const blade = stick({ slug: 'indian-maharadja-blade-10', brand: 'The Indian Maharadja', name: 'The Indian Maharadja Blade 10', bow: undefined, modelYear: 2025 });
+    const old = model({ brand: 'The Indian Maharadja', name: 'The Indian Maharadja Blade 10 Hockeystick Senior', url: 'https://www.plutosport.nl/the-indian-maharadja-blade-10-hockeystick-senior-10231006' });
+    expect(matchStick(blade, [old]).note).toContain('2023');
+  });
+
   it('is sure on brand, model, bow and year written differently ("JB 12+" vs "JB12+ Jumbow 2025/26")', () => {
     expect(matchStick(stick(), [model()])).toMatchObject({ level: 'zeker', method: 'naam' });
   });
@@ -174,6 +231,12 @@ describe('matchStick', () => {
     expect(tt.note).toContain('tt');
     const db = stick({ slug: 'grays-db10-composite', name: 'Grays DB 10 Composite', bow: 'dynabow' });
     expect(matchStick(db, [model({ name: 'Grays DB10+ Dynabow Hockeystick 2025/26' })]).level).toBe('twijfel');
+  });
+
+  it('knows a youth stick by its lengths when "Junior" is not in our name', () => {
+    const youngstar = stick({ slug: 'adidas-youngstar-9', brand: 'adidas', name: 'adidas Youngstar .9 Hockeystick', bow: undefined, modelYear: undefined, junior: true });
+    const result = matchStick(youngstar, [model({ brand: 'Adidas', name: 'Adidas Youngstar .9 Wood Hockeystick Junior', junior: true })]);
+    expect(result.level).toBe('twijfel');
   });
 
   it('never matches junior with senior', () => {
@@ -199,6 +262,14 @@ describe('matchStick', () => {
     expect(matchStick(adidas, [model({ ...plain, specText: 'Bow: Low Bow | Carbon: 60%' })]).level).toBe('zeker');
     expect(matchStick(adidas, [model({ ...plain, specText: 'Bow: Mid Bow' })]).level).toBe('geen');
     expect(matchStick(adidas, [model({ ...plain, specText: 'Kies uit Low Bow of Mid Bow' })]).level).toBe('twijfel');
+  });
+
+  it('marks an older collection of our stick, so it is never imported next to ours', () => {
+    const sword = stick({ slug: 'indian-maharadja-sword-20-lowbow-10261014', brand: 'The Indian Maharadja', name: 'Indian Maharadja Sword 20 LowBow', bow: undefined, modelYear: 2026 });
+    const result = matchStick(sword, [
+      model({ key: 'old', brand: 'The Indian Maharadja', name: 'The Indian Maharadja Sword 20 Hockeystick Senior', url: 'https://www.plutosport.nl/the-indian-maharadja-sword-20-hockeystick-senior-10251020' }),
+    ]);
+    expect(result).toMatchObject({ level: 'geen', olderCollectionKeys: ['old'] });
   });
 
   it('doubts when the year is missing on one side', () => {

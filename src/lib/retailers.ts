@@ -1,6 +1,6 @@
 import type { Brand } from '@/catalog/types';
 
-export type RetailerId = 'bolcom' | 'passasports';
+export type RetailerId = 'bolcom' | 'passasports' | 'plutosport';
 
 /** Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert. */
 export type RetailerPlacement =
@@ -83,6 +83,55 @@ export function passaSportsTrackingUrl(
 }
 
 /**
+ * Plutosport NL affiliate programme via Awin. Not secrets: both IDs are part
+ * of every tracking link.
+ */
+export const PLUTOSPORT_AWIN = {
+  advertiserId: '8342',
+  publisherId: '3132918',
+} as const;
+
+/** Product pages only: no search, category or other pages, no query string. */
+export function isPlutosportProductPage(url: URL): boolean {
+  return (
+    /^(www\.)?plutosport\.nl$/i.test(url.hostname) &&
+    url.protocol === 'https:' &&
+    url.search === '' &&
+    url.pathname.length > 1 &&
+    !/^\/(catalogsearch|zoeken|search|klantenservice|checkout|customer)(\/|$)/i.test(url.pathname)
+  );
+}
+
+/**
+ * Wraps a Plutosport product page in an Awin deep link (cread.php). The
+ * place on our site goes in `clickref`, which Awin documents for cread.php
+ * links and reports back per click. We do not use the feed's pclick.php link:
+ * Awin's documentation does not say that clickref works there (decision log
+ * 2026-10-27). Awin does not accept "&", "#" or "+" in a clickref.
+ */
+export function plutosportTrackingUrl(
+  productUrl: string,
+  placement: string,
+): string | null {
+  let target: URL;
+  try {
+    target = new URL(productUrl);
+  } catch {
+    return null;
+  }
+  if (!isPlutosportProductPage(target)) {
+    return null;
+  }
+  const params = new URLSearchParams({
+    awinmid: PLUTOSPORT_AWIN.advertiserId,
+    awinaffid: PLUTOSPORT_AWIN.publisherId,
+    clickref: placement.replace(/[&#+]/g, '-'),
+    ued: target.toString(),
+  });
+  return `https://www.awin1.com/cread.php?${params.toString()}`;
+}
+
+/**
  * Shipping for one stick, from the shop's public delivery terms, until a feed
  * states it (docs/spec/prijsvergelijking.md §7.1). `costEur: null` means
  * unknown, and the site then says so.
@@ -157,5 +206,12 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
     // Only direct product links: we never send people to a PassaSports search.
     getUrl: ({ placement, productUrl }) =>
       productUrl ? passaSportsTrackingUrl(productUrl, placement) : null,
+  },
+  plutosport: {
+    id: 'plutosport',
+    label: 'Plutosport',
+    // Only direct product links, like PassaHockey: never a Plutosport search.
+    getUrl: ({ placement, productUrl }) =>
+      productUrl ? plutosportTrackingUrl(productUrl, placement) : null,
   },
 };

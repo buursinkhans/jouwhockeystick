@@ -29,11 +29,23 @@ jobs:
           # Contains an API key: only the script reads it, it never prints it.
           AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
         run: |
-          if ! npm run --silent plutosport:feed -- report.md 2> error.txt; then
-            { printf '# Plutosport-feed: meting mislukt\n\n'; cat error.txt; } > report.md
+          if ! npm run --silent plutosport:feed -- report.md --write-matches --write-import 2> error.txt; then
+            # The script writes its own report when the feed is too small; otherwise only the error.
+            [ -s report.md ] || { printf '# Plutosport-feed: meting mislukt\n\n'; cat error.txt; } > report.md
             exit 1
           fi
         continue-on-error: true
+      - name: Volledige stickslijst bewaren
+        if: hashFiles('report-sticks.md') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: plutosport-sticks
+          path: |
+            report-sticks.md
+            report-koppelingen.md
+            src/catalog/offers/matches.ts
+            src/catalog/imported/plutosport.ts
+          retention-days: 14
       - name: Rapport in issue zetten
         env:
           GH_TOKEN: ${{ github.token }}

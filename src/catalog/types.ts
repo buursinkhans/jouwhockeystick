@@ -126,13 +126,23 @@ export const productSchema = z.object({
     .startsWith('https://www.passasports.nl/')
     .optional(),
   /**
+   * Plutosport product page (Awin). Not written in the product files: the
+   * catalog adds it from src/catalog/offers/matches.ts, where only 'zeker'
+   * matches from the Plutosport feed are kept.
+   */
+  plutosportProductUrl: z
+    .string()
+    .url()
+    .startsWith('https://www.plutosport.nl/')
+    .optional(),
+  /**
    * Set for sticks imported in bulk from a partner's product feed instead of
    * curated one by one. Their specs come from the feed only; their pages are
    * noindex, stay out of the sitemap and articles, and bol.com availability
    * is unknown until checked. Removed once a stick is enriched by hand.
    */
   feedImport: z
-    .object({ feed: z.literal('passahockey'), importedAt: z.string() })
+    .object({ feed: z.enum(['passahockey', 'plutosport']), importedAt: z.string() })
     .optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),

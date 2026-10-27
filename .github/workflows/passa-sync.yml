@@ -45,23 +45,34 @@ jobs:
         if: steps.open.outputs.open == '0'
         run: npm run --silent passa:import -- "$RUNNER_TEMP/import.md"
 
+      # Plutosport shop buttons ('zeker' matches) and the Plutosport sticks that
+      # PassaHockey does not sell (src/catalog/imported/plutosport.ts) in the
+      # same weekly PR, so they cost no extra deploy (docs/spec/prijsvergelijking.md
+      # §4, option A). A failing Awin download leaves both as they were.
+      - name: Plutosport-koppelingen en -import bijwerken
+        if: steps.open.outputs.open == '0'
+        continue-on-error: true
+        env:
+          AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
+        run: npm run --silent plutosport:feed -- "$RUNNER_TEMP/pluto.md" --write-matches --write-import
+
       - name: Pull request openen
         if: steps.open.outputs.open == '0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           trap 'echo "::error::Pull request openen mislukt bij: $BASH_COMMAND"' ERR
-          if [ -z "$(git status --porcelain src/catalog/imported)" ]; then echo "Geen wijzigingen."; exit 0; fi
-          other=$(git status --porcelain | awk '{print $2}' | grep -v '^src/catalog/imported/' || true)
-          if [ -n "$other" ]; then echo "::error::Wijzigingen buiten src/catalog/imported/: $other"; exit 1; fi
+          if [ -z "$(git status --porcelain src/catalog/imported src/catalog/offers)" ]; then echo "Geen wijzigingen."; exit 0; fi
+          other=$(git status --porcelain | awk '{print $2}' | grep -v -e '^src/catalog/imported/' -e '^src/catalog/offers/' || true)
+          if [ -n "$other" ]; then echo "::error::Wijzigingen buiten src/catalog/imported/ en src/catalog/offers/: $other"; exit 1; fi
           branch="catalogus/passa-sync-$(date -u +%Y-%m-%d)"
           git config user.name "PassaHockey-sync"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add src/catalog/imported
+          git add src/catalog/imported src/catalog/offers
           git commit -m "Catalogus: PassaHockey-feed bijgewerkt ($(date -u +%F))"
           git push origin "$branch"
-          { cat "$RUNNER_TEMP/import.md"; printf '\n\n_Gemaakt door de wekelijkse PassaHockey-sync. Merge om prijzen, voorraad en nieuwe sticks live te zetten; deze workflow merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
+          { cat "$RUNNER_TEMP/import.md"; if [ -f "$RUNNER_TEMP/pluto-koppelingen.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/pluto-koppelingen.md"; fi; printf '\n\n_Gemaakt door de wekelijkse PassaHockey-sync. Merge om prijzen, voorraad en nieuwe sticks live te zetten; deze workflow merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
           gh pr create --base main --head "$branch" --title "Catalogus: PassaHockey-feed bijgewerkt ($(date -u +%F))" --body-file "$RUNNER_TEMP/body.md"
           # PRs opened with the workflow token do not trigger other workflows; start the quality check explicitly.
           gh workflow run ci.yml --ref "$branch"

@@ -123,11 +123,11 @@ export function estimateLevel(carbon: number | null, price: number, junior = fal
   return 'beginner';
 }
 
-function estimatePositions(bow: BowProfile | null): Position[] {
+export function estimatePositions(bow: BowProfile | null): Position[] {
   return bow === 'extreme_lowbow' ? ['middenvelder', 'aanvaller'] : ['verdediger', 'middenvelder', 'aanvaller'];
 }
 
-const BOW_LABEL: Record<BowProfile, string> = {
+export const BOW_LABEL: Record<BowProfile, string> = {
   extreme_lowbow: 'extreme low bow',
   lowbow: 'low bow',
   midbow: 'mid bow',
@@ -136,7 +136,7 @@ const BOW_LABEL: Record<BowProfile, string> = {
   dynabow: 'dynabow',
 };
 
-const BOW_STRENGTH: Record<BowProfile, string> = {
+export const BOW_STRENGTH: Record<BowProfile, string> = {
   extreme_lowbow:
     'Extra lage kromming: een logische richting voor technische spelers die veel liften, slepen en sleeppushen',
   lowbow: 'Lage kromming: kan passen bij spelers die de bal willen liften en slepen',

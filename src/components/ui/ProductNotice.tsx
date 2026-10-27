@@ -10,21 +10,31 @@ export function ProductNotice({
   notSoldAtBol = false,
   passaSportsOnly = false,
   alsoAtPassaSports = false,
+  alsoAtPlutosport = false,
 }: {
   /** bol.com does not sell this model, so there is no price to check there. */
   notSoldAtBol?: boolean;
   /** The price is a PassaSports snapshot; the shop link goes there. */
   passaSportsOnly?: boolean;
-  /** Sold at bol.com and at PassaSports. */
+  /** Sold at PassaSports (with or without bol.com). */
   alsoAtPassaSports?: boolean;
+  /** Sold at Plutosport (with or without bol.com). */
+  alsoAtPlutosport?: boolean;
 }) {
+  const shops = [
+    ...(notSoldAtBol ? [] : ['bol.com']),
+    ...(alsoAtPassaSports || passaSportsOnly ? ['PassaHockey'] : []),
+    ...(alsoAtPlutosport ? ['Plutosport'] : []),
+  ];
+  const where =
+    shops.length <= 1
+      ? (shops[0] ?? '')
+      : `${shops.slice(0, -1).join(', ')} of ${shops[shops.length - 1]}`;
   const text =
-    notSoldAtBol && passaSportsOnly
-      ? 'Richtprijs van PassaHockey · bekijk actuele prijs bij PassaHockey'
-      : notSoldAtBol
-        ? 'Richtprijs · niet verkrijgbaar bij bol.com'
-        : alsoAtPassaSports
-          ? 'Richtprijs · bekijk actuele prijs bij bol.com of PassaHockey'
-          : 'Richtprijs · bekijk actuele prijs bij bol.com';
+    shops.length === 0
+      ? 'Richtprijs · niet verkrijgbaar bij bol.com'
+      : notSoldAtBol && passaSportsOnly
+        ? `Richtprijs van PassaHockey · bekijk actuele prijs bij ${where}`
+        : `Richtprijs · bekijk actuele prijs bij ${where}`;
   return <p className="text-xs text-lijngrijs">{text}</p>;
 }
