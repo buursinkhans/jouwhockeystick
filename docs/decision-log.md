@@ -1519,3 +1519,15 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 - **Onder elk blok:** één regel "Op prijs incl. verzending · gelezen op [datum] · Partnerlink, de winkel is de verkoper" en de uitklapper "Hoe we vergelijken".
 
 **Meten:** ongewijzigd. `retailer_click` met `position`, `offerCount` en `priceShown`; `offer_block_view` op de stickpagina en in het advies, niet op de honderden kaarten in de catalogus.
+
+## 2026-10-28 — PostHog: events ongecomprimeerd door de proxy (herstel)
+
+**Probleem:** sinds de PostHog-proxy op ons eigen domein live ging (`/p8k`, 2026-10-26), kwamen er geen events meer binnen in PostHog. De browser verstuurde ze wel, maar PostHog weigerde elk event met HTTP 400 ("invalid GZIP data", "invalid UTF8 in request payload").
+
+**Oorzaak:** posthog-js verstuurt events gecomprimeerd (gzip). De proxy (Next.js-rewrites op Netlify) beschadigt zo'n binaire inhoud onderweg; gewone JSON komt wel heel aan. Getoetst met een testbericht met een ongeldige sleutel, dus zonder data in ons project: via de proxy geeft gzip 400 en JSON 200; rechtstreeks naar PostHog werken beide. Het laden van de scripts en de configuratie via `/p8k` werkte wel; daarom leek de koppeling in orde.
+
+**Herstel:** `disable_compression: true` in de PostHog-instellingen. De instellingen staan nu in `POSTHOG_INIT_OPTIONS` (`src/lib/analytics/posthog.ts`), met een test. Getoetst in een echte browser op de lokale build: de events vertrekken nu als JSON. Events zijn klein, dus ongecomprimeerd versturen kost weinig.
+
+**Verloren:** de PostHog-events van 26 oktober (na de livegang van de proxy) tot het moment dat deze wijziging live staat. Simple Analytics liep gewoon door en heeft de bezoekersaantallen over die dagen.
+
+**Later te overwegen:** de proxy als Netlify-proxyregel (`netlify.toml`, op CDN-niveau) in plaats van een Next.js-rewrite, zodat ook gecomprimeerde verzoeken heel blijven. Niet nu: dat is op de beveiligde preview niet te testen.

@@ -22,3 +22,29 @@ export const POSTHOG_UI_HOST = 'https://eu.posthog.com';
 export function isTrackedHost(hostname: string): boolean {
   return hostname !== 'localhost' && hostname !== '127.0.0.1';
 }
+
+/**
+ * Options for posthog.init (src/instrumentation-client.ts). Cookieless: no
+ * cookies, no local or session storage, no session recordings and no person
+ * profiles, so the site needs no consent banner (privacy statement).
+ *
+ * `disable_compression`: the proxy on our domain (Next.js rewrites on
+ * Netlify) damages gzip request bodies, so every event since the proxy went
+ * live on 2026-10-26 was refused with HTTP 400 ("invalid GZIP data"); plain
+ * JSON passes intact (decision log 2026-10-28). Events are small, so sending
+ * them uncompressed costs little.
+ */
+export const POSTHOG_INIT_OPTIONS = {
+  api_host: POSTHOG_API_HOST,
+  ui_host: POSTHOG_UI_HOST,
+  cookieless_mode: 'always',
+  person_profiles: 'identified_only',
+  capture_pageview: 'history_change',
+  capture_pageleave: true,
+  autocapture: true,
+  enable_heatmaps: true,
+  capture_dead_clicks: true,
+  disable_session_recording: true,
+  disable_surveys: true,
+  disable_compression: true,
+} as const;
