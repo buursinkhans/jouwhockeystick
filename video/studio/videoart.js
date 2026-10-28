@@ -8,7 +8,8 @@
  */
 /* Animates a video script (scenes) on a canvas in the jouwhockeystick.nl house style:
    a YouTube Short / Reel / TikTok (1080 x 1920) and a YouTube video (1920 x 1080),
-   with our own music, plus a YouTube thumbnail (1280 x 720). Records to MP4 in the browser. */
+   with our own music, plus a YouTube thumbnail (1280 x 720). Records to MP4 (H.264) in the browser:
+   with MediaRecorder where it can, else with WebCodecs and the small MP4 writer below. */
 window.VideoArt = (() => {
   const C = { veld: '#1846A3', inkt: '#0D1B2E', bal: '#FF8A1F', krijt: '#EEF3FA', grijs: '#5B6B7F', nl: '#C9D6F0', wit: '#FFFFFF' };
   const FD = '"Bricolage Grotesque", "Segoe UI", sans-serif';
@@ -886,10 +887,8 @@ window.VideoArt = (() => {
     const list = ['video/mp4;codecs=avc1.640028,mp4a.40.2', 'video/mp4;codecs=avc1.4d002a,mp4a.40.2', 'video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4', 'video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'];
     return list.find((m) => { try { return MediaRecorder.isTypeSupported(m); } catch (e) { return false; } }) || null;
   }
-  /** Records the video in real time. Resolves {blob, ext, mime}. */
-  async function record(video, fmt, onProgress) {
-    const mime = pickMime();
-    if (!mime) throw Object.assign(new Error('Deze browser kan geen video opnemen.'), { code: 'no_recorder' });
+  /** Records the video in real time with MediaRecorder. Resolves {blob, ext, mime, h264}. */
+  async function recordRealtime(video, fmt, onProgress, mime) {
     const canvas = document.createElement('canvas');
     const ctx = setupCanvas(canvas, fmt);
     const tl = timeline(video, fmt);
@@ -925,6 +924,221 @@ window.VideoArt = (() => {
     return { blob: new Blob(chunks, { type }), ext: type === 'video/mp4' ? 'mp4' : 'webm', mime: type, h264: /avc1/.test(mime) };
   }
 
+  /* ---------- MP4 (H.264) without MediaRecorder: WebCodecs plus a small MP4 writer ----------
+     Browsers whose MediaRecorder only makes WebM (Firefox, the Claude desktop app, some
+     Chromium builds) can often still encode H.264 frame by frame with WebCodecs. */
+  const AVC_CODECS = ['avc1.640028', 'avc1.4d0028', 'avc1.4d002a', 'avc1.640032'];
+  const SAMPLE_RATE = 48000;
+  async function pickVideoEncoder(fmt) {
+    if (typeof VideoEncoder === 'undefined' || typeof VideoFrame === 'undefined') return null;
+    const F = FORMATS[fmt];
+    for (const codec of AVC_CODECS) {
+      const cfg = { codec, width: F.W, height: F.H, bitrate: fmt === 'short' ? 10_000_000 : 12_000_000, framerate: FPS, avc: { format: 'avc' } };
+      try { if ((await VideoEncoder.isConfigSupported(cfg)).supported) return cfg; } catch (e) { /* try the next profile */ }
+    }
+    return null;
+  }
+  async function pickAudioEncoder() {
+    if (typeof AudioEncoder === 'undefined' || typeof AudioData === 'undefined') return null;
+    for (const codec of ['mp4a.40.2', 'opus']) {
+      const cfg = { codec, sampleRate: SAMPLE_RATE, numberOfChannels: 2, bitrate: 160_000 };
+      try { if ((await AudioEncoder.isConfigSupported(cfg)).supported) return cfg; } catch (e) { /* try the next codec */ }
+    }
+    return null;
+  }
+  const toBytes = (d) => (d instanceof ArrayBuffer ? new Uint8Array(d.slice(0)) : new Uint8Array(d.buffer.slice(d.byteOffset, d.byteOffset + d.byteLength)));
+  const later = () => new Promise((r) => setTimeout(r, 0));
+
+  /** Draws every frame and encodes it (faster than real time), mixes the sound offline, writes an MP4. */
+  async function recordWebCodecs(video, fmt, onProgress, vcfg) {
+    const F = FORMATS[fmt];
+    const tl = timeline(video, fmt);
+    const frames = Math.max(1, Math.round(tl.total * FPS));
+    let failure = null;
+
+    // Sound: the same mix as playback, rendered offline.
+    let audio = null;
+    const acfg = await pickAudioEncoder();
+    if (acfg && typeof OfflineAudioContext !== 'undefined') {
+      const oac = new OfflineAudioContext(2, Math.ceil((frames / FPS) * SAMPLE_RATE), SAMPLE_RATE);
+      const buffers = await decode(oac);
+      schedule(oac, buffers, oac.destination, video, fmt, tl, 0);
+      const rendered = await oac.startRendering();
+      const samples = [];
+      let desc = null;
+      const ae = new AudioEncoder({
+        output: (chunk, meta) => {
+          const data = new Uint8Array(chunk.byteLength); chunk.copyTo(data);
+          samples.push({ data, ts: chunk.timestamp, dur: chunk.duration });
+          if (!desc && meta && meta.decoderConfig && meta.decoderConfig.description) desc = toBytes(meta.decoderConfig.description);
+        },
+        error: (e) => { failure = e; },
+      });
+      ae.configure(acfg);
+      const N = 4800;
+      const L = rendered.getChannelData(0), R = rendered.getChannelData(1);
+      for (let off = 0; off < rendered.length; off += N) {
+        const n = Math.min(N, rendered.length - off);
+        const data = new Float32Array(n * 2);
+        data.set(L.subarray(off, off + n), 0); data.set(R.subarray(off, off + n), n);
+        const ad = new AudioData({ format: 'f32-planar', sampleRate: SAMPLE_RATE, numberOfFrames: n, numberOfChannels: 2, timestamp: Math.round((off * 1e6) / SAMPLE_RATE), data });
+        ae.encode(ad); ad.close();
+      }
+      await ae.flush(); ae.close();
+      if (failure) throw failure;
+      audio = { codec: acfg.codec === 'opus' ? 'opus' : 'aac', samples, desc, sampleRate: SAMPLE_RATE, channels: 2 };
+    }
+
+    // Picture: frame by frame.
+    const canvas = document.createElement('canvas');
+    const ctx = setupCanvas(canvas, fmt);
+    const vs = [];
+    let vdesc = null;
+    const ve = new VideoEncoder({
+      output: (chunk, meta) => {
+        const data = new Uint8Array(chunk.byteLength); chunk.copyTo(data);
+        vs.push({ data, key: chunk.type === 'key', ts: chunk.timestamp });
+        if (!vdesc && meta && meta.decoderConfig && meta.decoderConfig.description) vdesc = toBytes(meta.decoderConfig.description);
+      },
+      error: (e) => { failure = e; },
+    });
+    ve.configure(vcfg);
+    for (let i = 0; i < frames; i++) {
+      if (failure) throw failure;
+      drawFrame(ctx, video, fmt, tl, Math.min(i / FPS, tl.total - 0.001));
+      const vf = new VideoFrame(canvas, { timestamp: Math.round((i * 1e6) / FPS), duration: Math.round(1e6 / FPS) });
+      ve.encode(vf, { keyFrame: i % (FPS * 2) === 0 });
+      vf.close();
+      while (ve.encodeQueueSize > 6 && !failure) await new Promise((r) => setTimeout(r, 4));
+      if (i % 6 === 0) { if (onProgress) onProgress(i / frames); await later(); }
+    }
+    await ve.flush(); ve.close();
+    if (failure) throw failure;
+    if (!vdesc || !vs.length) throw Object.assign(new Error('De encoder gaf geen H.264-gegevens.'), { code: 'no_avc' });
+    vs.sort((a, b) => a.ts - b.ts);
+    if (onProgress) onProgress(1);
+    const bytes = writeMp4({ width: F.W, height: F.H, fps: FPS, samples: vs, desc: vdesc }, audio);
+    return { blob: new Blob([bytes], { type: 'video/mp4' }), ext: 'mp4', mime: 'video/mp4', h264: true, sound: audio ? audio.codec : null };
+  }
+
+  /* A minimal ISO-BMFF writer: one H.264 track and optionally one AAC or Opus track,
+     moov before mdat (fast start), one chunk per track. */
+  function writeMp4(v, a) {
+    const enc = new TextEncoder();
+    const cat = (parts) => {
+      const list = parts.flat(Infinity).filter(Boolean);
+      const out = new Uint8Array(list.reduce((n, p) => n + p.length, 0));
+      let o = 0; for (const p of list) { out.set(p, o); o += p.length; }
+      return out;
+    };
+    const u8 = (x) => Uint8Array.of(x & 255);
+    const u16 = (x) => Uint8Array.of((x >>> 8) & 255, x & 255);
+    const u24 = (x) => Uint8Array.of((x >>> 16) & 255, (x >>> 8) & 255, x & 255);
+    const u32 = (x) => Uint8Array.of((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255);
+    const zeros = (n) => new Uint8Array(n);
+    const box = (type, ...parts) => { const body = cat(parts); return cat([u32(body.length + 8), enc.encode(type), body]); };
+    const full = (type, version, flags, ...parts) => box(type, u8(version), u24(flags), ...parts);
+    const MATRIX = [0x10000, 0, 0, 0, 0x10000, 0, 0, 0, 0x40000000].map(u32);
+    const MOVIE_TS = 1000;
+    const desc = (tag, body) => cat([u8(tag), u8(body.length), body]); // bodies here stay under 128 bytes
+
+    // Per-track sample tables.
+    const vts = v.fps * 1000; // timescale; every frame lasts 1000 ticks
+    const tracks = [{
+      id: 1, kind: 'vide', timescale: vts,
+      sizes: v.samples.map((s) => s.data.length),
+      durs: v.samples.map(() => 1000),
+      keys: v.samples.map((s, i) => (s.key ? i + 1 : 0)).filter(Boolean),
+      data: v.samples.map((s) => s.data),
+      entry: box('avc1', zeros(6), u16(1), u16(0), u16(0), zeros(12), u16(v.width), u16(v.height),
+        u32(0x00480000), u32(0x00480000), u32(0), u16(1), zeros(32), u16(0x0018), u16(0xffff),
+        box('avcC', v.desc), box('pasp', u32(1), u32(1))),
+    }];
+    if (a && a.samples.length) {
+      const sr = a.sampleRate;
+      const frameLen = a.codec === 'aac' ? 1024 : 960;
+      const durs = a.samples.map((s, i) => {
+        const next = a.samples[i + 1];
+        const us = next ? next.ts - s.ts : s.dur;
+        return Math.max(1, Math.round(((us || (frameLen * 1e6) / sr) * sr) / 1e6));
+      });
+      let codecBox;
+      if (a.codec === 'aac') {
+        const asc = a.desc && a.desc.length ? a.desc : Uint8Array.of(0x11, 0x90); // AAC-LC, 48 kHz, stereo
+        codecBox = full('esds', 0, 0, desc(0x03, cat([u16(0), u8(0),
+          desc(0x04, cat([u8(0x40), u8(0x15), u24(0), u32(160000), u32(160000), desc(0x05, asc)])),
+          desc(0x06, u8(0x02))])));
+      } else {
+        let preSkip = 312;
+        if (a.desc && a.desc.length >= 12 && new TextDecoder().decode(a.desc.subarray(0, 8)) === 'OpusHead') preSkip = a.desc[10] | (a.desc[11] << 8);
+        codecBox = box('dOps', u8(0), u8(a.channels), u16(preSkip), u32(sr), u16(0), u8(0));
+      }
+      tracks.push({
+        id: 2, kind: 'soun', timescale: sr,
+        sizes: a.samples.map((s) => s.data.length), durs, keys: null, data: a.samples.map((s) => s.data),
+        entry: box(a.codec === 'aac' ? 'mp4a' : 'Opus', zeros(6), u16(1), zeros(8), u16(a.channels), u16(16), u16(0), u16(0), u32(sr * 65536 >>> 0), codecBox),
+      });
+    }
+    for (const t of tracks) {
+      t.duration = t.durs.reduce((n, d) => n + d, 0);
+      t.movieDuration = Math.round((t.duration * MOVIE_TS) / t.timescale);
+      t.bytes = t.sizes.reduce((n, d) => n + d, 0);
+    }
+    const stts = (durs) => {
+      const runs = [];
+      for (const d of durs) { const last = runs[runs.length - 1]; if (last && last[1] === d) last[0]++; else runs.push([1, d]); }
+      return full('stts', 0, 0, u32(runs.length), runs.map(([n, d]) => [u32(n), u32(d)]));
+    };
+    const trak = (t, offset) => box('trak',
+      full('tkhd', 0, 3, u32(0), u32(0), u32(t.id), u32(0), u32(t.movieDuration), zeros(8), u16(0), u16(0),
+        u16(t.kind === 'soun' ? 0x0100 : 0), u16(0), MATRIX,
+        u32(t.kind === 'vide' ? v.width * 65536 : 0), u32(t.kind === 'vide' ? v.height * 65536 : 0)),
+      box('mdia',
+        full('mdhd', 0, 0, u32(0), u32(0), u32(t.timescale), u32(t.duration), u16(0x55c4), u16(0)),
+        full('hdlr', 0, 0, u32(0), enc.encode(t.kind), zeros(12), enc.encode(t.kind === 'vide' ? 'VideoHandler' : 'SoundHandler'), u8(0)),
+        box('minf',
+          t.kind === 'vide' ? full('vmhd', 0, 1, zeros(8)) : full('smhd', 0, 0, u16(0), u16(0)),
+          box('dinf', full('dref', 0, 0, u32(1), full('url ', 0, 1))),
+          box('stbl',
+            full('stsd', 0, 0, u32(1), t.entry),
+            stts(t.durs),
+            t.keys ? full('stss', 0, 0, u32(t.keys.length), t.keys.map(u32)) : null,
+            full('stsc', 0, 0, u32(1), u32(1), u32(t.sizes.length), u32(1)),
+            full('stsz', 0, 0, u32(0), u32(t.sizes.length), t.sizes.map(u32)),
+            full('stco', 0, 0, u32(1), u32(offset))))));
+    const ftyp = box('ftyp', enc.encode('isom'), u32(0x200), enc.encode('isomiso2avc1mp41'));
+    const moov = (offsets) => box('moov',
+      full('mvhd', 0, 0, u32(0), u32(0), u32(MOVIE_TS), u32(Math.max(...tracks.map((t) => t.movieDuration))),
+        u32(0x10000), u16(0x0100), zeros(10), MATRIX, zeros(24), u32(tracks.length + 1)),
+      tracks.map((t, i) => trak(t, offsets[i])));
+    const size = moov(tracks.map(() => 0)).length; // the offsets do not change the size
+    const mdatStart = ftyp.length + size + 8;
+    const offsets = []; let o = mdatStart;
+    for (const t of tracks) { offsets.push(o); o += t.bytes; }
+    const mdatBody = tracks.reduce((n, t) => n + t.bytes, 0);
+    return cat([ftyp, moov(offsets), u32(mdatBody + 8), enc.encode('mdat'), tracks.map((t) => t.data)]);
+  }
+
+  /** True when this browser can make a video file at all (MP4 or, as a last resort, WebM). */
+  function canRecord() { return !!pickMime() || typeof VideoEncoder !== 'undefined'; }
+
+  /**
+   * Makes the video file. Prefers H.264-MP4 (what Instagram, TikTok and YouTube accept):
+   * MediaRecorder when it can record H.264, else WebCodecs; WebM only when neither works.
+   * Resolves {blob, ext, mime, h264}.
+   */
+  async function record(video, fmt, onProgress) {
+    const mime = pickMime();
+    if (mime && /avc1/.test(mime)) return recordRealtime(video, fmt, onProgress, mime);
+    const vcfg = await pickVideoEncoder(fmt);
+    if (vcfg) {
+      try { return await recordWebCodecs(video, fmt, onProgress, vcfg); }
+      catch (e) { if (!mime) throw e; /* fall back to the recorder below */ }
+    }
+    if (!mime) throw Object.assign(new Error('Deze browser kan geen video opnemen.'), { code: 'no_recorder' });
+    return recordRealtime(video, fmt, onProgress, mime);
+  }
+
   const fontsReady = (async () => {
     try {
       await Promise.race([
@@ -934,7 +1148,7 @@ window.VideoArt = (() => {
     } catch (e) { /* fallback faces */ }
   })();
 
-  const canH264 = () => /avc1/.test(pickMime() || '');
+  const canH264 = () => /avc1/.test(pickMime() || '') || typeof VideoEncoder !== 'undefined';
   // cues, SOUNDS and VOLUME are used by video/studio/render.mjs to mix the same sound in ffmpeg.
-  return { FORMATS, FPS, canH264, timeline, drawFrame, cues, SOUNDS, VOLUME, still, play, record, thumbnail, thumbnailShort, pickMime, fontsReady, loadRaw, duration: (v, fmt) => timeline(v, fmt).total };
+  return { FORMATS, FPS, canH264, timeline, drawFrame, cues, SOUNDS, VOLUME, still, play, record, canRecord, writeMp4, thumbnail, thumbnailShort, pickMime, fontsReady, loadRaw, duration: (v, fmt) => timeline(v, fmt).total };
 })();
