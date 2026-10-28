@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
+  aiAssistant,
+  aiLandingRows,
   formatReport,
   groupSources,
+  sourceLabel,
   routeFunnel,
   largestDropOff,
   questionDropOff,
@@ -152,7 +155,7 @@ describe('groupSources', () => {
     expect(grouped).toContainEqual({ key: 'Google', now: 3, before: 0 });
     expect(grouped).toContainEqual({ key: 'Social: tiktok', now: 3, before: 0 });
     expect(grouped).toContainEqual({ key: 'Social: instagram', now: 2, before: 0 });
-    expect(grouped).toContainEqual({ key: 'AI-assistent', now: 1, before: 0 });
+    expect(grouped).toContainEqual({ key: 'AI-assistent: ChatGPT', now: 1, before: 0 });
     expect(grouped).toContainEqual({ key: 'Andere site: hockey.nl', now: 1, before: 0 });
   });
 
@@ -198,5 +201,33 @@ describe('formatReport', () => {
   it('escapes pipes in table cells', () => {
     const report = formatReport(data({ clicksByProduct: [c('Grays | DB 5', 3)] }), ORDER);
     expect(report).toContain('Grays \\| DB 5');
+  });
+});
+
+describe('AI assistants', () => {
+  it('recognises ChatGPT by its utm_source as well as by its referrer (decision log 2026-10-28)', () => {
+    expect(sourceLabel('utm:chatgpt.com')).toBe('AI-assistent: ChatGPT');
+    expect(sourceLabel('chatgpt.com')).toBe('AI-assistent: ChatGPT');
+    expect(sourceLabel('www.perplexity.ai')).toBe('AI-assistent: Perplexity');
+    expect(sourceLabel('copilot.microsoft.com')).toBe('AI-assistent: Copilot');
+    expect(sourceLabel('gemini.google.com')).toBe('AI-assistent: Gemini');
+    expect(sourceLabel('claude.ai')).toBe('AI-assistent: Claude');
+    expect(sourceLabel('www.google.nl')).toBe('Google');
+    expect(sourceLabel('utm:nieuwsbrief')).toBe('Campagne: nieuwsbrief');
+    expect(aiAssistant('openaigrants.nl')).toBeNull();
+  });
+
+  it('lists AI visitors per assistant and landing page, and nothing else', () => {
+    const rows = aiLandingRows([
+      { key: 'chatgpt.com → /kennis/hockeystick-lengte-tabel', now: 2, before: 1 },
+      { key: 'utm:chatgpt.com → /kennis/hockeystick-lengte-tabel', now: 3, before: 0 },
+      { key: 'www.perplexity.ai → /sticks', now: 1, before: 0 },
+      { key: 'www.google.nl → /sticks', now: 9, before: 9 },
+      { key: '', now: 4, before: 4 },
+    ]);
+    expect(rows).toEqual([
+      { key: 'ChatGPT → /kennis/hockeystick-lengte-tabel', now: 5, before: 1 },
+      { key: 'Perplexity → /sticks', now: 1, before: 0 },
+    ]);
   });
 });

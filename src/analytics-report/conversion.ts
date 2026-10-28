@@ -46,6 +46,8 @@ export type ConversionData = {
   pageviewsByPage: Count[];
   /** Visitors (per day) per "utm:<source>" or referring domain ("$direct" when none). */
   visitorsByReferrer: Count[];
+  /** Visitors (per day) from an AI assistant per "source → landing page"; optional. */
+  aiLandingPages?: Count[];
   /** `home_block_click` per "block → target". */
   homeBlocks: Count[];
   deadClicksByPage: Count[];
@@ -86,9 +88,26 @@ const UTM_SOURCE_ALIASES: Record<string, string> = {
   yt: 'youtube',
 };
 
+/**
+ * The AI assistant behind a referring domain or utm_source, or null.
+ * ChatGPT tags its links with `utm_source=chatgpt.com`, Perplexity and
+ * Copilot often send a referrer; both count (decision log 2026-10-28).
+ */
+export function aiAssistant(source: string): string | null {
+  const s = source.toLowerCase().replace(/^utm:/, '');
+  if (/(^|\.)chatgpt\.com$|(^|\.)openai\.com$|^chatgpt(\.com)?$/.test(s)) return 'ChatGPT';
+  if (/(^|\.)perplexity\.ai$|^perplexity/.test(s)) return 'Perplexity';
+  if (/(^|\.)copilot\.microsoft\.com$|^copilot/.test(s)) return 'Copilot';
+  if (/(^|\.)gemini\.google\.com$|^gemini/.test(s)) return 'Gemini';
+  if (/(^|\.)claude\.ai$|^claude/.test(s)) return 'Claude';
+  return null;
+}
+
 /** Groups a referring domain (or "utm:<source>") into a channel a person recognises. */
 export function sourceLabel(key: string): string {
   const k = key.toLowerCase();
+  const ai = aiAssistant(k);
+  if (ai) return `AI-assistent: ${ai}`;
   if (k.startsWith('utm:')) {
     const raw = k.slice(4);
     const source = UTM_SOURCE_ALIASES[raw] ?? raw;
@@ -102,8 +121,39 @@ export function sourceLabel(key: string): string {
   if (/(^|\.)(instagram|facebook|tiktok|youtube|linkedin|pinterest|twitter|whatsapp)\.|(^|\.)(t\.co|x\.com)$/.test(k)) {
     return `Social: ${k.replace(/^(www|m|l|lm)\./, '').split('.')[0]}`;
   }
-  if (/(^|\.)(chatgpt|openai|perplexity|copilot|gemini)\.|(^|\.)claude\.ai$/.test(k)) return 'AI-assistent';
   return `Andere site: ${k.replace(/^www\./, '')}`;
+}
+
+/**
+ * The AI-assistant rows of the report: per assistant and landing page
+ * ("ChatGPT → /kennis/hockeystick-lengte-tabel"). The raw keys are
+ * "utm-or-referrer → path"; keys of other sources are left out.
+ */
+export function aiLandingRows(counts: readonly Count[]): Count[] {
+  const totals = new Map<string, Count>();
+  for (const count of counts) {
+    const [source = '', path = ''] = count.key.split(' → ');
+    const ai = aiAssistant(source);
+    if (!ai) continue;
+    const key = `${ai} → ${path || '/'}`;
+    const total = totals.get(key) ?? { key, now: 0, before: 0 };
+    total.now += count.now;
+    total.before += count.before;
+    totals.set(key, total);
+  }
+  return [...totals.values()].sort((a, b) => b.now - a.now || b.before - a.before);
+}
+
+function aiSection(counts: readonly Count[]): string[] {
+  const rows = aiLandingRows(counts);
+  if (rows.length === 0) {
+    return ['Geen bezoekers via een AI-assistent in deze twee weken (of PostHog kon het niet beantwoorden).'];
+  }
+  return [
+    'Per assistent en de pagina waarop de bezoeker binnenkwam, per bezoeker per dag:',
+    '',
+    table(['Assistent → pagina', 'Deze week', 'Vorige week', 'Verschil'], countRows(rows)),
+  ];
 }
 
 /** Adds up the counts per channel, largest first. */
@@ -426,6 +476,10 @@ export function formatReport(
     table(['Bron', 'Deze week', 'Vorige week', 'Verschil'], countRows(groupSources(data.visitorsByReferrer))),
     '',
     '_Per bezoeker per dag. "Direct" is ook een link uit WhatsApp, e-mail of een app, en je eigen bezoeken: die geven geen bron mee._',
+    '',
+    '### Uit AI-assistenten (ChatGPT, Perplexity, Copilot, Gemini, Claude)',
+    '',
+    ...aiSection(data.aiLandingPages ?? []),
     '',
     '## Homepage-blokken',
     '',

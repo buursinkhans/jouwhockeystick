@@ -213,6 +213,13 @@ async function main() {
       `if(coalesce(toString(properties.utm_source), '') != '', concat('utm:', toString(properties.utm_source)), coalesce(toString(properties.$referring_domain), '$direct'))`,
       'visitors',
     ).catch(() => []),
+    // Landing pages of visitors from an AI assistant ("source → path"); the report keeps only AI sources.
+    aiLandingPages: await breakdown(
+      config,
+      '$pageview',
+      `if(match(lower(concat(coalesce(toString(properties.utm_source), ''), ' ', coalesce(toString(properties.$referring_domain), ''))), 'chatgpt|openai|perplexity|copilot|gemini|claude'), concat(if(coalesce(toString(properties.utm_source), '') != '', concat('utm:', toString(properties.utm_source)), toString(properties.$referring_domain)), ' → ', toString(properties.$pathname)), '')`,
+      'visitors',
+    ).catch(() => []),
     homeBlocks: await breakdown(
       config,
       'home_block_click',
