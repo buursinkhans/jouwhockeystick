@@ -151,7 +151,7 @@ export default function MethodiekPage() {
           href="/kennis/waar-koop-je-een-hockeystick"
           className="font-semibold text-veld hover:underline"
         >
-          Het verschil tussen bol.com en PassaHockey
+          Het verschil tussen bol.com, PassaHockey en Plutosport
         </Link>
       </p>
 
