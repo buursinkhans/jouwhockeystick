@@ -1,9 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import nextConfig from '../../../next.config';
 import { PRIVACY } from '@/content/privacy';
-import { POSTHOG_API_HOST, POSTHOG_PROXY_PATH } from './posthog';
+import { POSTHOG_API_HOST, POSTHOG_INIT_OPTIONS, POSTHOG_PROXY_PATH } from './posthog';
 
 describe('PostHog reverse proxy (decision log 2026-10-26)', () => {
+  it('sends events uncompressed: the proxy damages gzip bodies (decision log 2026-10-28)', () => {
+    expect(POSTHOG_INIT_OPTIONS.api_host).toBe(POSTHOG_PROXY_PATH);
+    expect(POSTHOG_INIT_OPTIONS.disable_compression).toBe(true);
+    expect(POSTHOG_INIT_OPTIONS.cookieless_mode).toBe('always');
+    expect(POSTHOG_INIT_OPTIONS.disable_session_recording).toBe(true);
+  });
+
   it('sends the SDK to our own path, rewritten to the EU hosts', async () => {
     expect(POSTHOG_API_HOST).toBe(POSTHOG_PROXY_PATH);
     const rewrites = await nextConfig.rewrites!();
