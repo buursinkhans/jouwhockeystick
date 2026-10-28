@@ -5,6 +5,7 @@ import {
   formatReport,
   groupSources,
   sourceLabel,
+  sourcesWithAiVisits,
   routeFunnel,
   largestDropOff,
   questionDropOff,
@@ -215,6 +216,49 @@ describe('AI assistants', () => {
     expect(sourceLabel('www.google.nl')).toBe('Google');
     expect(sourceLabel('utm:nieuwsbrief')).toBe('Campagne: nieuwsbrief');
     expect(aiAssistant('openaigrants.nl')).toBeNull();
+  });
+
+  it('recognises only exact domains and documented utm values, not keywords', () => {
+    for (const notAi of [
+      'openai-tips.nl',
+      'mychatgpt.example',
+      'chatgpt.com.evil.nl',
+      'news.chatgpt.com',
+      'perplexity.com',
+      'copilot.example.com',
+      'utm:chatgpt',
+      'utm:perplexity',
+      'utm:openai',
+      'utm:copilot',
+      'utm:gemini',
+    ]) {
+      expect(aiAssistant(notAi), notAi).toBeNull();
+    }
+    expect(aiAssistant('ChatGPT.com')).toBe('ChatGPT');
+    expect(aiAssistant('UTM:ChatGPT.com')).toBe('ChatGPT');
+    expect(aiAssistant('chat.openai.com')).toBe('ChatGPT');
+    expect(sourceLabel('utm:perplexity')).toBe('Campagne: perplexity');
+  });
+
+  it('does not count a ChatGPT visitor twice in "Waar bezoekers vandaan komen"', () => {
+    // Per pageview the same visitor shows up under the utm on the first page and the referrer on later pages.
+    const byReferrer = [c('utm:chatgpt.com', 3), c('chatgpt.com', 3), c('www.google.nl', 7), c('$direct', 2)];
+    const visits = [c('utm:chatgpt.com → /kennis/hockeystick-lengte-tabel', 2), c('chatgpt.com → /sticks', 1)];
+    const rows = sourcesWithAiVisits(byReferrer, visits);
+    expect(rows).toContainEqual({ key: 'AI-assistent: ChatGPT', now: 3, before: 0 });
+    expect(rows).toContainEqual({ key: 'Google', now: 7, before: 0 });
+    expect(rows.filter((r) => r.key.startsWith('AI-assistent'))).toHaveLength(1);
+    // Without visit data (PostHog could not answer) the old grouping stays.
+    expect(sourcesWithAiVisits(byReferrer, undefined)).toContainEqual({ key: 'AI-assistent: ChatGPT', now: 6, before: 0 });
+  });
+
+  it('titles the table as landing pages of visits and explains the definition', () => {
+    const report = formatReport(data({ aiLandingPages: [c('utm:chatgpt.com → /kennis/hockeystick-lengte-tabel', 2, 1)] }), ORDER);
+    expect(report).toContain('### Bezoeken uit AI-assistenten, per landingspagina');
+    expect(report).toContain('De landingspagina is de eerste pagina van dat bezoek');
+    expect(report).toContain('| ChatGPT → /kennis/hockeystick-lengte-tabel | 2 | 1 |');
+    expect(formatReport(data({ aiLandingPages: [] }), ORDER)).toContain('Geen bezoeken via een AI-assistent');
+    expect(formatReport(data({ aiLandingPages: undefined }), ORDER)).toContain('PostHog kon deze vraag niet beantwoorden');
   });
 
   it('lists AI visitors per assistant and landing page, and nothing else', () => {
