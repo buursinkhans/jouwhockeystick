@@ -29,14 +29,19 @@ export const ZAAL = {
   /** Search-result title (<title>), aimed at the queries in Search Console; the H1 stays `title`. */
   seoTitle: 'Zaalhockeystick kiezen en kopen: zaalsticks vergeleken',
   navLabel: 'Zaalsticks',
+  /**
+   * "Wekelijks bijgewerkte winkelprijzen": the shop prices come from the
+   * feeds through the weekly sync and disappear after 14 days, so "actueel"
+   * would claim too much (decision log 2026-10-29).
+   */
   metaDescription:
-    'Welke zaalhockeystick past bij jou of je kind? Lengte, bow en budget uitgelegd, met de zaalsticks uit onze catalogus naast elkaar, met richtprijs en bron.',
+    'Zaalhockeystick kiezen of kopen? Lengte, bow en budget uitgelegd, met alle zaalsticks uit onze catalogus naast elkaar en wekelijks bijgewerkte winkelprijzen.',
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-05',
-  updatedAt: '2026-10-23',
+  updatedAt: '2026-10-29',
   /** Answers the main question within the first 80 words. */
   intro:
-    'Een zaalhockeystick kies je net als een veldstick op lengte, niveau en gevoel, maar met het zaalspel in gedachten. In de zaal mag je de bal niet slaan en alleen omhoog spelen bij een schot op doel. Zaalhockey draait daardoor om pushen, balcontrole en snelle acties in een kleine ruimte. Voor de stick zelf gelden volgens de spelregels dezelfde maximale eisen als op het veld; merken ontwerpen zaalsticks wel voor dat andere spel.',
+    'Een zaalhockeystick kies je net als een veldstick op lengte, niveau en gevoel, maar met het zaalspel in gedachten. In de zaal mag je de bal niet slaan en alleen omhoog spelen bij een schot op doel. Zaalhockey draait daardoor om pushen, balcontrole en snelle acties in een kleine ruimte. Voor de stick zelf gelden volgens de spelregels dezelfde maximale eisen als op het veld; merken ontwerpen zaalsticks wel voor dat andere spel. Hieronder vergelijk je alle zaalhockeysticks uit onze catalogus op lengte, bow en prijs, met bij elke stick een link naar de partnerwinkels die hem verkopen.',
   differences: {
     heading: 'Wat is er anders in de zaal?',
     items: [
@@ -111,12 +116,17 @@ export const ZAAL = {
         answer:
           'Ja, dat mag volgens de spelregels. Een aparte zaalstick is een keuze, geen verplichting. Wat je wint en wat je inlevert lees je in [kun je met een veldstick zaalhockeyen?](/kennis/veldstick-zaalhockey).',
       },
+      {
+        question: 'Waar kun je een zaalhockeystick kopen?',
+        answer:
+          'Waar je wilt: in een hockeywinkel, de clubshop of online. Wil je de stick eerst in je handen hebben, dan is een winkel in de buurt handig. Bestel je online, neem dan de modelnaam en de lengte mee, zodat je precies dezelfde stick krijgt. Op de pagina van elke stick zie je welke van onze partnerwinkels hem verkopen; dat zijn partnerlinks en de winkel is de verkoper. Hoe de winkels verschillen in verzendkosten, retourneren en bezorging, lees je in [waar koop je een hockeystick?](/kennis/waar-koop-je-een-hockeystick).',
+      },
     ],
     /** Built from the catalog on the page, so the numbers never go stale. */
     price: {
       question: 'Wat kost een zaalhockeystick?',
       answer: (count: number, min: string, max: string) =>
-        `In onze catalogus staan ${count} zaalsticks met een richtprijs van ${min} tot ${max}. Waar het verschil in zit en wat je voor je budget kunt verwachten, lees je in [wat krijg je voor een klein of ruim budget?](/kennis/zaalstick-budget).`,
+        `In onze catalogus staan ${count} zaalhockeysticks met een richtprijs van ${min} tot ${max}. Op de pagina van elke stick zie je bij welke partnerwinkels hij te koop is en voor welke prijs, inclusief verzendkosten voor zover die bekend zijn; die prijzen werken we wekelijks bij. Waar het verschil in zit en wat je voor je budget kunt verwachten, lees je in [wat krijg je voor een klein of ruim budget?](/kennis/zaalstick-budget).`,
     },
   },
   picks: {
@@ -125,7 +135,7 @@ export const ZAAL = {
       'Per prijsgroep een paar zaalsticks om mee te beginnen, van verschillende merken en steeds met minstens één voor volwassenen. Alle zaalsticks staan verderop.',
     allLink: 'Bekijk alle zaalsticks',
   },
-  catalogHeading: 'Alle zaalsticks in onze catalogus',
+  catalogHeading: 'Alle zaalhockeysticks in onze catalogus',
   stickwijzerNote:
-    'De stickwijzer geeft op dit moment alleen advies voor veldsticks. Voor zaalsticks vergelijk je hieronder zelf, van laag naar hoog in prijs. Bij elke stick staat of een gegeven van het merk komt of van een winkel-listing op bol.com.',
+    'De stickwijzer geeft op dit moment alleen advies voor veldsticks. Voor zaalsticks vergelijk je hieronder zelf, van laag naar hoog in prijs. Op de pagina van elke stick staat waar elk gegeven vandaan komt (het merk of een winkel) en bij welke partnerwinkels hij te koop is.',
 } as const;

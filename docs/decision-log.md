@@ -1571,3 +1571,50 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
     - een testbezoek met `utm_source=chatgpt.com` op /kennis/hockeystick-lengte-tabel (28 oktober, 21:5x UTC, door mij) komt er precies één keer uit. Dat testbezoek staat dus in PostHog.
 
 **Bewust niet:** geen wijziging aan titels, beschrijvingen, canonicals, robots.txt of noindex (bestaande SEO), geen eigen bezoekregistratie van crawlers (dat vraagt een functie op elk verzoek, en die kost Netlify-credits).
+
+## 2026-10-29 — /zaalsticks: tekst voor kiezen, kopen en vergelijken (SEO-groei, nulmeting)
+
+**Aanleiding:** SEO-groeianalyse van /zaalsticks met akkoord van de eigenaar op de voorstellen A t/m F.
+- **Search Console** (28 september t/m 25 oktober): de pagina staat voor haar hoofdzoekwoorden op pagina 2: "zaalhockeystick" op 12,8 met 99 vertoningen, "zaalstick hockey" op 14,0. Het meervoud "zaalhockeysticks" staat veel lager (35,4). De vraag "verschil veldhockey zaalhockey stick" komt binnen op /zaalsticks (23,9) en op /kennis/zaalstick-budget (15,7).
+- **Teksten verouderd sinds "Waar te koop" (2026-10-27):** de beschrijving noemde "richtprijs", de prijsvraag alleen richtprijzen, en de notitie alleen bol.com als bron.
+
+**Wat (alleen tekst; titel, H1, URL, canonical, ankers, productgegevens, winkelknoppen en structured data ongewijzigd, geen FAQPage):**
+- **A. Meta description:** "Zaalhockeystick kiezen of kopen? … met alle zaalsticks uit onze catalogus naast elkaar en wekelijks bijgewerkte winkelprijzen." Er staat bewust "wekelijks bijgewerkt" en niet "actueel": de winkelprijzen komen via de wekelijkse sync en vervallen na 14 dagen.
+- **B. Intro:** één zin erbij over vergelijken en de partnerwinkels, met het meervoud "zaalhockeysticks". Het antwoord blijft in de eerste 80 woorden.
+- **C. Kop van de lijst:** "Alle zaalhockeysticks in onze catalogus". Het anker `#alle-zaalsticks` blijft gelijk.
+- **D. Prijsvraag:** het bereik blijft een richtprijs; erbij staat dat je per stick de prijs bij de partnerwinkels ziet, "inclusief verzendkosten voor zover die bekend zijn" (bij bol.com onder €25 zijn ze onbekend), en dat die wekelijks wordt bijgewerkt.
+- **E. Nieuwe FAQ "Waar kun je een zaalhockeystick kopen?":** geschreven vanuit de bezoeker ("waar je wilt"), met de tip om model en lengte mee te nemen, de partnerlink-vermelding en een link naar het winkelartikel.
+- **F. Notitie bij de lijst:** de bron van een gegeven (merk of winkel) en de partnerwinkels, niet meer alleen bol.com.
+- **Artikel "Waar koop je een hockeystick?":** Plutosport toegevoegd, met verzendkosten, retour (30 dagen, €1,95) en bezorging, nagekeken op plutosport.nl op 29 oktober. De H1 noemt de drie winkels. Zoektitel (nieuw, korter): "Waar koop je een hockeystick? De winkels naast elkaar". Aantallen per winkel en "bij twee of meer winkels" komen uit de catalogus. De partnerlink-uitleg blijft; erbij staat dat de winkels op prijs inclusief bekende verzendkosten staan. URL ongewijzigd. Ook de linktekst op /methodiek noemt nu de drie winkels.
+
+**Aanvulling vóór de merge (review eigenaar):**
+- **Footer:** "Aankopen verlopen via onze partnerwinkels bol.com, PassaHockey en Plutosport; de winkel is de verkoper. Winkelprijzen werken we wekelijks bij en richtprijzen zijn een indicatie: de actuele prijs zie je bij de winkel." De oude tekst noemde alleen bol.com en PassaHockey, en alleen richtprijzen.
+- **`ZAAL.updatedAt` → 2026-10-29.** Die datum bepaalt de zichtbare "bijgewerkt op" (twee keer op de pagina), `dateModified` in de Article-markup en `lastmod` in de sitemap (#116).
+- **Claims getoetst:**
+  - De woensdagsync draaide op 21 en 28 oktober en beide PR's zijn dezelfde dag gemerged. Alle prijsbronnen (bol.com, PassaHockey, Plutosport) staan op 28 oktober.
+  - "Wekelijks bijgewerkt" klopt zolang de wekelijkse sync-PR wordt gemerged. Blijft hij liggen, dan verdwijnt een prijs na 14 dagen vanzelf (`isPriceFresh`) en staat de richtprijs er weer.
+  - De verzendkosten zijn het goedkoopste standaardtarief uit de openbare voorwaarden. Bij bol.com onder €25 zijn ze onbekend en staat dat erbij. Dat dekt "inclusief verzendkosten voor zover die bekend zijn".
+- **Bijgesteld:** de kaarten in de lijst tonen per stick alleen de winkel met de laagste prijs en "Vergelijk alle N winkels"; de complete lijst staat op de stickpagina. Intro, prijsvraag, koop-FAQ en notitie zeggen dat nu zo ("met bij elke stick een link naar de partnerwinkels", "op de pagina van elke stick").
+- **Privacyverklaring:** niet gewijzigd (alleen op akkoord van de eigenaar). Een voorstel staat in PR #117.
+
+**Bewust niet:** geen wijziging aan het budgetartikel. Het is nu de best scorende pagina voor de vraag over het verschil, en het effect van de wijziging van /kennis/veldstick-zaalhockey (2026-10-24) is nog niet meetbaar. Geen nieuwe pagina. Geen andere volgorde van de blokken. De privacytekst noemt Plutosport nog niet; die wordt alleen op opdracht van de eigenaar aangepast.
+
+**Nulmeting (livegang = merge-datum van deze PR):**
+- **Pagina /zaalsticks** (opgave eigenaar uit Search Console): 526 vertoningen, 3 kliks, gemiddelde positie 14,3.
+- **Per zoekwoord** (28 september t/m 25 oktober):
+
+  | Zoekwoord | Positie | Vertoningen | Kliks |
+  |---|---|---|---|
+  | zaalhockeystick | 12,8 | 99 | 0 |
+  | zaalstick hockey | 14,0 | 46 | 0 |
+  | zaalhockeysticks | 35,4 | 38 | 0 |
+  | hockeystick zaalhockey | 25,4 | 32 | 0 |
+  | zaalsticks | 8,4 | 19 | 0 |
+  | zaalhockeystick kopen | 20,0 | 4 | 1 |
+  | verschil veldhockey zaalhockey stick | 23,9 (/zaalsticks), 15,7 (/kennis/zaalstick-budget) | 29 + 6 | 0 |
+
+**Meetplan:** na 4 en na 8 weken, telkens 28 dagen in Search Console met de filter pagina = /zaalsticks.
+- **Per zoekwoord:** de positie en de CTR van de zoekwoorden hierboven, en welke pagina Google kiest voor de vraag over het verschil.
+- **Winkelkliks:** `retailer_click` vanaf /zaalsticks in het conversierapport (PostHog; let op de meetstoring van 26 tot 28 oktober, #113).
+- **Seizoen:** november t/m februari is zaalseizoen, dus vertoningen en kliks stijgen sowieso. Beoordeel vooral de positie en de CTR per zoekwoord, en vergelijk met de seizoenstrend van de site als geheel.
+- **Geen automatisch terugdraaien:** daalt de positie, dan volgt eerst een advies op basis van voldoende gegevens (besluit eigenaar). Een daling van één of twee weken is bij zo weinig vertoningen geen betrouwbaar signaal.
