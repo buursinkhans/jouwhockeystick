@@ -1587,7 +1587,17 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 - **F. Notitie bij de lijst:** de bron van een gegeven (merk of winkel) en de partnerwinkels, niet meer alleen bol.com.
 - **Artikel "Waar koop je een hockeystick?":** Plutosport toegevoegd, met verzendkosten, retour (30 dagen, €1,95) en bezorging, nagekeken op plutosport.nl op 29 oktober. De H1 noemt de drie winkels. Zoektitel (nieuw, korter): "Waar koop je een hockeystick? De winkels naast elkaar". Aantallen per winkel en "bij twee of meer winkels" komen uit de catalogus. De partnerlink-uitleg blijft; erbij staat dat de winkels op prijs inclusief bekende verzendkosten staan. URL ongewijzigd. Ook de linktekst op /methodiek noemt nu de drie winkels.
 
-**Bewust niet:** geen wijziging aan het budgetartikel. Het is nu de best scorende pagina voor de vraag over het verschil, en het effect van de wijziging van /kennis/veldstick-zaalhockey (2026-10-24) is nog niet meetbaar. Geen nieuwe pagina. Geen andere volgorde van de blokken. De footertekst ("Aankopen verlopen via bol.com of PassaHockey") en de privacytekst noemen Plutosport nog niet; de privacytekst alleen op opdracht van de eigenaar.
+**Aanvulling vóór de merge (review eigenaar):**
+- **Footer:** "Aankopen verlopen via onze partnerwinkels bol.com, PassaHockey en Plutosport; de winkel is de verkoper. Winkelprijzen werken we wekelijks bij en richtprijzen zijn een indicatie: de actuele prijs zie je bij de winkel." De oude tekst noemde alleen bol.com en PassaHockey, en alleen richtprijzen.
+- **`ZAAL.updatedAt` → 2026-10-29.** Die datum bepaalt de zichtbare "bijgewerkt op" (twee keer op de pagina), `dateModified` in de Article-markup en `lastmod` in de sitemap (#116).
+- **Claims getoetst:**
+  - De woensdagsync draaide op 21 en 28 oktober en beide PR's zijn dezelfde dag gemerged. Alle prijsbronnen (bol.com, PassaHockey, Plutosport) staan op 28 oktober.
+  - "Wekelijks bijgewerkt" klopt zolang de wekelijkse sync-PR wordt gemerged. Blijft hij liggen, dan verdwijnt een prijs na 14 dagen vanzelf (`isPriceFresh`) en staat de richtprijs er weer.
+  - De verzendkosten zijn het goedkoopste standaardtarief uit de openbare voorwaarden. Bij bol.com onder €25 zijn ze onbekend en staat dat erbij. Dat dekt "inclusief verzendkosten voor zover die bekend zijn".
+- **Bijgesteld:** de kaarten in de lijst tonen per stick alleen de winkel met de laagste prijs en "Vergelijk alle N winkels"; de complete lijst staat op de stickpagina. Intro, prijsvraag, koop-FAQ en notitie zeggen dat nu zo ("met bij elke stick een link naar de partnerwinkels", "op de pagina van elke stick").
+- **Privacyverklaring:** niet gewijzigd (alleen op akkoord van de eigenaar). Een voorstel staat in PR #117.
+
+**Bewust niet:** geen wijziging aan het budgetartikel. Het is nu de best scorende pagina voor de vraag over het verschil, en het effect van de wijziging van /kennis/veldstick-zaalhockey (2026-10-24) is nog niet meetbaar. Geen nieuwe pagina. Geen andere volgorde van de blokken. De privacytekst noemt Plutosport nog niet; die wordt alleen op opdracht van de eigenaar aangepast.
 
 **Nulmeting (livegang = merge-datum van deze PR):**
 - **Pagina /zaalsticks** (opgave eigenaar uit Search Console): 526 vertoningen, 3 kliks, gemiddelde positie 14,3.

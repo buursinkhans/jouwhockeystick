@@ -38,10 +38,10 @@ export const ZAAL = {
     'Zaalhockeystick kiezen of kopen? Lengte, bow en budget uitgelegd, met alle zaalsticks uit onze catalogus naast elkaar en wekelijks bijgewerkte winkelprijzen.',
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-05',
-  updatedAt: '2026-10-23',
+  updatedAt: '2026-10-29',
   /** Answers the main question within the first 80 words. */
   intro:
-    'Een zaalhockeystick kies je net als een veldstick op lengte, niveau en gevoel, maar met het zaalspel in gedachten. In de zaal mag je de bal niet slaan en alleen omhoog spelen bij een schot op doel. Zaalhockey draait daardoor om pushen, balcontrole en snelle acties in een kleine ruimte. Voor de stick zelf gelden volgens de spelregels dezelfde maximale eisen als op het veld; merken ontwerpen zaalsticks wel voor dat andere spel. Hieronder vergelijk je alle zaalhockeysticks uit onze catalogus op lengte, bow en prijs, en zie je per stick bij welke partnerwinkels hij te koop is.',
+    'Een zaalhockeystick kies je net als een veldstick op lengte, niveau en gevoel, maar met het zaalspel in gedachten. In de zaal mag je de bal niet slaan en alleen omhoog spelen bij een schot op doel. Zaalhockey draait daardoor om pushen, balcontrole en snelle acties in een kleine ruimte. Voor de stick zelf gelden volgens de spelregels dezelfde maximale eisen als op het veld; merken ontwerpen zaalsticks wel voor dat andere spel. Hieronder vergelijk je alle zaalhockeysticks uit onze catalogus op lengte, bow en prijs, met bij elke stick een link naar de partnerwinkels die hem verkopen.',
   differences: {
     heading: 'Wat is er anders in de zaal?',
     items: [
@@ -119,14 +119,14 @@ export const ZAAL = {
       {
         question: 'Waar kun je een zaalhockeystick kopen?',
         answer:
-          'Waar je wilt: in een hockeywinkel, de clubshop of online. Wil je de stick eerst in je handen hebben, dan is een winkel in de buurt handig. Bestel je online, neem dan de modelnaam en de lengte mee, zodat je precies dezelfde stick krijgt. Bij de sticks op deze pagina zie je welke van onze partnerwinkels ze verkopen; dat zijn partnerlinks en de winkel is de verkoper. Hoe de winkels verschillen in verzendkosten, retourneren en bezorging, lees je in [waar koop je een hockeystick?](/kennis/waar-koop-je-een-hockeystick).',
+          'Waar je wilt: in een hockeywinkel, de clubshop of online. Wil je de stick eerst in je handen hebben, dan is een winkel in de buurt handig. Bestel je online, neem dan de modelnaam en de lengte mee, zodat je precies dezelfde stick krijgt. Op de pagina van elke stick zie je welke van onze partnerwinkels hem verkopen; dat zijn partnerlinks en de winkel is de verkoper. Hoe de winkels verschillen in verzendkosten, retourneren en bezorging, lees je in [waar koop je een hockeystick?](/kennis/waar-koop-je-een-hockeystick).',
       },
     ],
     /** Built from the catalog on the page, so the numbers never go stale. */
     price: {
       question: 'Wat kost een zaalhockeystick?',
       answer: (count: number, min: string, max: string) =>
-        `In onze catalogus staan ${count} zaalhockeysticks met een richtprijs van ${min} tot ${max}. Bij elke stick zie je bij welke partnerwinkels hij te koop is en voor welke prijs, inclusief verzendkosten voor zover die bekend zijn; die prijzen werken we wekelijks bij. Waar het verschil in zit en wat je voor je budget kunt verwachten, lees je in [wat krijg je voor een klein of ruim budget?](/kennis/zaalstick-budget).`,
+        `In onze catalogus staan ${count} zaalhockeysticks met een richtprijs van ${min} tot ${max}. Op de pagina van elke stick zie je bij welke partnerwinkels hij te koop is en voor welke prijs, inclusief verzendkosten voor zover die bekend zijn; die prijzen werken we wekelijks bij. Waar het verschil in zit en wat je voor je budget kunt verwachten, lees je in [wat krijg je voor een klein of ruim budget?](/kennis/zaalstick-budget).`,
     },
   },
   picks: {
@@ -137,5 +137,5 @@ export const ZAAL = {
   },
   catalogHeading: 'Alle zaalhockeysticks in onze catalogus',
   stickwijzerNote:
-    'De stickwijzer geeft op dit moment alleen advies voor veldsticks. Voor zaalsticks vergelijk je hieronder zelf, van laag naar hoog in prijs. Bij elke stick staat waar een gegeven vandaan komt (het merk of een winkel) en bij welke partnerwinkels hij te koop is.',
+    'De stickwijzer geeft op dit moment alleen advies voor veldsticks. Voor zaalsticks vergelijk je hieronder zelf, van laag naar hoog in prijs. Op de pagina van elke stick staat waar elk gegeven vandaan komt (het merk of een winkel) en bij welke partnerwinkels hij te koop is.',
 } as const;

@@ -51,6 +51,21 @@ describe('/zaalsticks copy (SEO change of 2026-10-29)', () => {
     expect(ZAAL.stickwijzerNote).not.toMatch(/winkel-listing op bol\.com/);
   });
 
+  it('only promises what the stick cards show: the full list of shops is on the stick page', () => {
+    // A card in the list shows the shop with the lowest price and "Vergelijk alle N winkels".
+    for (const text of [ZAAL.intro, ZAAL.stickwijzerNote, ZAAL.faq.price.answer(1, '€1', '€2'), ...ZAAL.faq.items.map((i) => i.answer)]) {
+      expect(text).not.toMatch(/bij elke stick zie je bij welke|per stick bij welke partnerwinkels/i);
+    }
+    expect(ZAAL.stickwijzerNote).toMatch(/Op de pagina van elke stick/);
+  });
+
+  it('shows the change date of this edit, also as dateModified', () => {
+    expect(ZAAL.updatedAt).toBe('2026-10-29');
+    const html = renderToStaticMarkup(ZaalsticksPage());
+    expect(html).toContain('"dateModified":"2026-10-29"');
+    expect(html).toContain('<time dateTime="2026-10-29">2026-10-29</time>');
+  });
+
   it('renders with the same structured data (Article and breadcrumbs, no FAQPage) and the same anchor', () => {
     const html = renderToStaticMarkup(ZaalsticksPage());
     const types = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(
