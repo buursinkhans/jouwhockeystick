@@ -20,6 +20,9 @@ window.VideoArt = (() => {
   const FORMATS = {
     // Shorts, Reels and TikTok cover the bottom and the right edge with buttons.
     short: { W: 1080, H: 1920, pad: 90, top: 250, bottom: 430, right: 160, portrait: true },
+    // Instagram/Facebook Reel: same 9:16 frame, but the profile grid shows only the middle 3:4
+    // (1080 x 1440, y 240-1680). Text, picture and site name stay inside that band.
+    reel: { W: 1080, H: 1920, pad: 90, top: 340, bottom: 440, right: 160, portrait: true, brandY: 262 },
     uitleg: { W: 1920, H: 1080, pad: 130, top: 130, bottom: 190, right: 130, portrait: false },
   };
   const STICK = new Path2D('M58 32 L58 67 C58 82 50 88 40 85');
@@ -671,7 +674,7 @@ window.VideoArt = (() => {
     const fn = SCENES[sc.s.soort] || sceneTekst;
     dark = fn(ctx, F, sc.s, local, sc.i === 0, sc.dur, sfx ? (n, at) => sfx(n, sc.start + at) : null);
     // Brand line: at the top on portrait (the bottom is covered by the app), bottom-left on landscape.
-    if (F.portrait) siteName(ctx, F.pad, 70, 34, dark);
+    if (F.portrait) siteName(ctx, F.pad, F.brandY || 70, 34, dark);
     else siteName(ctx, F.pad, F.H - 105, 30, dark);
     // Progress bar.
     ctx.fillStyle = C.bal; ctx.fillRect(0, 0, F.W * clamp(t / tl.total, 0, 1), 10);
@@ -743,7 +746,8 @@ window.VideoArt = (() => {
   }
 
   /** Vertical thumbnail for a Short (1080 x 1920). YouTube shows Shorts in a 9:16 frame, so everything is centred. */
-  function thumbnailShort(canvas, video) {
+  /** Cover for a Short (default) or, with reel, for a Reel: everything inside the middle 3:4 of the profile grid. */
+  function thumbnailShort(canvas, video, reel = false) {
     const W = 1080, H = 1920;
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
@@ -760,7 +764,8 @@ window.VideoArt = (() => {
     ctx.textBaseline = 'top';
     const b = fitText(ctx, kop, 800, FD, W - 180, 600, 176, 90, 1.02);
     ctx.font = b.font;
-    let y = 400;
+    let y = reel ? 360 : 400;
+    const nameY = reel ? H - 380 : H - 330;
     b.lines.forEach((l, li) => {
       const last = l[l.length - 1];
       const x0 = (W - (last ? last.x + last.width : 0)) / 2;
@@ -794,12 +799,14 @@ window.VideoArt = (() => {
       const dx = X(520 - peak * 480);
       ctx.fillStyle = C.bal; ctx.beginPath(); ctx.arc(dx, limit, 11 * u, 0, Math.PI * 2); ctx.fill();
     } else {
-      logo(ctx, W / 2 - 300, y - 40, 600, C.veld);
+      // The stick fills about 7-92% of its box: keep it clear of the site name below.
+      const s = Math.max(200, Math.min(600, (nameY - 40 - (y - 40)) / 0.92));
+      logo(ctx, W / 2 - s / 2, y - 40, s, C.veld);
     }
     // Site name, centred near the bottom (above where the app puts its buttons).
     ctx.font = `800 46px ${FD}`;
     const nameW = 46 * 1.95 + ctx.measureText('jouwhockeystick.nl').width;
-    siteName(ctx, (W - nameW) / 2, H - 330, 46, true);
+    siteName(ctx, (W - nameW) / 2, nameY, 46, true);
   }
 
   /* ---------- audio ---------- */
@@ -1150,5 +1157,5 @@ window.VideoArt = (() => {
 
   const canH264 = () => /avc1/.test(pickMime() || '') || typeof VideoEncoder !== 'undefined';
   // cues, SOUNDS and VOLUME are used by video/studio/render.mjs to mix the same sound in ffmpeg.
-  return { FORMATS, FPS, canH264, timeline, drawFrame, cues, SOUNDS, VOLUME, still, play, record, canRecord, writeMp4, thumbnail, thumbnailShort, pickMime, fontsReady, loadRaw, duration: (v, fmt) => timeline(v, fmt).total };
+  return { FORMATS, FPS, canH264, timeline, drawFrame, cues, SOUNDS, VOLUME, still, play, record, canRecord, writeMp4, thumbnail, thumbnailShort, thumbnailReel: (canvas, video) => thumbnailShort(canvas, video, true), pickMime, fontsReady, loadRaw, duration: (v, fmt) => timeline(v, fmt).total };
 })();

@@ -8,7 +8,7 @@ Dit handboek geldt voor iedereen die video's maakt voor jouwhockeystick.nl: Clau
 
 Eén onderwerp, *Welke lengte hockeystick?*, in twee vormen:
 
-- **Short** (9:16, ±30 s) voor YouTube Shorts, Instagram en Facebook Reels en TikTok;
+- **Short** (9:16, ±30 s) voor YouTube Shorts en TikTok, en dezelfde video als **Reel** (9:16, opmaak binnen de 3:4-uitsnede) voor Instagram en Facebook;
 - **Uitleg** (16:9, ±1 min) voor YouTube, met een thumbnail.
 
 **Evaluatie na 6 weken** (eind november): sitebezoek met `utm_source=youtube` in PostHog, naast dat uit Instagram en TikTok, en per video weergaven en kijkduur in YouTube Studio. Werkt het, dan komt er een video-brief per week bij (zie §5). Werkt het niet, dan stoppen we. Geen kijkcijferdoel vooraf.
@@ -36,6 +36,7 @@ Eén onderwerp, *Welke lengte hockeystick?*, in twee vormen:
 ## 4. Vorm
 
 - **Short:** 9:16, 1080 × 1920, 20–40 s, met muziek en in een versie *zonder muziek*. Het eerste beeld is de hook: de vraag of verrassing staat vanaf frame 1 volledig in beeld, zonder logo of aanloop (§7a). Laatste scène: "Doe de stickwijzer". Houd de onderste 400 px en de rechterrand vrij van belangrijke tekst (daar staan de knoppen van YouTube, Instagram en TikTok).
+- **Reel:** dezelfde scènes en lengte als de Short, maar Instagram toont een Reel in het profielraster als 3:4 (de middelste 1080 × 1440, y 240–1680). De studio maakt daarom een aparte *Reel* (MP4) waarin tekst, beeld en sitenaam binnen die band blijven, plus een *Cover Reel* (PNG, 1080 × 1920) met de kop binnen dezelfde band. Upload de cover als omslag.
 - **Uitleg:** 16:9, 1920 × 1080, 1–4 min. Mag meer laten zien (bijv. de hele tabel). Hoofdstukken in de beschrijving als elk deel minstens 10 s duurt.
 - **Thumbnail:** de vraag in maximaal 4 woorden plus één beeld, in twee versies: liggend (1280 × 720) voor de YouTube-video en staand (1080 × 1920) voor de Short. YouTube toont een Short in een staand kader en snijdt een liggende thumbnail in het midden af: gebruik bij een Short dus altijd de staande.
 - Per video een bestand `video/teksten/<onderwerp>.md` met titels, beschrijvingen, tags en onderschriften voor elk platform.
@@ -65,7 +66,7 @@ Naast losse video's in `video/` (Remotion, voor onderwerpen met een eigen animat
 - **Script:** 3–5 scènes (lijstje: opening, 3 of 5 `item`-scènes, slot), eerst `opening` (de hook, max 8 woorden), als laatste `slot` (knop naar de stickwijzer plus een volg-oproep), en daartussen `tekst` (max 18 woorden), `lijst` (2–3 punten van max 7 woorden), `tabel` (max 6 rijen) of `item` (nummer, kop, label, 1–3 punten). Woorden tussen `*sterretjes*` in een kop worden oranje. Zonder sterretjes krijgt alleen een vraag een oranje laatste woord. Doel: een Short van 13–20 seconden (lijstje: max 25).
 - **Teksten per kanaal:** YouTube (titel max 70 tekens, beschrijving, 5–8 tags), Short (titel met `#shorts`, korte beschrijving), Reel (onderschrift volgens `docs/instagram.md` §4) en TikTok (volgens `docs/instagram.md` §9). Elke beschrijving en elk onderschrift heeft de partnerlink-vermelding. YouTube linkt via `jouwhockeystick.nl/youtube` en de bronpagina met `utm_source=youtube&utm_medium=video&utm_campaign=<id>`.
 - **Thumbnail:** kop van max 4 woorden, eventueel een oranje label van max 3 woorden. De studio maakt er twee van: *Thumbnail YouTube-video* (1280 × 720) en *Thumbnail Short* (1080 × 1920, alles in het midden). Heeft het script een `bow`-scène, dan staat de tekening van de kromming op de staande thumbnail, anders het stick-logo.
-- **De eigenaar** bekijkt elke video in de Social-studio klikt op *Klaarzetten voor YouTube* en zet daarna op GitHub het label `publiceren`: de Short en (op woensdag) de YouTube-video gaan dan automatisch naar YouTube (§10). De Reel en de TikTok downloadt hij als MP4 en plant hij in het weekend zelf in: Meta Business Suite voor de Reel en TikTok Studio op de computer. Daarna klikt hij per kanaal op *Ingepland*. Na het geplande moment telt de studio het als geplaatst.
+- **De eigenaar** bekijkt elke video in de Social-studio klikt op *Klaarzetten voor YouTube* en zet daarna op GitHub het label `publiceren`: de Short en (op woensdag) de YouTube-video gaan dan automatisch naar YouTube (§10). De Reel (knop *Download Reel voor Instagram*, met *Cover Reel* als omslag) en de TikTok (de Short) downloadt hij als MP4 en plant hij in het weekend zelf in: Meta Business Suite voor de Reel en TikTok Studio op de computer. Daarna klikt hij per kanaal op *Ingepland*. Na het geplande moment telt de studio het als geplaatst.
 
 ## 7a. Hooks, lijstjes en algemene hockey
 
@@ -110,7 +111,7 @@ Sinds 22 oktober 2026 (besluit eigenaar). De eigenaar keurt goed; de rest gaat v
 
 **Wat de eigenaar zelf nog doet**
 - In YouTube Studio de Short koppelen aan de nieuwste YouTube-video (*Gerelateerde video*): dat kan niet via de API.
-- De Reel en de TikTok inplannen (MP4 uit de studio, of uit de run op GitHub: *Artifacts → video-bestanden*).
+- De Reel en de TikTok inplannen: de Reel-MP4 en Reel-cover uit de studio voor Instagram en Facebook, de Short (studio of GitHub-run: *Artifacts → video-bestanden*) voor TikTok.
 - Iets wijzigen na het inplannen: de video verwijderen in YouTube Studio, het kanaal in de studio terugzetten en opnieuw goedkeuren.
 
 **Veiligheid en grenzen**
