@@ -258,10 +258,10 @@ async function validateOnly(config: { key: string; projectId: string }) {
   console.log('## 4. Events per dag (UTC) sinds 2026-10-25, alle hosts en de live host');
   console.log(JSON.stringify(await hogql(
     config,
-    `SELECT toDate(timestamp) AS day, countIf(properties.$host IN (${hosts})) AS live, count() AS alle,
+    `SELECT toDate(timestamp) AS day, countIf(properties.$host IN (${hosts})) AS live, count() AS alle, countIf(coalesce(toString(properties.utm_source), '') != 'chatgpt.com') AS zonder_test, uniq(concat(distinct_id, '|', toString(toDate(timestamp)))) AS bezoekers,
        countIf(event = '$pageview' AND properties.$host IN (${hosts})) AS pageviews_live,
        min(timestamp) AS eerste, max(timestamp) AS laatste
-     FROM events WHERE timestamp >= toDateTime('2026-10-25 00:00:00', 'UTC') GROUP BY day ORDER BY day`,
+     FROM events WHERE timestamp >= toDateTime('2026-10-25 00:00:00', 'UTC') AND timestamp <= now() GROUP BY day ORDER BY day`,
   )));
 }
 
