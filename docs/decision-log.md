@@ -1553,6 +1553,21 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 - **Technical SEO-rapport (wekelijks):** een sectie "AI-crawlers en zoekmachines" (`src/seo/aiCrawlers.ts`). Per crawler: staat robots.txt het toe (RFC 9309), en krijgt hij met zijn eigen user-agent dezelfde HTML als een gewone bezoeker? Een blokkade op IP-adres is zo niet te zien.
 - **Conversierapport (wekelijks):**
   - ChatGPT zet `utm_source=chatgpt.com` in zijn links. Dat telde als "Campagne: chatgpt.com"; nu als "AI-assistent: ChatGPT", net als een verwijzing vanaf chatgpt.com. Zo ook Perplexity, Copilot, Gemini en Claude, elk apart.
-  - Nieuw: de pagina's waarop bezoekers uit AI-assistenten binnenkomen.
+  - **Alleen exacte waarden, geen trefwoorden:**
+    - verwijzende domeinen: chatgpt.com, chat.openai.com, perplexity.ai, www.perplexity.ai, copilot.microsoft.com, gemini.google.com en claude.ai;
+    - `utm_source`: alleen de gedocumenteerde waarde `chatgpt.com`.
+
+    Lijsten `AI_REFERRER_DOMAINS` en `AI_UTM_SOURCES` in `src/analytics-report/conversion.ts`.
+  - **Nieuw: "Bezoeken uit AI-assistenten, per landingspagina".**
+    - Een bezoek is één bezoeker op één dag (PostHog draait cookieloos en kent geen sessies).
+    - De landingspagina is de eerste pageview van die dag, en de bron de `utm_source` of verwijzende site van díe pageview.
+    - Elk bezoek telt één keer.
+
+    Per pageview zou dezelfde ChatGPT-bezoeker dubbel tellen: Next.js laat de referrer bij interne navigatie staan, en de eerste pagina draagt ook de utm. Gemeten: 284 pageviews tegenover 154 bezoeken in twee weken.
+  - **"Waar bezoekers vandaan komen":** de AI-regels komen nu uit dezelfde telling per bezoek, zodat ze niet dubbel tellen. De andere bronnen zijn niet veranderd.
+  - **Gevalideerd tegen PostHog** met een tijdelijke stap op de PR-branch (weer verwijderd):
+    - de query draait zonder fout;
+    - dezelfde opbouw zonder AI-filter geeft echte landingspagina's;
+    - een testbezoek met `utm_source=chatgpt.com` op /kennis/hockeystick-lengte-tabel (28 oktober, 21:5x UTC, door mij) komt er precies één keer uit. Dat testbezoek staat dus in PostHog.
 
 **Bewust niet:** geen wijziging aan titels, beschrijvingen, canonicals, robots.txt of noindex (bestaande SEO), geen eigen bezoekregistratie van crawlers (dat vraagt een functie op elk verzoek, en die kost Netlify-credits).
