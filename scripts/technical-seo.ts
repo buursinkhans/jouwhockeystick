@@ -10,19 +10,26 @@ import {
   type CrawledPage,
   type LinkCheck,
 } from '../src/seo/technicalSeo';
+import {
+  AI_CRAWLERS,
+  formatCrawlerSection,
+  robotsAllows,
+  type CrawlerFetch,
+  type CrawlerResult,
+} from '../src/seo/aiCrawlers';
 
 const SITE_URL = process.env.SITE_URL ?? 'https://jouwhockeystick.nl';
 const CONCURRENCY = 4;
 const TIMEOUT_MS = 15_000;
 const USER_AGENT = 'jouwhockeystick-technical-seo/1.0 (+https://jouwhockeystick.nl)';
 
-async function fetchPage(url: string, method: 'GET' | 'HEAD' = 'GET') {
+async function fetchPage(url: string, method: 'GET' | 'HEAD' = 'GET', userAgent = USER_AGENT) {
   const started = Date.now();
   try {
     const response = await fetch(url, {
       method,
       redirect: 'follow',
-      headers: { 'User-Agent': USER_AGENT },
+      headers: { 'User-Agent': userAgent },
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     const body = method === 'GET' ? await response.text() : '';
@@ -43,6 +50,37 @@ async function pool<T, R>(items: T[], worker: (item: T) => Promise<R>): Promise<
   };
   await Promise.all(Array.from({ length: Math.min(CONCURRENCY, items.length) }, run));
   return results;
+}
+
+/**
+ * Can AI crawlers and search bots read the site (decision log 2026-10-28)?
+ * Per crawler robots.txt for a few typical pages, and the HTML it gets with
+ * its own user agent, compared with what a normal visitor gets.
+ */
+async function aiCrawlerSection(urls: readonly string[]): Promise<string> {
+  const robots = await fetchPage(`${SITE_URL}/robots.txt`);
+  const product = urls.find((u) => /\/sticks\/[^/]+$/.test(u));
+  const article = urls.find((u) => /\/kennis\/[^/]+$/.test(u));
+  const paths = ['/', '/sticks', ...[product, article].flatMap((u) => (u ? [new URL(u).pathname] : []))];
+  const measure = (userAgent: string): Promise<CrawlerFetch[]> =>
+    Promise.all(
+      paths.map(async (path) => {
+        const r = await fetchPage(`${SITE_URL}${path}`, 'GET', userAgent);
+        return { path, status: r.status, bytes: r.body.length };
+      }),
+    );
+  const baseline = await measure(USER_AGENT);
+  const results: CrawlerResult[] = [];
+  for (const crawler of AI_CRAWLERS) {
+    results.push({
+      crawler,
+      robots: Object.fromEntries(
+        paths.map((path) => [path, robots.status === 200 ? robotsAllows(robots.body, crawler.token, path) : true]),
+      ),
+      fetches: await measure(crawler.userAgent),
+    });
+  }
+  return formatCrawlerSection(results, baseline);
 }
 
 async function main() {
@@ -87,6 +125,7 @@ async function main() {
       findings: checkSite(pages, links),
     }),
   );
+  console.log(`\n${await aiCrawlerSection(urls)}`);
 }
 
 main().catch((error: unknown) => {

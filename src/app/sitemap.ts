@@ -5,6 +5,9 @@ import type { Product } from '@/catalog/types';
 import { getAllArticles } from '@/content';
 import { getAllBlogPosts } from '@/content/blog';
 import { METHODIEK } from '@/content/methodiek';
+import { PRIVACY } from '@/content/privacy';
+import { VELD } from '@/content/veld';
+import { ZAAL } from '@/content/zaal';
 import { absoluteUrl } from '@/lib/site';
 
 const STATIC_PATHS = [
@@ -21,6 +24,24 @@ const STATIC_PATHS = [
   '/privacy',
 ];
 
+const latest = (dates: readonly string[]) =>
+  dates.reduce((a, b) => (b > a ? b : a), '');
+
+/**
+ * The date a hub page itself shows as "bijgewerkt op", or its newest
+ * article: Bing and AI search use lastmod to decide what to fetch again
+ * (decision log 2026-10-28). Pages without such a date get none.
+ */
+function hubLastModified(): Record<string, string> {
+  return {
+    '/sticks': VELD.updatedAt,
+    '/zaalsticks': ZAAL.updatedAt,
+    '/kennis': latest(getAllArticles().map((a) => a.updatedAt)),
+    '/blog': latest(getAllBlogPosts().map((p) => p.updatedAt)),
+    '/privacy': PRIVACY.updatedAt,
+  };
+}
+
 /** Latest check date across a product's core sourced fields. */
 function lastVerified(product: Product): string {
   return [
@@ -32,7 +53,10 @@ function lastVerified(product: Product): string {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    ...STATIC_PATHS.map((path) => ({ url: absoluteUrl(path) })),
+    ...STATIC_PATHS.map((path) => {
+      const lastModified = hubLastModified()[path];
+      return { url: absoluteUrl(path), ...(lastModified && { lastModified }) };
+    }),
     { url: absoluteUrl('/methodiek'), lastModified: METHODIEK.updatedAt },
     ...getAllProducts().map((product) => ({
       url: absoluteUrl(productPath(product)),

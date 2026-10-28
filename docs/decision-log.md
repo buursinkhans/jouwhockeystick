@@ -1531,3 +1531,43 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Verloren:** de PostHog-events van 26 oktober (na de livegang van de proxy) tot het moment dat deze wijziging live staat. Simple Analytics liep gewoon door en heeft de bezoekersaantallen over die dagen.
 
 **Later te overwegen:** de proxy als Netlify-proxyregel (`netlify.toml`, op CDN-niveau) in plaats van een Next.js-rewrite, zodat ook gecomprimeerde verzoeken heel blijven. Niet nu: dat is op de beveiligde preview niet te testen.
+
+## 2026-10-28 — Technische geschiktheid voor ChatGPT Search en andere AI-zoekmachines
+
+**Audit van de live site.** Alle 115 sitemap-URL's opgehaald met de user-agent van OAI-SearchBot, en de belangrijkste pagina's ook met GPTBot, ChatGPT-User, Bingbot, PerplexityBot, ClaudeBot, Googlebot en Applebot.
+- **In orde:**
+  - robots.txt staat alles toe, behalve /aanbod/ (bewust);
+  - geen firewall of CDN die bots weert: Netlify antwoordt elke crawler met dezelfde volledige HTML;
+  - alle URL's geven 200, met een canonical naar zichzelf, geen noindex, één H1, een eigen titel en beschrijving, geldige JSON-LD (Organization/WebSite, BreadcrumbList, Product met prijzen, Article, BlogPosting, FAQPage) en 244 tot ruim 1.000 woorden tekst in de server-HTML;
+  - geen weespagina's, en geen intern gelinkte pagina die in de sitemap ontbreekt;
+  - `llms.txt` bestaat; IndexNow meldt wijzigingen aan Bing.
+- **Kleine punten:**
+  - 11 hubpagina's zonder `lastmod`;
+  - 3 paren sticks met dezelfde automatische beschrijving;
+  - 15 titels langer dan 60 tekens;
+  - `http://www` gaat in twee stappen naar `https://` zonder www;
+  - `llms.txt` en het artikel "Waar koop je een hockeystick" noemen Plutosport nog niet.
+
+**Gedaan (veilig, alleen toevoegingen):**
+- **Sitemap:** `lastmod` voor /sticks, /zaalsticks, /kennis, /blog en /privacy, uit de datum die de pagina zelf toont (of het nieuwste artikel). Dezelfde 115 URL's als live, gecontroleerd. IndexNow werkt op gewijzigde bestanden en verandert hierdoor niet.
+- **Technical SEO-rapport (wekelijks):** een sectie "AI-crawlers en zoekmachines" (`src/seo/aiCrawlers.ts`). Per crawler: staat robots.txt het toe (RFC 9309), en krijgt hij met zijn eigen user-agent dezelfde HTML als een gewone bezoeker? Een blokkade op IP-adres is zo niet te zien.
+- **Conversierapport (wekelijks):**
+  - ChatGPT zet `utm_source=chatgpt.com` in zijn links. Dat telde als "Campagne: chatgpt.com"; nu als "AI-assistent: ChatGPT", net als een verwijzing vanaf chatgpt.com. Zo ook Perplexity, Copilot, Gemini en Claude, elk apart.
+  - **Alleen exacte waarden, geen trefwoorden:**
+    - verwijzende domeinen: chatgpt.com, chat.openai.com, perplexity.ai, www.perplexity.ai, copilot.microsoft.com, gemini.google.com en claude.ai;
+    - `utm_source`: alleen de gedocumenteerde waarde `chatgpt.com`.
+
+    Lijsten `AI_REFERRER_DOMAINS` en `AI_UTM_SOURCES` in `src/analytics-report/conversion.ts`.
+  - **Nieuw: "Bezoeken uit AI-assistenten, per landingspagina".**
+    - Een bezoek is één bezoeker op één dag (PostHog draait cookieloos en kent geen sessies).
+    - De landingspagina is de eerste pageview van die dag, en de bron de `utm_source` of verwijzende site van díe pageview.
+    - Elk bezoek telt één keer.
+
+    Per pageview zou dezelfde ChatGPT-bezoeker dubbel tellen: Next.js laat de referrer bij interne navigatie staan, en de eerste pagina draagt ook de utm. Gemeten: 284 pageviews tegenover 154 bezoeken in twee weken.
+  - **"Waar bezoekers vandaan komen":** de AI-regels komen nu uit dezelfde telling per bezoek, zodat ze niet dubbel tellen. De andere bronnen zijn niet veranderd.
+  - **Gevalideerd tegen PostHog** met een tijdelijke stap op de PR-branch (weer verwijderd):
+    - de query draait zonder fout;
+    - dezelfde opbouw zonder AI-filter geeft echte landingspagina's;
+    - een testbezoek met `utm_source=chatgpt.com` op /kennis/hockeystick-lengte-tabel (28 oktober, 21:5x UTC, door mij) komt er precies één keer uit. Dat testbezoek staat dus in PostHog.
+
+**Bewust niet:** geen wijziging aan titels, beschrijvingen, canonicals, robots.txt of noindex (bestaande SEO), geen eigen bezoekregistratie van crawlers (dat vraagt een functie op elk verzoek, en die kost Netlify-credits).

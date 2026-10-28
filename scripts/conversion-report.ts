@@ -8,6 +8,8 @@ import { QUESTION_META, type QuestionId } from '../src/advice-engine/answers';
 import { QUESTIONS, SCREENS } from '../src/content/stickwijzer/questions';
 import { POSTHOG_UI_HOST } from '../src/lib/analytics/posthog';
 import {
+  AI_REFERRER_DOMAINS,
+  AI_UTM_SOURCES,
   formatReport,
   type ConversionData,
   type Count,
@@ -132,6 +134,52 @@ async function funnel(config: { key: string; projectId: string }): Promise<Count
   }));
 }
 
+/** A quoted HogQL string list of exact values, lower case: 'a', 'b'. */
+const sqlList = (values: readonly string[]) => values.map((v) => `'${v.toLowerCase().replace(/'/g, '')}'`).join(', ');
+
+/**
+ * Visits from an AI assistant per "source → landing path" (decision log
+ * 2026-10-28). A visit is one visitor on one day (cookieless: no session
+ * ids). Its landing page, utm_source and referring domain all come from the
+ * day's FIRST pageview: argMin over a tuple, because argMin over a nullable
+ * column would skip empty values and take them from a later pageview. Only
+ * exact AI values count (AI_UTM_SOURCES, AI_REFERRER_DOMAINS); each visit
+ * yields one row, so nothing is counted twice.
+ */
+async function aiVisits(config: { key: string; projectId: string }): Promise<Count[]> {
+  const utm = sqlList(Object.keys(AI_UTM_SOURCES));
+  const domains = sqlList(Object.keys(AI_REFERRER_DOMAINS));
+  const rows = await hogql(
+    config,
+    `SELECT k, countIf(isNow) AS now, countIf(NOT isNow) AS before FROM (
+       SELECT
+         if(utm IN (${utm}), concat('utm:', utm), ref) AS source,
+         concat(source, ' → ', path) AS k,
+         isNow, utm, ref
+       FROM (
+         SELECT distinct_id, toDate(timestamp) AS day, max(${IS_NOW}) AS isNow,
+           argMin(tuple(
+             lower(coalesce(toString(properties.utm_source), '')),
+             lower(coalesce(toString(properties.$referring_domain), '')),
+             coalesce(toString(properties.$pathname), '/')
+           ), timestamp) AS first,
+           tupleElement(first, 1) AS utm,
+           tupleElement(first, 2) AS ref,
+           tupleElement(first, 3) AS path
+         FROM events WHERE event = '$pageview' AND ${BASE_FILTER}
+         GROUP BY distinct_id, day
+       )
+       WHERE utm IN (${utm}) OR ref IN (${domains})
+     )
+     GROUP BY k ORDER BY now DESC LIMIT 200`,
+  );
+  return rows.map(([key, now, before]) => ({
+    key: typeof key === 'string' ? key : '',
+    now: num(now),
+    before: num(before),
+  }));
+}
+
 async function otherHostEvents(config: { key: string; projectId: string }): Promise<number> {
   const rows = await hogql(
     config,
@@ -176,6 +224,7 @@ function routeScreenSteps(): Record<string, ScreenStep[]> {
 
 async function main() {
   const config = readConfig();
+
   // Sequential on purpose: PostHog allows only a few concurrent queries.
   const data: ConversionData = {
     current,
@@ -213,6 +262,11 @@ async function main() {
       `if(coalesce(toString(properties.utm_source), '') != '', concat('utm:', toString(properties.utm_source)), coalesce(toString(properties.$referring_domain), '$direct'))`,
       'visitors',
     ).catch(() => []),
+    // Landing pages of visitors from an AI assistant ("source → path"); the report keeps only AI sources.
+    aiLandingPages: await aiVisits(config).catch((error: unknown) => {
+      console.error(`AI-bezoeken overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }),
     homeBlocks: await breakdown(
       config,
       'home_block_click',

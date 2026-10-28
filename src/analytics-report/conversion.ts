@@ -46,6 +46,12 @@ export type ConversionData = {
   pageviewsByPage: Count[];
   /** Visitors (per day) per "utm:<source>" or referring domain ("$direct" when none). */
   visitorsByReferrer: Count[];
+  /**
+   * Visits (visitor-days) from an AI assistant per "source → landing path",
+   * source and path of the visit's first pageview; one key per visit.
+   * Undefined when PostHog could not answer.
+   */
+  aiLandingPages?: Count[];
   /** `home_block_click` per "block → target". */
   homeBlocks: Count[];
   deadClicksByPage: Count[];
@@ -86,9 +92,42 @@ const UTM_SOURCE_ALIASES: Record<string, string> = {
   yt: 'youtube',
 };
 
+/**
+ * Referring domains of AI assistants, exactly as PostHog stores them in
+ * `$referring_domain` (the host of document.referrer). Exact matches only:
+ * no keywords, so "openai-tips.nl" or "mychatgpt.example" never count.
+ */
+export const AI_REFERRER_DOMAINS: Readonly<Record<string, string>> = {
+  'chatgpt.com': 'ChatGPT',
+  'chat.openai.com': 'ChatGPT',
+  'perplexity.ai': 'Perplexity',
+  'www.perplexity.ai': 'Perplexity',
+  'copilot.microsoft.com': 'Copilot',
+  'gemini.google.com': 'Gemini',
+  'claude.ai': 'Claude',
+};
+
+/**
+ * utm_source values AI assistants put on their links themselves. Only the
+ * documented one: ChatGPT adds `utm_source=chatgpt.com` (OpenAI, "Publishers
+ * and developers FAQ"). The others are recognised by their referrer.
+ */
+export const AI_UTM_SOURCES: Readonly<Record<string, string>> = {
+  'chatgpt.com': 'ChatGPT',
+};
+
+/** The AI assistant behind a referring domain or "utm:<source>", by exact value; null otherwise. */
+export function aiAssistant(source: string): string | null {
+  const s = source.trim().toLowerCase();
+  if (s.startsWith('utm:')) return AI_UTM_SOURCES[s.slice(4)] ?? null;
+  return AI_REFERRER_DOMAINS[s] ?? null;
+}
+
 /** Groups a referring domain (or "utm:<source>") into a channel a person recognises. */
 export function sourceLabel(key: string): string {
   const k = key.toLowerCase();
+  const ai = aiAssistant(k);
+  if (ai) return `AI-assistent: ${ai}`;
   if (k.startsWith('utm:')) {
     const raw = k.slice(4);
     const source = UTM_SOURCE_ALIASES[raw] ?? raw;
@@ -102,8 +141,60 @@ export function sourceLabel(key: string): string {
   if (/(^|\.)(instagram|facebook|tiktok|youtube|linkedin|pinterest|twitter|whatsapp)\.|(^|\.)(t\.co|x\.com)$/.test(k)) {
     return `Social: ${k.replace(/^(www|m|l|lm)\./, '').split('.')[0]}`;
   }
-  if (/(^|\.)(chatgpt|openai|perplexity|copilot|gemini)\.|(^|\.)claude\.ai$/.test(k)) return 'AI-assistent';
   return `Andere site: ${k.replace(/^www\./, '')}`;
+}
+
+const addTo = (totals: Map<string, Count>, key: string, count: Count) => {
+  const total = totals.get(key) ?? { key, now: 0, before: 0 };
+  total.now += count.now;
+  total.before += count.before;
+  totals.set(key, total);
+};
+const byCount = (a: Count, b: Count) => b.now - a.now || b.before - a.before || a.key.localeCompare(b.key);
+
+/**
+ * AI visits per assistant and landing page ("ChatGPT → /kennis/…"). Input:
+ * one count per visit (visitor-day), keyed "source → landing path", where the
+ * source is the utm_source ("utm:…") or the referring domain of the visit's
+ * first pageview (scripts/conversion-report.ts). Sources that are not an AI
+ * assistant by exact value are left out. Each visit has one key, so adding
+ * up never counts a visit twice.
+ */
+export function aiLandingRows(visits: readonly Count[]): Count[] {
+  const totals = new Map<string, Count>();
+  for (const count of visits) {
+    const [source = '', path = ''] = count.key.split(' → ');
+    const ai = aiAssistant(source);
+    if (ai) addTo(totals, `${ai} → ${path || '/'}`, count);
+  }
+  return [...totals.values()].sort(byCount);
+}
+
+/**
+ * "Waar bezoekers vandaan komen" with the AI rows taken from the visits
+ * (first pageview of the day) instead of from every pageview: a ChatGPT
+ * visitor's later pages still carry chatgpt.com as referrer, and the first
+ * one carries utm_source=chatgpt.com, so per pageview the same visitor would
+ * count under two keys. Without visit data the old per-pageview grouping stays.
+ */
+export function sourcesWithAiVisits(byReferrer: readonly Count[], aiVisits: readonly Count[] | undefined): Count[] {
+  if (!aiVisits) return groupSources(byReferrer);
+  const other = groupSources(byReferrer.filter((c) => !aiAssistant(c.key)));
+  const totals = new Map<string, Count>();
+  for (const row of aiLandingRows(aiVisits)) addTo(totals, `AI-assistent: ${row.key.split(' → ')[0]}`, row);
+  return [...other, ...totals.values()].sort(byCount);
+}
+
+function aiSection(visits: readonly Count[] | undefined): string[] {
+  if (!visits) return ['PostHog kon deze vraag niet beantwoorden; zie de log van de workflow.'];
+  const rows = aiLandingRows(visits);
+  return [
+    '_Een bezoek is één bezoeker op één dag (PostHog draait cookieloos en kent geen sessies). De landingspagina is de eerste pagina van dat bezoek, de bron de `utm_source` of verwijzende site van die eerste pagina, op exacte waarde (chatgpt.com, perplexity.ai, copilot.microsoft.com, gemini.google.com, claude.ai). Elk bezoek telt één keer. Kwam iemand die dag eerst via Google en later via ChatGPT, dan telt het als Google._',
+    '',
+    rows.length
+      ? table(['Assistent → landingspagina', 'Deze week', 'Vorige week', 'Verschil'], countRows(rows))
+      : 'Geen bezoeken via een AI-assistent in deze twee weken.',
+  ];
 }
 
 /** Adds up the counts per channel, largest first. */
@@ -423,9 +514,13 @@ export function formatReport(
     '',
     '## Waar bezoekers vandaan komen',
     '',
-    table(['Bron', 'Deze week', 'Vorige week', 'Verschil'], countRows(groupSources(data.visitorsByReferrer))),
+    table(['Bron', 'Deze week', 'Vorige week', 'Verschil'], countRows(sourcesWithAiVisits(data.visitorsByReferrer, data.aiLandingPages))),
     '',
     '_Per bezoeker per dag. "Direct" is ook een link uit WhatsApp, e-mail of een app, en je eigen bezoeken: die geven geen bron mee._',
+    '',
+    '### Bezoeken uit AI-assistenten, per landingspagina',
+    '',
+    ...aiSection(data.aiLandingPages),
     '',
     '## Homepage-blokken',
     '',
