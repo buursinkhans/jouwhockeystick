@@ -241,6 +241,20 @@ async function validateOnly(config: { key: string; projectId: string }) {
   console.log(JSON.stringify(rows));
   console.log('## 3. Bezoeken vs pageviews (dubbeltelling per pageview zichtbaar maken)');
   console.log(JSON.stringify(await hogql(config, `SELECT count() AS pageviews, uniq(concat(distinct_id, '|', toString(toDate(timestamp)))) AS visits FROM events WHERE event = '$pageview' AND ${BASE_FILTER}`)));
+  console.log('## 5. AI-query met vandaag erbij (eindcontrole met het testbezoek via utm_source=chatgpt.com)');
+  const utm = sqlList(Object.keys(AI_UTM_SOURCES));
+  const domains = sqlList(Object.keys(AI_REFERRER_DOMAINS));
+  console.log(JSON.stringify(await hogql(
+    config,
+    `SELECT if(utm IN (${utm}), concat('utm:', utm), ref) AS source, path, count() AS visits FROM (
+       SELECT distinct_id, toDate(timestamp) AS day,
+         argMin(tuple(lower(coalesce(toString(properties.utm_source), '')), lower(coalesce(toString(properties.$referring_domain), '')), coalesce(toString(properties.$pathname), '/')), timestamp) AS first,
+         tupleElement(first, 1) AS utm, tupleElement(first, 2) AS ref, tupleElement(first, 3) AS path
+       FROM events WHERE event = '$pageview' AND timestamp >= toDateTime('2026-10-28 00:00:00', 'UTC') AND properties.$host IN (${hosts})
+       GROUP BY distinct_id, day)
+     WHERE utm IN (${utm}) OR ref IN (${domains})
+     GROUP BY source, path`,
+  )));
   console.log('## 4. Events per dag (UTC) sinds 2026-10-25, alle hosts en de live host');
   console.log(JSON.stringify(await hogql(
     config,
