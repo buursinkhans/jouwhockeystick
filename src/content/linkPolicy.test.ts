@@ -11,6 +11,12 @@ describe('sourceLinkRel', () => {
     ).toContain('nofollow');
   });
 
+  it('adds nofollow to partner shops cited as a source (review on PR #117)', () => {
+    expect(sourceLinkRel('https://www.plutosport.nl/bezorgen-afhalen')).toContain('nofollow');
+    expect(sourceLinkRel('https://www.passasports.nl/faq-bestelproces')).toContain('nofollow');
+    expect(sourceLinkRel('https://notplutosport.nl/')).not.toContain('nofollow');
+  });
+
   it('follows manufacturers and rule bodies normally', () => {
     expect(
       sourceLinkRel('https://www.grays-hockey.com/products/x'),
