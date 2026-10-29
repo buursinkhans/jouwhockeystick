@@ -1650,7 +1650,9 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
   - Zaalkeuze op /zaalsticks: "cm, zonder schoenen".
   - Het artikel en /clubs zeiden al "zonder schoenen".
   - `LENGTH_GUIDE` en de adviesregels zijn niet veranderd, dus geen nieuwe `ruleSetVersion`.
-  - **Afwijking van de spec:** `docs/spec/keuzehulp-instructie-v1.1.md` (§ vraag `height_cm` en het lengteblok) zegt "met schoenen aan". Op besluit van de eigenaar is dat nu "zonder schoenen", de gebruikelijke manier om lichaamslengte te meten. De spec zelf is niet aangepast (leidend document; afwijking hier gemeld).
+  - **Meetinstructie bij "Weet je de lengte niet precies?"** (`height_uncertain`): "laat de speler zonder schoenen rechtop tegen een muur staan…". Er stond "met hockeyschoenen aan". Die bleef bij de eerste versie van deze PR staan, omdat de test alleen op "met schoenen" zocht. Gecorrigeerd na review van de eigenaar.
+  - **Leidende spec bijgewerkt** op opdracht van de eigenaar: `docs/spec/keuzehulp-instructie-v1.1.md` zegt nu bij `height_cm` en in de flow "zonder schoenen", met een wijzigingsregel bovenaan.
+  - **Regressietest:** doorzoekt de hele `src`-map en de spec op "met (…)schoenen" en "schoenen aan", en controleert dat elke stickwijzer-vraag die schoenen noemt "zonder schoenen" zegt.
 - **Tabel in drie kolommen:** "Lichaamslengte", "Stick (inch)" en "Kan ook (inch)".
   - De aanbevolen lengte staat ook in centimeters, in kleinere tekst ("ca. 93 cm").
   - Onder de tabel: "1 inch = 2,54 cm."

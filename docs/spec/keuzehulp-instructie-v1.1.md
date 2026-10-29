@@ -4,6 +4,7 @@
 > **Documentstatus:** integrale implementatiespecificatie v1.1  
 > **Taal interface:** Nederlands  
 > **Doel:** bouw een uitlegbare en commercieel eerlijke keuzehulp voor veldhockeysticks, met een korte route voor beginnende kinderen en een verdiepende route voor gevorderde spelers.  
+> **Wijziging 2026-10-29:** lichaamslengte wordt overal zonder schoenen gemeten (vraag `height_cm`, de meetinstructie bij `height_uncertain` en de lengtetabel); zie `docs/decision-log.md`.  
 > **Principe:** advies is onderbouwd met productdata, eigen metingen, praktijktests en bronnen; verkoopmarge mag nooit de adviesvolgorde bepalen.
 
 ---
@@ -100,7 +101,7 @@ Vraag geen geboortedatum; leeftijdsgroep is privacyvriendelijk en voldoende.
 
 | ID | Vraag | Antwoorden | Routes | Verplicht | Gebruik |
 |---|---|---|---|---|---|
-| `height_cm` | Hoe lang is de speler met schoenen aan? | numeriek 95–210 cm | alle | ja | Primaire lengtebepaling |
+| `height_cm` | Hoe lang is de speler, zonder schoenen? | numeriek 95–210 cm | alle | ja | Primaire lengtebepaling |
 | `height_uncertain` | Weet je de lengte niet precies? | ja; nee | alle | nee | Toon meetinstructie |
 | `current_length_inch` | Welke sticklengte gebruikt de speler nu? | 24, 26–35, 36.5, onbekend | ONTWIKKEL/PRESTATIE | nee | Controle huidige maat |
 | `junior_grip_needed` | Is een smallere juniorgrip wenselijk? | ja; nee; onbekend | START/ONTWIKKEL | nee | Filter juniorvarianten |
@@ -213,7 +214,7 @@ Gebruik maximaal zes inhoudelijke schermen:
 
 1. Voor wie / startsituatie
 2. Leeftijdsgroep en ervaring
-3. Lichaamslengte met schoenen aan
+3. Lichaamslengte zonder schoenen
 4. Eerste stick of vervanging
 5. Wat vindt het kind leuk aan hockey?
 6. Budget

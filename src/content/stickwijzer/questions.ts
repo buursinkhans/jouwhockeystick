@@ -194,7 +194,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     question: 'Weet je de lengte niet precies?',
     shortLabel: 'lengte onzeker',
     helpText:
-      'Meten: laat de speler met hockeyschoenen aan rechtop tegen een muur staan en meet van de vloer tot de kruin.',
+      'Meten: laat de speler zonder schoenen rechtop tegen een muur staan en meet van de vloer tot de kruin.',
     dataUse:
       'Bij een geschatte lengte geven we het lengteadvies met een ruimere marge.',
     input: {

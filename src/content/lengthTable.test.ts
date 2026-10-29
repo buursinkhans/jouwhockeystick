@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -15,18 +16,41 @@ import { QUESTIONS } from './stickwijzer/questions';
 const links = (html: string) => html.split(`href="${LENGTH_TABLE_PATH}"`).length - 1;
 
 describe('length table improvements (decision log 2026-10-29)', () => {
-  it('measures height without shoes everywhere', () => {
+  it('measures height without shoes in the stickwijzer, its measuring help and the article', () => {
     expect(QUESTIONS.height_cm.question).toBe('Hoe lang is de speler, zonder schoenen?');
-    for (const file of [
-      'src/content/stickwijzer/questions.ts',
-      'src/app/methodiek/page.tsx',
-      'src/components/zaal/IndoorSelector.tsx',
-      'src/content/articles/hockeystick-lengte-tabel.ts',
-      'src/content/clubs.ts',
-    ]) {
-      expect(readFileSync(file, 'utf8'), file).not.toMatch(/met schoenen/i);
+    expect(QUESTIONS.height_uncertain.helpText).toBe(
+      'Meten: laat de speler zonder schoenen rechtop tegen een muur staan en meet van de vloer tot de kruin.',
+    );
+    // Every question that mentions shoes says "zonder", whatever kind of shoe.
+    for (const question of Object.values(QUESTIONS)) {
+      const text = `${question.question} ${question.helpText ?? ''}`;
+      if (/schoen/i.test(text)) expect(text, question.id).toMatch(/zonder schoenen/);
     }
     expect(JSON.stringify(article.sections)).toMatch(/zonder schoenen/);
+  });
+
+  it('has no instruction to measure with shoes on anywhere in the site code or the leading spec', () => {
+    // "met schoenen", "met hockeyschoenen aan", "schoenen aan"… (the 2026-10-29 fix missed "met hockeyschoenen" at first).
+    const withShoes = /\bmet\s+(?:\w+)?schoenen\b|\bschoenen\s+aan\b/i;
+    const files = [
+      ...readdirSync('src', { recursive: true, encoding: 'utf8' })
+        .filter((f) => /\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f))
+        .map((f) => join('src', f)),
+      'docs/spec/keuzehulp-instructie-v1.1.md',
+    ];
+    expect(files.length).toBeGreaterThan(100);
+    const offenders = files.filter((file) => withShoes.test(readFileSync(file, 'utf8')));
+    expect(offenders).toEqual([]);
+    // The pattern itself does catch the old wordings.
+    expect(withShoes.test('Hoe lang is de speler met schoenen aan?')).toBe(true);
+    expect(withShoes.test('laat de speler met hockeyschoenen aan rechtop staan')).toBe(true);
+    expect(withShoes.test('Hoe lang is de speler, zonder schoenen?')).toBe(false);
+  });
+
+  it('states the measuring rule in the leading spec', () => {
+    const spec = readFileSync('docs/spec/keuzehulp-instructie-v1.1.md', 'utf8');
+    expect(spec).toContain('| `height_cm` | Hoe lang is de speler, zonder schoenen? |');
+    expect(spec).toContain('3. Lichaamslengte zonder schoenen');
   });
 
   it('keeps the length data the stickwijzer uses', () => {
