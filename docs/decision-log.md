@@ -1635,3 +1635,35 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 - **`plutosport.nl` op de `nofollow`-lijst** (`src/content/linkPolicy.ts`), net als `passasports.nl`. Een bronlink naar een winkel in een artikel (bijv. de verzend- en retourvoorwaarden in "Waar koop je een hockeystick?") is geen winkelknop. De winkelknoppen zelf blijven partnerlinks met `rel="sponsored"`.
 - **bol.com staat niet op de lijst:** het was de enige partner toen de lijst ontstond. Of bol.com-bronlinks ook `nofollow` moeten krijgen, is een open keuze voor de eigenaar.
 - **Handboeken:** `docs/content-agent.md` en `docs/review-agent.md` noemen nu de drie partnerwinkels en de nofollow-regel voor winkels als bron.
+
+## 2026-10-29 — Lengtetabel: meten zonder schoenen, compacte tabel, interne links, lengte versus leeftijd
+
+**Aanleiding:** SEO-analyse van /kennis/hockeystick-lengte-tabel (nulmeting 157 vertoningen, 2 kliks, positie 8,1) met akkoord van de eigenaar.
+- **Bewezen:** de stickwijzer vroeg de lengte "met schoenen aan", het artikel zei "zonder schoenen", terwijl ze dezelfde tabel gebruiken.
+- **Bewezen:** op mobiel viel de vierde tabelkolom buiten beeld.
+- **Bewezen:** stickpagina's en de advieskaart linkten niet naar de tabel.
+
+**Wat:**
+- **Overal zonder schoenen.**
+  - Stickwijzer-vraag: "Hoe lang is de speler, zonder schoenen?"
+  - /methodiek: "lichaamslengte zonder schoenen".
+  - Zaalkeuze op /zaalsticks: "cm, zonder schoenen".
+  - Het artikel en /clubs zeiden al "zonder schoenen".
+  - `LENGTH_GUIDE` en de adviesregels zijn niet veranderd, dus geen nieuwe `ruleSetVersion`.
+  - **Afwijking van de spec:** `docs/spec/keuzehulp-instructie-v1.1.md` (§ vraag `height_cm` en het lengteblok) zegt "met schoenen aan". Op besluit van de eigenaar is dat nu "zonder schoenen", de gebruikelijke manier om lichaamslengte te meten. De spec zelf is niet aangepast (leidend document; afwijking hier gemeld).
+- **Tabel in drie kolommen:** "Lichaamslengte", "Stick (inch)" en "Kan ook (inch)".
+  - De aanbevolen lengte staat ook in centimeters, in kleinere tekst ("ca. 93 cm").
+  - Onder de tabel: "1 inch = 2,54 cm."
+  - Alle maten en alternatieven komen nog steeds uit `LENGTH_GUIDE` en `alsoFitsInch`.
+  - Een tabelcel in een artikel mag daarvoor nu `{ text, note }` zijn (`src/content/types.ts`, `ArticleBody`).
+  - Op kleine schermen is de celpadding iets kleiner (`px-3`, vanaf `sm` weer `px-4`); dat geldt voor alle artikeltabellen.
+- **Interne links:**
+  - Op de stickpagina staat onder "Beschikbare lengtes" de zin "Welke lengte past bij jou? Bekijk de hockeystick lengte tabel."
+  - Op de advieskaart staat onder de maat de link "Waarom deze maat?".
+  - Geen link tijdens het invullen van de stickwijzer. Het pad staat op één plek: `LENGTH_TABLE_PATH` in `src/lib/site.ts`.
+- **Sectie "Lichaamslengte, niet leeftijd":** de door de eigenaar aangeleverde tekst. Geen leeftijdstabel en geen nieuwe maatclaims.
+- **Wijzigingsdatum:** het artikel krijgt `updatedAt` 2026-10-29. Die datum is zichtbaar, staat als `dateModified` in de Article-markup en als `lastmod` in de sitemap. De opbouw van de structured data verandert niet.
+
+**Ongewijzigd:** SEO-title, meta description, H1, URL, canonical, structured data (Article en BreadcrumbList, geen FAQ), bestaande links en bronnen, productgegevens en partnerlinks. De titel en beschrijving blijven zo tot de zoekopdrachten uit Search Console zijn beoordeeld.
+
+**Meten:** na 4 en 8 weken, zoals in de analyse. Eerst de zoekopdrachten van deze pagina exporteren uit Search Console als nulmeting per zoekwoord.

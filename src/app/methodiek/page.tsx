@@ -54,7 +54,7 @@ export default function MethodiekPage() {
 
       <h2 className="mt-10 text-xl font-bold">Lengteadvies</h2>
       <p className="mt-3 text-inkt/80">
-        De sticklengte leiden we af van de lichaamslengte met schoenen aan. De
+        De sticklengte leiden we af van de lichaamslengte zonder schoenen. De
         tabel is een indicatie: op de grens tussen twee maten noemen we beide.{' '}
         {GROWTH_WARNING}
       </p>

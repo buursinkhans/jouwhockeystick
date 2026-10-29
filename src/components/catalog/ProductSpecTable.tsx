@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import type { Product } from '@/catalog/types';
+import { LENGTH_TABLE_PATH } from '@/lib/site';
 import {
   BOW_LABELS,
   DISCIPLINE_LABELS,
@@ -9,7 +11,7 @@ import {
 import { SourceBadge, type SourceMeta } from '@/components/ui/SourceBadge';
 
 export function ProductSpecTable({ product }: { product: Product }) {
-  const rows: Array<{ label: string; value: string; sourced: SourceMeta }> = [
+  const rows: Array<{ label: string; value: string; sourced: SourceMeta; lengthHelp?: boolean }> = [
     {
       label: 'Ervaringsniveau',
       value: EXPERIENCE_LABELS[product.experienceLevel.value],
@@ -61,6 +63,7 @@ export function ProductSpecTable({ product }: { product: Product }) {
       label: 'Beschikbare lengtes',
       value: product.lengthsInches.value.map((l) => `${l}"`).join(', '),
       sourced: product.lengthsInches,
+      lengthHelp: true,
     },
     {
       label: 'Voorraadstatus',
@@ -83,6 +86,15 @@ export function ProductSpecTable({ product }: { product: Product }) {
             </th>
             <td className="py-3">
               <p>{row.value}</p>
+              {row.lengthHelp && (
+                <p className="mt-1 text-sm text-inkt/80">
+                  Welke lengte past bij jou? Bekijk de{' '}
+                  <Link href={LENGTH_TABLE_PATH} className="font-semibold text-veld underline hover:no-underline">
+                    hockeystick lengte tabel
+                  </Link>
+                  .
+                </p>
+              )}
               <SourceBadge sourced={row.sourced} />
             </td>
           </tr>

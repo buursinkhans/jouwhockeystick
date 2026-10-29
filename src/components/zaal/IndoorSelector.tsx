@@ -219,7 +219,7 @@ export function IndoorSelector({ products }: { products: Product[] }) {
                     className="w-24 rounded-lg border border-lijngrijs bg-white px-3 py-1.5"
                   />
                   <span className="text-sm text-lijngrijs">
-                    cm, met schoenen
+                    cm, zonder schoenen
                   </span>
                 </div>
                 <p

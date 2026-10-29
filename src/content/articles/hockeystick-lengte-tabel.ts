@@ -8,19 +8,21 @@ const INTERSPORT_GUIDE =
 
 const CM_PER_INCH = 2.54;
 
+/** "36,5": the unit is in the column heading, which keeps the table narrow on a phone. */
 function formatInch(inch: number): string {
-  return `${String(inch).replace('.', ',')} inch`;
+  return String(inch).replace('.', ',');
 }
 
 function formatCm(inch: number): string {
-  return `ca. ${Math.round(inch * CM_PER_INCH)} cm`;
+  return `${Math.round(inch * CM_PER_INCH)}`;
 }
 
 /**
  * Generated from the same LENGTH_GUIDE the stickwijzer uses, so the table and
- * the advice can never disagree.
+ * the advice can never disagree. Three columns for phones (decision log
+ * 2026-10-29); the advised length also shows in cm, in smaller text.
  */
-const LENGTH_ROWS = LENGTH_GUIDE.map((band, index) => {
+export const LENGTH_ROWS = LENGTH_GUIDE.map((band, index) => {
   const isLast = index === LENGTH_GUIDE.length - 1;
   const height = isLast
     ? `${band.minCm} cm en langer`
@@ -28,9 +30,11 @@ const LENGTH_ROWS = LENGTH_GUIDE.map((band, index) => {
   const also = alsoFitsInch(band);
   return [
     height,
-    band.sizes.map(formatInch).join(' of '),
+    {
+      text: band.sizes.map(formatInch).join(' of '),
+      note: `ca. ${band.sizes.map(formatCm).join(' / ')} cm`,
+    },
     also.length > 0 ? also.map(formatInch).join(' of ') : '–',
-    band.sizes.map(formatCm).join(' / '),
   ];
 });
 
@@ -46,14 +50,10 @@ export const hockeystickLengteTabel: Article = {
       body: [
         {
           type: 'table',
-          columns: [
-            'Lichaamslengte',
-            'Sticklengte',
-            'Kan ook passen',
-            'Sticklengte in cm',
-          ],
+          columns: ['Lichaamslengte', 'Stick (inch)', 'Kan ook (inch)'],
           rows: LENGTH_ROWS,
         },
+        '1 inch = 2,54 cm.',
         'Deze tabel is onze eigen richtlijn, geen officiële norm. En eerlijk is eerlijk: de maattabellen van merken lopen flink uiteen. Bij kinderen scheelt het al snel 2 inch, en de ene tabel adviseert een maat langer dan de andere. Daarom staat er per rij ook een maat die kan passen. Bij kinderen is dat altijd de kortere maat, bij volwassenen de maat erboven of eronder.',
         'Kijk bij een specifiek model ook even naar de maattabel van het merk. De [stickwijzer](/stickwijzer) werkt met precies deze tabel en kijkt daarnaast naar je huidige stick.',
       ],
@@ -63,6 +63,13 @@ export const hockeystickLengteTabel: Article = {
       level: 2,
       body: [
         'Meet de lichaamslengte zonder schoenen en zoek de rij die erbij hoort. Doe daarna de houdingscheck: kan de speler ontspannen bewegen, dribbelen en de stick dicht bij het lichaam houden? Dan zit je goed. Een te lange stick maakt balcontrole en het leren van de techniek een stuk lastiger.',
+      ],
+    },
+    {
+      heading: 'Lichaamslengte, niet leeftijd',
+      level: 3,
+      body: [
+        'De juiste sticklengte bepaal je op basis van lichaamslengte, niet op leeftijd. Twee kinderen van dezelfde leeftijd kunnen behoorlijk in lengte verschillen. Meet daarom de lichaamslengte zonder schoenen en gebruik de tabel om de passende stickmaat te vinden.',
       ],
     },
     {
@@ -104,7 +111,7 @@ export const hockeystickLengteTabel: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-13',
+  updatedAt: '2026-10-29',
   sources: [
     {
       label:

@@ -181,7 +181,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
   },
   height_cm: {
     id: 'height_cm',
-    question: 'Hoe lang is de speler met schoenen aan?',
+    // Without shoes, like the length table on /kennis (decision log 2026-10-29).
+    question: 'Hoe lang is de speler, zonder schoenen?',
     shortLabel: 'lichaamslengte',
     helpText:
       'Koop niet extra groot ‘op de groei’; een te lange stick kan balcontrole en houding bemoeilijken.',
