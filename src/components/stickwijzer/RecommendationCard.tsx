@@ -1,5 +1,6 @@
 import { productPath } from '@/catalog/paths';
 import Link from 'next/link';
+import { LENGTH_TABLE_PATH } from '@/lib/site';
 import { isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import { getOffers, lowestTotal } from '@/catalog/offers';
 import { euro, shopCount } from '@/content/offers';
@@ -113,6 +114,11 @@ export function RecommendationCard({
         <div>
           <dt className="text-lijngrijs">Maat</dt>
           <dd className="font-semibold">{formatInch(item.sizeInch)}</dd>
+          <dd className="text-xs">
+            <Link href={LENGTH_TABLE_PATH} className="text-veld underline hover:no-underline">
+              Waarom deze maat?
+            </Link>
+          </dd>
         </div>
         {lowest !== null ? (
           <div>
