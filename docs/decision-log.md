@@ -1618,3 +1618,20 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 - **Winkelkliks:** `retailer_click` vanaf /zaalsticks in het conversierapport (PostHog; let op de meetstoring van 26 tot 28 oktober, #113).
 - **Seizoen:** november t/m februari is zaalseizoen, dus vertoningen en kliks stijgen sowieso. Beoordeel vooral de positie en de CTR per zoekwoord, en vergelijk met de seizoenstrend van de site als geheel.
 - **Geen automatisch terugdraaien:** daalt de positie, dan volgt eerst een advies op basis van voldoende gegevens (besluit eigenaar). Een daling van één of twee weken is bij zo weinig vertoningen geen betrouwbaar signaal.
+
+## 2026-10-29 — Privacyverklaring 1.4: Awin, Plutosport, partnerlinks en externe afbeeldingen; nofollow voor plutosport.nl
+
+**Opdracht eigenaar:** de privacyverklaring bijwerken voor Plutosport/Awin, de partnerlinks en externe afbeeldingen, en het nofollow-punt uit de review van PR #117 afhandelen.
+
+**Privacyverklaring (versie 1.4, 29 oktober), sectie "Afbeeldingen en links van derden":**
+- **Afbeeldingen:** behalve de merken en bol.com ook PassaSports en Plutosport, en de beeldservers die zij gebruiken. Gecontroleerd in de catalogus: de meeste foto's komen van cdn.sportshop.com (de PassaHockey-feed), verder van media.s-bol.com, cdn.plutosport.com, de sites van de merken en een Webflow-CDN.
+- **Doorklikken:** bol.com, PassaHockey of Plutosport. Erbij staat wat onze links meegeven: alleen de plek op onze site (`subid`, `reference`, `clickref`) en, bij bol.com, de naam van de stick (`name`, zie `src/lib/retailers.ts`). Geen persoonlijke kenmerken.
+- **Nieuw:** wij plaatsen geen cookies, ook niet voor partnerlinks; cookies van winkels en netwerken komen pas na een klik, op hun eigen websites.
+- **Nieuw: Awin en Plutosport.** Na een klik gaat de bezoeker langs awin1.com. Awin registreert technische gegevens (IP-adres, browser, tijdstip, verwijzende pagina) en geeft een klikkenmerk mee aan Plutosport. Awin en Plutosport kunnen cookies plaatsen om een aankoop toe te schrijven, en Plutosport verwerkt een bestelling onder zijn eigen beleid. Wij zien kliks en aankopen zonder naam, adres of andere identificerende gegevens.
+- **Ongewijzigd:** de bestaande alinea's over bol.com en TradeTracker, en de rest van de verklaring. Ook de intro ("we plaatsen geen cookies") klopt nog.
+- **Niet beoordeeld:** of en hoe Awin gegevens buiten de EER verwerkt. Dat staat in het privacybeleid van Awin. Dit is geen juridisch advies.
+
+**Nofollow:**
+- **`plutosport.nl` op de `nofollow`-lijst** (`src/content/linkPolicy.ts`), net als `passasports.nl`. Een bronlink naar een winkel in een artikel (bijv. de verzend- en retourvoorwaarden in "Waar koop je een hockeystick?") is geen winkelknop. De winkelknoppen zelf blijven partnerlinks met `rel="sponsored"`.
+- **bol.com staat niet op de lijst:** het was de enige partner toen de lijst ontstond. Of bol.com-bronlinks ook `nofollow` moeten krijgen, is een open keuze voor de eigenaar.
+- **Handboeken:** `docs/content-agent.md` en `docs/review-agent.md` noemen nu de drie partnerwinkels en de nofollow-regel voor winkels als bron.
