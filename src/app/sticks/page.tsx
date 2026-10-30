@@ -1,8 +1,9 @@
+import type { Metadata } from 'next';
 import { absoluteUrl, pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getAllBrands, getFieldProducts, isFeedImport } from '@/catalog';
+import { getFeedReadDates } from '@/catalog/feedDates';
 import { pickVaried } from '@/catalog/picks';
-import { isJuniorStick } from '@/catalog/similar';
 import type { Brand } from '@/catalog/types';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
 import { ImportedSticks } from '@/components/catalog/ImportedSticks';
@@ -11,15 +12,22 @@ import { TrackedBlock } from '@/components/catalog/TrackedBlock';
 import { InlineText } from '@/components/article/InlineText';
 import { plainText } from '@/components/article/inlineMarkup';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { VELD, veldFaq } from '@/content/veld';
+import { VELD, veldFaq, veldMetaDescription } from '@/content/veld';
 import { splitListNote } from '@/content/catalogLists';
 import { jsonLdHtml } from '@/lib/jsonLd';
 
-export const metadata = pageMetadata({
-  title: VELD.seoTitle,
-  description: VELD.metaDescription,
-  path: '/sticks',
-});
+/** The counts in the description come from the same stats as the page. */
+export function generateMetadata(): Metadata {
+  const stats = getCatalogStats(new Date());
+  return pageMetadata({
+    title: VELD.seoTitle,
+    description: veldMetaDescription(
+      stats.fieldSticks,
+      stats.fieldBrands.length,
+    ),
+    path: '/sticks',
+  });
+}
 
 function isValidBrand(
   value: string | undefined,
@@ -54,10 +62,10 @@ export default async function SticksPage({
   const showLanding = !activeBrand;
   // Hand-checked sticks only for the picks: their specs come with sources.
   const curated = getFieldProducts(now);
-  const faq = veldFaq(
-    allProducts,
-    curated.filter((p) => !isJuniorStick(p)),
-  );
+  const faq = veldFaq(allProducts);
+  // When the shop feeds were read; separate from the editorial updatedAt,
+  // which (with the sitemap lastmod) only moves for content changes.
+  const feedDates = getFeedReadDates();
 
   // Describes only the questions and answers visible on this page.
   const faqJsonLd = {
@@ -91,6 +99,21 @@ export default async function SticksPage({
         <time dateTime={VELD.publishedAt}>{VELD.publishedAt}</time> · bijgewerkt
         op <time dateTime={VELD.updatedAt}>{VELD.updatedAt}</time>
       </p>
+      {feedDates && (
+        <p className="mt-1 text-sm text-lijngrijs">
+          Aanbod en winkelprijzen gelezen{' '}
+          {feedDates.from === feedDates.to ? (
+            <>
+              op <time dateTime={feedDates.to}>{feedDates.to}</time>
+            </>
+          ) : (
+            <>
+              tussen <time dateTime={feedDates.from}>{feedDates.from}</time> en{' '}
+              <time dateTime={feedDates.to}>{feedDates.to}</time>
+            </>
+          )}
+        </p>
+      )}
       <TrackedBlock page="sticks" block="intro">
         <p className="mt-5 max-w-3xl text-lg text-inkt/80">
           <InlineText text={VELD.intro} />
