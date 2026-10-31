@@ -2,9 +2,9 @@
  * Hockey shoes in the partner feeds (read-only feed check, step 2 of the
  * /hockeyschoenen plan, issue #100). Do the PassaHockey (TradeTracker) and
  * Plutosport (Awin) feeds hold hockey shoes, how many, of which kind and at
- * which prices? Only counts and describes; nothing goes into the catalog or
- * onto the site. Pure functions; downloading and reporting live in
- * scripts/shoe-feed-check.ts.
+ * which prices? Pure functions; downloading and reporting live in
+ * scripts/shoe-feed-check.ts. The shoe catalog import (src/catalog/shoes/
+ * feedImport.ts) builds on the same parsed models.
  */
 import type { CsvRow } from '@/lib/csv';
 import { isJunior, parseRecord, productPageUrl } from './passaFeed';
@@ -22,6 +22,10 @@ export type ShoeModel = {
   discipline: ShoeDiscipline;
   junior: boolean;
   sizes: string[];
+  /** Sizes the feed lists as in stock, per size. */
+  sizesInStock: string[];
+  /** Product photo from the shop's feed, if any. */
+  imageUrl?: string;
   /** EAN/GTIN codes of all sizes: the reliable way to find the same shoe at two shops. */
   eans: string[];
   priceMin: number;
@@ -60,7 +64,8 @@ const sizeValue = (size: string) => {
   if (match[3] && match[4]) return Number(match[1]) + Number(match[3]) / Number(match[4]);
   return Number(match[1]);
 };
-const bySize = (a: string, b: string) => sizeValue(a) - sizeValue(b) || a.localeCompare(b);
+/** Shoe sizes in size order ("38", "38 2/3", "39"). */
+export const bySize = (a: string, b: string) => sizeValue(a) - sizeValue(b) || a.localeCompare(b);
 
 /**
  * A category path that is itself about hockey shoes ("Hockey > Hockeyschoenen",
@@ -92,14 +97,15 @@ export function shoeDiscipline(categoryTexts: readonly string[], name: string): 
 export const eansIn = (text: string) =>
   [...new Set((text.match(/\d{8,14}/g) ?? []).map((code) => code.replace(/^0+(?=\d{13}$)/, '')))];
 
-type Draft = ShoeModel & { categorySet: Set<string>; sizeSet: Set<string> };
+type Draft = ShoeModel & { categorySet: Set<string>; sizeSet: Set<string>; stockSizeSet: Set<string> };
 
 function finish(drafts: Iterable<Draft>): ShoeModel[] {
   return [...drafts]
-    .map(({ categorySet, sizeSet, ...model }) => ({
+    .map(({ categorySet, sizeSet, stockSizeSet, ...model }) => ({
       ...model,
       categories: [...categorySet].filter(isHockeyShoePath).sort(),
       sizes: [...sizeSet].sort(bySize),
+      sizesInStock: [...stockSizeSet].sort(bySize),
       discipline: shoeDiscipline([...categorySet], model.name),
       eans: [...model.eans].sort(),
     }))
@@ -108,7 +114,7 @@ function finish(drafts: Iterable<Draft>): ShoeModel[] {
 
 function addVariant(
   drafts: Map<string, Draft>,
-  base: Omit<ShoeModel, 'discipline' | 'sizes' | 'categories' | 'priceMin' | 'priceMax' | 'inStock' | 'eans'>,
+  base: Omit<ShoeModel, 'discipline' | 'sizes' | 'sizesInStock' | 'categories' | 'priceMin' | 'priceMax' | 'inStock' | 'eans'>,
   variant: { price: number; size: string | null; inStock: boolean; eans: readonly string[]; categories: readonly string[] },
 ): void {
   let draft = drafts.get(base.url);
@@ -117,6 +123,7 @@ function addVariant(
       ...base,
       discipline: 'onbekend',
       sizes: [],
+      sizesInStock: [],
       categories: [],
       eans: [],
       priceMin: variant.price,
@@ -124,11 +131,14 @@ function addVariant(
       inStock: false,
       categorySet: new Set(),
       sizeSet: new Set(),
+      stockSizeSet: new Set(),
     };
     drafts.set(base.url, draft);
   }
   for (const text of variant.categories) if (text) draft.categorySet.add(text);
   if (variant.size) draft.sizeSet.add(variant.size);
+  if (variant.size && variant.inStock) draft.stockSizeSet.add(variant.size);
+  if (!draft.imageUrl && base.imageUrl) draft.imageUrl = base.imageUrl;
   draft.priceMin = Math.min(draft.priceMin, variant.price);
   draft.priceMax = Math.max(draft.priceMax, variant.price);
   draft.inStock ||= variant.inStock;
@@ -150,7 +160,14 @@ export function parsePassaShoes(xml: string): ShoeModel[] {
     const gender = prop('gender')[0] ?? '';
     addVariant(
       drafts,
-      { shop: 'PassaHockey', url, name: record.name, brand: prop('brand')[0] ?? '', junior: isJunior(`${record.name} ${gender}`) },
+      {
+        shop: 'PassaHockey',
+        url,
+        name: record.name,
+        brand: prop('brand')[0] ?? '',
+        junior: isJunior(`${record.name} ${gender}`),
+        ...(record.imageUrl && { imageUrl: record.imageUrl }),
+      },
       {
         price: record.price,
         size: normalShoeSize(prop('size')[0]),
@@ -201,7 +218,14 @@ export class PlutoShoeCollector {
     if (!Number.isFinite(price) || price <= 0) return;
     addVariant(
       this.drafts,
-      { shop: 'Plutosport', url: page, name, brand: row.brand_name?.trim() ?? '', junior: isJunior(name) },
+      {
+        shop: 'Plutosport',
+        url: page,
+        name,
+        brand: row.brand_name?.trim() ?? '',
+        junior: isJunior(name),
+        ...((row.merchant_image_url ?? row.aw_image_url) && { imageUrl: (row.merchant_image_url ?? row.aw_image_url)!.trim() }),
+      },
       {
         price,
         size: plutoSize(row),

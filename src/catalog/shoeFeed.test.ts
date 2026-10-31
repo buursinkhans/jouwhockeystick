@@ -68,7 +68,7 @@ describe('parsePassaShoes', () => {
     const shoes = parsePassaShoes(`<products>${xml}</products>`);
     expect(shoes).toHaveLength(2);
     const fabela = shoes.find((s) => s.name === 'Adidas Fabela Zone');
-    expect(fabela).toMatchObject({ discipline: 'veld', sizes: ['38', '40'], priceMin: 79.95, priceMax: 89.95, inStock: true, eans: ['4066000000001'], junior: false });
+    expect(fabela).toMatchObject({ discipline: 'veld', sizes: ['38', '40'], sizesInStock: ['40'], priceMin: 79.95, priceMax: 89.95, inStock: true, eans: ['4066000000001'], junior: false });
     expect(shoes.find((s) => s.name.startsWith('Brabo'))).toMatchObject({ discipline: 'zaal', junior: true });
   });
 });
@@ -100,7 +100,7 @@ describe('PlutoShoeCollector', () => {
 });
 
 describe('summarizeShoes and shoeOverlap', () => {
-  const base = { shop: 'Plutosport' as const, sizes: [], eans: [] as string[], categories: ['Hockey > Schoenen'], junior: false };
+  const base = { shop: 'Plutosport' as const, sizes: [], sizesInStock: [], eans: [] as string[], categories: ['Hockey > Schoenen'], junior: false };
   const models = [
     { ...base, url: 'a', name: 'Adidas Fabela Zone', brand: 'Adidas', discipline: 'veld' as const, priceMin: 60, priceMax: 60, inStock: true },
     { ...base, url: 'b', name: 'Asics Typhoon', brand: 'Asics', discipline: 'veld' as const, priceMin: 100, priceMax: 100, inStock: true },

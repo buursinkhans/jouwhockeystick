@@ -31,6 +31,15 @@ De site combineert een stickwijzer, uitlegbare adviesregels, productvergelijking
   - Structured data (`Offer`/`AggregateOffer`) alleen voor prijzen die in het blok zichtbaar zijn en niet ouder dan 14 dagen.
   - Verzendkosten: vast bedrag per winkel uit de openbare voorwaarden, met bron en datum, in `src/lib/retailers.ts` (`SHIPPING`); onbekend is `null` en staat er zo bij.
 
+## Hockeyschoenen
+Sectie `/hockeyschoenen` op deze site (issue #100), in fasen gebouwd. Leidend is `docs/spec/hockeyschoenen-keuzemodel.md`; afwijkingen achteraf in de decision log. Alles uit dit bestand geldt ook voor schoenen. Daarnaast:
+- Eigen catalogus in `src/catalog/shoes/` en eigen adviesregels (`src/shoe-advice/`, nog te bouwen). De stickcatalogus, `src/advice-engine/` en de stick-`ruleSetVersion` blijven ongemoeid.
+- Weeg in deze volgorde: veld of zaal, ondergrond, voetvorm en pasproblemen, belasting en comfort, bewegingsstijl, en als laatste voorkeuren, budget en uitstraling. Positie is context: alleen een andere positie geeft nooit een andere selectie, en tel niet dubbel.
+- Elke eigenschap is bevestigd, ongeschikt of onbekend, met bron. Onbekend is nooit geschikt of gemiddeld en verhoogt een match nooit. Een algemene winkelcategorie "hockeyschoenen" is geen bron voor veld of zaal.
+- Geen "beste schoen", geen "voorkomt blessures", geen "gegarandeerde pasvorm", geen matchpercentages en geen grip-, dempings- of slijtagescores zonder vergelijkbare testgegevens. Bronsoorten zichtbaar: fabrikant (`brand-website`), winkel (`partner-shop`), redactie (`editorial-estimate`); een eigen test pas met een vastgelegd testprotocol.
+- Bij nul geschikte modellen een eerlijke melding, nooit een versoepelde harde voorwaarde. Keepers krijgen een aparte begrenzing. Bij pijn of blessure geen diagnose of correctieve keuze; dat antwoord gaat niet naar analytics, de deel-link of logs. Zonder bevestigde maat en voorraad geen belofte van directe levering. Kinderen nooit automatisch naar premiummodellen.
+- Winkels en prijsregels zoals bij sticks (Commerce). Koppelen tussen winkels alleen op EAN of na handmatige bevestiging, nooit op naam. Modellen uit de feeds (`src/catalog/shoes/imported.ts`, wekelijks in de PassaHockey-sync) krijgen `noindex` tot ze met de hand zijn verrijkt.
+
 ## Documentatie
 - `docs/README.md` is de inhoudsopgave van alle documenten.
 - De specificatie van de keuzehulp is leidend: `docs/spec/keuzehulp-instructie-v1.1.md`. Meld afwijkingen achteraf in `docs/decision-log.md`.
