@@ -125,6 +125,21 @@ describe('shoe feed import: shops linked on EAN only', () => {
     expect(result.curatedMatched).toEqual(['grays-aerocage-xw10']);
     expect(result.listings['grays-aerocage-xw10']).toHaveLength(1);
   });
+
+  it('merges two feed models of one checked model into one listing per shop, cheapest in stock first', () => {
+    const result = run(
+      [
+        page({ url: 'https://www.passasports.nl/osaka-kai-mk1-pro-tour-ftw00033-coolgray', name: 'Osaka KAI MK1 - PRO TOUR', brand: 'Osaka', eans: ['1'.repeat(13)], priceMin: 99, sizes: ['40'], sizesInStock: ['40'] }),
+        page({ url: 'https://www.passasports.nl/osaka-kai-mk1-pro-tour-ftw00044-bluetopaz', name: 'Osaka KAI MK1 - PRO TOUR', brand: 'Osaka', eans: ['2'.repeat(13)], priceMin: 89, sizes: ['38'], sizesInStock: ['38'] }),
+      ],
+      [],
+      [{ slug: 'osaka-kai-mk1-pro-tour', eans: ['1'.repeat(13), '2'.repeat(13)] }],
+    );
+    expect(result.shoes).toEqual([]);
+    expect(result.listings['osaka-kai-mk1-pro-tour']).toEqual([
+      expect.objectContaining({ shop: 'passasports', priceEur: 89, sizes: ['38', '40'], sizesInStock: ['38', '40'], colourPages: 2 }),
+    ]);
+  });
 });
 
 describe('shoe feed import: field or indoor only from a shop that says so', () => {

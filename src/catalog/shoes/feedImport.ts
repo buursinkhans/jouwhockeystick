@@ -189,6 +189,28 @@ function listing(shop: ShoeListing['shop'], pages: readonly ShoeModel[], date: s
 
 const DISPLAY_WORDS: Record<string, string> = { men: 'Heren', mens: 'Heren', women: 'Dames', womens: 'Dames' };
 
+/**
+ * One listing per shop: when several feed models belong to one checked model
+ * (two colour articles, say), keep the cheapest page in stock and add up the
+ * sizes and colour pages.
+ */
+export function mergeListings(listings: readonly ShoeListing[]): ShoeListing[] {
+  const byShop = new Map<ShoeListing['shop'], ShoeListing[]>();
+  for (const l of listings) byShop.set(l.shop, [...(byShop.get(l.shop) ?? []), l]);
+  return [...byShop.values()].map((group) => {
+    const inStock = group.filter((l) => l.inStock);
+    const best = [...(inStock.length ? inStock : group)].sort((a, b) => a.priceEur - b.priceEur || a.url.localeCompare(b.url))[0]!;
+    const union = (pick: (l: ShoeListing) => string[]) => [...new Set(group.flatMap(pick))].sort(bySize);
+    return {
+      ...best,
+      sizes: union((l) => l.sizes),
+      sizesInStock: union((l) => l.sizesInStock),
+      colourPages: group.reduce((sum, l) => sum + l.colourPages, 0),
+      readAt: group.map((l) => l.readAt).sort()[0]!,
+    };
+  });
+}
+
 /** The display name: the shortest shop name, without brand and shop words, in the shop's own spelling. */
 function displayModel(members: readonly ShoeModel[]): string {
   const names = members.map((m) => {
@@ -243,7 +265,7 @@ export function buildShoeImport(
     const curatedSlug = eans.map((ean) => curatedByEan.get(ean)).find(Boolean);
     if (curatedSlug) {
       curatedMatched.add(curatedSlug);
-      listings[curatedSlug] = [...(listings[curatedSlug] ?? []), ...modelListings];
+      listings[curatedSlug] = mergeListings([...(listings[curatedSlug] ?? []), ...modelListings]);
       continue;
     }
 
