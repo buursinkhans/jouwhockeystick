@@ -1686,3 +1686,25 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Betrokken bestanden:** `src/app/sticks/page.tsx`, `src/content/veld.ts`, `src/catalog/feedDates.ts`, `src/content/sticksSeo.test.ts`, `src/content/veld.test.ts`, `src/content/articles.test.ts`.
 
 **Meten:** nulmeting is de Search Console-export van 29 oktober (/sticks: 0 klikken, 226 vertoningen, positie 32,54). Klikratio en vertoningen van /sticks na 4 en 8 weken vergelijken.
+
+## 2026-10-31 — Hockeyschoenen fase 1a: datamodel, feedimport en keuzemodel als spec
+
+**Wat:**
+1. **Spec.** Het keuzemodel van de eigenaar (`advies_hockeyschoenen_keuzemodel.docx`) staat letterlijk als `docs/spec/hockeyschoenen-keuzemodel.md` en is leidend voor `/hockeyschoenen`. In `CLAUDE.md` staat een korte sectie "Hockeyschoenen" met de harde regels.
+2. **Datamodel** (`src/catalog/shoes/types.ts`, Zod), los van de stickcatalogus. Elke eigenschap uit §7 is óf onbekend (`{ value: 'onbekend' }`, zonder bron), óf een `SourcedValue` met bronsoort en controledatum. Ondergronden zijn `bevestigd`/`ongeschikt`/`onbekend`; pasvorm per voorvoet, hiel en wreef apart, met de beschrijving van de bron en een code (`smal`/`normaal`/`ruim`); vochtbescherming houdt waterafstotend en waterdicht uit elkaar.
+3. **Feedimport** (`src/catalog/shoes/feedImport.ts`, `scripts/shoe-import.ts`, gegenereerd `src/catalog/shoes/imported.ts`):
+   - kleurpagina's van één model worden één model (merk plus genormaliseerde naam; heren, dames, junior en indoor blijven aparte modellen);
+   - zelfde naam maar een ander artikelnummer in de URL (bijv. ASICS `1071a101` en `1071a133`) blijft apart, met het artikelnummer in de slug, en staat in het rapport;
+   - PassaHockey en Plutosport worden alleen op EAN gekoppeld, nooit op naam;
+   - alle inhoudelijke eigenschappen staan op onbekend; alleen de maten uit de feed staan erin, als winkelgegeven;
+   - per winkel een listing met de goedkoopste kleur op voorraad, de laagste feedprijs, voorraad, maten (ook per maat op voorraad) en leesdatum;
+   - geïmporteerde modellen hebben `feedImport` en krijgen `noindex` tot ze met de hand zijn verrijkt (zoals sticks, 2026-10-17).
+4. **Veld of zaal alleen uit een winkel die het zegt.** PassaHockey zet alle schoenen in de algemene categorie "Hockeyschoenen" en alleen zaalschoenen daarnaast onder zaalhockey; een veldcategorie heeft die winkel niet. Daarom: zaal als een winkel het model (in welke kleur ook) onder zaalhockey zet of "indoor" in de naam staat; veld alleen als Plutosport het onder "Veldhockey" zet; anders onbekend. Zeggen de winkels het tegenovergestelde, dan onbekend en in het rapport. Het bestaande feedrapport (`shoe-feed-check`) telt de algemene categorie nog als veld; dat rapport verandert niet.
+5. **Wekelijkse sync.** `passa-sync.yml` draait `shoes:import` na de Plutosport-stap en zet het bestand en het rapport in dezelfde PR. Kan een van beide feeds niet worden gelezen, dan blijft het bestand van vorige week staan. De Plutosport-URL komt alleen uit het secret `AWIN_PLUTOSPORT_FEED_URL`; de feedlezers en `redact` staan nu gedeeld in `scripts/shoe-feeds.ts`.
+6. **Eerste bestand.** Lokaal gemaakt met alleen de PassaHockey-feed (`--passa-only`; het Awin-secret staat alleen in GitHub): 190 modellen uit 451 pagina's, 49 zaal en 141 onbekend, 0 veld. De eerste woensdagsync vult Plutosport aan, met de veldindeling en de koppelingen.
+
+**Reden:** fase 1 van het plan voor `/hockeyschoenen` (#100), op verzoek van de eigenaar gesplitst in 1a (dit) en 1b (10–15 gecontroleerde modellen). Akkoord eigenaar op 2026-10-31: kleuren samenvoegen, eerste bestand alleen PassaHockey.
+
+**Niet in deze stap:** pagina's, de schoenenwijzer, artikelen, gecontroleerde modellen. De privacyverklaring wordt op verzoek van de eigenaar aangepast in fase 3, als duidelijk is wat de schoenenwijzer verwerkt.
+
+**Betrokken bestanden:** `src/catalog/shoes/*`, `src/catalog/shoeFeed.ts` (maten op voorraad en afbeelding per model), `scripts/shoe-import.ts`, `scripts/shoe-feeds.ts`, `scripts/shoe-feed-check.ts`, `.github/workflows/passa-sync.yml`, `package.json`, `docs/spec/hockeyschoenen-keuzemodel.md`, `docs/README.md`, `CLAUDE.md`.

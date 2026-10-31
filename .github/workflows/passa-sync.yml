@@ -21,7 +21,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -56,6 +56,16 @@ jobs:
           AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
         run: npm run --silent plutosport:feed -- "$RUNNER_TEMP/pluto.md" --write-matches --write-import
 
+      # Hockey shoes from both feeds (src/catalog/shoes/imported.ts, decision
+      # log 2026-10-31). Needs both feeds: a failing download leaves last
+      # week's file as it was (scripts/shoe-import.ts).
+      - name: Hockeyschoenen importeren
+        if: steps.open.outputs.open == '0'
+        continue-on-error: true
+        env:
+          AWIN_PLUTOSPORT_FEED_URL: ${{ secrets.AWIN_PLUTOSPORT_FEED_URL }}
+        run: npm run --silent shoes:import -- "$RUNNER_TEMP/shoes.md"
+
       # bol.com prices for "Waar te koop", after the imports so new sticks are
       # included. A failing API keeps last week's prices (scripts/bol-prices.ts).
       - name: bol.com-prijzen bijwerken
@@ -72,17 +82,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           trap 'echo "::error::Pull request openen mislukt bij: $BASH_COMMAND"' ERR
-          if [ -z "$(git status --porcelain src/catalog/imported src/catalog/offers)" ]; then echo "Geen wijzigingen."; exit 0; fi
-          other=$(git status --porcelain | awk '{print $2}' | grep -v -e '^src/catalog/imported/' -e '^src/catalog/offers/' || true)
-          if [ -n "$other" ]; then echo "::error::Wijzigingen buiten src/catalog/imported/ en src/catalog/offers/: $other"; exit 1; fi
+          if [ -z "$(git status --porcelain src/catalog/imported src/catalog/offers src/catalog/shoes/imported.ts)" ]; then echo "Geen wijzigingen."; exit 0; fi
+          other=$(git status --porcelain | awk '{print $2}' | grep -v -e '^src/catalog/imported/' -e '^src/catalog/offers/' -e '^src/catalog/shoes/imported.ts$' || true)
+          if [ -n "$other" ]; then echo "::error::Wijzigingen buiten src/catalog/imported/, src/catalog/offers/ en src/catalog/shoes/imported.ts: $other"; exit 1; fi
           branch="catalogus/passa-sync-$(date -u +%Y-%m-%d)"
           git config user.name "PassaHockey-sync"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add src/catalog/imported src/catalog/offers
+          git add src/catalog/imported src/catalog/offers src/catalog/shoes/imported.ts
           git commit -m "Catalogus: PassaHockey-feed bijgewerkt ($(date -u +%F))"
           git push origin "$branch"
-          { cat "$RUNNER_TEMP/import.md"; if [ -f "$RUNNER_TEMP/pluto-koppelingen.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/pluto-koppelingen.md"; fi; if [ -f "$RUNNER_TEMP/bol-prices.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/bol-prices.md"; fi; printf '\n\n_Gemaakt door de wekelijkse PassaHockey-sync. Merge om prijzen, voorraad en nieuwe sticks live te zetten; deze workflow merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
+          { cat "$RUNNER_TEMP/import.md"; if [ -f "$RUNNER_TEMP/pluto-koppelingen.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/pluto-koppelingen.md"; fi; if [ -f "$RUNNER_TEMP/bol-prices.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/bol-prices.md"; fi; if [ -f "$RUNNER_TEMP/shoes.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/shoes.md"; fi; printf '\n\n_Gemaakt door de wekelijkse PassaHockey-sync. Merge om prijzen, voorraad en nieuwe sticks live te zetten; deze workflow merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"
           gh pr create --base main --head "$branch" --title "Catalogus: PassaHockey-feed bijgewerkt ($(date -u +%F))" --body-file "$RUNNER_TEMP/body.md"
           # PRs opened with the workflow token do not trigger other workflows; start the quality check explicitly.
           gh workflow run ci.yml --ref "$branch"

@@ -29,7 +29,8 @@
     "indexnow": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/indexnow.ts",
     "plutosport:feed": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/plutosport-feed.ts",
     "bol:prices": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/bol-prices.ts",
-    "shoes:feed-check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/shoe-feed-check.ts"
+    "shoes:feed-check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/shoe-feed-check.ts",
+    "shoes:import": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/shoe-import.ts"
   },
   "dependencies": {
     "next": "^16.4.2",

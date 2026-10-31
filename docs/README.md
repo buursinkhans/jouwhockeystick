@@ -7,6 +7,7 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | Document | Waarvoor |
 |---|---|
 | [`spec/keuzehulp-instructie-v1.1.md`](spec/keuzehulp-instructie-v1.1.md) | De specificatie van de stickwijzer: routes, vragen, adviesregels en bronnen. **Leidend**; afwijkingen leggen we vast in de decision log. |
+| [`spec/hockeyschoenen-keuzemodel.md`](spec/hockeyschoenen-keuzemodel.md) | Het keuzemodel voor hockeyschoenen: vragen, beslisregels, productmodel, resultaatpagina en acceptatietests van de sectie `/hockeyschoenen` (issue #100). **Leidend**; afwijkingen leggen we vast in de decision log. |
 | [`spec/prijsvergelijking.md`](spec/prijsvergelijking.md) | Prijsvergelijking per stick: spelregels, gegevensmodel, koppelen tussen winkels en de architectuurkeuze. Besloten 2026-10-26, nog niet gebouwd. |
 | [`source-policy.md`](source-policy.md) | Bronbeleid: hoe we claims onderbouwen, bronnen vermelden en de catalogus elk kwartaal controleren. Bindend voor content, productdata en advies. |
 | [`merkinstructie.md`](merkinstructie.md) | Logo, kleuren, typografie en tone of voice. `scripts/build-brand-assets.mjs` bouwt de logobestanden hieruit. |
@@ -41,7 +42,7 @@ Deze workflows lezen alleen en maken een rapport, meestal als issue. De orchestr
 | `sales-report.yml` | Kliks en bestellingen per plek en per stick bij bol.com en PassaHockey (alleen aantallen, want de repo is openbaar) |
 | `conversion-report.yml` | Stickwijzer-trechter, afhaken per vraag, winkelkliks en bezoekers uit AI-assistenten per pagina (PostHog) |
 | `marktverkenning.yml` | Nieuwe hockeypagina's bij concurrenten |
-| `passa-sync.yml` | Woensdag: importeert de PassaHockey-productfeed opnieuw (prijzen, voorraad, nieuwe en verdwenen sticks) en opent een PR |
+| `passa-sync.yml` | Woensdag: importeert de PassaHockey-productfeed opnieuw (prijzen, voorraad, nieuwe en verdwenen sticks), werkt de Plutosport-koppelingen, de bol.com-prijzen en de hockeyschoenen uit beide feeds bij (`src/catalog/shoes/imported.ts`) en opent één PR |
 | `instagram-token.yml` | Elke maand: ververst het Instagram-token in Netlify en start een nieuwe deploy |
 | `catalog-health.yml` | Welke sticks aan hun kwartaalcontrole toe zijn |
 | `bol-feed-check.yml` | Testrun: zoekt elke stick op in de bol.com-feed |
