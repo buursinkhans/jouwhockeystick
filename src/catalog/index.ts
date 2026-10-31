@@ -99,6 +99,13 @@ import { graysAc600ProbowS } from './products/grays-ac600-probow-s';
 import { graysAc500DynabowS } from './products/grays-ac500-dynabow-s';
 import { indianMaharadjaYukiNeonNightHoutJunior } from './products/indian-maharadja-yuki-neon-night-hout-junior-10261053';
 import { indianMaharadjaYukiTangyTwistHoutJunior } from './products/indian-maharadja-yuki-tangy-twist-hout-junior-10261052';
+import { braboGForcePure40Junior3156528000 } from './products/brabo-g-force-pure-40-junior-3156528000';
+import { braboTraditionalCarbon70Lowbow31561262000 } from './products/brabo-traditional-carbon-70-lowbow-31561262000';
+import { braboTraditionalCarbon70Probow31561261000 } from './products/brabo-traditional-carbon-70-probow-31561261000';
+import { braboPure20Probow31563461010 } from './products/brabo-pure-20-probow-31563461010';
+import { braboTribute30Probow31562321020 } from './products/brabo-tribute-30-probow-31562321020';
+import { graysJb6Junior27055 } from './products/grays-jb-6-junior-27055';
+import { graysDynabow6Junior23274 } from './products/grays-dynabow-6-junior-23274';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -191,6 +198,13 @@ const ALL_PRODUCTS: Product[] = [
   scoop48Indoor,
   indianMaharadjaYukiNeonNightHoutJunior,
   indianMaharadjaYukiTangyTwistHoutJunior,
+  braboGForcePure40Junior3156528000,
+  braboTraditionalCarbon70Lowbow31561262000,
+  braboTraditionalCarbon70Probow31561261000,
+  braboPure20Probow31563461010,
+  braboTribute30Probow31562321020,
+  graysJb6Junior27055,
+  graysDynabow6Junior23274,
   braboOgeezPinkAquaJuniorIndoor,
 ];
 
