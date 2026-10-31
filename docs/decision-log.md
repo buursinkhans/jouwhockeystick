@@ -1708,3 +1708,21 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Niet in deze stap:** pagina's, de schoenenwijzer, artikelen, gecontroleerde modellen. De privacyverklaring wordt op verzoek van de eigenaar aangepast in fase 3, als duidelijk is wat de schoenenwijzer verwerkt.
 
 **Betrokken bestanden:** `src/catalog/shoes/*`, `src/catalog/shoeFeed.ts` (maten op voorraad en afbeelding per model), `scripts/shoe-import.ts`, `scripts/shoe-feeds.ts`, `scripts/shoe-feed-check.ts`, `.github/workflows/passa-sync.yml`, `package.json`, `docs/spec/hockeyschoenen-keuzemodel.md`, `docs/README.md`, `CLAUDE.md`.
+
+## 2026-10-31 — Hockeyschoenen fase 1b: 13 gecontroleerde modellen
+
+**Wat:** 13 schoenmodellen met gegevens van de merksite (gelezen op 2026-10-31), in `src/catalog/shoes/products/`: Grays AeroCage X10, AeroCage X10 Junior, Raid 2.0, Stealth en Stealth Junior; Osaka KAI Mk1 - Pro Tour en Furo Court; Brabo Elite, Force, Force Zaal en Tribute Zaal; Mizuno Wave Lynx 3 en Wave Lynx 3 Jr. Verdeling: 10 veld en 3 zaal; 7 senior en 6 junior.
+
+**Regels die we hierbij hebben toegepast:**
+1. **Alleen wat het merk zegt, letterlijk.** Elke ingevulde eigenschap heeft de URL van de productpagina, het citaat van het merk en de controledatum. Wat het merk niet noemt, blijft onbekend; per model staat in `evidenceLimits` wat niet is vastgesteld.
+2. **Ondergrond alleen bij naam.** Water- of zandkunstgras is alleen bevestigd als het merk die ondergrond noemt (Grays AeroCage X10: beide; Osaka KAI: water). "All surfaces", "all pitches" of "kunstgras" is geen claim over water of zand en blijft onbekend (Grays Raid 2.0 en Stealth, Brabo, Mizuno). "Sand-based courts" bij Osaka gaat over padelbanen en telt niet als zandveld. Semi-water of hybride noemt geen enkel merk.
+3. **Pasvorm alleen met een breedte.** Geen merk zegt iets over de breedte van voorvoet, hiel of wreef. Claims als "COMFORT FIT PLUS last", "Superior Heel Fit" of "sock-like fit" staan daarom bij de beperkingen, niet als pasvorm.
+4. **Gewicht alleen met maat.** Mizuno noemt 340 g (senior) en 275 g (junior) zonder schoenmaat; dat gewicht blijft onbekend.
+5. **Non-marking** is alleen bevestigd bij de twee Brabo-zaalschoenen, waar Brabo "non-marking zool" schrijft. Osaka Furo Court noemt het niet.
+6. **Waterdicht ≠ waterafstotend:** Grays Raid 2.0 "waterproof upper" (waterdicht volgens de fabrikant), Grays Stealth "water-repellent PU vamp" (waterafstotend).
+7. **Modeljaar** uit het seizoenslabel van het merk (Grays: Season_2024–2026; Osaka: "26-27"). Brabo en Mizuno noemen geen seizoen: geen modeljaar.
+8. **Koppeling met de feeds op EAN.** Voor Grays, Osaka en Brabo zijn de EAN's de barcodes uit de productgegevens van het merk, van alle kleuren (`products/eans.ts`). Mizuno publiceert geen barcodes; daar zijn het de EAN's uit de PassaHockey-feed onder hetzelfde Mizuno-artikelnummer (X1GA2630, X1GC2630), met de hand bevestigd. Een feedmodel met een gedeelde EAN wordt verborgen en geeft zijn winkelgegevens aan het gecontroleerde model; de volgende sync haalt zulke modellen ook uit `imported.ts`. Daarbij bleek dat de twee Osaka-artikelen die de import apart hield (`ftw00033`, `ftw00044`) kleuren van één model zijn.
+
+**Niet opgenomen:** ASICS en adidas (de merksite weigert automatische toegang, HTTP 403), The Indian Maharadja (geen productgegevens in de pagina) en Nike (geen hockeyschoenen op de eigen site). Voor die merken is een andere bron nodig: de eigenaar beslist of winkelgegevens (`partner-shop`, zichtbaar gemarkeerd) daarvoor mogen.
+
+**Betrokken bestanden:** `src/catalog/shoes/products/{source,eans,grays,osaka,brabo,mizuno,index}.ts`, `src/catalog/shoes/index.ts`, `src/catalog/shoes/feedImport.ts` (`mergeListings`), tests in `src/catalog/shoes/`.

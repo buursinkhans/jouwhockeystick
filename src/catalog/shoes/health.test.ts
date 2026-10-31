@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { SHOE_LISTINGS } from './imported';
-import { getCuratedShoes, getImportedShoes, getShoes } from './index';
+import { IMPORTED_SHOES, SHOE_LISTINGS } from './imported';
+import { getCuratedShoes, getImportedShoes, getShoeListings, getShoes } from './index';
 import { SHOE_CONTENT_PROPERTIES, shoeListingSchema, shoeSchema, type Shoe } from './types';
 
 /**
@@ -64,11 +64,68 @@ describe('shoe catalog health', () => {
     for (const shoe of getCuratedShoes()) expect(shoe.feedImport, shoe.slug).toBeUndefined();
   });
 
-  it('only has listings for models in the catalog, each with a read date', () => {
-    const slugs = new Set(all.map((s) => s.slug));
+  it('only has listings for models in the generated file or the checked catalog, each with a read date', () => {
+    const slugs = new Set([...IMPORTED_SHOES, ...getCuratedShoes()].map((s) => s.slug));
     for (const [slug, listings] of Object.entries(SHOE_LISTINGS)) {
       expect(slugs.has(slug), slug).toBe(true);
       for (const listing of listings) expect(() => shoeListingSchema.parse(listing), slug).not.toThrow();
     }
+  });
+});
+
+describe('hand-checked shoe models (phase 1b, decision log 2026-10-31)', () => {
+  const curated = getCuratedShoes();
+
+  it('has 10 to 15 models, field and indoor, junior and senior', () => {
+    expect(curated.length).toBeGreaterThanOrEqual(10);
+    expect(curated.length).toBeLessThanOrEqual(15);
+    for (const category of ['veld', 'zaal'] as const) expect(curated.some((s) => s.category.value === category), category).toBe(true);
+    for (const age of ['junior', 'senior'] as const) expect(curated.some((s) => s.ageGroup === age), age).toBe(true);
+  });
+
+  it('takes field or indoor, and every other claim, from the brand page', () => {
+    for (const shoe of curated) {
+      expect(shoe.category.value, shoe.slug).not.toBe('onbekend');
+      for (const [key, claim] of claims(shoe)) {
+        if (claim.value !== 'onbekend') expect(claim.source, `${shoe.slug}.${key}`).toBe('brand-website');
+      }
+      expect(shoe.eans.length, shoe.slug).toBeGreaterThan(0);
+      expect(shoe.evidenceLimits.length, shoe.slug).toBeGreaterThan(0);
+    }
+  });
+
+  it('confirms a surface only when the brand names that surface', () => {
+    for (const shoe of curated) {
+      if (shoe.surfaceWater.value === 'bevestigd') expect(shoe.surfaceWater.sourceLabel, shoe.slug).toMatch(/water/i);
+      if (shoe.surfaceSand.value === 'bevestigd') expect(shoe.surfaceSand.sourceLabel, shoe.slug).toMatch(/sand|zand/i);
+      expect(shoe.surfaceSemiWaterHybrid.value, shoe.slug).toBe('onbekend');
+    }
+    // "All surfaces" is no water or sand claim (Grays Raid 2.0 and Stealth).
+    for (const slug of ['grays-raid-2-0', 'grays-stealth']) {
+      const shoe = curated.find((s) => s.slug === slug)!;
+      expect([shoe.surfaceWater.value, shoe.surfaceSand.value], slug).toEqual(['onbekend', 'onbekend']);
+    }
+  });
+
+  it('confirms non-marking only for an indoor shoe whose brand says so', () => {
+    for (const shoe of curated) {
+      const claim = shoe.indoorNonMarking;
+      if (claim.value !== 'bevestigd') continue;
+      expect(shoe.category.value, shoe.slug).toBe('zaal');
+      expect(claim.sourceLabel, shoe.slug).toMatch(/non-marking/i);
+    }
+    expect(curated.filter((s) => s.indoorNonMarking.value === 'bevestigd').map((s) => s.slug)).toEqual(['brabo-force-zaal', 'brabo-tribute-zaal']);
+  });
+
+  it('hides a feed model that is a checked model and gives its shop listings to the checked one', () => {
+    const curatedEans = new Set(curated.flatMap((s) => s.eans));
+    expect(getImportedShoes().filter((s) => s.eans.some((e) => curatedEans.has(e))).map((s) => s.slug)).toEqual([]);
+    const hidden = IMPORTED_SHOES.filter((s) => s.eans.some((e) => curatedEans.has(e)));
+    expect(hidden.length).toBeGreaterThanOrEqual(curated.length);
+    // Two Osaka colour articles in the feed are one checked model, with one listing per shop.
+    const kai = getShoeListings('osaka-kai-mk1-pro-tour');
+    expect(kai.map((l) => l.shop)).toEqual(['passasports']);
+    expect(kai[0]!.colourPages).toBeGreaterThanOrEqual(2);
+    for (const shoe of curated) expect(getShoeListings(shoe.slug).length, shoe.slug).toBeGreaterThan(0);
   });
 });
