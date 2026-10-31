@@ -1669,3 +1669,20 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Ongewijzigd:** SEO-title, meta description, H1, URL, canonical, structured data (Article en BreadcrumbList, geen FAQ), bestaande links en bronnen, productgegevens en partnerlinks. De titel en beschrijving blijven zo tot de zoekopdrachten uit Search Console zijn beoordeeld.
 
 **Meten:** na 4 en 8 weken, zoals in de analyse. Eerst de zoekopdrachten van deze pagina exporteren uit Search Console als nulmeting per zoekwoord.
+
+## 2026-10-30 — /sticks: meta description met aantallen, datum van het aanbod, prijs- en carbonvraag
+
+**Wat:**
+1. **Meta description.** De oude tekst (183 tekens) werd op 158 tekens afgekapt, ook in de Open Graph-beschrijving ("…per niveau en…"). Nieuw: `Vergelijk {N} veldhockeysticks van {M} merken op lengte, bow, carbon en niveau, met de bron bij elk gegeven. Plus een eerste keuze per niveau.` N en M komen uit `getCatalogStats` (dezelfde telling als de koppen en het merkfilter op de pagina), via `generateMetadata`. Met de huidige catalogus 141 tekens; met vier cijfers per aantal nog binnen 158. Ontbreekt een aantal of wordt de tekst te lang, dan valt hij terug op een vaste tekst zonder getallen (148 tekens). SEO-title, H1 en canonical zijn ongewijzigd.
+2. **Datum van aanbod en prijzen.** Onder de byline staat apart: "Aanbod en winkelprijzen gelezen op {datum}" (of "tussen {datum} en {datum}" als de feeds op verschillende dagen zijn gelezen). De datums komen uit de vijf bestanden die de wekelijkse sync genereert (PassaHockey-import en -prijzen, Plutosport-import en -koppelingen, bol.com-prijzen); elk script schrijft zijn datum alleen na een geslaagde lezing. Ontbreekt een datum of is hij ongeldig, dan staat er geen regel; de huidige datum wordt nooit gebruikt (`src/catalog/feedDates.ts`).
+3. **Redactionele datum.** `VELD.updatedAt` blijft alleen voor inhoudelijke wijzigingen en is daarom nu eenmalig 2026-10-30 (deze FAQ-wijziging). De sitemap-`lastmod` van /sticks volgt die datum en verandert niet bij een prijs- of catalogusupdate.
+4. **Prijsvraag.** Het antwoord zegt nu dat het aantal en de prijzen juniorsticks en sticks voor volwassenen samen zijn, geeft beide ranges apart en meldt dat de ranges per niveau ook beide bevatten. Alles blijft berekend uit de catalogus.
+5. **Carbonvraag.** Het bereik uit de catalogus (live 0% tot 100%: houten en glasvezelsticks naast volledig carbon) is vervangen door praktische uitleg in lijn met het carbonartikel, met de link ernaar.
+
+**Reden:** analyse van /sticks op 2026-10-29 (afgekapte meta description, verouderd ogende datum, weinig zeggende carbonrange, prijsrange zonder vermelding van juniorsticks).
+
+**Ongewijzigd:** SEO-title, H1, URL, canonical, FAQPage-markup (zelfde vijf vragen, tekst gelijk aan de zichtbare antwoorden), merkfilter, productaantallen, de lijst en de knop met feedsticks, winkelknoppen en partnerlinks.
+
+**Betrokken bestanden:** `src/app/sticks/page.tsx`, `src/content/veld.ts`, `src/catalog/feedDates.ts`, `src/content/sticksSeo.test.ts`, `src/content/veld.test.ts`, `src/content/articles.test.ts`.
+
+**Meten:** nulmeting is de Search Console-export van 29 oktober (/sticks: 0 klikken, 226 vertoningen, positie 32,54). Klikratio en vertoningen van /sticks na 4 en 8 weken vergelijken.
