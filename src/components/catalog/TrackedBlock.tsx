@@ -13,8 +13,8 @@ export function TrackedBlock({
   block,
   children,
 }: {
-  page: 'sticks' | 'zaalsticks';
-  block: 'intro' | 'levels' | 'faq';
+  page: 'sticks' | 'zaalsticks' | 'hockeyschoenen';
+  block: 'intro' | 'levels' | 'faq' | 'filters' | 'modellen' | 'pascontrole';
   children: ReactNode;
 }) {
   return (

@@ -6,6 +6,7 @@ import { MainNav, type NavLink } from './MainNav';
 const NAV_LINKS: NavLink[] = [
   { href: '/sticks', label: 'Sticks' },
   { href: '/zaalsticks', label: 'Zaalsticks' },
+  { href: '/hockeyschoenen', label: 'Hockeyschoenen' },
   { href: '/merken', label: 'Merken' },
   { href: '/vergelijk', label: 'Vergelijk' },
   { href: '/kennis', label: 'Kennisbank' },

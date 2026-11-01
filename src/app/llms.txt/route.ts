@@ -1,5 +1,6 @@
 import { getAllArticles } from '@/content';
 import { getAllBlogPosts } from '@/content/blog';
+import { HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
 import { METHODIEK } from '@/content/methodiek';
 import { ZAAL } from '@/content/zaal';
 import { DEFAULT_DESCRIPTION, SITE_NAME, absoluteUrl } from '@/lib/site';
@@ -34,6 +35,7 @@ export function GET() {
     '## Catalogus',
     `- [Veldhockeysticks](${absoluteUrl('/sticks')}): specificaties met bron en controledatum per stick.`,
     `- [${ZAAL.title}](${absoluteUrl('/zaalsticks')}): ${ZAAL.metaDescription}`,
+    `- [${HOCKEYSCHOENEN.title}](${absoluteUrl('/hockeyschoenen')}): ${HOCKEYSCHOENEN.metaDescription}`,
     `- [Merken](${absoluteUrl('/merken')}): de merken in de catalogus.`,
     '',
   ];

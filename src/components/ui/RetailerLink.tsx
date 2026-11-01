@@ -1,7 +1,6 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import type { Brand } from '@/catalog/types';
 import {
   RETAILERS,
   type RetailerId,
@@ -12,7 +11,8 @@ import { buttonBaseClasses, buttonVariantClasses } from './Button';
 
 type Props = {
   retailer: RetailerId;
-  brand: Brand;
+  /** Stick or shoe brand (shoe brands are not in the stick Brand list). */
+  brand: string;
   productName: string;
   placement: RetailerPlacement;
   /** Direct product page; without it the link goes to a search. */

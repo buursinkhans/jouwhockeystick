@@ -1,10 +1,16 @@
-import type { Brand } from '@/catalog/types';
-
 export type RetailerId = 'bolcom' | 'passasports' | 'plutosport';
 
 /** Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert. */
 export type RetailerPlacement =
-  'stickwijzer' | 'productpagina' | 'catalogus' | 'vergelijk' | 'zaalkeuze';
+  | 'stickwijzer'
+  | 'productpagina'
+  | 'catalogus'
+  | 'vergelijk'
+  | 'zaalkeuze'
+  /** Hockey shoes (decision log 2026-11-01): model page, overview, shoe advice. */
+  | 'schoenpagina'
+  | 'schoenencatalogus'
+  | 'schoenwijzer';
 
 /**
  * bol.com Partnerprogramma site ID of jouwhockeystick.nl. Not a secret — it is
@@ -208,7 +214,8 @@ export type Retailer = {
   /** Returns null when this retailer has no verified link for the given brand. */
   getUrl: (params: {
     productName: string;
-    brand: Brand;
+    /** Stick or shoe brand (shoe brands are not in the stick Brand list). */
+    brand: string;
     placement: RetailerPlacement;
     /** Direct product page at this retailer; without it the link is a search. */
     productUrl?: string;

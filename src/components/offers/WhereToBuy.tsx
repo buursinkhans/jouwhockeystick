@@ -26,7 +26,17 @@ function footLine(offers: readonly Offer[], now: Date): string {
     .join(' · ');
 }
 
-function Foot({ offers, now }: { offers: readonly Offer[]; now: Date }) {
+/** Read date, partner-link note and "Hoe vergelijken we?", under every "Waar te koop" (sticks and shoes). */
+export function OfferFoot({
+  offers,
+  now,
+  item = 'stick',
+}: {
+  offers: readonly Offer[];
+  now: Date;
+  /** What one order is: a stick, or a pair of shoes. */
+  item?: 'stick' | 'schoen';
+}) {
   const line = footLine(offers, now);
   return (
     <>
@@ -41,7 +51,7 @@ function Foot({ offers, now }: { offers: readonly Offer[]; now: Date }) {
         <summary className="flex min-h-11 cursor-pointer items-center font-semibold text-veld">
           {OFFER_TEXT.howWeCompare}
         </summary>
-        <p className="text-inkt/80">{OFFER_TEXT.howWeCompareText}</p>
+        <p className="text-inkt/80">{item === 'schoen' ? OFFER_TEXT.howWeCompareTextShoe : OFFER_TEXT.howWeCompareText}</p>
         <p className="mt-1.5 text-inkt/80">{OFFER_TEXT.seller}</p>
       </details>
     </>
@@ -100,7 +110,7 @@ export function WhereToBuy({
                 more={{ kind: 'link', href: compareHref(product, size) }}
                 detail="full"
               />
-              <Foot offers={offers} now={now} />
+              <OfferFoot offers={offers} now={now} />
             </>
           )}
         </div>
@@ -133,7 +143,7 @@ export function WhereToBuy({
               more={{ kind: 'expand' }}
               detail="full"
             />
-            <Foot offers={offers} now={now} />
+            <OfferFoot offers={offers} now={now} />
           </>
         )}
       </OfferBlockView>

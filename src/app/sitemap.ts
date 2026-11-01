@@ -1,9 +1,12 @@
 import { productPath } from '@/catalog/paths';
 import type { MetadataRoute } from 'next';
 import { getAllProducts } from '@/catalog';
+import { getCuratedShoes, shoePath } from '@/catalog/shoes';
+import { lastChecked } from '@/catalog/shoes/certainty';
 import type { Product } from '@/catalog/types';
 import { getAllArticles } from '@/content';
 import { getAllBlogPosts } from '@/content/blog';
+import { HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
 import { METHODIEK } from '@/content/methodiek';
 import { PRIVACY } from '@/content/privacy';
 import { VELD } from '@/content/veld';
@@ -15,6 +18,7 @@ const STATIC_PATHS = [
   '/stickwijzer',
   '/sticks',
   '/zaalsticks',
+  '/hockeyschoenen',
   '/kennis',
   '/merken',
   '/vergelijk',
@@ -36,6 +40,7 @@ function hubLastModified(): Record<string, string> {
   return {
     '/sticks': VELD.updatedAt,
     '/zaalsticks': ZAAL.updatedAt,
+    '/hockeyschoenen': HOCKEYSCHOENEN.updatedAt,
     '/kennis': latest(getAllArticles().map((a) => a.updatedAt)),
     '/blog': latest(getAllBlogPosts().map((p) => p.updatedAt)),
     '/privacy': PRIVACY.updatedAt,
@@ -62,6 +67,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absoluteUrl(productPath(product)),
       lastModified: lastVerified(product),
     })),
+    // Only checked shoe models: feed models are noindex (decision log 2026-11-01).
+    ...getCuratedShoes().map((shoe) => {
+      const lastModified = lastChecked(shoe);
+      return { url: absoluteUrl(shoePath(shoe)), ...(lastModified && { lastModified }) };
+    }),
     ...getAllArticles().map((article) => ({
       url: absoluteUrl(`/kennis/${article.slug}`),
       lastModified: article.updatedAt,

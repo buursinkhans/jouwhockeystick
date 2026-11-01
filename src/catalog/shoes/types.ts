@@ -149,6 +149,8 @@ export const shoeListingSchema = z.object({
   sizesInStock: z.array(z.string()),
   /** Colour pages the shop has for this model. */
   colourPages: z.number().int().positive(),
+  /** The shop's product photo of the linked colour, from its feed. */
+  imageUrl: z.string().url().optional(),
   /** YYYY-MM-DD: when the feed was read. */
   readAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 });

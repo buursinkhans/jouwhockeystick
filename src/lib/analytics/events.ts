@@ -76,9 +76,12 @@ export type AnalyticsEvent =
        * landing blocks on /sticks), like home_block_click for the homepage.
        */
       name: 'catalog_block_click';
-      page: 'sticks' | 'zaalsticks';
-      /** 'aanbod' = the button that loads the imported PassaHockey sticks (target 'aanbod-laden'). */
-      block: 'intro' | 'levels' | 'faq' | 'aanbod';
+      page: 'sticks' | 'zaalsticks' | 'hockeyschoenen';
+      /**
+       * 'aanbod' = the button that loads the imported PassaHockey sticks (target 'aanbod-laden');
+       * 'filters', 'modellen' and 'pascontrole' are on /hockeyschoenen (decision log 2026-11-01).
+       */
+      block: 'intro' | 'levels' | 'faq' | 'aanbod' | 'filters' | 'modellen' | 'pascontrole';
       target: string;
     }
   | {
