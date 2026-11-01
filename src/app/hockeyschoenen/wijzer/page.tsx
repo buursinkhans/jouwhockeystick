@@ -2,6 +2,7 @@ import { getCuratedShoes, getShoeListings } from '@/catalog/shoes';
 import { bySize } from '@/catalog/shoeFeed';
 import { ShoeQuiz } from '@/components/schoenenwijzer/ShoeQuiz';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { shoeArticleLinks } from '@/content/shoeArticles';
 import { sizeKey } from '@/shoe-advice/engine';
 import { pageMetadata } from '@/lib/site';
 
@@ -40,7 +41,7 @@ export default function SchoenenwijzerPage() {
         is een pasadvies, geen garantie en geen medisch advies.
       </p>
       <div className="mt-8">
-        <ShoeQuiz sizes={sizeOptions()} />
+        <ShoeQuiz sizes={sizeOptions()} articles={shoeArticleLinks()} />
       </div>
     </div>
   );

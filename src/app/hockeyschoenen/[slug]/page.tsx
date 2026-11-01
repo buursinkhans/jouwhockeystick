@@ -5,6 +5,8 @@ import { SHOES_PATH, getShoeBySlug, getShoes, isShoeFeedImport, shoePath } from 
 import { getShoeOffers, shoeImageUrl } from '@/catalog/shoes/offers';
 import type { Shoe } from '@/catalog/shoes/types';
 import { FitCheck } from '@/components/shoes/FitCheck';
+import { ShoeArticleLinks } from '@/components/shoes/ShoeArticleLinks';
+import { shoeArticleLinks } from '@/content/shoeArticles';
 import { NonMarkingWarning } from '@/components/shoes/NonMarkingWarning';
 import { ShoeCard } from '@/components/shoes/ShoeCard';
 import { ShoeImage } from '@/components/shoes/ShoeImage';
@@ -148,6 +150,7 @@ export default async function ShoePage({ params }: { params: Promise<{ slug: str
       </section>
 
       <FitCheck />
+      <ShoeArticleLinks links={shoeArticleLinks()} />
 
       {others.length > 0 && (
         <section aria-labelledby="vergelijkbaar-kop" className="mt-12">
