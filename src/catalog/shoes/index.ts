@@ -29,7 +29,10 @@ const LISTINGS: Record<string, readonly ShoeListing[]> = (() => {
   for (const [slug, listings] of Object.entries(SHOE_LISTINGS)) {
     const imported = IMPORTED_SHOES.find((shoe) => shoe.slug === slug);
     const target = (imported && curatedSlugOf(imported)) ?? slug;
-    result[target] = [...(result[target] ?? []), ...listings];
+    // Listings written before 2026-11-01 carry no photo; the feed model's own does.
+    const image = imported?.imageUrl;
+    const withImage = listings.map((l) => (l.imageUrl || !image ? l : { ...l, imageUrl: image }));
+    result[target] = [...(result[target] ?? []), ...withImage];
   }
   return Object.fromEntries(Object.entries(result).map(([slug, listings]) => [slug, mergeListings(listings)]));
 })();
@@ -50,6 +53,11 @@ export function getShoes({ includeImported = false }: { includeImported?: boolea
 export function getShoeBySlug(slug: string): Shoe | undefined {
   return getShoes({ includeImported: true }).find((shoe) => shoe.slug === slug);
 }
+
+export const SHOES_PATH = '/hockeyschoenen';
+
+/** The model page; slugs are merk-model-versie and stay stable. */
+export const shoePath = (shoe: Pick<Shoe, 'slug'>) => `${SHOES_PATH}/${shoe.slug}`;
 
 /** A model generated from the feeds: noindex until enriched by hand (decision log 2026-10-17, 2026-10-31). */
 export const isShoeFeedImport = (shoe: Shoe) => shoe.feedImport !== undefined;

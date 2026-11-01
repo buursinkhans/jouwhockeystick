@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import type { Brand } from '@/catalog/types';
 import { isPriceFresh, sortOffers, totalPrice, type Offer } from '@/catalog/offers/sort';
 import { RETAILERS, type RetailerPlacement } from '@/lib/retailers';
 import { OFFER_TEXT, euro, inch, stockLine } from '@/content/offers';
@@ -40,7 +39,8 @@ export function OfferRows({
   more = null,
   detail,
 }: {
-  brand: Brand;
+  /** Stick or shoe brand (shoe brands are not in the stick Brand list). */
+  brand: string;
   productName: string;
   placement: RetailerPlacement;
   offers: readonly Offer[];

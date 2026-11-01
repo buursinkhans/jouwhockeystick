@@ -15,6 +15,9 @@ export const OFFER_TEXT = {
   howWeCompare: 'Hoe we vergelijken',
   howWeCompareText:
     'Gesorteerd op prijs plus verzendkosten, voor één stick. Alleen winkels waarmee we een partnerprogramma hebben. We krijgen een vergoeding als je via een link koopt; dat verandert de volgorde niet. Prijzen komen uit de productfeeds van de winkels en zijn hooguit 14 dagen oud; de winkel toont na de klik de actuele prijs. Verzendkosten komen uit de openbare voorwaarden van de winkel (de goedkoopste standaardoptie).',
+  /** The same for one pair of hockey shoes (decision log 2026-11-01). */
+  howWeCompareTextShoe:
+    'Gesorteerd op prijs plus verzendkosten, voor één paar. Alleen winkels waarmee we een partnerprogramma hebben. We krijgen een vergoeding als je via een link koopt; dat verandert de volgorde niet. Prijzen komen uit de productfeeds van de winkels en zijn hooguit 14 dagen oud; de winkel toont na de klik de actuele prijs. Verzendkosten komen uit de openbare voorwaarden van de winkel (de goedkoopste standaardoptie).',
   seller: 'De winkel is de verkoper: die levert en regelt retouren en garantie.',
 } as const;
 

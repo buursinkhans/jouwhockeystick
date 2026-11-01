@@ -215,6 +215,15 @@ export function QuizResult({
             <li key={line}>{line}</li>
           ))}
         </ul>
+        {hasResults && (
+          // A quiet pointer to the shoe section (decision log 2026-11-01), not part of the advice.
+          <p className="mt-4 text-sm">
+            Ook nieuwe hockeyschoenen nodig?{' '}
+            <Link href="/hockeyschoenen" className="font-semibold text-veld hover:underline">
+              Bekijk de hockeyschoenen
+            </Link>
+          </p>
+        )}
       </section>
 
       <section

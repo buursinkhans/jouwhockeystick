@@ -1746,3 +1746,45 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Totaal:** 15 gecontroleerde modellen; 11 veld en 4 zaal; 9 senior en 6 junior.
 
 **Betrokken bestanden:** `src/catalog/shoes/products/{grays,osaka,shopSourced,source,eans,index}.ts`, `src/catalog/shoes/health.test.ts`, `CLAUDE.md`.
+
+## 2026-11-01 — Hockeyschoenen fase 2: pagina's, winkelknoppen en navigatie
+
+**Wat:**
+1. **`/hockeyschoenen`:**
+   - de intro beantwoordt "welke hockeyschoenen heb je nodig?" in de eerste 80 woorden;
+   - filters veld/zaal en junior/senior als gewone links (`?type=`, `?leeftijd=`), canonical `/hockeyschoenen`;
+   - de gecontroleerde modellen staan als kaarten, de feedmodellen als compacte lijst met links (lichte HTML, `noindex` op hun pagina's);
+   - verder uitleg over de status en de "Pascontrole" uit §10.
+   Een model met onbekend veld of zaal staat niet in een gefilterde lijst: onbekend telt niet als match.
+2. **`/hockeyschoenen/[slug]`** voor alle modellen. Op elke pagina:
+   - de statusregel "Basis en zekerheid", met bronsoort en controledatum;
+   - "Waar te koop";
+   - "Wat je nog moet controleren": de concrete controles die uit de onbekende eigenschappen volgen;
+   - "Wat de bron zegt": per eigenschap de waarde of "Onbekend", met bronsoort, citaat, link en datum;
+   - "Wat niet is vastgesteld", de pascontrole en vergelijkbare modellen (zelfde soort en leeftijdsgroep, nooit aangevuld met onbekende soorten).
+   Feedmodellen krijgen `noindex` en een melding dat ze niet gecontroleerd zijn.
+3. **Status per model (laag C):**
+   - **onvoldoende informatie:** een feedmodel, of veld/zaal onbekend;
+   - **voorwaardelijk:** gecontroleerd, met veld of zaal bevestigd;
+   - **goede onderbouwing:** daarnaast ook ondergrond (veld) of non-marking (zaal) bevestigd, plus een pasvormgegeven.
+   Nu staan alle 15 gecontroleerde modellen op voorwaardelijk, omdat geen enkel merk een breedte noemt. Het schoenadvies in fase 3 voegt de antwoorden van de speler toe.
+4. **"Waar te koop" voor schoenen** gebruikt dezelfde `Offer`-vorm, `OfferRows` en voetregel als bij sticks: sorteren op prijs plus verzending, geen bedrag na 14 dagen, de partnerlink-vermelding en "de winkel is de verkoper". Maatknoppen zijn er niet, want schoenmaten zijn geen inch-lengtes. Wel staan de maten die de feed per maat op voorraad noemt per winkel vermeld, over alle kleuren samen, met de opmerking dat de winkel de maat bij het bestellen bevestigt. bol.com doet nog niet mee: er zijn geen bol-gegevens voor schoenen.
+5. **Structured data:** `Product` met `Offer` of `AggregateOffer` alleen voor zichtbare prijzen die hooguit 14 dagen oud zijn; geen review- of rating-schema.
+6. **SEO:** in de sitemap staan het overzicht en alleen de gecontroleerde modellen (lastmod = laatste controledatum); in `llms.txt` staat het overzicht; overal breadcrumbs.
+7. **Navigatie:** "Hockeyschoenen" in het menu en de footer, en op de uitkomst van de stickwijzer de rustige regel "Ook nieuwe hockeyschoenen nodig?". Niet op de homepage.
+8. **Analytics:**
+   - `retailer_click` met de nieuwe placements `schoenpagina` en `schoenencatalogus` (`schoenwijzer` staat klaar voor fase 3);
+   - `offer_block_view` op de modelpagina;
+   - `catalog_block_click` met `page: 'hockeyschoenen'` en de blokken `intro`, `filters`, `modellen` en `pascontrole`;
+   - het verkooprapport kent de nieuwe placements.
+9. **Kleine, veilige verbredingen in gedeelde code:**
+   - `RetailerLink`, `OfferRows` en `Retailer.getUrl` nemen het merk als `string`, want schoenmerken staan niet in de stick-`Brand`-lijst;
+   - `OfferFoot` (de voetregel van "Waar te koop") is geëxporteerd en kent een schoentekst ("voor één paar").
+   De stickpagina's veranderen niet.
+10. **Foto's:** elke listing krijgt voortaan de feedafbeelding van de gelinkte kleur. Tot de volgende sync neemt de catalogus die over van het verborgen feedmodel.
+
+**Nog niet in deze fase:** de knop naar de schoenenwijzer (fase 3) en links naar schoenartikelen (fase 4).
+
+**Betrokken bestanden:**
+- nieuw: `src/app/hockeyschoenen/{page,[slug]/page}.tsx`, `src/components/shoes/*`, `src/catalog/shoes/{offers,certainty}.ts`, `src/content/hockeyschoenen.ts` (+ test);
+- gewijzigd: `src/catalog/shoes/{index,types,feedImport}.ts`, `src/lib/retailers.ts`, `src/lib/analytics/events.ts`, `src/components/ui/RetailerLink.tsx`, `src/components/offers/{OfferRows,WhereToBuy}.tsx`, `src/components/catalog/TrackedBlock.tsx`, `src/content/offers.ts`, `src/components/layout/{Header,Footer}.tsx`, `src/components/stickwijzer/QuizResult.tsx`, `src/app/sitemap.ts`, `src/app/llms.txt/route.ts`, `src/analytics-report/sales.ts`.

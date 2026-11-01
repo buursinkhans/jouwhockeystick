@@ -184,6 +184,9 @@ function listing(shop: ShoeListing['shop'], pages: readonly ShoeModel[], date: s
     sizesInStock: union((p) => p.sizesInStock).sort(bySize),
     colourPages: pages.length,
     readAt: date,
+    ...((cheapest.imageUrl ?? pages.find((p) => p.imageUrl)?.imageUrl) && {
+      imageUrl: cheapest.imageUrl ?? pages.find((p) => p.imageUrl)?.imageUrl,
+    }),
   };
 }
 

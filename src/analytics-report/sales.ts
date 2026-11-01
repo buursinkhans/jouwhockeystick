@@ -35,6 +35,9 @@ const PLACEMENT_LABELS: Record<RetailerPlacement, string> = {
   catalogus: 'Catalogus',
   vergelijk: 'Vergelijken',
   zaalkeuze: 'Zaalkeuze',
+  schoenpagina: 'Schoenpagina',
+  schoenencatalogus: 'Schoenenoverzicht',
+  schoenwijzer: 'Schoenenwijzer',
 };
 const OTHER = 'Overig (andere of oude link)';
 
