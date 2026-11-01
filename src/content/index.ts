@@ -10,6 +10,7 @@ import { zaalstickBudget } from './articles/zaalstick-budget';
 import { meerCarbonHockeystickBeter } from './articles/meer-carbon-hockeystick-beter';
 import { waarKoopJeEenHockeystick } from './articles/waar-koop-je-een-hockeystick';
 import { welkeHockeyschoenenHebJeNodig } from './articles/welke-hockeyschoenen-heb-je-nodig';
+import { hockeyschoenenWaterveldZandveld } from './articles/hockeyschoenen-waterveld-zandveld';
 import { hockeyschoenenKinderenMaat } from './articles/hockeyschoenen-kinderen-maat';
 
 /** Listed on /kennis in this order. */
@@ -24,6 +25,7 @@ const ALL_ARTICLES: Article[] = [
   meerCarbonHockeystickBeter,
   waarKoopJeEenHockeystick,
   welkeHockeyschoenenHebJeNodig,
+  hockeyschoenenWaterveldZandveld,
   hockeyschoenenKinderenMaat,
 ];
 
