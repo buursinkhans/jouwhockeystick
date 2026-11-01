@@ -229,3 +229,54 @@ export const NO_SIZE = 'nog-bepalen';
 export const NO_SIZE_LABEL = 'Maat nog bepalen';
 
 export const visibleQuestions = (state: ShoeQuizState) => SHOE_QUESTIONS.filter((q) => !q.showIf || q.showIf(state));
+
+/** The main question of each number: the first question with that number (keuzemodel §5). */
+const MAIN_IDS = new Set(
+  SHOE_QUESTIONS.filter((q, i) => q.kind !== 'size' && SHOE_QUESTIONS.findIndex((other) => other.number === q.number) === i).map((q) => q.id),
+);
+
+export type QuizProgress = {
+  /** The real position: every screen counts, follow-ups and the size included. */
+  step: number;
+  steps: number;
+  /** Which main question this screen belongs to, among the main questions shown for these answers. */
+  main: number;
+  mains: number;
+  kind: 'hoofdvraag' | 'vervolgvraag' | 'maat';
+};
+
+/**
+ * Where the player is (decision log 2026-11-01): "Vraag 3 van 8" counts the
+ * main questions that are shown (7 for indoor, 2 for a keeper), a follow-up
+ * keeps the number of its main question, the size is the last step, and the
+ * real step count stays visible next to it. Recomputed from the answers on
+ * every screen, so branching and going back keep it right.
+ */
+export function quizProgress(questions: readonly ShoeQuestion[], index: number): QuizProgress {
+  const at = Math.max(0, Math.min(index, questions.length - 1));
+  const question = questions[at]!;
+  const mainsShown = questions.filter((q) => MAIN_IDS.has(q.id));
+  const main = questions.slice(0, at + 1).filter((q) => MAIN_IDS.has(q.id)).length;
+  return {
+    step: at + 1,
+    steps: questions.length,
+    main: Math.max(main, 1),
+    mains: mainsShown.length,
+    kind: question.kind === 'size' ? 'maat' : MAIN_IDS.has(question.id) ? 'hoofdvraag' : 'vervolgvraag',
+  };
+}
+
+/** "Vraag 3 van 8", "Vraag 3 van 8 · aanvullende vraag" or "Laatste stap: je maat". */
+export function progressLabel(progress: QuizProgress): string {
+  if (progress.kind === 'maat') return 'Laatste stap: je maat';
+  const base = `Vraag ${progress.main} van ${progress.mains}`;
+  return progress.kind === 'vervolgvraag' ? `${base} · aanvullende vraag` : base;
+}
+
+/**
+ * The questions the progress counts: the ones shown, but while question 1
+ * is still open as if it were field hockey (the longest path), so the count
+ * does not jump from "van 7" to "van 8" after the first answer.
+ */
+export const progressQuestions = (state: ShoeQuizState) =>
+  visibleQuestions(state.purpose === undefined ? { ...state, purpose: 'veld' } : state);

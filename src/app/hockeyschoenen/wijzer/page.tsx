@@ -9,7 +9,7 @@ import { pageMetadata } from '@/lib/site';
 export const metadata = pageMetadata({
   title: 'Schoenenwijzer: welke hockeyschoenen passen bij jou?',
   description:
-    'Beantwoord acht vragen over veld of zaal, je ondergrond, je pasvorm en je spel. Je krijgt maximaal drie hockeyschoenen met de redenen, wat je nog moet controleren en de bron.',
+    'Maximaal acht vragen over veld of zaal, je ondergrond, pasvorm en spel, plus je maat. Je krijgt hooguit drie hockeyschoenen met de redenen en de bron.',
   path: '/hockeyschoenen/wijzer',
 });
 
@@ -38,7 +38,8 @@ export default function SchoenenwijzerPage() {
       <p className="mt-3 text-lg text-inkt/80">
         Welke hockeyschoenen passen bij jou? Eerst kijken we naar veld of zaal en je ondergrond, dan naar je pasvorm, je gebruik en je
         spel. Je krijgt maximaal drie modellen, met waarom ze in je selectie staan en wat je bij het passen nog moet controleren. Het
-        is een pasadvies, geen garantie en geen medisch advies.
+        is een pasadvies, geen garantie en geen medisch advies. Je beantwoordt maximaal acht vragen en kiest je maat; bij sommige
+        antwoorden volgt een korte aanvullende vraag.
       </p>
       <div className="mt-8">
         <ShoeQuiz sizes={sizeOptions()} articles={shoeArticleLinks()} />

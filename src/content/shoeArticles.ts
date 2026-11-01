@@ -25,3 +25,11 @@ export function shoeArticleLinks(articles: readonly Pick<Article, 'slug' | 'titl
     return article ? [{ href: `/kennis/${slug}`, title: article.title }] : [];
   });
 }
+
+/** One shoe article by its agreed slug, when it is live; otherwise null. */
+export function shoeArticleLink(
+  slug: (typeof SHOE_ARTICLE_SLUGS)[number],
+  articles: readonly Pick<Article, 'slug' | 'title'>[] = getAllArticles(),
+): ShoeArticleLink | null {
+  return shoeArticleLinks(articles).find((link) => link.href === `/kennis/${slug}`) ?? null;
+}

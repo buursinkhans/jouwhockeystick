@@ -14,7 +14,7 @@ export function TrackedBlock({
   children,
 }: {
   page: 'sticks' | 'zaalsticks' | 'hockeyschoenen';
-  block: 'intro' | 'levels' | 'faq' | 'filters' | 'modellen' | 'pascontrole';
+  block: 'intro' | 'levels' | 'faq' | 'filters' | 'modellen' | 'intenties' | 'pascontrole';
   children: ReactNode;
 }) {
   return (

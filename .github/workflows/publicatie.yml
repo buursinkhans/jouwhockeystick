@@ -28,6 +28,11 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
+          cache: npm
+      # The schedule check imports the articles, and articles can import the
+      # catalog (zod and other packages): without the dependencies it failed on
+      # 2026-11-01 and no scheduled article would have gone live.
+      - run: npm ci
       - name: Laatste live-build bepalen
         id: since
         env:

@@ -26,6 +26,41 @@ export const HOCKEYSCHOENEN = {
     type: { all: 'Veld en zaal', veld: 'Veld', zaal: 'Zaal' },
     age: { all: 'Alle leeftijden', junior: 'Junior', senior: 'Senior' },
   },
+  /**
+   * Three short sections, one per search intent (SEO analysis 2026-11-01):
+   * each answers one choice question. Counts come from intentFacts(), links
+   * to the filters (canonical stays /hockeyschoenen) and to the article
+   * once it is live.
+   */
+  intents: {
+    veld: {
+      heading: 'Veldhockeyschoenen',
+      question: 'Welke veldhockeyschoen past bij jouw veld?',
+      answer:
+        'Kijk eerst op welk kunstgras je traint en speelt, ook bij uitwedstrijden: water-, zand- of semi-waterveld. Kies dan een schoen die volgens het merk of de winkel geschikt is voor dat veld. Staat de ondergrond bij een model op onbekend, vraag het dan na voordat je koopt. Pas daarna kijk je naar de pasvorm bij voorvoet, hiel en wreef.',
+      filterLabel: 'Bekijk de veldhockeyschoenen',
+      filterHref: '/hockeyschoenen?type=veld',
+      articleSlug: 'hockeyschoenen-waterveld-zandveld',
+    },
+    zaal: {
+      heading: 'Zaalhockeyschoenen',
+      question: 'Waaraan herken je een geschikte zaalhockeyschoen?',
+      answer:
+        'Aan een zool die geen strepen achterlaat op de zaalvloer (non-marking) en grip op een gladde ondergrond. Een veldschoen is gemaakt voor kunstgras, niet voor de zaal. Staat bij een model dat non-marking niet bevestigd is, vraag het dan na bij de winkel.',
+      filterLabel: 'Bekijk de zaalhockeyschoenen',
+      filterHref: '/hockeyschoenen?type=zaal',
+      articleSlug: 'zaalhockeyschoenen-of-indoorschoenen',
+    },
+    kinderen: {
+      heading: 'Hockeyschoenen voor kinderen',
+      question: 'Welke hockeyschoen past bij een kind dat nog groeit?',
+      answer:
+        'Een passend basispaar voor het veld of de zaal waar je kind speelt. Laat de maat de keuze bepalen, niet de leeftijd, en pas met de hockeysokken die je kind echt draagt: de tenen liggen ontspannen en de hiel blijft goed zitten. Een duurder model is voor een beginnend kind niet nodig.',
+      filterLabel: 'Bekijk de hockeyschoenen voor kinderen',
+      filterHref: '/hockeyschoenen?leeftijd=junior',
+      articleSlug: 'hockeyschoenen-kinderen-maat',
+    },
+  },
   checked: {
     heading: 'Gecontroleerde modellen',
     intro:
@@ -157,4 +192,58 @@ export function checksFor(shoe: Shoe): string[] {
   }
   checks.push('Of jouw maat op voorraad is: dat bevestigt de winkel bij het bestellen.');
   return checks;
+}
+
+export type IntentFacts = {
+  veld: { checked: number; surfaceConfirmed: number; feed: number };
+  zaal: { checked: number; nonMarkingConfirmed: number; nonMarkingEstimated: number; feed: number };
+  kinderen: { checked: number; veld: number; zaal: number; feed: number };
+};
+
+/**
+ * The counts in the three intent sections, from the catalog only. A model
+ * with unknown field or indoor is never counted as either; feed models count
+ * only where a shop's own category says field or indoor.
+ */
+export function intentFacts(checked: readonly Shoe[], feed: readonly Shoe[]): IntentFacts {
+  const of = (list: readonly Shoe[], category: 'veld' | 'zaal') => list.filter((s) => s.category.value === category);
+  const veld = of(checked, 'veld');
+  const zaal = of(checked, 'zaal');
+  const junior = checked.filter((s) => s.ageGroup === 'junior');
+  return {
+    veld: {
+      checked: veld.length,
+      surfaceConfirmed: veld.filter((s) => confirmedBySource(s.surfaceWater) || confirmedBySource(s.surfaceSand)).length,
+      feed: of(feed, 'veld').length,
+    },
+    zaal: {
+      checked: zaal.length,
+      nonMarkingConfirmed: zaal.filter((s) => confirmedBySource(s.indoorNonMarking)).length,
+      nonMarkingEstimated: zaal.filter((s) => s.indoorNonMarking.value === 'bevestigd' && !confirmedBySource(s.indoorNonMarking)).length,
+      feed: of(feed, 'zaal').length,
+    },
+    kinderen: {
+      checked: junior.length,
+      veld: of(junior, 'veld').length,
+      zaal: of(junior, 'zaal').length,
+      feed: feed.filter((s) => s.ageGroup === 'junior' && s.category.value !== 'onbekend').length,
+    },
+  };
+}
+
+const models = (n: number) => `${n} ${n === 1 ? 'model' : 'modellen'}`;
+const feedLine = (n: number) => (n > 0 ? ` Daarnaast ${models(n)} uit het aanbod van de winkels, nog niet gecontroleerd.` : '');
+
+/** The fact line under each section, in plain words; never more than the catalog says. */
+export function intentFactLine(intent: keyof IntentFacts, facts: IntentFacts): string {
+  if (intent === 'veld') {
+    const f = facts.veld;
+    return `We hebben ${models(f.checked)} met de hand gecontroleerd. Bij ${f.surfaceConfirmed} daarvan bevestigt het merk of de winkel voor welk veld de schoen bedoeld is.${feedLine(f.feed)}`;
+  }
+  if (intent === 'zaal') {
+    const f = facts.zaal;
+    return `We hebben ${models(f.checked)} met de hand gecontroleerd. Bij ${f.nonMarkingConfirmed} bevestigt het merk of de winkel dat de zool non-marking is; bij ${f.nonMarkingEstimated} is dat onze inschatting op basis van de foto.${feedLine(f.feed)}`;
+  }
+  const f = facts.kinderen;
+  return `We hebben ${models(f.checked)} voor junioren met de hand gecontroleerd: ${f.veld} voor het veld en ${f.zaal} voor de zaal.${feedLine(f.feed)}`;
 }

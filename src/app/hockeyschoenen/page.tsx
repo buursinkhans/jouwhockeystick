@@ -5,12 +5,12 @@ import { InlineText } from '@/components/article/InlineText';
 import { TrackedBlock } from '@/components/catalog/TrackedBlock';
 import { FitCheck } from '@/components/shoes/FitCheck';
 import { ShoeArticleLinks } from '@/components/shoes/ShoeArticleLinks';
-import { shoeArticleLinks } from '@/content/shoeArticles';
+import { shoeArticleLink, shoeArticleLinks } from '@/content/shoeArticles';
 import { ImportedShoes } from '@/components/shoes/ImportedShoes';
 import { ShoeCard } from '@/components/shoes/ShoeCard';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ButtonLink } from '@/components/ui/Button';
-import { CERTAINTY_TEXT, HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
+import { CERTAINTY_TEXT, HOCKEYSCHOENEN, intentFactLine, intentFacts } from '@/content/hockeyschoenen';
 import { pageMetadata } from '@/lib/site';
 
 export const metadata = pageMetadata({
@@ -60,6 +60,8 @@ export default async function HockeyschoenenPage({
   const matches = (shoe: Shoe) => (!type || shoe.category.value === type) && (!age || shoe.ageGroup === age);
   const checked = getCuratedShoes().filter(matches);
   const feedCount = getImportedShoes().filter(matches).length;
+  // The intent sections always count the whole catalog, whatever the filter.
+  const facts = intentFacts(getCuratedShoes(), getImportedShoes());
   const { filters } = HOCKEYSCHOENEN;
 
   return (
@@ -143,6 +145,39 @@ export default async function HockeyschoenenPage({
             <ImportedShoes count={feedCount} type={type} age={age} />
           )}
         </section>
+      </TrackedBlock>
+
+      <TrackedBlock page="hockeyschoenen" block="intenties">
+        <div className="mt-12 max-w-3xl space-y-10">
+          {(['veld', 'zaal', 'kinderen'] as const).map((intent) => {
+            const section = HOCKEYSCHOENEN.intents[intent];
+            const article = shoeArticleLink(section.articleSlug);
+            return (
+              <section key={intent} aria-labelledby={`intentie-${intent}`}>
+                <h2 id={`intentie-${intent}`} className="text-2xl font-bold">
+                  {section.heading}
+                </h2>
+                <h3 className="mt-3 text-lg font-semibold">{section.question}</h3>
+                <p className="mt-2 text-inkt/80">{section.answer}</p>
+                <p className="mt-2 text-sm text-inkt/80">{intentFactLine(intent, facts)}</p>
+                <ul className="mt-2 flex flex-col gap-1">
+                  <li>
+                    <Link href={section.filterHref} className="inline-flex min-h-11 items-center font-semibold text-veld hover:underline">
+                      {section.filterLabel}
+                    </Link>
+                  </li>
+                  {article && (
+                    <li>
+                      <Link href={article.href} className="inline-flex min-h-11 items-center font-semibold text-veld hover:underline">
+                        Lees: {article.title}
+                      </Link>
+                    </li>
+                  )}
+                </ul>
+              </section>
+            );
+          })}
+        </div>
       </TrackedBlock>
 
       <section aria-labelledby="status-kop" className="mt-12 max-w-3xl">
