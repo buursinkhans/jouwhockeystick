@@ -7,6 +7,7 @@ import { FitCheck } from '@/components/shoes/FitCheck';
 import { ImportedShoes } from '@/components/shoes/ImportedShoes';
 import { ShoeCard } from '@/components/shoes/ShoeCard';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { ButtonLink } from '@/components/ui/Button';
 import { CERTAINTY_TEXT, HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
 import { pageMetadata } from '@/lib/site';
 
@@ -77,6 +78,9 @@ export default async function HockeyschoenenPage({
         <p className="mt-5 max-w-3xl text-lg text-inkt/80">
           <InlineText text={HOCKEYSCHOENEN.intro} />
         </p>
+        <ButtonLink href="/hockeyschoenen/wijzer" className="mt-5">
+          {HOCKEYSCHOENEN.wizardButton}
+        </ButtonLink>
       </TrackedBlock>
 
       <TrackedBlock page="hockeyschoenen" block="filters">

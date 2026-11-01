@@ -23,6 +23,22 @@ export function isTrackedHost(hostname: string): boolean {
   return hostname !== 'localhost' && hostname !== '127.0.0.1';
 }
 
+/** A shared shoe advice carries the answers in its query (?a=…): never in the statistics (privacy statement 1.5). */
+const SHARED_SHOE_ADVICE = /(\/hockeyschoenen\/wijzer\/advies)\?[^#\s]*/g;
+
+/**
+ * Drops the query of a shared shoe advice from every property of an event
+ * ($current_url, $referrer, …) before PostHog sends it (decision log 2026-11-01).
+ */
+export function withoutSharedShoeAnswers<T extends { properties: Record<string, unknown> }>(event: T | null): T | null {
+  if (!event) return event;
+  const properties: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(event.properties)) {
+    properties[key] = typeof value === 'string' ? value.replace(SHARED_SHOE_ADVICE, '$1') : value;
+  }
+  return { ...event, properties };
+}
+
 /**
  * Options for posthog.init (src/instrumentation-client.ts). Cookieless: no
  * cookies, no local or session storage, no session recordings and no person
@@ -47,4 +63,5 @@ export const POSTHOG_INIT_OPTIONS = {
   disable_session_recording: true,
   disable_surveys: true,
   disable_compression: true,
+  before_send: withoutSharedShoeAnswers,
 } as const;

@@ -19,6 +19,8 @@ export const HOCKEYSCHOENEN = {
   /** Answers "welke hockeyschoenen heb je nodig?" within the first 80 words. */
   intro:
     'Welke hockeyschoenen je nodig hebt, hangt eerst af van waar je speelt. Voor veldhockey kies je een veldschoen die volgens de fabrikant past bij jouw kunstgras: water-, zand- of semi-waterveld. Voor zaalhockey kies je een zaalschoen met een zool die geen strepen achterlaat (non-marking). Daarna telt de pasvorm: ruimte bij de voorvoet, een hiel die blijft zitten en geen druk op de wreef. Per model zie je wat de fabrikant of winkel bevestigt en wat je nog zelf moet controleren.',
+  /** The button to the schoenenwijzer, right under the intro. */
+  wizardButton: 'Doe de schoenenwijzer',
   filters: {
     legend: 'Filter',
     type: { all: 'Veld en zaal', veld: 'Veld', zaal: 'Zaal' },

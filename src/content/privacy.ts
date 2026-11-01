@@ -14,11 +14,11 @@ export type PrivacySection = {
 export const PRIVACY = {
   title: 'Privacyverklaring',
   metaDescription:
-    'Welke gegevens jouwhockeystick.nl verwerkt, waarom, hoe lang en met wie: de stickwijzer, het interesseformulier, cookieloze statistieken, hosting en partnerlinks.',
-  version: '1.4',
-  updatedAt: '2026-10-29',
+    'Welke gegevens jouwhockeystick.nl verwerkt en waarom: de stick- en schoenenwijzer, het interesseformulier, cookieloze statistieken, hosting en partnerlinks.',
+  version: '1.5',
+  updatedAt: '2026-11-01',
   intro: [
-    `${SITE_NAME} gebruikt zo weinig persoonsgegevens als mogelijk. Voor de stickwijzer hoef je geen naam, e-mailadres of geboortedatum op te geven, we plaatsen geen cookies en we gebruiken statistieken zonder cookies of bezoekersprofielen. Alleen als je zelf het interesseformulier invult, ontvangen we contactgegevens.`,
+    `${SITE_NAME} gebruikt zo weinig persoonsgegevens als mogelijk. Voor de stickwijzer en de schoenenwijzer hoef je geen naam, e-mailadres of geboortedatum op te geven, we plaatsen geen cookies en we gebruiken statistieken zonder cookies of bezoekersprofielen. Alleen als je zelf het interesseformulier invult, ontvangen we contactgegevens.`,
   ],
   sections: [
     {
@@ -32,6 +32,15 @@ export const PRIVACY = {
       paragraphs: [
         'Je antwoorden in de stickwijzer (zoals leeftijdsgroep, lichaamslengte, ervaring en budget) worden tijdelijk in je eigen browser bewaard, zodat je kunt teruggaan zonder opnieuw te beginnen. Ze verdwijnen zodra je het tabblad sluit.',
         'Om het advies te berekenen, worden de antwoorden naar onze server gestuurd. We slaan ze daar niet op en koppelen ze niet aan jou. We vragen bewust geen naam, e-mailadres of geboortedatum.',
+      ],
+    },
+    {
+      heading: 'De schoenenwijzer',
+      paragraphs: [
+        'Voor de schoenenwijzer gebruiken we je antwoorden over veld of zaal, je ondergrond, je pasvorm, je gebruik en je spel, je budget en je schoenmaat. Om het advies te berekenen, gaan die antwoorden naar onze server. We slaan ze daar niet op en koppelen ze niet aan jou. In je browser staan ze alleen zolang de pagina open is.',
+        'Je antwoord op de vraag over bijzonderheden bij het passen (eigen inlegzolen of een brace, terugkerende pijn of een blessure, blaren of drukplekken) blijft in je browser. Het gaat niet naar onze server, niet in de statistieken en niet in een deellink. Geef je pijn of een blessure aan, dan tonen we alleen een vaste tekst met het advies om je klachten te laten beoordelen; we stellen geen diagnose.',
+        'Van je antwoorden in de schoenenwijzer komt niets in de statistieken, ook niet via de klikken die PostHog registreert: we tellen alleen dat de schoenenwijzer is gestart en afgerond, en op welke winkellinks wordt geklikt.',
+        'Deel je het advies, dan staan je antwoorden in de link zelf, behalve die over bijzonderheden bij het passen. Wij bewaren die link niet; iedereen die hem krijgt, kan het advies openen.',
       ],
     },
     {
@@ -61,7 +70,7 @@ export const PRIVACY = {
       heading: 'Afbeeldingen en links van derden',
       paragraphs: [
         'Productfoto’s en logo’s laden we rechtstreeks van de websites van de merken en van de winkels waar de gegevens vandaan komen (bol.com, PassaSports en Plutosport), of van de beeldservers die zij daarvoor gebruiken. Daardoor ontvangt die website, zoals bij elke afbeelding op internet, technische gegevens zoals je IP-adres en browser. Wij krijgen daar niets van te zien.',
-        'Als je doorklikt naar bol.com, PassaHockey of Plutosport, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken: alleen de plek op onze site waar je klikte (bijvoorbeeld de stickwijzer of een stickpagina) en, bij bol.com, de naam van de stick.',
+        'Als je doorklikt naar bol.com, PassaHockey of Plutosport, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken: alleen de plek op onze site waar je klikte (bijvoorbeeld de stickwijzer, de schoenenwijzer of een stick- of schoenpagina) en, bij bol.com, de naam van de stick.',
         'Op onze eigen site plaatsen we geen cookies, ook niet voor partnerlinks. Cookies van de winkels en de affiliatenetwerken komen pas na een klik, op hun eigen websites.',
         'De links naar bol.com lopen via het bol.com Partnerprogramma. Na een klik registreert bol.com dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; bol.com kan daarvoor op zijn eigen website cookies plaatsen. Wij ontvangen daarbij geen gegevens over wie je bent of wat je koopt, alleen geanonimiseerde totalen.',
         'De links naar PassaHockey, de hockeywinkel van PassaSports, lopen via het affiliatenetwerk TradeTracker. Na een klik registreren PassaSports en TradeTracker dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; zij kunnen daarvoor cookies plaatsen. Ook hier ontvangen wij geen gegevens over wie je bent.',
@@ -83,7 +92,7 @@ export const PRIVACY = {
     {
       heading: 'Kinderen',
       paragraphs: [
-        'De stickwijzer kan ook voor kinderen worden ingevuld; daarvoor zijn geen persoonsgegevens nodig. Het interesseformulier is bedoeld voor volwassenen. Ben je jonger dan 16 jaar, vraag dan een ouder of verzorger om het formulier in te vullen.',
+        'De stickwijzer en de schoenenwijzer kunnen ook voor kinderen worden ingevuld; daarvoor zijn geen persoonsgegevens nodig. Het interesseformulier is bedoeld voor volwassenen. Ben je jonger dan 16 jaar, vraag dan een ouder of verzorger om het formulier in te vullen.',
       ],
     },
     {
