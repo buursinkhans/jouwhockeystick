@@ -1930,3 +1930,9 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Restrisico:** `/hockeyschoenen` wordt per aanvraag opgebouwd en toont de link vanaf middernacht. De artikelpagina zelf komt na de ochtendbuild (ongeveer 05:00–06:00) live, tenzij die al eerder op aanvraag wordt opgebouwd. Een link kan dus een paar uur naar een pagina wijzen die nog niet in de build zit.
 
 **Betrokken bestanden:** `src/content/hockeyschoenen.ts`, `src/content/shoeArticles.ts`, `src/app/hockeyschoenen/page.tsx`, `src/content/schoenenwijzer/questions.ts`, `src/components/schoenenwijzer/ShoeQuiz.tsx`, `src/app/hockeyschoenen/wijzer/page.tsx`, `src/lib/analytics/events.ts`, `src/components/catalog/TrackedBlock.tsx`, `.github/workflows/publicatie.yml`, `src/content/shoesSeo.test.ts`.
+
+## 2026-11-01 — Kennisartikel: hockeyschoenen voor water-, zand- of semi-waterveld (#128, live 2026-11-02)
+
+**Wat:** `/kennis/hockeyschoenen-waterveld-zandveld`, fase 4 van #100. Beantwoordt in de intro of je een water-, zand- of semi-waterschoen nodig hebt, hoe je je ondergrond herkent (vraag je club, denk aan uitwedstrijden) en wat "volgens de fabrikant geschikt" op onze pagina's betekent, inclusief "alle ondergronden" = water én zand (besluit 2026-11-01).
+**Waarom dit onderwerp:** keuzemodel §3 (geen kunstmatige scheiding water/zand). De slug staat in `SHOE_ARTICLE_SLUGS`, dus de schoenpagina's linken er vanzelf naar zodra het live is. Geen botsing met `welke-hockeyschoenen-heb-je-nodig`: dat artikel geeft de volgorde van stappen, dit gaat alleen over de ondergrond.
+**Bewust niet:** modelclaims en aantallen in vaste tekst (tellingen komen uit `src/catalog/shoes`), grip- of slijtagescores, "waterveld = lange noppen"-regels, prijzen, millimeterregel, blessure- of pijnadvies.
