@@ -3,8 +3,9 @@ import { checkedShoe, fromBrand } from './source';
 
 /**
  * Grays hockey shoes, from grays-hockey.com (product pages read 2026-10-31).
- * Seasons from the brand's product tags. "All surfaces" or "all pitches"
- * without naming water or sand is not a surface claim: those stay unknown.
+ * Seasons from the brand's product tags. A brand claim for "all surfaces" or
+ * "all pitches" counts for water and sand (owner's decision, decision log
+ * 2026-11-01); semi-water or hybrid still needs its own claim.
  */
 const X10 = 'https://www.grays-hockey.com/products/aerocage-x10-shoe';
 const X10_JR = 'https://www.grays-hockey.com/products/aerocage-x10-junior-shoe';
@@ -47,13 +48,15 @@ export const GRAYS_SHOES: readonly Shoe[] = [
     version: '2.0',
     category: fromBrand('veld' as const, RAID, '"a superior grip outsole tailored specifically for dynamic hockey play"', 2025),
     ageGroup: 'senior',
+    surfaceWater: fromBrand('bevestigd' as const, RAID, '"stability and traction on all surfaces" (algemene claim voor alle ondergronden)', 2025),
+    surfaceSand: fromBrand('bevestigd' as const, RAID, '"stability and traction on all surfaces" (algemene claim voor alle ondergronden)', 2025),
     sizesAndWidths: fromBrand({ sizes: SENIOR_SIZES }, RAID, 'Maten in de productgegevens van Grays (EU); geen breedtes genoemd.', 2025),
     cushioning: fromBrand('EVA Midsole: Energy-efficient cushioning for optimal speed.', RAID, 'Grays, productpagina', 2025),
     support: fromBrand('Welded CAGE Upper: Advanced stability and breathability.', RAID, 'Grays, productpagina', 2025),
     moistureProtection: fromBrand({ kind: 'waterdicht' as const, claim: 'a lightweight waterproof upper … Ripstop WP Fabric' }, RAID, 'Grays, productpagina', 2025),
     durability: fromBrand('AGS Outsole: Enhanced grip and durability for all pitches.', RAID, 'Grays, productpagina', 2025),
     evidenceLimits: [
-      'Ondergrond: Grays noemt "stability and traction on all surfaces" en "all pitches", maar niet water- of zandkunstgras apart; daarom onbekend.',
+      'Ondergrond: Grays noemt "all surfaces" en "all pitches", niet water- of zandkunstgras apart. Semi-waterveld of hybride: niet genoemd.',
       'Pasvorm, gewicht, uitneembare binnenzool en bescherming: niet genoemd.',
       'Waterdicht volgens de fabrikant; niet door ons getest.',
     ],
@@ -66,6 +69,8 @@ export const GRAYS_SHOES: readonly Shoe[] = [
       model: slug === 'grays-stealth' ? 'Stealth' : 'Stealth Junior',
       category: fromBrand('veld' as const, url, '"a lightweight hockey shoe with a high-performance rubber outsole"', 2024),
       ageGroup: slug === 'grays-stealth' ? 'senior' : 'junior',
+      surfaceWater: fromBrand('bevestigd' as const, url, '"performs on all playing surfaces" (algemene claim voor alle ondergronden)', 2024),
+      surfaceSand: fromBrand('bevestigd' as const, url, '"performs on all playing surfaces" (algemene claim voor alle ondergronden)', 2024),
       sizesAndWidths: fromBrand(
         { sizes: slug === 'grays-stealth' ? SENIOR_SIZES : ['35', '35,5', '36', '36,5', '37', '37,5', '38', '39', '39,5'] },
         url,
@@ -76,7 +81,7 @@ export const GRAYS_SHOES: readonly Shoe[] = [
       support: fromBrand('a welded cradle for enhanced foot support and stability … the Superior Heel Fit (SHF) technology reduces lateral movement offering a secure fit', url, 'Grays, productpagina', 2024),
       moistureProtection: fromBrand({ kind: 'waterafstotend' as const, claim: 'The high-grade water-repellent PU vamp' }, url, 'Grays, productpagina', 2024),
       evidenceLimits: [
-        'Ondergrond: Grays noemt "performs on all playing surfaces" en "exceptional grip on synthetic surfaces", maar niet water- of zandkunstgras apart; daarom onbekend.',
+        'Ondergrond: Grays noemt "all playing surfaces" en "synthetic surfaces", niet water- of zandkunstgras apart. Semi-waterveld of hybride: niet genoemd.',
         'Pasvorm: Grays noemt "Superior Heel Fit", maar niets over de breedte van voorvoet, hiel of wreef.',
         'Waterafstotend is niet waterdicht. Gewicht, uitneembare binnenzool, bescherming en slijtvastheid: niet genoemd.',
       ],

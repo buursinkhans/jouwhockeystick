@@ -25,6 +25,15 @@ export function fromBrand<T>(
   };
 }
 
+/**
+ * A claim from a partner shop's product text, for brands whose own site
+ * cannot be read (owner's decision, decision log 2026-11-01). Shown as a shop
+ * source, never as the brand's.
+ */
+export function fromShop<T>(value: T, sourceUrl: string, quote: string): SourcedValue<T> {
+  return { value, source: 'partner-shop', sourceLabel: quote, sourceUrl, lastVerifiedAt: CHECKED_AT };
+}
+
 type ContentKey = (typeof SHOE_CONTENT_PROPERTIES)[number];
 type CheckedShoeInput = Omit<Shoe, ContentKey | 'sizesAndWidths' | 'eans' | 'feedImport' | 'id'> &
   Partial<Pick<Shoe, ContentKey | 'sizesAndWidths'>> & { slug: keyof typeof CURATED_SHOE_EANS };

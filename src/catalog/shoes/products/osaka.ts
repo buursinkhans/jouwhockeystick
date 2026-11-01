@@ -24,11 +24,17 @@ export const OSAKA_SHOES: readonly Shoe[] = [
       '"From water-based hockey pitches to sand-based courts and everyday training surfaces, the Kai MK1 - Pro Tour delivers reliable traction"',
       2026,
     ),
+    surfaceSand: fromBrand(
+      'bevestigd' as const,
+      KAI,
+      '"versatility, durability, and comfort across every surface" (algemene claim voor alle ondergronden)',
+      2026,
+    ),
     sizesAndWidths: fromBrand({ sizes: SIZES }, KAI, 'Maten in de productgegevens van Osaka (EU); geen breedtes genoemd.', 2026),
     support: fromBrand('the structured outer mesh delivers durability, support, and a bold, performance-driven look', KAI, 'Osaka, productpagina', 2026),
     durability: fromBrand('the structured outer mesh delivers durability', KAI, 'Osaka, productpagina', 2026),
     evidenceLimits: [
-      'Zandveld: Osaka noemt "sand-based courts" (padelbanen), geen zandkunstgras voor hockey; daarom onbekend.',
+      'Zandveld: bevestigd via de algemene claim "across every surface". Zandkunstgras voor hockey noemt Osaka niet apart; "sand-based courts" gaat over padelbanen.',
       'Osaka noemt de schoen een all-purpose schoen, ook voor padel en training.',
       'Pasvorm, gewicht, uitneembare binnenzool, demping, bescherming en vochtbescherming: niet genoemd.',
     ],
