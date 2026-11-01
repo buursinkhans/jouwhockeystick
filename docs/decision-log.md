@@ -1895,3 +1895,8 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 7. **Issue #100** bijgewerkt met de status per stap.
 
 **Betrokken bestanden:** `src/content/shoeArticles.ts` (+ test), `src/components/shoes/ShoeArticleLinks.tsx`, de pagina's van `/hockeyschoenen`, `src/components/schoenenwijzer/{ShoeQuiz,ShoeAdviceView}.tsx`, `src/content/articles/hockeystick-lengte-tabel.ts`, `src/content/zaal.ts`, `src/app/zaalsticks/page.tsx`, `src/content/articles.test.ts`, `docs/content-agent.md`.
+
+## 2026-11-01 — Artikel "Welke hockeyschoenen heb je nodig?" (#127)
+
+**Wat:** kennisartikel `/kennis/welke-hockeyschoenen-heb-je-nodig`, de uitgebreide uitleg achter `/hockeyschoenen`, in de volgorde van het keuzemodel (§2). Het aantal gecontroleerde modellen komt uit `src/catalog/shoes`.
+**Bewust niet:** "beste schoen", blessure- of pasvormbeloftes, grip-/dempingsscores, prijzen, maten, millimeterregel, schoen per positie, diagnose bij pijn. Geen botsing met bestaande artikelen: geen enkel artikel behandelt schoenen.
