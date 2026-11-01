@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { IMPORTED_SHOES, SHOE_LISTINGS } from './imported';
 import { getCuratedShoes, getImportedShoes, getShoeListings, getShoes } from './index';
+import { SHOP_SOURCED_SHOES } from './products/shopSourced';
 import { SHOE_CONTENT_PROPERTIES, shoeListingSchema, shoeSchema, type Shoe } from './types';
 
 /**
@@ -73,7 +74,7 @@ describe('shoe catalog health', () => {
   });
 });
 
-describe('hand-checked shoe models (phase 1b, decision log 2026-10-31)', () => {
+describe('hand-checked shoe models (phase 1b, decision log 2026-10-31 and 2026-11-01)', () => {
   const curated = getCuratedShoes();
 
   it('has 10 to 15 models, field and indoor, junior and senior', () => {
@@ -83,25 +84,36 @@ describe('hand-checked shoe models (phase 1b, decision log 2026-10-31)', () => {
     for (const age of ['junior', 'senior'] as const) expect(curated.some((s) => s.ageGroup === age), age).toBe(true);
   });
 
-  it('takes field or indoor, and every other claim, from the brand page', () => {
+  it('takes every claim from the brand page, or from the shop only for the shop-sourced models', () => {
+    const shopSourced = new Set(SHOP_SOURCED_SHOES.map((s) => s.slug));
+    expect([...shopSourced].sort()).toEqual(['asics-gel-peake-3', 'the-indian-maharadja-pro-slim-indoor']);
     for (const shoe of curated) {
       expect(shoe.category.value, shoe.slug).not.toBe('onbekend');
       for (const [key, claim] of claims(shoe)) {
-        if (claim.value !== 'onbekend') expect(claim.source, `${shoe.slug}.${key}`).toBe('brand-website');
+        if (claim.value === 'onbekend') continue;
+        expect(claim.source, `${shoe.slug}.${key}`).toBe(shopSourced.has(shoe.slug) ? 'partner-shop' : 'brand-website');
       }
+      if (shopSourced.has(shoe.slug)) expect(shoe.evidenceLimits[0], shoe.slug).toMatch(/^Bron is de winkel/);
       expect(shoe.eans.length, shoe.slug).toBeGreaterThan(0);
       expect(shoe.evidenceLimits.length, shoe.slug).toBeGreaterThan(0);
     }
   });
 
-  it('confirms a surface only when the brand names that surface', () => {
+  it('confirms a surface only when the source names it or claims all surfaces', () => {
+    const allSurfaces = /all (playing )?surfaces|all pitches|every surface/i;
     for (const shoe of curated) {
-      if (shoe.surfaceWater.value === 'bevestigd') expect(shoe.surfaceWater.sourceLabel, shoe.slug).toMatch(/water/i);
-      if (shoe.surfaceSand.value === 'bevestigd') expect(shoe.surfaceSand.sourceLabel, shoe.slug).toMatch(/sand|zand/i);
+      if (shoe.surfaceWater.value === 'bevestigd') expect(shoe.surfaceWater.sourceLabel, shoe.slug).toMatch(new RegExp(`water|${allSurfaces.source}`, 'i'));
+      if (shoe.surfaceSand.value === 'bevestigd') expect(shoe.surfaceSand.sourceLabel, shoe.slug).toMatch(new RegExp(`sand|zand|${allSurfaces.source}`, 'i'));
+      // An all-surfaces claim is never read as semi-water or hybrid.
       expect(shoe.surfaceSemiWaterHybrid.value, shoe.slug).toBe('onbekend');
     }
-    // "All surfaces" is no water or sand claim (Grays Raid 2.0 and Stealth).
-    for (const slug of ['grays-raid-2-0', 'grays-stealth']) {
+    // "All surfaces" counts for water and sand (owner's decision, 2026-11-01).
+    for (const slug of ['grays-raid-2-0', 'grays-stealth', 'grays-stealth-junior']) {
+      const shoe = curated.find((s) => s.slug === slug)!;
+      expect([shoe.surfaceWater.value, shoe.surfaceSand.value], slug).toEqual(['bevestigd', 'bevestigd']);
+    }
+    // "Kunstgras" or "grip in all directions" is not an all-surfaces claim.
+    for (const slug of ['brabo-elite', 'brabo-force', 'mizuno-wave-lynx-3', 'asics-gel-peake-3']) {
       const shoe = curated.find((s) => s.slug === slug)!;
       expect([shoe.surfaceWater.value, shoe.surfaceSand.value], slug).toEqual(['onbekend', 'onbekend']);
     }

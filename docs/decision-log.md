@@ -1726,3 +1726,23 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Niet opgenomen:** ASICS en adidas (de merksite weigert automatische toegang, HTTP 403), The Indian Maharadja (geen productgegevens in de pagina) en Nike (geen hockeyschoenen op de eigen site). Voor die merken is een andere bron nodig: de eigenaar beslist of winkelgegevens (`partner-shop`, zichtbaar gemarkeerd) daarvoor mogen.
 
 **Betrokken bestanden:** `src/catalog/shoes/products/{source,eans,grays,osaka,brabo,mizuno,index}.ts`, `src/catalog/shoes/index.ts`, `src/catalog/shoes/feedImport.ts` (`mergeListings`), tests in `src/catalog/shoes/`.
+
+## 2026-11-01 — Hockeyschoenen: besluiten eigenaar na fase 1b
+
+**Besluiten van de eigenaar (2026-11-01):**
+1. **Winkelgegevens mogen** voor merken waarvan de site niet te lezen is (ASICS, adidas, The Indian Maharadja, Nike), zichtbaar als winkelbron (`partner-shop`).
+2. **"Alle ondergronden" telt als water én zand.** Een claim van de bron als "all surfaces", "all pitches" of "every surface" bevestigt waterveld en zandveld. Semi-water of hybride blijft een eigen claim nodig hebben. "Kunstgras" of "grip in all directions" is geen claim voor alle ondergronden.
+3. **Brabo Tribute Zaal blijft junior.**
+
+**Wat er daardoor veranderde:**
+- **Grays Raid 2.0, Stealth en Stealth Junior:** water en zand bevestigd (Grays: "all surfaces", "all playing surfaces").
+- **Osaka KAI Mk1 - Pro Tour:** zand bevestigd via "across every surface". Water was al bevestigd. Osaka bedoelt met de claim ook padel en training; dat staat bij de beperkingen.
+- **Twee modellen met winkelbron**, uit de productomschrijving in de PassaHockey-feed (de site van PassaHockey zelf weigert automatische toegang):
+  - ASICS Gel-Peake 3: veld, senior;
+  - The Indian Maharadja Pro Slim Indoor: zaal, senior; de eerste zaalschoen voor volwassenen met een hockeyclaim.
+  Die winkelteksten zijn algemeen en verschillen per kleur. Ze leggen alleen veld of zaal en de maten vast. Ondergrond, pasvorm en non-marking blijven onbekend. EAN's komen uit de feed voor dat model.
+- **adidas en Nike:** niet opgenomen, omdat het maximum van 15 modellen bereikt is. Nike heeft bovendien geen hockeyschoenen op de eigen site.
+
+**Totaal:** 15 gecontroleerde modellen; 11 veld en 4 zaal; 9 senior en 6 junior.
+
+**Betrokken bestanden:** `src/catalog/shoes/products/{grays,osaka,shopSourced,source,eans,index}.ts`, `src/catalog/shoes/health.test.ts`, `CLAUDE.md`.
