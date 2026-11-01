@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ShoeAdviceView } from '@/components/schoenenwijzer/ShoeAdviceView';
+import { shoeArticleLinks } from '@/content/shoeArticles';
 import { shoeAnswersSchema } from '@/shoe-advice/answers';
 import { shoeAdviceCatalog } from '@/shoe-advice/catalog';
 import { getShoeAdvice } from '@/shoe-advice/engine';
@@ -50,7 +51,7 @@ export default async function SharedShoeAdvicePage({ searchParams }: { searchPar
         met je gedeeld. Prijzen en voorraad zijn die van vandaag.
       </p>
       <div className="mt-8">
-        <ShoeAdviceView advice={advice} answers={parsed.data} shareHref={shareHref(parsed.data, slugs, SHOE_SHARE_PATH)} />
+        <ShoeAdviceView advice={advice} answers={parsed.data} articles={shoeArticleLinks()} shareHref={shareHref(parsed.data, slugs, SHOE_SHARE_PATH)} />
       </div>
     </div>
   );

@@ -29,6 +29,9 @@ export const ZAAL = {
   /** Search-result title (<title>), aimed at the queries in Search Console; the H1 stays `title`. */
   seoTitle: 'Zaalhockeystick kiezen en kopen: zaalsticks vergeleken',
   navLabel: 'Zaalsticks',
+  /** A quiet pointer to the shoe section (#100, decision log 2026-11-01). */
+  shoesNote:
+    'Ook zaalhockeyschoenen nodig? Bij de [hockeyschoenen](/hockeyschoenen?type=zaal) zie je per model of de zool non-marking is.',
   /**
    * "Wekelijks bijgewerkte winkelprijzen": the shop prices come from the
    * feeds through the weekly sync and disappear after 14 days, so "actueel"

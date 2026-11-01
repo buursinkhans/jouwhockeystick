@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { getAllProducts } from '@/catalog';
+import { getShoes } from '@/catalog/shoes';
 import { getArticlesIncludingScheduled } from './index';
 import { getBlogPostsIncludingScheduled } from './blog';
 import { todayInSiteTimeZone } from './schedule';
@@ -39,6 +40,9 @@ function internalPathExists(path: string, liveFrom: string): boolean {
     return getBlogPostsIncludingScheduled().some(liveInTime);
   if (section === 'sticks')
     return getAllProducts().some((p) => p.slug === slug);
+  // The shoe section (#100): the schoenenwijzer and every shoe model page.
+  if (section === 'hockeyschoenen')
+    return slug === 'wijzer' || getShoes({ includeImported: true }).some((s) => s.slug === slug);
   return false;
 }
 
@@ -109,5 +113,15 @@ describe('articles and blog posts', () => {
       const slugs = list.map((a) => a.slug);
       expect(new Set(slugs).size).toBe(slugs.length);
     }
+  });
+});
+
+describe('internal links to the shoe section', () => {
+  it('accept the overview, the schoenenwijzer and model pages, not made-up ones', () => {
+    const today = todayInSiteTimeZone();
+    for (const href of ['/hockeyschoenen', '/hockeyschoenen?type=zaal', '/hockeyschoenen/wijzer', '/hockeyschoenen/brabo-elite']) {
+      expect(internalPathExists(href, today), href).toBe(true);
+    }
+    expect(internalPathExists('/hockeyschoenen/bestaat-niet', today)).toBe(false);
   });
 });

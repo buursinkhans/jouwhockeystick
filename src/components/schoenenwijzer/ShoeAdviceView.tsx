@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { OfferRows } from '@/components/offers/OfferRows';
 import { NonMarkingWarning } from '@/components/shoes/NonMarkingWarning';
+import { ShoeArticleLinks } from '@/components/shoes/ShoeArticleLinks';
+import type { ShoeArticleLink } from '@/content/shoeArticles';
 import { ShareAdviceButton } from '@/components/stickwijzer/ShareAdviceButton';
 import { PARTNER_LINK_LABEL, PARTNER_LINK_URL } from '@/content/partnerLinks';
 import {
@@ -123,11 +125,14 @@ export function ShoeAdviceView({
   advice,
   answers,
   fitParticulars = [],
+  articles = [],
   shareHref,
 }: {
   advice: ShoeAdvice;
   answers: ShoeAnswers;
   fitParticulars?: readonly FitParticular[];
+  /** The live shoe articles (src/content/shoeArticles.ts), passed in by the page. */
+  articles?: readonly ShoeArticleLink[];
   shareHref: string | null;
 }) {
   if (advice.kind === 'keeper') {
@@ -188,6 +193,8 @@ export function ShoeAdviceView({
         <p>{SELLER_NOTE}</p>
         <p className="text-xs text-lijngrijs">adviesregels {advice.ruleSetVersion}</p>
       </section>
+
+      <ShoeArticleLinks links={articles} />
 
       {shareHref && <ShareAdviceButton href={shareHref} subject="schoen" />}
     </div>

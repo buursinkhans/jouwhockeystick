@@ -106,6 +106,7 @@ export const hockeystickLengteTabel: Article = {
       level: 2,
       body: [
         'Vul in de [stickwijzer](/stickwijzer) je lichaamslengte, ervaring en wensen in. Je krijgt dan niet alleen een maat, maar ook sticks die je in die maat kunt krijgen, met de redenen erbij. Wil je eerst meer weten over de rest van de keuze? Lees dan [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
+        'Ook nieuwe schoenen nodig? Bij de [hockeyschoenen](/hockeyschoenen) zie je per model of hij past bij je veld of de zaal.',
       ],
     },
   ],

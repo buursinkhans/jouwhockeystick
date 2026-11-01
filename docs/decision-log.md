@@ -1873,3 +1873,25 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 - `src/components/shoes/{NonMarkingWarning,ShoeCard,ShoeSpecTable}.tsx`, `src/app/hockeyschoenen/[slug]/page.tsx`, `src/components/schoenenwijzer/ShoeAdviceView.tsx`;
 - `src/shoe-advice/{engine,types}.ts`, `src/content/{hockeyschoenen,privacy}.ts`, `src/content/schoenenwijzer/resultCopy.ts`, `src/lib/analytics/posthog.ts`;
 - tests.
+
+## 2026-11-01 — Hockeyschoenen fase 4: content-briefs en interne links
+
+**Wat:**
+1. **Zes content-briefs** als issues met het label `content-brief`. Elke brief heeft een vaste slug en verwijst naar de juiste paragrafen van het keuzemodel; ook staat erin wat er niet in mag (verboden claims, geen diagnose, geen vaste prijzen of maten, geen millimeterregel).
+   - #127: Welke hockeyschoenen heb je nodig?
+   - #128: water-, zand- of semi-waterveld
+   - #129: kinderen, maat en groeiruimte
+   - #130: smalle of brede voet
+   - #131: zaalhockeyschoenen of gewone indoorschoenen
+   - #132: wanneer zijn je hockeyschoenen versleten
+2. **De agent start pas na akkoord per brief.** De briefs bevatten bewust geen "@claude": een issue van de eigenaar met "@claude" start de content-agent meteen (`claude.yml`). De agent start nu pas als de eigenaar het label `akkoord` zet. Gecontroleerd: alle runs bij het aanmaken waren "skipped".
+3. **Links naar de artikelen zodra ze live staan** (`src/content/shoeArticles.ts`). Het overzicht, de modelpagina's, de uitkomst van de schoenenwijzer en het gedeelde advies tonen "Meer weten over hockeyschoenen" met alleen de artikelen die nu zichtbaar zijn, op de afgesproken slug. Zolang er geen enkel artikel is, is er geen blok. De links gaan als prop naar de wizard, zodat de browser geen artikelen laadt.
+4. **Rustige verwijzingen:**
+   - in de lengtetabel een zin in de laatste sectie naar `/hockeyschoenen`;
+   - op `/zaalsticks` een regel naar `/hockeyschoenen?type=zaal`.
+   De `updatedAt` van beide pagina's is niet veranderd: het gaat alleen om een link, niet om de inhoud.
+5. **De linkcontrole in de tests** (`articles.test.ts`) kent nu `/hockeyschoenen/wijzer` en de modelpagina's, zodat schoenartikelen daarnaar kunnen linken.
+6. **Handboek content-agent:** een regel voor schoenartikelen (keuzemodel, schoencatalogus, vaste slug).
+7. **Issue #100** bijgewerkt met de status per stap.
+
+**Betrokken bestanden:** `src/content/shoeArticles.ts` (+ test), `src/components/shoes/ShoeArticleLinks.tsx`, de pagina's van `/hockeyschoenen`, `src/components/schoenenwijzer/{ShoeQuiz,ShoeAdviceView}.tsx`, `src/content/articles/hockeystick-lengte-tabel.ts`, `src/content/zaal.ts`, `src/app/zaalsticks/page.tsx`, `src/content/articles.test.ts`, `docs/content-agent.md`.

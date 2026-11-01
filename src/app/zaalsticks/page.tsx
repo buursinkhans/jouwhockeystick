@@ -214,6 +214,10 @@ export default function ZaalsticksPage() {
         </div>
       </section>
 
+      <p className="mt-10 max-w-3xl text-inkt/80">
+        <InlineText text={ZAAL.shoesNote} />
+      </p>
+
       <section className="mt-12 max-w-3xl border-t border-rand pt-8">
         <h2 className="text-xl font-bold">Bronnen</h2>
         <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-inkt/80">

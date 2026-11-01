@@ -4,6 +4,8 @@ import type { Shoe } from '@/catalog/shoes/types';
 import { InlineText } from '@/components/article/InlineText';
 import { TrackedBlock } from '@/components/catalog/TrackedBlock';
 import { FitCheck } from '@/components/shoes/FitCheck';
+import { ShoeArticleLinks } from '@/components/shoes/ShoeArticleLinks';
+import { shoeArticleLinks } from '@/content/shoeArticles';
 import { ImportedShoes } from '@/components/shoes/ImportedShoes';
 import { ShoeCard } from '@/components/shoes/ShoeCard';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -162,6 +164,10 @@ export default async function HockeyschoenenPage({
           <FitCheck />
         </div>
       </TrackedBlock>
+
+      <div className="max-w-3xl">
+        <ShoeArticleLinks links={shoeArticleLinks()} />
+      </div>
     </div>
   );
 }

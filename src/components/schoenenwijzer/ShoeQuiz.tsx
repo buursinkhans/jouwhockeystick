@@ -10,6 +10,7 @@ import type { ShoeAdvice } from '@/shoe-advice/types';
 import { trackEvent } from '@/lib/analytics/track';
 import { shareHref } from '@/lib/shareAdvice';
 import { SHOE_SHARE_PATH, toServerAnswers } from '@/shoe-advice/share';
+import type { ShoeArticleLink } from '@/content/shoeArticles';
 import { ShoeAdviceView } from './ShoeAdviceView';
 
 const isAnswered = (question: ShoeQuestion, state: ShoeQuizState) => {
@@ -90,7 +91,7 @@ function Field({
 type Done = { advice: ShoeAdvice; answers: ShoeAnswers };
 
 /** The schoenenwijzer: one question per screen, the advice computed on the server (decision log 2026-11-01). */
-export function ShoeQuiz({ sizes }: { sizes: readonly string[] }) {
+export function ShoeQuiz({ sizes, articles = [] }: { sizes: readonly string[]; articles?: readonly ShoeArticleLink[] }) {
   const [state, setState] = useState<ShoeQuizState>({});
   const [step, setStep] = useState(0);
   const [started, setStarted] = useState(false);
@@ -139,6 +140,7 @@ export function ShoeQuiz({ sizes }: { sizes: readonly string[] }) {
         <ShoeAdviceView
           advice={done.advice}
           answers={done.answers}
+          articles={articles}
           fitParticulars={(state.fitParticulars ?? []) as FitParticular[]}
           shareHref={done.advice.kind === 'advice' ? shareHref(done.answers, slugs, SHOE_SHARE_PATH) : null}
         />
