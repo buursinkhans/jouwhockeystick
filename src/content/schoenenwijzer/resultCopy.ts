@@ -28,7 +28,7 @@ export const CATEGORY_HEADING = { veld: 'Voor veldhockey', zaal: 'Voor zaalhocke
 export const ADVICE_CERTAINTY: Record<AdviceCertainty, { label: string; text: string }> = {
   'goede-onderbouwing': {
     label: 'Goede onderbouwing',
-    text: 'De kenmerken die voor jou tellen, zijn met een bron bevestigd en er is geen bekend conflict. Dat is geen garantie op een goede pasvorm.',
+    text: 'De kenmerken die voor jou tellen, zijn door het merk of de winkel bevestigd en er is geen bekend conflict. De pasvorm controleer je zelf bij het passen; dit is geen garantie op een goede pasvorm.',
   },
   voorwaardelijk: {
     label: 'Voorwaardelijk advies',
@@ -98,6 +98,8 @@ export function checkText(check: CheckCode): string {
       return 'Op welk veld je speelt: vraag het na bij je club. Dan kun je controleren of de schoen daarbij past.';
     case 'NON_MARKING_ONBEKEND':
       return 'Of de zool non-marking is: nog niet bevestigd. Vraag het na bij de winkel.';
+    case 'NON_MARKING_INSCHATTING':
+      return 'Of de zool non-marking is: niet bevestigd door merk of winkel. We gaan ervan uit omdat de zool op de foto niet zwart is. Vraag het na bij de winkel.';
     case 'PASVORM_ONBEKEND':
       return `Hoe ${PART[check.part]} aansluit: online nog niet bevestigd. Let daar bij het passen op.`;
     case 'PASVORM_ALGEMEEN':

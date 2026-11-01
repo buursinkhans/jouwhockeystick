@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { OfferRows } from '@/components/offers/OfferRows';
+import { NonMarkingWarning } from '@/components/shoes/NonMarkingWarning';
 import { ShareAdviceButton } from '@/components/stickwijzer/ShareAdviceButton';
 import { PARTNER_LINK_LABEL, PARTNER_LINK_URL } from '@/content/partnerLinks';
 import {
@@ -47,6 +48,8 @@ function Item({ item, extraChecks, certaintyOf }: { item: ShoeAdviceItem; extraC
           </h4>
         </div>
       </div>
+
+      <NonMarkingWarning shoe={item.shoe} />
 
       <h5 className="mt-4 font-semibold">{RESULT_HEADINGS.why}</h5>
       <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-inkt/80">

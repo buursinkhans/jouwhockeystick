@@ -266,7 +266,22 @@ describe('shoe advice: rules around the acceptance tests', () => {
     for (const item of advice.items) {
       expect(item.shoe.category.value).toBe('veld');
       expect(item.shoe.surfaceWater.value).toBe('bevestigd');
-      expect(item.certainty).toBe('voorwaardelijk');
+      expect(item.certainty).not.toBe('onvoldoende-informatie');
     }
+    // Confirmed by the brand and nothing else open: a good basis, without fit data (owner, 2026-11-01).
+    expect(advice.items[0]!.certainty).toBe('goede-onderbouwing');
+  });
+
+  it('counts a non-marking sole estimated from the photo as met, but never as a good basis', () => {
+    const estimated = testShoe('zaal-foto', {
+      category: brand('zaal' as const),
+      indoorNonMarking: { value: 'bevestigd', source: 'editorial-estimate', sourceLabel: 'Inschatting: de loopzool is lichtgrijs', lastVerifiedAt: '2026-11-01' },
+    });
+    const item = only(advise(fieldAnswers({ purpose: 'zaal', surface: undefined }), testCatalog([[estimated]]))).items[0]!;
+    expect(item.hard['non-marking']).toBe('voldoet');
+    expect(item.checks).toContainEqual({ code: 'NON_MARKING_INSCHATTING' });
+    expect(item.certainty).toBe('voorwaardelijk');
+    const byBrand = testShoe('zaal-merk', { category: brand('zaal' as const), indoorNonMarking: brand('bevestigd' as const, '"non-marking"') });
+    expect(only(advise(fieldAnswers({ purpose: 'zaal', surface: undefined }), testCatalog([[byBrand]]))).items[0]!.certainty).toBe('goede-onderbouwing');
   });
 });

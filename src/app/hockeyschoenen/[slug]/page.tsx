@@ -5,6 +5,7 @@ import { SHOES_PATH, getShoeBySlug, getShoes, isShoeFeedImport, shoePath } from 
 import { getShoeOffers, shoeImageUrl } from '@/catalog/shoes/offers';
 import type { Shoe } from '@/catalog/shoes/types';
 import { FitCheck } from '@/components/shoes/FitCheck';
+import { NonMarkingWarning } from '@/components/shoes/NonMarkingWarning';
 import { ShoeCard } from '@/components/shoes/ShoeCard';
 import { ShoeImage } from '@/components/shoes/ShoeImage';
 import { ShoeSpecTable } from '@/components/shoes/ShoeSpecTable';
@@ -114,6 +115,7 @@ export default async function ShoePage({ params }: { params: Promise<{ slug: str
         <p className="mt-6 rounded-2xl border border-rand bg-krijt p-4 text-sm text-inkt/80">{HOCKEYSCHOENEN.model.feedNotice}</p>
       )}
       <ShoeStatus shoe={shoe} />
+      <NonMarkingWarning shoe={shoe} />
 
       <ShoeWhereToBuy shoe={shoe} />
 

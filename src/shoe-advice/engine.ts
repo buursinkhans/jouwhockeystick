@@ -99,6 +99,8 @@ type Candidate = {
   preferenceMatches: number;
   primaryConfirmed: boolean;
   primaryRequired: boolean;
+  /** The primary condition rests on our own estimate, not on the brand or a shop. */
+  estimated: boolean;
 };
 
 function lowestPrice(catalog: ShoeCatalog, shoe: Shoe, now: Date): number | null {
@@ -123,6 +125,7 @@ function evaluate(shoe: Shoe, category: 'veld' | 'zaal', answers: ShoeAnswers, c
   // A2. Surface (field) or non-marking sole (indoor).
   let primaryConfirmed = false;
   let primaryRequired = true;
+  let estimated = false;
   let surfaceMatches = 0;
   if (category === 'veld') {
     const { main, second } = requiredSurfaces(answers);
@@ -163,6 +166,11 @@ function evaluate(shoe: Shoe, category: 'veld' | 'zaal', answers: ShoeAnswers, c
     if (status === 'voldoet' && known(shoe.indoorNonMarking)) {
       primaryConfirmed = true;
       reasons.push({ code: 'NON_MARKING', source: shoe.indoorNonMarking.source });
+      // Our photo estimate counts as met (owner's decision, 2026-11-01), but stays a check and never 'goede onderbouwing'.
+      if (shoe.indoorNonMarking.source === 'editorial-estimate') {
+        estimated = true;
+        checks.push({ code: 'NON_MARKING_INSCHATTING' });
+      }
     } else {
       checks.push({ code: 'NON_MARKING_ONBEKEND' });
     }
@@ -306,6 +314,7 @@ function evaluate(shoe: Shoe, category: 'veld' | 'zaal', answers: ShoeAnswers, c
     preferenceMatches,
     primaryConfirmed,
     primaryRequired,
+    estimated,
   };
 }
 
@@ -331,9 +340,9 @@ function compareCandidates(a: Candidate, b: Candidate): number {
 
 function certaintyOf(c: Candidate): AdviceCertainty {
   if (c.primaryRequired && !c.primaryConfirmed) return 'onvoldoende-informatie';
-  const fitKnown = [c.shoe.fitForefoot, c.shoe.fitHeel, c.shoe.fitInstep].some((part) => part.value !== 'onbekend');
+  // No fit data needed (owner's decision, 2026-11-01); a fit problem the player named must still be known.
   const fitChecksOpen = c.checks.some((check) => check.code === 'PASVORM_ONBEKEND');
-  return unknownCount(c) === 0 && c.primaryRequired && fitKnown && !fitChecksOpen && c.fitConflicts === 0
+  return unknownCount(c) === 0 && c.primaryRequired && !c.estimated && !fitChecksOpen && c.fitConflicts === 0
     ? 'goede-onderbouwing'
     : 'voorwaardelijk';
 }

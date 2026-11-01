@@ -1,4 +1,4 @@
-import type { ShoeCertainty } from '@/catalog/shoes/certainty';
+import { confirmedBySource, type ShoeCertainty } from '@/catalog/shoes/certainty';
 import type { Shoe } from '@/catalog/shoes/types';
 
 /**
@@ -77,11 +77,11 @@ export const AGE_LABEL = { junior: 'Junior', senior: 'Senior' } as const;
 export const CERTAINTY_TEXT: Record<ShoeCertainty, { label: string; text: string }> = {
   'goede-onderbouwing': {
     label: 'Goede onderbouwing',
-    text: 'De belangrijkste kenmerken zijn met een bron bevestigd en er is geen bekend conflict. Dat is geen garantie op een goede pasvorm.',
+    text: 'Veld of zaal en de ondergrond of de non-marking zool zijn door het merk of de winkel bevestigd. De pasvorm controleer je zelf bij het passen; dit is geen garantie op een goede pasvorm.',
   },
   voorwaardelijk: {
     label: 'Voorwaardelijk',
-    text: 'Veld of zaal is bevestigd, maar ondergrond, non-marking of pasvorm moet je nog controleren.',
+    text: 'Veld of zaal is bevestigd, maar de ondergrond of de non-marking zool is niet door het merk of de winkel bevestigd. Controleer dat voordat je koopt.',
   },
   'onvoldoende-informatie': {
     label: 'Onvoldoende informatie',
@@ -94,6 +94,13 @@ export const SOURCE_KIND_LABEL = {
   'partner-shop': 'Winkel',
   'editorial-estimate': 'Redactie',
   'fih-rules': 'FIH-reglement',
+} as const;
+
+/** The warning on indoor shoes without a confirmed non-marking sole (owner's decision, 2026-11-01). */
+export const NON_MARKING_WARNING = {
+  inschatting:
+    'Let op: niet bevestigd dat de zool non-marking is. We gaan ervan uit omdat de zool op de productfoto niet zwart is. Vraag het na bij de winkel.',
+  onbekend: 'Let op: niet bevestigd dat de zool non-marking is. Vraag het na bij de winkel voordat je ermee in de zaal speelt.',
 } as const;
 
 export const SUITABILITY_LABEL = { bevestigd: 'Bevestigd', ongeschikt: 'Ongeschikt', onbekend: 'Onbekend' } as const;
@@ -135,8 +142,12 @@ export function checksFor(shoe: Shoe): string[] {
       if (shoe.surfaceSemiWaterHybrid.value === 'onbekend') checks.push('Semi-water of hybride veld: niet bevestigd. Speel je daarop, vraag het dan na.');
     }
   }
-  if (shoe.category.value === 'zaal' && shoe.indoorNonMarking.value !== 'bevestigd') {
-    checks.push('Of de zool non-marking is: niet bevestigd. Vraag het na bij de winkel.');
+  if (shoe.category.value === 'zaal' && !confirmedBySource(shoe.indoorNonMarking)) {
+    checks.push(
+      shoe.indoorNonMarking.value === 'bevestigd'
+        ? 'Of de zool non-marking is: onze inschatting op basis van de foto, niet bevestigd. Vraag het na bij de winkel.'
+        : 'Of de zool non-marking is: niet bevestigd. Vraag het na bij de winkel.',
+    );
   }
   if ([shoe.fitForefoot, shoe.fitHeel, shoe.fitInstep].every((part) => part.value === 'onbekend')) {
     checks.push('De pasvorm bij voorvoet, hiel en wreef: online niet bevestigd. Controleer het bij het passen.');

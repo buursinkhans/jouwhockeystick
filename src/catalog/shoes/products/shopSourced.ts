@@ -1,5 +1,5 @@
 import type { Shoe } from '../types';
-import { checkedShoe, fromShop } from './source';
+import { checkedShoe, fromShop, nonMarkingFromPhoto } from './source';
 
 /**
  * Models of brands whose own site cannot be read (ASICS and adidas refuse
@@ -47,6 +47,8 @@ export const SHOP_SOURCED_SHOES: readonly Shoe[] = [
       'PassaHockey: "Deze schoen is specifiek ontworpen voor gebruik in de zaal" (productomschrijving in de feed)',
     ),
     ageGroup: 'senior',
+    // Photos of both colours in the feed (white 3426025, mint 3426035), checked 2026-11-01.
+    indoorNonMarking: nonMarkingFromPhoto('lichtgrijs, bij beide kleuren', PRO_SLIM_INDOOR),
     sizesAndWidths: fromShop(
       { sizes: ['36', '37', '37 1/2', '38', '38 2/3', '39 1/3', '40', '40 2/3', '41 1/3', '42', '42 2/3', '43 1/3', '44'] },
       PRO_SLIM_INDOOR,
@@ -55,7 +57,8 @@ export const SHOP_SOURCED_SHOES: readonly Shoe[] = [
     evidenceLimits: [
       'Bron is de winkel, niet The Indian Maharadja: de merksite toont geen productgegevens.',
       'Pasvorm: de winkel noemt "De slanke pasvorm van de Pro Slim-lijn", maar niets over voorvoet, hiel of wreef apart; daarom onbekend.',
-      'Non-marking, gewicht, uitneembare binnenzool, demping, ondersteuning, bescherming, vochtbescherming en slijtvastheid: niet vastgesteld.',
+      'Non-marking: niet bevestigd door merk of winkel. Onze inschatting op basis van de kleur van de zool op de foto (lichtgrijs, niet zwart).',
+      'Gewicht, uitneembare binnenzool, demping, ondersteuning, bescherming, vochtbescherming en slijtvastheid: niet vastgesteld.',
     ],
   }),
 ];

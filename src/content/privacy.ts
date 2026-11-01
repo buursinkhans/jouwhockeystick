@@ -32,6 +32,7 @@ export const PRIVACY = {
       paragraphs: [
         'Je antwoorden in de stickwijzer (zoals leeftijdsgroep, lichaamslengte, ervaring en budget) worden tijdelijk in je eigen browser bewaard, zodat je kunt teruggaan zonder opnieuw te beginnen. Ze verdwijnen zodra je het tabblad sluit.',
         'Om het advies te berekenen, worden de antwoorden naar onze server gestuurd. We slaan ze daar niet op en koppelen ze niet aan jou. We vragen bewust geen naam, e-mailadres of geboortedatum.',
+        'Deel je het advies met de knop “Deel dit advies”, dan staan je antwoorden in de link zelf, samen met de sticks die je kreeg. Wij bewaren die link niet; iedereen die hem krijgt, kan het advies openen. Opent iemand de link, dan halen we de antwoorden uit het webadres voordat het in onze statistieken komt.',
       ],
     },
     {

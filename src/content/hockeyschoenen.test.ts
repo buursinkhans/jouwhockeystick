@@ -12,7 +12,7 @@ import { UNKNOWN, type Shoe } from '@/catalog/shoes/types';
 import { plainText } from '@/components/article/inlineMarkup';
 import { SHIPPING, shippingCostEur } from '@/lib/retailers';
 import { SITE_URL } from '@/lib/site';
-import { HOCKEYSCHOENEN, checksFor } from './hockeyschoenen';
+import { HOCKEYSCHOENEN, NON_MARKING_WARNING, checksFor } from './hockeyschoenen';
 
 /** Phase 2 of /hockeyschoenen (decision log 2026-11-01). */
 const overview = async (query: { type?: string; leeftijd?: string } = {}) =>
@@ -30,18 +30,33 @@ afterEach(() => vi.useRealTimers());
 describe('model certainty (laag C per model)', () => {
   it('rates feed models as insufficient and checked models by what is confirmed', () => {
     for (const shoe of getImportedShoes()) expect(shoeCertainty(shoe), shoe.slug).toBe('onvoldoende-informatie');
-    // Field confirmed, surface confirmed, no fit data: still conditional.
-    expect(shoeCertainty(curated('grays-aerocage-x10'))).toBe('voorwaardelijk');
-    // Indoor with non-marking but no fit: conditional.
-    expect(shoeCertainty(curated('brabo-force-zaal'))).toBe('voorwaardelijk');
-    const withFit: Shoe = {
-      ...curated('grays-aerocage-x10'),
-      fitHeel: { value: { code: 'smal', description: 'narrow heel' }, source: 'brand-website', lastVerifiedAt: '2026-11-01' },
-    };
-    expect(shoeCertainty(withFit)).toBe('goede-onderbouwing');
-    // Without a confirmed surface a fit claim is not enough.
-    expect(shoeCertainty({ ...withFit, surfaceWater: UNKNOWN, surfaceSand: UNKNOWN })).toBe('voorwaardelijk');
-    expect(shoeCertainty({ ...withFit, category: UNKNOWN })).toBe('onvoldoende-informatie');
+    // Surface or non-marking confirmed by the brand: good basis, no fit data needed (owner, 2026-11-01).
+    expect(shoeCertainty(curated('grays-aerocage-x10'))).toBe('goede-onderbouwing');
+    expect(shoeCertainty(curated('brabo-force-zaal'))).toBe('goede-onderbouwing');
+    // Non-marking only estimated from the photo: conditional.
+    expect(shoeCertainty(curated('osaka-furo-court'))).toBe('voorwaardelijk');
+    // No surface claim: conditional; field or indoor unknown: insufficient.
+    expect(shoeCertainty(curated('brabo-elite'))).toBe('voorwaardelijk');
+    const x10: Shoe = curated('grays-aerocage-x10');
+    expect(shoeCertainty({ ...x10, surfaceWater: UNKNOWN, surfaceSand: UNKNOWN })).toBe('voorwaardelijk');
+    expect(shoeCertainty({ ...x10, category: UNKNOWN })).toBe('onvoldoende-informatie');
+  });
+
+  it('warns on every indoor shoe whose non-marking sole is not confirmed by brand or shop', async () => {
+    for (const slug of ['osaka-furo-court', 'the-indian-maharadja-pro-slim-indoor']) {
+      const html = await modelPage(slug);
+      expect(html, slug).toContain(NON_MARKING_WARNING.inschatting);
+      expect(html, slug).toContain('Voorwaardelijk');
+    }
+    // Confirmed by Brabo: no warning of its own (cards of similar models may carry theirs).
+    const brabo = await modelPage('brabo-force-zaal');
+    expect(brabo).not.toContain(NON_MARKING_WARNING.inschatting);
+    expect(brabo).not.toContain(NON_MARKING_WARNING.onbekend);
+    expect(await modelPage('grays-aerocage-x10')).not.toContain('non-marking is');
+    const feedIndoor = getImportedShoes().find((s) => s.category.value === 'zaal')!;
+    expect(await modelPage(feedIndoor.slug)).toContain(NON_MARKING_WARNING.onbekend);
+    // And on the cards in the overview.
+    expect(await overview({ type: 'zaal' })).toContain('Let op: niet bevestigd dat de zool non-marking is.');
   });
 });
 
@@ -109,7 +124,7 @@ describe('shoe model page', () => {
   it('has one H1, the status, the checks, the sources, "Waar te koop" and the fit check', async () => {
     const html = await modelPage('grays-aerocage-x10');
     expect(html.match(/<h1/g)).toHaveLength(1);
-    for (const text of ['Basis en zekerheid', 'Voorwaardelijk', HOCKEYSCHOENEN.model.checkHeading, HOCKEYSCHOENEN.model.specsHeading, 'Waar te koop', 'Pascontrole']) {
+    for (const text of ['Basis en zekerheid', 'Goede onderbouwing', HOCKEYSCHOENEN.model.checkHeading, HOCKEYSCHOENEN.model.specsHeading, 'Waar te koop', 'Pascontrole']) {
       expect(html).toContain(text);
     }
     expect(html).toContain('rock-solid stability on both water- and sand-based turfs');
@@ -172,5 +187,13 @@ describe('navigation, sitemap and llms.txt', () => {
     expect(readFileSync('src/components/stickwijzer/QuizResult.tsx', 'utf8')).toContain('Ook nieuwe hockeyschoenen nodig?');
     // Not on the homepage hero.
     expect(readFileSync('src/app/page.tsx', 'utf8')).not.toContain('/hockeyschoenen');
+  });
+});
+
+describe('non-marking estimate in the property table', () => {
+  it('never shows an estimated non-marking sole as confirmed', async () => {
+    const html = await modelPage('osaka-furo-court');
+    expect(html).toMatch(/Non-marking zool<\/dt><dd[^>]*><span>Aangenomen \(inschatting, niet bevestigd\)<\/span>/);
+    expect(await modelPage('brabo-force-zaal')).toMatch(/Non-marking zool<\/dt><dd[^>]*><span>Bevestigd<\/span>/);
   });
 });

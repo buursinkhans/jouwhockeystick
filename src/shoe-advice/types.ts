@@ -39,6 +39,7 @@ export type CheckCode =
   | { code: 'ONDERGROND_ONBEKEND'; surface: 'water' | 'zand' | 'semi-water' }
   | { code: 'SPELER_ONDERGROND_ONBEKEND' }
   | { code: 'NON_MARKING_ONBEKEND' }
+  | { code: 'NON_MARKING_INSCHATTING' }
   | { code: 'PASVORM_ONBEKEND'; part: FitPart }
   | { code: 'PASVORM_ALGEMEEN' }
   | { code: 'MAAT_NIET_BEVESTIGD'; size: string }

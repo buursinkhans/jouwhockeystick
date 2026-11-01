@@ -8,7 +8,7 @@ import sitemap from '@/app/sitemap';
 import { ShoeAdviceView } from '@/components/schoenenwijzer/ShoeAdviceView';
 import { SHOE_QUESTIONS, visibleQuestions } from '@/content/schoenenwijzer/questions';
 import { PRIVACY } from '@/content/privacy';
-import { POSTHOG_INIT_OPTIONS, withoutSharedShoeAnswers } from '@/lib/analytics/posthog';
+import { POSTHOG_INIT_OPTIONS, withoutSharedAnswers } from '@/lib/analytics/posthog';
 import { readShare, shareHref } from '@/lib/shareAdvice';
 import { SITE_URL } from '@/lib/site';
 import { shoeAnswersSchema, type ShoeAnswers } from './answers';
@@ -68,9 +68,9 @@ describe('question 7 never leaves the browser', () => {
   });
 
   it('keeps the answers of a shared shoe advice out of PostHog', () => {
-    expect(POSTHOG_INIT_OPTIONS.before_send).toBe(withoutSharedShoeAnswers);
+    expect(POSTHOG_INIT_OPTIONS.before_send).toBe(withoutSharedAnswers);
     const url = `${SITE_URL}${shareHref(fieldAnswers(), ['brabo-elite'], SHOE_SHARE_PATH)}`;
-    const event = withoutSharedShoeAnswers({ properties: { $current_url: url, $referrer: url, $pathname: SHOE_SHARE_PATH, other: 1 } });
+    const event = withoutSharedAnswers({ properties: { $current_url: url, $referrer: url, $pathname: SHOE_SHARE_PATH, other: 1 } });
     expect(event?.properties).toEqual({
       $current_url: `${SITE_URL}${SHOE_SHARE_PATH}`,
       $referrer: `${SITE_URL}${SHOE_SHARE_PATH}`,
@@ -78,7 +78,7 @@ describe('question 7 never leaves the browser', () => {
       other: 1,
     });
     // Other pages keep their query.
-    expect(withoutSharedShoeAnswers({ properties: { $current_url: `${SITE_URL}/hockeyschoenen?type=zaal` } })?.properties.$current_url).toContain('?type=zaal');
+    expect(withoutSharedAnswers({ properties: { $current_url: `${SITE_URL}/hockeyschoenen?type=zaal` } })?.properties.$current_url).toContain('?type=zaal');
   });
 
   it('shows a fixed referral for pain or an injury, without changing the advice', () => {
@@ -161,5 +161,17 @@ describe('result copy', () => {
     const text = reasonText({ code: 'DEMPING', claim: 'EVA Midsole: Energy-efficient cushioning for optimal speed.', why: 'comfort' });
     expect(text).toBe('Je vindt comfort belangrijk. Over de demping zegt de bron: “EVA Midsole: Energy-efficient cushioning for optimal speed”.');
     expect(reasonText({ code: 'DEMPING', claim: 'Genius Foam Midsole', why: 'comfort' })).toContain('“Genius Foam Midsole”.');
+  });
+});
+
+describe('stickwijzer share link (owner, 2026-11-01)', () => {
+  it('is described in the privacy statement and its answers stay out of PostHog too', () => {
+    const stick = PRIVACY.sections.find((s) => s.heading === 'De stickwijzer')!.paragraphs.join(' ');
+    expect(stick).toMatch(/Deel je het advies met de knop “Deel dit advies”, dan staan je antwoorden in de link zelf/);
+    expect(stick).toMatch(/Wij bewaren die link niet/);
+    expect(stick).toMatch(/halen we de antwoorden uit het webadres voordat het in onze statistieken komt/);
+    const url = `${SITE_URL}${shareHref({ advice_goal: 'child' }, ['grays-db8-composite'])}`;
+    expect(url).toContain('/stickwijzer/advies?a=');
+    expect(withoutSharedAnswers({ properties: { $current_url: url } })?.properties.$current_url).toBe(`${SITE_URL}/stickwijzer/advies`);
   });
 });
