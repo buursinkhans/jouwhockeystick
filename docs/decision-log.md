@@ -1753,7 +1753,7 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 1. **`/hockeyschoenen`:**
    - de intro beantwoordt "welke hockeyschoenen heb je nodig?" in de eerste 80 woorden;
    - filters veld/zaal en junior/senior als gewone links (`?type=`, `?leeftijd=`), canonical `/hockeyschoenen`;
-   - de gecontroleerde modellen staan als kaarten, de feedmodellen als compacte lijst met links (lichte HTML, `noindex` op hun pagina's);
+   - de gecontroleerde modellen staan als kaarten; de feedmodellen laadt een knop pas na een klik, als lichte lijst uit `/data/aanbod-schoenen.json`, net als de feedsticks (besluit eigenaar 2026-11-01; `noindex` op hun pagina's);
    - verder uitleg over de status en de "Pascontrole" uit §10.
    Een model met onbekend veld of zaal staat niet in een gefilterde lijst: onbekend telt niet als match.
 2. **`/hockeyschoenen/[slug]`** voor alle modellen. Op elke pagina:

@@ -1,12 +1,13 @@
 import Link from 'next/link';
-import { SHOES_PATH, getCuratedShoes, getImportedShoes, shoePath } from '@/catalog/shoes';
+import { SHOES_PATH, getCuratedShoes, getImportedShoes } from '@/catalog/shoes';
 import type { Shoe } from '@/catalog/shoes/types';
 import { InlineText } from '@/components/article/InlineText';
 import { TrackedBlock } from '@/components/catalog/TrackedBlock';
 import { FitCheck } from '@/components/shoes/FitCheck';
+import { ImportedShoes } from '@/components/shoes/ImportedShoes';
 import { ShoeCard } from '@/components/shoes/ShoeCard';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { AGE_LABEL, CATEGORY_LABEL, CERTAINTY_TEXT, HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
+import { CERTAINTY_TEXT, HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
 import { pageMetadata } from '@/lib/site';
 
 export const metadata = pageMetadata({
@@ -55,9 +56,7 @@ export default async function HockeyschoenenPage({
   // A model with unknown field/indoor only shows without a type filter: unknown is never a match.
   const matches = (shoe: Shoe) => (!type || shoe.category.value === type) && (!age || shoe.ageGroup === age);
   const checked = getCuratedShoes().filter(matches);
-  const feed = getImportedShoes()
-    .filter(matches)
-    .sort((a, b) => `${a.brand} ${a.model}`.localeCompare(`${b.brand} ${b.model}`));
+  const feedCount = getImportedShoes().filter(matches).length;
   const { filters } = HOCKEYSCHOENEN;
 
   return (
@@ -128,25 +127,14 @@ export default async function HockeyschoenenPage({
 
         <section aria-labelledby="feed-kop" className="mt-12">
           <h2 id="feed-kop" className="text-2xl font-bold">
-            {HOCKEYSCHOENEN.feed.heading} <span className="font-normal text-lijngrijs">({feed.length})</span>
+            {HOCKEYSCHOENEN.feed.heading} <span className="font-normal text-lijngrijs">({feedCount})</span>
           </h2>
           <p className="mt-2 max-w-3xl text-inkt/80">{HOCKEYSCHOENEN.feed.intro}</p>
-          {feed.length === 0 ? (
+          {feedCount === 0 ? (
             <p className="mt-4 text-inkt/80">{HOCKEYSCHOENEN.feed.none}</p>
           ) : (
-            <ul className="mt-4 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2 lg:grid-cols-3">
-              {feed.map((shoe) => (
-                <li key={shoe.slug}>
-                  <Link href={shoePath(shoe)} className="inline-flex min-h-11 items-center hover:underline">
-                    {shoe.brand} {shoe.model}
-                  </Link>
-                  <span className="text-lijngrijs">
-                    {' '}
-                    · {CATEGORY_LABEL[shoe.category.value]} · {AGE_LABEL[shoe.ageGroup]}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            // Loaded after a click, like the imported sticks: not in the first page load.
+            <ImportedShoes count={feedCount} type={type} age={age} />
           )}
         </section>
       </TrackedBlock>

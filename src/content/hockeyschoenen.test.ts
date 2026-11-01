@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import HockeyschoenenPage, { metadata as overviewMetadata } from '@/app/hockeyschoenen/page';
 import ShoePage, { generateMetadata, generateStaticParams } from '@/app/hockeyschoenen/[slug]/page';
+import { GET as feedList } from '@/app/data/aanbod-schoenen.json/route';
 import sitemap from '@/app/sitemap';
 import { getCuratedShoes, getImportedShoes, getShoeBySlug, getShoeListings, shoePath } from '@/catalog/shoes';
 import { shoeCertainty } from '@/catalog/shoes/certainty';
@@ -74,6 +75,21 @@ describe('/hockeyschoenen overview', () => {
     expect(html).toContain(`${HOCKEYSCHOENEN.feed.heading} <span class="font-normal text-lijngrijs">(${getImportedShoes().length})`);
     expect(html).toContain('Pascontrole');
     expect(html).not.toMatch(FORBIDDEN);
+  });
+
+  it('loads the feed models only after a click, like the imported sticks', async () => {
+    const html = await overview();
+    for (const shoe of getImportedShoes()) expect(html, shoe.slug).not.toContain(`href="${shoePath(shoe)}"`);
+    expect(html).toContain(`Toon ook ${getImportedShoes().length} modellen uit het aanbod van de winkels`);
+    const response = feedList();
+    expect(response.headers.get('X-Robots-Tag')).toBe('noindex');
+    const items = (await response.json()) as { slug: string; category: string }[];
+    expect(items.map((i) => i.slug).sort()).toEqual(getImportedShoes().map((s) => s.slug).sort());
+    // A light list: no specs, listings or images.
+    expect(Object.keys(items[0]!).sort()).toEqual(['ageGroup', 'brand', 'category', 'model', 'slug']);
+    // The button counts with the filter, unknown kinds left out.
+    const zaal = await overview({ type: 'zaal' });
+    expect(zaal).toContain(`Toon ook ${getImportedShoes().filter((s) => s.category.value === 'zaal').length} modellen`);
   });
 
   it('filters on field or indoor and on age, and never counts an unknown kind as a match', async () => {
