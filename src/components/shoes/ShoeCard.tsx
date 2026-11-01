@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { shoePath } from '@/catalog/shoes';
 import type { Shoe } from '@/catalog/shoes/types';
 import { AGE_LABEL, CATEGORY_LABEL } from '@/content/hockeyschoenen';
+import { NonMarkingWarning } from './NonMarkingWarning';
 import { ShoeImage } from './ShoeImage';
 import { ShoeStatus } from './ShoeStatus';
 import { ShoeOfferSummary } from './ShoeWhereToBuy';
@@ -24,6 +25,7 @@ export function ShoeCard({ shoe }: { shoe: Shoe }) {
       </p>
       <div className="mt-3">
         <ShoeStatus shoe={shoe} compact />
+        <NonMarkingWarning shoe={shoe} compact />
       </div>
       <div className="mt-auto pt-4">
         <ShoeOfferSummary shoe={shoe} />

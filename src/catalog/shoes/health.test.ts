@@ -91,6 +91,8 @@ describe('hand-checked shoe models (phase 1b, decision log 2026-10-31 and 2026-1
       expect(shoe.category.value, shoe.slug).not.toBe('onbekend');
       for (const [key, claim] of claims(shoe)) {
         if (claim.value === 'onbekend') continue;
+        // The only estimate: a non-marking sole judged from the photo (owner's decision, 2026-11-01).
+        if (key === 'indoorNonMarking' && claim.source === 'editorial-estimate') continue;
         expect(claim.source, `${shoe.slug}.${key}`).toBe(shopSourced.has(shoe.slug) ? 'partner-shop' : 'brand-website');
       }
       if (shopSourced.has(shoe.slug)) expect(shoe.evidenceLimits[0], shoe.slug).toMatch(/^Bron is de winkel/);
@@ -119,14 +121,24 @@ describe('hand-checked shoe models (phase 1b, decision log 2026-10-31 and 2026-1
     }
   });
 
-  it('confirms non-marking only for an indoor shoe whose brand says so', () => {
+  it('takes non-marking from the brand, or as a marked estimate from a sole that is not black on the photo', () => {
     for (const shoe of curated) {
       const claim = shoe.indoorNonMarking;
       if (claim.value !== 'bevestigd') continue;
       expect(shoe.category.value, shoe.slug).toBe('zaal');
       expect(claim.sourceLabel, shoe.slug).toMatch(/non-marking/i);
+      if (claim.source === 'editorial-estimate') {
+        expect(claim.sourceLabel, shoe.slug).toMatch(/^Inschatting: de loopzool is .* op de productfoto/);
+        expect(claim.sourceLabel, shoe.slug).not.toMatch(/loopzool is zwart/);
+        expect(shoe.evidenceLimits.join(' '), shoe.slug).toMatch(/Non-marking: niet bevestigd/);
+      }
     }
-    expect(curated.filter((s) => s.indoorNonMarking.value === 'bevestigd').map((s) => s.slug)).toEqual(['brabo-force-zaal', 'brabo-tribute-zaal']);
+    const bySource = (source: string) =>
+      curated.filter((s) => s.indoorNonMarking.value === 'bevestigd' && 'source' in s.indoorNonMarking && s.indoorNonMarking.source === source).map((s) => s.slug);
+    expect(bySource('brand-website')).toEqual(['brabo-force-zaal', 'brabo-tribute-zaal']);
+    expect(bySource('editorial-estimate').sort()).toEqual(['osaka-furo-court', 'the-indian-maharadja-pro-slim-indoor']);
+    // Every checked indoor shoe now has a brand claim or an estimate.
+    expect(curated.filter((s) => s.category.value === 'zaal' && s.indoorNonMarking.value === 'onbekend')).toEqual([]);
   });
 
   it('hides a feed model that is a checked model and gives its shop listings to the checked one', () => {

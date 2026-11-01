@@ -29,13 +29,13 @@ function fromBase64Url(value: string): string | null {
   }
 }
 
-/** The path and query of a share link, e.g. `/stickwijzer/advies?a=…&s=…`. */
-export function shareHref(answers: object, slugs: readonly string[]): string {
+/** The path and query of a share link, e.g. `/stickwijzer/advies?a=…&s=…`; the schoenenwijzer passes its own path. */
+export function shareHref(answers: object, slugs: readonly string[], path: string = SHARE_PATH): string {
   const params = new URLSearchParams({
     a: toBase64Url(JSON.stringify(answers)),
   });
   if (slugs.length) params.set('s', slugs.join(','));
-  return `${SHARE_PATH}?${params.toString()}`;
+  return `${path}?${params.toString()}`;
 }
 
 /** Reads a share link; the answers still have to be validated by the caller. */

@@ -19,6 +19,7 @@ const STATIC_PATHS = [
   '/sticks',
   '/zaalsticks',
   '/hockeyschoenen',
+  '/hockeyschoenen/wijzer',
   '/kennis',
   '/merken',
   '/vergelijk',

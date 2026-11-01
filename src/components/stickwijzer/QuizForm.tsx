@@ -239,7 +239,7 @@ export function QuizForm() {
     if (!activeSessionId) {
       activeSessionId = newSessionId();
       setSessionId(activeSessionId);
-      trackEvent({ name: 'quiz_start' });
+      trackEvent({ name: 'quiz_start', quiz: 'stick' });
       track('advice_started', activeSessionId);
     }
     if (
@@ -302,6 +302,7 @@ export function QuizForm() {
     );
     trackEvent({
       name: 'quiz_complete',
+      quiz: 'stick',
       ruleSetVersion: result.advice.ruleSetVersion,
       hasRecommendation: result.advice.results.length > 0,
       isUncertain: result.advice.isUncertain,

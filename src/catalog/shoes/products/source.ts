@@ -34,6 +34,24 @@ export function fromShop<T>(value: T, sourceUrl: string, quote: string): Sourced
   return { value, source: 'partner-shop', sourceLabel: quote, sourceUrl, lastVerifiedAt: CHECKED_AT };
 }
 
+/** When the product photos were checked for the sole colour. */
+export const PHOTO_CHECKED_AT = '2026-11-01';
+
+/**
+ * Non-marking as our own estimate from the product photos: a sole that is not
+ * black counts as non-marking (owner's decision, decision log 2026-11-01).
+ * Always shown as an estimate with a warning, never as the brand's claim.
+ */
+export function nonMarkingFromPhoto(soleColour: string, photoPage: string): SourcedValue<'bevestigd'> {
+  return {
+    value: 'bevestigd',
+    source: 'editorial-estimate',
+    sourceLabel: `Inschatting: de loopzool is ${soleColour} op de productfoto's van de winkel. Bij een zool die niet zwart is, gaan we uit van non-marking; merk en winkel bevestigen het niet.`,
+    sourceUrl: photoPage,
+    lastVerifiedAt: PHOTO_CHECKED_AT,
+  };
+}
+
 type ContentKey = (typeof SHOE_CONTENT_PROPERTIES)[number];
 type CheckedShoeInput = Omit<Shoe, ContentKey | 'sizesAndWidths' | 'eans' | 'feedImport' | 'id'> &
   Partial<Pick<Shoe, ContentKey | 'sizesAndWidths'>> & { slug: keyof typeof CURATED_SHOE_EANS };

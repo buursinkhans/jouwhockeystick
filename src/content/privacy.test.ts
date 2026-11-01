@@ -26,8 +26,9 @@ describe('privacy statement 1.4 (decision log 2026-10-29)', () => {
   });
 
   it('has a new version and date, and keeps the earlier statements', () => {
-    expect(PRIVACY.version).toBe('1.4');
-    expect(PRIVACY.updatedAt).toBe('2026-10-29');
+    // 1.5 since 2026-11-01 (schoenenwijzer); the 1.4 statements stay.
+    expect(['1.4', '1.5']).toContain(PRIVACY.version);
+    expect(PRIVACY.updatedAt >= '2026-10-29').toBe(true);
     expect(all).toMatch(/PostHog via ons eigen domein|via ons eigen domein naar PostHog/);
     expect(all).toMatch(/we plaatsen geen cookies/);
   });

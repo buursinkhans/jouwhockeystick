@@ -20,6 +20,7 @@ export function GET() {
     '',
     '## Keuzehulp en methode',
     `- [Stickwijzer](${absoluteUrl('/stickwijzer')}): keuzehulp met drie routes (start, ontwikkel, prestatie).`,
+    `- [Schoenenwijzer](${absoluteUrl('/hockeyschoenen/wijzer')}): pasadvies voor veld- en zaalhockeyschoenen, met wat je nog moet controleren.`,
     `- [${METHODIEK.title}](${absoluteUrl('/methodiek')}): ${METHODIEK.metaDescription}`,
     '',
     '## Kennis',

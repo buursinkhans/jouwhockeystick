@@ -97,7 +97,11 @@ export function ShoeSpecTable({ shoe }: { shoe: Shoe }) {
             <dd className="text-sm">
               {known ? (
                 <>
-                  <span>{valueText(key, claim.value)}</span>
+                  <span>
+                    {claim.source === 'editorial-estimate' && key === 'indoorNonMarking'
+                      ? 'Aangenomen (inschatting, niet bevestigd)'
+                      : valueText(key, claim.value)}
+                  </span>
                   <SourceLine claim={claim} />
                 </>
               ) : (

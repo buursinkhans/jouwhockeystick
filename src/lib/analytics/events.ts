@@ -26,9 +26,14 @@ export type AdviceAnalyticsEvent = {
 };
 
 export type AnalyticsEvent =
-  | { name: 'quiz_start' }
+  | {
+      name: 'quiz_start';
+      /** Absent on stickwijzer events from before 2026-11-01: those are 'stick'. No answers, ever. */
+      quiz?: 'stick' | 'schoen';
+    }
   | {
       name: 'quiz_complete';
+      quiz?: 'stick' | 'schoen';
       ruleSetVersion: string;
       hasRecommendation: boolean;
       isUncertain: boolean;

@@ -9,14 +9,23 @@ import { trackEvent } from '@/lib/analytics/track';
  * where available, otherwise the link is copied. No e-mail address or
  * account; the link itself holds the advice (src/lib/shareAdvice.ts).
  */
-export function ShareAdviceButton({ href }: { href: string }) {
+export function ShareAdviceButton({
+  href,
+  subject = 'stick',
+}: {
+  href: string;
+  /** The stickwijzer or the schoenenwijzer (decision log 2026-11-01). */
+  subject?: 'stick' | 'schoen';
+}) {
+  const what = subject === 'stick' ? 'stickadvies' : 'schoenadvies';
+  const tool = subject === 'stick' ? 'stickwijzer' : 'schoenenwijzer';
   const [status, setStatus] = useState<'idle' | 'copied' | 'failed'>('idle');
 
   async function share() {
     const url = new URL(href, window.location.origin).toString();
     const data = {
-      title: 'Stickadvies van jouwhockeystick.nl',
-      text: 'Dit stickadvies kreeg ik van de stickwijzer van jouwhockeystick.nl:',
+      title: `${what[0]!.toUpperCase()}${what.slice(1)} van jouwhockeystick.nl`,
+      text: `Dit ${what} kreeg ik van de ${tool} van jouwhockeystick.nl:`,
       url,
     };
     if (typeof navigator.share === 'function') {

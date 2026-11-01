@@ -1,5 +1,5 @@
 import type { Shoe } from '../types';
-import { checkedShoe, fromBrand } from './source';
+import { checkedShoe, fromBrand, nonMarkingFromPhoto } from './source';
 
 /**
  * Osaka hockey shoes, from osakaworld.com (product pages read 2026-10-31;
@@ -45,12 +45,14 @@ export const OSAKA_SHOES: readonly Shoe[] = [
     model: 'Furo Court',
     category: fromBrand('zaal' as const, FURO_COURT, '"a next-generation indoor sports shoe … Built for smooth indoor surfaces"', 2026),
     ageGroup: 'senior',
+    // Photos of colour Pineneedle (the only colour of this model in the feed), checked 2026-11-01.
+    indoorNonMarking: nonMarkingFromPhoto('donkergroen met een gomkleurig middenstuk', 'https://www.passasports.nl/osaka-furo-court-ftw00030-pineneedle'),
     sizesAndWidths: fromBrand({ sizes: SIZES }, FURO_COURT, 'Maten in de productgegevens van Osaka (EU); geen breedtes genoemd.', 2026),
     support: fromBrand('Its lightweight yet durable construction enhances agility while providing the support needed for fast-paced indoor play.', FURO_COURT, 'Osaka, productpagina', 2026),
     protection: fromBrand('reinforced toe bumper', FURO_COURT, 'Osaka, productpagina', 2026),
     durability: fromBrand('long-lasting comfort and durability, even in high-abrasion environments', FURO_COURT, 'Osaka, productpagina', 2026),
     evidenceLimits: [
-      'Non-marking: niet genoemd. Osaka noemt een "herringbone-structured outsole" voor binnenvloeren.',
+      'Non-marking: niet bevestigd door Osaka of de winkel. Onze inschatting op basis van de kleur van de zool op de foto (niet zwart); Osaka noemt een "herringbone-structured outsole" voor binnenvloeren.',
       'Osaka noemt geen zaalhockey apart, wel indoorsporten in het algemeen.',
       'Pasvorm: Osaka noemt "a full spandex bootie for a custom, sock-like fit", maar niets over breedte.',
       'Gewicht, uitneembare binnenzool, demping en vochtbescherming: niet genoemd.',

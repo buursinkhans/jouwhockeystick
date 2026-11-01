@@ -1788,3 +1788,88 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Betrokken bestanden:**
 - nieuw: `src/app/hockeyschoenen/{page,[slug]/page}.tsx`, `src/components/shoes/*`, `src/catalog/shoes/{offers,certainty}.ts`, `src/content/hockeyschoenen.ts` (+ test);
 - gewijzigd: `src/catalog/shoes/{index,types,feedImport}.ts`, `src/lib/retailers.ts`, `src/lib/analytics/events.ts`, `src/components/ui/RetailerLink.tsx`, `src/components/offers/{OfferRows,WhereToBuy}.tsx`, `src/components/catalog/TrackedBlock.tsx`, `src/content/offers.ts`, `src/components/layout/{Header,Footer}.tsx`, `src/components/stickwijzer/QuizResult.tsx`, `src/app/sitemap.ts`, `src/app/llms.txt/route.ts`, `src/analytics-report/sales.ts`.
+
+## 2026-11-01 — Hockeyschoenen fase 3: de schoenenwijzer (`schoen-v1.0`) en privacyverklaring 1.5
+
+**Wat:**
+1. **Vragen** (`src/content/schoenenwijzer/questions.ts`): de acht hoofdvragen uit §5 en de maatvraag. Vervolgvragen staan er alleen waar het antwoord de selectie of de uitleg verandert: tweede ondergrond, sessieduur, positie (optioneel, alleen context) en toestemming voor een duurder alternatief. De vervolgvragen over de huidige schoen (merk, model, wat past) zijn in v1 weggelaten, omdat ze de selectie nog niet veranderen. "Voor beide" geeft twee aparte adviezen.
+2. **Adviesregels** (`src/shoe-advice/`, los van de stickengine):
+   - **Laag A, harde voorwaarden:** veld/zaal, ondergrond of non-marking, maat en voorraad, budget. Elke voorwaarde is `voldoet`, `voldoet-niet` (uitgesloten) of `onbekend` (voorwaardelijk, met een controle).
+   - **Modellen met onbekend veld/zaal** zijn geen kandidaat, omdat het de verkeerde soort schoen kan zijn.
+   - **Maat:** alleen wat de feed per maat op voorraad noemt. "41,5" en "41 1/2" zijn dezelfde maat. Een maat die de winkel wel noemt maar niet op voorraad heeft, sluit het model uit; zonder maatgegevens blijft de maat onbekend.
+   - **Budget:** boven het budget alleen met toestemming, en dan nooit als eerste advies.
+   - **Laag B, persoonlijke aansluiting:** een geordende vergelijking zonder gewichten, in deze volgorde: boven budget, primaire voorwaarde, aantal onbekende voorwaarden, pasvormconflicten, pasvormmatches (voorvoet, hiel en wreef apart), ondergronden, leeftijdsgroep, belasting, bewegingsstijl, voorkeuren, prijs. Een latere stap telt alleen bij gelijkstand, dus een voorkeur compenseert nooit een pasvormconflict. Onbekend telt nergens. Positie wordt niet gebruikt.
+   - **Leeftijdsgroep:** bij gelijke gegevens eerst het model voor de leeftijdsgroep van de speler (junior voor kind of jeugd, senior voor een volwassene). Het is nooit een uitsluiting, en komt het andere model in beeld, dan staat dat bij "Mogelijk minder geschikt wanneer".
+   - **Laag C, zekerheid:**
+     - onvoldoende informatie: de primaire voorwaarde (ondergrond bij veld, non-marking bij zaal) is niet bevestigd;
+     - goede onderbouwing: geen onbekende harde voorwaarde, een pasvormgegeven en geen open pascontrole;
+     - voorwaardelijk: al het andere.
+   - **Resultaat:** hooguit drie modellen, alleen echte kandidaten: eerste pasadvies, alternatief met een ander eigenschappenprofiel en een voordeliger alternatief. Er wordt nooit opgevuld.
+   - **Geen dooie advisering:** heeft geen model de primaire voorwaarde bevestigd, of valt alles af, dan volgt een eerlijke melding met de reden en een link naar het overzicht.
+   - **Keepers:** een vaste begrenzingstekst, zonder schoenen.
+3. **Vraag 7 blijft in de browser** (`fitNotes.ts`):
+   - het antwoordschema van de server weigert vraag 7, en `toServerAnswers` laat hem weg;
+   - pijn of blessure geeft alleen een vaste verwijstekst, zonder diagnose en zonder invloed op de selectie;
+   - een eigen inlegzool of brace maakt "goede onderbouwing" voorwaardelijk en voegt een pascontrole toe;
+   - blaren geeft een pascontrole zonder oorzaakclaim.
+4. **Analytics:**
+   - `quiz_start` en `quiz_complete` krijgen `quiz: 'stick' | 'schoen'`; de stickwijzer stuurt nu `'stick'`;
+   - de schoenenwijzer stuurt geen antwoorden;
+   - `retailer_click` met placement `schoenwijzer`;
+   - het formulier heeft `ph-no-capture`, zodat PostHog-autocapture geen knopteksten van antwoorden vastlegt;
+   - `before_send` haalt de querystring (met de antwoorden) van gedeelde schoenadviezen uit alle eventeigenschappen.
+5. **Delen:** `/hockeyschoenen/wijzer/advies` (noindex, opnieuw berekend). De link bevat de antwoorden zonder vraag 7. `shareHref` en de deelknop zijn generiek gemaakt (pad en tekst).
+6. **Pagina's en links:** `/hockeyschoenen/wijzer` staat in de sitemap en `llms.txt`, en het overzicht heeft de knop "Doe de schoenenwijzer". De wijzer adviseert alleen uit de gecontroleerde modellen.
+7. **Privacyverklaring 1.5** (opdracht eigenaar, 2026-11-01):
+   - nieuwe sectie "De schoenenwijzer": antwoorden niet opgeslagen, vraag 7 alleen in de browser, geen antwoorden in de statistieken, deellink zonder vraag 7;
+   - de schoenenwijzer staat er ook bij in de intro, de beschrijving, de passage over partnerlinks en de passage over kinderen.
+
+**Geverifieerd in een echte browser (Edge headless, 390 px):** de wizard doorgeklikt met pijn of blessure bij vraag 7 en maat 42. De enige POST naar de server bevat geen vraag 7, en de uitkomst toont de vaste verwijstekst, het profiel, twee modellen met redenen, controles, basis en winkelrij.
+
+**Open punt (niet aangepast, buiten opdracht):**
+- de deellink van de stickwijzer (`/stickwijzer/advies?a=…`) staat niet in de privacyverklaring;
+- de antwoorden van de stickwijzer gaan via de URL en PostHog-autocapture wel in de statistieken. Dat laatste is in lijn met de tekst ("welke antwoorden vaak worden gekozen"), maar de deellink niet.
+
+**Betrokken bestanden:**
+- nieuw: `src/shoe-advice/*`, `src/content/schoenenwijzer/*`, `src/components/schoenenwijzer/*`, `src/app/hockeyschoenen/wijzer/**`;
+- gewijzigd: `src/lib/analytics/{events,posthog}.ts`, `src/lib/shareAdvice.ts`, `src/components/stickwijzer/{QuizForm,ShareAdviceButton}.tsx`, `src/content/privacy.ts` (+ test), `src/content/hockeyschoenen.ts`, `src/app/hockeyschoenen/page.tsx`, `src/app/sitemap.ts`, `src/app/llms.txt/route.ts`, `CLAUDE.md`.
+
+## 2026-11-01 — Hockeyschoenen: non-marking uit de foto, goede onderbouwing zonder pasvorm, deellink stickwijzer
+
+**Besluiten van de eigenaar (2026-11-01, na PR #126):**
+1. **Kleur van de zool:**
+   - controleer de kleur van de zool op de foto's;
+   - bij elke kleur behalve zwart gaan we uit van non-marking;
+   - bij schoenen waar non-marking niet bevestigd is, komt een waarschuwing.
+2. **"Goede onderbouwing"** mag zonder pasvormgegevens.
+3. **De deellink van de stickwijzer** wordt rechtgezet in de privacyverklaring.
+
+**Wat er daardoor veranderde:**
+1. **Non-marking uit de foto:**
+   - de productfoto's van de winkel (vier aanzichten per kleur) zijn op 2026-11-01 met het oog bekeken bij de twee gecontroleerde zaalschoenen zonder bevestiging door het merk:
+     - Osaka Furo Court (kleur Pineneedle): donkergroene loopzool met een gomkleurig middenstuk;
+     - The Indian Maharadja Pro Slim Indoor (wit en mint): lichtgrijze loopzool.
+   - Geen van beide is zwart, dus beide hebben nu `indoorNonMarking` = bevestigd als **`editorial-estimate`**, met de zoolkleur en de fotopagina als bron.
+   - Brabo Force Zaal en Tribute Zaal waren al bevestigd door Brabo.
+   - De feedmodellen zijn niet op de foto beoordeeld; hun non-marking blijft onbekend.
+2. **Waarschuwing:** elke zaalschoen zonder bevestiging door merk of winkel (een inschatting of onbekend) krijgt een waarschuwing:
+   - op de modelpagina, als blok onder de status;
+   - op de kaarten, kort;
+   - in de uitkomst van de schoenenwijzer.
+   In de eigenschappentabel staat bij een inschatting "Aangenomen (inschatting, niet bevestigd)", nooit "Bevestigd".
+3. **Schoenenwijzer:** een geschatte non-marking zool telt als voldaan, maar geeft de controle "niet bevestigd door merk of winkel" en nooit "goede onderbouwing".
+4. **Goede onderbouwing zonder pasvorm:**
+   - **per model:** de ondergrond (veld) of de non-marking zool (zaal) is bevestigd door merk of winkel;
+   - **in de wijzer:** daarnaast geen onbekende harde voorwaarde, geen open pascontrole voor een probleem dat de speler noemde, en geen conflict;
+   - de teksten zeggen dat de pasvorm de eigen controle blijft;
+   - gevolg: de gecontroleerde veldschoenen met een ondergrondclaim en de Brabo-zaalschoenen staan nu op goede onderbouwing.
+5. **Deellink stickwijzer:**
+   - de sectie "De stickwijzer" in de privacyverklaring beschrijft nu dat "Deel dit advies" de antwoorden en sticks in de link zet, dat wij die niet bewaren, en dat de antwoorden uit het webadres worden gehaald voordat het in de statistieken komt;
+   - de PostHog-filter (`before_send`) haalt de antwoorden nu uit gedeelde stick- én schoenadviezen;
+   - dit valt binnen versie 1.5, die nog niet live is.
+
+**Betrokken bestanden:**
+- `src/catalog/shoes/{certainty.ts,products/{source,osaka,shopSourced}.ts}`;
+- `src/components/shoes/{NonMarkingWarning,ShoeCard,ShoeSpecTable}.tsx`, `src/app/hockeyschoenen/[slug]/page.tsx`, `src/components/schoenenwijzer/ShoeAdviceView.tsx`;
+- `src/shoe-advice/{engine,types}.ts`, `src/content/{hockeyschoenen,privacy}.ts`, `src/content/schoenenwijzer/resultCopy.ts`, `src/lib/analytics/posthog.ts`;
+- tests.
