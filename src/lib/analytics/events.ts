@@ -84,9 +84,9 @@ export type AnalyticsEvent =
       page: 'sticks' | 'zaalsticks' | 'hockeyschoenen';
       /**
        * 'aanbod' = the button that loads the imported PassaHockey sticks (target 'aanbod-laden');
-       * 'filters', 'modellen' and 'pascontrole' are on /hockeyschoenen (decision log 2026-11-01).
+       * 'filters', 'modellen', 'intenties' and 'pascontrole' are on /hockeyschoenen (decision log 2026-11-01).
        */
-      block: 'intro' | 'levels' | 'faq' | 'aanbod' | 'filters' | 'modellen' | 'pascontrole';
+      block: 'intro' | 'levels' | 'faq' | 'aanbod' | 'filters' | 'modellen' | 'intenties' | 'pascontrole';
       target: string;
     }
   | {

@@ -3,7 +3,16 @@
 import { useState, useTransition } from 'react';
 import { getShoeAdviceAction } from '@/app/hockeyschoenen/wijzer/actions';
 import { Button } from '@/components/ui/Button';
-import { NO_SIZE, NO_SIZE_LABEL, visibleQuestions, type ShoeQuestion, type ShoeQuizState } from '@/content/schoenenwijzer/questions';
+import {
+  NO_SIZE,
+  NO_SIZE_LABEL,
+  progressLabel,
+  progressQuestions,
+  quizProgress,
+  visibleQuestions,
+  type ShoeQuestion,
+  type ShoeQuizState,
+} from '@/content/schoenenwijzer/questions';
 import type { ShoeAnswers } from '@/shoe-advice/answers';
 import type { FitParticular } from '@/shoe-advice/fitNotes';
 import type { ShoeAdvice } from '@/shoe-advice/types';
@@ -102,7 +111,8 @@ export function ShoeQuiz({ sizes, articles = [] }: { sizes: readonly string[]; a
   const questions = visibleQuestions(state);
   const question = questions[Math.min(step, questions.length - 1)]!;
   const answered = isAnswered(question, state);
-  const last = step >= questions.length - 1 || state.player === 'keeper';
+  // A keeper sees only two questions, so the last screen is simply the last one shown.
+  const last = step >= questions.length - 1;
 
   function answer(value: unknown) {
     if (!started) {
@@ -163,7 +173,9 @@ export function ShoeQuiz({ sizes, articles = [] }: { sizes: readonly string[]; a
     );
   }
 
-  const progress = Math.round(((step + 1) / questions.length) * 100);
+  // Until question 1 is answered only that question is on screen, so counting the field path is safe.
+  const position = quizProgress(progressQuestions(state), step);
+  const progress = Math.round((position.step / position.steps) * 100);
   return (
     // ph-no-capture: PostHog autocapture records no click or button text in the questions, so no
     // answer (question 7 least of all) reaches the statistics (privacy statement 1.5).
@@ -179,9 +191,14 @@ export function ShoeQuiz({ sizes, articles = [] }: { sizes: readonly string[]; a
       <div className="h-2 rounded-full bg-krijt" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label="Voortgang">
         <div className="h-2 rounded-full bg-veld" style={{ width: `${progress}%` }} />
       </div>
-      <p className="mt-3 text-sm text-lijngrijs">
-        Vraag {step + 1} van {questions.length}
-        {question.optional && ' · optioneel'}
+      <p className="mt-3 flex flex-wrap justify-between gap-x-3 text-sm text-lijngrijs">
+        <span className="font-semibold text-inkt/80">
+          {progressLabel(position)}
+          {question.optional && ' · optioneel'}
+        </span>
+        <span>
+          stap {position.step} van {position.steps}
+        </span>
       </p>
       <fieldset className="mt-2">
         <legend className="text-xl font-bold">

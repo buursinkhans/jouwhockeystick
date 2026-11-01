@@ -1900,3 +1900,33 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 
 **Wat:** kennisartikel `/kennis/welke-hockeyschoenen-heb-je-nodig`, de uitgebreide uitleg achter `/hockeyschoenen`, in de volgorde van het keuzemodel (§2). Het aantal gecontroleerde modellen komt uit `src/catalog/shoes`.
 **Bewust niet:** "beste schoen", blessure- of pasvormbeloftes, grip-/dempingsscores, prijzen, maten, millimeterregel, schoen per positie, diagnose bij pijn. Geen botsing met bestaande artikelen: geen enkel artikel behandelt schoenen.
+
+## 2026-11-01 — /hockeyschoenen: drie intentiesecties, voortgang van de schoenenwijzer, fix geplande publicatie
+
+**Wat (PR A uit de SEO-analyse van 2026-11-01):**
+1. **Drie H2-secties op `/hockeyschoenen`:** Veldhockeyschoenen, Zaalhockeyschoenen en Hockeyschoenen voor kinderen.
+   - Elke sectie beantwoordt één keuzevraag, met een feitenregel uit de catalogus (`intentFacts`), een crawlbare filterlink (`?type=veld`, `?type=zaal`, `?leeftijd=junior`) en de link naar het bijbehorende artikel zodra dat live staat (#128, #131, #129).
+   - Een model met onbekend veld of zaal telt nergens mee; feedmodellen tellen alleen waar de categorie van de winkel het zegt.
+   - Title, H1 en canonical zijn ongewijzigd, en er zijn geen nieuwe pagina's.
+   - Meetblok `intenties` in `catalog_block_click`.
+2. **Voortgang van de schoenenwijzer:**
+   - "Vraag 3 van 8" telt de hoofdvragen die bij de antwoorden horen (7 bij zaal, 2 bij een keeper);
+   - een vervolgvraag houdt het nummer van zijn hoofdvraag ("· aanvullende vraag");
+   - de maat is "Laatste stap: je maat";
+   - "stap x van y" blijft zichtbaar en de balk volgt de echte stappen;
+   - zolang vraag 1 open is, telt de voortgang met het veldpad, zodat hij niet van 7 naar 8 springt;
+   - de laatste stap volgt nu alleen uit de getoonde vragen;
+   - metadata en intro zeggen "maximaal acht vragen … plus je maat".
+3. **Fix geplande publicatie:**
+   - de workflow *Geplande publicatie* draaide zonder `npm ci`;
+   - sinds het eerste schoenartikel (#134) importeert de artikellijst de schoencatalogus (`zod`), en de ochtendcontrole faalde op 2026-11-01 met `ERR_MODULE_NOT_FOUND`;
+   - zonder fix waren de artikelen van 2 tot en met 6 november niet automatisch live gegaan;
+   - nu: npm-cache en `npm ci` vóór de planningscontrole, met een test.
+4. **Publicatie gecontroleerd:**
+   - een gepland artikel is vóór zijn datum (Nederlandse tijd) niet bereikbaar (`getArticleBySlug` → 404), niet in de sitemap en niet gelinkt (`shoeArticleLinks` gebruikt dezelfde zichtbare lijst);
+   - de ochtendrun bouwt de site op de datum opnieuw;
+   - een artikel dat ná zijn datum wordt gemerged, staat meteen live bij de merge-build.
+
+**Restrisico:** `/hockeyschoenen` wordt per aanvraag opgebouwd en toont de link vanaf middernacht. De artikelpagina zelf komt na de ochtendbuild (ongeveer 05:00–06:00) live, tenzij die al eerder op aanvraag wordt opgebouwd. Een link kan dus een paar uur naar een pagina wijzen die nog niet in de build zit.
+
+**Betrokken bestanden:** `src/content/hockeyschoenen.ts`, `src/content/shoeArticles.ts`, `src/app/hockeyschoenen/page.tsx`, `src/content/schoenenwijzer/questions.ts`, `src/components/schoenenwijzer/ShoeQuiz.tsx`, `src/app/hockeyschoenen/wijzer/page.tsx`, `src/lib/analytics/events.ts`, `src/components/catalog/TrackedBlock.tsx`, `.github/workflows/publicatie.yml`, `src/content/shoesSeo.test.ts`.
