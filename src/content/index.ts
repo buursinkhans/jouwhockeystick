@@ -11,6 +11,7 @@ import { meerCarbonHockeystickBeter } from './articles/meer-carbon-hockeystick-b
 import { waarKoopJeEenHockeystick } from './articles/waar-koop-je-een-hockeystick';
 import { welkeHockeyschoenenHebJeNodig } from './articles/welke-hockeyschoenen-heb-je-nodig';
 import { hockeyschoenenWaterveldZandveld } from './articles/hockeyschoenen-waterveld-zandveld';
+import { hockeyschoenenKinderenMaat } from './articles/hockeyschoenen-kinderen-maat';
 
 /** Listed on /kennis in this order. */
 const ALL_ARTICLES: Article[] = [
@@ -25,6 +26,7 @@ const ALL_ARTICLES: Article[] = [
   waarKoopJeEenHockeystick,
   welkeHockeyschoenenHebJeNodig,
   hockeyschoenenWaterveldZandveld,
+  hockeyschoenenKinderenMaat,
 ];
 
 /** Articles a visitor may see now (scheduled ones only on previews). */

@@ -1936,3 +1936,9 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Wat:** `/kennis/hockeyschoenen-waterveld-zandveld`, fase 4 van #100. Beantwoordt in de intro of je een water-, zand- of semi-waterschoen nodig hebt, hoe je je ondergrond herkent (vraag je club, denk aan uitwedstrijden) en wat "volgens de fabrikant geschikt" op onze pagina's betekent, inclusief "alle ondergronden" = water én zand (besluit 2026-11-01).
 **Waarom dit onderwerp:** keuzemodel §3 (geen kunstmatige scheiding water/zand). De slug staat in `SHOE_ARTICLE_SLUGS`, dus de schoenpagina's linken er vanzelf naar zodra het live is. Geen botsing met `welke-hockeyschoenen-heb-je-nodig`: dat artikel geeft de volgorde van stappen, dit gaat alleen over de ondergrond.
 **Bewust niet:** modelclaims en aantallen in vaste tekst (tellingen komen uit `src/catalog/shoes`), grip- of slijtagescores, "waterveld = lange noppen"-regels, prijzen, millimeterregel, blessure- of pijnadvies.
+
+## 2026-11-01 — Artikel `hockeyschoenen-kinderen-maat` (#129)
+
+- **Wat:** kennisartikel "Hockeyschoenen voor kinderen: maat en groeiruimte", live op 2026-11-03; beantwoordt hoe je de maat kiest en hoeveel groeiruimte goed is.
+- **Waarom:** fase 4 van #100; de schoenpagina's linken er vanzelf naar (slug uit `shoeArticles.ts`). Basis: keuzemodel §5, §9 profiel D en §10.
+- **Bewust niet:** millimeterregel, prijzen, maten of modelclaims in vaste tekst (alleen het aantal juniormodellen uit de catalogus), premiummodellen voor kinderen, advies bij pijn of blessure, grip-/dempingsscores.
