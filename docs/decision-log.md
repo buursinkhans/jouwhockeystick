@@ -1930,3 +1930,9 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Restrisico:** `/hockeyschoenen` wordt per aanvraag opgebouwd en toont de link vanaf middernacht. De artikelpagina zelf komt na de ochtendbuild (ongeveer 05:00–06:00) live, tenzij die al eerder op aanvraag wordt opgebouwd. Een link kan dus een paar uur naar een pagina wijzen die nog niet in de build zit.
 
 **Betrokken bestanden:** `src/content/hockeyschoenen.ts`, `src/content/shoeArticles.ts`, `src/app/hockeyschoenen/page.tsx`, `src/content/schoenenwijzer/questions.ts`, `src/components/schoenenwijzer/ShoeQuiz.tsx`, `src/app/hockeyschoenen/wijzer/page.tsx`, `src/lib/analytics/events.ts`, `src/components/catalog/TrackedBlock.tsx`, `.github/workflows/publicatie.yml`, `src/content/shoesSeo.test.ts`.
+
+## 2026-11-01 — Artikel `hockeyschoenen-kinderen-maat` (#129)
+
+- **Wat:** kennisartikel "Hockeyschoenen voor kinderen: maat en groeiruimte", live op 2026-11-03; beantwoordt hoe je de maat kiest en hoeveel groeiruimte goed is.
+- **Waarom:** fase 4 van #100; de schoenpagina's linken er vanzelf naar (slug uit `shoeArticles.ts`). Basis: keuzemodel §5, §9 profiel D en §10.
+- **Bewust niet:** millimeterregel, prijzen, maten of modelclaims in vaste tekst (alleen het aantal juniormodellen uit de catalogus), premiummodellen voor kinderen, advies bij pijn of blessure, grip-/dempingsscores.
