@@ -1942,3 +1942,10 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 - **Wat:** kennisartikel "Hockeyschoenen voor kinderen: maat en groeiruimte", live op 2026-11-03; beantwoordt hoe je de maat kiest en hoeveel groeiruimte goed is.
 - **Waarom:** fase 4 van #100; de schoenpagina's linken er vanzelf naar (slug uit `shoeArticles.ts`). Basis: keuzemodel §5, §9 profiel D en §10.
 - **Bewust niet:** millimeterregel, prijzen, maten of modelclaims in vaste tekst (alleen het aantal juniormodellen uit de catalogus), premiummodellen voor kinderen, advies bij pijn of blessure, grip-/dempingsscores.
+
+## 2026-11-02 — Artikel `hockeyschoenen-smalle-brede-voet` (#130)
+
+- **Wat:** kennisartikel "Smalle of brede voet: waar let je op bij het passen van hockeyschoenen?", live op 2026-11-04; beantwoordt waar je op let bij voorvoet, hiel en wreef.
+- **Waarom:** fase 4 van #100; de schoenpagina's linken er vanzelf naar (slug uit `shoeArticles.ts`). Basis: keuzemodel §5 vraag 5, §9 profiel A en B en §10. Geen botsing met `hockeyschoenen-kinderen-maat` (maat en groeiruimte voor kinderen) of `welke-hockeyschoenen-heb-je-nodig` (volgorde van stappen).
+- **Eerlijk over breedte:** merken zeggen zelden iets over breedte; pasvorm staat dan op "onbekend". Het aantal modellen met pasvormgegevens komt uit `src/catalog/shoes`.
+- **Bewust niet:** millimeterregel, prijzen, maten of modelclaims in vaste tekst, "gegarandeerde pasvorm", diagnose of corrigerende schoenkeuze bij pijn of blessure, scores.

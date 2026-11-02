@@ -12,6 +12,7 @@ import { waarKoopJeEenHockeystick } from './articles/waar-koop-je-een-hockeystic
 import { welkeHockeyschoenenHebJeNodig } from './articles/welke-hockeyschoenen-heb-je-nodig';
 import { hockeyschoenenWaterveldZandveld } from './articles/hockeyschoenen-waterveld-zandveld';
 import { hockeyschoenenKinderenMaat } from './articles/hockeyschoenen-kinderen-maat';
+import { hockeyschoenenSmalleBredeVoet } from './articles/hockeyschoenen-smalle-brede-voet';
 
 /** Listed on /kennis in this order. */
 const ALL_ARTICLES: Article[] = [
@@ -27,6 +28,7 @@ const ALL_ARTICLES: Article[] = [
   welkeHockeyschoenenHebJeNodig,
   hockeyschoenenWaterveldZandveld,
   hockeyschoenenKinderenMaat,
+  hockeyschoenenSmalleBredeVoet,
 ];
 
 /** Articles a visitor may see now (scheduled ones only on previews). */
