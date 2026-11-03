@@ -14,7 +14,7 @@ export function WhyUs() {
   return (
     <section aria-labelledby="waarom-heading" className="border-y border-rand bg-krijt">
       <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
-        <p className="text-sm font-semibold tracking-wide text-veld uppercase">Waarom jouwhockeystick.nl</p>
+        <p className="eyebrow">Waarom jouwhockeystick.nl</p>
         <h2 id="waarom-heading" className="mt-2 max-w-3xl text-3xl font-extrabold tracking-tight">
           Onafhankelijk advies, met alles wat je nodig hebt om het te controleren
         </h2>

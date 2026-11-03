@@ -32,7 +32,7 @@ export function SimilarSticks({
         {similar.map(({ product, comparison }) => (
           <li
             key={product.slug}
-            className="flex items-start gap-4 rounded-2xl border border-rand bg-white p-4"
+            className="flex items-start gap-4 card p-4"
           >
             <ProductImage product={product} className="h-16 w-16 shrink-0" />
             <div className="min-w-0">

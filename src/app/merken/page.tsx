@@ -2,6 +2,7 @@ import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
 import { getCatalogStats } from '@/catalog/stats';
 import { BRAND_PROFILES } from '@/content/brands';
+import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 
 /** Profiles of the brands that are in the catalog now (src/catalog/stats.ts). */
 function catalogProfiles() {
@@ -52,187 +53,190 @@ export default function MerkenPage() {
   const fieldBrands = new Set<string>(stats.fieldBrands);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-bold">Merken</h1>
-      <p className="mt-4 text-lg leading-relaxed text-inkt">
-        Op jouwhockeystick.nl vergelijken we sticks van {brandNames.length}{' '}
-        merken: {joinDutch(brandNames)}. Hieronder staat per merk kort wat het
-        kenmerkt, hoe het merk zelf over sticks denkt (als het dat op de eigen
-        website uitlegt), en — waar we dat konden bevestigen op officiële
-        bronnen — welke Nederlandse hockeyinternationals het merk sponsort.
-      </p>
+    <>
+      <PageHeader width="lezen" eyebrow="Achter de sticks" title="Merken">
+        <p className="max-w-2xl text-lg leading-relaxed text-inkt/80">
+          Op jouwhockeystick.nl vergelijken we sticks van {brandNames.length}{' '}
+          merken: {joinDutch(brandNames)}. Hieronder staat per merk kort wat het
+          kenmerkt, hoe het merk zelf over sticks denkt (als het dat op de eigen
+          website uitlegt), en — waar we dat konden bevestigen op officiële
+          bronnen — welke Nederlandse hockeyinternationals het merk sponsort.
+        </p>
+      </PageHeader>
 
-      {/* Quick index (redesign fase 2): find a brand without scrolling 21 cards. */}
-      <nav aria-label="Merken op deze pagina" className="mt-8">
-        <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+      <PageBody width="lezen">
+        {/* Quick index (redesign fase 2): find a brand without scrolling 21 cards. */}
+        <nav aria-label="Merken op deze pagina">
+          <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+            {profiles.map((brand) => (
+              <li key={brand.brand}>
+                <a
+                  href={`#merk-${slugify(brand.brand)}`}
+                  className="card card-link flex h-16 items-center justify-center rounded-xl! px-2 text-center text-sm font-semibold text-inkt"
+                >
+                  {brand.logoUrl ? (
+                    <span
+                      className={
+                        brand.logoBackground === 'dark'
+                          ? 'flex h-10 w-full items-center justify-center rounded-lg bg-inkt px-2'
+                          : 'flex h-10 w-full items-center justify-center'
+                      }
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={brand.logoUrl} alt={brand.brand} loading="lazy" className="max-h-7 max-w-full object-contain" />
+                    </span>
+                  ) : (
+                    brand.brand
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="mt-10 space-y-8">
           {profiles.map((brand) => (
-            <li key={brand.brand}>
-              <a
-                href={`#merk-${slugify(brand.brand)}`}
-                className="flex h-16 items-center justify-center rounded-xl border border-rand bg-white px-2 text-center text-sm font-semibold text-inkt hover:border-veld"
-              >
+            <Card key={brand.brand} id={`merk-${slugify(brand.brand)}`} className="scroll-mt-24">
+              <div className="flex items-center gap-4">
                 {brand.logoUrl ? (
-                  <span
+                  <div
                     className={
                       brand.logoBackground === 'dark'
-                        ? 'flex h-10 w-full items-center justify-center rounded-lg bg-inkt px-2'
-                        : 'flex h-10 w-full items-center justify-center'
+                        ? 'flex h-14 w-28 shrink-0 items-center justify-center rounded-lg bg-inkt p-2'
+                        : 'flex h-14 w-28 shrink-0 items-center justify-center'
                     }
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={brand.logoUrl} alt={brand.brand} loading="lazy" className="max-h-7 max-w-full object-contain" />
-                  </span>
-                ) : (
-                  brand.brand
-                )}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+                    <img
+                      src={brand.logoUrl}
+                      alt={`${brand.brand} logo`}
+                      className="max-h-10 max-w-full object-contain"
+                    />
+                  </div>
+                ) : null}
+                <h2 className="text-xl font-bold">{brand.brand}</h2>
+              </div>
 
-      <div className="mt-10 space-y-8">
-        {profiles.map((brand) => (
-          <Card key={brand.brand} id={`merk-${slugify(brand.brand)}`} className="scroll-mt-24">
-            <div className="flex items-center gap-4">
-              {brand.logoUrl ? (
-                <div
-                  className={
-                    brand.logoBackground === 'dark'
-                      ? 'flex h-14 w-28 shrink-0 items-center justify-center rounded-lg bg-inkt p-2'
-                      : 'flex h-14 w-28 shrink-0 items-center justify-center'
-                  }
+              <p className="mt-4 text-sm text-inkt/80">
+                {brand.characteristics}{' '}
+                <a
+                  href={brand.characteristicsSourceUrl}
+                  className="inline-flex min-h-6 items-center text-veld hover:underline"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={brand.logoUrl}
-                    alt={`${brand.brand} logo`}
-                    className="max-h-10 max-w-full object-contain"
-                  />
+                  (bron)
+                </a>
+              </p>
+
+              {brand.nationalTeamNote && (
+                <p className="mt-3 text-sm text-inkt/80">
+                  <strong>Nederlands hockeyteam: </strong>
+                  {brand.nationalTeamNote}{' '}
+                  {brand.nationalTeamSourceUrl && (
+                    <a
+                      href={brand.nationalTeamSourceUrl}
+                      className="inline-flex min-h-6 items-center text-veld hover:underline"
+                    >
+                      (bron)
+                    </a>
+                  )}
+                </p>
+              )}
+
+              {brand.quotes && brand.quotes.length > 0 && (
+                <div className="mt-3 space-y-3">
+                  {brand.quotes.map((q) => (
+                    <blockquote
+                      key={q.sourceUrl}
+                      className="border-l-2 border-veld pl-3 text-sm italic text-inkt/80"
+                    >
+                      &ldquo;{q.quote}&rdquo;
+                      <footer className="mt-1 not-italic text-xs text-lijngrijs">
+                        — {q.attribution}
+                        {q.language ? ` · ${q.language}` : ''} ·{' '}
+                        <a
+                          href={q.sourceUrl}
+                          className="inline-flex min-h-6 items-center hover:underline"
+                        >
+                          bron
+                        </a>
+                      </footer>
+                    </blockquote>
+                  ))}
                 </div>
-              ) : null}
-              <h2 className="text-xl font-bold">{brand.brand}</h2>
-            </div>
+              )}
 
-            <p className="mt-4 text-sm text-inkt/80">
-              {brand.characteristics}{' '}
-              <a
-                href={brand.characteristicsSourceUrl}
-                className="inline-flex min-h-6 items-center text-veld hover:underline"
-              >
-                (bron)
-              </a>
-            </p>
-
-            {brand.nationalTeamNote && (
-              <p className="mt-3 text-sm text-inkt/80">
-                <strong>Nederlands hockeyteam: </strong>
-                {brand.nationalTeamNote}{' '}
-                {brand.nationalTeamSourceUrl && (
-                  <a
-                    href={brand.nationalTeamSourceUrl}
-                    className="inline-flex min-h-6 items-center text-veld hover:underline"
+              {brand.philosophy && (
+                <section
+                  aria-labelledby={`filosofie-${slugify(brand.brand)}`}
+                  className="mt-5 border-t border-rand pt-4"
+                >
+                  <h3
+                    id={`filosofie-${slugify(brand.brand)}`}
+                    className="text-base font-bold"
                   >
-                    (bron)
-                  </a>
+                    Hoe denkt {brand.brand} over sticks?
+                  </h3>
+                  {brand.philosophy.paragraphs.map((paragraph) => (
+                    <p key={paragraph} className="mt-2 text-sm text-inkt/80">
+                      {paragraph}
+                    </p>
+                  ))}
+                  <p className="mt-2 text-xs text-lijngrijs">
+                    Zo beschrijft {brand.brand} het zelf op de eigen website
+                    (gecontroleerd op{' '}
+                    {formatDutchDate(brand.philosophy.checkedAt)}
+                    ):{' '}
+                    {brand.philosophy.sources.map((source, index) => (
+                      <span key={source.url}>
+                        {index > 0 && ' · '}
+                        <a
+                          href={source.url}
+                          className="inline-flex min-h-6 items-center hover:underline"
+                        >
+                          {source.label}
+                        </a>
+                      </span>
+                    ))}
+                  </p>
+                </section>
+              )}
+
+              <p className="mt-4 text-sm">
+                {brand.hasCatalogProducts ? (
+                  fieldBrands.has(brand.brand) ? (
+                    <Link
+                      href={`/sticks?brand=${encodeURIComponent(brand.brand)}`}
+                      className="font-semibold text-veld hover:underline"
+                    >
+                      Bekijk alle {brand.brand}-sticks in onze catalogus
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/zaalsticks"
+                      className="font-semibold text-veld hover:underline"
+                    >
+                      Bekijk de {brand.brand}-zaalsticks bij onze zaalsticks
+                    </Link>
+                  )
+                ) : (
+                  <span className="text-lijngrijs">
+                    Nog geen {brand.brand}-sticks in onze catalogus (zie open
+                    punten).
+                  </span>
                 )}
               </p>
-            )}
+            </Card>
+          ))}
+        </div>
 
-            {brand.quotes && brand.quotes.length > 0 && (
-              <div className="mt-3 space-y-3">
-                {brand.quotes.map((q) => (
-                  <blockquote
-                    key={q.sourceUrl}
-                    className="border-l-2 border-veld pl-3 text-sm italic text-inkt/80"
-                  >
-                    &ldquo;{q.quote}&rdquo;
-                    <footer className="mt-1 not-italic text-xs text-lijngrijs">
-                      — {q.attribution}
-                      {q.language ? ` · ${q.language}` : ''} ·{' '}
-                      <a
-                        href={q.sourceUrl}
-                        className="inline-flex min-h-6 items-center hover:underline"
-                      >
-                        bron
-                      </a>
-                    </footer>
-                  </blockquote>
-                ))}
-              </div>
-            )}
-
-            {brand.philosophy && (
-              <section
-                aria-labelledby={`filosofie-${slugify(brand.brand)}`}
-                className="mt-5 border-t border-rand pt-4"
-              >
-                <h3
-                  id={`filosofie-${slugify(brand.brand)}`}
-                  className="text-base font-bold"
-                >
-                  Hoe denkt {brand.brand} over sticks?
-                </h3>
-                {brand.philosophy.paragraphs.map((paragraph) => (
-                  <p key={paragraph} className="mt-2 text-sm text-inkt/80">
-                    {paragraph}
-                  </p>
-                ))}
-                <p className="mt-2 text-xs text-lijngrijs">
-                  Zo beschrijft {brand.brand} het zelf op de eigen website
-                  (gecontroleerd op{' '}
-                  {formatDutchDate(brand.philosophy.checkedAt)}
-                  ):{' '}
-                  {brand.philosophy.sources.map((source, index) => (
-                    <span key={source.url}>
-                      {index > 0 && ' · '}
-                      <a
-                        href={source.url}
-                        className="inline-flex min-h-6 items-center hover:underline"
-                      >
-                        {source.label}
-                      </a>
-                    </span>
-                  ))}
-                </p>
-              </section>
-            )}
-
-            <p className="mt-4 text-sm">
-              {brand.hasCatalogProducts ? (
-                fieldBrands.has(brand.brand) ? (
-                  <Link
-                    href={`/sticks?brand=${encodeURIComponent(brand.brand)}`}
-                    className="font-semibold text-veld hover:underline"
-                  >
-                    Bekijk alle {brand.brand}-sticks in onze catalogus
-                  </Link>
-                ) : (
-                  <Link
-                    href="/zaalsticks"
-                    className="font-semibold text-veld hover:underline"
-                  >
-                    Bekijk de {brand.brand}-zaalsticks bij onze zaalsticks
-                  </Link>
-                )
-              ) : (
-                <span className="text-lijngrijs">
-                  Nog geen {brand.brand}-sticks in onze catalogus (zie open
-                  punten).
-                </span>
-              )}
-            </p>
-          </Card>
-        ))}
-      </div>
-
-      <p className="mt-8 text-xs text-lijngrijs">
-        De feiten hierboven komen van de officiële merksites, de KNHB of
-        hockey.nl, met bronvermelding per claim. Heeft een merk geen officiële
-        site die we konden raadplegen, dan staat dat bij het merk en noemen we
-        de bron die we wel gebruikten. We nemen geen sponsoring- of spelersclaim
-        over die we niet zelf konden verifiëren.
-      </p>
-    </div>
+        <p className="mt-8 text-xs text-lijngrijs">
+          De feiten hierboven komen van de officiële merksites, de KNHB of
+          hockey.nl, met bronvermelding per claim. Heeft een merk geen officiële
+          site die we konden raadplegen, dan staat dat bij het merk en noemen we
+          de bron die we wel gebruikten. We nemen geen sponsoring- of spelersclaim
+          over die we niet zelf konden verifiëren.
+        </p>
+      </PageBody>
+    </>
   );
 }

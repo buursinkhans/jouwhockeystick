@@ -8,7 +8,7 @@ import { ShoeArticleLinks } from '@/components/shoes/ShoeArticleLinks';
 import { shoeArticleLink, shoeArticleLinks } from '@/content/shoeArticles';
 import { ImportedShoes } from '@/components/shoes/ImportedShoes';
 import { ShoeCard } from '@/components/shoes/ShoeCard';
-import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 import { ButtonLink } from '@/components/ui/Button';
 import { CERTAINTY_TEXT, HOCKEYSCHOENEN, intentFactLine, intentFacts } from '@/content/hockeyschoenen';
 import { pageMetadata } from '@/lib/site';
@@ -65,144 +65,148 @@ export default async function HockeyschoenenPage({
   const { filters } = HOCKEYSCHOENEN;
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
-      <Breadcrumbs
-        items={[
+    <>
+      <PageHeader
+        eyebrow="Hockeyschoenen"
+        title={HOCKEYSCHOENEN.title}
+        breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Hockeyschoenen', href: SHOES_PATH },
         ]}
-      />
-      <h1 className="text-3xl font-extrabold sm:text-4xl">{HOCKEYSCHOENEN.title}</h1>
-      <p className="mt-2 text-sm text-lijngrijs">
-        Door {HOCKEYSCHOENEN.author} · gepubliceerd op{' '}
-        <time dateTime={HOCKEYSCHOENEN.publishedAt}>{HOCKEYSCHOENEN.publishedAt}</time> · bijgewerkt op{' '}
-        <time dateTime={HOCKEYSCHOENEN.updatedAt}>{HOCKEYSCHOENEN.updatedAt}</time>
-      </p>
-      <TrackedBlock page="hockeyschoenen" block="intro">
-        <p className="mt-5 max-w-3xl text-lg text-inkt/80">
-          <InlineText text={HOCKEYSCHOENEN.intro} />
+      >
+        <p className="text-sm text-lijngrijs">
+          Door {HOCKEYSCHOENEN.author} · gepubliceerd op{' '}
+          <time dateTime={HOCKEYSCHOENEN.publishedAt}>{HOCKEYSCHOENEN.publishedAt}</time> · bijgewerkt op{' '}
+          <time dateTime={HOCKEYSCHOENEN.updatedAt}>{HOCKEYSCHOENEN.updatedAt}</time>
         </p>
-        <ButtonLink href="/hockeyschoenen/wijzer" className="mt-5">
-          {HOCKEYSCHOENEN.wizardButton}
-        </ButtonLink>
-      </TrackedBlock>
+        <TrackedBlock page="hockeyschoenen" block="intro">
+          <p className="mt-5 max-w-3xl text-lg text-inkt/80">
+            <InlineText text={HOCKEYSCHOENEN.intro} />
+          </p>
+          <ButtonLink href="/hockeyschoenen/wijzer" className="mt-5">
+            {HOCKEYSCHOENEN.wizardButton}
+          </ButtonLink>
+        </TrackedBlock>
+      </PageHeader>
 
-      <TrackedBlock page="hockeyschoenen" block="filters">
-        <nav aria-label={filters.legend} className="mt-8 space-y-2">
-          <div className="flex flex-wrap gap-2">
-            <FilterLink href={filterHref(undefined, age)} active={!type}>
-              {filters.type.all}
-            </FilterLink>
-            <FilterLink href={filterHref('veld', age)} active={type === 'veld'}>
-              {filters.type.veld}
-            </FilterLink>
-            <FilterLink href={filterHref('zaal', age)} active={type === 'zaal'}>
-              {filters.type.zaal}
-            </FilterLink>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <FilterLink href={filterHref(type, undefined)} active={!age}>
-              {filters.age.all}
-            </FilterLink>
-            <FilterLink href={filterHref(type, 'junior')} active={age === 'junior'}>
-              {filters.age.junior}
-            </FilterLink>
-            <FilterLink href={filterHref(type, 'senior')} active={age === 'senior'}>
-              {filters.age.senior}
-            </FilterLink>
-          </div>
-        </nav>
-      </TrackedBlock>
+      <PageBody>
+        <TrackedBlock page="hockeyschoenen" block="filters">
+          <nav aria-label={filters.legend} className="space-y-2">
+            <div className="flex flex-wrap gap-2">
+              <FilterLink href={filterHref(undefined, age)} active={!type}>
+                {filters.type.all}
+              </FilterLink>
+              <FilterLink href={filterHref('veld', age)} active={type === 'veld'}>
+                {filters.type.veld}
+              </FilterLink>
+              <FilterLink href={filterHref('zaal', age)} active={type === 'zaal'}>
+                {filters.type.zaal}
+              </FilterLink>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <FilterLink href={filterHref(type, undefined)} active={!age}>
+                {filters.age.all}
+              </FilterLink>
+              <FilterLink href={filterHref(type, 'junior')} active={age === 'junior'}>
+                {filters.age.junior}
+              </FilterLink>
+              <FilterLink href={filterHref(type, 'senior')} active={age === 'senior'}>
+                {filters.age.senior}
+              </FilterLink>
+            </div>
+          </nav>
+        </TrackedBlock>
 
-      <TrackedBlock page="hockeyschoenen" block="modellen">
-        <section aria-labelledby="gecontroleerd-kop" className="mt-10">
-          <h2 id="gecontroleerd-kop" className="text-2xl font-bold">
-            {HOCKEYSCHOENEN.checked.heading} <span className="font-normal text-lijngrijs">({checked.length})</span>
-          </h2>
-          <p className="mt-2 max-w-3xl text-inkt/80">{HOCKEYSCHOENEN.checked.intro}</p>
-          {checked.length === 0 ? (
-            <p className="mt-4 text-inkt/80">{HOCKEYSCHOENEN.checked.none}</p>
-          ) : (
-            <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {checked.map((shoe) => (
-                <li key={shoe.slug}>
-                  <ShoeCard shoe={shoe} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        <section aria-labelledby="feed-kop" className="mt-12">
-          <h2 id="feed-kop" className="text-2xl font-bold">
-            {HOCKEYSCHOENEN.feed.heading} <span className="font-normal text-lijngrijs">({feedCount})</span>
-          </h2>
-          <p className="mt-2 max-w-3xl text-inkt/80">{HOCKEYSCHOENEN.feed.intro}</p>
-          {feedCount === 0 ? (
-            <p className="mt-4 text-inkt/80">{HOCKEYSCHOENEN.feed.none}</p>
-          ) : (
-            // Loaded after a click, like the imported sticks: not in the first page load.
-            <ImportedShoes count={feedCount} type={type} age={age} />
-          )}
-        </section>
-      </TrackedBlock>
-
-      <TrackedBlock page="hockeyschoenen" block="intenties">
-        <div className="mt-12 max-w-3xl space-y-10">
-          {(['veld', 'zaal', 'kinderen'] as const).map((intent) => {
-            const section = HOCKEYSCHOENEN.intents[intent];
-            const article = shoeArticleLink(section.articleSlug);
-            return (
-              <section key={intent} aria-labelledby={`intentie-${intent}`}>
-                <h2 id={`intentie-${intent}`} className="text-2xl font-bold">
-                  {section.heading}
-                </h2>
-                <h3 className="mt-3 text-lg font-semibold">{section.question}</h3>
-                <p className="mt-2 text-inkt/80">{section.answer}</p>
-                <p className="mt-2 text-sm text-inkt/80">{intentFactLine(intent, facts)}</p>
-                <ul className="mt-2 flex flex-col gap-1">
-                  <li>
-                    <Link href={section.filterHref} className="inline-flex min-h-11 items-center font-semibold text-veld hover:underline">
-                      {section.filterLabel}
-                    </Link>
+        <TrackedBlock page="hockeyschoenen" block="modellen">
+          <section aria-labelledby="gecontroleerd-kop" className="mt-10">
+            <h2 id="gecontroleerd-kop" className="text-2xl font-bold">
+              {HOCKEYSCHOENEN.checked.heading} <span className="font-normal text-lijngrijs">({checked.length})</span>
+            </h2>
+            <p className="mt-2 max-w-3xl text-inkt/80">{HOCKEYSCHOENEN.checked.intro}</p>
+            {checked.length === 0 ? (
+              <p className="mt-4 text-inkt/80">{HOCKEYSCHOENEN.checked.none}</p>
+            ) : (
+              <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {checked.map((shoe) => (
+                  <li key={shoe.slug}>
+                    <ShoeCard shoe={shoe} />
                   </li>
-                  {article && (
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section aria-labelledby="feed-kop" className="mt-12">
+            <h2 id="feed-kop" className="text-2xl font-bold">
+              {HOCKEYSCHOENEN.feed.heading} <span className="font-normal text-lijngrijs">({feedCount})</span>
+            </h2>
+            <p className="mt-2 max-w-3xl text-inkt/80">{HOCKEYSCHOENEN.feed.intro}</p>
+            {feedCount === 0 ? (
+              <p className="mt-4 text-inkt/80">{HOCKEYSCHOENEN.feed.none}</p>
+            ) : (
+              // Loaded after a click, like the imported sticks: not in the first page load.
+              <ImportedShoes count={feedCount} type={type} age={age} />
+            )}
+          </section>
+        </TrackedBlock>
+
+        <TrackedBlock page="hockeyschoenen" block="intenties">
+          <div className="mt-12 max-w-3xl space-y-10">
+            {(['veld', 'zaal', 'kinderen'] as const).map((intent) => {
+              const section = HOCKEYSCHOENEN.intents[intent];
+              const article = shoeArticleLink(section.articleSlug);
+              return (
+                <section key={intent} aria-labelledby={`intentie-${intent}`}>
+                  <h2 id={`intentie-${intent}`} className="text-2xl font-bold">
+                    {section.heading}
+                  </h2>
+                  <h3 className="mt-3 text-lg font-semibold">{section.question}</h3>
+                  <p className="mt-2 text-inkt/80">{section.answer}</p>
+                  <p className="mt-2 text-sm text-inkt/80">{intentFactLine(intent, facts)}</p>
+                  <ul className="mt-2 flex flex-col gap-1">
                     <li>
-                      <Link href={article.href} className="inline-flex min-h-11 items-center font-semibold text-veld hover:underline">
-                        Lees: {article.title}
+                      <Link href={section.filterHref} className="inline-flex min-h-11 items-center font-semibold text-veld hover:underline">
+                        {section.filterLabel}
                       </Link>
                     </li>
-                  )}
-                </ul>
-              </section>
-            );
-          })}
-        </div>
-      </TrackedBlock>
+                    {article && (
+                      <li>
+                        <Link href={article.href} className="inline-flex min-h-11 items-center font-semibold text-veld hover:underline">
+                          Lees: {article.title}
+                        </Link>
+                      </li>
+                    )}
+                  </ul>
+                </section>
+              );
+            })}
+          </div>
+        </TrackedBlock>
 
-      <section aria-labelledby="status-kop" className="mt-12 max-w-3xl">
-        <h2 id="status-kop" className="text-2xl font-bold">
-          {HOCKEYSCHOENEN.status.heading}
-        </h2>
-        <dl className="mt-3 space-y-3">
-          {Object.values(CERTAINTY_TEXT).map(({ label, text }) => (
-            <div key={label}>
-              <dt className="font-semibold">{label}</dt>
-              <dd className="text-inkt/80">{text}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+        <section aria-labelledby="status-kop" className="mt-12 max-w-3xl">
+          <h2 id="status-kop" className="text-2xl font-bold">
+            {HOCKEYSCHOENEN.status.heading}
+          </h2>
+          <dl className="mt-3 space-y-3">
+            {Object.values(CERTAINTY_TEXT).map(({ label, text }) => (
+              <div key={label}>
+                <dt className="font-semibold">{label}</dt>
+                <dd className="text-inkt/80">{text}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
 
-      <TrackedBlock page="hockeyschoenen" block="pascontrole">
+        <TrackedBlock page="hockeyschoenen" block="pascontrole">
+          <div className="max-w-3xl">
+            <FitCheck />
+          </div>
+        </TrackedBlock>
+
         <div className="max-w-3xl">
-          <FitCheck />
+          <ShoeArticleLinks links={shoeArticleLinks()} />
         </div>
-      </TrackedBlock>
-
-      <div className="max-w-3xl">
-        <ShoeArticleLinks links={shoeArticleLinks()} />
-      </div>
-    </div>
+      </PageBody>
+    </>
   );
 }

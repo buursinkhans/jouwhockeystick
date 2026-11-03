@@ -25,7 +25,7 @@ export function ShoeWhereToBuy({ shoe }: { shoe: Shoe }) {
   const sizes = sizesInStockByShop(shoe);
 
   return (
-    <section id={OFFER_ANCHOR} aria-labelledby="waar-te-koop-kop" className="mt-8 scroll-mt-24 rounded-2xl border border-rand bg-white p-4 shadow-sm sm:p-5">
+    <section id={OFFER_ANCHOR} aria-labelledby="waar-te-koop-kop" className="mt-8 scroll-mt-24 card p-4 sm:p-5">
       <OfferBlockView placement="schoenpagina" offerCount={offers.length} pricedCount={pricedCount}>
         <div className="flex items-baseline justify-between gap-3">
           <h2 id="waar-te-koop-kop" className="text-xl font-bold">

@@ -8,7 +8,7 @@ export function FeaturedProducts({ products }: { products: Product[] }) {
       <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold tracking-wide text-veld uppercase">
+            <p className="eyebrow">
               Uit de catalogus
             </p>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight">

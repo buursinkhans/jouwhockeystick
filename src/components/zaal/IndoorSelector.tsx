@@ -51,7 +51,7 @@ function ResultCard({
   hasBudget: boolean;
 }) {
   return (
-    <li className="flex flex-col gap-4 rounded-2xl border border-rand bg-white p-5 sm:flex-row">
+    <li className="flex flex-col gap-4 card p-5 sm:flex-row">
       <div className="flex h-28 w-full shrink-0 items-center justify-center rounded-xl bg-white sm:w-28">
         <ProductImage product={product} className="h-24 w-24" />
       </div>
@@ -149,7 +149,7 @@ export function IndoorSelector({ products }: { products: Product[] }) {
   }
 
   return (
-    <div className="rounded-3xl border border-rand bg-white p-4 sm:p-6">
+    <div className="card p-4 sm:p-6">
       <form
         noValidate
         className="space-y-4"

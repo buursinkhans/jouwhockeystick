@@ -17,7 +17,7 @@ import { getCatalogStats } from '@/catalog/stats';
 import { TrackedBlock } from '@/components/catalog/TrackedBlock';
 import { InlineText } from '@/components/article/InlineText';
 import { plainText } from '@/components/article/inlineMarkup';
-import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 import { VELD, veldFaq, veldMetaDescription } from '@/content/veld';
 import { splitListNote } from '@/content/catalogLists';
 import { jsonLdHtml } from '@/lib/jsonLd';
@@ -89,197 +89,201 @@ export default async function SticksPage({
   };
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+    <>
       {showLanding && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqJsonLd) }}
         />
       )}
-      <Breadcrumbs
-        items={[
+      <PageHeader
+        eyebrow="Catalogus"
+        title={VELD.title}
+        breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Veldhockeysticks', href: '/sticks' },
         ]}
-      />
-      <h1 className="text-3xl font-extrabold sm:text-4xl">{VELD.title}</h1>
-      <p className="mt-2 text-sm text-lijngrijs">
-        Door {VELD.author} · gepubliceerd op{' '}
-        <time dateTime={VELD.publishedAt}>{VELD.publishedAt}</time> · bijgewerkt
-        op <time dateTime={VELD.updatedAt}>{VELD.updatedAt}</time>
-      </p>
-      {feedDates && (
-        <p className="mt-1 text-sm text-lijngrijs">
-          Aanbod en winkelprijzen gelezen{' '}
-          {feedDates.from === feedDates.to ? (
-            <>
-              op <time dateTime={feedDates.to}>{feedDates.to}</time>
-            </>
-          ) : (
-            <>
-              tussen <time dateTime={feedDates.from}>{feedDates.from}</time> en{' '}
-              <time dateTime={feedDates.to}>{feedDates.to}</time>
-            </>
-          )}
-        </p>
-      )}
-      <TrackedBlock page="sticks" block="intro">
-        <p className="mt-5 max-w-3xl text-lg text-inkt/80">
-          <InlineText text={VELD.intro} />
-        </p>
-      </TrackedBlock>
-
-      <div className="mt-8">
-        <CatalogFilters action="/sticks" filters={filters} brands={brands} bows={bows} lengths={lengths} />
-      </div>
-
-      {showLanding && (
-        <section className="mt-10" aria-labelledby="veld-levels-heading">
-          <h2 id="veld-levels-heading" className="text-2xl font-bold">
-            {VELD.levels.heading}
-          </h2>
-          <p className="mt-2 max-w-3xl text-inkt/80">{VELD.levels.intro}</p>
-          <TrackedBlock page="sticks" block="levels">
-            {VELD.levels.groups.map((group) => {
-              const picks = pickVaried(
-                curated.filter((p) => p.experienceLevel.value === group.level),
-              );
-              return picks.length ? (
-                <div key={group.level} className="mt-6">
-                  <h3 className="text-lg font-semibold">{group.heading}</h3>
-                  <div className="mt-3">
-                    <ProductGrid products={picks} />
-                  </div>
-                </div>
-              ) : null;
-            })}
-            <p className="mt-6">
-              <a
-                href="#alle-veldsticks"
-                className="font-semibold text-veld hover:underline"
-              >
-                {VELD.levels.allLink} ({total}) ↓
-              </a>
-            </p>
-          </TrackedBlock>
-        </section>
-      )}
-
-      {showLanding && (
-        <section className="mt-12 max-w-3xl" aria-labelledby="veld-faq-heading">
-          <h2 id="veld-faq-heading" className="text-2xl font-bold">
-            {VELD.faq.heading}
-          </h2>
-          <TrackedBlock page="sticks" block="faq">
-            <div className="mt-5 space-y-6">
-              {faq.map((item) => (
-                <div key={item.question}>
-                  <h3 className="text-lg font-bold">{item.question}</h3>
-                  <p className="mt-2 text-inkt/80">
-                    <InlineText text={item.answer} />
-                  </p>
-                </div>
-              ))}
-            </div>
-          </TrackedBlock>
-        </section>
-      )}
-
-      <h2
-        id="alle-veldsticks"
-        className="mt-12 scroll-mt-24 text-2xl font-bold"
       >
-        Alle veldhockeysticks in onze catalogus
-      </h2>
-      <p className="mt-2 max-w-2xl text-lijngrijs">
-        {!filtered && 'Filter op merk. '}Zoek je een stick voor de zaal? Bekijk dan de{' '}
-        <Link
-          href="/zaalsticks"
-          className="font-semibold text-veld hover:underline"
-        >
-          zaalsticks
-        </Link>
-        .
-      </p>
+        <p className="text-sm text-lijngrijs">
+          Door {VELD.author} · gepubliceerd op{' '}
+          <time dateTime={VELD.publishedAt}>{VELD.publishedAt}</time> · bijgewerkt
+          op <time dateTime={VELD.updatedAt}>{VELD.updatedAt}</time>
+        </p>
+        {feedDates && (
+          <p className="mt-1 text-sm text-lijngrijs">
+            Aanbod en winkelprijzen gelezen{' '}
+            {feedDates.from === feedDates.to ? (
+              <>
+                op <time dateTime={feedDates.to}>{feedDates.to}</time>
+              </>
+            ) : (
+              <>
+                tussen <time dateTime={feedDates.from}>{feedDates.from}</time> en{' '}
+                <time dateTime={feedDates.to}>{feedDates.to}</time>
+              </>
+            )}
+          </p>
+        )}
+        <TrackedBlock page="sticks" block="intro">
+          <p className="mt-5 max-w-3xl text-lg text-inkt/80">
+            <InlineText text={VELD.intro} />
+          </p>
+        </TrackedBlock>
 
-      {/* With filters active the form above already holds the brand. */}
-      {!filtered && (
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="mt-8">
+          <CatalogFilters action="/sticks" filters={filters} brands={brands} bows={bows} lengths={lengths} />
+        </div>
+      </PageHeader>
+
+      <PageBody>
+        {showLanding && (
+          <section aria-labelledby="veld-levels-heading">
+            <h2 id="veld-levels-heading" className="text-2xl font-bold">
+              {VELD.levels.heading}
+            </h2>
+            <p className="mt-2 max-w-3xl text-inkt/80">{VELD.levels.intro}</p>
+            <TrackedBlock page="sticks" block="levels">
+              {VELD.levels.groups.map((group) => {
+                const picks = pickVaried(
+                  curated.filter((p) => p.experienceLevel.value === group.level),
+                );
+                return picks.length ? (
+                  <div key={group.level} className="mt-6">
+                    <h3 className="text-lg font-semibold">{group.heading}</h3>
+                    <div className="mt-3">
+                      <ProductGrid products={picks} />
+                    </div>
+                  </div>
+                ) : null;
+              })}
+              <p className="mt-6">
+                <a
+                  href="#alle-veldsticks"
+                  className="font-semibold text-veld hover:underline"
+                >
+                  {VELD.levels.allLink} ({total}) ↓
+                </a>
+              </p>
+            </TrackedBlock>
+          </section>
+        )}
+
+        {showLanding && (
+          <section className="mt-12 max-w-3xl" aria-labelledby="veld-faq-heading">
+            <h2 id="veld-faq-heading" className="text-2xl font-bold">
+              {VELD.faq.heading}
+            </h2>
+            <TrackedBlock page="sticks" block="faq">
+              <div className="mt-5 space-y-6">
+                {faq.map((item) => (
+                  <div key={item.question}>
+                    <h3 className="text-lg font-bold">{item.question}</h3>
+                    <p className="mt-2 text-inkt/80">
+                      <InlineText text={item.answer} />
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </TrackedBlock>
+          </section>
+        )}
+
+        <h2
+          id="alle-veldsticks"
+          className="mt-12 scroll-mt-24 text-2xl font-bold"
+        >
+          Alle veldhockeysticks in onze catalogus
+        </h2>
+        <p className="mt-2 max-w-2xl text-lijngrijs">
+          {!filtered && 'Filter op merk. '}Zoek je een stick voor de zaal? Bekijk dan de{' '}
           <Link
-            href="/sticks"
-            aria-current={!activeBrand ? 'page' : undefined}
-            className={`inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-medium ${
-              !activeBrand
-                ? 'border-veld bg-veld text-white'
-                : 'border-lijngrijs text-inkt/80 hover:border-veld'
-            }`}
+            href="/zaalsticks"
+            className="font-semibold text-veld hover:underline"
           >
-            Alle merken
+            zaalsticks
           </Link>
-          {brands.map((b) => (
+          .
+        </p>
+
+        {/* With filters active the form above already holds the brand. */}
+        {!filtered && (
+          <div className="mt-6 flex flex-wrap gap-2">
             <Link
-              key={b}
-              href={`/sticks?brand=${encodeURIComponent(b)}`}
-              aria-current={activeBrand === b ? 'page' : undefined}
+              href="/sticks"
+              aria-current={!activeBrand ? 'page' : undefined}
               className={`inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-medium ${
-                activeBrand === b
+                !activeBrand
                   ? 'border-veld bg-veld text-white'
                   : 'border-lijngrijs text-inkt/80 hover:border-veld'
               }`}
             >
-              {b}
+              Alle merken
             </Link>
-          ))}
-        </div>
-      )}
+            {brands.map((b) => (
+              <Link
+                key={b}
+                href={`/sticks?brand=${encodeURIComponent(b)}`}
+                aria-current={activeBrand === b ? 'page' : undefined}
+                className={`inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-medium ${
+                  activeBrand === b
+                    ? 'border-veld bg-veld text-white'
+                    : 'border-lijngrijs text-inkt/80 hover:border-veld'
+                }`}
+              >
+                {b}
+              </Link>
+            ))}
+          </div>
+        )}
 
-      <h3 className="mt-8 text-xl font-bold">
-        {filtered
-          ? matching.length === 1
-            ? '1 stick past bij je filters'
-            : `${matching.length} sticks passen bij je filters`
-          : 'Alle veldsticks'}{' '}
-        {!filtered && <span className="font-normal text-lijngrijs">({total})</span>}
-      </h3>
-      {importedCount > 0 && (
-        <p className="mt-2 max-w-3xl text-sm text-inkt/80">
-          {splitListNote(products.length, importedCount)}
-        </p>
-      )}
-      {filtered && matching.length === 0 && (
-        <p className="mt-3 max-w-2xl text-inkt/80">
-          Geen stick past bij al deze filters tegelijk. Kies een ruimer budget
-          of een andere lengte, of{' '}
-          <Link href="/stickwijzer" className="font-semibold text-veld hover:underline">
-            laat de stickwijzer meedenken
-          </Link>
-          .
-        </p>
-      )}
-      <div className="mt-4">
-        <ProductGrid products={products} />
-      </div>
-      {filtered && pageCount > 1 && (
-        <nav aria-label="Pagina's" className="mt-8 flex flex-wrap items-center gap-2">
-          {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
-            <Link
-              key={n}
-              href={`/sticks${filterQuery(filters, n > 1 ? { pagina: String(n) } : {})}#alle-veldsticks`}
-              aria-current={n === pageNumber ? 'page' : undefined}
-              className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border px-3 text-sm font-medium ${
-                n === pageNumber ? 'border-veld bg-veld text-white' : 'border-rand text-inkt/80 hover:border-veld'
-              }`}
-            >
-              {n}
+        <h3 className="mt-8 text-xl font-bold">
+          {filtered
+            ? matching.length === 1
+              ? '1 stick past bij je filters'
+              : `${matching.length} sticks passen bij je filters`
+            : 'Alle veldsticks'}{' '}
+          {!filtered && <span className="font-normal text-lijngrijs">({total})</span>}
+        </h3>
+        {importedCount > 0 && (
+          <p className="mt-2 max-w-3xl text-sm text-inkt/80">
+            {splitListNote(products.length, importedCount)}
+          </p>
+        )}
+        {filtered && matching.length === 0 && (
+          <p className="mt-3 max-w-2xl text-inkt/80">
+            Geen stick past bij al deze filters tegelijk. Kies een ruimer budget
+            of een andere lengte, of{' '}
+            <Link href="/stickwijzer" className="font-semibold text-veld hover:underline">
+              laat de stickwijzer meedenken
             </Link>
-          ))}
-        </nav>
-      )}
-      <ImportedSticks
-        page="sticks"
-        file="aanbod-veld.json"
-        count={importedCount}
-      />
-    </div>
+            .
+          </p>
+        )}
+        <div className="mt-4">
+          <ProductGrid products={products} />
+        </div>
+        {filtered && pageCount > 1 && (
+          <nav aria-label="Pagina's" className="mt-8 flex flex-wrap items-center gap-2">
+            {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
+              <Link
+                key={n}
+                href={`/sticks${filterQuery(filters, n > 1 ? { pagina: String(n) } : {})}#alle-veldsticks`}
+                aria-current={n === pageNumber ? 'page' : undefined}
+                className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border px-3 text-sm font-medium ${
+                  n === pageNumber ? 'border-veld bg-veld text-white' : 'border-rand text-inkt/80 hover:border-veld'
+                }`}
+              >
+                {n}
+              </Link>
+            ))}
+          </nav>
+        )}
+        <ImportedSticks
+          page="sticks"
+          file="aanbod-veld.json"
+          count={importedCount}
+        />
+      </PageBody>
+    </>
   );
 }
