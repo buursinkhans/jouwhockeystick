@@ -196,48 +196,51 @@ export function StickwijzerExplainer({
 
   return (
     <>
-      <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
-        <SectionHeading eyebrow="Zo werkt het" title="Van een paar antwoorden naar maximaal drie sticks">
-          <p>
-            De stickwijzer vergelijkt je antwoorden met alle {productCount}{' '}
-            veldsticks in onze catalogus. In {routeStepRange()} weet je welke
-            maat en welke sticks passen, en waarom.
-          </p>
-        </SectionHeading>
+      {/* A krijt band between the white blocks (designsysteem: white base, krijt as accent surface). */}
+      <div className="border-b border-rand bg-krijt">
+        <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+          <SectionHeading eyebrow="Zo werkt het" title="Van een paar antwoorden naar maximaal drie sticks">
+            <p>
+              De stickwijzer vergelijkt je antwoorden met alle {productCount}{' '}
+              veldsticks in onze catalogus. In {routeStepRange()} weet je welke
+              maat en welke sticks passen, en waarom.
+            </p>
+          </SectionHeading>
 
-        <ol className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
-          <li>
-            <StepNumber n={1} />
-            <p className="mt-4 text-lg font-bold">Jij vertelt over de speler</p>
-            <ul className="mt-3 space-y-2">
-              {LOOKS_AT.map(({ icon: LookIcon, title, body }) => (
-                <li key={title} className="flex items-start gap-3 text-sm">
-                  <LookIcon size={18} className="mt-0.5 shrink-0 text-veld" />
-                  <span>
-                    <span className="font-semibold">{title}</span>
-                    <span className="text-lijngrijs"> · {body}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </li>
-          {FLOW.map(({ title, body }, index) => (
-            <li key={title}>
-              <StepNumber n={index + 2} />
-              <p className="mt-4 text-lg font-bold">{title}</p>
-              <p className="mt-3 text-inkt/80">{body}</p>
+          <ol className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
+            <li>
+              <StepNumber n={1} />
+              <p className="mt-4 text-lg font-bold">Jij vertelt over de speler</p>
+              <ul className="mt-3 space-y-2">
+                {LOOKS_AT.map(({ icon: LookIcon, title, body }) => (
+                  <li key={title} className="flex items-start gap-3 text-sm">
+                    <LookIcon size={18} className="mt-0.5 shrink-0 text-veld" />
+                    <span>
+                      <span className="font-semibold">{title}</span>
+                      <span className="text-lijngrijs"> · {body}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </li>
-          ))}
-        </ol>
+            {FLOW.map(({ title, body }, index) => (
+              <li key={title}>
+                <StepNumber n={index + 2} />
+                <p className="mt-4 text-lg font-bold">{title}</p>
+                <p className="mt-3 text-inkt/80">{body}</p>
+              </li>
+            ))}
+          </ol>
 
-        <p className="mt-10 border-t border-rand pt-6 text-sm text-inkt/80">
-          <span className="font-semibold text-inkt">Drie routes:</span>{' '}
-          {routeLabels.join(' · ')}. Je kiest aan het begin wat bij de speler
-          past en kunt onderweg wisselen.
-        </p>
-      </section>
+          <p className="mt-10 border-t border-rand pt-6 text-sm text-inkt/80">
+            <span className="font-semibold text-inkt">Drie routes:</span>{' '}
+            {routeLabels.join(' · ')}. Je kiest aan het begin wat bij de speler
+            past en kunt onderweg wisselen.
+          </p>
+        </section>
+      </div>
 
-      <section className="mx-auto max-w-5xl px-4 pb-16 sm:px-6">
+      <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
         <div className="grid items-center gap-10 rounded-3xl bg-white p-6 ring-1 ring-rand sm:p-10 lg:grid-cols-2">
           <div>
             <SectionHeading

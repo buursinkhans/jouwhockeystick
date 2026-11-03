@@ -52,7 +52,7 @@ function ResultCard({
 }) {
   return (
     <li className="flex flex-col gap-4 rounded-2xl border border-rand bg-white p-5 sm:flex-row">
-      <div className="bg-hex-light flex h-28 w-full shrink-0 items-center justify-center rounded-xl bg-krijt sm:w-28">
+      <div className="flex h-28 w-full shrink-0 items-center justify-center rounded-xl bg-white sm:w-28">
         <ProductImage product={product} className="h-24 w-24" />
       </div>
       <div className="flex-1">

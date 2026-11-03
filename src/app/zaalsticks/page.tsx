@@ -151,7 +151,7 @@ export default function ZaalsticksPage() {
         </p>
       </section>
 
-      <section className="bg-hex-light mt-12 rounded-3xl border border-rand bg-krijt p-6 sm:p-8">
+      <section className="mt-12 rounded-3xl border border-rand bg-krijt p-6 sm:p-8">
         <h2 className="text-2xl font-bold">{ZAAL.choosing.heading}</h2>
         <ul className="mt-5 grid gap-5 sm:grid-cols-2">
           {ZAAL.choosing.items.map((item) => (

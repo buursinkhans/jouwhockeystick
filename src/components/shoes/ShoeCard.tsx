@@ -11,8 +11,8 @@ import { ShoeOfferSummary } from './ShoeWhereToBuy';
 export function ShoeCard({ shoe }: { shoe: Shoe }) {
   return (
     <article className="flex h-full flex-col rounded-3xl border border-rand bg-white p-5 shadow-sm">
-      <div className="bg-hex-light flex h-40 items-center justify-center rounded-2xl bg-krijt">
-        <ShoeImage shoe={shoe} className="h-32 w-32" />
+      <div className="flex h-44 items-center justify-center rounded-2xl bg-white">
+        <ShoeImage shoe={shoe} className="h-40 w-40" />
       </div>
       <p className="mt-4 text-xs font-semibold tracking-wide text-veld uppercase">{shoe.brand}</p>
       <h3 className="mt-1 text-lg leading-snug font-bold">
