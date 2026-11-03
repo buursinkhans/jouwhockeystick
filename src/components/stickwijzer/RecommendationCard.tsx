@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { LENGTH_TABLE_PATH } from '@/lib/site';
 import { isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import { getOffers, lowestTotal } from '@/catalog/offers';
-import { euro, shopCount } from '@/content/offers';
+import { euro } from '@/content/offers';
 import { WhereToBuy } from '@/components/offers/WhereToBuy';
 import type { AdviceRoute } from '@/advice-engine/answers';
 import type {
@@ -77,6 +77,39 @@ function ReasonSource({
   );
 }
 
+/**
+ * Reasons shown before the shop buttons; the rest sit one click away, each
+ * still with its source (spec §9.1, §9.5; CLAUDE.md: at least 2–3 visible).
+ * The engine lists them in order of weight.
+ */
+const VISIBLE_REASONS = 3;
+
+function ReasonList({
+  reasons,
+  product,
+  route,
+}: {
+  reasons: readonly AdviceReason[];
+  product: Product;
+  route: AdviceRoute;
+}) {
+  return (
+    <ul className="mt-2 space-y-3">
+      {reasons.map((reason) => (
+        <li key={reason.code} className="flex items-start gap-2 text-sm">
+          <CheckIcon size={16} className="mt-0.5 shrink-0 text-veld" />
+          <span>
+            {reasonText(reason, product, route)}
+            <span className="mt-0.5 block text-xs text-lijngrijs">
+              <ReasonSource reason={reason} product={product} />
+            </span>
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function RecommendationCard({
   item,
   route,
@@ -99,7 +132,7 @@ export function RecommendationCard({
       <p className="mt-1 text-sm text-lijngrijs">{roleIntro(item)}</p>
 
       <div className="mt-4 flex items-start gap-4">
-        <ProductImage product={product} className="h-20 w-20 shrink-0" />
+        <ProductImage product={product} className="h-28 w-28 shrink-0 sm:h-32 sm:w-32" />
         <div>
           <h4 className="text-lg font-bold">
             <Link href={productPath(product)} className="hover:underline">
@@ -124,7 +157,8 @@ export function RecommendationCard({
           <div>
             <dt className="text-lijngrijs">Prijs</dt>
             <dd className="font-semibold">
-              vanaf {euro(lowest)} bij {shopCount(offers.length)}
+              {/* lowestTotal counts only shops with the advised size in stock. */}
+              vanaf {euro(lowest)} in {formatInch(item.sizeInch)}
             </dd>
           </div>
         ) : (
@@ -164,19 +198,16 @@ export function RecommendationCard({
       )}
 
       <h5 className="mt-5 text-sm font-semibold">Waarom deze stick past</h5>
-      <ul className="mt-2 space-y-3">
-        {item.reasons.map((reason) => (
-          <li key={reason.code} className="flex items-start gap-2 text-sm">
-            <CheckIcon size={16} className="mt-0.5 shrink-0 text-veld" />
-            <span>
-              {reasonText(reason, product, route)}
-              <span className="mt-0.5 block text-xs text-lijngrijs">
-                <ReasonSource reason={reason} product={product} />
-              </span>
-            </span>
-          </li>
-        ))}
-      </ul>
+      <ReasonList reasons={item.reasons.slice(0, VISIBLE_REASONS)} product={product} route={route} />
+      {item.reasons.length > VISIBLE_REASONS && (
+        <details className="mt-3 text-sm">
+          <summary className="cursor-pointer select-none font-medium text-veld">
+            Nog {item.reasons.length - VISIBLE_REASONS}{' '}
+            {item.reasons.length - VISIBLE_REASONS === 1 ? 'reden' : 'redenen'}
+          </summary>
+          <ReasonList reasons={item.reasons.slice(VISIBLE_REASONS)} product={product} route={route} />
+        </details>
+      )}
 
       <h5 className="mt-5 text-sm font-semibold">Let op vóór je koopt</h5>
       <ul className="mt-2 space-y-2">

@@ -12,6 +12,8 @@ const FOOTER_LINKS = [
     label: 'Waar koop je een stick?',
   },
   { href: '/hockeyschoenen', label: 'Hockeyschoenen' },
+  { href: '/vergelijk', label: 'Sticks vergelijken' },
+  { href: '/blog', label: 'Blog' },
   { href: '/clubs', label: 'Voor hockeyclubs' },
   { href: '/privacy', label: 'Privacy' },
 ];

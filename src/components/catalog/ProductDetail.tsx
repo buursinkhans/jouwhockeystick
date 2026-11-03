@@ -104,7 +104,7 @@ export function ProductDetail({ product }: { product: Product }) {
         <div className="shrink-0">
           <ProductImage
             product={product}
-            className="h-40 w-40 sm:h-48 sm:w-48"
+            className="h-40 w-40 sm:h-64 sm:w-64"
           />
           {product.imageUrl && product.imageSourceUrl && (
             <p className="mt-1 text-center text-xs text-lijngrijs">
@@ -171,7 +171,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
       <h2 className="mt-10 text-xl font-bold">Specificaties</h2>
       <div className="mt-4">
-        <ProductSpecTable product={product} />
+        <ProductSpecTable product={product} hasCurrentOffers={lowest !== null} />
       </div>
 
       <ProductFitAndSources product={product} />

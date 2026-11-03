@@ -24,7 +24,7 @@ import {
 import type { AdviceEventName } from '@/lib/analytics/events';
 import { trackEvent } from '@/lib/analytics/track';
 import { shareHref } from '@/lib/shareAdvice';
-import { remainingTimeText } from '@/content/stickwijzer/progress';
+import { remainingTimeText, routeStepRange } from '@/content/stickwijzer/progress';
 import { Button } from '@/components/ui/Button';
 import { QuestionField, type AnswerValue } from './QuestionField';
 import { QuizResult } from './QuizResult';
@@ -424,7 +424,7 @@ export function QuizForm() {
     >
       <p className="text-sm text-lijngrijs">
         Stap {currentStep + 1}
-        {route ? ` van ${screens.length}` : ''}
+        {route ? ` van ${screens.length}` : ` · ${routeStepRange()}, afhankelijk van de route`}
         {route ? ` · ${ROUTE_LABELS[route]}` : ''}
         {route ? ` · ${remainingTimeText(questionsLeft, isLastStep)}` : ''}
       </p>

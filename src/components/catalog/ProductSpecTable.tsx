@@ -10,7 +10,14 @@ import {
 } from '@/catalog/labels';
 import { SourceBadge, type SourceMeta } from '@/components/ui/SourceBadge';
 
-export function ProductSpecTable({ product }: { product: Product }) {
+export function ProductSpecTable({
+  product,
+  hasCurrentOffers = false,
+}: {
+  product: Product;
+  /** "Waar te koop" on the same page shows a current shop price and stock. */
+  hasCurrentOffers?: boolean;
+}) {
   const rows: Array<{ label: string; value: string; sourced: SourceMeta; lengthHelp?: boolean }> = [
     {
       label: 'Ervaringsniveau',
@@ -58,19 +65,21 @@ export function ProductSpecTable({ product }: { product: Product }) {
     });
   }
 
-  rows.push(
-    {
-      label: 'Beschikbare lengtes',
-      value: product.lengthsInches.value.map((l) => `${l}"`).join(', '),
-      sourced: product.lengthsInches,
-      lengthHelp: true,
-    },
-    {
+  rows.push({
+    label: 'Beschikbare lengtes',
+    value: product.lengthsInches.value.map((l) => `${l}"`).join(', '),
+    sourced: product.lengthsInches,
+    lengthHelp: true,
+  });
+  // With a current shop price, "Waar te koop" shows stock per shop and
+  // length; the catalog's general status would only contradict it.
+  if (!hasCurrentOffers) {
+    rows.push({
       label: 'Voorraadstatus',
       value: STOCK_LABELS[product.stock.value],
       sourced: product.stock,
-    },
-  );
+    });
+  }
 
   return (
     <table className="w-full border-collapse text-left">

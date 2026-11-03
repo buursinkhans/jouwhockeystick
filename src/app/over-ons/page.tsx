@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { pageMetadata } from '@/lib/site';
 
 export const metadata = pageMetadata({
@@ -52,9 +53,21 @@ export default function OverOnsPage() {
       <h2 className="mt-10 text-2xl font-bold">Hoe we werken</h2>
       <p className="mt-3 leading-relaxed text-inkt/80">
         De stickwijzer op deze site geeft je een persoonlijk advies met
-        zichtbare redenen. De daadwerkelijke aankoop verloopt via bol.com of
-        PassaHockey — wij verkopen zelf niet, maar zorgen dat je met een
-        duidelijk advies bij de juiste stick uitkomt.
+        zichtbare redenen. Je koopt bij een van onze partnerwinkels: bol.com,
+        PassaHockey, Plutosport of HockeyCity. Wij verkopen zelf niets, maar
+        zorgen dat je met een duidelijk advies bij de juiste stick uitkomt.
+      </p>
+
+      <h2 className="mt-10 text-2xl font-bold">Zo verdienen we geld</h2>
+      <p className="mt-3 leading-relaxed text-inkt/80">
+        Koop je via een winkelknop op deze site, dan krijgen wij van die winkel
+        een vergoeding. Die vergoeding telt niet mee in het advies, en in
+        &ldquo;Waar te koop&rdquo; staan de winkels op volgorde van prijs
+        inclusief verzending, nooit op vergoeding.{' '}
+        <Link href="/methodiek" className="font-semibold text-veld hover:underline">
+          Zo werkt ons advies
+        </Link>
+        .
       </p>
 
       <h2 className="mt-10 text-2xl font-bold">Contact</h2>

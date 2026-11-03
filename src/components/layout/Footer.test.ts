@@ -10,4 +10,10 @@ describe('Footer', () => {
     expect(html).toMatch(/Winkelprijzen werken we wekelijks bij/);
     expect(html).not.toMatch(/bol\.com of PassaHockey\./);
   });
+
+  it('keeps the pages that left the main menu reachable', () => {
+    const html = renderToStaticMarkup(createElement(Footer));
+    expect(html).toContain('href="/vergelijk"');
+    expect(html).toContain('href="/blog"');
+  });
 });

@@ -373,17 +373,27 @@ export const BRAND_PROFILES: BrandProfile[] = [
   },
   {
     brand: 'Mercian',
+    logoUrl: 'https://www.mercianhockey.com/cdn/shop/files/MERCIAN_GLOBAL.jpg?height=100&v=1781690883',
     logoBackground: 'light',
     characteristics:
-      'De Mercian-sticks in onze catalogus en hun gegevens komen uit de productfeed en de productpagina’s van HockeyCity, onze partnerwinkel. We hebben ze nog niet met de eigen website van Mercian vergeleken. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
-    characteristicsSourceUrl: 'https://www.hockeycity.nl/hockeysticks/',
+      'Mercian is een Brits merk, volgens de eigen website opgericht in 1974. Het merk laat zijn sticks maken bij vaste fabrikanten in Jalandhar (India) en Sialkot (Pakistan) en zegt die fabrieken regelmatig zelf te bezoeken. Volgens Mercian voldoen alle producten aan de regels van de FIH. De Mercian-sticks in onze catalogus en hun gegevens komen van HockeyCity, onze partnerwinkel.',
+    characteristicsSourceUrl: 'https://mercianhockey.com/pages/about-us',
+    quotes: [
+      {
+        quote:
+          'If you select the correct equipment, designed, manufactured and provided with a clinical attention to detail, you give yourself an advantage before you even set foot on the field.',
+        attribution: 'Mercian Hockey, over het motto "Win before you play"',
+        language: 'Engelstalig citaat, zoals gepubliceerd op de officiële Mercian-website',
+        sourceUrl: 'https://mercianhockey.com/pages/about-us',
+      },
+    ],
     hasCatalogProducts: true,
   },
   {
     brand: 'Cyclone',
     logoBackground: 'light',
     characteristics:
-      'De Cyclone-sticks in onze catalogus en hun gegevens komen uit de productfeed en de productpagina’s van HockeyCity, onze partnerwinkel. We hebben ze nog niet met de eigen website van Cyclone vergeleken. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+      'Cyclone heeft geen officiële website die we konden raadplegen (gezocht op 3 november 2026). De Cyclone-sticks in onze catalogus en hun gegevens komen daarom uit de productfeed en de productpagina’s van HockeyCity, onze partnerwinkel. Over de achtergrond van het merk zeggen we zonder officiële bron niets.',
     characteristicsSourceUrl: 'https://www.hockeycity.nl/hockeysticks/',
     hasCatalogProducts: true,
   },
@@ -391,7 +401,7 @@ export const BRAND_PROFILES: BrandProfile[] = [
     brand: 'Naked',
     logoBackground: 'light',
     characteristics:
-      'De Naked-sticks in onze catalogus en hun gegevens komen uit de productfeed en de productpagina’s van HockeyCity, onze partnerwinkel. We hebben ze nog niet met de eigen website van Naked vergeleken. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+      'Naked heeft geen officiële website die we konden raadplegen (gezocht op 3 november 2026). De Naked-sticks in onze catalogus en hun gegevens komen daarom uit de productfeed en de productpagina’s van HockeyCity, onze partnerwinkel. Over de achtergrond van het merk zeggen we zonder officiële bron niets.',
     characteristicsSourceUrl: 'https://www.hockeycity.nl/hockeysticks/',
     hasCatalogProducts: true,
   },
