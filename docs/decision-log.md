@@ -2006,3 +2006,25 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 8. **Merken:** een index met logo's bovenaan die naar elk profiel springt.
 
 **Betrokken bestanden:** `src/components/stickwijzer/{QuizForm,QuizResult}.tsx`, `src/content/stickwijzer/{flow,resultCopy}.ts`, `src/catalog/filters.ts`, `src/components/catalog/{CatalogFilters,ProductDetail}.tsx`, `src/app/sticks/page.tsx`, `src/instrumentation-client.ts`, `src/lib/analytics/{posthogClient,track}.ts`, `src/app/vergelijk/page.tsx`, `src/content/kennisThemes.ts`, `src/app/kennis/page.tsx`, `src/app/merken/page.tsx`, `src/components/ui/Card.tsx` en de tests.
+
+## 2026-11-03 — Redesign fase 3: designsysteem vastgelegd en toegepast
+
+**Wat:** `docs/designsysteem.md` legt vast hoe pagina's eruitzien: kleurrollen, typeschaal, drie breedtes, kaarten, foto's, ritme, beweging en wat we bewust niet doen. Bij strijd gaat de merkinstructie voor.
+
+1. **Witte basis:** de `body` is wit in plaats van krijt. Krijt blijft het accentvlak van de merkinstructie ("lichte vlakken, achtergrond van secties"): de hero, één band op de homepage ("Zo werkt het"), meldingen en gemarkeerde rijen.
+2. **Zeshoekpatroon** alleen nog in de homepage-hero en de footer, als merkaccent. Het staat niet meer achter productfoto's (catalogus, schoenen, zaalstickkiezer) en niet meer in de zaalsectie.
+3. **Productfoto's** staan op wit en zijn groter in de kaarten (160 px). De foto's van merken en winkels hebben zelf een witte achtergrond, dus er staat geen wit vlak meer op een gekleurd vlak.
+
+**Open, vraagt de eigenaar:** eigen fotografie op een club (met toestemming van ouders en club), en Over ons met foto, naam en hockeyachtergrond van de oprichter.
+
+**Betrokken bestanden:** `docs/designsysteem.md`, `docs/README.md`, `src/app/layout.tsx`, `src/components/catalog/ProductCard.tsx`, `src/components/shoes/ShoeCard.tsx`, `src/components/zaal/IndoorSelector.tsx`, `src/app/zaalsticks/page.tsx`, `src/components/home/StickwijzerExplainer.tsx`.
+
+## 2026-11-03 — Redesign fase 3: een gezicht in plaats van clubfotografie
+
+**Opdracht eigenaar (2026-11-03):** foto's op een club lukken nog niet; bedenk een alternatief of houd de oude foto. Voor Over ons: deze foto, naam Hans Buursink, en als achtergrond alleen "Hockeyvader".
+
+1. **Over ons:** portret met naam en "Hockeyvader", direct onder de inleiding. De foto is verkleind (720×960, 42 kB) en zonder metadata opgeslagen (`src/assets/over-ons/hans-buursink.jpg`), net als de herofoto's.
+2. **Homepage-hero:** onder de vertrouwensregel staat een kleine link "Gemaakt door Hans Buursink, hockeyvader" met het portret, naar `/over-ons`. Klikken meten we als `home_block_click` (block `hero`, target `/over-ons`). Een echt gezicht bovenaan is het alternatief voor clubfotografie; de foto's van de jeugdspeelster blijven.
+3. **Geen stockfoto's** van spelers of clubs (`docs/designsysteem.md` §9).
+
+**Betrokken bestanden:** `src/app/over-ons/page.tsx` (+ test), `src/components/home/Hero.tsx`, `src/assets/over-ons/hans-buursink.jpg`, `src/lib/analytics/events.ts` (commentaar), `docs/designsysteem.md`.

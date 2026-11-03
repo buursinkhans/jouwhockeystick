@@ -10,4 +10,11 @@ describe('/over-ons', () => {
     expect(html).toContain('Zo verdienen we geld');
     expect(html).toContain('nooit op vergoeding');
   });
+
+  it('shows who is behind the site, as the owner gave it', () => {
+    const html = renderToStaticMarkup(createElement(OverOnsPage));
+    expect(html).toContain('Hans Buursink');
+    expect(html).toContain('Hockeyvader');
+    expect(html).toContain('alt="Portret van Hans Buursink"');
+  });
 });

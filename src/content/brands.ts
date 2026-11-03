@@ -83,7 +83,8 @@ export const BRAND_PROFILES: BrandProfile[] = [
     brand: 'Brabo',
     logoUrl:
       'https://brabohockey.com/cdn/shop/files/logo-brabo.svg?v=1711717685&width=300',
-    logoBackground: 'light',
+    /** Brabo's official logo file is white too (fill #fff), like JDH's. */
+    logoBackground: 'dark',
     characteristics:
       'Brabo noemt zichzelf op zijn officiële site "Nederlands hockeymerk sinds 1968" en werkt met eigen technologienamen: Forged Carbon (hoge-druk samengeperst carbon), Pro Bow (curve op 260mm) en 12K Carbon (fijngeweven carbon voor extra stugheid).',
     characteristicsSourceUrl: 'https://brabohockey.com/en/pages/about-us',

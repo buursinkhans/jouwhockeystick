@@ -1,5 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { pageMetadata } from '@/lib/site';
+import portret from '@/assets/over-ons/hans-buursink.jpg';
 
 export const metadata = pageMetadata({
   title: 'Over ons',
@@ -19,6 +21,28 @@ export default function OverOnsPage() {
         keuze in de praktijk vaak op gevoel of prijs alleen wordt gemaakt,
         terwijl een paar gerichte vragen al een groot verschil kunnen maken.
       </p>
+
+      {/*
+        The person behind the site (redesign fase 3): photo, name and
+        background as the owner gave them on 2026-11-03; metadata stripped.
+      */}
+      <figure className="mt-8 flex items-center gap-5 rounded-2xl border border-rand bg-krijt p-4 sm:gap-6 sm:p-5">
+        <Image
+          src={portret}
+          alt="Portret van Hans Buursink"
+          width={720}
+          height={960}
+          sizes="(min-width: 640px) 128px, 96px"
+          className="h-28 w-24 shrink-0 rounded-xl object-cover sm:h-40 sm:w-32"
+        />
+        <figcaption>
+          <span className="block text-xs font-semibold tracking-wide text-lijngrijs uppercase">
+            Wie zit erachter?
+          </span>
+          <span className="mt-1 block text-xl font-bold text-inkt">Hans Buursink</span>
+          <span className="block text-inkt/80">Hockeyvader</span>
+        </figcaption>
+      </figure>
 
       <h2 className="mt-10 text-2xl font-bold">Waarom we zijn begonnen</h2>
       <p className="mt-3 leading-relaxed text-inkt/80">

@@ -71,7 +71,7 @@ export type AnalyticsEvent =
   | {
       /** A click in a homepage block under the hero, to see what it adds to the funnel. */
       name: 'home_block_click';
-      /** 'hero' = the photo with the example reasons (2026-10-22). */
+      /** 'hero' = the photo with the example reasons (2026-10-22), or the "Gemaakt door" link (target /over-ons, 2026-11-03). */
       block: 'season' | 'buying' | 'hero';
       target: string;
     }
