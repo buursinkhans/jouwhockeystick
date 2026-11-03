@@ -15,8 +15,10 @@ import {
   START_FOOTNOTE,
   TRANSPARENCY_NOTE,
   formatInch,
+  levelLabel,
   sizeAdviceText,
 } from '@/content/stickwijzer/resultCopy';
+import { ROUTE_LABELS } from '@/content/stickwijzer/questions';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { RecommendationCard } from './RecommendationCard';
 import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
@@ -92,11 +94,35 @@ export function QuizResult({
               ? 'Onze aanbeveling'
               : 'Onze aanbevelingen'}
           </h2>
-          <p className="mt-2 text-inkt/80">
-            In maat <strong className="text-inkt">{size}</strong>
-            {advice.candidateCount > 0 &&
-              ` · ${candidateCountText(advice.candidateCount, advice.results.length)}`}
-          </p>
+          {/*
+            Profile card (redesign fase 2): what the advice is based on, in
+            one glance, before the sticks. Everything here comes from the
+            advice itself; the full explanation stays below.
+          */}
+          <dl className="mt-4 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-rand bg-rand sm:grid-cols-3">
+            <div className="bg-white px-4 py-3">
+              <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Jouw maat</dt>
+              <dd className="mt-1 text-xl font-bold text-inkt">{size}</dd>
+              <dd className="text-xs">
+                <a href="#lengteadvies" className="text-veld underline hover:no-underline">
+                  Waarom deze maat?
+                </a>
+              </dd>
+            </div>
+            <div className="bg-white px-4 py-3">
+              <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Advies voor een</dt>
+              <dd className="mt-1 text-xl font-bold text-inkt">{levelLabel(advice.playerLevel.band)}</dd>
+            </div>
+            <div className="bg-white px-4 py-3">
+              <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Route</dt>
+              <dd className="mt-1 text-xl font-bold text-inkt">{ROUTE_LABELS[advice.route]}</dd>
+            </div>
+          </dl>
+          {advice.candidateCount > 0 && (
+            <p className="mt-3 text-sm text-inkt/80">
+              {candidateCountText(advice.candidateCount, advice.results.length)}
+            </p>
+          )}
           {advice.brandPreference && !advice.brandPreference.matched && (
             <p className="mt-3 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
               {brandNotFoundText(
@@ -209,7 +235,9 @@ export function QuizResult({
             tellen mee.
           </p>
         )}
-        <h4 className="mt-5 font-semibold text-inkt">Lengteadvies: {size}</h4>
+        <h4 id="lengteadvies" className="mt-5 scroll-mt-24 font-semibold text-inkt">
+          Lengteadvies: {size}
+        </h4>
         <ul className="mt-2 space-y-1 text-sm">
           {sizeAdviceText(advice.sizeAdvice).map((line) => (
             <li key={line}>{line}</li>

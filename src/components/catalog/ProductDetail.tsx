@@ -86,7 +86,7 @@ export function ProductDetail({ product }: { product: Product }) {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
@@ -100,100 +100,116 @@ export function ProductDetail({ product }: { product: Product }) {
           { label: product.name, href: productPath(product) },
         ]}
       />
-      <div className="flex items-start gap-6">
-        <div className="shrink-0">
-          <ProductImage
-            product={product}
-            className="h-40 w-40 sm:h-64 sm:w-64"
-          />
-          {product.imageUrl && product.imageSourceUrl && (
-            <p className="mt-1 text-center text-xs text-lijngrijs">
-              <a href={product.imageSourceUrl} className="hover:underline">
-                Foto: {product.brand}
-              </a>
-            </p>
-          )}
-        </div>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-veld">
-            {product.brand}
-          </p>
-          <h1 className="mt-1 text-3xl font-bold">{product.name}</h1>
-          <p className="mt-4 text-inkt/80">{product.summary}</p>
-        </div>
-      </div>
-
-      {lowest !== null ? (
-        // A current shop price exists: say where it starts and point to the shops.
-        <p className="mt-6 text-2xl font-bold">
-          <a href={`#${OFFER_ANCHOR}`} className="hover:underline">
-            vanaf {euro(lowest)}
-          </a>{' '}
-          <span className="text-base font-normal text-inkt/75">
-            bij {shopCount(offers.length)}, incl. verzending
-          </span>
-        </p>
-      ) : (
-        <>
-          {/* No current shop price: the indicative price stays (CLAUDE.md, Testfase-scope). */}
-          <p className="mt-6 text-2xl font-bold">
-            €{product.priceIndicativeEur.value.toFixed(2)}
-          </p>
-          <div className="mt-1">
-            <ProductNotice
-              notSoldAtBol={!isSoldAtBol(product)}
-              passaSportsOnly={isPassaSportsOnly(product)}
-              alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
-              alsoAtPlutosport={product.plutosportProductUrl !== undefined}
-              alsoAtHockeyCity={product.hockeyCityProductUrl !== undefined}
+      {/*
+        Two columns from lg (redesign fase 2): photo, name and details left,
+        price and "Waar te koop" right and sticky. The DOM order is header,
+        buying, details, so a phone shows them in that order in one column.
+      */}
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-x-12">
+        <div className="flex items-start gap-6 lg:col-start-1 lg:row-start-1">
+          <div className="shrink-0">
+            <ProductImage
+              product={product}
+              className="h-40 w-40 sm:h-64 sm:w-64"
             />
+            {product.imageUrl && product.imageSourceUrl && (
+              <p className="mt-1 text-center text-xs text-lijngrijs">
+                <a href={product.imageSourceUrl} className="hover:underline">
+                  Foto: {product.brand}
+                </a>
+              </p>
+            )}
           </div>
-        </>
-      )}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-veld">
+              {product.brand}
+            </p>
+            <h1 className="mt-1 text-3xl font-bold">{product.name}</h1>
+            <p className="mt-4 text-inkt/80">{product.summary}</p>
+          </div>
+        </div>
 
-      <WhereToBuy product={product} placement="productpagina" variant="full" />
-
-      <div className="mt-6">
-        <ButtonLink
-          href={`/interesse?product=${product.slug}&source=productpagina`}
-          variant="secondary"
+        <aside
+          aria-label="Prijs en winkels"
+          className="lg:col-start-2 lg:row-span-2 lg:row-start-1"
         >
-          Stel een vraag
-        </ButtonLink>
+          <div className="lg:sticky lg:top-6">
+            {lowest !== null ? (
+              // A current shop price exists: say where it starts and point to the shops.
+              <p className="mt-6 text-2xl font-bold lg:mt-0">
+                <a href={`#${OFFER_ANCHOR}`} className="hover:underline">
+                  vanaf {euro(lowest)}
+                </a>{' '}
+                <span className="text-base font-normal text-inkt/75 lg:block lg:text-sm">
+                  bij {shopCount(offers.length)}, incl. verzending
+                </span>
+              </p>
+            ) : (
+              <>
+                {/* No current shop price: the indicative price stays (CLAUDE.md, Testfase-scope). */}
+                <p className="mt-6 text-2xl font-bold lg:mt-0">
+                  €{product.priceIndicativeEur.value.toFixed(2)}
+                </p>
+                <div className="mt-1">
+                  <ProductNotice
+                    notSoldAtBol={!isSoldAtBol(product)}
+                    passaSportsOnly={isPassaSportsOnly(product)}
+                    alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
+                    alsoAtPlutosport={product.plutosportProductUrl !== undefined}
+                    alsoAtHockeyCity={product.hockeyCityProductUrl !== undefined}
+                  />
+                </div>
+              </>
+            )}
+
+            <WhereToBuy product={product} placement="productpagina" variant="full" />
+
+            <div className="mt-6">
+              <ButtonLink
+                href={`/interesse?product=${product.slug}&source=productpagina`}
+                variant="secondary"
+              >
+                Stel een vraag
+              </ButtonLink>
+            </div>
+          </div>
+        </aside>
+
+        <div className="min-w-0 lg:col-start-1 lg:row-start-2">
+          <h2 className="mt-10 text-xl font-bold">
+            Sterke punten &amp; aandachtspunten
+          </h2>
+          <div className="mt-4">
+            <ProductProsAndCons product={product} />
+          </div>
+
+          <h2 className="mt-10 text-xl font-bold">Specificaties</h2>
+          <div className="mt-4">
+            <ProductSpecTable product={product} hasCurrentOffers={lowest !== null} />
+          </div>
+
+          <ProductFitAndSources product={product} />
+
+          {family && <FamilyTable current={product} family={family} />}
+
+          <SimilarSticks
+            current={product}
+            similar={getSimilarSticks(
+              product,
+              getAllProducts(new Date(), { includeImported: true }),
+            )}
+          />
+
+          <p className="mt-6 text-sm">
+            <Link
+              href={`/vergelijk?a=${product.slug}`}
+              className="font-semibold text-veld hover:underline"
+            >
+              Vergelijk deze stick met een andere
+            </Link>
+          </p>
+        </div>
       </div>
-
-      <h2 className="mt-10 text-xl font-bold">
-        Sterke punten &amp; aandachtspunten
-      </h2>
-      <div className="mt-4">
-        <ProductProsAndCons product={product} />
-      </div>
-
-      <h2 className="mt-10 text-xl font-bold">Specificaties</h2>
-      <div className="mt-4">
-        <ProductSpecTable product={product} hasCurrentOffers={lowest !== null} />
-      </div>
-
-      <ProductFitAndSources product={product} />
-
-      {family && <FamilyTable current={product} family={family} />}
-
-      <SimilarSticks
-        current={product}
-        similar={getSimilarSticks(
-          product,
-          getAllProducts(new Date(), { includeImported: true }),
-        )}
-      />
-
-      <p className="mt-6 text-sm">
-        <Link
-          href={`/vergelijk?a=${product.slug}`}
-          className="font-semibold text-veld hover:underline"
-        >
-          Vergelijk deze stick met een andere
-        </Link>
-      </p>
     </div>
   );
 }

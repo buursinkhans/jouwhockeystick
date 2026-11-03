@@ -25,6 +25,7 @@ import type { AdviceEventName } from '@/lib/analytics/events';
 import { trackEvent } from '@/lib/analytics/track';
 import { shareHref } from '@/lib/shareAdvice';
 import { remainingTimeText, routeStepRange } from '@/content/stickwijzer/progress';
+import { nextOpenQuestion } from '@/content/stickwijzer/flow';
 import { Button } from '@/components/ui/Button';
 import { QuestionField, type AnswerValue } from './QuestionField';
 import { QuizResult } from './QuizResult';
@@ -150,6 +151,22 @@ function focusQuestion(id: QuestionId) {
     ?.focus({ preventScroll: true });
 }
 
+/**
+ * Spec §1.3: one question per screen on mobile. The screens stay as they
+ * are (steps, stored progress and analytics are per screen); on a phone a
+ * single-choice answer brings the next open question into view, or the
+ * buttons when the screen is done, so the visitor sees one question at a time.
+ */
+function guideToNext(next: QuestionId | undefined) {
+  if (!window.matchMedia('(max-width: 767px)').matches) return;
+  const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Wait a frame so follow-up questions that the answer opens are rendered.
+  window.setTimeout(() => {
+    const target = next ? document.getElementById(`vraag-${next}`) : document.getElementById('wizard-acties');
+    target?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: next ? 'start' : 'center' });
+  }, 120);
+}
+
 /** Drops answers to questions that don't belong to the final route or are hidden. */
 function answersForRoute(answers: Answers, route: AdviceRoute): Answers {
   const cleaned: Record<string, unknown> = {};
@@ -253,7 +270,13 @@ export function QuizForm() {
       track('route_selected', activeSessionId, { route: selected });
     }
     setErrorMessage(null);
-    setAnswers((previous) => ({ ...previous, [id]: value }) as Answers);
+    const nextAnswers = { ...answers, [id]: value } as Answers;
+    setAnswers(nextAnswers);
+    // The route cards on the first screen carry their own Start button.
+    const guided = QUESTIONS[id].input.kind === 'single' && id !== 'route_self_select';
+    if (guided && screen.questions.includes(id)) {
+      guideToNext(nextOpenQuestion(screen, nextAnswers, id));
+    }
   }
 
   function trackScreenAnswers() {
@@ -556,7 +579,7 @@ export function QuizForm() {
         {errorMessage}
       </p>
 
-      <div className="mt-5 flex flex-wrap gap-3">
+      <div id="wizard-acties" className="mt-5 flex flex-wrap gap-3 scroll-mt-24">
         {currentStep > 0 && (
           <Button
             variant="secondary"
