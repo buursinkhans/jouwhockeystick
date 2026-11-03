@@ -1,4 +1,5 @@
 import { productPath } from '@/catalog/paths';
+import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 
 import { pageMetadata } from '@/lib/site';
 import Link from 'next/link';
@@ -72,7 +73,7 @@ function PairLinks({ title, pairs }: { title: string; pairs: ReadonlyArray<[Prod
           <li key={`${a.slug}-${b.slug}`}>
             <Link
               href={compareHref(a, b)}
-              className="flex h-full flex-col rounded-2xl border border-rand bg-white p-4 hover:border-veld"
+              className="flex h-full flex-col card card-link p-4"
             >
               <span className="flex items-center gap-2" aria-hidden="true">
                 <ProductImage product={a} className="h-14 w-14" />
@@ -122,81 +123,84 @@ export default async function VergelijkPage({
         : [];
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-bold">Vergelijk hockeysticks</h1>
-      <p className="mt-2 text-lijngrijs">
-        Kies twee sticks om de specificaties naast elkaar te zien. Verschillen zijn gemarkeerd.
-      </p>
+    <>
+      <PageHeader width="tussen" eyebrow="Naast elkaar" title="Vergelijk hockeysticks">
+        <p className="max-w-2xl text-lg text-inkt/80">
+          Kies twee sticks om de specificaties naast elkaar te zien. Verschillen zijn gemarkeerd.
+        </p>
+      </PageHeader>
 
-      <form method="get" className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <StickSelect id="a" label="Stick 1" value={params.a} groups={groups} />
-        <StickSelect id="b" label="Stick 2" value={params.b} groups={groups} />
-        <div className="sm:col-span-2">
-          <button type="submit" className={`${buttonBaseClasses} ${buttonVariantClasses.primary} min-h-11`}>
-            Vergelijk
-          </button>
-        </div>
-      </form>
+      <PageBody width="tussen">
+        <form method="get" className="card grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 sm:p-5">
+          <StickSelect id="a" label="Stick 1" value={params.a} groups={groups} />
+          <StickSelect id="b" label="Stick 2" value={params.b} groups={groups} />
+          <div className="sm:col-span-2">
+            <button type="submit" className={`${buttonBaseClasses} ${buttonVariantClasses.primary} min-h-11`}>
+              Vergelijk
+            </button>
+          </div>
+        </form>
 
-      {productA && productB ? (
-        <div className="mt-10">
-          <div className="grid grid-cols-2 gap-4">
-            {[productA, productB].map((product) => (
-              <div key={product.slug} className="flex flex-col items-center text-center">
-                <ProductImage product={product} className="h-28 w-28 sm:h-36 sm:w-36" />
-                <p className="mt-1 text-xs font-semibold tracking-wide text-veld uppercase">{product.brand}</p>
-                <p className="mt-1 font-semibold">
-                  <Link href={productPath(product)} className="hover:underline">
-                    {product.name}
-                  </Link>
-                </p>
-                <div className="mt-3 w-full">
-                  <OfferSummary product={product} placement="vergelijk" />
+        {productA && productB ? (
+          <div className="mt-10">
+            <div className="grid grid-cols-2 gap-4">
+              {[productA, productB].map((product) => (
+                <div key={product.slug} className="flex flex-col items-center text-center">
+                  <ProductImage product={product} className="h-28 w-28 sm:h-36 sm:w-36" />
+                  <p className="mt-1 text-xs font-semibold tracking-wide text-veld uppercase">{product.brand}</p>
+                  <p className="mt-1 font-semibold">
+                    <Link href={productPath(product)} className="hover:underline">
+                      {product.name}
+                    </Link>
+                  </p>
+                  <div className="mt-3 w-full">
+                    <OfferSummary product={product} placement="vergelijk" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          <div className="mt-8 overflow-x-auto">
-            <table className="w-full border-collapse text-left">
-              <caption className="sr-only">
-                Vergelijking van {productA.name} en {productB.name}; rijen met een verschil zijn gemarkeerd
-              </caption>
-              <thead className="sr-only">
-                <tr>
-                  <th scope="col">Eigenschap</th>
-                  <th scope="col">{productA.name}</th>
-                  <th scope="col">{productB.name}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {buildCompareRows(productA, productB).map((row) => {
-                  const differs = row.valueA !== row.valueB;
-                  return (
-                    <tr key={row.label} className={`border-b border-rand ${differs ? 'bg-krijt' : ''}`}>
-                      <th scope="row" className="w-1/3 py-3 pr-4 pl-2 align-top text-sm font-semibold text-inkt/80">
-                        {row.label}
-                        {differs && <span className="sr-only"> (verschilt)</span>}
-                      </th>
-                      <td className={`py-3 pr-4 align-top ${differs ? 'font-semibold' : ''}`}>{row.valueA}</td>
-                      <td className={`py-3 pr-2 align-top ${differs ? 'font-semibold' : ''}`}>{row.valueB}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className="mt-8 overflow-x-auto">
+              <table className="w-full border-collapse text-left">
+                <caption className="sr-only">
+                  Vergelijking van {productA.name} en {productB.name}; rijen met een verschil zijn gemarkeerd
+                </caption>
+                <thead className="sr-only">
+                  <tr>
+                    <th scope="col">Eigenschap</th>
+                    <th scope="col">{productA.name}</th>
+                    <th scope="col">{productB.name}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {buildCompareRows(productA, productB).map((row) => {
+                    const differs = row.valueA !== row.valueB;
+                    return (
+                      <tr key={row.label} className={`border-b border-rand ${differs ? 'bg-krijt' : ''}`}>
+                        <th scope="row" className="w-1/3 py-3 pr-4 pl-2 align-top text-sm font-semibold text-inkt/80">
+                          {row.label}
+                          {differs && <span className="sr-only"> (verschilt)</span>}
+                        </th>
+                        <td className={`py-3 pr-4 align-top ${differs ? 'font-semibold' : ''}`}>{row.valueA}</td>
+                        <td className={`py-3 pr-2 align-top ${differs ? 'font-semibold' : ''}`}>{row.valueB}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-3 text-xs text-lijngrijs">
+              Bekijk de productpagina van elke stick voor de exacte bron en
+              verificatiedatum per specificatie.
+            </p>
           </div>
-          <p className="mt-3 text-xs text-lijngrijs">
-            Bekijk de productpagina van elke stick voor de exacte bron en
-            verificatiedatum per specificatie.
-          </p>
-        </div>
-      ) : (
-        <PairLinks
-          title={productA ? `Vergelijk ${productA.name} met` : 'Of begin met een van deze vergelijkingen'}
-          pairs={suggestions}
-        />
-      )}
-    </div>
+        ) : (
+          <PairLinks
+            title={productA ? `Vergelijk ${productA.name} met` : 'Of begin met een van deze vergelijkingen'}
+            pairs={suggestions}
+          />
+        )}
+      </PageBody>
+    </>
   );
 }

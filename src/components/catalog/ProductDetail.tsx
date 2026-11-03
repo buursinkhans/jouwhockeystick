@@ -133,7 +133,7 @@ export function ProductDetail({ product }: { product: Product }) {
           aria-label="Prijs en winkels"
           className="lg:col-start-2 lg:row-span-2 lg:row-start-1"
         >
-          <div className="lg:sticky lg:top-6">
+          <div className="lg:sticky lg:top-24">
             {lowest !== null ? (
               // A current shop price exists: say where it starts and point to the shops.
               <p className="mt-6 text-2xl font-bold lg:mt-0">

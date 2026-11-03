@@ -32,7 +32,7 @@ function Item({ item, extraChecks, certaintyOf }: { item: ShoeAdviceItem; extraC
   const certainty = ADVICE_CERTAINTY[certaintyOf(item.certainty)];
   const checks = [...item.checks.map(checkText), ...extraChecks];
   return (
-    <article className="rounded-3xl border border-rand bg-white p-5 shadow-sm">
+    <article className="card p-5">
       <p className="text-xs font-semibold tracking-wide text-veld uppercase">{ROLE_LABEL[item.role]}</p>
       <div className="mt-2 flex items-start gap-4">
         {item.imageUrl ? (

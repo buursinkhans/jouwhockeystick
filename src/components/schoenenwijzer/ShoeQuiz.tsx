@@ -180,7 +180,7 @@ export function ShoeQuiz({ sizes, articles = [] }: { sizes: readonly string[]; a
     // ph-no-capture: PostHog autocapture records no click or button text in the questions, so no
     // answer (question 7 least of all) reaches the statistics (privacy statement 1.5).
     <form
-      className="ph-no-capture rounded-3xl border border-rand bg-white p-5 shadow-sm sm:p-6"
+      className="ph-no-capture card p-5 sm:p-6"
       onSubmit={(event) => {
         event.preventDefault();
         if (!answered && !question.optional) return;

@@ -11,7 +11,7 @@ import { ProductProsAndCons } from './ProductProsAndCons';
  */
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <article className="flex h-full flex-col rounded-3xl border border-rand bg-white p-5 shadow-sm">
+    <article className="flex h-full flex-col card p-5 transition-shadow hover:shadow-card-hover">
       <div className="flex h-44 items-center justify-center rounded-2xl bg-white">
         <ProductImage product={product} className="h-40 w-40" />
       </div>

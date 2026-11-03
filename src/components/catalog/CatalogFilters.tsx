@@ -32,7 +32,7 @@ export function CatalogFilters({
       action={`${action}#alle-veldsticks`}
       role="search"
       aria-label="Sticks filteren"
-      className="rounded-2xl border border-rand bg-white p-4 sm:p-5"
+      className="card p-4 sm:p-5"
     >
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         <div>

@@ -2046,3 +2046,16 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 - **Het aandeel merkgegevens als feit op de homepage:** 33% van de specificaties van de nagelopen sticks komt van de merksite. Dat staat per gegeven op de stickpagina, maar helpt op de homepage geen keuze.
 
 **Betrokken bestanden:** `src/catalog/trustFacts.ts`, `src/content/trust.ts` (+ test), `src/components/trust/{ProofFacts,PromiseList}.tsx`, `src/components/home/{WhyUs,HomePage,Hero}.tsx`, `src/app/stickwijzer/page.tsx`, `src/components/stickwijzer/QuizResult.tsx`, `src/content/stickwijzer/resultCopy.ts`, `src/app/methodiek/page.tsx`, `src/components/layout/Footer.tsx`, `docs/designsysteem.md`.
+
+## 2026-11-04 — Redesign fase 5: globale UI, weg van het documentgevoel
+
+**Opdracht eigenaar (2026-11-03):** een moderne, sportieve en strakke huisstijl met Tailwind, met duidelijke hiërarchie, subtiele kaarten met lichte schaduwen en een header die direct laat zien dat we een onafhankelijke vergelijker zijn.
+
+1. **Header:** een donkere balk erboven: "Onafhankelijke stickvergelijker", "Prijzen van 4 partnerwinkels" (geteld uit `src/lib/retailers.ts`), "Vergoeding telt niet mee in het advies" en een link naar /methodiek. Op een telefoon staat alleen het eerste punt. De header zelf scrolt mee (sticky, licht doorschijnend). Ankers en de sticky kolom op de stickpagina houden daar ruimte voor.
+2. **Diepte:** drie schaduwtokens en de utilities `card`, `card-link` en `eyebrow` in `globals.css`. Alle losse kaarten gebruiken `card`; kaarten die in hun geheel een link zijn (kennisbank, vergelijkingen, merkenindex) krijgen `card-link`. Een kaart binnen een kaart blijft vlak.
+3. **Paginakop** (`PageHeader`/`PageBody`): sticks, zaalsticks, hockeyschoenen, kennisbank, merken, vergelijken, Over ons en methodiek beginnen met een band (kruimelpad, label, H1, intro; bij sticks ook de filters). De H1 en de intro blijven gelijk, dus de hoofdvraag staat nog steeds in de eerste 80 woorden.
+4. **Typografie:** H1 zwaarder en strakker (800, −0,025 em, `text-wrap: balance`), en antialiasing.
+
+Binnen de merkinstructie: veldblauw als hoofdkleur, oranje alleen voor de stickwijzer, het zeshoekpatroon alleen in hero en footer.
+
+**Betrokken bestanden:** `src/app/globals.css`, `src/components/layout/Header.tsx`, `src/components/ui/{PageHeader,Card}.tsx`, de pagina's hierboven, de kaartcomponenten (`ProductCard`, `ShoeCard`, `SimilarSticks`, `WhereToBuy`, `ShoeWhereToBuy`, `CatalogFilters`, `IndoorSelector`, `ShoeQuiz`, `ShoeAdviceView`), `src/components/catalog/ProductDetail.tsx` (sticky afstand), `docs/designsysteem.md`.

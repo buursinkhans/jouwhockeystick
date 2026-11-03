@@ -98,7 +98,7 @@ function SectionHeading({
 }) {
   return (
     <div className="max-w-3xl">
-      <p className="text-sm font-semibold tracking-wide text-veld uppercase">
+      <p className="eyebrow">
         {eyebrow}
       </p>
       <h2 className="mt-2 text-3xl font-extrabold tracking-tight">{title}</h2>
@@ -128,7 +128,7 @@ function IconBadge({
 /** Illustrative mock of a result card — deliberately no real product, price or spec. */
 function ExampleAdvice() {
   return (
-    <figure className="rounded-3xl border border-rand bg-white p-6 shadow-xl shadow-inkt/10">
+    <figure className="card p-6 shadow-card-hover">
       <figcaption className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">
         Voorbeeld van een advies
       </figcaption>

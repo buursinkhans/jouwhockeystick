@@ -50,7 +50,11 @@ Zijmarge altijd `px-4 sm:px-6`; geen horizontaal scrollen op 360 px.
 
 ## 5. Vormen en componenten
 
-- **Kaart:** wit, `rounded-2xl` of `rounded-3xl`, `border border-rand`, hooguit `shadow-sm`. Eén kaartvorm per lijst.
+- **Diepte (fase 5):** drie schaduwen in `globals.css`, licht en inktgetint: `shadow-card` (kaart in rust), `shadow-card-hover` (kaart onder de muis) en `shadow-header` (sticky header). Geen andere schaduwen.
+- **Kaart:** de utility `card` (wit, afgerond 20 px, haarlijnrand, `shadow-card`). Een kaart die in zijn geheel een link is, krijgt ook `card-link`: hij komt 2 px omhoog met `shadow-card-hover` (niet bij `prefers-reduced-motion`). Een kaart binnen een kaart blijft vlak (`border border-rand`, geen schaduw).
+- **Sectielabel:** de utility `eyebrow`, met een kort veldblauw streepje ervoor, boven elke sectiekop op de homepage en in elke paginakop.
+- **Header:** een donkere balk erboven met wat we zijn ("Onafhankelijke stickvergelijker · Prijzen van 4 partnerwinkels · Vergoeding telt niet mee in het advies", op een telefoon alleen het eerste) en daaronder de witte header, die meescrolt (`sticky`, licht doorschijnend met blur). Ankers houden daarvoor 5,5 rem vrij (`scroll-padding-top`).
+- **Paginakop:** `PageHeader` (`src/components/ui/PageHeader.tsx`): een band van krijt naar wit met kruimelpad, label, H1 en intro, op dezelfde breedte als de body (`PageBody`). Op sticks, zaalsticks, hockeyschoenen, kennisbank, merken, vergelijken, Over ons en methodiek.
 - **Productfoto:** op wit (`bg-white`), `object-contain`, in de catalogus 160 px, op de stickpagina tot 256 px, in het advies tot 128 px. Geen patroon achter een foto.
 - **Zeshoekpatroon** (`bg-hex-light`, `bg-hex-dark`): alleen in de homepage-hero en de footer, als merkaccent. Niet in kaarten, fotovlakken of secties.
 - **Knoppen:** `Button`/`ButtonLink` uit `src/components/ui/Button.tsx`. Primair veldblauw, secundair omlijnd; `accent` (oranje) alleen voor de stickwijzer.
