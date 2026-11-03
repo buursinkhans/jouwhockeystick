@@ -1,6 +1,6 @@
 /**
- * Shops we cite as a source in an article, PassaHockey and Plutosport
- * included: a source link is not a shop button, so it stays visible but
+ * Shops we cite as a source in an article, PassaHockey, Plutosport and
+ * HockeyCity included: a source link is not a shop button, so it stays visible but
  * carries `nofollow` and passes no ranking value to a shop. Shop buttons
  * themselves are partner links with `rel="sponsored"` (RetailerLink).
  * bol.com is not on the list: it was the only partner shop when the list was
@@ -13,6 +13,7 @@ const NOFOLLOW_HOSTS = [
   'hockeydirect.com',
   'passasports.nl',
   'plutosport.nl',
+  'hockeycity.nl',
   'jumbosports.com',
   'de-hockeywinkel.nl',
 ];

@@ -38,7 +38,7 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 - **Schrijf "aerial/scoopen"**, niet alleen "aerial": veel spelers kennen de techniek als scoopen.
 - **Schrijf "sleeppush"**, niet "dragflick" (behalve in een letterlijk citaat van een merk of winkel).
 - **Geen kortingsclaims** (EU Omnibus) en geen "review" in titels.
-- **Onze partnerwinkels zijn bol.com, PassaHockey** (de hockeywinkel van PassaSports) **en Plutosport.** Hun koopknoppen komen uit de catalogus, niet uit de tekst. Een winkel als bron (ook PassaHockey of Plutosport) staat op de `nofollow`-lijst in `src/content/linkPolicy.ts`.
+- **Onze partnerwinkels zijn bol.com, PassaHockey** (de hockeywinkel van PassaSports)**, Plutosport en HockeyCity.** Hun koopknoppen komen uit de catalogus, niet uit de tekst. Een winkel als bron (ook PassaHockey, Plutosport of HockeyCity) staat op de `nofollow`-lijst in `src/content/linkPolicy.ts`.
 - **Interne links:** minimaal één naar de stickwijzer (verplicht, test), en naar de verwante pagina's. Alleen naar pagina's die bestaan (test).
 - **Artikelen over hockeyschoenen:** het keuzemodel (`docs/spec/hockeyschoenen-keuzemodel.md`) en de sectie Hockeyschoenen in `CLAUDE.md` zijn leidend. Modellen en eigenschappen komen uit `src/catalog/shoes` (met bron), nooit uit vaste tekst. Gebruik precies de slug uit de brief: `src/content/shoeArticles.ts` linkt de schoenpagina's en de schoenenwijzer dan vanzelf naar het artikel zodra het live staat. Link ook naar `/hockeyschoenen` en `/hockeyschoenen/wijzer`.
 

@@ -367,11 +367,23 @@ export type CatalogStick = {
 
 export type MatchLevel = 'zeker' | 'twijfel' | 'geen';
 
-export type StickMatch = {
+/**
+ * What the matcher needs of a shop's stick model; Plutosport's and
+ * HockeyCity's (src/catalog/hockeyCityFeed.ts) both have it.
+ */
+export type FeedStickModel = Pick<
+  PlutoStickModel,
+  'key' | 'name' | 'brand' | 'modelText' | 'specText' | 'url' | 'discipline' | 'junior' | 'eans' | 'inStock' | 'inStockPriceMin' | 'priceMin'
+> & {
+  /** Collection year the shop states outside the name (an article code), if any. */
+  year?: number;
+};
+
+export type StickMatch<M extends FeedStickModel = PlutoStickModel> = {
   slug: string;
   level: MatchLevel;
   method?: 'ean' | 'naam';
-  model?: PlutoStickModel;
+  model?: M;
   /** Why it is not 'zeker' (or how it is): shown in the report. */
   note: string;
   /** Plutosport pages of the same model in an older collection than ours: never imported next to ours. */
@@ -447,7 +459,7 @@ export function sameBrand(a: string, b: string): boolean {
 
 type Comparison = { reasons: string[] } | { otherYear: number } | null;
 
-function compare(stick: CatalogStick, model: PlutoStickModel): Comparison {
+function compare(stick: CatalogStick, model: FeedStickModel, shop: string): Comparison {
   if (!sameBrand(stick.brand, model.brand || model.name.split(/\s+/)[0] || '')) return null;
   if (stick.discipline !== model.discipline) return null;
   if ((stick.junior ?? isJunior(stick.name)) !== model.junior) return null;
@@ -465,7 +477,7 @@ function compare(stick: CatalogStick, model: PlutoStickModel): Comparison {
   const ourBow = stick.bow ?? bowInName(stick.name, stick.brand);
   if (ourBow && theirBow && ourBow !== theirBow) return null;
 
-  const theirYear = seasonYear(theirText) ?? yearFromArticleCode(model.url, model.brand || stick.brand);
+  const theirYear = model.year ?? seasonYear(theirText) ?? yearFromArticleCode(model.url, model.brand || stick.brand);
   if (stick.modelYear && theirYear && stick.modelYear !== theirYear) return { otherYear: theirYear };
 
   const reasons: string[] = [];
@@ -473,26 +485,27 @@ function compare(stick: CatalogStick, model: PlutoStickModel): Comparison {
   const extra = [...theirs].filter(
     (token) => !oursSet.has(token) && !NOISE.has(token) && !BOW_TOKENS.has(token) && !/^\d{6,}$/.test(token),
   );
-  if (extra.length) reasons.push(`extra in de naam bij Plutosport: ${extra.join(', ')}`);
+  if (extra.length) reasons.push(`extra in de naam bij ${shop}: ${extra.join(', ')}`);
   if (!stick.modelYear) reasons.push('modeljaar niet bekend in onze catalogus');
-  else if (!theirYear) reasons.push('geen modeljaar in de naam bij Plutosport');
-  if (ourBow && !theirBow) reasons.push('bow niet in de naam bij Plutosport');
+  else if (!theirYear) reasons.push(`geen modeljaar in de naam bij ${shop}`);
+  if (ourBow && !theirBow) reasons.push(`bow niet in de naam bij ${shop}`);
   return { reasons };
 }
 
 /** In stock first, then the lowest price: the variant a buyer would see. */
-const preferred = (a: PlutoStickModel, b: PlutoStickModel) =>
+const preferred = (a: FeedStickModel, b: FeedStickModel) =>
   Number(b.inStock) - Number(a.inStock) ||
   (a.inStockPriceMin ?? a.priceMin) - (b.inStockPriceMin ?? b.priceMin) ||
   a.url.localeCompare(b.url);
 
 /** Colour variants of one model have the same name apart from the colour. */
-const nameKey = (model: PlutoStickModel) =>
+const nameKey = (model: FeedStickModel) =>
   modelTokens(withoutYears(model.name), model.brand)
     .filter((token) => !NOISE.has(token))
     .join(' ');
 
-export function matchStick(stick: CatalogStick, models: readonly PlutoStickModel[]): StickMatch {
+/** Matches one catalog stick with a shop's models; `shop` names the shop in the notes. */
+export function matchStick<M extends FeedStickModel>(stick: CatalogStick, models: readonly M[], shop = 'Plutosport'): StickMatch<M> {
   const ours = new Set(stick.eans);
   const byEan = models.filter((model) => model.eans.some((ean) => ours.has(ean))).sort(preferred);
   const [eanHit] = byEan;
@@ -505,16 +518,16 @@ export function matchStick(stick: CatalogStick, models: readonly PlutoStickModel
           level: 'twijfel',
           method: 'ean',
           model: eanHit,
-          note: `EAN gelijk aan die bij PassaHockey, maar Plutosport noemt hem ${eanHit.junior ? 'junior' : 'senior'} en wij niet`,
+          note: `EAN gelijk aan die bij PassaHockey, maar ${shop} noemt hem ${eanHit.junior ? 'junior' : 'senior'} en wij niet`,
         };
   }
 
-  const exact: PlutoStickModel[] = [];
-  const doubtful: { model: PlutoStickModel; reasons: string[] }[] = [];
+  const exact: M[] = [];
+  const doubtful: { model: M; reasons: string[] }[] = [];
   const otherYears = new Set<number>();
   const older: string[] = [];
   for (const model of models) {
-    const result = compare(stick, model);
+    const result = compare(stick, model, shop);
     if (result === null) continue;
     if ('otherYear' in result) {
       otherYears.add(result.otherYear);
@@ -526,15 +539,15 @@ export function matchStick(stick: CatalogStick, models: readonly PlutoStickModel
   return older.length ? { ...match, olderCollectionKeys: older } : match;
 }
 
-function byName(
+function byName<M extends FeedStickModel>(
   stick: CatalogStick,
-  exact: PlutoStickModel[],
-  doubtful: { model: PlutoStickModel; reasons: string[] }[],
+  exact: M[],
+  doubtful: { model: M; reasons: string[] }[],
   otherYears: ReadonlySet<number>,
-): StickMatch {
+): StickMatch<M> {
   if (exact.length) {
     exact.sort(preferred);
-    const [best] = exact as [PlutoStickModel];
+    const [best] = exact as [M];
     const names = new Set(exact.map(nameKey));
     return names.size === 1
       ? { slug: stick.slug, level: 'zeker', method: 'naam', model: best, note: 'merk, model, bow en modeljaar gelijk' }
@@ -548,7 +561,7 @@ function byName(
   }
   if (doubtful.length) {
     doubtful.sort((a, b) => a.reasons.length - b.reasons.length || preferred(a.model, b.model));
-    const [best] = doubtful as [{ model: PlutoStickModel; reasons: string[] }];
+    const [best] = doubtful as [{ model: M; reasons: string[] }];
     const others = doubtful.length - 1;
     const more = others > 0 ? `; ${others} andere ${others === 1 ? 'kandidaat' : 'kandidaten'}` : '';
     return { slug: stick.slug, level: 'twijfel', method: 'naam', model: best.model, note: `${best.reasons.join('; ')}${more}` };

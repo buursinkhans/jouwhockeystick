@@ -136,6 +136,16 @@ export const productSchema = z.object({
     .startsWith('https://www.plutosport.nl/')
     .optional(),
   /**
+   * HockeyCity product page (TradeTracker). Not written in the product files
+   * either: the catalog adds it from src/catalog/offers/hockeyCity.ts, with the
+   * 'zeker' name matches and the matches the owner confirmed by hand.
+   */
+  hockeyCityProductUrl: z
+    .string()
+    .url()
+    .startsWith('https://www.hockeycity.nl/')
+    .optional(),
+  /**
    * Set for sticks imported in bulk from a partner's product feed instead of
    * curated one by one. Their specs come from the feed only; their pages are
    * noindex, stay out of the sitemap and articles, and bol.com availability

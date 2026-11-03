@@ -148,8 +148,10 @@ describe('hand-checked shoe models (phase 1b, decision log 2026-10-31 and 2026-1
     expect(hidden.length).toBeGreaterThanOrEqual(curated.length);
     // Two Osaka colour articles in the feed are one checked model, with one listing per shop.
     const kai = getShoeListings('osaka-kai-mk1-pro-tour');
-    expect(kai.map((l) => l.shop)).toEqual(['passasports']);
-    expect(kai[0]!.colourPages).toBeGreaterThanOrEqual(2);
+    const shops = kai.map((l) => l.shop);
+    expect(shops.filter((shop) => shop === 'passasports')).toHaveLength(1);
+    expect(new Set(shops).size).toBe(shops.length);
+    expect(kai.find((l) => l.shop === 'passasports')!.colourPages).toBeGreaterThanOrEqual(2);
     for (const shoe of curated) expect(getShoeListings(shoe.slug).length, shoe.slug).toBeGreaterThan(0);
   });
 });

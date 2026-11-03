@@ -22,8 +22,8 @@ export function Footer() {
       <div className="mx-auto max-w-5xl px-4 py-12 text-sm sm:px-6">
         <Logo variant="wordmark-negative" size={30} tagline />
         <p className="mt-6 max-w-2xl">
-          Aankopen verlopen via onze partnerwinkels bol.com, PassaHockey en
-          Plutosport; de winkel is de verkoper. Winkelprijzen werken we
+          Aankopen verlopen via onze partnerwinkels bol.com, PassaHockey,
+          Plutosport en HockeyCity; de winkel is de verkoper. Winkelprijzen werken we
           wekelijks bij en richtprijzen zijn een indicatie: de actuele prijs
           zie je bij de winkel.
         </p>

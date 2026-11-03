@@ -1,3 +1,4 @@
+import { HOCKEYCITY_OFFERS } from '../offers/hockeyCity';
 import { mergeListings } from './feedImport';
 import { IMPORTED_SHOES, SHOE_IMPORT_DATE, SHOE_LISTINGS } from './imported';
 import { CURATED_SHOES } from './products';
@@ -33,6 +34,12 @@ const LISTINGS: Record<string, readonly ShoeListing[]> = (() => {
     const image = imported?.imageUrl;
     const withImage = listings.map((l) => (l.imageUrl || !image ? l : { ...l, imageUrl: image }));
     result[target] = [...(result[target] ?? []), ...withImage];
+  }
+  // HockeyCity, linked on EAN by scripts/hockeycity-feed.ts (decision log 2026-11-03).
+  for (const [slug, listing] of Object.entries(HOCKEYCITY_OFFERS.shoes)) {
+    const imported = IMPORTED_SHOES.find((shoe) => shoe.slug === slug);
+    const target = (imported && curatedSlugOf(imported)) ?? slug;
+    result[target] = [...(result[target] ?? []), listing];
   }
   return Object.fromEntries(Object.entries(result).map(([slug, listings]) => [slug, mergeListings(listings)]));
 })();

@@ -4,7 +4,8 @@ import { PASSAHOCKEY_PRODUCTS } from './imported/passahockey';
 import { PLUTOSPORT_PRODUCTS } from './imported/plutosport';
 import { PASSAHOCKEY_LIVE_PRICES } from './imported/passaPrices';
 import { withLivePrice } from './livePrice';
-import { withPlutosport } from './offers';
+import { withHockeyCity, withPlutosport } from './offers';
+import { HOCKEYCITY_OFFERS } from './offers/hockeyCity';
 import { PLUTOSPORT_MATCHES } from './offers/matches';
 
 export { getDiscipline };
@@ -268,23 +269,28 @@ export type ProductQuery = {
 
 /**
  * Curated sticks, with the current PassaHockey price where the shop sells
- * them and the Plutosport page where the feed match is 'zeker'.
+ * them, the Plutosport page where the feed match is 'zeker' and the
+ * HockeyCity page where the match is 'zeker' or confirmed by hand.
  */
 const CURATED_WITH_LIVE_PRICES: Product[] = ALL_PRODUCTS.map((product) =>
-  withPlutosport(
-    withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
-    PLUTOSPORT_MATCHES,
+  withHockeyCity(
+    withPlutosport(
+      withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
+      PLUTOSPORT_MATCHES,
+    ),
+    HOCKEYCITY_OFFERS,
   ),
 );
 
 /**
  * Imported sticks: PassaHockey's (with the Plutosport page where the feed
- * match is 'zeker'), then the Plutosport sticks that PassaHockey does not sell.
+ * match is 'zeker'), then the Plutosport sticks that PassaHockey does not
+ * sell; both with the HockeyCity page where there is one.
  */
 const IMPORTED_WITH_OFFERS: Product[] = [
   ...PASSAHOCKEY_PRODUCTS.map((product) => withPlutosport(product, PLUTOSPORT_MATCHES)),
   ...PLUTOSPORT_PRODUCTS,
-];
+].map((product) => withHockeyCity(product, HOCKEYCITY_OFFERS));
 
 export function getAllProducts(
   now: Date = new Date(),

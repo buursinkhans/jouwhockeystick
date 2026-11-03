@@ -1,4 +1,4 @@
-export type RetailerId = 'bolcom' | 'passasports' | 'plutosport';
+export type RetailerId = 'bolcom' | 'passasports' | 'plutosport' | 'hockeycity';
 
 /** Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert. */
 export type RetailerPlacement =
@@ -138,6 +138,62 @@ export function plutosportTrackingUrl(
 }
 
 /**
+ * HockeyCity affiliate programme via TradeTracker (campaign 27931, approved
+ * 2026-11-03). Not secrets: they are part of every tracking link. Format taken
+ * from the links in HockeyCity's TradeTracker product feed (material = the
+ * feed, 1633756) on 2026-11-03:
+ * hockeycity.nl/tracking/tradetracker/redirect/?tt=<campaign>_<material>_<site>_<reference>&r=<url>
+ */
+export const HOCKEYCITY_TRADETRACKER = {
+  campaignId: '27931',
+  materialId: '1633756',
+  affiliateSiteId: '517408',
+} as const;
+
+const HOCKEYCITY_HOST = 'www.hockeycity.nl';
+
+/** Product pages only (they end in .html), no query: never a search or category page. */
+export function isHockeyCityProductPage(url: URL): boolean {
+  return (
+    url.hostname === HOCKEYCITY_HOST &&
+    url.protocol === 'https:' &&
+    url.search === '' &&
+    /^\/[a-z0-9-]+\.html$/i.test(url.pathname)
+  );
+}
+
+/**
+ * Wraps a HockeyCity product page in a TradeTracker direct link, like
+ * PassaHockey's: the reference (where on our site the link sits) shows up in
+ * TradeTracker's reports and may not contain "_", the separator inside `tt`.
+ */
+export function hockeyCityTrackingUrl(
+  productUrl: string,
+  reference: string,
+): string | null {
+  let target: URL;
+  try {
+    target = new URL(productUrl);
+  } catch {
+    return null;
+  }
+  if (!isHockeyCityProductPage(target)) {
+    return null;
+  }
+  const { campaignId, materialId, affiliateSiteId } = HOCKEYCITY_TRADETRACKER;
+  const params = new URLSearchParams({
+    tt: [
+      campaignId,
+      materialId,
+      affiliateSiteId,
+      reference.replaceAll('_', '-'),
+    ].join('_'),
+    r: target.toString(),
+  });
+  return `https://${HOCKEYCITY_HOST}/tracking/tradetracker/redirect/?${params.toString()}`;
+}
+
+/**
  * Shipping for one stick, from the shop's public delivery terms, until a feed
  * states it (docs/spec/prijsvergelijking.md §7.1). The first tier whose
  * bound the price stays under applies; `costEur: null` means unknown, and the
@@ -193,10 +249,26 @@ export const BOL_SHIPPING: ShippingTerms = {
   note: 'Geen verzendkosten vanaf €25; daaronder €2,99 als bol.com verstuurt en niets als een partner verstuurt.',
 };
 
+/**
+ * The FAQ says €5 and free above €75; the banner on every page and the cart
+ * say free from €100. We take the cart's €100, so a total is never too low
+ * (decision log 2026-11-03).
+ */
+export const HOCKEYCITY_SHIPPING: ShippingTerms = {
+  tiers: [
+    { belowEur: 100, costEur: 5 },
+    { belowEur: null, costEur: 0 },
+  ],
+  sourceUrl: 'https://www.hockeycity.nl/service/',
+  checkedAt: '2026-11-03',
+  note: 'Verzending in Nederland €5, gratis vanaf €100 (volgens de winkelmand en de banner; de FAQ noemt gratis boven €75). Geen afhaalpunt genoemd.',
+};
+
 export const SHIPPING: Record<RetailerId, ShippingTerms> = {
   bolcom: BOL_SHIPPING,
   passasports: PASSASPORTS_SHIPPING,
   plutosport: PLUTOSPORT_SHIPPING,
+  hockeycity: HOCKEYCITY_SHIPPING,
 };
 
 /** Shipping for an order of one item at this price; null when unknown. */
@@ -262,5 +334,12 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
     // Only direct product links, like PassaHockey: never a Plutosport search.
     getUrl: ({ placement, productUrl }) =>
       productUrl ? plutosportTrackingUrl(productUrl, placement) : null,
+  },
+  hockeycity: {
+    id: 'hockeycity',
+    label: 'HockeyCity',
+    // Only direct product links, like PassaHockey: never a HockeyCity search.
+    getUrl: ({ placement, productUrl }) =>
+      productUrl ? hockeyCityTrackingUrl(productUrl, placement) : null,
   },
 };

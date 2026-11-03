@@ -145,6 +145,7 @@ export function ProductDetail({ product }: { product: Product }) {
               passaSportsOnly={isPassaSportsOnly(product)}
               alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
               alsoAtPlutosport={product.plutosportProductUrl !== undefined}
+              alsoAtHockeyCity={product.hockeyCityProductUrl !== undefined}
             />
           </div>
         </>

@@ -6,7 +6,7 @@
 export const PARTNER_LINK_LABEL = 'Partnerlink';
 
 export const PARTNER_LINK_NOTE =
-  'Links naar bol.com, PassaHockey en Plutosport zijn partnerlinks: we kunnen een vergoeding krijgen als je via zo’n link koopt.';
+  'Links naar bol.com, PassaHockey, Plutosport en HockeyCity zijn partnerlinks: we kunnen een vergoeding krijgen als je via zo’n link koopt.';
 
 export const PARTNER_LINK_URL = '/methodiek#partnerlinks';
 
@@ -14,6 +14,7 @@ export const PARTNER_LINK_URL = '/methodiek#partnerlinks';
 export const SHOP_SELLER_NAMES = {
   passasports: 'PassaHockey (PassaSports)',
   plutosport: 'Plutosport',
+  hockeycity: 'HockeyCity',
 } as const;
 
 const joinShops = (shops: readonly string[]) =>

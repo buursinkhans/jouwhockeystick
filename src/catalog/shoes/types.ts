@@ -138,7 +138,7 @@ export const SHOE_CONTENT_PROPERTIES = [
 
 /** One shop's listing of a model, as read from its feed. */
 export const shoeListingSchema = z.object({
-  shop: z.enum(['passasports', 'plutosport']),
+  shop: z.enum(['passasports', 'plutosport', 'hockeycity']),
   /** The shop's page for the cheapest colour in stock (else the cheapest). */
   url: z.string().url(),
   /** Lowest feed price of that model at this shop, in stock if any. */
