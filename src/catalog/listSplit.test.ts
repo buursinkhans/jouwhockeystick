@@ -23,9 +23,10 @@ describe('server HTML of the catalog lists (decision log 2026-10-24)', () => {
     for (const p of all.filter((p) => !isFeedImport(p)))
       expect(links, p.slug).toContain(productPath(p));
     for (const p of all.filter(isFeedImport))
-      expect(html, p.slug).not.toContain(p.slug);
+      // The link, not the slug: "malik-lowbow-4" is part of the checked "malik-lowbow-4-junior".
+      expect(links, p.slug).not.toContain(productPath(p));
     expect(html).toContain(
-      `Toon ook ${all.filter(isFeedImport).length} sticks uit het aanbod van PassaHockey en Plutosport`,
+      `Toon ook ${all.filter(isFeedImport).length} sticks uit het aanbod van PassaHockey, Plutosport en HockeyCity`,
     );
   });
 
@@ -36,7 +37,8 @@ describe('server HTML of the catalog lists (decision log 2026-10-24)', () => {
     for (const p of all.filter((p) => !isFeedImport(p)))
       expect(links, p.slug).toContain(productPath(p));
     for (const p of all.filter(isFeedImport))
-      expect(html, p.slug).not.toContain(p.slug);
+      // The link, not the slug: "malik-lowbow-4" is part of the checked "malik-lowbow-4-junior".
+      expect(links, p.slug).not.toContain(productPath(p));
   });
 
   it('with a brand filter, /sticks shows every stick of that brand, imported ones too', async () => {

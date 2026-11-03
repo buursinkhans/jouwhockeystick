@@ -1,6 +1,7 @@
 import { PASSAHOCKEY_IMPORT_DATE } from './imported/passahockey';
 import { PASSAHOCKEY_LIVE_PRICES } from './imported/passaPrices';
 import { PLUTOSPORT_IMPORT_DATE } from './imported/plutosport';
+import { HOCKEYCITY_IMPORT_DATE } from './imported/hockeycity';
 import { BOL_PRICES } from './offers/bolPrices';
 import { HOCKEYCITY_OFFERS } from './offers/hockeyCity';
 import { PLUTOSPORT_MATCHES } from './offers/matches';
@@ -22,6 +23,7 @@ export const FEED_READ_DATES: readonly string[] = [
   PLUTOSPORT_IMPORT_DATE,
   PLUTOSPORT_MATCHES.date,
   HOCKEYCITY_OFFERS.date,
+  HOCKEYCITY_IMPORT_DATE,
   BOL_PRICES.date,
 ];
 

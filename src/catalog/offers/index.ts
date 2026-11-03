@@ -53,8 +53,10 @@ export type HockeyCityStickMatch = {
   productUrl: string;
   /** 'naam': a 'zeker' name match; 'handmatig': confirmed by the owner (hockeyCityConfirmed.ts). */
   method: 'naam' | 'handmatig';
-  /** The page's current price incl. btw; the feed lists no lengths. */
+  /** Lowest price of a length in stock incl. btw (the page's price when its lengths could not be read). */
   priceEur: number;
+  /** Lengths in inches in stock, from the product page. */
+  lengths?: readonly number[];
 };
 
 export type HockeyCityOffers = {
@@ -131,9 +133,15 @@ export function getOffers(product: Product): Offer[] {
   }
 
   if (product.hockeyCityProductUrl) {
-    // Only in-stock pages are matched (scripts/hockeycity-feed.ts); the feed has no lengths.
-    const match = HOCKEYCITY_OFFERS.sticks[slug];
-    offers.push(offer('hockeycity', product.hockeyCityProductUrl, match?.priceEur ?? null, HOCKEYCITY_OFFERS.date, true));
+    if (product.feedImport?.feed === 'hockeycity') {
+      offers.push(
+        offer('hockeycity', product.hockeyCityProductUrl, product.priceIndicativeEur.value, product.feedImport.importedAt, true, product.lengthsInches.value),
+      );
+    } else {
+      // Only in-stock pages are matched (scripts/hockeycity-feed.ts); lengths from the page when it could be read.
+      const match = HOCKEYCITY_OFFERS.sticks[slug];
+      offers.push(offer('hockeycity', product.hockeyCityProductUrl, match?.priceEur ?? null, HOCKEYCITY_OFFERS.date, true, match?.lengths));
+    }
   }
   return offers;
 }

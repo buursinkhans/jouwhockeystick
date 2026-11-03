@@ -2,16 +2,19 @@
  * HockeyCity product feed (TradeTracker, XML; read-only), decision log
  * 2026-11-03. One feed entry per product page, without lengths or sizes: the
  * price is the page's current price (never the "fromPrice", which we do not
- * show). Sticks are matched by name only: their GTIN is HockeyCity's own
- * number (prefix 52619…), not the maker's EAN. Shoes have real EANs for most
- * brands and are linked on EAN only (CLAUDE.md, Hockeyschoenen). Pure
+ * show). Lengths, shoe sizes and their stock come from the public product data
+ * of each page (`?format=json`), which the weekly sync reads slowly (owner's
+ * choice, phase 2). Sticks are matched by name only: their GTIN is HockeyCity's
+ * own number (prefix 52619…), not the maker's EAN. Shoes have real EANs per size
+ * for most brands and are linked on EAN only (CLAUDE.md, Hockeyschoenen). Pure
  * functions; downloading and reporting live in scripts/hockeycity-feed.ts.
  */
+import { z } from 'zod';
 import { isHockeyCityProductPage } from '@/lib/retailers';
 import { parseRecord } from './passaFeed';
 import type { HockeyCityStickMatch } from './offers/index';
-import type { FeedStickModel, StickMatch } from './plutosportFeed';
-import type { ShoeListing } from './shoes/types';
+import type { FeedStickModel, PlutoStickModel, StickMatch } from './plutosportFeed';
+import { bySize, isHockeyShoe, normalShoeSize, type ShoeModel } from './shoeFeed';
 
 /** Feed "HockeyCity.nl - Algemeen" (#1633756) of campaign 27931; same affiliate site as our links. */
 export const HOCKEYCITY_FEED_URL =
@@ -35,7 +38,7 @@ export type HockeyCityRecord = {
 /** HockeyCity numbers its own products from this prefix: not a GS1 EAN, never a link between shops. */
 const OWN_NUMBER = /^52619/;
 
-export function makerEan(gtin: string | undefined): string | undefined {
+export function makerEan(gtin: string | null | undefined): string | undefined {
   const value = gtin?.trim() ?? '';
   return /^\d{8,14}$/.test(value) && !OWN_NUMBER.test(value) ? value : undefined;
 }
@@ -65,7 +68,8 @@ export function parseHockeyCityFeed(xml: string): HockeyCityRecord[] {
     const ean = makerEan(prop('GTIN'));
     records.push({
       url,
-      name: record.name,
+      // Some names repeat the brand ("Brabo Brabo G-Force …").
+      name: record.name.replace(/^(\S+)\s+\1\s/i, '$1 '),
       brand: prop('brand'),
       categoryPath: prop('categoryPath'),
       mpn: prop('MPN'),
@@ -77,6 +81,67 @@ export function parseHockeyCityFeed(xml: string): HockeyCityRecord[] {
   }
   return records;
 }
+
+// ---------------------------------------------------------------------------
+// The product data of one page (`<page>?format=json`): one variant per length or size
+
+const pageSchema = z.object({
+  product: z.object({
+    variants: z.record(
+      z.string(),
+      z.object({
+        title: z.string(),
+        ean: z.string().nullish(),
+        active: z.boolean().optional(),
+        price: z.object({ price_incl: z.number().positive() }),
+        stock: z.object({ available: z.boolean() }),
+      }),
+    ),
+  }),
+});
+
+export type HockeyCityVariant = { title: string; ean?: string; priceEur: number; inStock: boolean };
+
+/** The variants of a page, or null when the data is not what we expect (then nothing is imported). */
+export function parseHockeyCityPage(json: unknown): HockeyCityVariant[] | null {
+  const parsed = pageSchema.safeParse(json);
+  if (!parsed.success) return null;
+  // `active` marks the variant the page has selected, not whether it is for sale: stock says that.
+  return Object.values(parsed.data.product.variants).map((variant) => {
+    const ean = makerEan(variant.ean);
+    return {
+      title: variant.title.trim(),
+      ...(ean && { ean }),
+      priceEur: variant.price.price_incl,
+      inStock: variant.stock.available,
+    };
+  });
+}
+
+/** Stick lengths in inches in a variant title ("36.5", "36,5", "SR 36.5"); null for anything else. */
+export function lengthInches(title: string): number | null {
+  const match = title.match(/(?:^|\s)(\d{2}(?:[.,]5)?)(?:\s*(?:inch|"))?$/i);
+  const value = match?.[1] ? Number(match[1].replace(',', '.')) : NaN;
+  return value >= 18 && value <= 39 ? value : null;
+}
+
+/** Lengths in stock and the lowest price of those; nothing in stock gives no lengths. */
+export function stickStock(variants: readonly HockeyCityVariant[]): { lengths: number[]; priceEur: number | null } {
+  const inStock = variants.filter((variant) => variant.inStock && lengthInches(variant.title) !== null);
+  return {
+    lengths: [...new Set(inStock.map((variant) => lengthInches(variant.title) as number))].sort((a, b) => a - b),
+    priceEur: inStock.length ? Math.min(...inStock.map((variant) => variant.priceEur)) : null,
+  };
+}
+
+/** EU shoe sizes only ("37", "37,5", "36 2/3"); UK or US sizes are never mixed in. */
+const euSize = (title: string) => {
+  const size = normalShoeSize(title);
+  return size && /^\d{2}( \d\/\d|,\d)?$/.test(size) ? size : null;
+};
+
+// ---------------------------------------------------------------------------
+// Sticks
 
 const KEEPER = /\(gk\)|\bkeeper|\bgoalie\b/i;
 
@@ -122,6 +187,35 @@ export function hockeyCitySticks(records: readonly HockeyCityRecord[]): HockeyCi
 }
 
 /**
+ * A HockeyCity stick in the shape of the shared feed import
+ * (src/catalog/plutosportImport.ts), with the lengths in stock from its page.
+ */
+export function asImportModel(model: HockeyCityStickModel, stock: { lengths: readonly number[]; priceEur: number | null }): PlutoStickModel {
+  const sizes = stock.lengths.map(String);
+  return {
+    key: model.key,
+    name: model.name,
+    brand: model.brand,
+    modelText: '',
+    specText: '',
+    url: model.url,
+    awDeepLink: '',
+    discipline: model.discipline,
+    junior: model.junior,
+    eans: [],
+    sizes,
+    sizesInStock: sizes,
+    priceMin: stock.priceEur ?? model.priceMin,
+    priceMax: stock.priceEur ?? model.priceMin,
+    inStockPriceMin: stock.priceEur,
+    inStock: stock.lengths.length > 0,
+    categories: [],
+    ...(model.imageUrl && { imageUrl: model.imageUrl }),
+    description: '',
+  };
+}
+
+/**
  * The sticks that get a HockeyCity button: confirmed by hand first, then the
  * 'zeker' name matches; only pages the feed lists in stock. A confirmed slug
  * whose page is gone or sold out gets nothing, also not a name match.
@@ -148,45 +242,46 @@ export function hockeyCityStickMatches(
   return result;
 }
 
-const NOT_A_SHOE = /glove|handschoen|riemen|slipper|slider|sok/i;
+// ---------------------------------------------------------------------------
+// Shoes
+
+/** In HockeyCity's shoe category but not a shoe: a shoe dryer, a set of laces or straps. */
+const NOT_A_SHOE = /mister\s*dry|droger|dryer|riemen/i;
 
 export function isHockeyCityShoe(record: HockeyCityRecord): boolean {
-  return /schoen/i.test(record.categoryPath) && !NOT_A_SHOE.test(record.name);
+  return isHockeyShoe([record.categoryPath], record.name) && !NOT_A_SHOE.test(record.name);
 }
 
+/** Below EU 36 every size is a children's size. */
+const JUNIOR_SIZE_LIMIT = 36;
+
 /**
- * HockeyCity's listing per shoe model whose EANs include a HockeyCity page's
- * EAN (one size per page in this feed). The linked page is the cheapest in
- * stock, else the cheapest. No sizes: the feed does not list them.
+ * A HockeyCity shoe page as a feed shoe model (src/catalog/shoeFeed.ts), with
+ * the EU sizes, the stock per size and the maker's EAN per size from its page.
+ * Without page data only the feed's own EAN and price are known.
  */
-export function hockeyCityShoeListings(
-  shoes: readonly { slug: string; eans: readonly string[] }[],
-  records: readonly HockeyCityRecord[],
-  date: string,
-): Record<string, ShoeListing> {
-  const slugByEan = new Map<string, string>();
-  for (const shoe of shoes) for (const ean of shoe.eans) if (!slugByEan.has(ean)) slugByEan.set(ean, shoe.slug);
-  const pages = new Map<string, HockeyCityRecord[]>();
-  for (const record of records.filter(isHockeyCityShoe)) {
-    const slug = record.ean ? slugByEan.get(record.ean) : undefined;
-    if (slug) pages.set(slug, [...(pages.get(slug) ?? []), record]);
-  }
-  const listings: Record<string, ShoeListing> = {};
-  for (const [slug, found] of [...pages.entries()].sort(([a], [b]) => a.localeCompare(b))) {
-    const [best] = [...found].sort(
-      (a, b) => Number(b.inStock) - Number(a.inStock) || a.priceEur - b.priceEur || a.url.localeCompare(b.url),
-    ) as [HockeyCityRecord];
-    listings[slug] = {
-      shop: 'hockeycity',
-      url: best.url,
-      priceEur: best.priceEur,
-      inStock: best.inStock,
-      sizes: [],
-      sizesInStock: [],
-      colourPages: new Set(found.map((record) => record.url)).size,
-      ...(best.imageUrl && { imageUrl: best.imageUrl }),
-      readAt: date,
-    };
-  }
-  return listings;
+export function hockeyCityShoeModel(record: HockeyCityRecord, variants: readonly HockeyCityVariant[] | null): ShoeModel {
+  const sized = (variants ?? []).map((variant) => ({ ...variant, size: euSize(variant.title) }));
+  const inStock = sized.filter((variant) => variant.inStock);
+  const prices = (inStock.length ? inStock : sized).map((variant) => variant.priceEur);
+  const eans = [...new Set([...(record.ean ? [record.ean] : []), ...sized.flatMap((variant) => (variant.ean ? [variant.ean] : []))])].sort();
+  const sizes = [...new Set(sized.flatMap((variant) => (variant.size ? [variant.size] : [])))].sort(bySize);
+  // A kids' line often has no "JR" in the name (adidas Youngstar): its sizes tell.
+  const childSizes = sizes.length > 0 && sizes.every((size) => parseInt(size, 10) < JUNIOR_SIZE_LIMIT);
+  return {
+    shop: 'HockeyCity',
+    url: record.url,
+    name: record.name,
+    brand: record.brand,
+    discipline: /zaal/i.test(record.categoryPath) ? 'zaal' : /veld/i.test(record.categoryPath) ? 'veld' : 'onbekend',
+    junior: /\b(jr|junior|kids|gs)\b/i.test(record.name) || childSizes,
+    sizes,
+    sizesInStock: [...new Set(inStock.flatMap((variant) => (variant.size ? [variant.size] : [])))].sort(bySize),
+    ...(record.imageUrl && { imageUrl: record.imageUrl }),
+    eans,
+    priceMin: prices.length ? Math.min(...prices) : record.priceEur,
+    priceMax: prices.length ? Math.max(...prices) : record.priceEur,
+    inStock: variants ? inStock.length > 0 : record.inStock,
+    categories: [record.categoryPath],
+  };
 }

@@ -103,6 +103,7 @@ export const shoeSchema = z.object({
   eans: z.array(z.string().regex(/^\d{8,14}$/)),
   passaSportsProductUrl: z.string().url().optional(),
   plutosportProductUrl: z.string().url().optional(),
+  hockeyCityProductUrl: z.string().url().optional(),
   bolProductUrl: z.string().url().optional(),
   bolNotSold: z.boolean().optional(),
   /** Product photo from a shop feed; never a brand logo or other image. */
@@ -111,7 +112,7 @@ export const shoeSchema = z.object({
   /** Set on models generated from the shop feeds: noindex until enriched by hand. */
   feedImport: z
     .object({
-      feeds: z.array(z.enum(['passahockey', 'plutosport'])).min(1),
+      feeds: z.array(z.enum(['passahockey', 'plutosport', 'hockeycity'])).min(1),
       importedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     })
     .optional(),

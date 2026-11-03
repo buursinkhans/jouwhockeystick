@@ -8,18 +8,25 @@ import {
   shippingCostEur,
 } from '@/lib/retailers';
 import {
-  hockeyCityShoeListings,
+  asImportModel,
+  hockeyCityShoeModel,
   hockeyCityStickMatches,
   hockeyCitySticks,
+  isHockeyCityShoe,
+  lengthInches,
   makerEan,
   parseHockeyCityFeed,
+  parseHockeyCityPage,
+  stickStock,
   type HockeyCityStickModel,
 } from './hockeyCityFeed';
 import { getOffers } from './offers';
 import { HOCKEYCITY_OFFERS } from './offers/hockeyCity';
 import { HOCKEYCITY_CONFIRMED } from './offers/hockeyCityConfirmed';
 import type { StickMatch } from './plutosportFeed';
+import { HOCKEYCITY_IMPORT, toFeedProduct } from './plutosportImport';
 import { getShoeListings, getShoes } from './shoes';
+import { buildShoeImport, modelKey } from './shoes/feedImport';
 
 /** HockeyCity integration (decision log 2026-11-03). */
 
@@ -128,25 +135,128 @@ describe('HockeyCity feed', () => {
     });
   });
 
-  it('links shoes on the maker EAN only, to the cheapest page in stock, never on a glove or an own number', () => {
-    const listings = hockeyCityShoeListings(
-      [
-        { slug: 'asics-gel-peake-3', eans: ['4571633936296', '4570158833578'] },
-        { slug: 'grays-stealth', eans: ['5261902421439'] },
-      ],
-      records,
-      '2026-11-03',
+  it('keeps hockey shoes, never a glove in the shoe category', () => {
+    expect(records.filter(isHockeyCityShoe).map((r) => r.name)).toEqual([
+      'Asics Gel Peake 3',
+      'Asics Gel-Peake 3',
+      'Grays Stealth White 26',
+    ]);
+  });
+});
+
+/** Phase 2: lengths and sizes from the product pages, and what only HockeyCity sells. */
+describe('HockeyCity product pages', () => {
+  const records = parseHockeyCityFeed(FEED);
+  const page =(variants: Record<string, unknown>) => ({ product: { id: 1, variants } });
+  const variant = (title: string, available: boolean, price: number, ean = '') => ({
+    title,
+    ean,
+    active: true,
+    price: { price_incl: price },
+    stock: { available },
+  });
+
+  it('reads the variants, and nothing from data it does not recognise', () => {
+    expect(parseHockeyCityPage(page({ a: variant('36.5', true, 230, '5261902447248'), b: variant('37.5', false, 230) }))).toEqual([
+      { title: '36.5', priceEur: 230, inStock: true },
+      { title: '37.5', priceEur: 230, inStock: false },
+    ]);
+    // `active` is only the variant the page shows first: an inactive size in stock still counts.
+    expect(parseHockeyCityPage(page({ a: { ...variant('39', true, 52.5), active: false } }))).toEqual([
+      { title: '39', priceEur: 52.5, inStock: true },
+    ]);
+    expect(parseHockeyCityPage({ product: {} })).toBeNull();
+    expect(parseHockeyCityPage('<html>')).toBeNull();
+  });
+
+  it('takes the stick lengths in stock and the lowest price of those', () => {
+    expect([lengthInches('36.5'), lengthInches('36,5'), lengthInches('SR 37.5'), lengthInches('28'), lengthInches('L'), lengthInches('120')]).toEqual([
+      36.5, 36.5, 37.5, 28, null, null,
+    ]);
+    const variants = parseHockeyCityPage(
+      page({ a: variant('36.5', true, 80), b: variant('37.5', true, 75), c: variant('38.5', false, 60), d: variant('Grip', true, 5) }),
+    )!;
+    expect(stickStock(variants)).toEqual({ lengths: [36.5, 37.5], priceEur: 75 });
+    expect(stickStock([])).toEqual({ lengths: [], priceEur: null });
+  });
+
+  it('gives a shoe its EU sizes, stock per size and the maker EAN of every size', () => {
+    const record = records.find((r) => r.url.endsWith('/gel-peake-3.html'))!;
+    const variants = parseHockeyCityPage(
+      page({
+        a: variant('37', false, 120, '4570158833431'),
+        b: variant('37.5', true, 120, '4570158833578'),
+        c: variant('36 2/3', true, 110, '4069987883194'),
+        d: variant('UK 8', true, 120, '4570158833999'),
+      }),
     );
-    expect(Object.keys(listings)).toEqual(['asics-gel-peake-3']);
-    expect(listings['asics-gel-peake-3']).toMatchObject({
-      shop: 'hockeycity',
-      url: 'https://www.hockeycity.nl/gel-peake-3-sale.html',
-      priceEur: 72,
+    const model = hockeyCityShoeModel(record, variants);
+    expect(model).toMatchObject({
+      shop: 'HockeyCity',
+      discipline: 'veld',
+      sizes: ['36 2/3', '37', '37,5'],
+      sizesInStock: ['36 2/3', '37,5'],
+      priceMin: 110,
       inStock: true,
-      sizes: [],
-      colourPages: 2,
-      readAt: '2026-11-03',
+      categories: ['Hockeyschoenen > Veldhockeyschoenen'],
     });
+    expect(model.eans).toEqual(['4069987883194', '4570158833431', '4570158833578', '4570158833999', '4571633936296']);
+    expect(model.junior).toBe(false);
+    // Without page data: only what the feed says.
+    expect(hockeyCityShoeModel(record, null)).toMatchObject({ sizes: [], inStock: true, eans: ['4571633936296'] });
+    // A kids' line without "JR" in the name is junior by its sizes.
+    const kids = hockeyCityShoeModel(record, parseHockeyCityPage(page({ a: variant('32', true, 45), b: variant('35 1/3', true, 45) })));
+    expect(kids.junior).toBe(true);
+  });
+
+  it('cleans a repeated brand from a name and keeps a shoe dryer out of the shoes', () => {
+    const extra = parseHockeyCityFeed(
+      `<products>${item('Brabo Brabo G-Force Trad. Carbon 70 LowBow JR', 'g-force-70.html', 'Hockeysticks &gt; Veldhockeysticks', '5261902440000', '315.1-34')}${item('Brabo Mister Dry Black', 'mister-dry-black.html', 'Hockeyschoenen &gt; Veldhockeyschoenen', '5261902436761', '317.10050.010')}</products>`,
+    );
+    expect(extra[0]!.name).toBe('Brabo G-Force Trad. Carbon 70 LowBow JR');
+    expect(isHockeyCityShoe(extra[1]!)).toBe(false);
+  });
+
+  it('links a shoe on EAN, imports one only HockeyCity sells, and never one that only shares a name', () => {
+    const shoes = records.filter(isHockeyCityShoe).map((r) => hockeyCityShoeModel(r, null));
+    const known = [{ slug: 'asics-gel-peake-3', eans: ['4571633936296'] }];
+    const result = buildShoeImport({ passa: [], pluto: [], hockeyCity: shoes }, known, '2026-11-03');
+    // Both Gel-Peake colour pages are one model; one of them has a known EAN, so both list under it.
+    expect(result.curatedMatched).toEqual(['asics-gel-peake-3']);
+    expect(result.listings['asics-gel-peake-3']).toMatchObject([{ shop: 'hockeycity', colourPages: 2, priceEur: 72 }]);
+    // The Grays shoe has only HockeyCity's own numbers and no other shop: imported on its own.
+    expect(result.shoes.map((s) => s.slug)).toEqual(['grays-stealth-white-26']);
+    const own = result.shoes[0]!;
+    expect(own.feedImport).toEqual({ feeds: ['hockeycity'], importedAt: '2026-11-03' });
+    expect(own.hockeyCityProductUrl).toBe('https://www.hockeycity.nl/stealth-white-26.html');
+    expect(own.category).toMatchObject({ value: 'zaal', source: 'partner-shop' });
+    expect(own.eans).toEqual([]);
+    // When we already show a Grays Stealth White 26 from another shop, it is not imported: no EAN, no link.
+    const twice = buildShoeImport(
+      { passa: [], pluto: [], hockeyCity: shoes },
+      known,
+      '2026-11-03',
+      new Set([modelKey({ name: 'Grays Stealth White 26', brand: 'Grays' })]),
+    );
+    expect(twice.shoes).toEqual([]);
+    expect(twice.hockeyCityNameOnly.map((s) => s.name)).toEqual(['Grays Stealth White 26']);
+  });
+
+  it('turns a stick only HockeyCity sells into a noindex feed product with its lengths in stock', () => {
+    const [gold] = hockeyCitySticks(records) as [HockeyCityStickModel];
+    const result = toFeedProduct(asImportModel(gold, { lengths: [36.5, 37.5], priceEur: 275 }), '2026-11-03', HOCKEYCITY_IMPORT);
+    if (!('product' in result)) throw new Error(result.skip.reason);
+    expect(result.product).toMatchObject({
+      slug: 'the-indian-maharadja-gold-95-lowbow-nxt',
+      feedImport: { feed: 'hockeycity', importedAt: '2026-11-03' },
+      hockeyCityProductUrl: 'https://www.hockeycity.nl/gold-95-lowbow-nxt.html',
+      lengthsInches: { value: [36.5, 37.5], source: 'partner-shop' },
+      priceIndicativeEur: { value: 275 },
+    });
+    expect(result.product.plutosportProductUrl).toBeUndefined();
+    expect(JSON.stringify(result.product)).not.toMatch(/Plutosport/);
+    // Without lengths in stock nothing is imported.
+    expect(toFeedProduct(asImportModel(gold, { lengths: [], priceEur: null }), '2026-11-03', HOCKEYCITY_IMPORT)).toHaveProperty('skip');
   });
 });
 
@@ -164,6 +274,16 @@ describe('HockeyCity in the catalog and "Waar te koop"', () => {
     const products = getAllProducts(new Date(), { includeImported: true });
     for (const product of products) {
       const offer = getOffers(product).find((o) => o.retailer === 'hockeycity');
+      if (product.feedImport?.feed === 'hockeycity') {
+        // Only at HockeyCity: its own price and lengths, read on the import date.
+        expect(offer).toMatchObject({
+          priceEur: product.priceIndicativeEur.value,
+          lengths: product.lengthsInches.value,
+          readAt: product.feedImport.importedAt,
+        });
+        expect(getOffers(product).map((o) => o.retailer)).toEqual(['hockeycity']);
+        continue;
+      }
       const match = HOCKEYCITY_OFFERS.sticks[product.slug];
       if (!match) {
         expect(offer, product.slug).toBeUndefined();

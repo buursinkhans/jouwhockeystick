@@ -10,7 +10,7 @@ import type { CsvRow } from '@/lib/csv';
 import { isJunior, parseRecord, productPageUrl } from './passaFeed';
 import { isDutchShopUrl } from './plutosportFeed';
 
-export type ShoeShop = 'PassaHockey' | 'Plutosport';
+export type ShoeShop = 'PassaHockey' | 'Plutosport' | 'HockeyCity';
 export type ShoeDiscipline = 'veld' | 'zaal' | 'onbekend';
 
 export type ShoeModel = {

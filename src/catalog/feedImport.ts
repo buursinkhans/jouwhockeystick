@@ -15,6 +15,9 @@ export const MIN_MODEL_YEAR = 2025;
 const BRAND_BY_FEED_NAME: Record<string, Brand> = Object.fromEntries([
   ...brandSchema.options.map((brand) => [brand.toLowerCase(), brand] as const),
   ['indian maharadja', 'The Indian Maharadja'] as const,
+  // HockeyCity's feed names (decision log 2026-11-03).
+  ['princess hockey', 'Princess'] as const,
+  ['tk hockey', 'TK'] as const,
 ]);
 
 export function catalogBrand(feedBrand: string): Brand | null {
