@@ -86,6 +86,9 @@ export const brandSchema = z.enum([
   'Malik',
   'Nike',
   'Yibbi',
+  'Mercian',
+  'Cyclone',
+  'Naked',
 ]);
 export type Brand = z.infer<typeof brandSchema>;
 
@@ -152,7 +155,7 @@ export const productSchema = z.object({
    * is unknown until checked. Removed once a stick is enriched by hand.
    */
   feedImport: z
-    .object({ feed: z.enum(['passahockey', 'plutosport']), importedAt: z.string() })
+    .object({ feed: z.enum(['passahockey', 'plutosport', 'hockeycity']), importedAt: z.string() })
     .optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),

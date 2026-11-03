@@ -371,4 +371,28 @@ export const BRAND_PROFILES: BrandProfile[] = [
     },
     hasCatalogProducts: true,
   },
+  {
+    brand: 'Mercian',
+    logoBackground: 'light',
+    characteristics:
+      'De Mercian-sticks in onze catalogus en hun gegevens komen uit de productfeed en de productpagina’s van HockeyCity, onze partnerwinkel. We hebben ze nog niet met de eigen website van Mercian vergeleken. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+    characteristicsSourceUrl: 'https://www.hockeycity.nl/hockeysticks/',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Cyclone',
+    logoBackground: 'light',
+    characteristics:
+      'De Cyclone-sticks in onze catalogus en hun gegevens komen uit de productfeed en de productpagina’s van HockeyCity, onze partnerwinkel. We hebben ze nog niet met de eigen website van Cyclone vergeleken. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+    characteristicsSourceUrl: 'https://www.hockeycity.nl/hockeysticks/',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Naked',
+    logoBackground: 'light',
+    characteristics:
+      'De Naked-sticks in onze catalogus en hun gegevens komen uit de productfeed en de productpagina’s van HockeyCity, onze partnerwinkel. We hebben ze nog niet met de eigen website van Naked vergeleken. Over de achtergrond van het merk kunnen we zonder officiële bron niets zeggen.',
+    characteristicsSourceUrl: 'https://www.hockeycity.nl/hockeysticks/',
+    hasCatalogProducts: true,
+  },
 ];

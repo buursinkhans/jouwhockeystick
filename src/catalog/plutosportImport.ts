@@ -41,7 +41,7 @@ const euro = (n: number) => `€${n.toFixed(2).replace('.', ',')}`;
 const inch = (n: number) => String(n).replace('.', ',');
 
 /** Colour variants have their own page; one product per model name, the one with the most lengths in stock. */
-export function modelNameKey(model: PlutoStickModel): string {
+export function modelNameKey(model: Pick<PlutoStickModel, 'brand' | 'name'>): string {
   return `${model.brand.toLowerCase()}|${modelTokens(model.name, model.brand)
     .filter((token) => !COLOURS.has(token))
     .join(' ')}`;
@@ -71,11 +71,46 @@ export function plutosportGaps(models: readonly PlutoStickModel[], matchedKeys: 
   return [...byName.values()].sort((a, b) => a.url.localeCompare(b.url));
 }
 
-export function toPlutosportProduct(
+/** The shop a feed-only stick comes from: Plutosport or HockeyCity (decision log 2026-11-03). */
+export type ImportShop = {
+  feed: 'plutosport' | 'hockeycity';
+  label: string;
+  /** Where the lengths come from, for the source of `lengthsInches`. */
+  lengthsFrom: string;
+  /** The catalog slug of a page; HockeyCity's page names leave the brand out. */
+  slug: (model: PlutoStickModel, brand: string) => string;
+};
+
+export const PLUTOSPORT_IMPORT: ImportShop = {
+  feed: 'plutosport',
+  label: 'Plutosport',
+  lengthsFrom: 'volgens de productfeed van Plutosport leverbaar waren op de controledatum (uit het artikelnummer)',
+  slug: (model) => slugFromUrl(model.url),
+};
+
+export const HOCKEYCITY_IMPORT: ImportShop = {
+  feed: 'hockeycity',
+  label: 'HockeyCity',
+  lengthsFrom: 'volgens de productpagina van HockeyCity leverbaar waren op de controledatum',
+  slug: (model, brand) => {
+    const page = slugFromUrl(model.url).replace(/-html$/, '');
+    const brandSlug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return page.startsWith(brandSlug) ? page : `${brandSlug}-${page}`;
+  },
+};
+
+export function toPlutosportProduct(model: PlutoStickModel, today: string): { product: Product } | { skip: ImportSkip } {
+  return toFeedProduct(model, today, PLUTOSPORT_IMPORT);
+}
+
+/** A feed-only stick as a catalog product; specs from the shop only, level and positions our estimate. */
+export function toFeedProduct(
   model: PlutoStickModel,
   today: string,
+  shop: ImportShop,
 ): { product: Product } | { skip: ImportSkip } {
   const skip = (reason: string) => ({ skip: { url: model.url, name: model.name, reason } });
+  const { label } = shop;
   const brand = catalogBrand(model.brand);
   if (!brand) return skip(`merk "${model.brand}" staat niet in de catalogus`);
   if (/goalie|keeper|\bgk\s*\d*\b/i.test(model.name)) return skip('keepersstick');
@@ -104,7 +139,7 @@ export function toPlutosportProduct(
   );
   const summary = `${kind} van ${brand}${junior ? ' voor jeugdspelers' : ''}${
     details.length ? `, met ${details.join(' en ')}` : ''
-  }. Leverbaar bij Plutosport in ${sizes.length === 1 ? `${inch(sizes[0] ?? 0)} inch` : `${sizes.length} lengtes`}.`;
+  }. Leverbaar bij ${label} in ${sizes.length === 1 ? `${inch(sizes[0] ?? 0)} inch` : `${sizes.length} lengtes`}.`;
 
   const strengths = [
     bow ? BOW_STRENGTH[bow] : null,
@@ -119,33 +154,33 @@ export function toPlutosportProduct(
   ].filter((s): s is string => s !== null);
 
   const attention = [
-    'Gegevens uit de productfeed van Plutosport; nog niet met de website van het merk vergeleken',
+    `Gegevens uit de productfeed van ${label}; nog niet met de website van het merk vergeleken`,
     bow === null ? 'Kromming niet vermeld in de naam' : null,
     carbonDropped
       ? `Carbonpercentage in de feed (${feedCarbon}%) past niet bij de prijs; niet overgenomen`
       : carbon === null
         ? 'Carbonpercentage niet vermeld'
         : null,
-    sizes.length === 1 ? 'Bij Plutosport in één lengte leverbaar' : null,
+    sizes.length === 1 ? `Bij ${label} in één lengte leverbaar` : null,
   ].filter((s): s is string => s !== null);
 
   const product: Product = {
-    slug: slugFromUrl(model.url),
+    slug: shop.slug(model, brand),
     brand,
     name: model.name,
     dataStatus: 'verified',
-    feedImport: { feed: 'plutosport', importedAt: today },
-    plutosportProductUrl: model.url,
+    feedImport: { feed: shop.feed, importedAt: today },
+    ...(shop.feed === 'plutosport' ? { plutosportProductUrl: model.url } : { hockeyCityProductUrl: model.url }),
     imageAlt: `${model.name}`,
     ...(model.imageUrl && { imageUrl: model.imageUrl, imageSourceUrl: model.url }),
     discipline: {
       value: model.discipline,
-      ...fact(`Plutosport plaatst deze stick bij ${model.discipline === 'zaal' ? 'de zaalhockeysticks' : 'de veldhockeysticks'}.`),
+      ...fact(`${label} plaatst deze stick bij ${model.discipline === 'zaal' ? 'de zaalhockeysticks' : 'de veldhockeysticks'}.`),
     },
     experienceLevel: {
       value: estimateLevel(carbon, price, junior),
       ...estimate(
-        `Plutosport noemt geen niveau. Eigen inschatting op basis van ${
+        `${label} noemt geen niveau. Eigen inschatting op basis van ${
           carbon !== null ? `het carbonpercentage (${carbon}%) en ` : ''
         }de prijs (${euro(price)})${junior ? '; een juniorstick schatten we nooit als "ervaren" in' : ''}.`,
       ),
@@ -153,32 +188,32 @@ export function toPlutosportProduct(
     },
     recommendedPositions: {
       value: estimatePositions(bow),
-      ...estimate('Plutosport noemt geen positie. Eigen inschatting op basis van de kromming; positie is nooit de enige factor.'),
+      ...estimate(`${label} noemt geen positie. Eigen inschatting op basis van de kromming; positie is nooit de enige factor.`),
     },
-    ...(bow && { bowProfile: { value: bow, ...fact(`De productnaam bij Plutosport noemt een ${BOW_LABEL[bow]}.`) } }),
+    ...(bow && { bowProfile: { value: bow, ...fact(`De productnaam bij ${label} noemt een ${BOW_LABEL[bow]}.`) } }),
     ...(carbon !== null && {
-      carbonPercentage: { value: carbon, ...fact(`Plutosport vermeldt een carbonpercentage van ${carbon}%.`) },
+      carbonPercentage: { value: carbon, ...fact(`${label} vermeldt een carbonpercentage van ${carbon}%.`) },
     }),
     lengthsInches: {
       value: sizes,
-      ...fact('Lengtes die volgens de productfeed van Plutosport leverbaar waren op de controledatum (uit het artikelnummer).'),
+      ...fact(`Lengtes die ${shop.lengthsFrom}.`),
     },
     priceIndicativeEur: {
       value: price,
-      ...fact('Laagste verkoopprijs bij Plutosport volgens de productfeed op de controledatum.'),
+      ...fact(`Laagste verkoopprijs van een leverbare lengte bij ${label} op de controledatum.`),
     },
     stock: {
       value: sizes.length === 1 ? 'limited' : 'available',
-      ...fact('Voorraad volgens de productfeed van Plutosport op de controledatum.'),
+      ...fact(`Voorraad volgens ${label} op de controledatum.`),
     },
     summary,
     strengths: {
-      value: strengths.length ? strengths : [`Leverbaar bij Plutosport in ${sizes.length} ${sizes.length === 1 ? 'lengte' : 'lengtes'}`],
-      ...estimate('Eigen inschatting op basis van de gegevens in de productfeed van Plutosport.'),
+      value: strengths.length ? strengths : [`Leverbaar bij ${label} in ${sizes.length} ${sizes.length === 1 ? 'lengte' : 'lengtes'}`],
+      ...estimate(`Eigen inschatting op basis van de gegevens van ${label}.`),
     },
     pointsOfAttention: {
       value: attention,
-      ...estimate('Eigen inschatting op basis van de gegevens in de productfeed van Plutosport.'),
+      ...estimate(`Eigen inschatting op basis van de gegevens van ${label}.`),
     },
   };
   return { product };

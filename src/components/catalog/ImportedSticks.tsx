@@ -57,7 +57,7 @@ export function ImportedSticks({
     return (
       <div className="mt-6">
         <p className="text-sm text-lijngrijs">
-          Uit het aanbod van PassaHockey en Plutosport ({products.length}).
+          Uit het aanbod van PassaHockey, Plutosport en HockeyCity ({products.length}).
           Deze gegevens komen uit de productfeed van de winkel en zijn nog niet
           met de hand gecontroleerd.
         </p>
@@ -77,7 +77,7 @@ export function ImportedSticks({
       >
         {state.kind === 'loading'
           ? 'Bezig met laden…'
-          : `Toon ook ${count} sticks uit het aanbod van PassaHockey en Plutosport`}
+          : `Toon ook ${count} sticks uit het aanbod van PassaHockey, Plutosport en HockeyCity`}
       </Button>
       {state.kind === 'error' && (
         <p className="mt-2 text-sm text-red-700">
