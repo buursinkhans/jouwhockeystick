@@ -36,6 +36,8 @@ import { grays6iDynabowIndoor } from './products/grays-6i-dynabow-indoor';
 import { grays4iDynabowIndoor } from './products/grays-4i-dynabow-indoor';
 import { scoopIndoorMidBow20Carbon } from './products/scoop-indoor-mid-bow-20-carbon';
 import { scoopWdnJuniorIndoor } from './products/scoop-wdn-junior-indoor';
+import { indianMaharadjaBlackSparkWoodIndoor } from './products/indian-maharadja-black-spark-wood-indoor';
+import { indianMaharadjaGravity00Midbow } from './products/indian-maharadja-gravity-00-midbow';
 import { indianMaharadjaArcticWoodIndoor } from './products/indian-maharadja-arctic-wood-indoor';
 import { tk3ControlBowJuniorIndoor } from './products/tk-3-control-bow-junior-indoor';
 import { adidasYoungstar102627 } from './products/adidas-youngstar-10-2627';
@@ -207,6 +209,8 @@ const ALL_PRODUCTS: Product[] = [
   graysJb6Junior27055,
   graysDynabow6Junior23274,
   braboOgeezPinkAquaJuniorIndoor,
+  indianMaharadjaBlackSparkWoodIndoor,
+  indianMaharadjaGravity00Midbow,
 ];
 
 /**
