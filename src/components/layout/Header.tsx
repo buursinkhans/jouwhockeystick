@@ -8,11 +8,12 @@ const NAV_LINKS: NavLink[] = [
   { href: '/zaalsticks', label: 'Zaalsticks' },
   { href: '/hockeyschoenen', label: 'Hockeyschoenen' },
   { href: '/merken', label: 'Merken' },
-  { href: '/vergelijk', label: 'Vergelijk' },
   { href: '/kennis', label: 'Kennisbank' },
-  { href: '/blog', label: 'Blog' },
   { href: '/over-ons', label: 'Over ons' },
 ];
+// Vergelijk and Blog moved to the footer (redesign fase 1, 2026-11-03): six
+// links fit on one row next to the logo; comparing starts from a stick page
+// or an advice, where the first stick is already chosen.
 
 export function Header() {
   return (

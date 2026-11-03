@@ -1975,3 +1975,19 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Bewust niet:** twijfelgevallen automatisch koppelen of importeren, schoenen op naam koppelen, sticks zonder leverbare lengte, de van-prijs.
 
 **Betrokken bestanden:** `src/catalog/hockeyCityFeed.ts`, `scripts/hockeycity-feed.ts`, `src/catalog/plutosportImport.ts` (import voor beide winkels), `src/catalog/shoes/{feedImport,index,types,importedHockeyCity}.ts`, `src/catalog/shoeFeed.ts`, `src/catalog/imported/hockeycity.ts`, `src/catalog/{index,types,feedImport,feedDates}.ts`, `src/catalog/offers/{index,hockeyCity}.ts`, `src/content/brands.ts`, `src/components/catalog/ImportedSticks.tsx`, `src/content/catalogLists.ts`, `.github/workflows/passa-sync.yml`, `CLAUDE.md` en de tests.
+
+## 2026-11-03 — Redesign fase 1: minder uitleg, eerder naar de stick
+
+**Opdracht eigenaar (2026-11-03):** een designreview van de hele site, en daarna de aanbevelingen kritisch beoordelen en in fasen uitvoeren, eerst lokaal om te bekijken. Fase 1 zijn de kleine verbeteringen; fase 2 (stickwijzer per vraag, filters in de catalogus, stickpagina in twee kolommen, lichter laden) en fase 3 (eigen fotografie, vastgelegd designsysteem) volgen na akkoord.
+
+1. **Homepage:** de drie uitlegsecties ("Wat doet de stickwijzer?", "Drie routes", "Zo werkt het") zijn één sectie in drie stappen, met de routes als één regel. Het voorbeeldadvies en de uitgelichte sticks blijven. Het woordmerk in de hero blijft staan (merkinstructie §4: homepage-hero met pay-off), net als de zaalseizoenband (de stickwijzer adviseert geen zaalsticks).
+2. **Hoofdmenu:** van acht naar zes links. Vergelijk en Blog staan nu in de footer; vergelijken begint op een stickpagina of in een advies, waar de eerste stick al gekozen is. URL's blijven gelijk.
+3. **Stickadvies:** per stick drie redenen zichtbaar, de rest onder "Nog N redenen", elk nog steeds met de bron ernaast (spec §9.1 en §9.5; minimaal 2–3 zichtbare redenen). Grotere productfoto. De prijs heet "vanaf €X in [maat]", omdat die alleen winkels telt met de geadviseerde maat op voorraad; eerder stond er "bij N partnerwinkels" terwijl het blok ook rijen zonder die maat toont.
+4. **Stickwijzer, eerste stap:** "Stap 1 · 5 tot 7 stappen, afhankelijk van de route"; na de routekeuze verandert er niets.
+5. **Stickpagina:** grotere foto op desktop. De rij "Voorraadstatus" uit de catalogus vervalt als "Waar te koop" een actuele winkelprijs toont: daar staat de voorraad per winkel en lengte, en de algemene status sprak die soms tegen.
+6. **Over ons en clubpagina:** noemden nog één of twee winkels; nu alle vier. Over ons heeft een alinea "Zo verdienen we geld" (vergoeding per aankoop, telt niet mee in het advies, winkels op volgorde van prijs incl. verzending).
+7. **Merkprofielen:** Mercian aangevuld vanaf de eigen site (herkomst, 1974, productie, FIH-regels, een citaat). Voor Cyclone en Naked vonden we geen officiële merksite (nakedhockey.com is een geparkeerd domein); hun profiel zegt dat nu met datum.
+
+**Bewust niet overgenomen uit de review:** alleen sticks met foto uitlichten (de lege vlakken in de review kwamen door lazy loading in de screenshot; alle uitgelichte sticks en gecontroleerde schoenen hebben een foto), de schoenlabels "Goede onderbouwing" en "Voorwaardelijk" hernoemen (begrippen uit het keuzemodel, laag C), contrast van grijze tekst (#5b6b7f op #eef3fa is 5,0:1 en haalt AA).
+
+**Betrokken bestanden:** `src/components/home/StickwijzerExplainer.tsx`, `src/components/layout/{Header,Footer}.tsx`, `src/components/stickwijzer/{RecommendationCard,QuizForm}.tsx`, `src/content/stickwijzer/progress.ts`, `src/components/catalog/{ProductDetail,ProductSpecTable}.tsx`, `src/app/over-ons/page.tsx`, `src/content/clubs.ts`, `src/content/brands.ts` en de tests.

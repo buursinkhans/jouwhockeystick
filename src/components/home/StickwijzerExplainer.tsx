@@ -1,23 +1,18 @@
 import type { ComponentType, ReactNode, SVGProps } from 'react';
 import Link from 'next/link';
 import type { AdviceRoute } from '@/advice-engine/answers';
-import { QUESTIONS, SCREENS } from '@/content/stickwijzer/questions';
+import { QUESTIONS } from '@/content/stickwijzer/questions';
+import { routeStepRange } from '@/content/stickwijzer/progress';
 import { ButtonLink } from '@/components/ui/Button';
 import {
   AlertIcon,
   BallIcon,
   CheckIcon,
   EuroIcon,
-  FilterIcon,
-  QuestionIcon,
   RulerIcon,
-  ScaleIcon,
   SourceIcon,
-  SproutIcon,
   StepsIcon,
   StickIcon,
-  TargetIcon,
-  ThreeSticksIcon,
 } from '@/components/ui/icons';
 
 type Icon = ComponentType<SVGProps<SVGSVGElement> & { size?: number }>;
@@ -45,34 +40,34 @@ const LOOKS_AT: Array<{ icon: Icon; title: string; body: string }> = [
   },
 ];
 
-const ROUTES: Array<{ route: AdviceRoute; optionValue: string; icon: Icon }> = [
-  { route: 'START', optionValue: 'first_stick', icon: SproutIcon },
-  { route: 'ONTWIKKEL', optionValue: 'next_stick', icon: StepsIcon },
-  { route: 'PRESTATIE', optionValue: 'advanced_compare', icon: TargetIcon },
+const ROUTES: Array<{ route: AdviceRoute; optionValue: string }> = [
+  { route: 'START', optionValue: 'first_stick' },
+  { route: 'ONTWIKKEL', optionValue: 'next_stick' },
+  { route: 'PRESTATIE', optionValue: 'advanced_compare' },
 ];
 
-const FLOW: Array<{ icon: Icon; title: string; body: string }> = [
+/** Steps 2 and 3; step 1 lists LOOKS_AT. */
+const FLOW: Array<{ title: string; body: string }> = [
   {
-    icon: QuestionIcon,
-    title: 'Jij beantwoordt de vragen',
-    body: 'Bij elke vraag staat waarom we die stellen.',
-  },
-  {
-    icon: FilterIcon,
     title: 'Wat niet past, valt af',
-    body: 'Verkeerde maat, boven budget of te lastig voor het niveau.',
+    body: 'Verkeerde maat, boven budget of te lastig voor het niveau. Wat overblijft wegen we op ervaring, doelen, bow-profiel en gevoel. Marge telt niet mee.',
   },
   {
-    icon: ScaleIcon,
-    title: 'We wegen wat overblijft',
-    body: 'Op maat, ervaring, doelen, bow-profiel en gevoel. Marge telt niet mee.',
-  },
-  {
-    icon: ThreeSticksIcon,
     title: 'Maximaal drie sticks',
-    body: 'Beste match, veilige keuze en soms een ambitieuze keuze.',
+    body: 'Een beste match, een veilige keuze en soms een ambitieuze keuze, elk met de redenen, de afweging en de bron.',
   },
 ];
+
+function StepNumber({ n }: { n: number }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="flex h-10 w-10 items-center justify-center rounded-full bg-veld text-base font-bold text-white"
+    >
+      {n}
+    </span>
+  );
+}
 
 const ADVICE_POINTS: Array<{ icon: Icon; title: string; body: string }> = [
   {
@@ -181,117 +176,65 @@ function ExampleAdvice() {
   );
 }
 
+/**
+ * One section instead of three (redesign fase 1, 2026-11-03): what the
+ * stickwijzer asks, how it gets from answers to sticks, and the three routes
+ * as one line. The routes are explained in full on /stickwijzer itself.
+ */
 export function StickwijzerExplainer({
   productCount,
 }: {
   productCount: number;
 }) {
-  const routeOptions =
+  const routeLabels = ROUTES.map(({ optionValue }) =>
     QUESTIONS.route_self_select.input.kind === 'single'
-      ? QUESTIONS.route_self_select.input.options
-      : [];
+      ? QUESTIONS.route_self_select.input.options.find(
+          (option) => option.value === optionValue,
+        )?.label
+      : undefined,
+  ).filter((label): label is string => label !== undefined);
 
   return (
     <>
-      <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
-        <SectionHeading
-          eyebrow="Wat doet de stickwijzer?"
-          title="Een advies dat je kunt navolgen"
-        >
+      <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+        <SectionHeading eyebrow="Zo werkt het" title="Van een paar antwoorden naar maximaal drie sticks">
           <p>
             De stickwijzer vergelijkt je antwoorden met alle {productCount}{' '}
-            veldsticks in onze catalogus. Sticks die niet passen vallen af; van
-            wat overblijft zie je er maximaal drie, elk met de redenen, de
-            afweging en de bron van elk gegeven.
+            veldsticks in onze catalogus. In {routeStepRange()} weet je welke
+            maat en welke sticks passen, en waarom.
           </p>
         </SectionHeading>
-        <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {LOOKS_AT.map(({ icon, title, body }) => (
-            <li
-              key={title}
-              className="flex items-start gap-4 rounded-2xl border border-rand bg-white p-5 lg:flex-col"
-            >
-              <IconBadge icon={icon} />
-              <div>
-                <p className="font-bold">{title}</p>
-                <p className="mt-1 text-sm text-lijngrijs">{body}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
 
-      <section className="bg-hex-light border-y border-rand bg-krijt">
-        <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
-          <SectionHeading
-            eyebrow="Drie routes"
-            title="Een eerste stick vraagt iets anders"
-          >
-            <p>
-              Aan het begin kies je de route die bij de speler past. Je kunt
-              onderweg nog wisselen.
-            </p>
-          </SectionHeading>
-          <ul className="mt-10 grid gap-5 md:grid-cols-3">
-            {ROUTES.map(({ route, optionValue, icon }) => {
-              const option = routeOptions.find(
-                (candidate) => candidate.value === optionValue,
-              );
-              if (!option) {
-                return null;
-              }
-              return (
-                <li
-                  key={route}
-                  className="flex h-full flex-col rounded-3xl border border-rand bg-white p-6 shadow-sm"
-                >
-                  <IconBadge icon={icon} tone="orange" />
-                  <p className="mt-4 text-lg font-bold">{option.label}</p>
-                  {option.details?.slice(0, 2).map((detail) => (
-                    <p key={detail.term} className="mt-3 text-sm text-inkt/80">
-                      <span className="block text-xs font-semibold tracking-wide text-lijngrijs uppercase">
-                        {detail.term}
-                      </span>
-                      {detail.text}
-                    </p>
-                  ))}
-                  <p className="mt-auto pt-5 text-sm font-semibold text-veld">
-                    {SCREENS[route].length} stappen
-                  </p>
+        <ol className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
+          <li>
+            <StepNumber n={1} />
+            <p className="mt-4 text-lg font-bold">Jij vertelt over de speler</p>
+            <ul className="mt-3 space-y-2">
+              {LOOKS_AT.map(({ icon: LookIcon, title, body }) => (
+                <li key={title} className="flex items-start gap-3 text-sm">
+                  <LookIcon size={18} className="mt-0.5 shrink-0 text-veld" />
+                  <span>
+                    <span className="font-semibold">{title}</span>
+                    <span className="text-lijngrijs"> · {body}</span>
+                  </span>
                 </li>
-              );
-            })}
-          </ul>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
-        <SectionHeading
-          eyebrow="Zo werkt het"
-          title="Van antwoorden naar advies"
-        />
-        <ol className="relative mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-          {/* Connecting line behind the step badges on wide screens. */}
-          <span
-            aria-hidden="true"
-            className="absolute top-6 right-[12.5%] left-[12.5%] hidden h-0.5 bg-rand lg:block"
-          />
-          {FLOW.map(({ icon: FlowIcon, title, body }, index) => (
-            <li
-              key={title}
-              className="relative flex flex-col items-center text-center"
-            >
-              <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-veld text-white ring-8 ring-krijt">
-                <FlowIcon size={22} />
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-inkt text-xs font-bold text-white">
-                  {index + 1}
-                </span>
-              </span>
-              <p className="mt-4 font-bold">{title}</p>
-              <p className="mt-1 max-w-56 text-sm text-lijngrijs">{body}</p>
+              ))}
+            </ul>
+          </li>
+          {FLOW.map(({ title, body }, index) => (
+            <li key={title}>
+              <StepNumber n={index + 2} />
+              <p className="mt-4 text-lg font-bold">{title}</p>
+              <p className="mt-3 text-inkt/80">{body}</p>
             </li>
           ))}
         </ol>
+
+        <p className="mt-10 border-t border-rand pt-6 text-sm text-inkt/80">
+          <span className="font-semibold text-inkt">Drie routes:</span>{' '}
+          {routeLabels.join(' · ')}. Je kiest aan het begin wat bij de speler
+          past en kunt onderweg wisselen.
+        </p>
       </section>
 
       <section className="mx-auto max-w-5xl px-4 pb-16 sm:px-6">

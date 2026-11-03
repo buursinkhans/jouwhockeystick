@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { remainingTimeText } from './progress';
+import { remainingTimeText, routeStepRange } from './progress';
+import { SCREENS } from './questions';
+
+describe('routeStepRange', () => {
+  it('names the shortest and the longest route', () => {
+    const counts = Object.values(SCREENS).map((screens) => screens.length);
+    expect(routeStepRange()).toBe(`${Math.min(...counts)} tot ${Math.max(...counts)} stappen`);
+  });
+});
 
 describe('remainingTimeText', () => {
   it('rounds to whole minutes, at least one', () => {
