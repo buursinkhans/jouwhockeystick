@@ -287,6 +287,12 @@ const LEVEL_NAMES: Record<ExperienceBand, string> = {
   advanced: 'ervaren speler',
 };
 
+/** "Beginnende speler" etc., for the profile card above the sticks. */
+export function levelLabel(band: ExperienceBand): string {
+  const name = LEVEL_NAMES[band];
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
 /** One line on the level the advice is made for, and why. */
 export function playerLevelText(level: AdviceResult['playerLevel']): string {
   const name = LEVEL_NAMES[level.band];

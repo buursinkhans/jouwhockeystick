@@ -62,9 +62,38 @@ export default function MerkenPage() {
         bronnen — welke Nederlandse hockeyinternationals het merk sponsort.
       </p>
 
+      {/* Quick index (redesign fase 2): find a brand without scrolling 21 cards. */}
+      <nav aria-label="Merken op deze pagina" className="mt-8">
+        <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
+          {profiles.map((brand) => (
+            <li key={brand.brand}>
+              <a
+                href={`#merk-${slugify(brand.brand)}`}
+                className="flex h-16 items-center justify-center rounded-xl border border-rand bg-white px-2 text-center text-sm font-semibold text-inkt hover:border-veld"
+              >
+                {brand.logoUrl ? (
+                  <span
+                    className={
+                      brand.logoBackground === 'dark'
+                        ? 'flex h-10 w-full items-center justify-center rounded-lg bg-inkt px-2'
+                        : 'flex h-10 w-full items-center justify-center'
+                    }
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={brand.logoUrl} alt={brand.brand} loading="lazy" className="max-h-7 max-w-full object-contain" />
+                  </span>
+                ) : (
+                  brand.brand
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
       <div className="mt-10 space-y-8">
         {profiles.map((brand) => (
-          <Card key={brand.brand}>
+          <Card key={brand.brand} id={`merk-${slugify(brand.brand)}`} className="scroll-mt-24">
             <div className="flex items-center gap-4">
               {brand.logoUrl ? (
                 <div
