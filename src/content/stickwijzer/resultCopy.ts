@@ -287,6 +287,18 @@ const LEVEL_NAMES: Record<ExperienceBand, string> = {
   advanced: 'ervaren speler',
 };
 
+/**
+ * Three rules the advice keeps, shown above the first stick (redesign fase 4).
+ * Each one is enforced in code: fees are no score input (advice-engine),
+ * every reason carries its source (RecommendationCard), shop rows show the
+ * read date (WhereToBuy).
+ */
+export const ADVICE_TRUST_POINTS = [
+  'Vergoedingen van winkels tellen niet mee',
+  'Bron bij elke reden',
+  'Winkelprijzen met de datum waarop we ze lazen',
+] as const;
+
 /** "Beginnende speler" etc., for the profile card above the sticks. */
 export function levelLabel(band: ExperienceBand): string {
   const name = LEVEL_NAMES[band];

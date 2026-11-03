@@ -10,6 +10,7 @@ import { LENGTH_GUIDE } from '@/advice-engine/sizeAdvice';
 import { METHODIEK, WEIGHT_LABELS } from '@/content/methodiek';
 import { GROWTH_WARNING, formatInch } from '@/content/stickwijzer/resultCopy';
 import { ButtonLink } from '@/components/ui/Button';
+import { PromiseList } from '@/components/trust/PromiseList';
 
 export const metadata = pageMetadata({
   title: METHODIEK.title,
@@ -36,6 +37,14 @@ export default function MethodiekPage() {
           <p key={paragraph}>{paragraph}</p>
         ))}
       </div>
+
+      {/* The promises the homepage links here for, in one place (redesign fase 4). */}
+      <section aria-labelledby="afspraken-heading" className="mt-10 rounded-2xl border border-rand bg-krijt p-5 sm:p-6">
+        <h2 id="afspraken-heading" className="text-xl font-bold">Onze afspraken</h2>
+        <div className="mt-4">
+          <PromiseList currentPath="/methodiek" />
+        </div>
+      </section>
 
       <h2 className="mt-10 text-xl font-bold">Drie adviesroutes</h2>
       <dl className="mt-4 space-y-3">

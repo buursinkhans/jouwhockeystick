@@ -57,10 +57,22 @@ Zijmarge altijd `px-4 sm:px-6`; geen horizontaal scrollen op 360 px.
 - **Profielkaart** (advies): drie vakken (maat, niveau, route) in één rij vanaf `sm`.
 - **Filters:** gewone GET-formulieren met `select`; geen JavaScript nodig, elke selectie is een eigen URL, de canonical blijft de ongefilterde pagina.
 
+## 5a. Vertrouwen (fase 4)
+
+Vertrouwen bouwen we met wat we kunnen aantonen, niet met wat indruk maakt.
+
+- **Getelde feiten** (`ProofFacts`, gegevens uit `src/catalog/trustFacts.ts`): aantal veldsticks, merken, partnerwinkels en de datum waarop de prijzen laatst gelezen zijn. Nooit een getal met de hand intikken.
+- **Afspraken** (`PromiseList`, tekst in `src/content/trust.ts`): vier beloftes, elk met een link naar de pagina die laat zien dat we ons eraan houden. Op de homepage en op `/methodiek`.
+- **Vergelijking met één webshop:** neutraal over de winkel en zonder namen van andere winkels.
+- **In het advies:** drie vaste afspraken boven de eerste stick (`ADVICE_TRUST_POINTS`). **In de stickwijzer:** drie zekerheden boven de eerste vraag.
+- **Een gezicht:** "Gemaakt door Hans Buursink, hockeyvader" in de hero en de footer, met de foto op Over ons.
+- **Niet:** reviews, sterren, gebruikersaantallen of "aanbevolen door"-logo's zonder bron die we kunnen tonen. Willen we het aantal gegeven adviezen tonen, dan moet dat uit de statistieken komen (PostHog, `quiz_complete`) en automatisch bijgewerkt worden.
+
 ## 6. Ritme en witruimte
 
 - Secties op de homepage: `py-16` tot `sm:py-20`. Tussen kop en inhoud `mt-10`/`mt-12`.
-- Wissel wit en krijt af zodat secties herkenbaar zijn zonder lijnen: hero (krijt), seizoensband (wit), "Zo werkt het" (krijt), voorbeeldadvies en uitgelichte sticks (wit), footer (veldblauw).
+- Wissel wit en krijt af zodat secties herkenbaar zijn zonder lijnen: hero (krijt), seizoensband (wit), "Zo werkt het" (krijt), voorbeeldadvies (wit), "Waarom jouwhockeystick.nl" (krijt), uitgelichte sticks (wit), footer (veldblauw).
+- **Footer:** vier kolommen (merk en partnervermelding, Kiezen, Leren, Over ons); op een telefoon onder elkaar.
 
 ## 7. Beweging en laden
 

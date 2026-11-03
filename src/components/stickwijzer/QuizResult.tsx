@@ -14,11 +14,13 @@ import {
   SELLER_NOTE,
   START_FOOTNOTE,
   TRANSPARENCY_NOTE,
+  ADVICE_TRUST_POINTS,
   formatInch,
   levelLabel,
   sizeAdviceText,
 } from '@/content/stickwijzer/resultCopy';
 import { ROUTE_LABELS } from '@/content/stickwijzer/questions';
+import { CheckIcon } from '@/components/ui/icons';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { RecommendationCard } from './RecommendationCard';
 import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
@@ -123,6 +125,15 @@ export function QuizResult({
               {candidateCountText(advice.candidateCount, advice.results.length)}
             </p>
           )}
+          {/* Why this ranking can be trusted, before the first stick (redesign fase 4). */}
+          <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-inkt/80">
+            {ADVICE_TRUST_POINTS.map((point) => (
+              <li key={point} className="flex items-center gap-1.5">
+                <CheckIcon size={14} className="shrink-0 text-veld" />
+                {point}
+              </li>
+            ))}
+          </ul>
           {advice.brandPreference && !advice.brandPreference.matched && (
             <p className="mt-3 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
               {brandNotFoundText(
