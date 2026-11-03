@@ -31,6 +31,14 @@ export const PROMISES: readonly TrustPromise[] = [
   },
 ] as const;
 
+/**
+ * The order of the advice, said positively (redesign fase 6): fit first,
+ * shops after. True by construction: the stickwijzer ranks sticks without
+ * shop or fee input, and "Waar te koop" sorts on price incl. shipping.
+ */
+export const ORDER_PROMISE =
+  'Eerst kiezen we de stick die bij de speler past. Pas daarna zie je waar hij te koop is, met per winkel de prijs, de verzendkosten en of jouw maat op voorraad is.';
+
 /** One row of the comparison with buying at a single webshop; neutral about the shop. */
 export type ComparisonRow = { topic: string; webshop: string; us: string };
 

@@ -1,6 +1,5 @@
 import { getTrustFacts } from '@/catalog/trustFacts';
-import { COMPARISON_HEADING, COMPARISON_INTRO, comparisonRows } from '@/content/trust';
-import { ProofFacts } from '@/components/trust/ProofFacts';
+import { COMPARISON_HEADING, COMPARISON_INTRO, ORDER_PROMISE, comparisonRows } from '@/content/trust';
 import { PromiseList } from '@/components/trust/PromiseList';
 
 /**
@@ -18,10 +17,7 @@ export function WhyUs() {
         <h2 id="waarom-heading" className="mt-2 max-w-3xl text-3xl font-extrabold tracking-tight">
           Onafhankelijk advies, met alles wat je nodig hebt om het te controleren
         </h2>
-
-        <div className="mt-8">
-          <ProofFacts facts={facts} />
-        </div>
+        <p className="mt-4 max-w-2xl text-lg text-inkt/80">{ORDER_PROMISE}</p>
 
         <div className="mt-10">
           <PromiseList />

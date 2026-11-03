@@ -19,7 +19,7 @@ import {
   levelLabel,
   sizeAdviceText,
 } from '@/content/stickwijzer/resultCopy';
-import { ROUTE_LABELS } from '@/content/stickwijzer/questions';
+import { ROUTE_SHORT_LABELS } from '@/content/stickwijzer/questions';
 import { CheckIcon } from '@/components/ui/icons';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { RecommendationCard } from './RecommendationCard';
@@ -101,23 +101,23 @@ export function QuizResult({
             one glance, before the sticks. Everything here comes from the
             advice itself; the full explanation stays below.
           */}
-          <dl className="mt-4 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-rand bg-rand sm:grid-cols-3">
-            <div className="bg-white px-4 py-3">
+          <dl className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-rand bg-rand shadow-card">
+            <div className="bg-white px-3 py-3 sm:px-4">
               <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Jouw maat</dt>
-              <dd className="mt-1 text-xl font-bold text-inkt">{size}</dd>
+              <dd className="mt-1 text-[0.9375rem] leading-tight font-bold break-words text-inkt sm:text-xl">{size}</dd>
               <dd className="text-xs">
                 <a href="#lengteadvies" className="text-veld underline hover:no-underline">
                   Waarom deze maat?
                 </a>
               </dd>
             </div>
-            <div className="bg-white px-4 py-3">
-              <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Advies voor een</dt>
-              <dd className="mt-1 text-xl font-bold text-inkt">{levelLabel(advice.playerLevel.band)}</dd>
+            <div className="bg-white px-3 py-3 sm:px-4">
+              <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Niveau</dt>
+              <dd className="mt-1 text-[0.9375rem] leading-tight font-bold break-words text-inkt sm:text-xl">{levelLabel(advice.playerLevel.band)}</dd>
             </div>
-            <div className="bg-white px-4 py-3">
+            <div className="bg-white px-3 py-3 sm:px-4">
               <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Route</dt>
-              <dd className="mt-1 text-xl font-bold text-inkt">{ROUTE_LABELS[advice.route]}</dd>
+              <dd className="mt-1 text-[0.9375rem] leading-tight font-bold break-words text-inkt sm:text-xl">{ROUTE_SHORT_LABELS[advice.route]}</dd>
             </div>
           </dl>
           {advice.candidateCount > 0 && (

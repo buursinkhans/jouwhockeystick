@@ -58,7 +58,9 @@ Zijmarge altijd `px-4 sm:px-6`; geen horizontaal scrollen op 360 px.
 - **Productfoto:** op wit (`bg-white`), `object-contain`, in de catalogus 160 px, op de stickpagina tot 256 px, in het advies tot 128 px. Geen patroon achter een foto.
 - **Zeshoekpatroon** (`bg-hex-light`, `bg-hex-dark`): alleen in de homepage-hero en de footer, als merkaccent. Niet in kaarten, fotovlakken of secties.
 - **Knoppen:** `Button`/`ButtonLink` uit `src/components/ui/Button.tsx`. Primair veldblauw, secundair omlijnd; `accent` (oranje) alleen voor de stickwijzer.
-- **Profielkaart** (advies): drie vakken (maat, niveau, route) in één rij vanaf `sm`.
+- **Profielkaart** (advies): drie vakken (maat, niveau, route) in één rij, ook op een telefoon.
+- **Stickkaart in het advies** (fase 6): rolbadge (Beste match, Veilige keuze, Ambitieuze keuze), merk en naam, vier vakken (maat, kromming, carbon, modeljaar), dan "Waarom deze stick past" naast "Waar je op inlevert", en pas daarna "Waar te koop". **De prijs staat nooit bovenaan**: eerst de pasvorm, dan de winkels.
+- **Antwoorden in de stickwijzer:** tikvlakken van 48 px; gekozen = blauwe rand, krijt, ring en vet.
 - **Filters:** gewone GET-formulieren met `select`; geen JavaScript nodig, elke selectie is een eigen URL, de canonical blijft de ongefilterde pagina.
 
 ## 5a. Vertrouwen (fase 4)

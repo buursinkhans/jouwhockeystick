@@ -2059,3 +2059,26 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 Binnen de merkinstructie: veldblauw als hoofdkleur, oranje alleen voor de stickwijzer, het zeshoekpatroon alleen in hero en footer.
 
 **Betrokken bestanden:** `src/app/globals.css`, `src/components/layout/Header.tsx`, `src/components/ui/{PageHeader,Card}.tsx`, de pagina's hierboven, de kaartcomponenten (`ProductCard`, `ShoeCard`, `SimilarSticks`, `WhereToBuy`, `ShoeWhereToBuy`, `CatalogFilters`, `IndoorSelector`, `ShoeQuiz`, `ShoeAdviceView`), `src/components/catalog/ProductDetail.tsx` (sticky afstand), `docs/designsysteem.md`.
+
+## 2026-11-04 — Redesign fase 6: eerst de pasvorm, dan de winkels
+
+**Opdracht eigenaar (2026-11-04):** het advies is het product; eerst de pasvorm, dan pas de prijs. Gezag zichtbaar vóór er iets gevraagd wordt, mobiel eerst, nette randgevallen.
+
+1. **Stickkaart in het advies** (`RecommendationCard`):
+   - de rol staat als badge bovenaan (Beste match met doel-icoon en blauw vlak, Veilige keuze met schild, Ambitieuze keuze met bliksem), en de beste match heeft een lichte blauwe rand;
+   - daaronder merk, naam en samenvatting, en vier vakken: jouw maat, kromming, carbon en modeljaar. **De prijs staat niet meer bovenaan**, maar pas in "Waar te koop";
+   - "Waarom deze stick past" en "Waar je op inlevert" (de afweging en voor wie hij minder past) staan vanaf `sm` naast elkaar;
+   - zonder actuele winkelprijs volgt de richtprijs, gemarkeerd, vlak boven "Waar te koop".
+2. **Profielkaart:** op een telefoon drie vakken naast elkaar in plaats van onder elkaar; de route heet kort Start, Ontwikkel of Prestatie, omdat het vak al "Route" heet. Gemeten op 390×844, op een gedeeld advies met melding: de naam van de beste match staat op 1,16 schermhoogte, de eerste koopknop op 2,3.
+3. **Stickwijzer:** antwoorden zijn 48 px hoge tikvlakken met een duidelijke gekozen staat (blauwe rand, krijt, ring, vet) en een korte overgang, die stopt bij `prefers-reduced-motion`.
+4. **Homepage:** de getelde feiten staan direct onder de hero (`ProofStrip`). Het vierde feit zegt nu "prijzen wekelijks bijgewerkt, laatst op …". "Waarom jouwhockeystick.nl" opent met de volgorde: "Eerst kiezen we de stick die bij de speler past. Pas daarna zie je waar hij te koop is …" (`ORDER_PROMISE`).
+5. **Randgevallen van "Waar te koop"** hebben nu tests: geen partnerwinkel, één winkel, en nooit een korting, doorgestreepte prijs of "goedkoopst". Verouderde prijzen (> 14 dagen) en een maat die niet op voorraad is, handelde het blok al af.
+
+**Bewust niet:**
+- **Concurrenten bij naam:** HockeyDirect, HockeyHouse en HockeyOranje noemen we niet. Een vergelijking met een genoemde winkel moet per winkel objectief en controleerbaar zijn, en een winkel kan partner worden.
+- **Reviews, sterren of gebruikersaantallen:** we hebben geen bron die we kunnen tonen.
+- **Levertijden:** de feeds hebben er geen, dus we tonen ook geen schatting.
+- **Winkellogo's:** pas na toestemming via het partnerprogramma van elke winkel.
+- **Emoji als markering van de rollen:** iconen in de huisstijl, met de rol in woorden ernaast.
+
+**Betrokken bestanden:** `src/components/stickwijzer/{RecommendationCard,QuizResult,QuestionField}.tsx`, `src/components/ui/icons.tsx` (ShieldIcon), `src/content/stickwijzer/questions.ts` (ROUTE_SHORT_LABELS), `src/components/home/{ProofStrip,WhyUs,HomePage}.tsx`, `src/components/trust/ProofFacts.tsx`, `src/content/trust.ts` (+ test), `src/components/offers/WhereToBuy.test.ts`, `docs/designsysteem.md`.

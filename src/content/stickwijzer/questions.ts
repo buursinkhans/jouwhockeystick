@@ -834,6 +834,13 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
   ],
 };
 
+/** The route names of the route cards ("Start — eerste stick"), for a cell already labelled "Route". */
+export const ROUTE_SHORT_LABELS: Record<AdviceRoute, string> = {
+  START: 'Start',
+  ONTWIKKEL: 'Ontwikkel',
+  PRESTATIE: 'Prestatie',
+};
+
 export const ROUTE_LABELS: Record<AdviceRoute, string> = {
   START: 'Startroute',
   ONTWIKKEL: 'Ontwikkelroute',
