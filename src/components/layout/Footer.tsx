@@ -91,7 +91,7 @@ export function Footer() {
           ))}
         </div>
         <p className="mt-10 border-t border-white/15 pt-6">
-          &copy; {new Date().getFullYear()} {SITE_NAME} · Gemaakt door Hans Buursink, hockeyvader · We verkopen zelf niets
+          &copy; {new Date().getFullYear()} {SITE_NAME} · We verkopen zelf niets
         </p>
       </div>
     </footer>

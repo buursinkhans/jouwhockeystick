@@ -5,7 +5,8 @@ import { getTrustFacts } from '@/catalog/trustFacts';
 import { getCatalogStats } from '@/catalog/stats';
 import { RETAILERS } from '@/lib/retailers';
 import { WhyUs } from '@/components/home/WhyUs';
-import { PROMISES, comparisonRows } from './trust';
+import { ProofStrip } from '@/components/home/ProofStrip';
+import { ORDER_PROMISE, PROMISES, comparisonRows } from './trust';
 
 describe('trust facts', () => {
   it('are counted from the catalog and the retailers, never typed in', () => {
@@ -20,6 +21,7 @@ describe('trust facts', () => {
 
 describe('trust copy', () => {
   const text = [
+    ORDER_PROMISE,
     ...PROMISES.flatMap((p) => [p.title, p.body]),
     ...comparisonRows({ brands: 21, shops: 4 }).flatMap((r) => [r.webshop, r.us]),
   ].join(' ');
@@ -37,10 +39,11 @@ describe('trust copy', () => {
     for (const promise of PROMISES) expect(promise.proof.href).toMatch(/^\//);
   });
 
-  it('shows the counted facts on the homepage block', () => {
+  it('shows the counted facts under the hero and the promises in "Waarom"', () => {
     const facts = getTrustFacts();
+    expect(renderToStaticMarkup(createElement(ProofStrip))).toContain(`>${facts.fieldSticks}<`);
     const html = renderToStaticMarkup(createElement(WhyUs));
-    expect(html).toContain(String(facts.fieldSticks));
     expect(html).toContain('Waarom niet meteen bij één webshop?');
+    expect(html).toContain(ORDER_PROMISE);
   });
 });

@@ -8,6 +8,7 @@ import { SeasonBand } from './SeasonBand';
 import { BuyingIntro } from './BuyingIntro';
 import { InstagramFeed } from './InstagramFeed';
 import { WhyUs } from './WhyUs';
+import { ProofStrip } from './ProofStrip';
 
 export function HomePage({ variant }: { variant: HomeIntroVariant }) {
   const products = getAllProducts();
@@ -17,6 +18,7 @@ export function HomePage({ variant }: { variant: HomeIntroVariant }) {
   return (
     <>
       <Hero />
+      <ProofStrip />
       {variant === 'season' && isIndoorSeason() && <SeasonBand />}
       {variant === 'buying' && <BuyingIntro />}
       <StickwijzerExplainer productCount={adviceCount} />

@@ -58,7 +58,9 @@ Zijmarge altijd `px-4 sm:px-6`; geen horizontaal scrollen op 360 px.
 - **Productfoto:** op wit (`bg-white`), `object-contain`, in de catalogus 160 px, op de stickpagina tot 256 px, in het advies tot 128 px. Geen patroon achter een foto.
 - **Zeshoekpatroon** (`bg-hex-light`, `bg-hex-dark`): alleen in de homepage-hero en de footer, als merkaccent. Niet in kaarten, fotovlakken of secties.
 - **Knoppen:** `Button`/`ButtonLink` uit `src/components/ui/Button.tsx`. Primair veldblauw, secundair omlijnd; `accent` (oranje) alleen voor de stickwijzer.
-- **Profielkaart** (advies): drie vakken (maat, niveau, route) in één rij vanaf `sm`.
+- **Profielkaart** (advies): drie vakken (maat, niveau, route) in één rij, ook op een telefoon.
+- **Stickkaart in het advies** (fase 6): rolbadge (Beste match, Veilige keuze, Ambitieuze keuze), merk en naam, vier vakken (maat, kromming, carbon, modeljaar), dan "Waarom deze stick past" naast "Waar je op inlevert", en pas daarna "Waar te koop". **De prijs staat nooit bovenaan**: eerst de pasvorm, dan de winkels.
+- **Antwoorden in de stickwijzer:** tikvlakken van 48 px; gekozen = blauwe rand, krijt, ring en vet.
 - **Filters:** gewone GET-formulieren met `select`; geen JavaScript nodig, elke selectie is een eigen URL, de canonical blijft de ongefilterde pagina.
 
 ## 5a. Vertrouwen (fase 4)
@@ -69,7 +71,7 @@ Vertrouwen bouwen we met wat we kunnen aantonen, niet met wat indruk maakt.
 - **Afspraken** (`PromiseList`, tekst in `src/content/trust.ts`): vier beloftes, elk met een link naar de pagina die laat zien dat we ons eraan houden. Op de homepage en op `/methodiek`.
 - **Vergelijking met één webshop:** neutraal over de winkel en zonder namen van andere winkels.
 - **In het advies:** drie vaste afspraken boven de eerste stick (`ADVICE_TRUST_POINTS`). **In de stickwijzer:** drie zekerheden boven de eerste vraag.
-- **Een gezicht:** "Gemaakt door Hans Buursink, hockeyvader" in de hero en de footer, met de foto op Over ons.
+- **Een gezicht:** foto, naam en "Hockeyvader" alleen op Over ons (op de homepage en in de footer niet, op verzoek van de eigenaar, 2026-11-04).
 - **Niet:** reviews, sterren, gebruikersaantallen of "aanbevolen door"-logo's zonder bron die we kunnen tonen. Willen we het aantal gegeven adviezen tonen, dan moet dat uit de statistieken komen (PostHog, `quiz_complete`) en automatisch bijgewerkt worden.
 
 ## 6. Ritme en witruimte
@@ -89,7 +91,7 @@ Geen "beste"-, "goedkoopst"- of kortingslabels, geen sterren zonder echte review
 
 ## 9. Fotografie
 
-- **Mensen:** alleen echte foto's met toestemming: de jeugdspeelster in de hero (dochter van de eigenaar) en het portret van Hans Buursink, hockeyvader (Over ons, en klein in de hero als "Gemaakt door"). Metadata (EXIF, locatie) gaat er altijd af; bestanden in `src/assets/`.
+- **Mensen:** alleen echte foto's met toestemming: de jeugdspeelster in de hero (dochter van de eigenaar) en het portret van Hans Buursink, hockeyvader (alleen op Over ons). Metadata (EXIF, locatie) gaat er altijd af; bestanden in `src/assets/`.
 - **Producten:** de foto's van merk of winkel, zoals de catalogus ze heeft.
 - **Geen stockfoto's** van spelers, teams of clubs: die lijken op echte mensen en clubs die er niets mee te maken hebben.
 - **Open:** eigen fotografie op een club (spelers, ouders langs de lijn, close-ups van sticks), met toestemming van ouders en club. Kan nog niet (eigenaar, 2026-11-03); tot die tijd blijven de huidige foto's.

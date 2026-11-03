@@ -10,7 +10,7 @@ export function ProofFacts({ facts }: { facts: TrustFacts }) {
     { value: String(facts.brands), label: 'merken, veld en zaal' },
     { value: String(facts.shops), label: 'partnerwinkels naast elkaar' },
     facts.pricesReadOn
-      ? { value: DUTCH_DATE.format(new Date(`${facts.pricesReadOn}T00:00:00Z`)), label: 'prijzen laatst gelezen' }
+      ? { value: DUTCH_DATE.format(new Date(`${facts.pricesReadOn}T00:00:00Z`)), label: 'prijzen wekelijks bijgewerkt, laatst op' }
       : { value: String(facts.checkedSticks), label: 'sticks met de hand nagelopen' },
   ];
   return (
