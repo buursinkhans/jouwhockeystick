@@ -2082,3 +2082,11 @@ Binnen de merkinstructie: veldblauw als hoofdkleur, oranje alleen voor de stickw
 - **Emoji als markering van de rollen:** iconen in de huisstijl, met de rol in woorden ernaast.
 
 **Betrokken bestanden:** `src/components/stickwijzer/{RecommendationCard,QuizResult,QuestionField}.tsx`, `src/components/ui/icons.tsx` (ShieldIcon), `src/content/stickwijzer/questions.ts` (ROUTE_SHORT_LABELS), `src/components/home/{ProofStrip,WhyUs,HomePage}.tsx`, `src/components/trust/ProofFacts.tsx`, `src/content/trust.ts` (+ test), `src/components/offers/WhereToBuy.test.ts`, `docs/designsysteem.md`.
+
+## 2026-11-04 — Portret alleen op Over ons
+
+**Opdracht eigenaar (2026-11-04):** de foto en de tekst over hockeyvader van de homepage halen.
+
+De link "Gemaakt door Hans Buursink, hockeyvader" met portret is uit de homepage-hero verwijderd, en dezelfde tekst uit de footer (die staat ook op de homepage). De foto, naam en "Hockeyvader" blijven op Over ons. Het analytics-commentaar bij `home_block_click` noemt de link niet meer.
+
+**Betrokken bestanden:** `src/components/home/Hero.tsx`, `src/components/layout/Footer.tsx`, `src/lib/analytics/events.ts` (commentaar), `docs/designsysteem.md`.
