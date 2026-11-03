@@ -2018,3 +2018,13 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 **Open, vraagt de eigenaar:** eigen fotografie op een club (met toestemming van ouders en club), en Over ons met foto, naam en hockeyachtergrond van de oprichter.
 
 **Betrokken bestanden:** `docs/designsysteem.md`, `docs/README.md`, `src/app/layout.tsx`, `src/components/catalog/ProductCard.tsx`, `src/components/shoes/ShoeCard.tsx`, `src/components/zaal/IndoorSelector.tsx`, `src/app/zaalsticks/page.tsx`, `src/components/home/StickwijzerExplainer.tsx`.
+
+## 2026-11-03 — Redesign fase 3: een gezicht in plaats van clubfotografie
+
+**Opdracht eigenaar (2026-11-03):** foto's op een club lukken nog niet; bedenk een alternatief of houd de oude foto. Voor Over ons: deze foto, naam Hans Buursink, en als achtergrond alleen "Hockeyvader".
+
+1. **Over ons:** portret met naam en "Hockeyvader", direct onder de inleiding. De foto is verkleind (720×960, 42 kB) en zonder metadata opgeslagen (`src/assets/over-ons/hans-buursink.jpg`), net als de herofoto's.
+2. **Homepage-hero:** onder de vertrouwensregel staat een kleine link "Gemaakt door Hans Buursink, hockeyvader" met het portret, naar `/over-ons`. Klikken meten we als `home_block_click` (block `hero`, target `/over-ons`). Een echt gezicht bovenaan is het alternatief voor clubfotografie; de foto's van de jeugdspeelster blijven.
+3. **Geen stockfoto's** van spelers of clubs (`docs/designsysteem.md` §9).
+
+**Betrokken bestanden:** `src/app/over-ons/page.tsx` (+ test), `src/components/home/Hero.tsx`, `src/assets/over-ons/hans-buursink.jpg`, `src/lib/analytics/events.ts` (commentaar), `docs/designsysteem.md`.

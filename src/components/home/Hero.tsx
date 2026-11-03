@@ -4,7 +4,9 @@ import { HomeBlockLink } from './HomeBlockLink';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getCatalogStats } from '@/catalog/stats';
+import portret from '@/assets/over-ons/hans-buursink.jpg';
 
 const EXAMPLE_REASONS = [
   'Juiste stick',
@@ -83,6 +85,32 @@ function TrustLine() {
   );
 }
 
+/**
+ * A real face instead of club photography, which is not possible yet
+ * (owner, 2026-11-03): who made the site, linking to /over-ons.
+ */
+function MadeBy() {
+  return (
+    <HomeBlockLink
+      block="hero"
+      href="/over-ons"
+      className="mt-5 inline-flex items-center gap-3 rounded-full border border-rand bg-white py-1 pr-4 pl-1 text-sm text-inkt/80 hover:border-veld"
+    >
+      <Image
+        src={portret}
+        alt=""
+        width={720}
+        height={960}
+        sizes="36px"
+        className="h-9 w-9 rounded-full object-cover object-top"
+      />
+      <span>
+        Gemaakt door <span className="font-semibold text-inkt">Hans Buursink</span>, hockeyvader
+      </span>
+    </HomeBlockLink>
+  );
+}
+
 export function Hero() {
   return (
     <section className="bg-hex-light border-b border-rand bg-krijt">
@@ -105,6 +133,7 @@ export function Hero() {
             </ButtonLink>
           </div>
           <TrustLine />
+          <MadeBy />
         </div>
         <HeroVisual />
       </div>

@@ -71,7 +71,9 @@ Zijmarge altijd `px-4 sm:px-6`; geen horizontaal scrollen op 360 px.
 
 Geen "beste"-, "goedkoopst"- of kortingslabels, geen sterren zonder echte reviews, geen nep-urgentie, geen stockfoto's die op echte spelers lijken. Zie `CLAUDE.md` (Commerce, Kernregels).
 
-## 9. Open (fase 3, vraagt de eigenaar)
+## 9. Fotografie
 
-- **Eigen fotografie** op een club: spelers, ouders langs de lijn, close-ups van sticks. Met toestemming van ouders en club.
-- **Over ons met een gezicht:** foto, naam en hockeyachtergrond van de oprichter.
+- **Mensen:** alleen echte foto's met toestemming: de jeugdspeelster in de hero (dochter van de eigenaar) en het portret van Hans Buursink, hockeyvader (Over ons, en klein in de hero als "Gemaakt door"). Metadata (EXIF, locatie) gaat er altijd af; bestanden in `src/assets/`.
+- **Producten:** de foto's van merk of winkel, zoals de catalogus ze heeft.
+- **Geen stockfoto's** van spelers, teams of clubs: die lijken op echte mensen en clubs die er niets mee te maken hebben.
+- **Open:** eigen fotografie op een club (spelers, ouders langs de lijn, close-ups van sticks), met toestemming van ouders en club. Kan nog niet (eigenaar, 2026-11-03); tot die tijd blijven de huidige foto's.
