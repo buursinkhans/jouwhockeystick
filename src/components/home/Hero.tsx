@@ -6,6 +6,7 @@ import { CheckIcon } from '@/components/ui/icons';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getCatalogStats } from '@/catalog/stats';
+import { getTrustFacts } from '@/catalog/trustFacts';
 import portret from '@/assets/over-ons/hans-buursink.jpg';
 
 const EXAMPLE_REASONS = [
@@ -112,6 +113,7 @@ function MadeBy() {
 }
 
 export function Hero() {
+  const { shops } = getTrustFacts();
   return (
     <section className="bg-hex-light border-b border-rand bg-krijt">
       <div className="mx-auto grid max-w-5xl items-center gap-8 px-4 py-10 sm:px-6 sm:py-12 md:grid-cols-[3fr_2fr]">
@@ -124,8 +126,10 @@ export function Hero() {
           </h1>
           <p className="mt-4 max-w-xl text-lg text-inkt/80">
             Beantwoord een paar vragen over lengte, ervaring, speelwensen en
-            budget. Je krijgt maximaal drie sticks, elk met de redenen waarom
-            hij past — en eerlijk waar je op inlevert.
+            budget. Je krijgt de juiste maat en maximaal drie sticks, elk met
+            de redenen waarom hij past en eerlijk waar je op inlevert. Per
+            stick zie je bij welke van onze {shops} partnerwinkels hij te koop
+            is, met de prijs incl. verzending.
           </p>
           <div className="mt-6">
             <ButtonLink href="/stickwijzer" variant="accent">

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ADVICE_VERSION } from '@/advice-engine/ruleSetVersion';
 import { StickwijzerLoader } from '@/components/stickwijzer/StickwijzerLoader';
 import { QUESTIONS } from '@/content/stickwijzer/questions';
+import { CheckIcon } from '@/components/ui/icons';
 
 const ROUTE_OPTIONS =
   QUESTIONS.route_self_select.input.kind === 'single'
@@ -29,9 +30,21 @@ export default function StickwijzerPage() {
         de bronnen. Het advies is een hulpmiddel, geen garantie, en positie is
         nooit de beslissende factor.
       </p>
-      <p className="mt-2 text-sm text-lijngrijs group-has-[[data-advice-result]]/stickwijzer:hidden">
-        Je hebt geen account nodig. We vragen geen naam, e-mailadres of
-        geboortedatum.{' '}
+      {/* What a visitor may worry about before starting (redesign fase 4); each item is a rule the wizard keeps. */}
+      <ul className="mt-4 flex flex-wrap gap-2 text-sm group-has-[[data-advice-result]]/stickwijzer:hidden">
+        {/* The number of steps is in the step counter right below. */}
+        {[
+          'Geen account, naam of e-mailadres',
+          'Antwoorden blijven in je browser',
+          'Vergoedingen tellen niet mee',
+        ].map((item) => (
+          <li key={item} className="inline-flex items-center gap-1.5 rounded-full border border-rand bg-white px-3 py-1.5 text-inkt/80">
+            <CheckIcon size={14} className="shrink-0 text-veld" />
+            {item}
+          </li>
+        ))}
+      </ul>
+      <p className="mt-3 text-sm group-has-[[data-advice-result]]/stickwijzer:hidden">
         <Link
           href="/methodiek"
           className="font-semibold text-veld hover:underline"

@@ -7,6 +7,7 @@ import { FeaturedProducts } from './FeaturedProducts';
 import { SeasonBand } from './SeasonBand';
 import { BuyingIntro } from './BuyingIntro';
 import { InstagramFeed } from './InstagramFeed';
+import { WhyUs } from './WhyUs';
 
 export function HomePage({ variant }: { variant: HomeIntroVariant }) {
   const products = getAllProducts();
@@ -19,6 +20,7 @@ export function HomePage({ variant }: { variant: HomeIntroVariant }) {
       {variant === 'season' && isIndoorSeason() && <SeasonBand />}
       {variant === 'buying' && <BuyingIntro />}
       <StickwijzerExplainer productCount={adviceCount} />
+      <WhyUs />
       <FeaturedProducts products={products.slice(0, 3)} />
       <InstagramFeed />
     </>

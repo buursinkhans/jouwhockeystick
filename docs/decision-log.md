@@ -2028,3 +2028,21 @@ Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaa
 3. **Geen stockfoto's** van spelers of clubs (`docs/designsysteem.md` §9).
 
 **Betrokken bestanden:** `src/app/over-ons/page.tsx` (+ test), `src/components/home/Hero.tsx`, `src/assets/over-ons/hans-buursink.jpg`, `src/lib/analytics/events.ts` (commentaar), `docs/designsysteem.md`.
+
+## 2026-11-03 — Redesign fase 4: vertrouwen met bewijs
+
+**Opdracht eigenaar (2026-11-03):** meer vertrouwen, autoriteit en bewijs inbouwen in homepage, stickwijzer, advies, vergelijken, navigatie en footer; direct bouwen in plaats van adviseren.
+
+1. **Getelde feiten** (`src/catalog/trustFacts.ts`): veldsticks, merken, partnerwinkels, met de hand nagelopen sticks en de leesdatum van de prijzen, allemaal uit catalogus en feeds. Op de homepage als vier tegels.
+2. **Vier afspraken** (`src/content/trust.ts`, `PromiseList`): de vergoeding telt nooit mee; bron en datum bij elk gegeven; actuele prijzen zonder kortingstrucs; eerlijk over de afweging. Elke afspraak linkt naar de pagina die het laat zien. Op de homepage ("Waarom jouwhockeystick.nl") en bovenaan `/methodiek`.
+3. **Vergelijking met één webshop:** aanbod, prijs, keuze, gegevens en belang, neutraal over de winkel. **Bewust geen namen van andere winkels:** een vergelijking met een genoemde winkel moet per winkel objectief en controleerbaar zijn, en een winkel kan partner worden.
+4. **Homepage-hero:** de tekst noemt nu ook dat je per stick ziet bij welke van de vier partnerwinkels hij te koop is, met de prijs incl. verzending.
+5. **Stickwijzer:** drie zekerheden boven de eerste vraag (geen account, antwoorden in je browser, vergoedingen tellen niet mee); het aantal stappen staat in de stapteller eronder. Dezelfde beloftes als ervoor; "geen geboortedatum" staat nog bij de leeftijdsvraag zelf.
+6. **Advies:** drie vaste afspraken boven de eerste stick.
+7. **Footer:** vier kolommen (merk en partnervermelding, Kiezen, Leren, Over ons), met "Gemaakt door Hans Buursink, hockeyvader".
+
+**Bewust niet:**
+- **Reviews, sterren en gebruikersaantallen:** we hebben geen bron die we kunnen tonen, en het zou verboden schijnbewijs zijn (CLAUDE.md, GEO/SEO).
+- **Het aandeel merkgegevens als feit op de homepage:** 33% van de specificaties van de nagelopen sticks komt van de merksite. Dat staat per gegeven op de stickpagina, maar helpt op de homepage geen keuze.
+
+**Betrokken bestanden:** `src/catalog/trustFacts.ts`, `src/content/trust.ts` (+ test), `src/components/trust/{ProofFacts,PromiseList}.tsx`, `src/components/home/{WhyUs,HomePage,Hero}.tsx`, `src/app/stickwijzer/page.tsx`, `src/components/stickwijzer/QuizResult.tsx`, `src/content/stickwijzer/resultCopy.ts`, `src/app/methodiek/page.tsx`, `src/components/layout/Footer.tsx`, `docs/designsysteem.md`.
