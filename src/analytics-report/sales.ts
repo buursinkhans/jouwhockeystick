@@ -27,6 +27,8 @@ export type SalesData = {
   previous: Period;
   bol: { current: Source<BolRow>; previous: Source<BolRow> };
   passa: { current: Source<PassaRow>; previous: Source<PassaRow> };
+  /** HockeyCity: the same TradeTracker reference report, campaign 27931 (decision log 2026-11-03). */
+  hockeyCity?: { current: Source<PassaRow>; previous: Source<PassaRow> };
 };
 
 const PLACEMENT_LABELS: Record<RetailerPlacement, string> = {
@@ -141,6 +143,22 @@ export function formatSalesReport(data: SalesData): string {
     '',
   ];
 
+  const tradeTracker = (
+    name: string,
+    source: { current: Source<PassaRow>; previous: Source<PassaRow> },
+  ) => ({
+    name,
+    now:
+      'error' in source.current
+        ? source.current.error
+        : byPlacement(source.current.rows, (r) => r.reference, passaCount),
+    before:
+      'error' in source.previous
+        ? null
+        : byPlacement(source.previous.rows, (r) => r.reference, passaCount),
+    unit: 'verkopen',
+  });
+
   const shops: {
     name: string;
     now: Map<string, Totals> | string;
@@ -159,26 +177,8 @@ export function formatSalesReport(data: SalesData): string {
           : byPlacement(data.bol.previous.rows, (r) => r.subId, bolCount),
       unit: 'bestellingen',
     },
-    {
-      name: 'PassaHockey',
-      now:
-        'error' in data.passa.current
-          ? data.passa.current.error
-          : byPlacement(
-              data.passa.current.rows,
-              (r) => r.reference,
-              passaCount,
-            ),
-      before:
-        'error' in data.passa.previous
-          ? null
-          : byPlacement(
-              data.passa.previous.rows,
-              (r) => r.reference,
-              passaCount,
-            ),
-      unit: 'verkopen',
-    },
+    tradeTracker('PassaHockey', data.passa),
+    ...(data.hockeyCity ? [tradeTracker('HockeyCity', data.hockeyCity)] : []),
   ];
 
   lines.push('## Samenvatting', '');
@@ -198,22 +198,21 @@ export function formatSalesReport(data: SalesData): string {
 
   lines.push('', '## Per plek op de site', '');
   lines.push(
-    '| Plek | bol.com kliks | bol.com bestellingen | PassaHockey kliks | PassaHockey verkopen |',
-    '|---|---|---|---|---|',
+    `| Plek | ${shops.map((s) => `${s.name} kliks | ${s.name} ${s.unit}`).join(' | ')} |`,
+    `|---|${shops.map(() => '---|---').join('|')}|`,
   );
-  const [bol, passa] = shops.map((s) =>
-    typeof s.now === 'string' ? null : s.now,
-  );
+  const maps = shops.map((s) => (typeof s.now === 'string' ? null : s.now));
   const labels = [...Object.values(PLACEMENT_LABELS), OTHER];
   for (const label of labels) {
-    const b = bol?.get(label);
-    const p = passa?.get(label);
-    if (!b && !p && label === OTHER) continue;
+    const found = maps.map((map) => map?.get(label));
+    if (found.every((t) => !t) && label === OTHER) continue;
     const cell = (v: number | undefined, available: boolean) =>
       available ? String(v ?? 0) : '–';
-    lines.push(
-      `| ${label} | ${cell(b?.clicks, bol !== null)} | ${cell(b?.orders, bol !== null)} | ${cell(p?.clicks, passa !== null)} | ${cell(p?.orders, passa !== null)} |`,
+    const cells = maps.map(
+      (map, i) =>
+        `${cell(found[i]?.clicks, map !== null)} | ${cell(found[i]?.orders, map !== null)}`,
     );
+    lines.push(`| ${label} | ${cells.join(' | ')} |`);
   }
 
   if (!('error' in data.bol.current)) {
@@ -243,7 +242,7 @@ export function formatSalesReport(data: SalesData): string {
     }
     lines.push(
       '',
-      '_PassaHockey-links dragen alleen de plek mee, niet de stick; per stick zie je dat in TradeTracker._',
+      '_PassaHockey- en HockeyCity-links dragen alleen de plek mee, niet de stick; per stick zie je dat in TradeTracker._',
     );
   }
 

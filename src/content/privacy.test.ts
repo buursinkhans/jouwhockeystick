@@ -6,12 +6,14 @@ const thirdParties = PRIVACY.sections.find((s) => s.heading === 'Afbeeldingen en
 const text = (thirdParties?.paragraphs ?? []).join(' ');
 
 describe('privacy statement 1.4 (decision log 2026-10-29)', () => {
-  it('names all three partner shops and the network behind each', () => {
-    expect(text).toMatch(/bol\.com, PassaHockey of Plutosport/);
+  it('names all four partner shops and the network behind each', () => {
+    // HockeyCity since 1.6 (decision log 2026-11-03).
+    expect(text).toMatch(/bol\.com, PassaHockey, Plutosport of HockeyCity/);
     expect(text).toMatch(/bol\.com Partnerprogramma/);
     expect(text).toMatch(/TradeTracker/);
     expect(text).toMatch(/affiliatenetwerk Awin/);
     expect(text).toMatch(/awin1\.com/);
+    expect(text).toMatch(/De links naar HockeyCity lopen, net als die naar PassaHockey, via het affiliatenetwerk TradeTracker/);
   });
 
   it('says what our links contain and that cookies only come after a click, on their sites', () => {
@@ -21,13 +23,13 @@ describe('privacy statement 1.4 (decision log 2026-10-29)', () => {
   });
 
   it('lists the shops and their image servers as sources of product photos', () => {
-    expect(text).toMatch(/bol\.com, PassaSports en Plutosport/);
+    expect(text).toMatch(/bol\.com, PassaSports, Plutosport en HockeyCity/);
     expect(text).toMatch(/beeldservers/);
   });
 
   it('has a new version and date, and keeps the earlier statements', () => {
-    // 1.5 since 2026-11-01 (schoenenwijzer); the 1.4 statements stay.
-    expect(['1.4', '1.5']).toContain(PRIVACY.version);
+    // 1.5 since 2026-11-01 (schoenenwijzer), 1.6 since 2026-11-03 (HockeyCity); the 1.4 statements stay.
+    expect(['1.4', '1.5', '1.6']).toContain(PRIVACY.version);
     expect(PRIVACY.updatedAt >= '2026-10-29').toBe(true);
     expect(all).toMatch(/PostHog via ons eigen domein|via ons eigen domein naar PostHog/);
     expect(all).toMatch(/we plaatsen geen cookies/);

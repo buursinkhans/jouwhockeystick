@@ -51,7 +51,7 @@ describe('/sticks meta description (decision log 2026-10-29)', () => {
 
 describe('/sticks offer date (decision log 2026-10-29)', () => {
   it('reads the dates the weekly sync writes, not today', () => {
-    expect(FEED_READ_DATES).toHaveLength(5);
+    expect(FEED_READ_DATES).toHaveLength(6);
     expect(FEED_READ_DATES).toContain(PASSAHOCKEY_IMPORT_DATE);
     expect(getFeedReadDates(['2026-10-28', '2026-10-28'])).toEqual({ from: '2026-10-28', to: '2026-10-28' });
     expect(getFeedReadDates(['2026-10-28', '2026-10-21', '2026-10-27'])).toEqual({ from: '2026-10-21', to: '2026-10-28' });

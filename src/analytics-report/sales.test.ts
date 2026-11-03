@@ -36,6 +36,26 @@ describe('parsing', () => {
   });
 });
 
+describe('formatSalesReport with HockeyCity (decision log 2026-11-03)', () => {
+  it('adds HockeyCity to the summary and the table, from its own TradeTracker campaign', () => {
+    const report = formatSalesReport({
+      current: { from: '2026-11-02', to: '2026-11-08' },
+      previous: { from: '2026-10-26', to: '2026-11-01' },
+      bol: { current: { rows: [] }, previous: { rows: [] } },
+      passa: { current: { rows: [] }, previous: { rows: [] } },
+      hockeyCity: {
+        current: { rows: [{ reference: 'productpagina', clicks: 3, sales: 1 }] },
+        previous: { error: 'x' },
+      },
+    });
+    expect(report).toContain('**HockeyCity:** 3 kliks, 1 verkopen.');
+    expect(report).toContain(
+      '| Plek | bol.com kliks | bol.com bestellingen | PassaHockey kliks | PassaHockey verkopen | HockeyCity kliks | HockeyCity verkopen |',
+    );
+    expect(report).toContain('| Stickpagina | 0 | 0 | 0 | 0 | 3 | 1 |');
+  });
+});
+
 describe('formatSalesReport', () => {
   const data: SalesData = {
     current: { from: '2026-10-12', to: '2026-10-18' },

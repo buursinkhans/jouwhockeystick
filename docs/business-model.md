@@ -121,7 +121,7 @@ Het eerdere plan voor deze tussenstap, met een mailto-bestelformulier en aanname
 | bol.com | bol.com Partnerprogramma | 7% (Sport) | 5 dagen | goedgekeurd, live | |
 | PassaHockey | TradeTracker | 5% | 14 dagen | goedgekeurd, live | |
 | Plutosport NL | Awin | 5% | 15 dagen | goedgekeurd, live (knop bij zekere feedkoppelingen, 2026-10-27) | adverteerder-ID 8342; feed (Awin) bevat 113 hockeysticks op plutosport.nl: Indian Maharadja, Brabo, Osaka, adidas, Princess, Reece; geen Grays of JDH. Overlapmeting in issue #99 |
-| HockeyCity.nl | TradeTracker | 5% | onbekend | aangevraagd | hockeyspecialist voor junioren; openbare pagina noemt 100 dagen cookie; productfeed onbekend |
+| HockeyCity.nl | TradeTracker | 5% | onbekend | goedgekeurd, live (2026-11-03; knop bij zekere of met de hand bevestigde koppelingen) | campagne 27931; feed (TradeTracker, #1633756) met ongeveer 620 producten, waarvan ongeveer 260 sticks en 70 schoenen; stick-GTIN's zijn eigen nummers van HockeyCity, geen EAN |
 | Jumbo Sports | Daisycon | 12% | 100 dagen | aangevraagd | golf- en hockeywinkel; productfeed en deeplinks |
 | DAKA | Daisycon | 5% | 30 dagen | aangevraagd | algemene sportwinkel met hockey; productfeed onbekend |
 | Decathlon NL | Odyssey Partnerships | onbekend | onbekend | aangevraagd | verkoopt via de marketplace o.a. Grays; EU-check Odyssey nodig |

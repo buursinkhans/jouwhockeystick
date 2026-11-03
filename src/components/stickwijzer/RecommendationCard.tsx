@@ -159,6 +159,7 @@ export function RecommendationCard({
           passaSportsOnly={isPassaSportsOnly(product)}
           alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
           alsoAtPlutosport={product.plutosportProductUrl !== undefined}
+          alsoAtHockeyCity={product.hockeyCityProductUrl !== undefined}
         />
       )}
 

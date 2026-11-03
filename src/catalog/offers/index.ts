@@ -9,7 +9,9 @@ import { SHIPPING, shippingCostEur, type RetailerId } from '@/lib/retailers';
 import { isSoldAtBol } from '../shop';
 import type { Product } from '../types';
 import { PASSAHOCKEY_LIVE_PRICES } from '../imported/passaPrices';
+import type { ShoeListing } from '../shoes/types';
 import { BOL_PRICES } from './bolPrices';
+import { HOCKEYCITY_OFFERS } from './hockeyCity';
 import { PLUTOSPORT_MATCHES } from './matches';
 import type { Offer } from './sort';
 
@@ -46,6 +48,30 @@ export function withPlutosport(product: Product, plutosport: PlutosportMatches):
   return match ? { ...product, plutosportProductUrl: match.productUrl } : product;
 }
 
+export type HockeyCityStickMatch = {
+  /** Product page on hockeycity.nl; the tracking link is built in src/lib/retailers.ts. */
+  productUrl: string;
+  /** 'naam': a 'zeker' name match; 'handmatig': confirmed by the owner (hockeyCityConfirmed.ts). */
+  method: 'naam' | 'handmatig';
+  /** The page's current price incl. btw; the feed lists no lengths. */
+  priceEur: number;
+};
+
+export type HockeyCityOffers = {
+  /** YYYY-MM-DD: when the feed was read. */
+  date: string;
+  /** Sticks with an in-stock HockeyCity page. */
+  sticks: Readonly<Record<string, HockeyCityStickMatch>>;
+  /** Shoe models (curated or imported) with a HockeyCity page of the same EAN. */
+  shoes: Readonly<Record<string, ShoeListing>>;
+};
+
+/** Adds the HockeyCity page to a stick that has a confirmed match. */
+export function withHockeyCity(product: Product, hockeyCity: HockeyCityOffers): Product {
+  const match = hockeyCity.sticks[product.slug];
+  return match ? { ...product, hockeyCityProductUrl: match.productUrl } : product;
+}
+
 const offer = (
   retailer: RetailerId,
   productUrl: string,
@@ -66,7 +92,7 @@ const offer = (
 /**
  * Every partner shop that sells this stick, unsorted. Only confirmed pages
  * (rule 6 of the spec): bol.com with a bol.com product page, never a search;
- * Plutosport only with a 'zeker' match.
+ * Plutosport only with a 'zeker' match; HockeyCity with a 'zeker' or confirmed one.
  */
 export function getOffers(product: Product): Offer[] {
   const offers: Offer[] = [];
@@ -102,6 +128,12 @@ export function getOffers(product: Product): Offer[] {
       // Only in-stock pages are matched (scripts/plutosport-feed.ts).
       offers.push(offer('plutosport', product.plutosportProductUrl, match?.priceEur ?? null, PLUTOSPORT_MATCHES.date, true, match?.lengths));
     }
+  }
+
+  if (product.hockeyCityProductUrl) {
+    // Only in-stock pages are matched (scripts/hockeycity-feed.ts); the feed has no lengths.
+    const match = HOCKEYCITY_OFFERS.sticks[slug];
+    offers.push(offer('hockeycity', product.hockeyCityProductUrl, match?.priceEur ?? null, HOCKEYCITY_OFFERS.date, true));
   }
   return offers;
 }
