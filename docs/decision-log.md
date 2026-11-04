@@ -2205,3 +2205,21 @@ GitHub keurde het bestand daardoor af. Elke run sinds de merge van #141 faalde m
 - **Test op verborgen feedmodellen:** verwachtte dat het importbestand nog feedmodellen met de EAN van een nagekeken model bevat. Sinds fase 1b slaat de import die over en geeft hun winkelregels aan het nagekeken model; alleen het oude bestand van 31 oktober had ze nog. De test controleert nu alleen dat zo'n model nooit los zichtbaar is, en dat elk nagekeken model winkelregels heeft.
 
 Adviesregels en `ruleSetVersion` zijn niet veranderd.
+
+## 2026-11-04 — Daka: dezelfde naam zonder modeljaar telt als koppeling
+
+**Besluit eigenaar (2026-11-04):** bij Daka telt een stick als gekoppeld als de naam na het gelijkmaken hetzelfde is, er maar één kandidaat is en alleen het modeljaar onbekend is. Dat wijkt af van de regel "zelfde model én modeljaar" (Commerce, Prijsvergelijking) en geldt alleen voor Daka.
+
+**Waarom:** Daka zet bijna nooit een modeljaar in de feed, en bij 139 van onze sticks staat ook geen modeljaar. Alle 182 twijfelgevallen hadden daardoor een modeljaarprobleem. Verschillen als PB/Probow, LB/Lowbow en Kids/Junior telden al als gelijk; die waren niet de reden.
+
+**Voorwaarden** (`matchStick`, `yearOnly`; `dakaStickMatches`, methode `naam-zonder-jaar`):
+- dezelfde naam: merk, modelwoorden en bow; geen extra woord bij Daka (zoals "Limited", "Forged" of "SG9") en de bow niet weggelaten;
+- precies één kandidaat bij Daka en geen andere jaargang van dat model;
+- een bekend modeljaar dat aan beide kanten verschilt, blijft altijd een uitsluiting;
+- op voorraad, zoals elke Daka-knop.
+
+**Resultaat eerste run:** 44 sticks krijgen een Daka-knop. Ze staan niet meer op de afvinklijst. Wat overblijft, beslist de eigenaar nog steeds met de hand. Een voorbeeld is de Grays Dynabow 10: Daka heeft twee pagina's met die naam en verschillende prijzen.
+
+**Risico:** Daka verkoopt soms een oudere jaargang onder dezelfde naam. Dan klopt de prijsvergelijking voor die stick niet. De eigenaar aanvaardt dat risico.
+
+**Betrokken bestanden:** `src/catalog/plutosportFeed.ts`, `src/catalog/dakaFeed.ts` (+ test), `src/catalog/offers/{index,daka}.ts`, `scripts/daka-feed.ts`, `CLAUDE.md`.

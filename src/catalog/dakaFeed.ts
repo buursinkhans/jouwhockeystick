@@ -224,6 +224,9 @@ export function dakaStickMatches(
     if (match.level === 'zeker' && match.model) {
       const result_ = entry(match.model, 'naam');
       if (result_) result[slug] = result_;
+    } else if (match.level === 'twijfel' && match.yearOnly && match.model) {
+      const result_ = entry(match.model, 'naam-zonder-jaar');
+      if (result_) result[slug] = result_;
     }
   }
   return result;

@@ -79,8 +79,11 @@ export function withHockeyCity(product: Product, hockeyCity: HockeyCityOffers): 
 export type DakaStickMatch = {
   /** Product page on daka.nl; the tracking link is built in src/lib/retailers.ts. */
   productUrl: string;
-  /** 'naam': a 'zeker' name match; 'handmatig': confirmed by the owner (dakaConfirmed.ts). */
-  method: 'naam' | 'handmatig';
+  /**
+   * 'naam': a 'zeker' name match; 'naam-zonder-jaar': the same name and one candidate, only the model
+   * year unknown (owner's decision, decision log 2026-11-04); 'handmatig': confirmed by the owner (dakaConfirmed.ts).
+   */
+  method: 'naam' | 'naam-zonder-jaar' | 'handmatig';
   /** Lowest price of a length in stock incl. btw (never the feed's price_old). */
   priceEur: number;
   /** Lengths in inches in stock. */
