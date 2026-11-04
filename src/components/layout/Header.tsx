@@ -80,7 +80,8 @@ export function Header() {
           <ButtonLink
             href="/stickwijzer"
             variant="accent"
-            className="order-1 min-h-11 shrink-0 px-3! py-2! shadow-sm sm:px-4! lg:order-last"
+            // The compact label keeps logo, six links and this button on one row (fase 7).
+            className="order-1 min-h-11 shrink-0 px-3! py-2! text-sm! sm:px-4! lg:order-last"
           >
             Stickwijzer
           </ButtonLink>

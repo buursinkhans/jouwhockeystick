@@ -56,12 +56,22 @@ Zijmarge altijd `px-4 sm:px-6`; geen horizontaal scrollen op 360 px.
 - **Header:** een donkere balk erboven met wat we zijn ("Onafhankelijke stickvergelijker · Prijzen van 4 partnerwinkels · Vergoeding telt niet mee in het advies", op een telefoon alleen het eerste) en daaronder de witte header, die meescrolt (`sticky`, licht doorschijnend met blur). Ankers houden daarvoor 5,5 rem vrij (`scroll-padding-top`).
 - **Paginakop:** `PageHeader` (`src/components/ui/PageHeader.tsx`): een band van krijt naar wit met kruimelpad, label, H1 en intro, op dezelfde breedte als de body (`PageBody`). Op sticks, zaalsticks, hockeyschoenen, kennisbank, merken, vergelijken, Over ons en methodiek.
 - **Productfoto:** op wit (`bg-white`), `object-contain`, in de catalogus 160 px, op de stickpagina tot 256 px, in het advies tot 128 px. Geen patroon achter een foto.
-- **Zeshoekpatroon** (`bg-hex-light`, `bg-hex-dark`): alleen in de homepage-hero en de footer, als merkaccent. Niet in kaarten, fotovlakken of secties.
+- **Zeshoekpatroon** (`bg-hex-dark`): alleen in de footer, als merkaccent (sinds fase 7 niet meer in de hero). Niet in kaarten, fotovlakken of secties.
 - **Knoppen:** `Button`/`ButtonLink` uit `src/components/ui/Button.tsx`. Primair veldblauw, secundair omlijnd; `accent` (oranje) alleen voor de stickwijzer.
 - **Profielkaart** (advies): drie vakken (maat, niveau, route) in één rij, ook op een telefoon.
 - **Stickkaart in het advies** (fase 6): rolbadge (Beste match, Veilige keuze, Ambitieuze keuze), merk en naam, vier vakken (maat, kromming, carbon, modeljaar), dan "Waarom deze stick past" naast "Waar je op inlevert", en pas daarna "Waar te koop". **De prijs staat nooit bovenaan**: eerst de pasvorm, dan de winkels.
 - **Antwoorden in de stickwijzer:** tikvlakken van 48 px; gekozen = blauwe rand, krijt, ring en vet.
 - **Filters:** gewone GET-formulieren met `select`; geen JavaScript nodig, elke selectie is een eigen URL, de canonical blijft de ongefilterde pagina.
+
+## 5b. Visuele uitvoering (fase 7)
+
+- **Kleurtrappen:** `veld-donker` (#12378A) en `bal-donker` (#F07A0C) voor hover en ingedrukt (donkerder, nooit lichter), `mist` (#F6F8FC) als zachtste vlak (navigatie, secundaire knop).
+- **Typografie:** H1 800, −0,03 em, regelafstand 1,05; H2 750, −0,022 em, 1,15; H3/H4 1,25; lopende tekst 1,6. Koppen gebruiken de optische maat van Bricolage. Alinea's breken met `text-wrap: pretty`, koppen met `balance`.
+- **Maten:** homepage-H1 2,6 rem, vanaf `sm` 6xl; sectiekoppen op de homepage 3xl, vanaf `sm` 2,5 rem; paginakop 2,125 rem, vanaf `sm` 5xl.
+- **Ritme:** homepage-secties `py-20`, vanaf `sm` `py-28`; paginakop `pb-12`/`sm:pb-16`; footer `pt-16`/`sm:pt-20`.
+- **Knoppen:** 44 px hoog, label 15 px, een lichte binnenrand bovenaan, donkerder bij hover en 1 px omlaag bij indrukken (niet bij `prefers-reduced-motion`). In de header houdt de knop een compact label, zodat alles op één regel past.
+- **Hero:** geen patroon, een vlak van krijt naar wit, een staande foto (4:5) met één bijschrift erop in plaats van losse pillen.
+- **Productkaarten en schoenkaarten:** de hele kaart is de link (de naam is over de kaart uitgerekt), de kooprij ligt erboven als eigen link. Grotere foto (176 px) die bij hover licht vergroot, de naam in 17 px, een samenvatting van twee regels en sterke punten in compacte letter onder een lijn.
 
 ## 5a. Vertrouwen (fase 4)
 

@@ -11,25 +11,33 @@ import { ProductProsAndCons } from './ProductProsAndCons';
  */
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <article className="flex h-full flex-col card p-5 transition-shadow hover:shadow-card-hover">
-      <div className="flex h-44 items-center justify-center rounded-2xl bg-white">
-        <ProductImage product={product} className="h-40 w-40" />
+    // Fase 7: the whole card opens the stick page (the name's link is stretched
+    // over it); the shop row sits above that layer so it stays its own link.
+    <article className="card card-link group relative flex h-full flex-col p-5">
+      <div className="flex h-48 items-center justify-center">
+        <ProductImage
+          product={product}
+          className="h-44 w-44 transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        />
       </div>
-      <p className="mt-4 text-xs font-semibold tracking-wide text-veld uppercase">
+      <p className="mt-4 text-xs font-semibold tracking-[0.06em] text-veld uppercase">
         {product.brand}
       </p>
-      <h3 className="mt-1 text-lg leading-snug font-bold">
-        <Link href={productPath(product)} className="hover:underline">
+      <h3 className="mt-1 text-[1.0625rem] leading-snug font-bold text-inkt">
+        <Link
+          href={productPath(product)}
+          className="after:absolute after:inset-0 after:rounded-[1.25rem]"
+        >
           {product.name}
         </Link>
       </h3>
-      <p className="mt-2 line-clamp-3 text-sm text-lijngrijs">
+      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-lijngrijs">
         {product.summary}
       </p>
-      <div className="mt-4">
-        <ProductProsAndCons product={product} limit={1} stacked />
+      <div className="mt-4 border-t border-rand/70 pt-4">
+        <ProductProsAndCons product={product} limit={1} stacked compact />
       </div>
-      <div className="mt-auto pt-4">
+      <div className="relative z-10 mt-auto pt-5">
         <OfferSummary product={product} placement="catalogus" />
       </div>
     </article>

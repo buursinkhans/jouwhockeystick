@@ -101,8 +101,8 @@ function SectionHeading({
       <p className="eyebrow">
         {eyebrow}
       </p>
-      <h2 className="mt-2 text-3xl font-extrabold tracking-tight">{title}</h2>
-      {children && <div className="mt-3 text-lg text-inkt/80">{children}</div>}
+      <h2 className="mt-3 max-w-3xl text-3xl text-inkt sm:text-[2.5rem]">{title}</h2>
+      {children && <div className="mt-4 max-w-2xl text-lg leading-relaxed text-inkt/80">{children}</div>}
     </div>
   );
 }
@@ -198,7 +198,7 @@ export function StickwijzerExplainer({
     <>
       {/* A krijt band between the white blocks (designsysteem: white base, krijt as accent surface). */}
       <div className="border-b border-rand bg-krijt">
-        <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+        <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
           <SectionHeading eyebrow="Zo werkt het" title="Van een paar antwoorden naar maximaal drie sticks">
             <p>
               De stickwijzer vergelijkt je antwoorden met alle {productCount}{' '}
@@ -240,7 +240,7 @@ export function StickwijzerExplainer({
         </section>
       </div>
 
-      <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+      <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
         <div className="grid items-center gap-10 rounded-3xl bg-white p-6 ring-1 ring-rand sm:p-10 lg:grid-cols-2">
           <div>
             <SectionHeading

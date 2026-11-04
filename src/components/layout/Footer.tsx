@@ -43,7 +43,7 @@ const FOOTER_COLUMNS: ReadonlyArray<{ heading: string; links: ReadonlyArray<{ hr
 export function Footer() {
   return (
     <footer className="focus-ring-light print:hidden bg-hex-dark bg-veld text-nl-negatief">
-      <div className="mx-auto max-w-5xl px-4 py-12 text-sm sm:px-6">
+      <div className="mx-auto max-w-5xl px-4 pt-16 pb-10 text-sm sm:px-6 sm:pt-20">
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <div>
             <Logo variant="wordmark-negative" size={30} tagline />
