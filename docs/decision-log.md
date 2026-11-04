@@ -2090,11 +2090,3 @@ Binnen de merkinstructie: veldblauw als hoofdkleur, oranje alleen voor de stickw
 De link "Gemaakt door Hans Buursink, hockeyvader" met portret is uit de homepage-hero verwijderd, en dezelfde tekst uit de footer (die staat ook op de homepage). De foto, naam en "Hockeyvader" blijven op Over ons. Het analytics-commentaar bij `home_block_click` noemt de link niet meer.
 
 **Betrokken bestanden:** `src/components/home/Hero.tsx`, `src/components/layout/Footer.tsx`, `src/lib/analytics/events.ts` (commentaar), `docs/designsysteem.md`.
-
-## 2026-11-04 — Wekelijkse sync hersteld (workflowbestand ongeldig sinds 2026-11-03)
-
-**Wat:** bij de aanpassing van `.github/workflows/passa-sync.yml` voor HockeyCity fase 2 (2026-11-03) brak één regel van de stap "Pull request openen" af (de `grep -v` miste `' -e '^src/catalog/shoes/importedHockeyCity.ts' || true)`), en bleven er twee kopieën van het slot van die stap staan, met te weinig inspringing. GitHub keurde het bestand daardoor af: elke run sinds de merge van #141 faalde meteen, en de geplande run van woensdag 2026-11-04 04:41 UTC is niet gestart. Prijzen, voorraad en imports zijn die week dus niet bijgewerkt.
-
-**Herstel:** de regel staat er weer heel, de losse kopieën zijn weg. Het bestand is lokaal als YAML ingelezen (10 stappen, de laatste compleet). Na de merge moet de sync één keer met de hand gestart worden (Actions → PassaHockey-sync → Run workflow), zodat de prijzen niet ouder worden dan 14 dagen.
-
-**Les:** workflowbestanden niet meer met PowerShell-tekstvervanging aanpassen (die maakte de regel kapot); alleen met een gecontroleerde bewerking, en altijd het resultaat als YAML inlezen voordat het de deur uit gaat.
