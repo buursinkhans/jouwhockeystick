@@ -22,6 +22,8 @@ import { getSimilarSticks } from '@/catalog/similar';
 import { getProductFamily } from '@/catalog/family';
 import { FamilyTable } from '@/components/catalog/FamilyTable';
 import { DISCIPLINE_LABELS } from '@/catalog/labels';
+import { getModelYear } from '@/catalog/modelYear';
+import { evidenceGaps, sourceMixText } from '@/content/evidence';
 import { absoluteUrl } from '@/lib/site';
 import { jsonLdHtml } from '@/lib/jsonLd';
 
@@ -50,6 +52,8 @@ export function ProductDetail({ product }: { product: Product }) {
   const now = new Date();
   const offers = getOffers(product);
   const lowest = lowestTotal(offers, { size: null, now });
+  // The last gap ("niet zelf in de hand gehad") is already in "Bronnen en methode" on this page.
+  const gaps = evidenceGaps(product, getModelYear(product) ?? null).slice(0, -1);
   // Offers only for prices visible in "Waar te koop" and at most 14 days old
   // (CLAUDE.md, Prijsvergelijking); the price is the shop's price, shipping
   // is shown apart. No Review or AggregateRating: we have not tested the sticks.
@@ -187,6 +191,11 @@ export function ProductDetail({ product }: { product: Product }) {
           <div className="mt-4">
             <ProductSpecTable product={product} hasCurrentOffers={lowest !== null} />
           </div>
+          {/* How sure we are, in one line under the specs (fase 8); the full list is under "Bronnen en methode". */}
+          <p className="mt-3 text-sm text-lijngrijs">
+            {sourceMixText(product)}{' '}
+            {gaps.join(' ')}
+          </p>
 
           <ProductFitAndSources product={product} />
 

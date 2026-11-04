@@ -2106,3 +2106,16 @@ De link "Gemaakt door Hans Buursink, hockeyvader" met portret is uit de homepage
 Geen wijziging aan inhoud, routes, adviesregels of analytics-events.
 
 **Betrokken bestanden:** `src/app/globals.css`, `src/components/ui/{Button,PageHeader}.tsx`, `src/components/home/{Hero,HeroPhotos,StickwijzerExplainer,WhyUs,FeaturedProducts}.tsx`, `src/components/catalog/{ProductCard,ProductProsAndCons}.tsx`, `src/components/shoes/ShoeCard.tsx`, `src/components/layout/{Header,MainNav,Footer}.tsx`, `docs/designsysteem.md`.
+
+## 2026-11-04 — Redesign fase 8: zeggen wat we weten, en wat niet
+
+**Opdracht eigenaar (2026-11-04):** vertrouwen, gezag, bewijs, geloofwaardigheid en de uitleg van het advies verbeteren, zonder het visuele ontwerp te veranderen. Alleen tekst in bestaande stijlen.
+
+1. **"Kort gezegd" per geadviseerde stick:** één concrete regel uit de eigen gegevens van de stick ("Kort gezegd: een low bow met 40% carbon, in 34 inch."). Zonder kromming en carbon vervalt de regel, want dan is er niets concreets te zeggen (`verdictLine`).
+2. **"Wat we niet weten" per geadviseerde stick:** wat ontbreekt (kromming, carbon, gewicht, modeljaar), wanneer kromming of carbon van een winkel komt in plaats van het merk, en altijd dat we de stick niet zelf in de hand hadden of gemeten (`evidenceGaps`). Dit volgt de bestaande bronregel "Eigen meting: niet gemeten. Praktijktest: nog niet getest."
+3. **Stickpagina:** onder de specificaties staat één zin over de herkomst ("Van de 6 gegevens over deze stick komen er 5 van JDH zelf en 1 is onze inschatting."), met wat er ontbreekt (`sourceMixText`). De volledige bronnenlijst blijft onder "Bronnen en methode".
+4. **"Waarom dit advies?"** begint met drie genummerde stappen met de aantallen van dít advies: wat afviel, hoe we wegen (zonder vergoeding, marge of winkel), en wat je ziet (`adviceSteps`).
+
+Alles komt uit de bronvelden van de stick en uit het advies zelf; er komt geen bewering bij die de gegevens niet dragen. Adviesregels, scores en analytics zijn ongewijzigd.
+
+**Betrokken bestanden:** `src/content/evidence.ts` (+ test), `src/content/stickwijzer/resultCopy.ts` (`adviceSteps`), `src/components/stickwijzer/{RecommendationCard,QuizResult}.tsx`, `src/components/catalog/ProductDetail.tsx`.
