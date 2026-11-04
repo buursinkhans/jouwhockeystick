@@ -62,7 +62,7 @@ export function Header() {
            * minimum (§4.1). Below 360 px only icon + "Stickadvies".
            */}
           <span className="mr-auto hidden sm:inline-flex">
-            <Logo variant="lockup" size={40} />
+            <Logo variant="lockup" size={40} tagline />
           </span>
           <span className="mr-auto hidden min-[360px]:inline-flex sm:hidden">
             <Logo variant="lockup" size={26} />

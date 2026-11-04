@@ -95,8 +95,16 @@ export function Logo({
     content = (
       <span className="flex items-center" style={{ gap: size * 0.4 }}>
         <LogoIcon size={size} />
-        <span className="jhs-wordmark" style={{ fontSize: size * 0.6 }}>
-          jouwhockeystick<span className="jhs-tld">.nl</span>
+        <span className="inline-flex flex-col">
+          <span className="jhs-wordmark" style={{ fontSize: size * 0.6 }}>
+            jouwhockeystick<span className="jhs-tld">.nl</span>
+          </span>
+          {/* The pay-off under the header wordmark instead of in the hero (owner, 2026-11-04). */}
+          {tagline && (
+            <span className="text-lijngrijs" style={{ fontSize: 13, lineHeight: 1.2, marginTop: 2 }}>
+              {BRAND_PAYOFF}
+            </span>
+          )}
         </span>
       </span>
     );
