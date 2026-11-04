@@ -12,9 +12,9 @@ export function WhyUs() {
   const facts = getTrustFacts();
   return (
     <section aria-labelledby="waarom-heading" className="border-y border-rand bg-krijt">
-      <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
         <p className="eyebrow">Waarom jouwhockeystick.nl</p>
-        <h2 id="waarom-heading" className="mt-2 max-w-3xl text-3xl font-extrabold tracking-tight">
+        <h2 id="waarom-heading" className="mt-3 max-w-3xl text-3xl text-inkt sm:text-[2.5rem]">
           Onafhankelijk advies, met alles wat je nodig hebt om het te controleren
         </h2>
         <p className="mt-4 max-w-2xl text-lg text-inkt/80">{ORDER_PROMISE}</p>

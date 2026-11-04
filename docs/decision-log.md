@@ -2090,3 +2090,19 @@ Binnen de merkinstructie: veldblauw als hoofdkleur, oranje alleen voor de stickw
 De link "Gemaakt door Hans Buursink, hockeyvader" met portret is uit de homepage-hero verwijderd, en dezelfde tekst uit de footer (die staat ook op de homepage). De foto, naam en "Hockeyvader" blijven op Over ons. Het analytics-commentaar bij `home_block_click` noemt de link niet meer.
 
 **Betrokken bestanden:** `src/components/home/Hero.tsx`, `src/components/layout/Footer.tsx`, `src/lib/analytics/events.ts` (commentaar), `docs/designsysteem.md`.
+
+## 2026-11-04 — Redesign fase 7: visuele uitvoering
+
+**Opdracht eigenaar (2026-11-04):** alleen de visuele uitvoering verbeteren (hiërarchie, witruimte, typografie, kleur, ritme, consistentie, iconen, beeld en interactie), niet de inhoud, structuur of adviesregels.
+
+1. **Kleur:** stappen `veld-donker`, `bal-donker` en `mist` naast de merkkleuren. Hover maakt donkerder in plaats van lichter.
+2. **Typografie:** strakkere en zwaardere H1 en H2, de optische maat van Bricolage, `text-wrap: pretty` voor alinea's en een selectiekleur in veldblauw. De fonts en gewichten blijven die van de merkinstructie (§2.2).
+3. **Knoppen:** één hoogte en vorm, een iets groter label, een binnenrand, donkerder bij hover en een korte druk.
+4. **Hero:** zonder patroon, een grotere titel met een korte lead en een aparte regel over de winkels, een staande foto met één bijschrift (in plaats van drie zwevende pillen) en meer witruimte. **Afwijking van het designsysteem uit fase 3:** het zeshoekpatroon staat nu alleen nog in de footer.
+5. **Ritme:** homepage-secties en paginakoppen met meer lucht, één kopmaat voor de homepage-secties, ruimere footer.
+6. **Kaarten:** product- en schoenkaarten zijn als geheel klikbaar (de kooprij blijft een eigen link erboven), met een grotere foto die bij hover licht vergroot, een rustigere tekst en compacte sterke punten. De focusring blijft voor toetsenbordgebruik.
+7. **Navigatie:** stillere links, de huidige pagina in veldblauw op een mist-vlak.
+
+Geen wijziging aan inhoud, routes, adviesregels of analytics-events.
+
+**Betrokken bestanden:** `src/app/globals.css`, `src/components/ui/{Button,PageHeader}.tsx`, `src/components/home/{Hero,HeroPhotos,StickwijzerExplainer,WhyUs,FeaturedProducts}.tsx`, `src/components/catalog/{ProductCard,ProductProsAndCons}.tsx`, `src/components/shoes/ShoeCard.tsx`, `src/components/layout/{Header,MainNav,Footer}.tsx`, `docs/designsysteem.md`.

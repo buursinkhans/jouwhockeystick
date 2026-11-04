@@ -27,18 +27,14 @@ function HeroVisual() {
       href="/stickwijzer"
       aria-hidden="true"
       tabIndex={-1}
-      className="relative mx-auto block w-full max-w-xs sm:max-w-sm"
+      className="relative mx-auto block w-full max-w-sm"
     >
       <HeroPhotos />
-      <ul className="mt-3 flex flex-wrap gap-2 sm:absolute sm:top-4 sm:-left-8 sm:mt-0 sm:block sm:space-y-2 lg:-left-16">
+      {/* Fase 7: one quiet caption on the photo instead of three floating pills. */}
+      <ul className="absolute inset-x-3 bottom-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 rounded-2xl bg-white/90 px-4 py-2.5 text-[0.8125rem] font-semibold text-inkt shadow-card backdrop-blur-sm sm:inset-x-4 sm:bottom-4">
         {EXAMPLE_REASONS.map((reason) => (
-          <li
-            key={reason}
-            className="flex items-center gap-2 rounded-full border border-rand bg-white px-3 py-1.5 text-sm font-semibold text-inkt shadow-sm"
-          >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-veld text-white">
-              <CheckIcon size={13} />
-            </span>
+          <li key={reason} className="flex items-center gap-1.5">
+            <CheckIcon size={14} className="shrink-0 text-veld" />
             {reason}
           </li>
         ))}
@@ -88,24 +84,28 @@ function TrustLine() {
 export function Hero() {
   const { shops } = getTrustFacts();
   return (
-    <section className="bg-hex-light border-b border-rand bg-krijt">
-      <div className="mx-auto grid max-w-5xl items-center gap-8 px-4 py-10 sm:px-6 sm:py-12 md:grid-cols-[3fr_2fr]">
+    // Fase 7: a calm krijt-to-white field without the pattern, a larger title
+    // with a short lead, and the photo as the one strong image.
+    <section className="border-b border-rand/70 bg-gradient-to-b from-krijt to-white">
+      <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 pt-10 pb-12 sm:px-6 sm:pt-16 sm:pb-20 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
         <div>
           <div className="hidden sm:block">
-            <Logo variant="wordmark" size={30} tagline href={null} />
+            <Logo variant="wordmark" size={26} tagline href={null} />
           </div>
-          <h1 className="text-4xl leading-tight font-extrabold text-inkt sm:mt-5 sm:text-5xl">
+          <h1 className="text-[2.6rem] text-inkt sm:mt-8 sm:text-6xl">
             Vind de hockeystick die bij jou past
           </h1>
-          <p className="mt-4 max-w-xl text-lg text-inkt/80">
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-inkt/80 sm:text-xl">
             Beantwoord een paar vragen over lengte, ervaring, speelwensen en
             budget. Je krijgt de juiste maat en maximaal drie sticks, elk met
-            de redenen waarom hij past en eerlijk waar je op inlevert. Per
-            stick zie je bij welke van onze {shops} partnerwinkels hij te koop
-            is, met de prijs incl. verzending.
+            de redenen waarom hij past en eerlijk waar je op inlevert.
           </p>
-          <div className="mt-6">
-            <ButtonLink href="/stickwijzer" variant="accent">
+          <p className="mt-3 max-w-xl text-inkt/70">
+            Per stick zie je bij welke van onze {shops} partnerwinkels hij te
+            koop is, met de prijs incl. verzending.
+          </p>
+          <div className="mt-8">
+            <ButtonLink href="/stickwijzer" variant="accent" className="min-h-12 px-7 text-base">
               Start de stickwijzer
             </ButtonLink>
           </div>

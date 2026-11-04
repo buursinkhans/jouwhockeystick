@@ -10,13 +10,17 @@ import { ShoeOfferSummary } from './ShoeWhereToBuy';
 /** A shoe in the overview, like ProductCard: photo, name, kind, status and the cheapest shop. */
 export function ShoeCard({ shoe }: { shoe: Shoe }) {
   return (
-    <article className="flex h-full flex-col card p-5 transition-shadow hover:shadow-card-hover">
-      <div className="flex h-44 items-center justify-center rounded-2xl bg-white">
-        <ShoeImage shoe={shoe} className="h-40 w-40" />
+    // Same treatment as ProductCard (fase 7): the whole card opens the model page.
+    <article className="card card-link group relative flex h-full flex-col p-5">
+      <div className="flex h-48 items-center justify-center">
+        <ShoeImage
+          shoe={shoe}
+          className="h-44 w-44 transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        />
       </div>
-      <p className="mt-4 text-xs font-semibold tracking-wide text-veld uppercase">{shoe.brand}</p>
-      <h3 className="mt-1 text-lg leading-snug font-bold">
-        <Link href={shoePath(shoe)} className="hover:underline">
+      <p className="mt-4 text-xs font-semibold tracking-[0.06em] text-veld uppercase">{shoe.brand}</p>
+      <h3 className="mt-1 text-[1.0625rem] leading-snug font-bold text-inkt">
+        <Link href={shoePath(shoe)} className="after:absolute after:inset-0 after:rounded-[1.25rem]">
           {shoe.model}
         </Link>
       </h3>
@@ -27,7 +31,7 @@ export function ShoeCard({ shoe }: { shoe: Shoe }) {
         <ShoeStatus shoe={shoe} compact />
         <NonMarkingWarning shoe={shoe} compact />
       </div>
-      <div className="mt-auto pt-4">
+      <div className="relative z-10 mt-auto pt-5">
         <ShoeOfferSummary shoe={shoe} />
       </div>
     </article>
