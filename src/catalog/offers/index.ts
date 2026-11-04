@@ -11,6 +11,7 @@ import type { Product } from '../types';
 import { PASSAHOCKEY_LIVE_PRICES } from '../imported/passaPrices';
 import type { ShoeListing } from '../shoes/types';
 import { BOL_PRICES } from './bolPrices';
+import { DAKA_OFFERS } from './daka';
 import { HOCKEYCITY_OFFERS } from './hockeyCity';
 import { PLUTOSPORT_MATCHES } from './matches';
 import type { Offer } from './sort';
@@ -72,6 +73,32 @@ export type HockeyCityOffers = {
 export function withHockeyCity(product: Product, hockeyCity: HockeyCityOffers): Product {
   const match = hockeyCity.sticks[product.slug];
   return match ? { ...product, hockeyCityProductUrl: match.productUrl } : product;
+}
+
+/** A stick at Daka, like HockeyCityStickMatch; lengths and price come from the feed rows (one per length). */
+export type DakaStickMatch = {
+  /** Product page on daka.nl; the tracking link is built in src/lib/retailers.ts. */
+  productUrl: string;
+  /** 'naam': a 'zeker' name match; 'handmatig': confirmed by the owner (dakaConfirmed.ts). */
+  method: 'naam' | 'handmatig';
+  /** Lowest price of a length in stock incl. btw (never the feed's price_old). */
+  priceEur: number;
+  /** Lengths in inches in stock. */
+  lengths?: readonly number[];
+};
+
+export type DakaOffers = {
+  /** YYYY-MM-DD: when the feed was read. */
+  date: string;
+  sticks: Readonly<Record<string, DakaStickMatch>>;
+  /** Shoe models with a Daka page of the same EAN (the feed rarely has EANs). */
+  shoes: Readonly<Record<string, ShoeListing>>;
+};
+
+/** Adds the Daka page to a stick that has a confirmed match. */
+export function withDaka(product: Product, daka: DakaOffers): Product {
+  const match = daka.sticks[product.slug];
+  return match ? { ...product, dakaProductUrl: match.productUrl } : product;
 }
 
 const offer = (
@@ -141,6 +168,18 @@ export function getOffers(product: Product): Offer[] {
       // Only in-stock pages are matched (scripts/hockeycity-feed.ts); lengths from the page when it could be read.
       const match = HOCKEYCITY_OFFERS.sticks[slug];
       offers.push(offer('hockeycity', product.hockeyCityProductUrl, match?.priceEur ?? null, HOCKEYCITY_OFFERS.date, true, match?.lengths));
+    }
+  }
+
+  if (product.dakaProductUrl) {
+    if (product.feedImport?.feed === 'daka') {
+      offers.push(
+        offer('daka', product.dakaProductUrl, product.priceIndicativeEur.value, product.feedImport.importedAt, true, product.lengthsInches.value),
+      );
+    } else {
+      // Only in-stock pages are matched (scripts/daka-feed.ts); lengths from the feed rows.
+      const match = DAKA_OFFERS.sticks[slug];
+      offers.push(offer('daka', product.dakaProductUrl, match?.priceEur ?? null, DAKA_OFFERS.date, true, match?.lengths));
     }
   }
   return offers;

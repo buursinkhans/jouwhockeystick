@@ -1,4 +1,4 @@
-export type RetailerId = 'bolcom' | 'passasports' | 'plutosport' | 'hockeycity';
+export type RetailerId = 'bolcom' | 'passasports' | 'plutosport' | 'hockeycity' | 'daka';
 
 /** Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert. */
 export type RetailerPlacement =
@@ -194,6 +194,55 @@ export function hockeyCityTrackingUrl(
 }
 
 /**
+ * Daka affiliate programme via Daisycon (programme 7290, media 441384,
+ * approved; decision log 2026-11-04). Not secrets: they are part of every
+ * tracking link. Format taken from the links in Daka's Daisycon product feed
+ * on 2026-11-04, without the feed's per-product `pid`:
+ * partner.daka.nl/c/?si=<programme>&li=<link>&wi=<media>&ws=<sub id>&dl=<path>
+ */
+export const DAKA_DAISYCON = {
+  programId: '7290',
+  linkId: '1765148',
+  mediaId: '441384',
+} as const;
+
+const DAKA_HOST = 'www.daka.nl';
+
+/** Product pages only (/p/<slug>), no query: never a search or category page. */
+export function isDakaProductPage(url: URL): boolean {
+  return (
+    url.hostname === DAKA_HOST &&
+    url.protocol === 'https:' &&
+    url.search === '' &&
+    /^\/p\/[a-z0-9_-]+$/i.test(url.pathname)
+  );
+}
+
+/**
+ * Wraps a Daka product page in a Daisycon deeplink: `ws` (the sub id) says
+ * where on our site the link sits, like the placement at the other shops;
+ * `dl` is the page path without the leading slash, as in the feed.
+ */
+export function dakaTrackingUrl(productUrl: string, placement: string): string | null {
+  let target: URL;
+  try {
+    target = new URL(productUrl);
+  } catch {
+    return null;
+  }
+  if (!isDakaProductPage(target)) return null;
+  const { programId, linkId, mediaId } = DAKA_DAISYCON;
+  const params = new URLSearchParams({
+    si: programId,
+    li: linkId,
+    wi: mediaId,
+    ws: placement,
+    dl: target.pathname.slice(1),
+  });
+  return `https://partner.daka.nl/c/?${params.toString()}`;
+}
+
+/**
  * Shipping for one stick, from the shop's public delivery terms, until a feed
  * states it (docs/spec/prijsvergelijking.md §7.1). The first tier whose
  * bound the price stays under applies; `costEur: null` means unknown, and the
@@ -264,11 +313,29 @@ export const HOCKEYCITY_SHIPPING: ShippingTerms = {
   note: 'Verzending in Nederland €5, gratis vanaf €100 (volgens de winkelmand en de banner; de FAQ noemt gratis boven €75). Geen afhaalpunt genoemd.',
 };
 
+/**
+ * daka.nl refused automated reading on 2026-11-04 (HTTP 429), so not the shop's
+ * page itself: Daisycon's campaign page says free shipping from €50, and the
+ * feed's own `price_shipping` agrees (every item from €50 ships free; below
+ * €50 €4,95, some items free). We take €4,95 below €50, so a total is never
+ * too low (decision log 2026-11-04). To confirm on daka.nl by the owner.
+ */
+export const DAKA_SHIPPING: ShippingTerms = {
+  tiers: [
+    { belowEur: 50, costEur: 4.95 },
+    { belowEur: null, costEur: 0 },
+  ],
+  sourceUrl: 'https://daisycon.com/campaigns/7290-daka-nl',
+  checkedAt: '2026-11-04',
+  note: 'Bezorging via PostNL: €4,95 onder €50, gratis vanaf €50 (campagnepagina van Daisycon en de productfeed van Daka; daka.nl zelf was niet te lezen).',
+};
+
 export const SHIPPING: Record<RetailerId, ShippingTerms> = {
   bolcom: BOL_SHIPPING,
   passasports: PASSASPORTS_SHIPPING,
   plutosport: PLUTOSPORT_SHIPPING,
   hockeycity: HOCKEYCITY_SHIPPING,
+  daka: DAKA_SHIPPING,
 };
 
 /** Shipping for an order of one item at this price; null when unknown. */
@@ -341,5 +408,12 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
     // Only direct product links, like PassaHockey: never a HockeyCity search.
     getUrl: ({ placement, productUrl }) =>
       productUrl ? hockeyCityTrackingUrl(productUrl, placement) : null,
+  },
+  daka: {
+    id: 'daka',
+    label: 'Daka',
+    // Only direct product links: never a Daka search.
+    getUrl: ({ placement, productUrl }) =>
+      productUrl ? dakaTrackingUrl(productUrl, placement) : null,
   },
 };

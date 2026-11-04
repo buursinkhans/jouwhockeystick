@@ -49,7 +49,7 @@ export function Footer() {
             <Logo variant="wordmark-negative" size={30} tagline />
             <p className="mt-6 max-w-sm">
               Aankopen verlopen via onze partnerwinkels bol.com, PassaHockey,
-              Plutosport en HockeyCity; de winkel is de verkoper. Winkelprijzen werken we
+              Plutosport, HockeyCity en Daka; de winkel is de verkoper. Winkelprijzen werken we
               wekelijks bij en richtprijzen zijn een indicatie: de actuele prijs
               zie je bij de winkel.
             </p>

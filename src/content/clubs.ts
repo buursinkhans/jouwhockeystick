@@ -28,7 +28,7 @@ export const CLUBS_PAGE = {
     'Dit is een redactionele richtlijn, geen norm van de KNHB of een fabrikant. Op de grens tussen twee maten noemen we beide.',
   honestyHeading: 'Wie zijn wij',
   honesty: [
-    'jouwhockeystick.nl is een onafhankelijke Nederlandse site die spelers en ouders helpt een passende stick te kiezen. We verkopen zelf niets. Bij de sticks linken we naar onze partnerwinkels bol.com, PassaHockey, Plutosport en HockeyCity; koopt iemand via zo\'n link, dan krijgen we een vergoeding van die winkel. Die vergoeding speelt geen rol in het advies.',
+    'jouwhockeystick.nl is een onafhankelijke Nederlandse site die spelers en ouders helpt een passende stick te kiezen. We verkopen zelf niets. Bij de sticks linken we naar onze partnerwinkels bol.com, PassaHockey, Plutosport, HockeyCity en Daka; koopt iemand via zo\'n link, dan krijgen we een vergoeding van die winkel. Die vergoeding speelt geen rol in het advies.',
     'Liever iets anders voor je club, zoals een tabel in clubkleuren of een andere tekst? Mail ons gerust.',
   ],
 } as const;

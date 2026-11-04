@@ -271,6 +271,7 @@ export function RecommendationCard({
             alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
             alsoAtPlutosport={product.plutosportProductUrl !== undefined}
             alsoAtHockeyCity={product.hockeyCityProductUrl !== undefined}
+            alsoAtDaka={product.dakaProductUrl !== undefined}
           />
         </div>
       )}

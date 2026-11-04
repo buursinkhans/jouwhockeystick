@@ -14,6 +14,7 @@ const NOFOLLOW_HOSTS = [
   'passasports.nl',
   'plutosport.nl',
   'hockeycity.nl',
+  'daka.nl',
   'jumbosports.com',
   'de-hockeywinkel.nl',
 ];

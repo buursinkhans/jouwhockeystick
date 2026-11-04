@@ -26,7 +26,7 @@ describe('server HTML of the catalog lists (decision log 2026-10-24)', () => {
       // The link, not the slug: "malik-lowbow-4" is part of the checked "malik-lowbow-4-junior".
       expect(links, p.slug).not.toContain(productPath(p));
     expect(html).toContain(
-      `Toon ook ${all.filter(isFeedImport).length} sticks uit het aanbod van PassaHockey, Plutosport en HockeyCity`,
+      `Toon ook ${all.filter(isFeedImport).length} sticks uit het aanbod van PassaHockey, Plutosport, HockeyCity en Daka`,
     );
   });
 

@@ -104,6 +104,7 @@ export const shoeSchema = z.object({
   passaSportsProductUrl: z.string().url().optional(),
   plutosportProductUrl: z.string().url().optional(),
   hockeyCityProductUrl: z.string().url().optional(),
+  dakaProductUrl: z.string().url().optional(),
   bolProductUrl: z.string().url().optional(),
   bolNotSold: z.boolean().optional(),
   /** Product photo from a shop feed; never a brand logo or other image. */
@@ -112,7 +113,7 @@ export const shoeSchema = z.object({
   /** Set on models generated from the shop feeds: noindex until enriched by hand. */
   feedImport: z
     .object({
-      feeds: z.array(z.enum(['passahockey', 'plutosport', 'hockeycity'])).min(1),
+      feeds: z.array(z.enum(['passahockey', 'plutosport', 'hockeycity', 'daka'])).min(1),
       importedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     })
     .optional(),
@@ -139,7 +140,7 @@ export const SHOE_CONTENT_PROPERTIES = [
 
 /** One shop's listing of a model, as read from its feed. */
 export const shoeListingSchema = z.object({
-  shop: z.enum(['passasports', 'plutosport', 'hockeycity']),
+  shop: z.enum(['passasports', 'plutosport', 'hockeycity', 'daka']),
   /** The shop's page for the cheapest colour in stock (else the cheapest). */
   url: z.string().url(),
   /** Lowest feed price of that model at this shop, in stock if any. */
