@@ -24,6 +24,8 @@ import { FamilyTable } from '@/components/catalog/FamilyTable';
 import { DISCIPLINE_LABELS } from '@/catalog/labels';
 import { getModelYear } from '@/catalog/modelYear';
 import { evidenceGaps, sourceMixText } from '@/content/evidence';
+import { routeStepRange } from '@/content/stickwijzer/progress';
+import { TrackedBlock } from '@/components/catalog/TrackedBlock';
 import { absoluteUrl } from '@/lib/site';
 import { jsonLdHtml } from '@/lib/jsonLd';
 
@@ -176,6 +178,18 @@ export function ProductDetail({ product }: { product: Product }) {
                 Stel een vraag
               </ButtonLink>
             </div>
+            {getDiscipline(product) === 'veld' && (
+              // For a visitor who doubts the fit (fase 9); the stickwijzer advises field sticks only.
+              <TrackedBlock page="stickpagina" block="stickwijzer">
+                <p className="mt-4 text-sm text-inkt/80">
+                  Twijfel je of deze stick bij je past?{' '}
+                  <Link href="/stickwijzer" className="font-semibold text-veld hover:underline">
+                    Doe de stickwijzer
+                  </Link>
+                  : in {routeStepRange()} weet je de maat en welke sticks passen.
+                </p>
+              </TrackedBlock>
+            )}
           </div>
         </aside>
 

@@ -579,7 +579,14 @@ export function QuizForm() {
         {errorMessage}
       </p>
 
-      <div id="wizard-acties" className="mt-5 flex flex-wrap gap-3 scroll-mt-24">
+      {/*
+        On a phone the buttons stay at the bottom of the screen (fase 9), so
+        "Volgende" is always one tap away; from md they sit under the questions.
+      */}
+      <div
+        id="wizard-acties"
+        className="sticky bottom-0 z-20 -mx-4 mt-5 flex flex-wrap gap-3 border-t border-rand bg-white/95 px-4 py-3 scroll-mt-24 backdrop-blur-sm sm:-mx-6 sm:px-6 md:static md:mx-0 md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none"
+      >
         {currentStep > 0 && (
           <Button
             variant="secondary"
