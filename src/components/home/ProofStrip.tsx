@@ -7,7 +7,7 @@ import { ProofFacts } from '@/components/trust/ProofFacts';
  */
 export function ProofStrip() {
   return (
-    <section aria-label="De catalogus in cijfers" className="border-b border-rand bg-white">
+    <section aria-label="De catalogus in cijfers" className="bg-white">
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
         <ProofFacts facts={getTrustFacts()} />
       </div>

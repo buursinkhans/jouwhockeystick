@@ -8,6 +8,7 @@ import { SeasonBand } from './SeasonBand';
 import { BuyingIntro } from './BuyingIntro';
 import { InstagramFeed } from './InstagramFeed';
 import { WhyUs } from './WhyUs';
+import { QuickFind } from './QuickFind';
 import { ProofStrip } from './ProofStrip';
 import { ClosingCta } from './ClosingCta';
 
@@ -19,6 +20,7 @@ export function HomePage({ variant }: { variant: HomeIntroVariant }) {
   return (
     <>
       <Hero />
+      <QuickFind />
       <ProofStrip />
       {variant === 'season' && isIndoorSeason() && <SeasonBand />}
       {variant === 'buying' && <BuyingIntro />}

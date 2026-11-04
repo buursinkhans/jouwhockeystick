@@ -9,7 +9,7 @@ import { HomeBlockLink } from './HomeBlockLink';
  */
 export function ClosingCta() {
   return (
-    <section aria-labelledby="slot-heading" className="border-t border-rand bg-krijt">
+    <section aria-labelledby="slot-heading" className="bg-krijt">
       <div className="mx-auto flex max-w-5xl flex-col items-start gap-6 px-4 py-16 sm:px-6 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 id="slot-heading" className="text-3xl text-inkt">

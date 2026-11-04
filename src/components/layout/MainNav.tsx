@@ -52,7 +52,7 @@ export function MainNav({ links }: { links: NavLink[] }) {
         aria-label="Hoofdnavigatie"
         className={`${open ? 'block' : 'hidden'} order-last w-full lg:order-none lg:block lg:w-auto`}
       >
-        <ul className="flex flex-col border-t border-rand pt-2 lg:flex-row lg:gap-1 lg:border-0 lg:pt-0">
+        <ul className="flex flex-col border-t border-rand pt-2 lg:flex-row lg:gap-0 lg:border-0 lg:pt-0">
           {links.map((link) => {
             const active = isActive(pathname, link.href);
             return (
@@ -61,7 +61,7 @@ export function MainNav({ links }: { links: NavLink[] }) {
                   href={link.href}
                   aria-current={active ? 'page' : undefined}
                   onClick={() => setOpen(false)}
-                  className={`flex min-h-11 items-center rounded-lg px-3 text-base font-semibold transition-colors lg:text-sm ${
+                  className={`flex min-h-11 items-center rounded-lg px-3 text-base font-semibold transition-colors lg:px-2.5 lg:text-sm ${
                     // Fase 7: quiet links, the current page in field blue with a mist fill.
                     active
                       ? 'bg-mist text-veld'

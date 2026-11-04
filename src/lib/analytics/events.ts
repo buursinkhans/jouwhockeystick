@@ -71,8 +71,11 @@ export type AnalyticsEvent =
   | {
       /** A click in a homepage block under the hero, to see what it adds to the funnel. */
       name: 'home_block_click';
-      /** 'hero' = the photo with the example reasons (2026-10-22); 'slot' = the closing call to the stickwijzer (fase 9). */
-      block: 'season' | 'buying' | 'hero' | 'slot';
+      /**
+       * 'hero' = the photo with the example reasons (2026-10-22); 'slot' = the closing call to the stickwijzer (fase 9);
+       * 'zoeken' = a category shortcut in the search block (2026-11-04).
+       */
+      block: 'season' | 'buying' | 'hero' | 'slot' | 'zoeken';
       target: string;
     }
   | {
@@ -111,6 +114,16 @@ export type AnalyticsEvent =
       name: 'advice_compare_click';
       /** Roles of the two sticks, e.g. 'best_match+safe_choice'. */
       pair: string;
+    }
+  | {
+      /**
+       * A search on /zoeken (2026-11-04). Counts only: the typed text stays out of
+       * analytics, because a free-text field can hold anything.
+       */
+      name: 'search_results';
+      queryLength: number;
+      sticks: number;
+      shoes: number;
     }
   | {
       /** A shared advice link was opened; `changed` = sticks differ since sharing. */

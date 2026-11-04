@@ -1,11 +1,10 @@
-import { Logo } from '@/components/brand/Logo';
 import { HeroPhotos } from './HeroPhotos';
 import { HomeBlockLink } from './HomeBlockLink';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import Link from 'next/link';
-import { getCatalogStats } from '@/catalog/stats';
 import { getTrustFacts } from '@/catalog/trustFacts';
+import { BRAND_PAYOFF } from '@/lib/site';
 
 const EXAMPLE_REASONS = [
   'Juiste stick',
@@ -43,7 +42,7 @@ function HeroVisual() {
   );
 }
 
-/** Homepage hero: primary wordmark with pay-off on a light background (merkinstructie §4). */
+/** Homepage hero; the pay-off sits under the header logo (owner, 2026-11-04). */
 /**
  * Why the advice can be trusted, visible without scrolling. Every claim is
  * counted from the catalog or documented on /methodiek. "Onafhankelijk
@@ -52,11 +51,8 @@ function HeroVisual() {
  * button and explained on /methodiek.
  */
 function TrustLine() {
-  const stats = getCatalogStats();
-  const sticks = stats.fieldSticks;
-  const brands = stats.fieldBrands.length;
+  // The catalog size is in the facts strip under the search block (2026-11-04), so not here as well.
   const items = [
-    `${sticks} veldsticks van ${brands} merken`,
     'Bron bij elk gegeven',
     'Onafhankelijk advies',
   ];
@@ -86,13 +82,11 @@ export function Hero() {
   return (
     // Fase 7: a calm krijt-to-white field without the pattern, a larger title
     // with a short lead, and the photo as the one strong image.
-    <section className="border-b border-rand/70 bg-gradient-to-b from-krijt to-white">
-      <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 pt-10 pb-12 sm:px-6 sm:pt-16 sm:pb-20 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
+    <section className="bg-gradient-to-b from-krijt to-white">
+      <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 pt-8 pb-12 sm:px-6 sm:pt-12 sm:pb-12 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
         <div>
-          <div className="hidden sm:block">
-            <Logo variant="wordmark" size={26} tagline href={null} />
-          </div>
-          <h1 className="text-[2.6rem] text-inkt sm:mt-8 sm:text-6xl">
+          <p className="text-sm font-semibold text-veld sm:text-base">{BRAND_PAYOFF}</p>
+          <h1 className="mt-3 text-[2.6rem] text-inkt sm:text-6xl">
             Vind de hockeystick die bij jou past
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-inkt/80 sm:text-xl">

@@ -14,7 +14,7 @@ export function BuyingIntro() {
   return (
     <section
       aria-labelledby="goede-stick-heading"
-      className="border-b border-rand bg-white"
+      className="bg-white"
     >
       <div className="mx-auto grid max-w-5xl gap-6 px-4 py-6 sm:px-6 md:grid-cols-[3fr_2fr] md:gap-10">
         <div>
