@@ -15,6 +15,7 @@ import {
   START_FOOTNOTE,
   TRANSPARENCY_NOTE,
   ADVICE_TRUST_POINTS,
+  adviceSteps,
   formatInch,
   levelLabel,
   sizeAdviceText,
@@ -272,6 +273,13 @@ export function QuizResult({
         <h3 id="method-heading" className="text-lg font-semibold text-inkt">
           Waarom dit advies?
         </h3>
+        {hasResults && advice.candidateCount > 0 && (
+          <ol className="list-decimal space-y-1 pl-5">
+            {adviceSteps(advice.candidateCount, advice.results.length).map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        )}
         <p>{TRANSPARENCY_NOTE}</p>
         <p>{ADVICE_DISCLAIMER}</p>
         <p>{SELLER_NOTE}</p>

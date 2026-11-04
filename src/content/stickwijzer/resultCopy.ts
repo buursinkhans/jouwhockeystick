@@ -51,6 +51,20 @@ export const ADVICE_DISCLAIMER =
 export const TRANSPARENCY_NOTE =
   'We vertellen niet alleen wát we adviseren, maar ook waarop dat is gebaseerd. Per stick maken we onderscheid tussen gegevens van de fabrikant en onze eigen redactionele adviesregels. Eigen metingen en praktijktests hebben we nog niet; dat staat er dan ook bij.';
 
+/**
+ * "Hoe we dit advies maakten" (fase 8): the three steps the engine takes,
+ * with the numbers of this advice. The wording follows the engine: hard
+ * filters (size, level, budget), then the weighed fit (homepage "Zo werkt
+ * het"), no fee or shop input (methodiek).
+ */
+export function adviceSteps(candidates: number, shown: number): string[] {
+  return [
+    `Eerst vallen de sticks af die niet bij de maat, het niveau of het budget passen. Er ${candidates === 1 ? 'bleef er 1' : `bleven er ${candidates}`} over.`,
+    'Die wegen we op ervaring, doelen, bow-profiel en gevoel. Vergoeding, marge en winkel tellen daarbij niet mee.',
+    `${shown === 1 ? 'De stick' : `De ${shown} sticks`} met de beste aansluiting zie je hierboven, met de redenen, de afweging en wat we niet weten.`,
+  ];
+}
+
 /** How many sticks passed the filters, so a visitor sees the advice is a selection. */
 export function candidateCountText(candidates: number, shown: number): string {
   if (candidates <= shown) {

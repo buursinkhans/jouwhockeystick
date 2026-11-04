@@ -29,6 +29,7 @@ import {
   sourceLine,
 } from '@/sources/productSources';
 import { Card } from '@/components/ui/Card';
+import { evidenceGaps, verdictLine } from '@/content/evidence';
 import { ProductNotice } from '@/components/ui/ProductNotice';
 import { AlertIcon, BoltIcon, CheckIcon, ShieldIcon, StickIcon, TargetIcon } from '@/components/ui/icons';
 import { ProductImage } from '@/components/catalog/ProductImage';
@@ -144,6 +145,7 @@ export function RecommendationCard({
   const sources = buildProductSourceRecords(product);
   const offers = getOffers(product);
   const lowest = lowestTotal(offers, { size: item.sizeInch, now: new Date() });
+  const verdict = verdictLine(product, item.sizeInch);
 
   return (
     <Card className={item.role === 'best_match' ? 'ring-2 ring-veld/20' : ''}>
@@ -166,6 +168,7 @@ export function RecommendationCard({
             </Link>
           </h4>
           <p className="mt-1 text-sm text-inkt/80">{product.summary}</p>
+          {verdict && <p className="mt-2 text-sm font-semibold text-inkt">{verdict}</p>}
         </div>
       </div>
 
@@ -244,6 +247,14 @@ export function RecommendationCard({
           <p className="mt-3 text-sm text-inkt/80">
             {LESS_SUITABLE_FOR[product.experienceLevel.value]}
           </p>
+
+          {/* What we don't know, said plainly (fase 8): the limits of this advice. */}
+          <h5 className="mt-5 text-sm font-semibold">Wat we niet weten</h5>
+          <ul className="mt-2 space-y-1 text-sm text-lijngrijs">
+            {evidenceGaps(product, modelYear ?? null).map((gap) => (
+              <li key={gap}>{gap}</li>
+            ))}
+          </ul>
         </div>
       </div>
 
