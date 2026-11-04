@@ -22,6 +22,7 @@ import {
 } from '@/content/stickwijzer/resultCopy';
 import { ROUTE_SHORT_LABELS } from '@/content/stickwijzer/questions';
 import { CheckIcon } from '@/components/ui/icons';
+import { trackEvent } from '@/lib/analytics/track';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { RecommendationCard } from './RecommendationCard';
 import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
@@ -79,6 +80,16 @@ export function QuizResult({
 }) {
   const copy = ROUTE_RESULT_COPY[advice.route];
   const hasResults = advice.results.length > 0;
+  const [first, second] = advice.results;
+  const compare =
+    first && second
+      ? {
+          href: `/vergelijk?a=${first.product.slug}&b=${second.product.slug}`,
+          a: first.product.name,
+          b: second.product.name,
+          pair: `${first.role}+${second.role}`,
+        }
+      : null;
   const size = `${formatInch(advice.sizeAdvice.primaryInch)}${advice.sizeAdvice.alternativeInch !== undefined ? ` (of ${formatInch(advice.sizeAdvice.alternativeInch)})` : ''}`;
 
   // Since 2026-10-22 the result starts with the sticks (and the size in one
@@ -168,6 +179,20 @@ export function QuizResult({
               />
             ))}
           </div>
+          {compare && (
+            // The doubt is largest between the first two picks (fase 9): one tap to see them side by side.
+            <p className="mt-4 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
+              <span className="font-semibold text-inkt">Twijfel je tussen de twee?</span>{' '}
+              <Link
+                href={compare.href}
+                onClick={() => trackEvent({ name: 'advice_compare_click', pair: compare.pair })}
+                className="font-semibold text-veld hover:underline"
+              >
+                Zet de {compare.a} en de {compare.b} naast elkaar
+              </Link>
+              .
+            </p>
+          )}
           {advice.noAmbitiousReason && (
             <p className="mt-4 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
               <span className="font-semibold text-inkt">

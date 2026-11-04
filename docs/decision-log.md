@@ -2119,3 +2119,18 @@ Geen wijziging aan inhoud, routes, adviesregels of analytics-events.
 Alles komt uit de bronvelden van de stick en uit het advies zelf; er komt geen bewering bij die de gegevens niet dragen. Adviesregels, scores en analytics zijn ongewijzigd.
 
 **Betrokken bestanden:** `src/content/evidence.ts` (+ test), `src/content/stickwijzer/resultCopy.ts` (`adviceSteps`), `src/components/stickwijzer/{RecommendationCard,QuizResult}.tsx`, `src/components/catalog/ProductDetail.tsx`.
+
+## 2026-11-04 — Redesign fase 9: meer afgeronde adviezen en doorkliks
+
+**Opdracht eigenaar (2026-11-04):** de afronding van de stickwijzer, de doorkliks en de betrokkenheid bij het advies verhogen, zonder het designsysteem te veranderen. Alleen bestaande knoppen, kaarten en tekststijlen.
+
+1. **Stickwijzer:** op een telefoon blijven "Vorige" en "Volgende" sticky onderaan het scherm, zodat de volgende stap altijd één tik weg is. Vanaf `md` staan ze onder de vragen, zoals voorheen. Gemeten op 390×844: de balk staat op 775–844 px van een pagina van 4218 px.
+2. **Advies:** onder de sticks staat "Twijfel je tussen de twee? Zet de [beste match] en de [tweede keuze] naast elkaar", met een link naar /vergelijk met beide sticks. Nieuw event `advice_compare_click` met de rollen van het paar (bijv. `best_match+safe_choice`).
+3. **Homepage:** een slotblok na de laatste sectie ("Weet in 5 tot 7 stappen welke stick past", geen account, de stickwijzer-knop). Gemeten als `home_block_click`, block `slot`.
+4. **Stickpagina (veldsticks):** onder "Stel een vraag" de zin "Twijfel je of deze stick bij je past? Doe de stickwijzer", gemeten als `catalog_block_click`, page `stickpagina`, block `stickwijzer`. Zaalsticks krijgen hem niet, omdat de stickwijzer alleen veldsticks adviseert.
+
+**Meten:** na twee weken vergelijken met de twee weken ervoor: quiz_complete ten opzichte van quiz_start (afronding), retailer_click per quiz_complete (doorklik), en het aantal advice_compare_click en de klikken op het slotblok.
+
+**Bewust niet:** nep-urgentie, aftellers, "nog X op voorraad" zonder voorraaddata, of een vooraf aangevinkte route. Adviesregels en volgorde blijven gelijk.
+
+**Betrokken bestanden:** `src/components/stickwijzer/{QuizForm,QuizResult}.tsx`, `src/components/home/{ClosingCta,HomePage,HomeBlockLink}.tsx` (+ test), `src/components/catalog/{ProductDetail,TrackedBlock}.tsx`, `src/lib/analytics/events.ts`.

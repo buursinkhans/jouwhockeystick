@@ -9,6 +9,7 @@ import { BuyingIntro } from './BuyingIntro';
 import { InstagramFeed } from './InstagramFeed';
 import { WhyUs } from './WhyUs';
 import { ProofStrip } from './ProofStrip';
+import { ClosingCta } from './ClosingCta';
 
 export function HomePage({ variant }: { variant: HomeIntroVariant }) {
   const products = getAllProducts();
@@ -25,6 +26,7 @@ export function HomePage({ variant }: { variant: HomeIntroVariant }) {
       <WhyUs />
       <FeaturedProducts products={products.slice(0, 3)} />
       <InstagramFeed />
+      <ClosingCta />
     </>
   );
 }

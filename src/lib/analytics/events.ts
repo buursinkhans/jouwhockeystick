@@ -71,8 +71,8 @@ export type AnalyticsEvent =
   | {
       /** A click in a homepage block under the hero, to see what it adds to the funnel. */
       name: 'home_block_click';
-      /** 'hero' = the photo with the example reasons (2026-10-22). */
-      block: 'season' | 'buying' | 'hero';
+      /** 'hero' = the photo with the example reasons (2026-10-22); 'slot' = the closing call to the stickwijzer (fase 9). */
+      block: 'season' | 'buying' | 'hero' | 'slot';
       target: string;
     }
   | {
@@ -81,12 +81,13 @@ export type AnalyticsEvent =
        * landing blocks on /sticks), like home_block_click for the homepage.
        */
       name: 'catalog_block_click';
-      page: 'sticks' | 'zaalsticks' | 'hockeyschoenen';
+      /** 'stickpagina' = a stick's own page (fase 9: the link to the stickwijzer). */
+      page: 'sticks' | 'zaalsticks' | 'hockeyschoenen' | 'stickpagina';
       /**
        * 'aanbod' = the button that loads the imported PassaHockey sticks (target 'aanbod-laden');
        * 'filters', 'modellen', 'intenties' and 'pascontrole' are on /hockeyschoenen (decision log 2026-11-01).
        */
-      block: 'intro' | 'levels' | 'faq' | 'aanbod' | 'filters' | 'modellen' | 'intenties' | 'pascontrole';
+      block: 'intro' | 'levels' | 'faq' | 'aanbod' | 'filters' | 'modellen' | 'intenties' | 'pascontrole' | 'stickwijzer';
       target: string;
     }
   | {
@@ -104,6 +105,12 @@ export type AnalyticsEvent =
       /** "Deel dit advies": shared via the share sheet or copied link. */
       name: 'advice_shared';
       method: 'native' | 'copy';
+    }
+  | {
+      /** "Zet ze naast elkaar" in an advice: the best match and the second pick on /vergelijk (fase 9). */
+      name: 'advice_compare_click';
+      /** Roles of the two sticks, e.g. 'best_match+safe_choice'. */
+      pair: string;
     }
   | {
       /** A shared advice link was opened; `changed` = sticks differ since sharing. */
