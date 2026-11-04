@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DAKA_SHIPPING, RETAILERS, dakaTrackingUrl, isDakaProductPage, shippingCostEur } from '@/lib/retailers';
 import { dakaPageUrl, dakaShoes, dakaStickMatches, dakaSticks, isDakaShoe, isDakaStick, parseDakaFeed, groupByPage } from './dakaFeed';
-import type { StickMatch } from './plutosportFeed';
+import { matchStick, type CatalogStick, type StickMatch } from './plutosportFeed';
 import type { DakaStickModel } from './dakaFeed';
 
 const link = (path: string) =>
@@ -117,5 +117,28 @@ describe('sticks and shoes', () => {
     expect(Object.keys(result).sort()).toEqual(['b', 'c']);
     expect(result.b).toMatchObject({ method: 'naam', priceEur: 129.99, lengths: [36.5] });
     expect(result.c?.method).toBe('handmatig');
+  });
+
+  it('links the same name with only the model year unknown, but only with one candidate (owner, decision log 2026-11-04)', () => {
+    const sticks = dakaSticks(rows);
+    const grays = { ...sticks.find((s) => s.name.startsWith('Grays'))!, name: 'Grays Dynabow 6.5' };
+    const ours: CatalogStick = { slug: 'grays-db65', brand: 'Grays', name: 'Grays DB 6.5 Composite', discipline: grays.discipline, bow: 'dynabow', eans: [] };
+    const one = matchStick(ours, [grays], 'Daka');
+    expect(one).toMatchObject({ level: 'twijfel', yearOnly: true, note: 'modeljaar niet bekend in onze catalogus' });
+    expect(dakaStickMatches([{ slug: 'grays-db65', match: one }], [grays], {})['grays-db65']).toMatchObject({ method: 'naam-zonder-jaar', priceEur: 129.99 });
+    // Rejected by the owner: no button, also not on this rule.
+    expect(dakaStickMatches([{ slug: 'grays-db65', match: one }], [grays], { 'grays-db65': grays.url }, new Set(['grays-db65']))).toEqual({});
+
+    // Two pages with this name (two collections, other prices?): the owner decides.
+    const two = matchStick(ours, [grays, { ...grays, key: `${grays.key}-2`, url: 'https://www.daka.nl/p/grays-db65-mc-sku_9' }], 'Daka');
+    expect(two.level).toBe('twijfel');
+    expect(two.yearOnly).toBeUndefined();
+    expect(dakaStickMatches([{ slug: 'grays-db65', match: two }], [grays], {})).toEqual({});
+
+    // A word more in Daka's name is not the same name.
+    const extra = matchStick(ours, [{ ...grays, name: 'Grays Dynabow 6.5 Limited' }], 'Daka');
+    expect(extra.yearOnly).toBeUndefined();
+    // A known year on both sides that differs is never a match.
+    expect(matchStick({ ...ours, modelYear: 2025 }, [{ ...grays, name: 'Grays Dynabow 6.5 2024' }], 'Daka').level).not.toBe('zeker');
   });
 });
