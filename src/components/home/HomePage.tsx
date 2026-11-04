@@ -9,6 +9,7 @@ import { BuyingIntro } from './BuyingIntro';
 import { InstagramFeed } from './InstagramFeed';
 import { WhyUs } from './WhyUs';
 import { QuickFind } from './QuickFind';
+import { ProofStrip } from './ProofStrip';
 import { ClosingCta } from './ClosingCta';
 
 export function HomePage({ variant }: { variant: HomeIntroVariant }) {
@@ -20,6 +21,7 @@ export function HomePage({ variant }: { variant: HomeIntroVariant }) {
     <>
       <Hero />
       <QuickFind />
+      <ProofStrip />
       {variant === 'season' && isIndoorSeason() && <SeasonBand />}
       {variant === 'buying' && <BuyingIntro />}
       <StickwijzerExplainer productCount={adviceCount} />
