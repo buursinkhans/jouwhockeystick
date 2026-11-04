@@ -206,6 +206,8 @@ export function dakaStickMatches(
   matches: readonly { slug: string; match: StickMatch<DakaStickModel> }[],
   sticks: readonly DakaStickModel[],
   confirmed: Readonly<Record<string, string>>,
+  /** Rejected by the owner: no button, whatever the match (dakaConfirmed.ts). */
+  rejected: ReadonlySet<string> = new Set(),
 ): Record<string, DakaStickMatch> {
   const byUrl = new Map(sticks.map((stick) => [stick.url, stick]));
   const result: Record<string, DakaStickMatch> = {};
@@ -214,6 +216,7 @@ export function dakaStickMatches(
       ? { productUrl: model.url, method, priceEur: model.inStockPriceMin, ...(model.lengths.length && { lengths: model.lengths }) }
       : null;
   for (const { slug, match } of [...matches].sort((a, b) => a.slug.localeCompare(b.slug))) {
+    if (rejected.has(slug)) continue;
     const handPicked = confirmed[slug];
     if (handPicked) {
       const model = byUrl.get(handPicked);

@@ -22,7 +22,7 @@ import {
 import { getModelYear } from '../src/catalog/modelYear';
 import type { DakaOffers } from '../src/catalog/offers/index';
 import { DAKA_OFFERS } from '../src/catalog/offers/daka';
-import { DAKA_CONFIRMED } from '../src/catalog/offers/dakaConfirmed';
+import { DAKA_CONFIRMED, DAKA_REJECTED } from '../src/catalog/offers/dakaConfirmed';
 import { isJunior } from '../src/catalog/passaFeed';
 import { matchStick, type StickMatch } from '../src/catalog/plutosportFeed';
 import { DAKA_IMPORT, modelNameKey, toFeedProduct } from '../src/catalog/plutosportImport';
@@ -136,7 +136,7 @@ function report(run: Run, rowCount: number, sticks: readonly DakaStickModel[], s
   const removed = Object.keys(DAKA_OFFERS.sticks).filter((slug) => !data.sticks[slug]);
   const lostConfirmed = Object.keys(DAKA_CONFIRMED).filter((slug) => !data.sticks[slug]);
   const doubts = matches.filter(
-    ({ product, match }) => match.level === 'twijfel' && !match.yearOnly && match.model?.inStock && !DAKA_CONFIRMED[product.slug],
+    ({ product, match }) => match.level === 'twijfel' && !match.yearOnly && match.model?.inStock && !DAKA_CONFIRMED[product.slug] && !DAKA_REJECTED.has(product.slug),
   );
   const before = new Set(getDakaImportedProducts().map((p) => p.slug));
   const newSticks = run.products.filter((p) => !before.has(p.slug));
@@ -243,6 +243,7 @@ async function main() {
     matches.map(({ product, match }) => ({ slug: product.slug, match })),
     sticks,
     DAKA_CONFIRMED,
+    DAKA_REJECTED,
   );
 
   const taken = new Set(products.map((p) => p.slug));

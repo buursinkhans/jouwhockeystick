@@ -126,6 +126,8 @@ describe('sticks and shoes', () => {
     const one = matchStick(ours, [grays], 'Daka');
     expect(one).toMatchObject({ level: 'twijfel', yearOnly: true, note: 'modeljaar niet bekend in onze catalogus' });
     expect(dakaStickMatches([{ slug: 'grays-db65', match: one }], [grays], {})['grays-db65']).toMatchObject({ method: 'naam-zonder-jaar', priceEur: 129.99 });
+    // Rejected by the owner: no button, also not on this rule.
+    expect(dakaStickMatches([{ slug: 'grays-db65', match: one }], [grays], { 'grays-db65': grays.url }, new Set(['grays-db65']))).toEqual({});
 
     // Two pages with this name (two collections, other prices?): the owner decides.
     const two = matchStick(ours, [grays, { ...grays, key: `${grays.key}-2`, url: 'https://www.daka.nl/p/grays-db65-mc-sku_9' }], 'Daka');

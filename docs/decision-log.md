@@ -2223,3 +2223,8 @@ Adviesregels en `ruleSetVersion` zijn niet veranderd.
 **Risico:** Daka verkoopt soms een oudere jaargang onder dezelfde naam. Dan klopt de prijsvergelijking voor die stick niet. De eigenaar aanvaardt dat risico.
 
 **Betrokken bestanden:** `src/catalog/plutosportFeed.ts`, `src/catalog/dakaFeed.ts` (+ test), `src/catalog/offers/{index,daka}.ts`, `scripts/daka-feed.ts`, `CLAUDE.md`.
+
+**Aanvulling (2026-11-04, zelfde avond):** de eigenaar heeft de afvinklijst nagelopen. Uitkomst: 181 keer "klopt", 1 keer "klopt niet" (`osaka-midbow-10-stk00262-retroblue-s`).
+- **Klopt:** staat in `DAKA_CONFIRMED`. De Grays Dynabow 10 is gekoppeld aan de pagina van €244,99.
+- **Klopt niet:** staat in `DAKA_REJECTED`. Die stick krijgt nooit een Daka-knop, ook niet via de regel "dezelfde naam".
+- **Resultaat:** 171 sticks met een Daka-knop. Tien bevestigde sticks staan nu niet op voorraad bij Daka; zij krijgen de knop zodra de feed ze weer op voorraad heeft. Tien nieuwe twijfelgevallen gaan naar de volgende sync-PR.
