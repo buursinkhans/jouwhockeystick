@@ -8,7 +8,7 @@ import { SeasonBand } from './SeasonBand';
 import { BuyingIntro } from './BuyingIntro';
 import { InstagramFeed } from './InstagramFeed';
 import { WhyUs } from './WhyUs';
-import { ProofStrip } from './ProofStrip';
+import { QuickFind } from './QuickFind';
 import { ClosingCta } from './ClosingCta';
 
 export function HomePage({ variant }: { variant: HomeIntroVariant }) {
@@ -19,7 +19,7 @@ export function HomePage({ variant }: { variant: HomeIntroVariant }) {
   return (
     <>
       <Hero />
-      <ProofStrip />
+      <QuickFind />
       {variant === 'season' && isIndoorSeason() && <SeasonBand />}
       {variant === 'buying' && <BuyingIntro />}
       <StickwijzerExplainer productCount={adviceCount} />
