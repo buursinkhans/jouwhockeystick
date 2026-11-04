@@ -2196,3 +2196,12 @@ GitHub keurde het bestand daardoor af. Elke run sinds de merge van #141 faalde m
 - **Bijschrift:** "Juiste stick · Past bij het niveau · Binnen budget" stond op de foto en bedekte de stick en de bal. Het staat nu onder de foto.
 - **Datumtegel:** heeft dezelfde vorm als de andere: groot "Wekelijks", klein "prijzen bijgewerkt, laatst 3 nov".
 - **Naam:** Hans Buursink en "Hockeyvader" staan alleen op Over ons. Een test bewaakt dat ze niet in de homepage-blokken, de header of de footer staan.
+
+## 2026-11-04 — Twee schoenentests hingen aan de data van 31 oktober
+
+**Wat:** de eerste sync na het herstel (PR #154) liet twee tests falen. De nieuwe feed en de code waren in orde; de tests leunden op oude data.
+
+- **Adviestest op de echte catalogus:** rekende met de vaste datum 2026-11-01. De prijzen van 4 november lagen daardoor "in de toekomst", telden als onbekend, en het advies zakte van "goede onderbouwing" naar "voorwaardelijk". De test rekent nu met de dag van de laatste feedlezing.
+- **Test op verborgen feedmodellen:** verwachtte dat het importbestand nog feedmodellen met de EAN van een nagekeken model bevat. Sinds fase 1b slaat de import die over en geeft hun winkelregels aan het nagekeken model; alleen het oude bestand van 31 oktober had ze nog. De test controleert nu alleen dat zo'n model nooit los zichtbaar is, en dat elk nagekeken model winkelregels heeft.
+
+Adviesregels en `ruleSetVersion` zijn niet veranderd.

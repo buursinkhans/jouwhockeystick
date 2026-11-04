@@ -261,7 +261,9 @@ describe('shoe advice: rules around the acceptance tests', () => {
 
   it('works on the real catalog: a water-pitch player gets checked field shoes with a confirmed water claim', () => {
     const catalog: ShoeCatalog = { shoes: getCuratedShoes(), listingsOf: (s) => getShoeListings(s.slug), offersOf: getShoeOffers };
-    const advice = only(getShoeAdvice(fieldAnswers(), catalog, new Date('2026-11-01')));
+    // The day of the latest feed read: a fixed date would put the prices of a newer weekly sync in the future.
+    const lastRead = catalog.shoes.flatMap((s) => getShoeListings(s.slug).map((l) => l.readAt)).sort().at(-1)!;
+    const advice = only(getShoeAdvice(fieldAnswers(), catalog, new Date(`${lastRead}T12:00:00Z`)));
     expect(advice.items.length).toBeGreaterThan(0);
     for (const item of advice.items) {
       expect(item.shoe.category.value).toBe('veld');

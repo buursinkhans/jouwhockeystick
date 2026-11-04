@@ -143,9 +143,9 @@ describe('hand-checked shoe models (phase 1b, decision log 2026-10-31 and 2026-1
 
   it('hides a feed model that is a checked model and gives its shop listings to the checked one', () => {
     const curatedEans = new Set(curated.flatMap((s) => s.eans));
+    // The import gives a feed model with a checked model's EAN to that model; older import files may
+    // still hold such a model, and getImportedShoes hides it. Which of the two depends on the data.
     expect(getImportedShoes().filter((s) => s.eans.some((e) => curatedEans.has(e))).map((s) => s.slug)).toEqual([]);
-    const hidden = IMPORTED_SHOES.filter((s) => s.eans.some((e) => curatedEans.has(e)));
-    expect(hidden.length).toBeGreaterThanOrEqual(curated.length);
     // Two Osaka colour articles in the feed are one checked model, with one listing per shop.
     const kai = getShoeListings('osaka-kai-mk1-pro-tour');
     const shops = kai.map((l) => l.shop);
