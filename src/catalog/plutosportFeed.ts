@@ -386,6 +386,11 @@ export type StickMatch<M extends FeedStickModel = PlutoStickModel> = {
   model?: M;
   /** Why it is not 'zeker' (or how it is): shown in the report. */
   note: string;
+  /**
+   * A 'twijfel' whose only open point is the model year: one candidate with the same name and no
+   * other collection of it. Only Daka links on this (owner's decision, decision log 2026-11-04).
+   */
+  yearOnly?: true;
   /** Plutosport pages of the same model in an older collection than ours: never imported next to ours. */
   olderCollectionKeys?: string[];
 };
@@ -457,7 +462,8 @@ export function sameBrand(a: string, b: string): boolean {
   return clean(a) !== '' && clean(a) === clean(b);
 }
 
-type Comparison = { reasons: string[] } | { otherYear: number } | null;
+/** `yearOnly`: the names are the same (brand, model words and bow) and only a model year is missing. */
+type Comparison = { reasons: string[]; yearOnly: boolean } | { otherYear: number } | null;
 
 function compare(stick: CatalogStick, model: FeedStickModel, shop: string): Comparison {
   if (!sameBrand(stick.brand, model.brand || model.name.split(/\s+/)[0] || '')) return null;
@@ -489,7 +495,8 @@ function compare(stick: CatalogStick, model: FeedStickModel, shop: string): Comp
   if (!stick.modelYear) reasons.push('modeljaar niet bekend in onze catalogus');
   else if (!theirYear) reasons.push(`geen modeljaar in de naam bij ${shop}`);
   if (ourBow && !theirBow) reasons.push(`bow niet in de naam bij ${shop}`);
-  return { reasons };
+  const yearMissing = !stick.modelYear || !theirYear;
+  return { reasons, yearOnly: yearMissing && extra.length === 0 && !(ourBow && !theirBow) };
 }
 
 /** In stock first, then the lowest price: the variant a buyer would see. */
@@ -523,7 +530,7 @@ export function matchStick<M extends FeedStickModel>(stick: CatalogStick, models
   }
 
   const exact: M[] = [];
-  const doubtful: { model: M; reasons: string[] }[] = [];
+  const doubtful: { model: M; reasons: string[]; yearOnly: boolean }[] = [];
   const otherYears = new Set<number>();
   const older: string[] = [];
   for (const model of models) {
@@ -533,7 +540,7 @@ export function matchStick<M extends FeedStickModel>(stick: CatalogStick, models
       otherYears.add(result.otherYear);
       if (stick.modelYear && result.otherYear < stick.modelYear) older.push(model.key);
     } else if (result.reasons.length === 0) exact.push(model);
-    else doubtful.push({ model, reasons: result.reasons });
+    else doubtful.push({ model, reasons: result.reasons, yearOnly: result.yearOnly });
   }
   const match = byName(stick, exact, doubtful, otherYears);
   return older.length ? { ...match, olderCollectionKeys: older } : match;
@@ -542,7 +549,7 @@ export function matchStick<M extends FeedStickModel>(stick: CatalogStick, models
 function byName<M extends FeedStickModel>(
   stick: CatalogStick,
   exact: M[],
-  doubtful: { model: M; reasons: string[] }[],
+  doubtful: { model: M; reasons: string[]; yearOnly: boolean }[],
   otherYears: ReadonlySet<number>,
 ): StickMatch<M> {
   if (exact.length) {
@@ -561,10 +568,19 @@ function byName<M extends FeedStickModel>(
   }
   if (doubtful.length) {
     doubtful.sort((a, b) => a.reasons.length - b.reasons.length || preferred(a.model, b.model));
-    const [best] = doubtful as [{ model: M; reasons: string[] }];
+    const [best] = doubtful as [{ model: M; reasons: string[]; yearOnly: boolean }];
     const others = doubtful.length - 1;
     const more = others > 0 ? `; ${others} andere ${others === 1 ? 'kandidaat' : 'kandidaten'}` : '';
-    return { slug: stick.slug, level: 'twijfel', method: 'naam', model: best.model, note: `${best.reasons.join('; ')}${more}` };
+    // One candidate, the same name, no other collection of it: only the model year is open.
+    const yearOnly = best.yearOnly && others === 0 && otherYears.size === 0;
+    return {
+      slug: stick.slug,
+      level: 'twijfel',
+      method: 'naam',
+      model: best.model,
+      note: `${best.reasons.join('; ')}${more}`,
+      ...(yearOnly && { yearOnly: true }),
+    };
   }
   const years = [...otherYears].sort();
   return {

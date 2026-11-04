@@ -281,7 +281,8 @@ describe('HockeyCity in the catalog and "Waar te koop"', () => {
           lengths: product.lengthsInches.value,
           readAt: product.feedImport.importedAt,
         });
-        expect(getOffers(product).map((o) => o.retailer)).toEqual(['hockeycity']);
+        // Daka, linked after HockeyCity, may sell it too; no shop whose import came before.
+        expect(getOffers(product).map((o) => o.retailer).filter((r) => r !== 'daka')).toEqual(['hockeycity']);
         continue;
       }
       const match = HOCKEYCITY_OFFERS.sticks[product.slug];
