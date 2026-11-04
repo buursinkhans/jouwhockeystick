@@ -2228,6 +2228,7 @@ Adviesregels en `ruleSetVersion` zijn niet veranderd.
 - **Klopt:** staat in `DAKA_CONFIRMED`. De Grays Dynabow 10 is gekoppeld aan de pagina van €244,99.
 - **Klopt niet:** staat in `DAKA_REJECTED`. Die stick krijgt nooit een Daka-knop, ook niet via de regel "dezelfde naam".
 - **Resultaat:** 171 sticks met een Daka-knop. Tien bevestigde sticks staan nu niet op voorraad bij Daka; zij krijgen de knop zodra de feed ze weer op voorraad heeft. Tien nieuwe twijfelgevallen gaan naar de volgende sync-PR.
+
 ## 2026-11-04 — Homepage: zoeken op merk of model, rustigere header en geen scheidingslijnen
 
 **Opdracht eigenaar (2026-11-04):** een zoekblok op de homepage, en de bijbehorende verbeteringen die de eigenaar lokaal heeft bekeken en goedgekeurd.
