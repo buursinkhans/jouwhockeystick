@@ -3,8 +3,8 @@ import { HomeBlockLink } from './HomeBlockLink';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import Link from 'next/link';
-import { getCatalogStats } from '@/catalog/stats';
 import { getTrustFacts } from '@/catalog/trustFacts';
+import { BRAND_PAYOFF } from '@/lib/site';
 
 const EXAMPLE_REASONS = [
   'Juiste stick',
@@ -51,11 +51,8 @@ function HeroVisual() {
  * button and explained on /methodiek.
  */
 function TrustLine() {
-  const stats = getCatalogStats();
-  const sticks = stats.fieldSticks;
-  const brands = stats.fieldBrands.length;
+  // The catalog size is in the facts strip under the search block (2026-11-04), so not here as well.
   const items = [
-    `${sticks} veldsticks van ${brands} merken`,
     'Bron bij elk gegeven',
     'Onafhankelijk advies',
   ];
@@ -88,7 +85,8 @@ export function Hero() {
     <section className="bg-gradient-to-b from-krijt to-white">
       <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 pt-8 pb-12 sm:px-6 sm:pt-12 sm:pb-12 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
         <div>
-          <h1 className="text-[2.6rem] text-inkt sm:text-6xl">
+          <p className="text-sm font-semibold text-veld sm:text-base">{BRAND_PAYOFF}</p>
+          <h1 className="mt-3 text-[2.6rem] text-inkt sm:text-6xl">
             Vind de hockeystick die bij jou past
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-inkt/80 sm:text-xl">

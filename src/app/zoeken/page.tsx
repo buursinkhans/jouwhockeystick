@@ -3,6 +3,7 @@ import { searchCatalog } from '@/catalog/search';
 import { ProductGrid } from '@/components/catalog/ProductGrid';
 import { ShoeCard } from '@/components/shoes/ShoeCard';
 import { SearchForm } from '@/components/search/SearchForm';
+import { SearchTracker } from '@/components/search/SearchTracker';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 import { pageMetadata } from '@/lib/site';
 
@@ -44,6 +45,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           </p>
         )}
       </PageHeader>
+      <SearchTracker queryLength={query.length} sticks={sticks.length} shoes={shoes.length} />
       <PageBody>
         {query && total === 0 && (
           <div className="max-w-prose space-y-3 text-inkt/80">

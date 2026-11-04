@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { SearchForm } from '@/components/search/SearchForm';
+import { HomeBlockLink } from './HomeBlockLink';
 
 const SHORTCUTS = [
   { label: 'Veldsticks', href: '/sticks' },
@@ -27,12 +27,13 @@ export function QuickFind() {
           <ul className="mt-4 flex flex-wrap gap-2" aria-label="Of begin bij een soort">
             {SHORTCUTS.map((shortcut) => (
               <li key={shortcut.href}>
-                <Link
+                <HomeBlockLink
+                  block="zoeken"
                   href={shortcut.href}
                   className="inline-flex min-h-11 items-center rounded-full border border-rand bg-krijt px-4 text-sm font-semibold text-inkt hover:border-veld hover:text-veld"
                 >
                   {shortcut.label}
-                </Link>
+                </HomeBlockLink>
               </li>
             ))}
           </ul>

@@ -2205,3 +2205,31 @@ GitHub keurde het bestand daardoor af. Elke run sinds de merge van #141 faalde m
 - **Test op verborgen feedmodellen:** verwachtte dat het importbestand nog feedmodellen met de EAN van een nagekeken model bevat. Sinds fase 1b slaat de import die over en geeft hun winkelregels aan het nagekeken model; alleen het oude bestand van 31 oktober had ze nog. De test controleert nu alleen dat zo'n model nooit los zichtbaar is, en dat elk nagekeken model winkelregels heeft.
 
 Adviesregels en `ruleSetVersion` zijn niet veranderd.
+
+## 2026-11-04 — Homepage: zoeken op merk of model, rustigere header en geen scheidingslijnen
+
+**Opdracht eigenaar (2026-11-04):** een zoekblok op de homepage, en de bijbehorende verbeteringen die de eigenaar lokaal heeft bekeken en goedgekeurd.
+
+1. **Zoeken:**
+   - **Pagina `/zoeken`:** een GET-formulier, dat op de server wordt gelezen en zonder JavaScript werkt. De pagina krijgt `noindex`, want elke zoekopdracht zou een dunne pagina zijn.
+   - **Wat het zoekt:** alleen op merk en modelnaam, in veld- en zaalsticks en in schoenen, ook in de feedimport. De met de hand nagekeken modellen komen eerst; prijs, winkel of vergoeding tellen niet mee voor de volgorde.
+   - **Afkortingen:** PB, LB, MB, DB, JB en UB tellen als de bow; jr en kids tellen als junior. Een getal moet helemaal kloppen, dus "dynabow 5" vindt geen Grays 500.
+2. **Homepage:**
+   - **Zoekblok:** "Weet je al welk model?" staat direct onder de hero, met snelkoppelingen naar Veldsticks, Zaalsticks en Hockeyschoenen. Geen "Tassen", want die verkopen we niet. Geen slogans als "snel" of "slim", want niets onderbouwt ze.
+   - **Cijferstrook:** die staat weer los onder het zoekblok. De vier waarden staan nu op één lijn.
+   - **Vinkjesregel in de hero:** "606 veldsticks van 20 merken" is weg, omdat de cijferstrook hetzelfde getal toont.
+3. **Geen scheidingslijnen tussen de blokken:** de achtergronden wisselen af tussen wit en krijt, zodat er nooit twee krijtblokken na elkaar staan. De volgorde: hero (krijt naar wit), zoeken, cijfers en seizoen op wit; "Zo werkt het" krijt; het voorbeeldadvies wit; "Waarom" krijt; catalogus en Instagram wit; slotblok krijt.
+4. **Header:**
+   - **Pay-off:** "Eerlijk stickadvies op maat" staat niet meer als woordmerk met pay-off in de hero. Het is nu een korte blauwe regel boven de H1. Dat wijkt af van merkinstructie §4 ("Met pay-off: homepage hero"); het woordmerk staat al in de header.
+   - **Menu:** "Sticks" heet nu "Veldsticks", naast "Zaalsticks". Ook de kruimel op de stickpagina is aangepast. De URL blijft `/sticks`.
+   - **Donkere balk:** de balk boven de header staat alleen nog op mobiel. Op bredere schermen staan dezelfde punten al in de hero.
+5. **Meten:**
+   - `search_results` met de lengte van de zoekopdracht en het aantal gevonden sticks en schoenen. De getypte tekst gaat niet naar analytics, omdat in een vrij tekstveld van alles kan staan.
+   - Klikken op de snelkoppelingen komen in `home_block_click` met `block: 'zoeken'`.
+
+**Betrokken bestanden:**
+- `src/catalog/search.ts` (+ test);
+- `src/app/zoeken/page.tsx`, `src/components/search/`;
+- `src/components/home/{QuickFind,Hero,HomePage,ProofStrip,SeasonBand,BuyingIntro,StickwijzerExplainer,WhyUs,FeaturedProducts,InstagramFeed,ClosingCta,HomeBlockLink}.tsx`;
+- `src/components/trust/ProofFacts.tsx`, `src/components/layout/Header.tsx`, `src/components/catalog/ProductDetail.tsx`;
+- `src/lib/analytics/events.ts`.

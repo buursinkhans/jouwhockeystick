@@ -102,7 +102,7 @@ export function ProductDetail({ product }: { product: Product }) {
           { label: 'Home', href: '/' },
           getDiscipline(product) === 'zaal'
             ? { label: 'Zaalsticks', href: '/zaalsticks' }
-            : { label: 'Sticks', href: '/sticks' },
+            : { label: 'Veldsticks', href: '/sticks' },
           { label: product.name, href: productPath(product) },
         ]}
       />

@@ -6,7 +6,8 @@ import { getTrustFacts } from '@/catalog/trustFacts';
 import { MainNav, type NavLink } from './MainNav';
 
 const NAV_LINKS: NavLink[] = [
-  { href: '/sticks', label: 'Sticks' },
+  // "Veldsticks" next to "Zaalsticks": "Sticks" read as if zaalsticks were something else (2026-11-04).
+  { href: '/sticks', label: 'Veldsticks' },
   { href: '/zaalsticks', label: 'Zaalsticks' },
   { href: '/hockeyschoenen', label: 'Hockeyschoenen' },
   { href: '/merken', label: 'Merken' },
@@ -20,7 +21,8 @@ const NAV_LINKS: NavLink[] = [
 /**
  * The thin bar above the header (redesign fase 5): what the site is, before
  * anything else. Each point is a rule the site keeps (src/content/trust.ts);
- * the shop count comes from src/lib/retailers.ts. A phone shows the first.
+ * the shop count comes from src/lib/retailers.ts. Phones only (2026-11-04):
+ * on a wider screen the same points stand in the hero, and one bar is calmer.
  */
 function IndependenceBar() {
   const { shops } = getTrustFacts();
@@ -30,11 +32,11 @@ function IndependenceBar() {
     'Vergoeding telt niet mee in het advies',
   ];
   return (
-    <div className="bg-inkt text-xs text-white/85 print:hidden">
+    <div className="bg-inkt text-xs text-white/85 sm:hidden print:hidden">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-2 sm:px-6">
         <ul className="flex min-w-0 items-center gap-x-5">
           {points.map((point, index) => (
-            <li key={point} className={`items-center gap-1.5 ${index === 0 ? 'flex' : 'hidden md:flex'}`}>
+            <li key={point} className={`items-center gap-1.5 ${index === 0 ? 'flex' : 'hidden'}`}>
               <CheckIcon size={12} className="shrink-0 text-nl-negatief" />
               <span className="truncate">{point}</span>
             </li>
@@ -62,7 +64,7 @@ export function Header() {
            * minimum (§4.1). Below 360 px only icon + "Stickadvies".
            */}
           <span className="mr-auto hidden sm:inline-flex">
-            <Logo variant="lockup" size={40} tagline />
+            <Logo variant="lockup" size={40} />
           </span>
           <span className="mr-auto hidden min-[360px]:inline-flex sm:hidden">
             <Logo variant="lockup" size={26} />
