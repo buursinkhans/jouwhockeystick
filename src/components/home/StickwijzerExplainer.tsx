@@ -197,7 +197,7 @@ export function StickwijzerExplainer({
   return (
     <>
       {/* A krijt band between the white blocks (designsysteem: white base, krijt as accent surface). */}
-      <div className="border-b border-rand bg-krijt">
+      <div className="bg-krijt">
         <section className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
           <SectionHeading eyebrow="Zo werkt het" title="Van een paar antwoorden naar maximaal drie sticks">
             <p>

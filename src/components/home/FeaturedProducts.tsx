@@ -4,7 +4,7 @@ import { ProductGrid } from '@/components/catalog/ProductGrid';
 
 export function FeaturedProducts({ products }: { products: Product[] }) {
   return (
-    <section className="border-t border-rand bg-white">
+    <section className="bg-white">
       <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>

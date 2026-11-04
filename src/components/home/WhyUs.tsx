@@ -11,7 +11,7 @@ import { PromiseList } from '@/components/trust/PromiseList';
 export function WhyUs() {
   const facts = getTrustFacts();
   return (
-    <section aria-labelledby="waarom-heading" className="border-y border-rand bg-krijt">
+    <section aria-labelledby="waarom-heading" className="bg-krijt">
       <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
         <p className="eyebrow">Waarom jouwhockeystick.nl</p>
         <h2 id="waarom-heading" className="mt-3 max-w-3xl text-3xl text-inkt sm:text-[2.5rem]">
