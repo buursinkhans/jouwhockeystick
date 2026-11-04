@@ -2134,3 +2134,65 @@ Alles komt uit de bronvelden van de stick en uit het advies zelf; er komt geen b
 **Bewust niet:** nep-urgentie, aftellers, "nog X op voorraad" zonder voorraaddata, of een vooraf aangevinkte route. Adviesregels en volgorde blijven gelijk.
 
 **Betrokken bestanden:** `src/components/stickwijzer/{QuizForm,QuizResult}.tsx`, `src/components/home/{ClosingCta,HomePage,HomeBlockLink}.tsx` (+ test), `src/components/catalog/{ProductDetail,TrackedBlock}.tsx`, `src/lib/analytics/events.ts`.
+
+## 2026-11-04 — Wekelijkse sync hersteld (workflowbestand ongeldig sinds 2026-11-03)
+
+**Wat:** bij de aanpassing van `.github/workflows/passa-sync.yml` voor HockeyCity fase 2 (2026-11-03) ging er in de stap "Pull request openen" iets mis:
+
+- één regel brak af: de `grep -v` miste `' -e '^src/catalog/shoes/importedHockeyCity.ts' || true)`;
+- er bleven twee kopieën van het slot van die stap staan, met te weinig inspringing.
+
+GitHub keurde het bestand daardoor af. Elke run sinds de merge van #141 faalde meteen, en de geplande run van woensdag 2026-11-04 04:41 UTC is niet gestart.
+
+**Herstel:** de regel staat er weer heel en de kopieën zijn weg (#152, en hetzelfde in deze PR). Na de merge start de eigenaar de sync één keer met de hand.
+
+**Les:** workflowbestanden pas ik niet meer aan met tekstvervanging in PowerShell; die maakte de regel kapot. Nieuw: `src/lib/workflows.test.ts` leest elk workflowbestand in als YAML. De kapotte versie van main keurt die test af ("bad indentation", regel 110).
+
+## 2026-11-04 — Daka als vijfde partnerwinkel (Daisycon)
+
+**Opdracht eigenaar (2026-11-04):** Daka koppelen via Daisycon. Het programma is goedgekeurd (eigenaar, 2026-11-04). Ook in de privacyverklaring.
+
+1. **Links:** het Daisycon-deeplinkformaat uit de feed, `partner.daka.nl/c/?si=7290&li=1765148&wi=441384&ws=<plek>&dl=<pad>`, zonder de `pid` per product van de feed. Alleen productpagina's (`/p/…`, zonder query). Geen geheim: de feed-URL en de ID's staan in elke link.
+2. **Feed ("Daka.nl: Fashion", standaard 7):**
+   - ongeveer 48.700 regels, één per maat of lengte, met prijs, voorraad en verzendkosten;
+   - de categorie is overal "Sporten";
+   - bijna nooit een EAN (2 van de 970 stickregels, 1 van de 1545 schoenregels);
+   - zelden een modeljaar.
+
+   We tonen nooit `price_old`.
+3. **Herkennen** (`src/catalog/dakaFeed.ts`, geijkt op de feed van 2026-11-04):
+   - **Een stick:** een hockeymerk, geen kleding of accessoire, het woord "stick" op de pagina of in de omschrijving, en minstens één lengte in inches.
+   - **Een hockeyschoen:** een schoenwoord en "hockey" op de pagina, geen stick in naam of pad, en EU-maten. Veld of zaal alleen uit de naam ("indoor", "zaal"), anders onbekend. Een algemene winkelcategorie is geen bron.
+4. **Koppelen:**
+   - **Sticks:** op naam via `matchStick`. Alleen 'zeker' of met de hand bevestigd (`dakaConfirmed.ts`) geeft een knop. In de eerste run: 0 zeker, 182 twijfel; de afvinklijst staat bij de eigenaar.
+   - **Schoenen:** alleen op EAN, in de eerste run 1 model.
+5. **Alleen bij Daka** (`noindex`):
+   - 80 sticks en 28 schoenen;
+   - dezelfde import als HockeyCity en Plutosport;
+   - een schoen met de naam van een model dat we al tonen, maar zonder gedeelde EAN, importeren we niet (17 namen).
+6. **Verzendkosten:** daka.nl weigerde automatisch lezen (HTTP 429). Bron is daarom de campagnepagina van Daisycon ("gratis verzending vanaf €50"), en de feed bevestigt die:
+   - alle regels vanaf €50 zijn gratis;
+   - onder €50 is het meestal €4,95, maar 7.187 regels zijn ook daaronder gratis.
+
+   We rekenen €4,95 onder €50, zodat een totaal nooit te laag is. **De eigenaar bevestigt dit op daka.nl.**
+7. **Wekelijkse sync:** de stap `daka:feed` draait na HockeyCity, en `src/catalog/shoes/importedDaka.ts` mag in de sync-PR.
+8. **Teksten:**
+   - partnervermelding, footer, Over ons, methodiek, clubs, catalogus, ProductNotice en de `nofollow`-lijst;
+   - het artikel "Waar koop je een hockeystick?" krijgt een vijfde kolom; retourvoorwaarden "nog niet nagekeken", omdat daka.nl niet te lezen was;
+   - **privacyverklaring 1.7**, met een alinea over Daisycon en `partner.daka.nl` (opdracht eigenaar).
+9. **Verkooprapport:** nog niet. Daisycon heeft een eigen login of API-sleutel nodig, en die zet de eigenaar als geheim in GitHub.
+
+**Bewust niet:** twijfelgevallen automatisch koppelen, schoenen op naam koppelen, de oude prijs uit de feed tonen, levertijden tonen.
+
+**Betrokken bestanden:**
+- `src/lib/retailers.ts`, `src/catalog/dakaFeed.ts` (+ test), `scripts/daka-feed.ts`, `package.json`;
+- `src/catalog/{index,types,feedDates,plutosportImport,shoeFeed}.ts`, `src/catalog/offers/{index,daka,dakaConfirmed}.ts`, `src/catalog/imported/daka.ts`;
+- `src/catalog/shoes/{feedImport,index,types,importedDaka}.ts`;
+- de teksten en tests hierboven, `.github/workflows/passa-sync.yml`, `CLAUDE.md` en de docs.
+
+## 2026-11-04 — Homepage: bijschrift onder de foto, datumtegel en naam alleen op Over ons
+
+**Opdracht eigenaar (2026-11-04):**
+- **Bijschrift:** "Juiste stick · Past bij het niveau · Binnen budget" stond op de foto en bedekte de stick en de bal. Het staat nu onder de foto.
+- **Datumtegel:** heeft dezelfde vorm als de andere: groot "Wekelijks", klein "prijzen bijgewerkt, laatst 3 nov".
+- **Naam:** Hans Buursink en "Hockeyvader" staan alleen op Over ons. Een test bewaakt dat ze niet in de homepage-blokken, de header of de footer staan.

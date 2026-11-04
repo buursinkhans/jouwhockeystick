@@ -45,7 +45,7 @@ Per stick een lijst aanbiedingen, los van de productdata (CLAUDE.md: catalogus e
 
 ```ts
 type Offer = {
-  retailer: RetailerId;        // 'bolcom' | 'passasports' | 'plutosport' | 'hockeycity'
+  retailer: RetailerId;        // 'bolcom' | 'passasports' | 'plutosport' | 'hockeycity' | 'daka'
   productUrl: string;          // winkelpagina; de trackinglink bouwt retailers.ts
   priceEur: number;            // actuele prijs in de feed, incl. btw
   shippingEur: number | null;  // null = onbekend; dan staat dat erbij

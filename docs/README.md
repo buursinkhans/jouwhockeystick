@@ -43,7 +43,7 @@ Deze workflows lezen alleen en maken een rapport, meestal als issue. De orchestr
 | `sales-report.yml` | Kliks en bestellingen per plek en per stick bij bol.com en PassaHockey (alleen aantallen, want de repo is openbaar) |
 | `conversion-report.yml` | Stickwijzer-trechter, afhaken per vraag, winkelkliks en bezoekers uit AI-assistenten per pagina (PostHog) |
 | `marktverkenning.yml` | Nieuwe hockeypagina's bij concurrenten |
-| `passa-sync.yml` | Woensdag: importeert de PassaHockey-productfeed opnieuw (prijzen, voorraad, nieuwe en verdwenen sticks), werkt de Plutosport-koppelingen, de bol.com-prijzen, de hockeyschoenen uit beide feeds (`src/catalog/shoes/imported.ts`) en de HockeyCity-koppelingen (`src/catalog/offers/hockeyCity.ts`) bij en opent één PR |
+| `passa-sync.yml` | Woensdag: importeert de PassaHockey-productfeed opnieuw (prijzen, voorraad, nieuwe en verdwenen sticks), werkt de Plutosport-koppelingen, de bol.com-prijzen, de hockeyschoenen uit beide feeds (`src/catalog/shoes/imported.ts`) de HockeyCity-koppelingen (`src/catalog/offers/hockeyCity.ts`) en de Daka-koppelingen (`src/catalog/offers/daka.ts`) bij en opent één PR |
 | `instagram-token.yml` | Elke maand: ververst het Instagram-token in Netlify en start een nieuwe deploy |
 | `catalog-health.yml` | Welke sticks aan hun kwartaalcontrole toe zijn |
 | `bol-feed-check.yml` | Testrun: zoekt elke stick op in de bol.com-feed |

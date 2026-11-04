@@ -93,6 +93,8 @@ export type ShoeImportResult = {
   disciplineConflicts: DisciplineConflict[];
   /** HockeyCity pages with the name of a shoe we already show but no shared EAN: not imported. */
   hockeyCityNameOnly: { name: string; url: string }[];
+  /** The same for Daka pages: a name we already show (or another shop shows), no shared EAN. */
+  dakaNameOnly: { name: string; url: string }[];
 };
 
 const slugify = (text: string) =>
@@ -241,7 +243,12 @@ const CUT = /\b(heren|dames|men|women)\b/i;
  * again.
  */
 export function buildShoeImport(
-  feeds: { passa: readonly ShoeModel[]; pluto: readonly ShoeModel[]; hockeyCity?: readonly ShoeModel[] },
+  feeds: {
+    passa: readonly ShoeModel[];
+    pluto: readonly ShoeModel[];
+    hockeyCity?: readonly ShoeModel[];
+    daka?: readonly ShoeModel[];
+  },
   curated: readonly Pick<Shoe, 'slug' | 'eans'>[],
   date: string,
   /**
@@ -255,10 +262,18 @@ export function buildShoeImport(
   const passa = groupShop(feeds.passa);
   const pluto = groupShop(feeds.pluto);
   const hockeyCity = groupShop(feeds.hockeyCity ?? []);
-  const models = joinOnEan([...passa.groups, ...pluto.groups, ...hockeyCity.groups]);
-  const splitCode = new Map([...passa.splitCode, ...pluto.splitCode, ...hockeyCity.splitCode]);
-  const otherShopKeys = new Set([...feeds.passa, ...feeds.pluto].map(modelKey));
+  const daka = groupShop(feeds.daka ?? []);
+  const models = joinOnEan([...passa.groups, ...pluto.groups, ...hockeyCity.groups, ...daka.groups]);
+  const splitCode = new Map([...passa.splitCode, ...pluto.splitCode, ...hockeyCity.splitCode, ...daka.splitCode]);
+  // Shops whose models only come in when nothing else shows them (HockeyCity, Daka): their name
+  // must not be the name of a model of another shop in this run (decision log 2026-11-03, 2026-11-04).
+  const keysOf = (models: readonly ShoeModel[]) => new Set(models.map(modelKey));
+  const otherShopKeys: Record<'HockeyCity' | 'Daka', ReadonlySet<string>> = {
+    HockeyCity: keysOf([...feeds.passa, ...feeds.pluto]),
+    Daka: keysOf([...feeds.passa, ...feeds.pluto, ...(feeds.hockeyCity ?? [])]),
+  };
   const nameOnly: { name: string; url: string }[] = [];
+  const dakaNameOnly: { name: string; url: string }[] = [];
 
   const curatedByEan = new Map<string, string>();
   for (const shoe of curated) for (const ean of shoe.eans) curatedByEan.set(ean, shoe.slug);
@@ -279,6 +294,7 @@ export function buildShoeImport(
     if (shopPages('PassaHockey').length) modelListings.push(listing('passasports', shopPages('PassaHockey'), date));
     if (shopPages('Plutosport').length) modelListings.push(listing('plutosport', shopPages('Plutosport'), date));
     if (shopPages('HockeyCity').length) modelListings.push(listing('hockeycity', shopPages('HockeyCity'), date));
+    if (shopPages('Daka').length) modelListings.push(listing('daka', shopPages('Daka'), date));
     const eans = [...new Set(members.flatMap((m) => m.eans))].sort();
 
     const curatedSlug = eans.map((ean) => curatedByEan.get(ean)).find(Boolean);
@@ -287,10 +303,11 @@ export function buildShoeImport(
       listings[curatedSlug] = mergeListings([...(listings[curatedSlug] ?? []), ...modelListings]);
       continue;
     }
-    if (members.every((m) => m.shop === 'HockeyCity')) {
+    const onlyShop = members.every((m) => m.shop === 'HockeyCity') ? 'HockeyCity' : members.every((m) => m.shop === 'Daka') ? 'Daka' : null;
+    if (onlyShop) {
       const key = modelKey(members[0]!);
-      if (knownModelKeys.has(key) || otherShopKeys.has(key)) {
-        nameOnly.push(...members.map((m) => ({ name: m.name, url: m.url })));
+      if (knownModelKeys.has(key) || otherShopKeys[onlyShop].has(key)) {
+        (onlyShop === 'Daka' ? dakaNameOnly : nameOnly).push(...members.map((m) => ({ name: m.name, url: m.url })));
         continue;
       }
     }
@@ -310,13 +327,16 @@ export function buildShoeImport(
     const passaPage = modelListings.find((l) => l.shop === 'passasports')?.url;
     const plutoPage = modelListings.find((l) => l.shop === 'plutosport')?.url;
     const hockeyCityPage = modelListings.find((l) => l.shop === 'hockeycity')?.url;
+    const dakaPage = modelListings.find((l) => l.shop === 'daka')?.url;
     const sizes = [...new Set(modelListings.flatMap((l) => l.sizes))].sort(bySize);
     const image = members.find((m) => m.imageUrl)?.imageUrl;
     const shopLabel = (shop: ShoeModel['shop']) => `de categorie van ${shop}`;
     // HockeyCity's sizes come from its product pages, not from its feed.
     const sizeSource = members.every((m) => m.shop === 'HockeyCity')
       ? `Maten op de productpagina van HockeyCity op ${date}; geen maattabel van het merk.`
-      : `Maten in de productfeed van de winkel op ${date}; geen maattabel van het merk.`;
+      : members.every((m) => m.shop === 'Daka')
+        ? `Maten in de productfeed van Daka op ${date} (één regel per maat); geen maattabel van het merk.`
+        : `Maten in de productfeed van de winkel op ${date}; geen maattabel van het merk.`;
 
     shoes.push({
       id: slug,
@@ -363,12 +383,14 @@ export function buildShoeImport(
       ...(passaPage && { passaSportsProductUrl: passaPage }),
       ...(plutoPage && { plutosportProductUrl: plutoPage }),
       ...(hockeyCityPage && { hockeyCityProductUrl: hockeyCityPage }),
+      ...(dakaPage && { dakaProductUrl: dakaPage }),
       ...(image && { imageUrl: image }),
       feedImport: {
         feeds: [
           ...(passaPage ? (['passahockey'] as const) : []),
           ...(plutoPage ? (['plutosport'] as const) : []),
           ...(hockeyCityPage ? (['hockeycity'] as const) : []),
+          ...(dakaPage ? (['daka'] as const) : []),
         ],
         importedAt: date,
       },
@@ -380,8 +402,9 @@ export function buildShoeImport(
     shoes: shoes.sort((a, b) => a.slug.localeCompare(b.slug)),
     listings,
     curatedMatched: [...curatedMatched].sort(),
-    splitByArticle: [...passa.split, ...pluto.split, ...hockeyCity.split],
+    splitByArticle: [...passa.split, ...pluto.split, ...hockeyCity.split, ...daka.split],
     disciplineConflicts: conflicts,
     hockeyCityNameOnly: nameOnly,
+    dakaNameOnly,
   };
 }

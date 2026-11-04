@@ -149,13 +149,22 @@ export const productSchema = z.object({
     .startsWith('https://www.hockeycity.nl/')
     .optional(),
   /**
+   * Daka product page (Daisycon), added by the catalog from
+   * src/catalog/offers/daka.ts like HockeyCity's; never written in the product files.
+   */
+  dakaProductUrl: z
+    .string()
+    .url()
+    .startsWith('https://www.daka.nl/p/')
+    .optional(),
+  /**
    * Set for sticks imported in bulk from a partner's product feed instead of
    * curated one by one. Their specs come from the feed only; their pages are
    * noindex, stay out of the sitemap and articles, and bol.com availability
    * is unknown until checked. Removed once a stick is enriched by hand.
    */
   feedImport: z
-    .object({ feed: z.enum(['passahockey', 'plutosport', 'hockeycity']), importedAt: z.string() })
+    .object({ feed: z.enum(['passahockey', 'plutosport', 'hockeycity', 'daka']), importedAt: z.string() })
     .optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),

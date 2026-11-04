@@ -145,7 +145,7 @@ describe('privacy statement 1.5 (decision log 2026-11-01)', () => {
 
   it('describes the schoenenwijzer as built: not stored, question 7 only in the browser, no answers in the statistics', () => {
     // 1.6 since 2026-11-03 (HockeyCity); the 1.5 statements stay.
-    expect(['1.5', '1.6']).toContain(PRIVACY.version);
+    expect(['1.5', '1.6', '1.7']).toContain(PRIVACY.version);
     expect(PRIVACY.updatedAt >= '2026-11-01').toBe(true);
     expect(text).toMatch(/We slaan ze daar niet op en koppelen ze niet aan jou/);
     expect(text).toMatch(/blijft in je browser\. Het gaat niet naar onze server, niet in de statistieken en niet in een deellink/);

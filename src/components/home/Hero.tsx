@@ -30,8 +30,8 @@ function HeroVisual() {
       className="relative mx-auto block w-full max-w-sm"
     >
       <HeroPhotos />
-      {/* Fase 7: one quiet caption on the photo instead of three floating pills. */}
-      <ul className="absolute inset-x-3 bottom-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 rounded-2xl bg-white/90 px-4 py-2.5 text-[0.8125rem] font-semibold text-inkt shadow-card backdrop-blur-sm sm:inset-x-4 sm:bottom-4">
+      {/* One quiet caption under the photo (owner, 2026-11-04): on the photo it covered the stick and ball. */}
+      <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[0.8125rem] font-semibold text-inkt">
         {EXAMPLE_REASONS.map((reason) => (
           <li key={reason} className="flex items-center gap-1.5">
             <CheckIcon size={14} className="shrink-0 text-veld" />

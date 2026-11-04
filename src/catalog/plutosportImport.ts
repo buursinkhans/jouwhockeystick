@@ -73,7 +73,7 @@ export function plutosportGaps(models: readonly PlutoStickModel[], matchedKeys: 
 
 /** The shop a feed-only stick comes from: Plutosport or HockeyCity (decision log 2026-11-03). */
 export type ImportShop = {
-  feed: 'plutosport' | 'hockeycity';
+  feed: 'plutosport' | 'hockeycity' | 'daka';
   label: string;
   /** Where the lengths come from, for the source of `lengthsInches`. */
   lengthsFrom: string;
@@ -86,6 +86,23 @@ export const PLUTOSPORT_IMPORT: ImportShop = {
   label: 'Plutosport',
   lengthsFrom: 'volgens de productfeed van Plutosport leverbaar waren op de controledatum (uit het artikelnummer)',
   slug: (model) => slugFromUrl(model.url),
+};
+
+/** Daka page paths end in "-sku_<number>"; the catalog slug leaves that out and starts with the brand. */
+export const DAKA_IMPORT: ImportShop = {
+  feed: 'daka',
+  label: 'Daka',
+  lengthsFrom: 'volgens de productfeed van Daka leverbaar waren op de controledatum (één regel per lengte)',
+  slug: (model, brand) => {
+    // Lower case, and only letters, digits and single dashes: Daka paths can hold "_" ("5_gravity-20").
+    const page = (new URL(model.url).pathname.split('/').pop() ?? '')
+      .toLowerCase()
+      .replace(/-sku_\d+$/, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+    const brandSlug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return page.startsWith(brandSlug) ? page : `${brandSlug}-${page}`;
+  },
 };
 
 export const HOCKEYCITY_IMPORT: ImportShop = {
@@ -170,7 +187,11 @@ export function toFeedProduct(
     name: model.name,
     dataStatus: 'verified',
     feedImport: { feed: shop.feed, importedAt: today },
-    ...(shop.feed === 'plutosport' ? { plutosportProductUrl: model.url } : { hockeyCityProductUrl: model.url }),
+    ...(shop.feed === 'plutosport'
+      ? { plutosportProductUrl: model.url }
+      : shop.feed === 'daka'
+        ? { dakaProductUrl: model.url }
+        : { hockeyCityProductUrl: model.url }),
     imageAlt: `${model.name}`,
     ...(model.imageUrl && { imageUrl: model.imageUrl, imageSourceUrl: model.url }),
     discipline: {

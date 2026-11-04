@@ -1,6 +1,6 @@
 import type { TrustFacts } from '@/catalog/trustFacts';
 
-const DUTCH_DATE = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'long', timeZone: 'UTC' });
+const DUTCH_DATE = new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'short', timeZone: 'UTC' });
 
 /** Four counted facts in a row (two on a phone); every number comes from getTrustFacts. */
 export function ProofFacts({ facts }: { facts: TrustFacts }) {
@@ -9,8 +9,12 @@ export function ProofFacts({ facts }: { facts: TrustFacts }) {
     // The hero counts field brands only ("540 veldsticks van 20 merken"); say which count this is.
     { value: String(facts.brands), label: 'merken, veld en zaal' },
     { value: String(facts.shops), label: 'partnerwinkels naast elkaar' },
+    // A short word as the big value, like the numbers beside it; the date goes in the label (owner, 2026-11-04).
     facts.pricesReadOn
-      ? { value: DUTCH_DATE.format(new Date(`${facts.pricesReadOn}T00:00:00Z`)), label: 'prijzen wekelijks bijgewerkt, laatst op' }
+      ? {
+          value: 'Wekelijks',
+          label: `prijzen bijgewerkt, laatst ${DUTCH_DATE.format(new Date(`${facts.pricesReadOn}T00:00:00Z`)).replace(/\.$/, '')}`,
+        }
       : { value: String(facts.checkedSticks), label: 'sticks met de hand nagelopen' },
   ];
   return (

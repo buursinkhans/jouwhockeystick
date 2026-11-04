@@ -15,8 +15,8 @@ export const PRIVACY = {
   title: 'Privacyverklaring',
   metaDescription:
     'Welke gegevens jouwhockeystick.nl verwerkt en waarom: de stick- en schoenenwijzer, het interesseformulier, cookieloze statistieken, hosting en partnerlinks.',
-  version: '1.6',
-  updatedAt: '2026-11-03',
+  version: '1.7',
+  updatedAt: '2026-11-04',
   intro: [
     `${SITE_NAME} gebruikt zo weinig persoonsgegevens als mogelijk. Voor de stickwijzer en de schoenenwijzer hoef je geen naam, e-mailadres of geboortedatum op te geven, we plaatsen geen cookies en we gebruiken statistieken zonder cookies of bezoekersprofielen. Alleen als je zelf het interesseformulier invult, ontvangen we contactgegevens.`,
   ],
@@ -70,13 +70,14 @@ export const PRIVACY = {
     {
       heading: 'Afbeeldingen en links van derden',
       paragraphs: [
-        'Productfoto’s en logo’s laden we rechtstreeks van de websites van de merken en van de winkels waar de gegevens vandaan komen (bol.com, PassaSports, Plutosport en HockeyCity), of van de beeldservers die zij daarvoor gebruiken. Daardoor ontvangt die website, zoals bij elke afbeelding op internet, technische gegevens zoals je IP-adres en browser. Wij krijgen daar niets van te zien.',
-        'Als je doorklikt naar bol.com, PassaHockey, Plutosport of HockeyCity, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken: alleen de plek op onze site waar je klikte (bijvoorbeeld de stickwijzer, de schoenenwijzer of een stick- of schoenpagina) en, bij bol.com, de naam van de stick.',
+        'Productfoto’s en logo’s laden we rechtstreeks van de websites van de merken en van de winkels waar de gegevens vandaan komen (bol.com, PassaSports, Plutosport, HockeyCity en Daka), of van de beeldservers die zij daarvoor gebruiken. Daardoor ontvangt die website, zoals bij elke afbeelding op internet, technische gegevens zoals je IP-adres en browser. Wij krijgen daar niets van te zien.',
+        'Als je doorklikt naar bol.com, PassaHockey, Plutosport, HockeyCity of Daka, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken: alleen de plek op onze site waar je klikte (bijvoorbeeld de stickwijzer, de schoenenwijzer of een stick- of schoenpagina) en, bij bol.com, de naam van de stick.',
         'Op onze eigen site plaatsen we geen cookies, ook niet voor partnerlinks. Cookies van de winkels en de affiliatenetwerken komen pas na een klik, op hun eigen websites.',
         'De links naar bol.com lopen via het bol.com Partnerprogramma. Na een klik registreert bol.com dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; bol.com kan daarvoor op zijn eigen website cookies plaatsen. Wij ontvangen daarbij geen gegevens over wie je bent of wat je koopt, alleen geanonimiseerde totalen.',
         'De links naar PassaHockey, de hockeywinkel van PassaSports, lopen via het affiliatenetwerk TradeTracker. Na een klik registreren PassaSports en TradeTracker dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; zij kunnen daarvoor cookies plaatsen. Ook hier ontvangen wij geen gegevens over wie je bent.',
         'De links naar Plutosport lopen via het affiliatenetwerk Awin. Na een klik ga je eerst langs de website van Awin (awin1.com). Awin registreert dan technische gegevens zoals je IP-adres, je browser, het tijdstip en de pagina waar je vandaan kwam, en geeft een kenmerk van de klik mee aan Plutosport. Awin en Plutosport kunnen daarvoor cookies plaatsen, zodat een eventuele aankoop aan ons kan worden toegeschreven. Koop je iets, dan verwerkt Plutosport je bestelling volgens zijn eigen privacybeleid. Wij zien alleen kliks en aankopen, zonder naam, adres of andere gegevens over wie je bent.',
         'De links naar HockeyCity lopen, net als die naar PassaHockey, via het affiliatenetwerk TradeTracker. Na een klik registreren HockeyCity en TradeTracker dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; zij kunnen daarvoor cookies plaatsen. Ook hier ontvangen wij geen gegevens over wie je bent.',
+        'De links naar Daka lopen via het affiliatenetwerk Daisycon. Na een klik ga je eerst langs partner.daka.nl, het klikadres van Daka bij Daisycon. Daisycon registreert dan technische gegevens zoals je IP-adres, je browser, het tijdstip en de pagina waar je vandaan kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; Daisycon en Daka kunnen daarvoor cookies plaatsen. Koop je iets, dan verwerkt Daka je bestelling volgens zijn eigen privacybeleid. Wij zien alleen kliks en aankopen, zonder gegevens over wie je bent.',
       ],
     },
     {

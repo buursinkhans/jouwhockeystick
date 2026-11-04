@@ -81,7 +81,7 @@ export default function OverOnsPage() {
         <p className="mt-3 leading-relaxed text-inkt/80">
           De stickwijzer op deze site geeft je een persoonlijk advies met
           zichtbare redenen. Je koopt bij een van onze partnerwinkels: bol.com,
-          PassaHockey, Plutosport of HockeyCity. Wij verkopen zelf niets, maar
+          PassaHockey, Plutosport, HockeyCity of Daka. Wij verkopen zelf niets, maar
           zorgen dat je met een duidelijk advies bij de juiste stick uitkomt.
         </p>
 

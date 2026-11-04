@@ -2,8 +2,10 @@ import { PASSAHOCKEY_IMPORT_DATE } from './imported/passahockey';
 import { PASSAHOCKEY_LIVE_PRICES } from './imported/passaPrices';
 import { PLUTOSPORT_IMPORT_DATE } from './imported/plutosport';
 import { HOCKEYCITY_IMPORT_DATE } from './imported/hockeycity';
+import { DAKA_IMPORT_DATE } from './imported/daka';
 import { BOL_PRICES } from './offers/bolPrices';
 import { HOCKEYCITY_OFFERS } from './offers/hockeyCity';
+import { DAKA_OFFERS } from './offers/daka';
 import { PLUTOSPORT_MATCHES } from './offers/matches';
 
 /** First and last day on which the shop feeds behind the offer and prices were read. */
@@ -24,6 +26,8 @@ export const FEED_READ_DATES: readonly string[] = [
   PLUTOSPORT_MATCHES.date,
   HOCKEYCITY_OFFERS.date,
   HOCKEYCITY_IMPORT_DATE,
+  DAKA_OFFERS.date,
+  DAKA_IMPORT_DATE,
   BOL_PRICES.date,
 ];
 

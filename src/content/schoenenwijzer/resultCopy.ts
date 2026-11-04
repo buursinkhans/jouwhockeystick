@@ -54,7 +54,7 @@ export const SOURCE_NAME: Record<SourceType, string> = {
 };
 const SURFACE = { water: 'waterveld', zand: 'zandveld', 'semi-water': 'semi-waterveld' } as const;
 const PART = { voorvoet: 'de voorvoet', hiel: 'de hiel', wreef: 'de wreef' } as const satisfies Record<FitPart, string>;
-const SHOP = { passasports: 'PassaHockey', plutosport: 'Plutosport', hockeycity: 'HockeyCity' } as Record<string, string>;
+const SHOP = { passasports: 'PassaHockey', plutosport: 'Plutosport', hockeycity: 'HockeyCity', daka: 'Daka' } as Record<string, string>;
 const euro = (n: number) => `€ ${n.toFixed(2).replace('.', ',')}`;
 /** The source's words in quotes; a closing full stop is dropped, the sentence around it adds its own. */
 const quoted = (text: string) => `“${text.replace(/^["“]|["”]$/g, '').replace(/\.$/, '')}”`;
