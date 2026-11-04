@@ -18,7 +18,7 @@ const SHORTCUTS = [
 export function QuickFind() {
   return (
     <section aria-labelledby="quickfind-title" className="border-b border-rand bg-white">
-      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-12">
+      <div className="mx-auto max-w-5xl px-4 pt-6 pb-10 sm:px-6 sm:pt-8 sm:pb-12">
         <div className="card p-5 sm:p-8">
           <h2 id="quickfind-title" className="text-2xl text-inkt sm:text-3xl">
             Weet je al welk model?

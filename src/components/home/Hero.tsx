@@ -87,7 +87,7 @@ export function Hero() {
     // Fase 7: a calm krijt-to-white field without the pattern, a larger title
     // with a short lead, and the photo as the one strong image.
     <section className="border-b border-rand/70 bg-gradient-to-b from-krijt to-white">
-      <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 pt-10 pb-12 sm:px-6 sm:pt-16 sm:pb-20 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
+      <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 pt-10 pb-12 sm:px-6 sm:pt-16 sm:pb-12 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
         <div>
           <div className="hidden sm:block">
             <Logo variant="wordmark" size={26} tagline href={null} />
