@@ -27,7 +27,7 @@ const render = (offers: Offer[], indicativeEur: number | null = 180) =>
       productName: 'Grays Test',
       placement: 'catalogus',
       offers,
-      compareHref: '/sticks/x#waar-te-koop',
+      compareHref: '/sticks/x',
       indicativeEur,
     }),
   );
@@ -44,7 +44,7 @@ describe('OfferCardSummary', () => {
     expect(html).toContain('€244,95');
     expect(html).toContain('incl. €4,95 verzending · bij Daka');
     expect(html).toMatch(/Vergelijk prijzen<span[^>]*> bij (<!-- -->)?3(<!-- -->)? winkels/);
-    expect(html).toContain('href="/sticks/x#waar-te-koop"');
+    expect(html).toContain('href="/sticks/x"');
     expect(html).toMatch(/Direct naar (<!-- -->)?Daka/);
     expect(html).toContain('rel="noopener noreferrer sponsored"');
     expect(html).toContain(OFFER_TEXT.cardPartnerNote);

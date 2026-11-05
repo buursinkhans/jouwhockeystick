@@ -12,11 +12,17 @@ import { OfferCardSummary } from './OfferCardSummary';
 /** Rows in the stickwijzer before the link to all shops; the stick page shows every shop (2026-11-05). */
 const ADVICE_ROWS = 2;
 
-/** The id the stickwijzer's and the cards' "Vergelijk alle winkels" link to. */
+/** The id of "Waar te koop", for the "vanaf" price on the product page itself. */
 export const OFFER_ANCHOR = 'waar-te-koop';
 
+/**
+ * The comparison links of cards and advice go to the top of the product
+ * page, not to #waar-te-koop (2026-11-05): on a laptop the block sits in the
+ * sticky right column, and the jump scrolled the page to halfway the specs.
+ * The top shows photo, name, price and the shops on every screen.
+ */
 const compareHref = (product: Product, size: number | null) =>
-  `${productPath(product)}${size !== null ? `?maat=${size}` : ''}#${OFFER_ANCHOR}`;
+  `${productPath(product)}${size !== null ? `?maat=${size}` : ''}`;
 
 /** "Op prijs incl. verzending · gelezen op 27 okt" (one shop: no sort note). */
 function footLine(offers: readonly Offer[], now: Date): string {

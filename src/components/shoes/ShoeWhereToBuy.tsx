@@ -76,7 +76,7 @@ export function ShoeOfferSummary({ shoe }: { shoe: Shoe }) {
       productName={name(shoe)}
       placement="schoenencatalogus"
       offers={getShoeOffers(shoe)}
-      compareHref={`${shoePath(shoe)}#${OFFER_ANCHOR}`}
+      compareHref={shoePath(shoe)}
     />
   );
 }

@@ -2287,3 +2287,5 @@ Adviesregels en `ruleSetVersion` zijn niet veranderd.
 - `src/content/offers.ts`, `src/lib/analytics/events.ts`;
 - 16 stickbestanden in `src/catalog/products/`;
 - `docs/designsysteem.md`.
+
+**Aanvulling (2026-11-05):** "Vergelijk prijzen" op een kaart en "Vergelijk alle winkels" in het stick- en schoenadvies gaan naar de bovenkant van de productpagina, niet meer naar `#waar-te-koop`. Op een laptop staat dat blok in de meescrollende rechterkolom; de sprong naar het anker scrolde de pagina tot halverwege de specificaties, zonder foto (eigenaar). Bovenaan staan op elk scherm de foto, de naam, de prijs en de winkels. Het anker blijft voor de link "vanaf €…" op de pagina zelf.
