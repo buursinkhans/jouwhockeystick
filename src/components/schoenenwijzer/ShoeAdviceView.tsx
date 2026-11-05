@@ -100,7 +100,7 @@ function Item({ item, extraChecks, certaintyOf }: { item: ShoeAdviceItem; extraC
             offers={item.offers}
             nowIso={new Date().toISOString()}
             visible={2}
-            more={{ kind: 'link', href: `/hockeyschoenen/${item.shoe.slug}#waar-te-koop` }}
+            more={{ kind: 'link', href: `/hockeyschoenen/${item.shoe.slug}` }}
             detail="full"
           />
           <p className="mt-1 text-xs text-inkt/70">
