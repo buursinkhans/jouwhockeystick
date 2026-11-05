@@ -89,7 +89,6 @@ export const graysJb6Junior27055: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Het carbonpercentage komt van PassaHockey; Grays noemt zelf geen percentage',
       'Dat de Jumbow als low bow geldt is onze eigen indeling',
       'Een lage kromming vraagt wennen als je van een mid bow komt',
     ],

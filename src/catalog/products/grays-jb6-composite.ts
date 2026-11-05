@@ -82,7 +82,6 @@ export const graysJb6Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Beperkt tot twee lengtematen (36.5" en 37.5")',
     ],
     source: 'editorial-estimate',

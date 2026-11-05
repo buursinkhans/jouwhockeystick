@@ -83,7 +83,6 @@ export const graysJb10Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Prijs aan de hoge kant binnen dit assortiment — vooral interessant als het gebruiksniveau dat rechtvaardigt',
     ],
     source: 'editorial-estimate',

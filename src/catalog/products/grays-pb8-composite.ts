@@ -92,7 +92,6 @@ export const graysPb8Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Bij bol.com was op de controledatum alleen 37,5 inch leverbaar',
     ],
     source: 'editorial-estimate',

@@ -96,7 +96,6 @@ export const graysAc700DynabowS: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Grays noemt geen niveau; dat is onze inschatting',
     ],
     source: 'editorial-estimate',

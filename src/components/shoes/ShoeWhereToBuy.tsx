@@ -1,14 +1,13 @@
-import Link from 'next/link';
 import { isPriceFresh } from '@/catalog/offers/sort';
 import { shoePath } from '@/catalog/shoes';
 import { getShoeOffers, sizesInStockByShop } from '@/catalog/shoes/offers';
 import type { Shoe } from '@/catalog/shoes/types';
 import { OfferBlockView } from '@/components/offers/OfferBlockView';
 import { OfferRows } from '@/components/offers/OfferRows';
+import { OfferCardSummary } from '@/components/offers/OfferCardSummary';
 import { OFFER_ANCHOR, OfferFoot } from '@/components/offers/WhereToBuy';
 import { HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
 import { OFFER_TEXT } from '@/content/offers';
-import { PARTNER_LINK_LABEL, PARTNER_LINK_URL } from '@/content/partnerLinks';
 import { RETAILERS } from '@/lib/retailers';
 
 const name = (shoe: Shoe) => `${shoe.brand} ${shoe.model}`;
@@ -43,8 +42,9 @@ export function ShoeWhereToBuy({ shoe }: { shoe: Shoe }) {
               placement="schoenpagina"
               offers={offers}
               nowIso={now.toISOString()}
-              visible={3}
-              more={{ kind: 'expand' }}
+              // Every shop at once, as on a stick page (2026-11-05).
+              visible={offers.length}
+              more={null}
               detail="full"
             />
             {sizes.length > 0 && (
@@ -68,28 +68,15 @@ export function ShoeWhereToBuy({ shoe }: { shoe: Shoe }) {
   );
 }
 
-/** Under every shoe card: the shop with the lowest total as one row, and a link to all shops. */
+/** Under every shoe card: the same summary as a stick card (OfferCardSummary); shoes have no indicative price. */
 export function ShoeOfferSummary({ shoe }: { shoe: Shoe }) {
-  const now = new Date();
-  const offers = getShoeOffers(shoe);
-  if (offers.length === 0) return <p className="text-sm text-inkt/70">Nog geen partnerwinkel bekend</p>;
   return (
-    <div>
-      <OfferRows
-        brand={shoe.brand}
-        productName={name(shoe)}
-        placement="schoenencatalogus"
-        offers={offers}
-        nowIso={now.toISOString()}
-        visible={1}
-        more={{ kind: 'link', href: `${shoePath(shoe)}#${OFFER_ANCHOR}` }}
-        detail="short"
-      />
-      <p className="mt-1 text-xs text-inkt/70">
-        <Link href={PARTNER_LINK_URL} className="underline hover:text-veld">
-          {PARTNER_LINK_LABEL}
-        </Link>
-      </p>
-    </div>
+    <OfferCardSummary
+      brand={shoe.brand}
+      productName={name(shoe)}
+      placement="schoenencatalogus"
+      offers={getShoeOffers(shoe)}
+      compareHref={`${shoePath(shoe)}#${OFFER_ANCHOR}`}
+    />
   );
 }

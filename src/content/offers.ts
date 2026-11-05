@@ -19,7 +19,27 @@ export const OFFER_TEXT = {
   howWeCompareTextShoe:
     'Gesorteerd op prijs plus verzendkosten, voor één paar. Alleen winkels waarmee we een partnerprogramma hebben. We krijgen een vergoeding als je via een link koopt; dat verandert de volgorde niet. Prijzen komen uit de productfeeds van de winkels en zijn hooguit 14 dagen oud; de winkel toont na de klik de actuele prijs. Verzendkosten komen uit de openbare voorwaarden van de winkel (de goedkoopste standaardoptie).',
   seller: 'De winkel is de verkoper: die levert en regelt retouren en garantie.',
+  /**
+   * Product cards (2026-11-05). "Laagste prijs" names the lowest current total
+   * among our partner shops in stock, the same order as "Waar te koop"; never
+   * "goedkoopst" or "beste prijs". The line under the price says what the
+   * shipping is, or that it is unknown.
+   */
+  cardLowest: 'Laagste prijs',
+  cardIndicative: 'Richtprijs',
+  cardNoCurrentPrice: 'geen actuele winkelprijs op voorraad',
+  cardNoShop: 'nog geen partnerwinkel bekend',
+  cardPartnerNote: 'Partnerlink bij doorklikken naar winkels',
+  /** One shop: the line where the direct link stands on other cards, so prices stay level. */
+  cardOnlyShop: (shop: string) => `Alleen bij ${shop} gevonden`,
 } as const;
+
+/** What the lowest price includes, and where: "incl. €4,95 verzending · bij Daka". */
+export function shippingAt(shipping: number | null, shop: string): string {
+  const what =
+    shipping === null ? 'verzendkosten onbekend' : shipping === 0 ? 'gratis verzending' : `incl. ${euro(shipping)} verzending`;
+  return `${what} · bij ${shop}`;
+}
 
 const MONTHS = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
 

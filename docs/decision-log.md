@@ -2256,3 +2256,34 @@ Adviesregels en `ruleSetVersion` zijn niet veranderd.
 - `src/components/home/{QuickFind,Hero,HomePage,ProofStrip,SeasonBand,BuyingIntro,StickwijzerExplainer,WhyUs,FeaturedProducts,InstagramFeed,ClosingCta,HomeBlockLink}.tsx`;
 - `src/components/trust/ProofFacts.tsx`, `src/components/layout/Header.tsx`, `src/components/catalog/ProductDetail.tsx`;
 - `src/lib/analytics/events.ts`.
+
+## 2026-11-05 — Productkaarten: de vergelijking is de held, niet de winkel
+
+**Opdracht eigenaar (2026-11-05):** de kaarten moesten minder als webwinkel ogen en meer als onafhankelijke vergelijker.
+
+1. **Productkaart** (veldsticks, zaalsticks, vergelijkpagina, zaalkeuze en schoenen; `OfferCardSummary`):
+   - **Bovenaan:** "Laagste prijs" met rechts het aantal winkels. Daaronder groot de laagste actuele totaalprijs van de winkels die op voorraad hebben, en daaronder de verzending en de winkel ("gratis verzending · bij Daka", "incl. €4,95 verzending · bij Daka").
+   - **Verzendkosten onbekend:** dan staat er "verzendkosten onbekend", nooit "incl. verzending".
+   - **Woordkeuze:** "Laagste prijs" is de laagste prijs bij onze partners, in dezelfde volgorde als "Waar te koop". Nooit "goedkoopst" of "beste prijs".
+   - **Acties:** "Vergelijk prijzen bij N winkels" is de knop. "Direct naar [winkel]" is een rustige link naar de winkel van die prijs. Bij één winkel is "Bekijk bij [winkel]" de knop, met "Alleen bij [winkel] gevonden".
+   - **Geen actuele prijs:** de richtprijs, gemarkeerd als richtprijs.
+   - **Partnerlink:** "Partnerlink bij doorklikken naar winkels" staat onderaan.
+2. **Stick- en schoenpagina:** alle winkels staan direct open, zonder "Toon nog N winkels"; het zijn er hooguit vijf. Bij betaalde verzending toont een rij "prijs + verzending", met het totaal rechts.
+3. **Bronvermeldingen:** de regel "Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey" en vergelijkbare regels zijn uit de aandachtspunten van 16 sticks gehaald. Op de kaart stonden ze als waarschuwing vlak boven de koopknop. De bron staat al volledig bij de specificatie zelf.
+   - **Specificatietabel:** een gegeven van een winkel krijgt daar een rustig info-icoon en "Van de winkel.", geen waarschuwingsicoon.
+   - **Uitzondering:** bij 3 sticks (Grays AC500, AC600 en MB7) is die regel het enige aandachtspunt. Er moet er minstens één zijn, en we verzinnen er geen, dus daar staat hij nog. Open punt voor de redactie.
+4. **Meten:**
+   - `offer_compare_click` (placement, offerCount) bij "Vergelijk prijzen";
+   - `retailer_click` met de plek van de kaart (bijvoorbeeld `catalogus`) is direct doorklikken;
+   - `retailer_click` met `productpagina` of `schoenpagina` is doorklikken vanuit de vergelijking.
+
+   Zo zijn de drie routes in PostHog te onderscheiden. Er is geen nieuwe tracking op winkelklikken.
+
+**Niet veranderd:** de sortering, de prijsregels (14 dagen), de partnerlinks en hun parameters, `rel="sponsored"`, de structured data, de URL's en de stickwijzer. De kaarten blijven server-side gerenderd.
+
+**Betrokken bestanden:**
+- `src/components/offers/{OfferCardSummary,CompareLink,WhereToBuy,OfferRows}.tsx` (+ test);
+- `src/components/shoes/ShoeWhereToBuy.tsx`, `src/components/ui/SourceBadge.tsx`;
+- `src/content/offers.ts`, `src/lib/analytics/events.ts`;
+- 16 stickbestanden in `src/catalog/products/`;
+- `docs/designsysteem.md`.
