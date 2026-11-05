@@ -62,6 +62,19 @@ export function sortOffers(offers: readonly Offer[], { size, now }: { size: numb
   );
 }
 
+/**
+ * Whether the top row of a sorted list gets the "Laagste prijs" badge (owner,
+ * 2026-11-05): a current price, in stock in the chosen length, known shipping,
+ * and strictly lower than at least one other shop with a current price in
+ * stock. A tie, one shop or unknown shipping: no badge. Price only, never fee.
+ */
+export function hasLowestBadge(sorted: readonly Offer[], { size, now }: { size: number | null; now: Date }): boolean {
+  const comparable = sorted.filter((o) => isPriceFresh(o, now) && o.inStock && hasLength(o, size));
+  const [top, ...rest] = comparable;
+  if (!top || top !== sorted[0] || top.shippingEur === null || rest.length === 0) return false;
+  return rest.every((o) => totalPrice(top) < totalPrice(o));
+}
+
 /** Lowest total of the shops with a current price (in this length when given); null when none. */
 export function lowestTotal(offers: readonly Offer[], { size, now }: { size: number | null; now: Date }): number | null {
   const totals = offers.filter((o) => isPriceFresh(o, now) && o.inStock && hasLength(o, size)).map(totalPrice);

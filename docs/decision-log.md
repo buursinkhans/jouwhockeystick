@@ -2289,3 +2289,22 @@ Adviesregels en `ruleSetVersion` zijn niet veranderd.
 - `docs/designsysteem.md`.
 
 **Aanvulling (2026-11-05):** "Vergelijk prijzen" op een kaart en "Vergelijk alle winkels" in het stick- en schoenadvies gaan naar de bovenkant van de productpagina, niet meer naar `#waar-te-koop`. Op een laptop staat dat blok in de meescrollende rechterkolom; de sprong naar het anker scrolde de pagina tot halverwege de specificaties, zonder foto (eigenaar). Bovenaan staan op elk scherm de foto, de naam, de prijs en de winkels. Het anker blijft voor de link "vanaf €…" op de pagina zelf.
+
+## 2026-11-05 — Badge "Laagste prijs" in "Waar te koop"
+
+**Besluit eigenaar (2026-11-05):** het advies "geef de scherpste prijs of de snelste levering een opvallende badge" gedeeltelijk overnemen.
+
+- **Wel:** de bovenste rij krijgt een blauwe badge "Laagste prijs" op de rand (`hasLowestBadge`). Dat gebeurt alleen als aan alle voorwaarden is voldaan:
+  - de prijs is actueel;
+  - de stick is op voorraad, in de gekozen maat;
+  - de verzendkosten zijn bekend;
+  - de prijs is echt lager dan bij minstens één andere winkel met een actuele prijs op voorraad.
+
+  Bij één winkel of een gelijke prijs komt er geen badge. De badge volgt alleen de prijs, nooit de vergoeding. Hij staat op de stickpagina, de schoenpagina en in het stick- en schoenadvies.
+- **Niet:**
+  - "scherpste prijs", "goedkoopst", "beste prijs" of "winnaar": dat zijn claims over de hele markt, terwijl we vijf partners vergelijken;
+  - een badge voor de snelste levering: de feeds geven geen betrouwbare levertijden, en CLAUDE.md verbiedt een leverbelofte zonder bevestigde maat en voorraad.
+
+Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere rand na" in CLAUDE.md en in `docs/spec/prijsvergelijking.md`.
+
+**Betrokken bestanden:** `src/catalog/offers/sort.ts` (+ `badge.test.ts`), `src/components/offers/OfferRows.tsx`, `src/content/offers.ts`, `CLAUDE.md`, `docs/spec/prijsvergelijking.md`.

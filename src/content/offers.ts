@@ -9,6 +9,8 @@ export const OFFER_TEXT = {
   /** On a stick page there is no advice to keep. */
   noneOnPage: 'We kennen nog geen partnerwinkel die deze stick verkoopt. Vraag ernaar bij je hockeywinkel.',
   sortNote: 'op prijs incl. verzending',
+  /** Badge on the top row when it is strictly the lowest total (hasLowestBadge); never "goedkoopst" or "beste prijs". */
+  lowestBadge: 'Laagste prijs',
   sizeLegend: 'Jouw maat',
   noCurrentPrice: 'prijs niet actueel',
   checkPrice: 'Bekijk de actuele prijs',

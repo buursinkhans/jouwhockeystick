@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { isPriceFresh, sortOffers, totalPrice, type Offer } from '@/catalog/offers/sort';
+import { hasLowestBadge, isPriceFresh, sortOffers, totalPrice, type Offer } from '@/catalog/offers/sort';
 import { RETAILERS, type RetailerPlacement } from '@/lib/retailers';
 import { OFFER_TEXT, euro, inch, priceBreakdown, stockLine } from '@/content/offers';
 import { RetailerLink } from '@/components/ui/RetailerLink';
@@ -69,6 +69,7 @@ export function OfferRows({
   }, [sizeFromUrl, sizes]);
 
   const sorted = sortOffers(offers, { size, now });
+  const badge = hasLowestBadge(sorted, { size, now });
   const shown = open ? sorted : sorted.slice(0, visible);
   const hidden = sorted.length - shown.length;
 
@@ -104,6 +105,7 @@ export function OfferRows({
           const label = RETAILERS[offer.retailer].label;
           const fresh = isPriceFresh(offer, now);
           const top = index === 0 && fresh;
+          const withBadge = index === 0 && badge;
           const stock = stockLine({ inStock: offer.inStock, lengths: offer.lengths, size });
           const meta =
             detail === 'short'
@@ -125,7 +127,7 @@ export function OfferRows({
                   } · ${stock}`
                 : stock;
           return (
-            <li key={offer.retailer}>
+            <li key={offer.retailer} className={withBadge ? 'pt-2.5' : undefined}>
               <RetailerLink
                 retailer={offer.retailer}
                 brand={brand}
@@ -135,13 +137,19 @@ export function OfferRows({
                 offer={{ position: index + 1, offerCount: sorted.length, priceShown: fresh }}
                 ariaLabel={
                   fresh
-                    ? `Koop bij ${label}, ${euro(totalPrice(offer))} inclusief verzending`
+                    ? `Koop bij ${label}, ${euro(totalPrice(offer))} inclusief verzending${withBadge ? `, ${OFFER_TEXT.lowestBadge.toLowerCase()}` : ''}`
                     : `Koop bij ${label}, ${OFFER_TEXT.checkPrice.toLowerCase()}`
                 }
-                className={`flex min-h-14 items-center justify-between gap-3 rounded-xl bg-white text-inkt ${
-                  top ? 'border-2 border-veld px-[11px] py-[7px]' : 'border border-rand px-3 py-2 hover:border-veld'
+                className={`relative flex min-h-14 items-center justify-between gap-3 rounded-xl bg-white text-inkt ${
+                  top ? `border-2 border-veld px-[11px] ${withBadge ? 'pt-[13px] pb-[7px]' : 'py-[7px]'}` : 'border border-rand px-3 py-2 hover:border-veld'
                 }`}
               >
+                {withBadge && (
+                  // On the border, like a tab: the eye lands on the lowest price first (owner, 2026-11-05).
+                  <span className="absolute -top-2.5 left-3 rounded-full bg-veld px-2 py-0.5 text-[11px] leading-4 font-bold tracking-[0.02em] text-white shadow-sm">
+                    {OFFER_TEXT.lowestBadge}
+                  </span>
+                )}
                 <span className="flex min-w-0 flex-col">
                   <span className="text-[15px] font-bold text-veld">Koop bij {label}</span>
                   <span className="text-xs text-inkt/70">{meta}</span>
