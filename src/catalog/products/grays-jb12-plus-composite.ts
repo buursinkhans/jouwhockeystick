@@ -81,7 +81,6 @@ export const graysJb12PlusComposite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Hoogste prijs binnen de Grays-lijn (€450) — vooral interessant als het niveau dat rechtvaardigt',
     ],
     source: 'editorial-estimate',

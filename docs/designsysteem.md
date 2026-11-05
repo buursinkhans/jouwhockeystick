@@ -71,7 +71,11 @@ Zijmarge altijd `px-4 sm:px-6`; geen horizontaal scrollen op 360 px.
 - **Ritme:** homepage-secties `py-20`, vanaf `sm` `py-28`; paginakop `pb-12`/`sm:pb-16`; footer `pt-16`/`sm:pt-20`.
 - **Knoppen:** 44 px hoog, label 15 px, een lichte binnenrand bovenaan, donkerder bij hover en 1 px omlaag bij indrukken (niet bij `prefers-reduced-motion`). In de header houdt de knop een compact label, zodat alles op één regel past.
 - **Hero:** geen patroon, een vlak van krijt naar wit, een staande foto (4:5) met één bijschrift erop in plaats van losse pillen.
-- **Productkaarten en schoenkaarten:** de hele kaart is de link (de naam is over de kaart uitgerekt), de kooprij ligt erboven als eigen link. Grotere foto (176 px) die bij hover licht vergroot, de naam in 17 px, een samenvatting van twee regels en sterke punten in compacte letter onder een lijn.
+- **Productkaarten en schoenkaarten:** de hele kaart is de link (de naam is over de kaart uitgerekt), de kooprij ligt erboven als eigen link. Grotere foto (176 px) die bij hover licht vergroot, de naam in 17 px, een samenvatting van twee regels en sterke punten in compacte letter onder een lijn. Onderaan staat de prijsvergelijking (`OfferCardSummary`, 2026-11-05):
+  - **Prijs voorop:** "Laagste prijs" en het aantal winkels, de prijs groot, daaronder de verzending en de winkel.
+  - **Hoofdactie:** "Vergelijk prijzen bij N winkels", de enige blauwe knop op de kaart.
+  - **Winkel:** "Direct naar [winkel]" als rustige tekstlink. Bij één winkel is "Bekijk bij [winkel]" de knop, met "Alleen bij [winkel] gevonden" eronder, zodat de prijzen in een rij gelijk staan.
+  - **Partnerlink:** de vermelding staat klein onderaan.
 
 ## 5a. Vertrouwen (fase 4)
 

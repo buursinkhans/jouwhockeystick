@@ -110,6 +110,17 @@ export type AnalyticsEvent =
       method: 'native' | 'copy';
     }
   | {
+      /**
+       * "Vergelijk prijzen bij N winkels" on a product card (2026-11-05): the
+       * visitor opens the comparison. A shop click from the card itself is
+       * retailer_click with the card's placement; from the comparison it has
+       * placement 'productpagina' or 'schoenpagina'.
+       */
+      name: 'offer_compare_click';
+      placement: string;
+      offerCount: number;
+    }
+  | {
       /** "Zet ze naast elkaar" in an advice: the best match and the second pick on /vergelijk (fase 9). */
       name: 'advice_compare_click';
       /** Roles of the two sticks, e.g. 'best_match+safe_choice'. */

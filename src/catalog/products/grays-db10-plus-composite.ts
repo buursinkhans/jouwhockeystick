@@ -80,7 +80,6 @@ export const graysDb10PlusComposite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Grays vermeldt zelf geen specifiek niveau of positie voor dit model — hier ingeschat',
     ],
     source: 'editorial-estimate',

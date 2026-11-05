@@ -84,7 +84,6 @@ export const braboGForcePure40Junior3156528000: Product = {
   pointsOfAttention: {
     value: [
       'Brabo noemt 15% carbon, PassaHockey 40%: we tonen daarom geen percentage; controleer dit bij de winkel',
-      'Brabo noemt de kromming niet; die komt van PassaHockey',
       'Het niveau is onze eigen inschatting; Brabo noemt er geen',
     ],
     source: 'editorial-estimate',

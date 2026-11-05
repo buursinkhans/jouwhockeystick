@@ -3,13 +3,13 @@ import { getOffers, isPriceFresh, type Offer } from '@/catalog/offers';
 import { productPath } from '@/catalog/paths';
 import type { Product } from '@/catalog/types';
 import type { RetailerPlacement } from '@/lib/retailers';
-import { OFFER_TEXT, inch, readLine, shopCount } from '@/content/offers';
+import { OFFER_TEXT, inch, readLine } from '@/content/offers';
 import { PARTNER_LINK_LABEL, PARTNER_LINK_URL } from '@/content/partnerLinks';
 import { OfferBlockView } from './OfferBlockView';
 import { OfferRows } from './OfferRows';
+import { OfferCardSummary } from './OfferCardSummary';
 
-/** Rows before "Toon nog N winkels" on the stick page; in the stickwijzer and on cards fewer. */
-const PAGE_ROWS = 3;
+/** Rows in the stickwijzer before the link to all shops; the stick page shows every shop (2026-11-05). */
 const ADVICE_ROWS = 2;
 
 /** The id the stickwijzer's and the cards' "Vergelijk alle winkels" link to. */
@@ -139,8 +139,8 @@ export function WhereToBuy({
               nowIso={now.toISOString()}
               sizes={sizeChoices(product, offers)}
               sizeFromUrl
-              visible={PAGE_ROWS}
-              more={{ kind: 'expand' }}
+              visible={offers.length}
+              more={null}
               detail="full"
             />
             <OfferFoot offers={offers} now={now} />
@@ -152,43 +152,20 @@ export function WhereToBuy({
 }
 
 /**
- * Under every stick card (catalog, compare page, indoor selector): the shop
- * with the lowest price plus shipping as one row, and a link to all shops on
- * the stick page. No shop known: the indicative price, marked as such.
+ * Under every stick card (catalog, compare page, indoor selector): the lowest
+ * current total, the number of shops, "Vergelijk prijzen" to the stick page
+ * and a direct link to the shop of that price (OfferCardSummary). No current
+ * price: the indicative price, marked as such.
  */
 export function OfferSummary({ product, placement }: { product: Product; placement: RetailerPlacement }) {
-  const now = new Date();
-  const offers = getOffers(product);
-  const priced = offers.some((o) => isPriceFresh(o, now));
-
   return (
-    <div>
-      {!priced && (
-        <p className="text-sm text-inkt/70">
-          Richtprijs €{product.priceIndicativeEur.value.toFixed(2).replace('.', ',')}
-          {offers.length === 0 && ' · nog geen partnerwinkel bekend'}
-        </p>
-      )}
-      {offers.length > 0 && (
-        <>
-          <OfferRows
-            brand={product.brand}
-            productName={product.name}
-            placement={placement}
-            offers={offers}
-            nowIso={now.toISOString()}
-            visible={1}
-            more={{ kind: 'link', href: compareHref(product, null) }}
-            detail="short"
-          />
-          <p className="mt-1 text-xs text-inkt/70">
-            {offers.length === 1 && <>{shopCount(1)} · </>}
-            <Link href={PARTNER_LINK_URL} className="underline hover:text-veld">
-              {PARTNER_LINK_LABEL}
-            </Link>
-          </p>
-        </>
-      )}
-    </div>
+    <OfferCardSummary
+      brand={product.brand}
+      productName={product.name}
+      placement={placement}
+      offers={getOffers(product)}
+      compareHref={compareHref(product, null)}
+      indicativeEur={product.priceIndicativeEur.value}
+    />
   );
 }

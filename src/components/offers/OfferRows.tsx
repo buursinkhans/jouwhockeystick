@@ -4,11 +4,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { isPriceFresh, sortOffers, totalPrice, type Offer } from '@/catalog/offers/sort';
 import { RETAILERS, type RetailerPlacement } from '@/lib/retailers';
-import { OFFER_TEXT, euro, inch, stockLine } from '@/content/offers';
+import { OFFER_TEXT, euro, inch, priceBreakdown, stockLine } from '@/content/offers';
 import { RetailerLink } from '@/components/ui/RetailerLink';
-
-const shippingText = (shipping: number | null) =>
-  shipping === null ? 'verzendkosten onbekend' : shipping === 0 ? 'gratis verzending' : `incl. ${euro(shipping)} verzending`;
 
 function Chevron() {
   return (
@@ -118,7 +115,14 @@ export function OfferRows({
                   ? 'prijs bij de winkel'
                   : 'niet op voorraad volgens de feed'
               : fresh
-                ? `${shippingText(offer.shippingEur)} · ${stock}`
+                ? // With paid shipping the sum is visible: price + shipping, the total on the right (2026-11-05).
+                  `${
+                    offer.shippingEur === null
+                      ? 'verzendkosten onbekend'
+                      : offer.shippingEur === 0
+                        ? 'gratis verzending'
+                        : priceBreakdown(offer.priceEur ?? 0, offer.shippingEur)
+                  } · ${stock}`
                 : stock;
           return (
             <li key={offer.retailer}>

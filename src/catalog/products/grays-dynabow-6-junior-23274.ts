@@ -89,7 +89,6 @@ export const graysDynabow6Junior23274: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Het carbonpercentage komt van PassaHockey; Grays noemt zelf geen percentage',
       'Grays verkoopt dit model in meer kleuren; de specificaties komen van de blauwe uitvoering',
     ],
     source: 'editorial-estimate',
