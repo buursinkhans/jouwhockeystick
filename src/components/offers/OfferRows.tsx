@@ -146,7 +146,7 @@ export function OfferRows({
               >
                 {withBadge && (
                   // On the border, like a tab: the eye lands on the lowest price first (owner, 2026-11-05).
-                  <span className="absolute -top-2.5 left-3 rounded-full bg-veld px-2 py-0.5 text-[11px] leading-4 font-bold tracking-[0.02em] text-white shadow-sm">
+                  <span className="absolute -top-2.5 left-[11px] rounded-full bg-veld px-2 py-0.5 text-[11px] leading-4 font-bold tracking-[0.02em] text-white shadow-sm">
                     {OFFER_TEXT.lowestBadge}
                   </span>
                 )}
