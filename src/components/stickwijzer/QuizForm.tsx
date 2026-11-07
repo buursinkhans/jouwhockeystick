@@ -13,6 +13,8 @@ import {
   type QuestionId,
 } from '@/advice-engine/answers';
 import { suggestRoute } from '@/advice-engine/route';
+import type { StickUse } from '@/content/stickwijzer/stickUse';
+import { StickUseChoice, StickUseExit } from './StickUseChoice';
 import type { AdviceResult } from '@/advice-engine/types';
 import {
   FIRST_SCREEN,
@@ -52,12 +54,16 @@ const SELF_SELECT_BY_ROUTE: Record<
 };
 
 /** "6 stappen" etc. per route card, derived from the screens so it can't drift. */
-const ROUTE_STEP_COUNTS: Record<string, string> = Object.fromEntries(
-  (Object.keys(SELF_SELECT_BY_ROUTE) as AdviceRoute[]).map((route) => [
-    SELF_SELECT_BY_ROUTE[route],
-    `${SCREENS[route].length} stappen`,
-  ]),
-);
+const ROUTE_STEP_COUNTS: Record<string, string> = {
+  ...Object.fromEntries(
+    (Object.keys(SELF_SELECT_BY_ROUTE) as AdviceRoute[]).map((route) => [
+      SELF_SELECT_BY_ROUTE[route],
+      `${SCREENS[route].length} stappen`,
+    ]),
+  ),
+  // "Weet ik nog niet" ends up on one of the routes.
+  unsure: `${Math.min(...Object.values(SCREENS).map((s) => s.length))}–${Math.max(...Object.values(SCREENS).map((s) => s.length))} stappen`,
+};
 
 /**
  * Random id for one wizard session. crypto.randomUUID only exists in secure
@@ -199,11 +205,13 @@ export function QuizForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [advice, setAdvice] = useState<AdviceResult | null>(null);
   const [adviceShareHref, setAdviceShareHref] = useState<string | undefined>();
+  // Not an answer: the stickwijzer only runs for a field stick (2026-11-08).
+  const [stickUse, setStickUse] = useState<StickUse>('veld');
   const headingRef = useRef<HTMLHeadingElement>(null);
   const isFirstRender = useRef(true);
 
   const route = answers.route_self_select
-    ? routeFromSelfSelect(answers.route_self_select)
+    ? routeFromSelfSelect(answers.route_self_select, answers)
     : null;
   const screens = SCREENS[route ?? 'START'];
   const currentStep = Math.min(stepIndex, screens.length - 1);
@@ -264,10 +272,13 @@ export function QuizForm() {
       typeof value === 'string' &&
       value !== answers.route_self_select
     ) {
-      const selected = routeFromSelfSelect(
-        value as AdviceAnswers['route_self_select'],
-      );
-      track('route_selected', activeSessionId, { route: selected });
+      // "Weet ik nog niet" has no route yet: it follows from the next screen.
+      if (value !== 'unsure') {
+        const selected = routeFromSelfSelect(
+          value as AdviceAnswers['route_self_select'],
+        );
+        track('route_selected', activeSessionId, { route: selected });
+      }
     }
     setErrorMessage(null);
     const nextAnswers = { ...answers, [id]: value } as Answers;
@@ -372,9 +383,11 @@ export function QuizForm() {
     );
   }
 
+  // With "Weet ik nog niet" the route already is the suggestion: no banner.
   const suggested =
     screen.id === 'age_experience' &&
     route &&
+    answers.route_self_select !== 'unsure' &&
     answers.age_band &&
     answers.experience_seasons
       ? suggestRoute({
@@ -421,6 +434,15 @@ export function QuizForm() {
     </div>
   );
 
+  if (currentStep === 0 && stickUse !== 'veld') {
+    return (
+      <div>
+        <StickUseChoice value={stickUse} onChange={setStickUse} />
+        <StickUseExit use={stickUse} />
+      </div>
+    );
+  }
+
   return (
     <form
       noValidate
@@ -445,6 +467,11 @@ export function QuizForm() {
         }
       }}
     >
+      {currentStep === 0 && (
+        <div className="mb-8">
+          <StickUseChoice value={stickUse} onChange={setStickUse} />
+        </div>
+      )}
       <p className="text-sm text-lijngrijs">
         Stap {currentStep + 1}
         {route ? ` van ${screens.length}` : ` · ${routeStepRange()}, afhankelijk van de route`}

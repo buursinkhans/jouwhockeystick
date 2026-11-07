@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 export const interestSourceSchema = z.enum([
   'stickwijzer-resultaat',
+  /** A keeper on the first stickwijzer question (2026-11-08). */
+  'stickwijzer-keeper',
   'productpagina',
   'algemeen',
 ]);

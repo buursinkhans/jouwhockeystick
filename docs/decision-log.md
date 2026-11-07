@@ -2351,3 +2351,28 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/catalog/{feedImport,plutosportImport}.ts`, `src/content/stickwijzer/{questions,resultCopy}.ts`, `src/components/stickwijzer/RecommendationCard.tsx`;
 - `src/content/methodiek.ts` (uitleg aangepast aan de nieuwe regels, bijgewerkt 2026-11-08);
 - `scripts/stickwijzer-bench.ts`, `package.json`, `docs/stickwijzer/`.
+
+## 2026-11-08 — Stickwijzer stap 2: eerste vraag veld, zaal of keeper, en "Weet ik nog niet"
+
+**Opdracht eigenaar (2026-11-08):** stap 2 uit het plan voor de stickwijzer.
+
+1. **Eerste vraag "Waarvoor zoek je een stick?"** met de keuzes Veldhockey, Zaalhockey en Keeper. Veldhockey staat vooraan geselecteerd.
+   - **Zaalhockey:** gaat naar de zaalkeuze op `/zaalsticks`. De stickwijzer adviseert alleen veldsticks.
+   - **Keeper:** krijgt persoonlijk advies via `/interesse?source=stickwijzer-keeper`, met de uitleg dat er nog geen gecontroleerde adviesregels voor keepersticks zijn. Zo loopt een keeper nooit ongemerkt door de regels voor veldspelers.
+   - **Opslag:** de keuze is geen antwoord in het advies en wordt niet bewaard.
+   - **Meten:** `stickwijzer_exit` met `target` `zaal` of `keeper`.
+   - **Nieuwe bron:** `stickwijzer-keeper` in `interestSourceSchema`.
+2. **"Weet ik nog niet" als vierde keuze bij de route** (`route_self_select: 'unsure'`). De route volgt dan uit leeftijd en ervaring, via dezelfde `suggestRoute` als de bestaande routesuggestie; tot die bekend zijn is het de startroute, waarvan de eerste schermen gelijk zijn. Er komt dan geen wisselbanner.
+   - **Meten:** `route_selected` wordt niet gemeten voor "Weet ik nog niet", omdat er dan nog geen route is.
+   - **Weergave:** de vier kaarten staan op laptop in een raster van 2×2. De uitleg "Drie routes in de stickwijzer" toont alleen de drie routes.
+3. **Minder dan drie resultaten:** dat kon de stickwijzer al. Een ambitieuze keuze komt er alleen als die verantwoord is (`noAmbitiousReason`), en bij nul passende sticks volgt een eerlijke melding. Er is niets veranderd.
+
+**Advies ongewijzigd:** de vergelijkbank geeft voor alle 13 profielen dezelfde uitkomst als `v13-2026-11-08`, dus `ruleSetVersion` blijft gelijk.
+
+**Bewust niet:** lengte meten tot de heup. Daarvoor is een lengtetabel op heuphoogte met een eigen bron nodig; de huidige tabel gaat uit van de lichaamslengte zonder schoenen (decision log 2026-10-29). Dit is een open punt.
+
+**Betrokken bestanden:**
+- `src/components/stickwijzer/{StickUseChoice,QuizForm,QuestionField}.tsx`, `src/components/stickwijzer/stickwijzerIcons.ts`;
+- `src/content/stickwijzer/{stickUse,questions}.ts`, `src/app/stickwijzer/page.tsx`;
+- `src/advice-engine/{answers,playerContext}.ts` (+ test);
+- `src/lib/analytics/events.ts`, `src/interest/types.ts`.

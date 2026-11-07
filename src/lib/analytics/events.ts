@@ -121,6 +121,11 @@ export type AnalyticsEvent =
       offerCount: number;
     }
   | {
+      /** The first stickwijzer question sent the visitor elsewhere: indoor selector or personal keeper advice (2026-11-08). */
+      name: 'stickwijzer_exit';
+      target: 'zaal' | 'keeper';
+    }
+  | {
       /** "Zet ze naast elkaar" in an advice: the best match and the second pick on /vergelijk (fase 9). */
       name: 'advice_compare_click';
       /** Roles of the two sticks, e.g. 'best_match+safe_choice'. */

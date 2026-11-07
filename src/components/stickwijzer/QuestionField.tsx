@@ -204,7 +204,8 @@ export function QuestionField({
             {suffix}
           </legend>
           <p className="mt-1 text-sm text-lijngrijs">{def.dataUse}</p>
-          <div className="mt-3 grid items-start gap-3 md:grid-cols-3">
+          {/* Four cards (the routes plus "Weet ik nog niet") as two by two, so none stands alone. */}
+          <div className={`mt-3 grid items-start gap-3 ${input.options.length === 4 ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
             {input.options.map((option) => {
               const OptionIcon = optionIcons?.[option.value];
               return (
