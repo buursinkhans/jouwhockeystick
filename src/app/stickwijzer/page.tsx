@@ -5,9 +5,10 @@ import { StickwijzerLoader } from '@/components/stickwijzer/StickwijzerLoader';
 import { QUESTIONS } from '@/content/stickwijzer/questions';
 import { CheckIcon } from '@/components/ui/icons';
 
+// The three routes; "Weet ik nog niet" is a choice on the first screen, not a route.
 const ROUTE_OPTIONS =
   QUESTIONS.route_self_select.input.kind === 'single'
-    ? QUESTIONS.route_self_select.input.options
+    ? QUESTIONS.route_self_select.input.options.filter((option) => option.value !== 'unsure')
     : [];
 
 export const metadata = pageMetadata({

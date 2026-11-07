@@ -4,6 +4,7 @@ import {
   BoltIcon,
   EuroIcon,
   FeelIcon,
+  QuestionIcon,
   RulerIcon,
   SproutIcon,
   StepsIcon,
@@ -21,6 +22,7 @@ export const ROUTE_OPTION_ICONS: Record<string, IconComponent> = {
   first_stick: SproutIcon,
   next_stick: StepsIcon,
   advanced_compare: TargetIcon,
+  unsure: QuestionIcon,
 };
 
 /** Icon per wizard screen id, shown next to the screen title. */

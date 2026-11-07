@@ -197,7 +197,7 @@ export function buildPlayerContext(
   answers: AdviceAnswers,
   now: Date = new Date(),
 ): PlayerContext {
-  const route = routeFromSelfSelect(answers.route_self_select);
+  const route = routeFromSelfSelect(answers.route_self_select, answers);
   const currentLength =
     answers.current_length_inch && answers.current_length_inch !== 'unknown'
       ? Number(answers.current_length_inch)

@@ -83,7 +83,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     question: 'Welke route past het best?',
     shortLabel: 'situatie',
     dataUse:
-      'De route bepaalt hoeveel we vragen en welke sticks in beeld komen. Twijfel je? Kies de eenvoudigere route; na de vragen over leeftijd en ervaring stellen we een andere route voor als die beter past, en je kunt altijd teruggaan.',
+      'De route bepaalt hoeveel we vragen. Je niveau volgt altijd uit je antwoorden. Twijfel je, kies dan "Weet ik nog niet": dan kiezen wij de route na de vragen over leeftijd en ervaring.',
     input: {
       kind: 'single',
       options: [
@@ -138,6 +138,16 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
             {
               term: 'Wat je krijgt',
               text: 'Een gedetailleerde match, ook op sticks voor ervaren spelers, met de trade-off per stick.',
+            },
+          ],
+        },
+        {
+          value: 'unsure',
+          label: 'Weet ik nog niet',
+          details: [
+            {
+              term: 'Wat er gebeurt',
+              text: 'Je beantwoordt eerst de vragen over leeftijd, ervaring en lengte. Daarna kiezen wij de route die daarbij past. Bovenaan zie je welke route het is geworden.',
             },
           ],
         },
