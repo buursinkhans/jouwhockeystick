@@ -2325,3 +2325,29 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 **Bewust niet:** `src/content/privacy.ts` (privacytekst alleen op expliciete opdracht van de eigenaar) en de streepjes in UI-onderdelen (bronvermelding in het stickadvies, citaattoeschrijving), waar het een interfaceconventie is. Artikelen die alleen licht gekleurd zijn, zijn niet herschreven.
 
 **Betrokken bestanden:** `src/app/over-ons/page.tsx`, `src/content/blogPosts/hockeystick-kopen.ts`, `src/content/blogPosts/met-welke-stick-speelt-oranje.ts`, `src/content/brands.ts`, `src/app/merken/page.tsx`, diverse bestanden in `src/content/articles/` en `src/content/stickwijzer/`, `docs/schrijfstijl.md`, `docs/content-agent.md`, `docs/review-agent.md`, `docs/README.md`, `CLAUDE.md`.
+## 2026-11-08 — Stickwijzer v13: vier regels eerlijker, en een vergelijkbank
+
+**Opdracht eigenaar (2026-11-08):** stap 1 uit de vergelijking met de bouwopdracht van Perplexity. Vier regels gingen in tegen eerlijk advies. `ruleSetVersion` gaat van `v12-2026-10-19` naar `v13-2026-11-08`.
+
+1. **Budget is een maximum, geen bestedingsdoel.** Elke stick binnen het budget krijgt dezelfde budgetpunten. Eerder scoorde een stick ver onder de ondergrens van de gekozen budgetklasse lager. Daardoor kreeg een volwassen beginner bij een hoger budget een duurdere stick als beste match.
+2. **Een merkvoorkeur gaat niet boven een harde voorwaarde.** Budget en niveau werden voor het voorkeursmerk versoepeld; dat gebeurt niet meer. Past er geen stick van het merk, dan volgt het gewone advies, met de reden waarom het merk ontbreekt (`brandPreference.missReason`). Voorbeeld: "alleen Ritual, budget onder €75" gaf een Ritual van €298.
+3. **De gekozen route en het teamniveau verhogen het niveau niet.** Alleen 4+ seizoenen met een zekere aanname geeft een niveau hoger, zoals voorheen behalve als de basis nog geleerd wordt. De prestatieroute stelt nog wel meer vragen.
+4. **Het niveau van een feedstick komt nooit uit de prijs** (`adviceLevel`).
+   - **Met carbonpercentage:** het niveau wordt alleen daaruit geschat (`levelFromCarbon`; besluit eigenaar: alleen schatten uit carbon, zichtbaar als schatting).
+   - **Zonder carbonpercentage:** het niveau is onbekend en de stick telt niet mee in het advies (`unknown_level`).
+   - **Catalogus:** daar staat bij zo'n stick nog een niveau uit de prijs, met de bron "omdat het carbonpercentage onbekend is; de stickwijzer gebruikt deze schatting niet".
+   - **Bestanden:** de import schrijft deze schatting vanaf de volgende wekelijkse sync. Tot dan rekent de advieskern de oude bestanden opnieuw door.
+
+**Vergelijkbank:** `npm run stickwijzer:bench` rekent 13 vaste, fictieve profielen door, waaronder paren die op één antwoord verschillen. Hij legt de uitkomst vast als JSON en zet twee regelversies naast elkaar. De vergelijking van v12 en v13 staat in `docs/stickwijzer/vergelijking-v12-v13.md`. Invarianttests (`invariants.test.ts`) bewaken de vier regels en de herhaalbaarheid.
+
+**Gevolgen in de vergelijking:**
+- De competitiespeler krijgt als beste match de Brabo Traditional Carbon 70 (€133) in plaats van de Elite X One (€249); de Elite X One wordt de ambitieuze keuze.
+- De "veilige keuze" voor een volwassen beginner kan nu een goedkope houten stick zijn: die is eenvoudiger en past binnen het budget. **Open punt voor de eigenaar:** is dat gewenst, of moet de veilige keuze een ondergrens krijgen in opbouw (niet in prijs)?
+
+**Niet veranderd:** de vragenlijst, de maatregels, de veiligheidsfilters, het gevoel uit carbon (open beslissing) en het budget op de richtprijs in plaats van de winkelprijs.
+
+**Betrokken bestanden:**
+- `src/advice-engine/{scoring,engine,hardFilters,playerContext,productRules,ruleSetVersion,benchProfiles}.ts`, `invariants.test.ts` en bijgewerkte tests;
+- `src/catalog/{feedImport,plutosportImport}.ts`, `src/content/stickwijzer/{questions,resultCopy}.ts`, `src/components/stickwijzer/RecommendationCard.tsx`;
+- `src/content/methodiek.ts` (uitleg aangepast aan de nieuwe regels, bijgewerkt 2026-11-08);
+- `scripts/stickwijzer-bench.ts`, `package.json`, `docs/stickwijzer/`.

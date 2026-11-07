@@ -1,5 +1,6 @@
 import type { AdviceRoute, Goal } from '@/advice-engine/answers';
 import { feelFromCarbon } from '@/advice-engine/carbon';
+import { adviceLevel } from '@/advice-engine/productRules';
 import type { SizeAdvice } from '@/advice-engine/sizeAdvice';
 import type {
   AdviceReason,
@@ -183,7 +184,8 @@ export function reasonText(
     case 'SIZE_ALTERNATIVE':
       return `Beschikbaar in ${formatInch(reason.inch ?? 0)}, de tweede maat uit het lengteadvies.`;
     case 'EXPERIENCE_FIT':
-      return EXPERIENCE_REASON[product.experienceLevel.value];
+      // The level the advice was made with (adviceLevel), not a price-based estimate.
+      return EXPERIENCE_REASON[adviceLevel(product) ?? product.experienceLevel.value];
     case 'CONTROL_FOCUS':
       return `Met ${carbon}% carbon is dit een relatief zachte, controlegerichte opbouw; dat past doorgaans beter bij het leren aannemen en passen.`;
     case 'GOAL_FIT':

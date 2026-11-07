@@ -5,7 +5,6 @@ import { getCautions } from './cautions';
 import {
   applyHardFilters,
   firstFailingStage,
-  passesAllExcept,
   passesNonLengthFilters,
 } from './hardFilters';
 import { buildPlayerContext } from './playerContext';
@@ -193,12 +192,12 @@ function assignRoles(
 }
 
 /**
- * Owner's rule: a player who wants to stay with a brand always gets a stick
- * of that brand as the first choice, and the best stick of another brand as
- * the alternative to compare with. When nothing of the brand passes the
- * filters, the budget and then the level are relaxed for that brand only,
- * each with a visible caution. Size, data, safety and availability are never
- * relaxed; then the advice says why the brand is missing.
+ * Owner's rule: a player who wants to stay with a brand gets a stick of that
+ * brand as the first choice, and the best stick of another brand as the
+ * alternative to compare with. A brand preference never overrules a hard
+ * condition (owner, 2026-11-08): budget, level, size, data, safety and
+ * availability all stay. When nothing of the brand passes, the advice is the
+ * ordinary one and says why the brand is missing.
  */
 function brandFirstResults(
   ranked: Candidate[],
@@ -209,17 +208,12 @@ function brandFirstResults(
   if (brand === null) {
     return null;
   }
-  // Prefer a stick of the brand at the player's level, even above budget,
-  // over one that is too simple; only then the simpler one, and last one
-  // outside the level (too hard).
+  // Prefer a stick of the brand at the player's level over one that is too
+  // simple; both passed every hard filter.
   const own =
     ranked.find(
       (candidate) => candidate.product.brand === brand && !candidate.tooSimple,
-    ) ??
-    bestOfBrand(products, brand, ctx, ['budget'], true) ??
-    ranked.find((candidate) => candidate.product.brand === brand) ??
-    bestOfBrand(products, brand, ctx, ['budget']) ??
-    bestOfBrand(products, brand, ctx, ['budget', 'experience']);
+    ) ?? ranked.find((candidate) => candidate.product.brand === brand);
   if (!own) {
     return null;
   }
@@ -229,23 +223,6 @@ function brandFirstResults(
     results.push(withRole(other, 'other_brand', ctx));
   }
   return results;
-}
-
-function bestOfBrand(
-  products: Product[],
-  brand: Product['brand'],
-  ctx: PlayerContext,
-  relaxed: ReadonlyArray<'budget' | 'experience'>,
-  atLevelOnly = false,
-): Candidate | undefined {
-  return products
-    .filter(
-      (product) =>
-        product.brand === brand && passesAllExcept(product, ctx, relaxed),
-    )
-    .map((product) => toCandidate(product, ctx, sizeInchFor(product, ctx)))
-    .filter((candidate) => !atLevelOnly || !candidate.tooSimple)
-    .sort(byScore)[0];
 }
 
 function sizeInchFor(product: Product, ctx: PlayerContext): number {

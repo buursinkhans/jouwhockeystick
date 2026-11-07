@@ -5,6 +5,7 @@ import { isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import { getOffers, lowestTotal } from '@/catalog/offers';
 import { WhereToBuy } from '@/components/offers/WhereToBuy';
 import type { AdviceRoute } from '@/advice-engine/answers';
+import { adviceLevel } from '@/advice-engine/productRules';
 import type {
   AdviceReason,
   AdviceResultItem,
@@ -245,7 +246,7 @@ export function RecommendationCard({
             )}
           </ul>
           <p className="mt-3 text-sm text-inkt/80">
-            {LESS_SUITABLE_FOR[product.experienceLevel.value]}
+            {LESS_SUITABLE_FOR[adviceLevel(product) ?? product.experienceLevel.value]}
           </p>
 
           {/* What we don't know, said plainly (fase 8): the limits of this advice. */}

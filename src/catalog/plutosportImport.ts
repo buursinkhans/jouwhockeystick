@@ -12,6 +12,7 @@ import {
   MIN_MODEL_YEAR,
   catalogBrand,
   estimateLevel,
+  levelEstimateLabel,
   estimatePositions,
   isImplausibleCarbon,
   slugFromUrl,
@@ -37,7 +38,6 @@ export function carbonFromText(text: string): number | null {
 }
 
 const inchValue = (size: string) => Number(size.replace(',', '.'));
-const euro = (n: number) => `€${n.toFixed(2).replace('.', ',')}`;
 const inch = (n: number) => String(n).replace('.', ',');
 
 /** Colour variants have their own page; one product per model name, the one with the most lengths in stock. */
@@ -200,11 +200,7 @@ export function toFeedProduct(
     },
     experienceLevel: {
       value: estimateLevel(carbon, price, junior),
-      ...estimate(
-        `${label} noemt geen niveau. Eigen inschatting op basis van ${
-          carbon !== null ? `het carbonpercentage (${carbon}%) en ` : ''
-        }de prijs (${euro(price)})${junior ? '; een juniorstick schatten we nooit als "ervaren" in' : ''}.`,
-      ),
+      ...estimate(levelEstimateLabel(label, carbon, price, junior)),
       ...year,
     },
     recommendedPositions: {

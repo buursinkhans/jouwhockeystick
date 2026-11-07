@@ -14,7 +14,7 @@ import {
 } from './testFixtures';
 
 const band = (answers: AdviceAnswers) =>
-  derivePlayerBand(answers, buildPlayerContext(answers, NOW).route).band;
+  derivePlayerBand(answers).band;
 
 /** A 12-year-old in a selection team with 4+ seasons, 150 cm (34 inch, or 33). */
 const selectionKid = (overrides: Partial<AdviceAnswers> = {}) =>
@@ -37,6 +37,7 @@ describe('player level comes from the answers, not from the route', () => {
     expect(
       band(buildDevelopAnswers({ age_band: '8_10', experience_seasons: '2_3' })),
     ).toBe('starter');
+    // A selection team is context, not proof of technique (owner, 2026-11-08).
     expect(
       band(
         buildDevelopAnswers({
@@ -45,23 +46,22 @@ describe('player level comes from the answers, not from the route', () => {
           playing_level: 'selection',
         }),
       ),
-    ).toBe('developing');
+    ).toBe('starter');
     expect(band(buildDevelopAnswers({ age_band: '13_15' }))).toBe(
       'developing',
     );
     expect(band(selectionKid())).toBe('advanced');
   });
 
-  it('counts the performance route as a signal', () => {
-    expect(
-      band(
-        buildPerformanceAnswers({
-          age_band: '11_12',
-          experience_seasons: '2_3',
-          first_touch_confidence: 'mostly_good',
-        }),
-      ),
-    ).toBe('advanced');
+  it('never steps up on the chosen route or the team level alone (owner, 2026-11-08)', () => {
+    const answers = buildPerformanceAnswers({
+      age_band: '11_12',
+      experience_seasons: '2_3',
+      first_touch_confidence: 'mostly_good',
+    });
+    expect(band(answers)).toBe('developing');
+    expect(band({ ...answers, playing_level: 'top' })).toBe('developing');
+    expect(band({ ...answers, route_self_select: 'next_stick' })).toBe('developing');
   });
 
   it('does not step up while the basics are still being learned', () => {
@@ -202,22 +202,19 @@ describe('a stick that is too simple', () => {
 });
 
 describe('budget and brand points', () => {
-  it('gives a stick far below the budget a lower budget score', () => {
+  it('treats the budget as a maximum: every stick within it gets the same budget points (owner, 2026-11-08)', () => {
     const ctx = buildPlayerContext(
       buildDevelopAnswers({ budget_band: '125_175' }),
       NOW,
     );
-    const cheap = scoreProduct(
-      buildProduct({ priceIndicativeEur: sourced.price(30) }),
-      ctx,
-    );
-    const belowBand = scoreProduct(
-      buildProduct({ priceIndicativeEur: sourced.price(100) }),
-      ctx,
-    );
     const weight = ROUTE_WEIGHTS.ONTWIKKEL.budget;
-    expect(cheap.breakdown.budgetFit).toBe(weight * 0.4);
-    expect(belowBand.breakdown.budgetFit).toBe(weight * 0.8);
+    for (const price of [30, 100, 170]) {
+      const scored = scoreProduct(
+        buildProduct({ priceIndicativeEur: sourced.price(price) }),
+        ctx,
+      );
+      expect(scored.breakdown.budgetFit, `€${price}`).toBe(weight);
+    }
   });
 
   it('ranks on the uncapped score, so the cap does not erase differences within a brand', () => {

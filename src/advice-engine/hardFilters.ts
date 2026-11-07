@@ -92,26 +92,6 @@ export function passesNonLengthFilters(
 }
 
 /**
- * Every filter except the given stages (never data or length): for the stick
- * of the brand a player wants to stay with, which is shown with a caution
- * for each relaxed stage.
- */
-export function passesAllExcept(
-  product: Product,
-  ctx: PlayerContext,
-  relaxed: ReadonlyArray<'budget' | 'experience'>,
-): boolean {
-  return (
-    passesData(product, ctx) &&
-    matchSize(product, ctx.sizeAdvice) !== 'none' &&
-    NON_LENGTH_STAGES.every(
-      ([stage, passes]) =>
-        relaxed.some((r) => r === stage) || passes(product, ctx),
-    )
-  );
-}
-
-/**
  * The first filter a product fails, in the order applyHardFilters uses, or
  * null when it passes all of them.
  */
