@@ -63,15 +63,15 @@ export const BRAND_PROFILES: BrandProfile[] = [
       ],
       sources: [
         {
-          label: 'Grays — Hoe kies je de juiste hockeystick',
+          label: 'Grays: Hoe kies je de juiste hockeystick',
           url: 'https://www.grays-hockey.eu/nl/blogs/blog/how-to-choose-the-right-grays-hockey-stick-for-you',
         },
         {
-          label: 'Grays — Over Grays Hockey',
+          label: 'Grays: Over Grays Hockey',
           url: 'https://www.grays-hockey.eu/nl/blogs/blog/grays-hockey-about-us',
         },
         {
-          label: 'Grays — Waarom AeroCore-sticks',
+          label: 'Grays: Waarom AeroCore-sticks',
           url: 'https://www.grays-hockey.eu/nl/blogs/blog/why-choose-grays-aerocore-ac-hockey-sticks',
         },
       ],
@@ -117,11 +117,11 @@ export const BRAND_PROFILES: BrandProfile[] = [
       ],
       sources: [
         {
-          label: 'Brabo — Over Brabo Hockey',
+          label: 'Brabo: Over Brabo Hockey',
           url: 'https://brabohockey.com/pages/about-brabohockey',
         },
         {
-          label: 'Brabo — Technology',
+          label: 'Brabo: Technology',
           url: 'https://brabohockey.com/en/pages/technology',
         },
       ],
@@ -138,7 +138,7 @@ export const BRAND_PROFILES: BrandProfile[] = [
       'JDH is een multisportmerk ("All Sports. One Goal.") met voor hockey de merkfilosofie "Beyond limits. Powered by performance. Driven by discipline." JDH noemt op zijn site geen specifieke, eigen materiaaltechnologie zoals sommige concurrenten wel doen.',
     characteristicsSourceUrl: 'https://www.jdhsports.eu',
     nationalTeamNote:
-      'JDH voert Koen Bijen (Oranje heren, olympisch kampioen Parijs 2024) en Marijn Veen (Oranje dames, olympisch kampioen Parijs 2024) op als ambassadeur — onafhankelijk bevestigd via hockey.nl.',
+      'JDH voert Koen Bijen (Oranje heren, olympisch kampioen Parijs 2024) en Marijn Veen (Oranje dames, olympisch kampioen Parijs 2024) op als ambassadeur. Dat is onafhankelijk bevestigd via hockey.nl.',
     nationalTeamSourceUrl: 'https://www.jdhsports.eu/team-jdh',
     hasCatalogProducts: true,
   },
@@ -148,7 +148,7 @@ export const BRAND_PROFILES: BrandProfile[] = [
       'https://www.princess-hockey.com/cdn/shop/files/Princess_-_logo_Black.png?v=1714973755',
     logoBackground: 'light',
     characteristics:
-      'Princess is een Nederlands merk (opgericht 2003, hockeysticks sinds 2005) en staat bekend om zijn "Star"-classificatie: elke stick krijgt 2 tot 7 sterren, oplopend met het carbonpercentage — van circa 10% carbon bij 2 sterren tot 100% carbon bij 7 sterren.',
+      'Princess is een Nederlands merk (opgericht 2003, hockeysticks sinds 2005) en staat bekend om zijn "Star"-classificatie: elke stick krijgt 2 tot 7 sterren, oplopend met het carbonpercentage: van circa 10% carbon bij 2 sterren tot 100% carbon bij 7 sterren.',
     characteristicsSourceUrl:
       'https://princesshockey.co.za/pages/stick-technology',
     philosophy: {
@@ -158,11 +158,11 @@ export const BRAND_PROFILES: BrandProfile[] = [
       ],
       sources: [
         {
-          label: 'Princess — Technologie',
+          label: 'Princess: Technologie',
           url: 'https://www.princess-hockey.com/pages/technologie',
         },
         {
-          label: 'Princess — Over ons',
+          label: 'Princess: Over ons',
           url: 'https://www.princess-hockey.com/pages/about-us',
         },
       ],
@@ -178,7 +178,7 @@ export const BRAND_PROFILES: BrandProfile[] = [
     characteristicsSourceUrl:
       'https://www.hockeydirect.com/collections/adidas-hockey-sticks',
     nationalTeamNote:
-      'adidas is sinds 1999 officieel partner van de KNHB en levert de kleding/kit voor de Nederlandse jeugd- en A-teams (heren en dames) — dit is een kledingsponsoring, geen bevestigde koppeling met welke stick de spelers daadwerkelijk gebruiken.',
+      'adidas is sinds 1999 officieel partner van de KNHB en levert de kleding/kit voor de Nederlandse jeugd- en A-teams (heren en dames). Dat is een kledingsponsoring, geen bevestigde koppeling met welke stick de spelers daadwerkelijk gebruiken.',
     nationalTeamSourceUrl: 'https://www.knhb.nl/over-knhb/partners/adidas',
     hasCatalogProducts: true,
   },
@@ -197,9 +197,9 @@ export const BRAND_PROFILES: BrandProfile[] = [
         "Voor wie net begint, heeft Osaka een uitleg met video's over de grip, de push, slaan, de sweep en het stoppen van de bal.",
       ],
       sources: [
-        { label: 'Osaka — About', url: 'https://osakaworld.com/pages/about' },
+        { label: 'Osaka: About', url: 'https://osakaworld.com/pages/about' },
         {
-          label: 'Osaka — How to hockey',
+          label: 'Osaka: How to hockey',
           url: 'https://osakaworld.com/nl-nl/pages/how-to-hockey',
         },
       ],
@@ -220,7 +220,7 @@ export const BRAND_PROFILES: BrandProfile[] = [
       ],
       sources: [
         {
-          label: 'The Indian Maharadja — About',
+          label: 'The Indian Maharadja: About',
           url: 'https://www.indianmaharadja.com/about-theindianmaharadja',
         },
       ],
@@ -250,11 +250,11 @@ export const BRAND_PROFILES: BrandProfile[] = [
       ],
       sources: [
         {
-          label: 'Ritual — About us',
+          label: 'Ritual: About us',
           url: 'https://ritualhockey.com/pages/about-us',
         },
         {
-          label: 'Ritual — Technology',
+          label: 'Ritual: Technology',
           url: 'https://ritualhockey.com/en-gb/pages/technology',
         },
       ],
@@ -293,15 +293,15 @@ export const BRAND_PROFILES: BrandProfile[] = [
       ],
       sources: [
         {
-          label: 'Y1 — Homepage (Cosmic-collectie)',
+          label: 'Y1: Homepage (Cosmic-collectie)',
           url: 'https://y1sport.com/',
         },
         {
-          label: 'Y1 — LB 70 (Cosmic 2026)',
+          label: 'Y1: LB 70 (Cosmic 2026)',
           url: 'https://y1sport.com/products/lb-70-2026',
         },
         {
-          label: 'Y1 — Geschiedenis van Y1',
+          label: 'Y1: Geschiedenis van Y1',
           url: 'https://y1sport.com/pages/unity-history-of-y1',
         },
       ],
@@ -364,7 +364,7 @@ export const BRAND_PROFILES: BrandProfile[] = [
       ],
       sources: [
         {
-          label: 'Yibbi — Over Yibbi',
+          label: 'Yibbi: Over Yibbi',
           url: 'https://osakaworld.com/pages/yibbi-about',
         },
       ],

@@ -74,7 +74,7 @@ export const hockeystickKiezenPraktischeTips: Article = {
     { label: 'FIH Rules of Hockey (technische grenzen aan lengte en gewicht)' },
     {
       label:
-        'Redactionele inschatting jouwhockeystick.nl — geen medisch of prestatie-advies',
+        'Redactionele inschatting jouwhockeystick.nl (geen medisch of prestatie-advies)',
     },
   ],
   metaDescription:

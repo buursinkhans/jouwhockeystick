@@ -19,7 +19,7 @@ export const METHODIEK = {
   intro: [
     'Wij kiezen eerst de stick die past bij de speler: het niveau, de speelwensen (zoals aannemen, passen, dribbelen, 3D, backhand of sleeppush), het stickgevoel en het budget. Daarna kijken we of die stick er in de juiste maat is. De maat is dus geen punt in de score, maar een harde voorwaarde: een stick die er niet in jouw maat is, adviseren we niet.',
     'Het niveau halen we uit je antwoorden, niet uit de route die je kiest. Bij de jeugd tot en met 15 jaar is de leeftijd het uitgangspunt: onder 11 jaar adviseren we voor een beginnende speler, van 11 tot en met 15 jaar voor een gevorderde speler. Speelt iemand al 4 seizoenen of langer met een zekere aanname, dan adviseren we een niveau hoger, behalve als de speler de basis nog leert. De route die je kiest en het team waarin je speelt, verhogen het niveau niet: ze zeggen niets over hoe je met de bal omgaat. Wie nog geen seizoen speelt, krijgt altijd een advies voor beginners.',
-    'Je budget is een maximum, geen doel: elke stick binnen je budget telt even zwaar mee. Een duurdere stick is dus niet vanzelf een betere match. Het niveau van een stick halen we nooit uit de prijs. Noemt het merk of de winkel geen niveau, dan schatten we het in op basis van het carbonpercentage. Is ook dat onbekend, dan adviseren we die stick niet.',
+    'Je budget is de bovengrens: elke stick binnen je budget telt even zwaar mee. Een duurdere stick is dus niet vanzelf een betere match. Het niveau van een stick halen we nooit uit de prijs. Noemt het merk of de winkel geen niveau, dan schatten we het in op basis van het carbonpercentage. Is ook dat onbekend, dan adviseren we die stick niet.',
     'Voor beginnende hockeyers adviseren we bewust eenvoudiger. Dan staan maat, hanteerbaarheid, controle en plezier voorop. Een heel stijve of extreem gekromde stick is niet automatisch beter om hockey te leren.',
     'Voor ervaren spelers wegen we meer kenmerken mee, zoals gewenste acties, voorkeur voor een zachter of directer stickgevoel en ervaring met verschillende bow-profielen.',
     'Wil je bij het merk van je huidige stick blijven? Dan zetten we de best passende stick van dat merk voorop, en het best passende alternatief van een ander merk ernaast. Een merkvoorkeur gaat nooit boven je budget, je niveau of je maat. Past er geen stick van dat merk, dan krijg je het gewone advies en zeggen we waarom je merk ontbreekt.',
@@ -35,7 +35,7 @@ export const METHODIEK = {
     },
     {
       name: 'Prestatie',
-      body: 'Voor gevorderde jeugd en senioren. We vergelijken op acties, techniek per actie, bow-profiel, stijfheid en budget. Deze route stelt meer vragen; het niveau volgt nog steeds uit je antwoorden, niet uit de keuze voor deze route.',
+      body: 'Voor gevorderde jeugd en senioren. We vergelijken op acties, techniek per actie, bow-profiel, stijfheid en budget. Deze route stelt meer vragen. Het niveau volgt uit je antwoorden, net als bij de andere routes.',
     },
   ],
   hardFilters: [

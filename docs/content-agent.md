@@ -24,7 +24,8 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 
 - **Hoofdvraag beantwoord in de intro, binnen 80 woorden**, in eigen bewoordingen.
 - **Eén H1 (de titel), daaronder H2/H3.** Kopjes zijn vragen of duidelijke onderwerpen.
-- **Toon: vriendelijk, persoonlijk en sprankelend.** Schrijf zoals een enthousiaste hockeyvriend die er verstand van heeft, niet als een rapport. Spreek de lezer aan met "je". Korte zinnen, af en toe een vraag of een uitroep ("Op naar de zaal!"), gewone hockeytaal (sleeppush, aanname) en geen jargon zonder uitleg. Warm en enthousiast, maar niet overdreven: geen superlatieven over producten.
+- **Toon: vriendelijk, persoonlijk en concreet.** Schrijf zoals een hockeyvriend die er verstand van heeft, niet als een rapport. Spreek de lezer aan met "je". Korte zinnen, af en toe een vraag aan de lezer, gewone hockeytaal (sleeppush, aanname) en geen jargon zonder uitleg. Warm, maar zonder uitroeptekens of superlatieven: enthousiasme laat je zien met een concreet voorbeeld.
+- **Geen AI-patronen:** volg `docs/schrijfstijl.md` (hooguit één "niet X, maar Y" per tekst, geen gedachtestreepjes in lopende tekst, geen uitroeptekens, geen labels als "Goed nieuws:" of "Tip:"). Is de skill vermijd-ai-schrijfstijl beschikbaar, draai die dan over de tekst vóór de PR.
   - Wel: "Een stick die nu te lang is, maakt oefenen juist moeilijker, en daar gaat het plezier van af."
   - Niet: "Ons advies is om de huidige hanteerbaarheid zwaarder te laten wegen."
   - Vermijd zakelijke formuleringen als "redactionele inschatting", "doorgaans", "de geraadpleegde passages". Zeg het gewoon: "onze tip", "meestal", "voor zover bekend".
@@ -57,6 +58,6 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 
 ## 5. Controle vóór de PR
 
-Draai `npm run lint`, `npx next typegen`, `npm run typecheck` en `npm test`. Lees de tekst daarna nog één keer als ouder of speler: is de hoofdvraag beantwoord, staat er niets in wat we niet kunnen onderbouwen?
+Draai `npm run lint`, `npx next typegen`, `npm run typecheck` en `npm test`. Lees de tekst daarna nog één keer als ouder of speler: is de hoofdvraag beantwoord, staat er niets in wat we niet kunnen onderbouwen? En één keer op de harde regels uit `docs/schrijfstijl.md`.
 
 Open de PR zelf met `gh pr create --base main` (titel `Content: <onderwerp> (#<issue>)`, met `Closes #<issue>` in de beschrijving). In de PR-beschrijving staan: de hoofdvraag, welke pagina's je op botsing hebt gecontroleerd, de bronnen, en wat je bewust hebt weggelaten.

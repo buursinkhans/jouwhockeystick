@@ -104,11 +104,11 @@ export const hockeyschoenenWaterveldZandveld: Article = {
       label: 'Modelgegevens en bronnen per schoen: de modelpagina’s onder /hockeyschoenen, met bron en controledatum per eigenschap',
     },
     {
-      label: 'Grays — AeroCage XW10 (fabrikantinformatie over een zool voor water- en zandkunstgras)',
+      label: 'Grays: AeroCage XW10 (fabrikantinformatie over een zool voor water- en zandkunstgras)',
       url: 'https://www.grays-hockey.com/products/aerocage-xw10-shoe',
     },
     {
-      label: 'Grays — Our Guide To The Best Grays Hockey Shoes (fabrikantbeschrijving van ondergrondgeschiktheid)',
+      label: 'Grays: Our Guide To The Best Grays Hockey Shoes (fabrikantbeschrijving van ondergrondgeschiktheid)',
       url: 'https://www.grays-hockey.com/blogs/news/our-guide-to-the-best-grays-hockey-shoes',
     },
   ],

@@ -11,6 +11,7 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | [`spec/hockeyschoenen-keuzemodel.md`](spec/hockeyschoenen-keuzemodel.md) | Het keuzemodel voor hockeyschoenen: vragen, beslisregels, productmodel, resultaatpagina en acceptatietests van de sectie `/hockeyschoenen` (issue #100). **Leidend**; afwijkingen leggen we vast in de decision log. |
 | [`spec/prijsvergelijking.md`](spec/prijsvergelijking.md) | Prijsvergelijking per stick: spelregels, gegevensmodel, koppelen tussen winkels en de architectuurkeuze. Besloten 2026-10-26, nog niet gebouwd. |
 | [`source-policy.md`](source-policy.md) | Bronbeleid: hoe we claims onderbouwen, bronnen vermelden en de catalogus elk kwartaal controleren. Bindend voor content, productdata en advies. |
+| [`schrijfstijl.md`](schrijfstijl.md) | Schrijfstijl zonder AI-patronen: harde regels en wat je vermijdt. Geldt voor alle Nederlandse tekst; komt uit de skill vermijd-ai-schrijfstijl. |
 | [`merkinstructie.md`](merkinstructie.md) | Logo, kleuren, typografie en tone of voice. `scripts/build-brand-assets.mjs` bouwt de logobestanden hieruit. |
 | [`designsysteem.md`](designsysteem.md) | Hoe pagina's eruitzien: kleurrollen, typeschaal, breedtes, kaarten, foto's en wat we bewust niet doen. Volgt de merkinstructie. |
 | [`business-model.md`](business-model.md) | Verdienmodel en strategie. De actuele situatie staat in sectie 5; de partnerprogramma's per winkel in sectie 5a; hockeyschoenen in sectie 5b. |
