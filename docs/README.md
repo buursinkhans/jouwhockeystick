@@ -7,6 +7,7 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | Document | Waarvoor |
 |---|---|
 | [`spec/keuzehulp-instructie-v1.1.md`](spec/keuzehulp-instructie-v1.1.md) | De specificatie van de stickwijzer: routes, vragen, adviesregels en bronnen. **Leidend**; afwijkingen leggen we vast in de decision log. |
+| [`stickwijzer/vergelijking-v12-v13.md`](stickwijzer/vergelijking-v12-v13.md) | Vaste testprofielen, oude en nieuwe regels naast elkaar (`npm run stickwijzer:bench`). |
 | [`spec/hockeyschoenen-keuzemodel.md`](spec/hockeyschoenen-keuzemodel.md) | Het keuzemodel voor hockeyschoenen: vragen, beslisregels, productmodel, resultaatpagina en acceptatietests van de sectie `/hockeyschoenen` (issue #100). **Leidend**; afwijkingen leggen we vast in de decision log. |
 | [`spec/prijsvergelijking.md`](spec/prijsvergelijking.md) | Prijsvergelijking per stick: spelregels, gegevensmodel, koppelen tussen winkels en de architectuurkeuze. Besloten 2026-10-26, nog niet gebouwd. |
 | [`source-policy.md`](source-policy.md) | Bronbeleid: hoe we claims onderbouwen, bronnen vermelden en de catalogus elk kwartaal controleren. Bindend voor content, productdata en advies. |

@@ -279,9 +279,11 @@ function feelFit(
   return { fit, exactMatch: distance === 0 };
 }
 
-/** Far below the budget: less than half of the lower end of the chosen band. */
-const FAR_BELOW_BUDGET_SHARE = 0.5;
-
+/**
+ * The budget is a maximum, not a spending target (owner, 2026-11-08): every
+ * stick within it scores the same, so a higher budget never pushes a dearer
+ * stick to the top. The hard filter removes sticks above the maximum.
+ */
 function budgetFit(
   product: Product,
   ctx: PlayerContext,
@@ -289,15 +291,7 @@ function budgetFit(
   if (ctx.budget === null) {
     return { fit: 0.7, inBand: false };
   }
-  const price = product.priceIndicativeEur.value;
-  if (price >= ctx.budget.minEur) {
-    return { fit: 1, inBand: true };
-  }
-  if (price < ctx.budget.minEur * FAR_BELOW_BUDGET_SHARE) {
-    // Much cheaper than asked: likely a simpler stick than the player is looking for.
-    return { fit: 0.4, inBand: false };
-  }
-  return { fit: ctx.route === 'START' ? 0.9 : 0.8, inBand: false };
+  return { fit: 1, inBand: product.priceIndicativeEur.value <= ctx.budget.maxEur };
 }
 
 function goalQuestionIds(ctx: PlayerContext): QuestionId[] {

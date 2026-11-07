@@ -604,7 +604,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     question: 'Wil je bij hetzelfde merk blijven?',
     shortLabel: 'zelfde merk',
     dataUse:
-      'Kies je voor hetzelfde merk, dan wegen we dat zwaar mee. We laten altijd ook een stick van een ander merk zien om mee te vergelijken.',
+      'Kies je voor hetzelfde merk, dan zetten we een passende stick van dat merk voorop, binnen je budget en niveau. We laten altijd ook een stick van een ander merk zien om mee te vergelijken.',
     showWhen: knowsCurrentBrand,
     input: {
       kind: 'single',

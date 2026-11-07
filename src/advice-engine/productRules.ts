@@ -1,4 +1,7 @@
 import { isProductActive } from '@/catalog';
+import { levelFromCarbon } from '@/catalog/feedImport';
+import { isJunior } from '@/catalog/passaFeed';
+import { isJuniorStick } from '@/catalog/similar';
 import type { BowProfile, ExperienceLevel, Product } from '@/catalog/types';
 import { HIGH_CARBON, SOFT_MAX_CARBON, feelFromCarbon } from './carbon';
 import type { ExperienceBand, StickFeel } from './types';
@@ -72,8 +75,24 @@ function carbonTier(
  * in per product, so a product can never carry an advice flag that its own
  * specs contradict.
  */
+/**
+ * The level the stickwijzer uses (owner, 2026-11-08). A level a shop or brand
+ * states, or that we checked by hand, stays. A level we estimated for a feed
+ * stick is recomputed from its carbon percentage only, so a price never sets
+ * it; without a carbon percentage it is unknown (null) and the stick is not
+ * advised. The import writes the same estimate from the next weekly sync on.
+ */
+export function adviceLevel(product: Product): ExperienceLevel | null {
+  if (!product.feedImport || product.experienceLevel.source !== 'editorial-estimate') {
+    return product.experienceLevel.value;
+  }
+  const carbon = product.carbonPercentage?.value;
+  return carbon === undefined ? null : levelFromCarbon(carbon, isJunior(product.name) || isJuniorStick(product));
+}
+
 export function deriveAdviceRules(product: Product): ProductAdviceRules {
-  const level = product.experienceLevel.value;
+  // A stick without a known level never passes getAdviceBlockers, so the fallback is never scored.
+  const level = adviceLevel(product) ?? product.experienceLevel.value;
   const bow = product.bowProfile?.value;
   const carbon = product.carbonPercentage?.value;
   const bands = BANDS_BY_LEVEL[level];
@@ -127,7 +146,9 @@ export type AdviceBlocker =
   | 'missing_lengths'
   | 'missing_core_source'
   | 'unavailable'
-  | 'illogical_starter_flag';
+  | 'illogical_starter_flag'
+  /** A feed stick whose level could only be estimated from its price. */
+  | 'unknown_level';
 
 function hasTraceableSource(
   sourced: { source: string; sourceUrl?: string } | undefined,
@@ -173,8 +194,12 @@ export function getAdviceBlockers(
   if (product.stock.value === 'unavailable') {
     blockers.push('unavailable');
   }
+  const level = adviceLevel(product);
+  if (level === null) {
+    blockers.push('unknown_level');
+  }
   if (
-    product.experienceLevel.value === 'beginner' &&
+    level === 'beginner' &&
     (product.bowProfile?.value === 'extreme_lowbow' ||
       (carbon !== undefined && carbon >= HIGH_CARBON))
   ) {
