@@ -76,7 +76,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Begin je als volwassene?',
       level: 2,
       body: [
-        'Leuk dat je begint! Ook als volwassene start je het makkelijkst met een rustige, soepele stick in 36,5 inch. Deze sticks uit onze catalogus zijn gemaakt voor beginners:',
+        'Ook als volwassene start je het makkelijkst met een rustige, soepele stick in 36,5 inch. Deze sticks uit onze catalogus zijn gemaakt voor beginners:',
         { type: 'list', items: adultSticks.map(stickListItem) },
       ],
     },

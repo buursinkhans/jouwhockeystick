@@ -55,7 +55,7 @@ export const zaalstickVoorKinderen: Article = {
   slug: 'zaalstick-voor-kinderen',
   title: 'Zaalstick voor kinderen: waar let je op?',
   intro:
-    'Op naar de zaal! Een zaalstick voor je kind kies je eerst op lengte: dezelfde maat als op het veld, niet groter. Daarna telt balcontrole meer dan slagkracht, want slaan mag in de zaal niet. Goed om te weten: een aparte zaalstick is niet verplicht, want voor zaal- en veldsticks gelden dezelfde regels. En omdat het zaalseizoen kort is, is een eenvoudige, betaalbare stick vaak een slimme keuze.',
+    'Een zaalstick voor je kind kies je eerst op lengte: dezelfde maat als op het veld, niet groter. Daarna telt balcontrole meer dan slagkracht, want slaan mag in de zaal niet. Een aparte zaalstick is niet verplicht, want voor zaal- en veldsticks gelden dezelfde regels. En omdat het zaalseizoen kort is, is een eenvoudige, betaalbare stick vaak een slimme keuze.',
   sections: [
     {
       heading: 'Heeft je kind een aparte zaalstick nodig?',

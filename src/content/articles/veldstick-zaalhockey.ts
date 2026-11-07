@@ -24,7 +24,7 @@ export const veldstickZaalhockey: Article = {
   title: 'Kun je met een veldstick zaalhockeyen?',
   seoTitle: 'Veldstick of zaalstick: wat is het verschil?',
   intro:
-    'Ja, dat kan! Het verschil tussen een veld- en zaalstick zit niet in de spelregels: volgens de FIH gelden voor beide dezelfde maximale eisen, dus een aparte zaalstick is niet verplicht. Het verschil zit in het spel: in de zaal mag je de bal niet slaan en blijft hij laag. Voor je stick betekent dat: je veldstick is een prima start, en een zaalstick is vooral iets voor wie vaker de zaal in gaat.',
+    'Ja, dat kan. Het verschil tussen een veld- en zaalstick zit niet in de spelregels: volgens de FIH gelden voor beide dezelfde maximale eisen, dus een aparte zaalstick is niet verplicht. Het verschil zit in het spel: in de zaal mag je de bal niet slaan en blijft hij laag. Voor je stick betekent dat: je veldstick is een prima start, en een zaalstick is vooral iets voor wie vaker de zaal in gaat.',
   sections: [
     {
       heading: 'Wat is het verschil tussen een veld- en zaalstick?',

@@ -2320,6 +2320,8 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 
 **Reden:** De teksten moeten betrouwbaar lezen. Herkenbare AI-tics kosten vertrouwen bij lezers. De oude toonregel was de bron van een deel van die tics.
 
+**Na review-agent (zelfde PR):** ook de uitroeptekens en "Goed om te weten:" uit de intro's van drie kennisartikelen gehaald, en het streepje in de lijstregels van `stickListItem` (`src/content/catalogLinks.ts`) vervangen door een dubbele punt.
+
 **Bewust niet:** `src/content/privacy.ts` (privacytekst alleen op expliciete opdracht van de eigenaar) en de streepjes in UI-onderdelen (bronvermelding in het stickadvies, citaattoeschrijving), waar het een interfaceconventie is. Artikelen die alleen licht gekleurd zijn, zijn niet herschreven.
 
 **Betrokken bestanden:** `src/app/over-ons/page.tsx`, `src/content/blogPosts/hockeystick-kopen.ts`, `src/content/blogPosts/met-welke-stick-speelt-oranje.ts`, `src/content/brands.ts`, `src/app/merken/page.tsx`, diverse bestanden in `src/content/articles/` en `src/content/stickwijzer/`, `docs/schrijfstijl.md`, `docs/content-agent.md`, `docs/review-agent.md`, `docs/README.md`, `CLAUDE.md`.

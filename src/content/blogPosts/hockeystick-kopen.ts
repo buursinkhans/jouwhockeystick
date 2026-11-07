@@ -61,7 +61,7 @@ export const hockeystickKopen: Article = {
             'Een prijs waarbij overstappen later geen drama is.',
           ],
         },
-        'Grays maakt de GX1000 Ultrabow bijvoorbeeld speciaal om de basis van hockey mee te leren. Dat is wat de maker ermee wil; of elk kind er sneller door leert, is daarmee niet gezegd.',
+        'Grays maakt de GX1000 Ultrabow bijvoorbeeld speciaal om de basis van hockey mee te leren. Dat is wat de maker ermee beoogt; of elk kind er sneller door leert, weten we niet.',
         'Welke junior- en beginnerssticks we op een rij hebben gezet, zie je bij [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },
