@@ -46,6 +46,7 @@ Sectie `/hockeyschoenen` op deze site (issue #100), in fasen gebouwd. Leidend is
 - `docs/README.md` is de inhoudsopgave van alle documenten.
 - De specificatie van de keuzehulp is leidend: `docs/spec/keuzehulp-instructie-v1.1.md`. Meld afwijkingen achteraf in `docs/decision-log.md`.
 - Merk en logo: `docs/merkinstructie.md`. Bronbeleid: `docs/source-policy.md`.
+- Schrijfstijl: `docs/schrijfstijl.md` geldt voor alle Nederlandse tekst op de site (geen AI-patronen: hooguit één "niet X, maar Y" per tekst, geen gedachtestreepjes in lopende tekst, geen uitroeptekens). In een sessie met de skill vermijd-ai-schrijfstijl: draai die over nieuwe of herschreven tekst.
 
 ## Kernregels
 - Gebruik TypeScript in strict mode. Vermijd `any`; gebruik expliciete types, discriminated unions en Zod-validatie waar passend.

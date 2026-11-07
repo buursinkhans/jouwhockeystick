@@ -34,7 +34,7 @@ function listItem(product: Product): string {
       : 'bow-profiel niet opgegeven',
   ];
   const availability = product.bolNotSold
-    ? ' — niet verkrijgbaar bij bol.com'
+    ? ', niet verkrijgbaar bij bol.com'
     : '';
   return `${stickListItem(product)} (${details.join(', ')})${availability}`;
 }
@@ -161,7 +161,7 @@ export const zaalstickBudget: Article = {
     },
     {
       label:
-        'Redactionele uitgangspunten jouwhockeystick.nl — geen eigen testresultaten of prestatiegaranties',
+        'Redactionele uitgangspunten jouwhockeystick.nl (geen eigen testresultaten of prestatiegaranties)',
     },
   ],
   metaDescription:

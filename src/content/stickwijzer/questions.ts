@@ -89,7 +89,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
       options: [
         {
           value: 'first_stick',
-          label: 'Start — eerste stick',
+          label: 'Start: eerste stick',
           details: [
             {
               term: 'Voor wie',
@@ -107,7 +107,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
         },
         {
           value: 'next_stick',
-          label: 'Ontwikkel — volgende stick',
+          label: 'Ontwikkel: volgende stick',
           details: [
             {
               term: 'Voor wie',
@@ -125,7 +125,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
         },
         {
           value: 'advanced_compare',
-          label: 'Prestatie — gericht vergelijken',
+          label: 'Prestatie: gericht vergelijken',
           details: [
             {
               term: 'Voor wie',

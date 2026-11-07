@@ -76,7 +76,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Begin je als volwassene?',
       level: 2,
       body: [
-        'Leuk dat je begint! Ook als volwassene start je het makkelijkst met een rustige, soepele stick in 36,5 inch. Deze sticks uit onze catalogus zijn gemaakt voor beginners:',
+        'Ook als volwassene start je het makkelijkst met een rustige, soepele stick in 36,5 inch. Deze sticks uit onze catalogus zijn gemaakt voor beginners:',
         { type: 'list', items: adultSticks.map(stickListItem) },
       ],
     },
@@ -101,7 +101,7 @@ export const hockeystickKinderenEnBeginners: Article = {
   sources: [
     {
       label:
-        'Intersport — Waar moet je op letten bij de aanschaf van een hockeystick',
+        'Intersport: Waar moet je op letten bij de aanschaf van een hockeystick',
       url: INTERSPORT_GUIDE,
     },
     {
@@ -110,7 +110,7 @@ export const hockeystickKinderenEnBeginners: Article = {
     },
     {
       label:
-        'Redactionele uitgangspunten jouwhockeystick.nl — geen eigen testresultaten of prestatiegaranties',
+        'Redactionele uitgangspunten jouwhockeystick.nl (geen eigen testresultaten of prestatiegaranties)',
     },
   ],
   metaDescription:
