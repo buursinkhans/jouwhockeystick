@@ -2308,3 +2308,18 @@ Adviesregels en `ruleSetVersion` zijn niet veranderd.
 Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere rand na" in CLAUDE.md en in `docs/spec/prijsvergelijking.md`.
 
 **Betrokken bestanden:** `src/catalog/offers/sort.ts` (+ `badge.test.ts`), `src/components/offers/OfferRows.tsx`, `src/content/offers.ts`, `CLAUDE.md`, `docs/spec/prijsvergelijking.md`.
+
+## 2026-11-07: schrijfstijl zonder AI-patronen
+
+**Wat:** De sitetekst is getoetst met de skill vermijd-ai-schrijfstijl van de eigenaar. Op basis daarvan:
+1. Over ons herschreven: de lijst met vier waarden (vet, gedachtestreepje) is één alinea met concrete afspraken geworden (we testen niet zelf, bij elke reden staat de bron, geen prestatiebeloften).
+2. Blog "Met welke stick speelt Oranje": "Zijn exacte wedstrijdmodel? Dat houdt hij voor zich." vervangen door "is niet bekend" (dat was een bewering zonder bron), plus "Superleuk!" en "leuk!" eruit.
+3. Blog "Hockeystick kopen" herschreven: van zo'n acht "niet X, maar Y"-zinnen naar één, geen tussenkreten ("Goed nieuws:", "Je zult zien:", "Tip:"), minder "fijn" en "lekker". Koppen, links, tabel, lijsten en bronnen zijn gelijk gebleven.
+4. Gedachtestreepjes in bronlabels ("Grays — Over Grays") vervangen door een dubbele punt, en in lopende tekst door komma, punt of haakjes.
+5. Nieuw: `docs/schrijfstijl.md` met de harde regels. `CLAUDE.md`, `docs/content-agent.md` en `docs/review-agent.md` verwijzen ernaar. De toonregel in `content-agent.md` vroeg om uitroepen ("Op naar de zaal!") en een "sprankelende" toon; die is nu "vriendelijk, persoonlijk en concreet", zonder uitroeptekens.
+
+**Reden:** De teksten moeten betrouwbaar lezen. Herkenbare AI-tics kosten vertrouwen bij lezers. De oude toonregel was de bron van een deel van die tics.
+
+**Bewust niet:** `src/content/privacy.ts` (privacytekst alleen op expliciete opdracht van de eigenaar) en de streepjes in UI-onderdelen (bronvermelding in het stickadvies, citaattoeschrijving), waar het een interfaceconventie is. Artikelen die alleen licht gekleurd zijn, zijn niet herschreven.
+
+**Betrokken bestanden:** `src/app/over-ons/page.tsx`, `src/content/blogPosts/hockeystick-kopen.ts`, `src/content/blogPosts/met-welke-stick-speelt-oranje.ts`, `src/content/brands.ts`, `src/app/merken/page.tsx`, diverse bestanden in `src/content/articles/` en `src/content/stickwijzer/`, `docs/schrijfstijl.md`, `docs/content-agent.md`, `docs/review-agent.md`, `docs/README.md`, `CLAUDE.md`.

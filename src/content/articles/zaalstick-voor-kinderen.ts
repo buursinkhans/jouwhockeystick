@@ -39,7 +39,7 @@ function juniorListItem(product: Product): string {
       : null,
   ].filter(Boolean);
   const availability = product.bolNotSold
-    ? ' — niet verkrijgbaar bij bol.com'
+    ? ', niet verkrijgbaar bij bol.com'
     : '';
   return `${stickListItem(product)} (${details.join(', ')})${availability}`;
 }
@@ -138,7 +138,7 @@ export const zaalstickVoorKinderen: Article = {
     },
     {
       label:
-        'Redactionele uitgangspunten jouwhockeystick.nl — geen eigen testresultaten of prestatiegaranties',
+        'Redactionele uitgangspunten jouwhockeystick.nl (geen eigen testresultaten of prestatiegaranties)',
     },
   ],
   metaDescription:

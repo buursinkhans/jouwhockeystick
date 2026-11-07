@@ -109,7 +109,7 @@ const ROLE_INTRO: Record<
   safe_choice:
     'Een rustiger of gelijkwaardig alternatief dat niet lastiger speelt dan de beste match.',
   ambitious_choice:
-    'Eén stap vooruit — passend als de basis er staat, maar niet noodzakelijk.',
+    'Eén stap vooruit: passend als de basis er staat, maar niet noodzakelijk.',
   closest_option:
     'Geen duidelijke match: dit komt het dichtst in de buurt, maar past op meerdere punten minder goed.',
   other_size:

@@ -13,11 +13,11 @@ import { Card } from '@/components/ui/Card';
 
 export const metadata = pageMetadata({
   title: 'Merken',
-  description: `De hockeystickmerken die we vergelijken — ${catalogProfiles()
+  description: `De hockeystickmerken die we vergelijken: ${catalogProfiles()
     .map((b) => b.brand)
     .join(
       ', ',
-    )} — met hun belangrijkste kenmerken en Nederlandse hockey-sponsoring.`,
+    )}, met hun belangrijkste kenmerken en Nederlandse hockey-sponsoring.`,
   path: '/merken',
 });
 
@@ -59,8 +59,8 @@ export default function MerkenPage() {
           Op jouwhockeystick.nl vergelijken we sticks van {brandNames.length}{' '}
           merken: {joinDutch(brandNames)}. Hieronder staat per merk kort wat het
           kenmerkt, hoe het merk zelf over sticks denkt (als het dat op de eigen
-          website uitlegt), en — waar we dat konden bevestigen op officiële
-          bronnen — welke Nederlandse hockeyinternationals het merk sponsort.
+          website uitlegt) en, waar we dat konden bevestigen op officiële
+          bronnen, welke Nederlandse hockeyinternationals het merk sponsort.
         </p>
       </PageHeader>
 

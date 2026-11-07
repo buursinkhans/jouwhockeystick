@@ -101,7 +101,7 @@ export const hockeystickKinderenEnBeginners: Article = {
   sources: [
     {
       label:
-        'Intersport — Waar moet je op letten bij de aanschaf van een hockeystick',
+        'Intersport: Waar moet je op letten bij de aanschaf van een hockeystick',
       url: INTERSPORT_GUIDE,
     },
     {
@@ -110,7 +110,7 @@ export const hockeystickKinderenEnBeginners: Article = {
     },
     {
       label:
-        'Redactionele uitgangspunten jouwhockeystick.nl — geen eigen testresultaten of prestatiegaranties',
+        'Redactionele uitgangspunten jouwhockeystick.nl (geen eigen testresultaten of prestatiegaranties)',
     },
   ],
   metaDescription:

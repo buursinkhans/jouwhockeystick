@@ -121,7 +121,7 @@ export const veldstickZaalhockey: Article = {
     },
     {
       label:
-        'Redactionele uitgangspunten jouwhockeystick.nl — geen eigen testresultaten of prestatiegaranties',
+        'Redactionele uitgangspunten jouwhockeystick.nl (geen eigen testresultaten of prestatiegaranties)',
     },
   ],
   metaDescription:

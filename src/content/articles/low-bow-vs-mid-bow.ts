@@ -133,15 +133,15 @@ export const lowBowVsMidBow: Article = {
   updatedAt: '2026-10-13',
   sources: [
     { label: ZAAL_SOURCES.fieldRules.label, url: ZAAL_SOURCES.fieldRules.url },
-    { label: 'PassaHockey — Zaalhockeyadvies', url: PASSAHOCKEY_INDOOR },
+    { label: 'PassaHockey: Zaalhockeyadvies', url: PASSAHOCKEY_INDOOR },
     {
       label:
-        'Intersport — Waar moet je op letten bij de aanschaf van een hockeystick',
+        'Intersport: Waar moet je op letten bij de aanschaf van een hockeystick',
       url: INTERSPORT_GUIDE,
     },
     {
       label:
-        'Redactionele uitgangspunten jouwhockeystick.nl — geen eigen testresultaten of prestatiegaranties',
+        'Redactionele uitgangspunten jouwhockeystick.nl (geen eigen testresultaten of prestatiegaranties)',
     },
   ],
   metaDescription:

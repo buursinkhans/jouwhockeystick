@@ -18,7 +18,7 @@ function brandCatalogLine(brand: Brand): string | undefined {
     sticks.length === 1
       ? `richtprijs ${formatEuro(prices[0] ?? 0)}`
       : `richtprijzen van ${formatEuro(Math.min(...prices))} tot ${formatEuro(Math.max(...prices))}`;
-  return `[${brand}](/sticks?brand=${encodeURIComponent(brand)}) — ${sticks.length} ${sticks.length === 1 ? 'veldstick' : 'veldsticks'}, ${range}`;
+  return `[${brand}](/sticks?brand=${encodeURIComponent(brand)}): ${sticks.length} ${sticks.length === 1 ? 'veldstick' : 'veldsticks'}, ${range}`;
 }
 
 const brandLines = ORANJE_BRANDS.map(brandCatalogLine).filter(
@@ -121,14 +121,14 @@ export const metWelkeStickSpeeltOranje: Article = {
       heading: 'Thierry Brinkman en Brabo',
       level: 3,
       body: [
-        'Thierry Brinkman speelt met Brabo, na eerder met Princess te hebben gespeeld. Brabo zet hem ook op de eigen site in de spotlights. Zijn exacte wedstrijdmodel? Dat houdt hij voor zich.',
+        'Thierry Brinkman speelt met Brabo, na eerder met Princess te hebben gespeeld. Brabo zet hem ook op de eigen site in de spotlights. Met welk model hij in wedstrijden speelt, is niet bekend.',
       ],
     },
     {
       heading: 'Koen Bijen en Princess',
       level: 3,
       body: [
-        'Koen Bijen ontwikkelde samen met Frédérique Matla de Princess Premium 7 Star. Een heren- en een damesinternational aan één stick, leuk! Of hij er zelf in wedstrijden mee speelt, is daarmee nog niet gezegd.',
+        'Koen Bijen ontwikkelde samen met Frédérique Matla de Princess Premium 7 Star. Een heren- en een damesinternational werkten dus aan dezelfde stick. Of hij er zelf in wedstrijden mee speelt, is daarmee nog niet gezegd.',
       ],
     },
     {
@@ -159,7 +159,7 @@ export const metWelkeStickSpeeltOranje: Article = {
       heading: 'Moet je dezelfde stick kopen als je idool?',
       level: 2,
       body: [
-        'Spelen met hetzelfde merk als je favoriete international? Superleuk! Maar de merknaam vertelt nog niet welk model bij jou past. En het exacte wedstrijdmodel van je idool is meestal niet eens bekend.',
+        'Met hetzelfde merk spelen als je favoriete international kan leuk zijn, maar de merknaam vertelt nog niet welk model bij jou past. En het exacte wedstrijdmodel van je idool is meestal niet eens bekend.',
         'Laat je dus gerust inspireren, maar kies het model op je eigen lengte, ervaring, voorkeuren en budget.',
         'Benieuwd welke stick bij jou past? Doe de [stickwijzer](/stickwijzer) of lees [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Het verschil in kromming lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow), en voor kinderen is er [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
@@ -191,21 +191,21 @@ export const metWelkeStickSpeeltOranje: Article = {
   sources: [
     {
       label:
-        'PassaSports — Speel jij met dezelfde hockeymerken als de Oranje Dames?',
+        'PassaSports: Speel jij met dezelfde hockeymerken als de Oranje Dames?',
     },
-    { label: 'PassaSports — Thierry Brinkman' },
-    { label: 'Brabo — atletenpagina Thierry Brinkman' },
-    { label: 'Osaka — atletenpagina Yibbi Jansen en Yibbi-stickcollectie' },
-    { label: 'Princess — atletenpagina Frédérique Matla' },
+    { label: 'PassaSports: Thierry Brinkman' },
+    { label: 'Brabo: atletenpagina Thierry Brinkman' },
+    { label: 'Osaka: atletenpagina Yibbi Jansen en Yibbi-stickcollectie' },
+    { label: 'Princess: atletenpagina Frédérique Matla' },
     {
       label:
-        'Jumbo Sports — Princess-hockeysticks (Premium 7 Star) en adidas Estro .95',
+        'Jumbo Sports: Princess-hockeysticks (Premium 7 Star) en adidas Estro .95',
     },
     {
       label:
-        'De Hockeywinkel — Speel als Jorrit Croon met de adidas Estro-serie',
+        'De Hockeywinkel: Speel als Jorrit Croon met de adidas Estro-serie',
     },
-    { label: 'HockeyDirect — Exclusief interview met Jorrit Croon' },
+    { label: 'HockeyDirect: Exclusief interview met Jorrit Croon' },
     { label: 'Alle bronnen geraadpleegd op 8 oktober 2026' },
   ],
   metaDescription:

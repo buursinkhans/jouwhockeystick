@@ -116,20 +116,20 @@ export const hockeystickLengteTabel: Article = {
   sources: [
     {
       label:
-        'Intersport — Waar moet je op letten bij de aanschaf van een hockeystick',
+        'Intersport: Waar moet je op letten bij de aanschaf van een hockeystick',
       url: INTERSPORT_GUIDE,
     },
     {
-      label: 'Intersport — Hockeysticks (assortiment en lengtes)',
+      label: 'Intersport: Hockeysticks (assortiment en lengtes)',
       url: INTERSPORT_STICKS,
     },
     {
-      label: 'Grays — maattabel hockeysticks (lichaamslengte en sticklengte)',
+      label: 'Grays: maattabel hockeysticks (lichaamslengte en sticklengte)',
     },
     { label: ZAAL_SOURCES.fieldRules.label, url: ZAAL_SOURCES.fieldRules.url },
     {
       label:
-        'Lengtetabel: redactionele richtlijn van jouwhockeystick.nl, dezelfde als in de stickwijzer — geen officiële norm',
+        'Lengtetabel: redactionele richtlijn van jouwhockeystick.nl, dezelfde als in de stickwijzer (geen officiële norm)',
     },
   ],
   metaDescription:

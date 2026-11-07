@@ -17,10 +17,10 @@ export default function OverOnsPage() {
       <PageHeader width="lezen" eyebrow="Over ons" title="Over jouwhockeystick.nl">
         <p className="text-lg leading-relaxed text-inkt">
           jouwhockeystick.nl helpt hockeyers en ouders een stick te kiezen die
-          past bij niveau, speelstijl en budget — met heldere uitleg in plaats van
-          een overweldigende lijst modellen. We zijn deze site begonnen omdat die
-          keuze in de praktijk vaak op gevoel of prijs alleen wordt gemaakt,
-          terwijl een paar gerichte vragen al een groot verschil kunnen maken.
+          past bij niveau, speelstijl en budget, en legt bij elk advies uit
+          waarom. We zijn deze site begonnen omdat die keuze vaak alleen op
+          gevoel of prijs wordt gemaakt. Met vragen over lengte, ervaring,
+          spelacties en budget kom je al een stuk verder.
         </p>
       </PageHeader>
 
@@ -49,33 +49,23 @@ export default function OverOnsPage() {
 
         <h2 className="mt-10 text-2xl font-bold">Waarom we zijn begonnen</h2>
         <p className="mt-3 leading-relaxed text-inkt/80">
-          Wie voor het eerst een hockeystick koopt — of een stick voor zijn kind
-          zoekt — loopt al snel vast in vaktermen als bow-profiel en
-          carbonpercentage. Winkels en merken hebben vaak wel de kennis, maar niet
-          altijd de tijd om die per klant uit te leggen. Wij wilden een plek maken
-          waar die uitleg wél voorop staat, zodat je een keuze maakt die je zelf
+          Wie voor het eerst een hockeystick koopt, of er een zoekt voor zijn
+          kind, loopt al snel vast in vaktermen als bow-profiel en
+          carbonpercentage. Winkels en merken hebben die kennis wel, maar
+          hebben niet altijd tijd om het per klant uit te leggen. Op deze site
+          staat die uitleg voorop, zodat je een keuze maakt die je zelf
           begrijpt.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">Wie we willen zijn</h2>
-        <ul className="mt-3 space-y-2 leading-relaxed text-inkt/80">
-          <li>
-            <strong>Helder</strong> — we leggen uit in gewone taal, niet in
-            marketingtermen.
-          </li>
-          <li>
-            <strong>Eerlijk</strong> — we doen geen loze beloftes over prestaties,
-            en zijn open over waar onze informatie vandaan komt.
-          </li>
-          <li>
-            <strong>Persoonlijk</strong> — advies dat rekening houdt met jouw
-            situatie, niet één lijstje &ldquo;bestsellers&rdquo; voor iedereen.
-          </li>
-          <li>
-            <strong>Deskundig en verifieerbaar</strong> — elk advies is gebaseerd
-            op zichtbare, navolgbare redenen, nooit op schijnzekerheid.
-          </li>
-        </ul>
+        <h2 className="mt-10 text-2xl font-bold">Wat je van ons kunt verwachten</h2>
+        <p className="mt-3 leading-relaxed text-inkt/80">
+          We leggen vaktermen uit in gewone taal. We testen sticks niet zelf:
+          ons advies is gebaseerd op gegevens van de merken en informatie van
+          hockeywinkels, en bij elke reden in het advies staat waar die vandaan
+          komt. Je antwoorden over lengte, ervaring, spelacties en budget
+          bepalen welke sticks je ziet; we beloven nergens dat een stick je
+          beter laat spelen.
+        </p>
 
         <h2 className="mt-10 text-2xl font-bold">Hoe we werken</h2>
         <p className="mt-3 leading-relaxed text-inkt/80">
