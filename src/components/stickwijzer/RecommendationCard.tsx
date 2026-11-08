@@ -6,6 +6,7 @@ import { getOffers, lowestTotal } from '@/catalog/offers';
 import { WhereToBuy } from '@/components/offers/WhereToBuy';
 import type { AdviceRoute } from '@/advice-engine/answers';
 import { adviceLevel } from '@/advice-engine/productRules';
+import { TermHelp } from '@/components/ui/TermHelp';
 import type {
   AdviceReason,
   AdviceResultItem,
@@ -204,6 +205,7 @@ export function RecommendationCard({
           <dd className="font-semibold">{modelYear ?? 'Niet bevestigd'}</dd>
         </div>
       </dl>
+      <TermHelp terms={['bow', 'carbon']} label="Wat betekenen kromming en carbon?" />
 
       {/* The match and the trade-off side by side from sm, so the compromise is never hidden. */}
       <div className="mt-6 grid gap-6 sm:grid-cols-2">

@@ -17,7 +17,8 @@ function Chevron() {
 
 /**
  * The shops of one stick as compact rows, cheapest total (price plus
- * shipping) first: "Koop bij [winkel]", shipping and stock, the total price.
+ * shipping) first: "Bekijk prijs bij [winkel]" (owner, 2026-11-08: the visitor
+ * checks the price at the shop, which sells), shipping and stock, the total price.
  * The top row has a slightly heavier border when it shows a current price;
  * that is the lowest price, never a choice by commission
  * (docs/spec/prijsvergelijking.md §2). Used on the stick page, in the
@@ -137,8 +138,8 @@ export function OfferRows({
                 offer={{ position: index + 1, offerCount: sorted.length, priceShown: fresh }}
                 ariaLabel={
                   fresh
-                    ? `Koop bij ${label}, ${euro(totalPrice(offer))} inclusief verzending${withBadge ? `, ${OFFER_TEXT.lowestBadge.toLowerCase()}` : ''}`
-                    : `Koop bij ${label}, ${OFFER_TEXT.checkPrice.toLowerCase()}`
+                    ? `Bekijk prijs bij ${label}, ${euro(totalPrice(offer))} inclusief verzending${withBadge ? `, ${OFFER_TEXT.lowestBadge.toLowerCase()}` : ''}`
+                    : `Bekijk prijs bij ${label}, ${OFFER_TEXT.checkPrice.toLowerCase()}`
                 }
                 className={`relative flex min-h-14 items-center justify-between gap-3 rounded-xl bg-white text-inkt ${
                   top ? `border-2 border-veld px-[11px] ${withBadge ? 'pt-[13px] pb-[7px]' : 'py-[7px]'}` : 'border border-rand px-3 py-2 hover:border-veld'
@@ -151,7 +152,7 @@ export function OfferRows({
                   </span>
                 )}
                 <span className="flex min-w-0 flex-col">
-                  <span className="text-[15px] font-bold text-veld">Koop bij {label}</span>
+                  <span className="text-[15px] font-bold text-veld">Bekijk prijs bij {label}</span>
                   <span className="text-xs text-inkt/70">{meta}</span>
                 </span>
                 <span className="flex items-center gap-1.5 whitespace-nowrap">

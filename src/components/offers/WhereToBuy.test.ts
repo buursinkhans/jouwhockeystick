@@ -26,7 +26,7 @@ describe('WhereToBuy edge cases', () => {
     expect(product).toBeDefined();
     const html = render(product!, 'compact');
     // The visible label; the button's aria-label says it once more for screen readers.
-    expect(html.match(/>Koop bij /g)?.length ?? 0).toBe(1);
+    expect(html.match(/>Bekijk prijs bij /g)?.length ?? 0).toBe(1);
     expect(html).not.toContain(OFFER_TEXT.none);
   });
 

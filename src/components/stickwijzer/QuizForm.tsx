@@ -15,9 +15,11 @@ import {
 import { suggestRoute } from '@/advice-engine/route';
 import type { StickUse } from '@/content/stickwijzer/stickUse';
 import { StickUseChoice, StickUseExit } from './StickUseChoice';
+import { AdviceModeChoice } from './AdviceModeChoice';
 import type { AdviceResult } from '@/advice-engine/types';
 import {
   FIRST_SCREEN,
+  QUICK_SCREENS,
   QUESTIONS,
   ROUTE_LABELS,
   SCREENS,
@@ -213,7 +215,8 @@ export function QuizForm() {
   const route = answers.route_self_select
     ? routeFromSelfSelect(answers.route_self_select, answers)
     : null;
-  const screens = SCREENS[route ?? 'START'];
+  const quick = answers.route_self_select === 'quick';
+  const screens = quick ? QUICK_SCREENS : SCREENS[route ?? 'START'];
   const currentStep = Math.min(stepIndex, screens.length - 1);
   const screen = screens[currentStep] ?? FIRST_SCREEN;
   const isLastStep = currentStep === screens.length - 1;
@@ -228,6 +231,14 @@ export function QuizForm() {
       sessionId ? { answers, stepIndex: currentStep, sessionId } : null,
     );
   }, [answers, currentStep, sessionId]);
+
+  // "/stickwijzer?snel" (the homepage link for parents) opens with quick advice chosen.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has('snel')) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- the URL is only known in the browser.
+      setAnswers((current) => (current.route_self_select ? current : { ...current, route_self_select: 'quick' }));
+    }
+  }, []);
 
   // Move focus to the new screen's heading so keyboard and screen-reader users land on it.
   useEffect(() => {
@@ -273,7 +284,8 @@ export function QuizForm() {
       value !== answers.route_self_select
     ) {
       // "Weet ik nog niet" has no route yet: it follows from the next screen.
-      if (value !== 'unsure') {
+      // "Weet ik nog niet" and quick advice have no route yet: it follows from the answers.
+      if (value !== 'unsure' && value !== 'quick') {
         const selected = routeFromSelfSelect(
           value as AdviceAnswers['route_self_select'],
         );
@@ -369,6 +381,7 @@ export function QuizForm() {
         <QuizResult
           advice={advice}
           adviceGoal={answers.advice_goal}
+          quick={quick}
           headingRef={headingRef}
           onEdit={() => setAdvice(null)}
           onRestart={handleRestart}
@@ -399,7 +412,7 @@ export function QuizForm() {
   const optionalSet = new Set(screen.optional ?? []);
   const displayIds = (
     screen.order ?? [...screen.questions, ...(screen.optional ?? [])]
-  ).filter((id) => isVisible(id, answers));
+  ).filter((id) => isVisible(id, answers) && !(quick && id === 'route_self_select'));
   const requiredIds = displayIds.filter((id) => !optionalSet.has(id));
   const optionalIds = displayIds.filter((id) => optionalSet.has(id));
   const renderField = (id: QuestionId, optional: boolean) => (
@@ -468,14 +481,26 @@ export function QuizForm() {
       }}
     >
       {currentStep === 0 && (
-        <div className="mb-8">
+        <div className="mb-8 space-y-8">
           <StickUseChoice value={stickUse} onChange={setStickUse} />
+          <AdviceModeChoice
+            value={quick ? 'quick' : 'full'}
+            onChange={(mode) => {
+              if (mode === 'quick') handleChange('route_self_select', 'quick');
+              else if (quick) {
+                // Back to the full stickwijzer: the route is chosen there.
+                const rest = { ...answers };
+                delete rest.route_self_select;
+                setAnswers(rest);
+              }
+            }}
+          />
         </div>
       )}
       <p className="text-sm text-lijngrijs">
         Stap {currentStep + 1}
         {route ? ` van ${screens.length}` : ` · ${routeStepRange()}, afhankelijk van de route`}
-        {route ? ` · ${ROUTE_LABELS[route]}` : ''}
+        {quick ? ' · Snel advies' : route ? ` · ${ROUTE_LABELS[route]}` : ''}
         {route ? ` · ${remainingTimeText(questionsLeft, isLastStep)}` : ''}
       </p>
       {route && (

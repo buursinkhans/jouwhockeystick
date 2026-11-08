@@ -644,19 +644,19 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
   },
   budget_band: {
     id: 'budget_band',
-    question: 'Welk bedrag is passend voor alleen de stick?',
+    question: 'Wat wil je maximaal uitgeven aan alleen de stick?',
     shortLabel: 'budget',
     helpText: 'We rekenen met richtprijzen, geen live winkelprijzen.',
     dataUse:
-      'Sticks boven je budget laten we weg, tenzij je eerst wilt vergelijken.',
+      'Je budget is een bovengrens: sticks erboven laten we weg, en elke stick eronder telt even zwaar mee.',
     input: {
       kind: 'single',
       options: [
         { value: 'lt_75', label: 'Tot €75' },
-        { value: '75_125', label: '€75–125' },
-        { value: '125_175', label: '€125–175' },
-        { value: '175_250', label: '€175–250' },
-        { value: 'gt_250', label: 'Meer dan €250' },
+        { value: '75_125', label: 'Tot €125' },
+        { value: '125_175', label: 'Tot €175' },
+        { value: '175_250', label: 'Tot €250' },
+        { value: 'gt_250', label: 'Geen bovengrens' },
         { value: 'compare_first', label: 'Eerst vergelijken' },
       ],
     },
@@ -754,6 +754,22 @@ const BUDGET: ScreenDef = {
   questions: ['budget_band'],
   optional: ['availability_preference', 'purchase_timing'],
 };
+
+/**
+ * Quick advice (UX phase 1, 2026-11-08): the first screen, then one screen
+ * with age, height, seasons played and budget.
+ */
+export const QUICK_SCREENS: ScreenDef[] = [
+  // Same screen id (analytics, icon), without the route in the title: quick advice has none to choose.
+  { ...FIRST_SCREEN, title: 'Voor wie' },
+  {
+    id: 'quick',
+    title: 'Over de speler en het budget',
+    questions: ['age_band', 'height_cm', 'experience_seasons', 'budget_band'],
+    optional: ['height_uncertain'],
+    order: ['age_band', 'height_cm', 'height_uncertain', 'experience_seasons', 'budget_band'],
+  },
+];
 
 /**
  * Screens per route. START is capped at six screens (spec §4.1). Since
