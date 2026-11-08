@@ -2376,3 +2376,35 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/content/stickwijzer/{stickUse,questions}.ts`, `src/app/stickwijzer/page.tsx`;
 - `src/advice-engine/{answers,playerContext}.ts` (+ test);
 - `src/lib/analytics/events.ts`, `src/interest/types.ts`.
+
+## 2026-11-08 — SEO en GEO stap A: structured data en interne links
+
+**Opdracht eigenaar (2026-11-08):** stap A uit het SEO/GEO-plan. Alle markup beschrijft alleen wat zichtbaar op de pagina staat (CLAUDE.md).
+
+1. **`FaqSection`** (`src/components/article/FaqSection.tsx`) en **`faqJsonLd`** (`src/lib/faqJsonLd.ts`): één bron voor de zichtbare vragen en de FAQPage-markup, server-side gerenderd. `/sticks` gebruikt het; de vijf vragen en hun tekst zijn gelijk gebleven.
+2. **ItemList** (`itemListJsonLd`):
+   - op `/sticks`: de met de hand nagekeken sticks die de pagina toont, als links naar hun stickpagina, alleen op de ongefilterde pagina;
+   - op `/merken`: alle merken als `Brand`, elk met het anker van zijn kaart.
+
+   Een overzicht krijgt geen Product-markup, omdat Google die alleen wil op de pagina van één product.
+3. **HowTo** (`howToJsonLd`) op de homepage, met de drie stappen die daar al zichtbaar staan ("Jij vertelt over de speler", "Wat niet past, valt af", "Maximaal drie sticks"), in dezelfde woorden. `/methodiek` toont geen stappen en krijgt daarom geen HowTo.
+4. **Organization en WebSite** krijgen een `description`: dezelfde tekst als de meta description van de homepage.
+5. **Interne links:** alle 15 kennisartikelen en blogs linken al naar de stickwijzer. Twee artikelen noemen Grays zonder merklink; die linken nu bij de eerste vermelding naar `/merken#merk-grays`.
+   - **Anker:** `brandAnchor` in `src/content/brands.ts` is nu de enige plek waar het anker van een merkkaart wordt bepaald.
+   - **Linktest:** de linktest in `articles.test.ts` controleert ook zulke ankers.
+6. **Technische check op de live site** (`npm run seo:technical`, alleen lezen):
+   - alle 144 pagina's geven 200;
+   - alle AI-crawlers mogen lezen en krijgen dezelfde HTML;
+   - 8 dubbele meta descriptions (vier paren sticks met dezelfde specificaties);
+   - 15 titels langer dan 60 tekens;
+   - 2 trage pagina's.
+
+   Die volgen in stap C.
+
+**Kanttekening:** Google toont geen HowTo-resultaten meer, en FAQ-resultaten alleen nog voor overheid en zorg. De markup helpt vooral machines, ook AI-zoekmachines, de pagina te begrijpen; een rich result is niet te verwachten.
+
+**Betrokken bestanden:**
+- `src/components/article/FaqSection.tsx`, `src/lib/{faqJsonLd,jsonLd}.ts`;
+- `src/app/{layout,sticks/page,merken/page}.tsx`, `src/components/home/StickwijzerExplainer.tsx`;
+- `src/content/brands.ts`, `src/content/articles/{low-bow-vs-mid-bow,veldstick-zaalhockey}.ts`;
+- tests: `src/seo/structuredData.test.ts`, `src/content/{articles,sticksSeo}.test.ts`.

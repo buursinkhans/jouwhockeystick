@@ -102,9 +102,12 @@ describe('/sticks FAQ (decision log 2026-10-29)', () => {
   it('keeps five questions, also in the FAQPage structured data', async () => {
     expect(faq).toHaveLength(5);
     const html = await render();
-    const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/)![1]!) as {
-      mainEntity: { name: string; acceptedAnswer: { text: string } }[];
-    };
+    const blocks = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/g)].map(
+      (m) => JSON.parse(m[1]!) as { '@type'?: string; mainEntity?: { name: string; acceptedAnswer: { text: string } }[] },
+    );
+    const faqBlocks = blocks.filter((b) => b['@type'] === 'FAQPage');
+    expect(faqBlocks).toHaveLength(1);
+    const jsonLd = faqBlocks[0] as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] };
     expect(jsonLd.mainEntity.map((q) => q.name)).toEqual(faq.map((item) => item.question));
     expect(jsonLd.mainEntity.map((q) => q.acceptedAnswer.text)).toEqual(faq.map((item) => plainText(item.answer)));
   });

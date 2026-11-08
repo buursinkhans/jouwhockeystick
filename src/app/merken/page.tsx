@@ -1,7 +1,8 @@
-import { pageMetadata } from '@/lib/site';
+import { absoluteUrl, pageMetadata } from '@/lib/site';
+import { itemListJsonLd, jsonLdHtml } from '@/lib/jsonLd';
 import Link from 'next/link';
 import { getCatalogStats } from '@/catalog/stats';
-import { BRAND_PROFILES } from '@/content/brands';
+import { BRAND_PROFILES, brandAnchor } from '@/content/brands';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 
 /** Profiles of the brands that are in the catalog now (src/catalog/stats.ts). */
@@ -64,6 +65,22 @@ export default function MerkenPage() {
         </p>
       </PageHeader>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdHtml(
+            itemListJsonLd(
+              'Hockeystickmerken op jouwhockeystick.nl',
+              absoluteUrl('/merken'),
+              profiles.map((brand) => ({
+                name: brand.brand,
+                url: absoluteUrl(`/merken#${brandAnchor(brand.brand)}`),
+                type: 'Brand' as const,
+              })),
+            ),
+          ),
+        }}
+      />
       <PageBody width="lezen">
         {/* Quick index (redesign fase 2): find a brand without scrolling 21 cards. */}
         <nav aria-label="Merken op deze pagina">
@@ -71,7 +88,7 @@ export default function MerkenPage() {
             {profiles.map((brand) => (
               <li key={brand.brand}>
                 <a
-                  href={`#merk-${slugify(brand.brand)}`}
+                  href={`#${brandAnchor(brand.brand)}`}
                   className="card card-link flex h-16 items-center justify-center rounded-xl! px-2 text-center text-sm font-semibold text-inkt"
                 >
                   {brand.logoUrl ? (
@@ -96,7 +113,7 @@ export default function MerkenPage() {
 
         <div className="mt-10 space-y-8">
           {profiles.map((brand) => (
-            <Card key={brand.brand} id={`merk-${slugify(brand.brand)}`} className="scroll-mt-24">
+            <Card key={brand.brand} id={brandAnchor(brand.brand)} className="scroll-mt-24">
               <div className="flex items-center gap-4">
                 {brand.logoUrl ? (
                   <div

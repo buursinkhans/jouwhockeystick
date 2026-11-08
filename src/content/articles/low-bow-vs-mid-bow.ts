@@ -100,7 +100,7 @@ export const lowBowVsMidBow: Article = {
       heading: 'En pro bow, dynabow of standaard?',
       level: 3,
       body: [
-        'Elk merk geeft zijn profielen een eigen naam, en dat maakt het soms verwarrend. Een standaardprofiel, zoals de Ultrabow van Grays, is nog rustiger dan een mid bow. Pro bow en dynabow zitten tussen mid en low bow in. Kijk dus niet alleen naar het woord op de stick, maar ook naar de omschrijving van dat ene model.',
+        'Elk merk geeft zijn profielen een eigen naam, en dat maakt het soms verwarrend. Een standaardprofiel, zoals de Ultrabow van [Grays](/merken#merk-grays), is nog rustiger dan een mid bow. Pro bow en dynabow zitten tussen mid en low bow in. Kijk dus niet alleen naar het woord op de stick, maar ook naar de omschrijving van dat ene model.',
       ],
     },
     {
