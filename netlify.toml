@@ -1,6 +1,9 @@
 [build]
   command = "npm run build"
   publish = ".next"
+  # Skip builds for pushes that only touch docs, workflows, video or tests
+  # (exit 0 = skip). Build hooks always build. See scripts/netlify-ignore.sh.
+  ignore = "bash scripts/netlify-ignore.sh"
 
 [build.environment]
   NODE_VERSION = "22"
