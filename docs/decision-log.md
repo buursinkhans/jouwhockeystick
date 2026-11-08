@@ -2414,3 +2414,19 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/app/{layout,sticks/page,merken/page}.tsx`, `src/components/home/StickwijzerExplainer.tsx`;
 - `src/content/brands.ts`, `src/content/articles/{low-bow-vs-mid-bow,veldstick-zaalhockey}.ts`;
 - tests: `src/seo/structuredData.test.ts`, `src/content/{articles,sticksSeo}.test.ts`.
+
+## 2026-11-08 — SEO en GEO stap B: vragen en antwoorden op de landingspagina's
+
+**Akkoord eigenaar (2026-11-08):** vragen zoals mensen ze aan een zoekmachine of AI-assistent stellen, op drie landingspagina's, met `FaqSection` (zichtbare tekst en FAQPage-markup uit dezelfde bron, `src/content/landingFaqs.ts`).
+
+- **/stickwijzer** (5): stick voor een kind van 12, of positie uitmaakt, hoe lang de stickwijzer duurt, of het advies onafhankelijk is, wat er gebeurt als er niets past.
+- **/kennis** (4): 30% of 70% carbon, low bow of mid bow, de juiste lengte, een veldstick in de zaal.
+- **/merken** (3): het beste merk, merken met sticks voor beginners, waar je ze koopt.
+
+**Regels:**
+- **Antwoorden:** elk antwoord herhaalt wat een nagekeken artikel, de methodiek of de catalogus al zegt, en linkt naar de volledige uitleg.
+- **Getallen:** komen uit de catalogus. Het aantal merken met een beginnersstick telt alleen de met de hand nagekeken sticks, en dat staat er zo bij.
+- **Positie:** de vraag over positie zegt dat positie nooit de enige reden is (CLAUDE.md).
+- **Tests:** bewaken dat elke link bestaat en dat de teksten de schrijfstijl volgen: geen gedachtestreepje, geen uitroepteken, hooguit één contrastzin.
+
+**Betrokken bestanden:** `src/content/landingFaqs.ts` (+ test), `src/app/{stickwijzer,kennis,merken}/page.tsx`.

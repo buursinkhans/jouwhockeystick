@@ -2,7 +2,9 @@ import Link from 'next/link';
 import { getAllArticles } from '@/content';
 import { groupArticles, readingMinutes } from '@/content/kennisThemes';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
-import { pageMetadata } from '@/lib/site';
+import { absoluteUrl, pageMetadata } from '@/lib/site';
+import { FaqSection } from '@/components/article/FaqSection';
+import { kennisFaq } from '@/content/landingFaqs';
 
 export const metadata = pageMetadata({
   title: 'Kennisbank',
@@ -95,6 +97,13 @@ export default function KennisIndexPage() {
             </ul>
           </section>
         ))}
+        <FaqSection
+          id="kennis-faq-heading"
+          heading="Veelgestelde vragen"
+          items={kennisFaq()}
+          url={absoluteUrl('/kennis')}
+          className="mt-14 max-w-3xl"
+        />
       </PageBody>
     </>
   );

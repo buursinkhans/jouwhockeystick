@@ -1,4 +1,6 @@
-import { pageMetadata } from '@/lib/site';
+import { absoluteUrl, pageMetadata } from '@/lib/site';
+import { FaqSection } from '@/components/article/FaqSection';
+import { stickwijzerFaq } from '@/content/landingFaqs';
 import Link from 'next/link';
 import { ADVICE_VERSION } from '@/advice-engine/ruleSetVersion';
 import { StickwijzerLoader } from '@/components/stickwijzer/StickwijzerLoader';
@@ -96,6 +98,13 @@ export default function StickwijzerPage() {
           we gebruiken.
         </p>
       </section>
+
+      <FaqSection
+        id="stickwijzer-faq-heading"
+        heading="Veelgestelde vragen over de stickwijzer"
+        items={stickwijzerFaq()}
+        url={absoluteUrl('/stickwijzer')}
+      />
 
       <p className="mt-8 text-xs text-lijngrijs">{ADVICE_VERSION}</p>
     </div>

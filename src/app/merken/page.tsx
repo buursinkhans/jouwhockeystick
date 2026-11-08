@@ -3,6 +3,8 @@ import { itemListJsonLd, jsonLdHtml } from '@/lib/jsonLd';
 import Link from 'next/link';
 import { getCatalogStats } from '@/catalog/stats';
 import { BRAND_PROFILES, brandAnchor } from '@/content/brands';
+import { merkenFaq } from '@/content/landingFaqs';
+import { FaqSection } from '@/components/article/FaqSection';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 
 /** Profiles of the brands that are in the catalog now (src/catalog/stats.ts). */
@@ -253,6 +255,13 @@ export default function MerkenPage() {
           de bron die we wel gebruikten. We nemen geen sponsoring- of spelersclaim
           over die we niet zelf konden verifiëren.
         </p>
+
+        <FaqSection
+          id="merken-faq-heading"
+          heading="Veelgestelde vragen over merken"
+          items={merkenFaq()}
+          url={absoluteUrl('/merken')}
+        />
       </PageBody>
     </>
   );
