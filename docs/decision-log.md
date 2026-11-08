@@ -2545,3 +2545,11 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 **Waarom:** beide startten donderdag 05:23 UTC en bewerken allebei `src/catalog/products/`. Twee PR's tegelijk op dezelfde bestanden geven conflicten.
 
 **Bewust niet:** de catalogus-aanvuller (dinsdag) wacht nog alleen op `catalogus/`-PR's. Het open-PR-overslaan van de aanvuller viel buiten deze opdracht.
+
+## 2026-11-08 — Review-agent alleen op PR's uit deze repo (code-review)
+
+**Wat:** `review.yml` controleert vóór de checkout met de GitHub-API of de head-repo van de PR deze repo is. Zo niet, dan stopt de job met een foutmelding.
+
+**Waarom:** bij een handmatige start (`workflow_dispatch`) gold de fork-controle op jobniveau niet. Een PR uit een fork zou dan `npm ci` met install-scripts draaien in dezelfde job als het secret `CLAUDE_CODE_OAUTH_TOKEN`.
+
+**Bewust niet:** de controle bij `pull_request` blijft zoals hij was; die gold al.
