@@ -1,10 +1,16 @@
 # IndexNow: tells Bing and the other IndexNow search engines which pages are
 # new or changed, once a production deploy is live. Netlify does not report
-# its deploys to GitHub (no deployment_status), so this starts on a push to
-# main and waits until https://jouwhockeystick.nl/version.txt shows this
-# commit (or a newer one). Only URLs from the live sitemap are sent; one
-# request per deploy. No secrets: the IndexNow key is public by design.
-# See scripts/indexnow.ts and the decision log of 2026-10-24.
+# its deploys to GitHub (no deployment_status), so this waits until
+# https://jouwhockeystick.nl/version.txt shows the commit (or a newer one);
+# only the first line of that file (the commit) counts. Only URLs from the
+# live sitemap are sent; one request per deploy. No secrets: the IndexNow key
+# is public by design. See scripts/indexnow.ts and the decision log of
+# 2026-10-24 and 2026-11-08.
+#
+# Two starts:
+# - a push to main, for as long as Netlify builds every push;
+# - "Geplande publicatie", after it rebuilt the site through the build hook,
+#   with the previous and the new live commit (daily publishing, 2026-11-08).
 name: IndexNow
 
 on:
@@ -17,6 +23,14 @@ on:
         type: choice
         options: [changed, all]
         default: changed
+      before:
+        description: 'Vorige live commit (gezet door Geplande publicatie; leeg = de commit ervoor)'
+        required: false
+        default: ''
+      after:
+        description: 'Commit die live moet komen (gezet door Geplande publicatie; leeg = main)'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -39,11 +53,14 @@ jobs:
 
       - name: Wachten tot de deploy live staat
         id: live
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' || inputs.after != ''
+        env:
+          SHA: ${{ inputs.after || github.sha }}
         run: |
-          sha="${{ github.sha }}"
+          sha="$SHA"
+          case "$sha" in *[!0-9a-f]* | '') echo "::error::Geen geldige commit: $sha"; exit 1;; esac
           for attempt in $(seq 1 50); do
-            live=$(curl -fsS --max-time 20 https://jouwhockeystick.nl/version.txt | tr -d '[:space:]' || true)
+            live=$(curl -fsS --max-time 20 https://jouwhockeystick.nl/version.txt | head -n 1 | tr -d '[:space:]' || true)
             # Live is this commit, or a newer one that contains it.
             if [ "$live" = "$sha" ] || { [ -n "$live" ] && git merge-base --is-ancestor "$sha" "$live" 2>/dev/null; }; then
               echo "Live: $live"
@@ -53,15 +70,31 @@ jobs:
             echo "Nog niet live (nu: ${live:-onbekend}); poging $attempt van 50."
             sleep 30
           done
-          echo "::warning::Deze commit stond na 25 minuten niet live (Netlify-build mislukt of overgeslagen?). Niets gemeld."
+          if [ "${{ github.event_name }}" = "push" ]; then
+            # With daily publishing Netlify does not build a push: the
+            # publication workflow reports these pages after its build.
+            echo "::notice::Deze commit stond na 25 minuten niet live. Bouwt Netlify alleen dagelijks, dan meldt Geplande publicatie deze pagina's na de volgende build."
+          else
+            echo "::warning::Deze commit stond na 25 minuten niet live (Netlify-build mislukt?). Niets gemeld."
+          fi
           echo "ready=false" >> "$GITHUB_OUTPUT"
 
       - name: Gewijzigde pagina's melden
         if: github.event_name == 'push' && steps.live.outputs.ready == 'true'
         run: npm run --silent indexnow -- changed "${{ github.event.before }}" "${{ github.sha }}"
 
+      - name: Gewijzigde pagina's sinds de vorige live-zetting melden
+        if: github.event_name == 'workflow_dispatch' && inputs.after != '' && steps.live.outputs.ready == 'true'
+        env:
+          BEFORE: ${{ inputs.before }}
+          AFTER: ${{ inputs.after }}
+        run: |
+          before="${BEFORE:-$AFTER~1}"
+          case "$BEFORE" in *[!0-9a-f]*) echo "::error::Geen geldige commit: $BEFORE"; exit 1;; esac
+          npm run --silent indexnow -- changed "$before" "$AFTER"
+
       - name: Handmatig melden
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'workflow_dispatch' && inputs.after == ''
         run: |
           if [ "${{ inputs.mode }}" = "all" ]; then
             npm run --silent indexnow -- all

@@ -15,6 +15,14 @@ if [ -n "${INCOMING_HOOK_TITLE:-}" ] || [ -n "${INCOMING_HOOK_URL:-}" ]; then
   build "build hook"
 fi
 
+# Daily publishing (decision log 2026-11-08): with DAILY_BUILD_ONLY=1 set in
+# Netlify, a push to main no longer builds production; the workflow
+# "Geplande publicatie" builds once a day through the build hook (above).
+# Deploy previews and branch deploys are not affected.
+if [ "${DAILY_BUILD_ONLY:-}" = "1" ] && [ "${CONTEXT:-}" = "production" ]; then
+  skip "productie bouwt dagelijks via de build hook (DAILY_BUILD_ONLY)"
+fi
+
 base="${CACHED_COMMIT_REF:-}"
 head="${COMMIT_REF:-}"
 # First build, no cache, or a manual redeploy of the same commit: build.
