@@ -2376,3 +2376,9 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/content/stickwijzer/{stickUse,questions}.ts`, `src/app/stickwijzer/page.tsx`;
 - `src/advice-engine/{answers,playerContext}.ts` (+ test);
 - `src/lib/analytics/events.ts`, `src/interest/types.ts`.
+
+## 2026-11-08 — Stickpagina op mobiel: omschrijving onder foto en naam
+
+**Opdracht eigenaar (2026-11-08):** op een telefoon stond de korte omschrijving in een smalle kolom naast de foto. Daardoor begon "Waar te koop" pas onderaan het eerste scherm. De omschrijving staat nu onder de foto en de naam, over de volle breedte, en de naam is op mobiel iets kleiner (`text-2xl`). Zo staan op 390 px de "vanaf"-prijs en de bovenste winkel in het eerste scherm. Vanaf `sm` staat de omschrijving weer naast de foto; op laptop blijft "Waar te koop" rechts en blijft het meescrollen. De tekst staat er één keer, in dezelfde HTML-volgorde.
+
+**Betrokken bestand:** `src/components/catalog/ProductDetail.tsx`.

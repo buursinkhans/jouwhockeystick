@@ -112,8 +112,13 @@ export function ProductDetail({ product }: { product: Product }) {
         buying, details, so a phone shows them in that order in one column.
       */}
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-x-12">
-        <div className="flex items-start gap-6 lg:col-start-1 lg:row-start-1">
-          <div className="shrink-0">
+        {/*
+          A phone puts the summary under photo and name, over the full width,
+          so the price and the first shops reach the first screen (owner,
+          2026-11-08). From sm the summary sits beside the photo again.
+        */}
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-6 lg:col-start-1 lg:row-start-1">
+          <div className="shrink-0 sm:row-span-2">
             <ProductImage
               product={product}
               className="h-40 w-40 sm:h-64 sm:w-64"
@@ -130,9 +135,9 @@ export function ProductDetail({ product }: { product: Product }) {
             <p className="text-xs font-semibold uppercase tracking-wide text-veld">
               {product.brand}
             </p>
-            <h1 className="mt-1 text-3xl font-bold">{product.name}</h1>
-            <p className="mt-4 text-inkt/80">{product.summary}</p>
+            <h1 className="mt-1 text-2xl font-bold sm:text-3xl">{product.name}</h1>
           </div>
+          <p className="col-span-2 mt-4 text-inkt/80 sm:col-span-1 sm:col-start-2">{product.summary}</p>
         </div>
 
         <aside
