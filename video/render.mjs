@@ -8,6 +8,8 @@ const RENDERS = [
   ['render', 'lengte-uitleg', 'out/hockeystick-lengte-uitleg.mp4'],
   ['render', 'lengte-trainer-short', 'out/hockeystick-lengte-trainer-short.mp4'],
   ['render', 'lengte-trainer-short-zonder-muziek', 'out/hockeystick-lengte-trainer-short-zonder-muziek.mp4'],
+  ['render', 'kromming-trainer-short', 'out/hockeystick-kromming-trainer-short.mp4'],
+  ['render', 'kromming-trainer-short-zonder-muziek', 'out/hockeystick-kromming-trainer-short-zonder-muziek.mp4'],
   ['still', 'lengte-thumbnail', 'out/hockeystick-lengte-thumbnail.png'],
 ];
 

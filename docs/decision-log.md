@@ -2389,3 +2389,20 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/content/stickwijzer/{stickUse,questions}.ts`, `src/app/stickwijzer/page.tsx`;
 - `src/advice-engine/{answers,playerContext}.ts` (+ test);
 - `src/lib/analytics/events.ts`, `src/interest/types.ts`.
+
+## 2026-11-08 — Daan wordt vaste explainer-trainer: reeks "Daan legt uit"
+
+**Besluit eigenaar:** "Ik wil Daan als explainer trainer: uitleggen in een korte video waar je op moet letten, uitleg geven over kromming, enz." Daan blijft bij stickkennis; trainingsoefeningen vallen erbuiten.
+
+**Wat:**
+- **Reeks** in `video/teksten/daan-reeks.md`: vijf onderwerpen, elk bij een kennispagina die live staat (lengte, kromming, carbon, veldstick in de zaal, eerste stick voor een kind), met de gesproken takes voor Synthesia. Zo kunnen alle clips in één maand Synthesia Starter worden opgenomen.
+- **Tweede video:** `kromming-trainer-short` (+ zonder muziek), *Low bow of mid bow?*, bij `/kennis/low-bow-vs-mid-bow`. De plek van de kromming en de maximale diepte (25 mm, FIH) komen uit `src/content/bowProfiles.ts`; de stick is schematisch en dat staat in beeld. Uploadteksten in `video/teksten/kromming-trainer.md`.
+- **Gedeelde onderdelen** naar `video/src/trainer/Trainer.tsx` (clip, ondertitels, AI-label, muziek die zachter gaat, eindkaart). De lengtevideo gebruikt ze nu ook; die verandert daardoor niet.
+- **Regels** in `docs/video.md` §9a: Daan zegt alleen algemene zinnen (geen merken, maten, aantallen of prijzen, want een clip kun je niet opnieuw renderen), geen trainersclaims, geen oefeningen of blessureadvies, AI-label in elke scène.
+- **Ritme:** hooguit één Daan-video per week, op de plek van de vrijdagvideo, zodat het bij drie Shorts per week blijft (besluit 22 oktober) en de woensdag zijn YouTube-video houdt.
+
+**Vervangt:** "Bewust niet: AI-avatars" (16 oktober) en "Daan in de wekelijkse video's vraagt een nieuw besluit" (24 oktober), alleen voor de Daan-reeks. Daan in de Social-studio zelf blijft uit tot na de evaluatie.
+
+**Open:** de clips. Het gratis pakket van Synthesia kan geen MP4 downloaden; de eigenaar neemt één maand Starter. Zonder clip openen beide video's met een tekst, zonder AI-label.
+
+**Evaluatie:** eind november, met de pilot: kijkers die blijven en sitebezoek per `utm_campaign`, Daan tegenover de video's zonder Daan.
