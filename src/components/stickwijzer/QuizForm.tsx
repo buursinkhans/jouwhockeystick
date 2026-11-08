@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { getAdviceAction } from '@/app/stickwijzer/actions';
+import { countFittingAction, getAdviceAction } from '@/app/stickwijzer/actions';
 import {
   QUESTION_IDS,
   QUESTION_META,
@@ -207,6 +207,8 @@ export function QuizForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [advice, setAdvice] = useState<AdviceResult | null>(null);
   const [adviceShareHref, setAdviceShareHref] = useState<string | undefined>();
+  // "Nog X veldsticks passen" (UX phase 2): counted on the server, with the engine's rules.
+  const [liveCount, setLiveCount] = useState<number | null>(null);
   // Not an answer: the stickwijzer only runs for a field stick (2026-11-08).
   const [stickUse, setStickUse] = useState<StickUse>('veld');
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -231,6 +233,23 @@ export function QuizForm() {
       sessionId ? { answers, stepIndex: currentStep, sessionId } : null,
     );
   }, [answers, currentStep, sessionId]);
+
+  // Recount when an answer the count uses changes; a short delay avoids a request per keystroke.
+  const { height_cm, height_uncertain, age_band, experience_seasons, first_touch_confidence, core_skills_stage, budget_band } = answers;
+  useEffect(() => {
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      void countFittingAction({ height_cm, height_uncertain, age_band, experience_seasons, first_touch_confidence, core_skills_stage, budget_band })
+        .then((count) => {
+          if (!cancelled) setLiveCount(count);
+        })
+        .catch(() => undefined);
+    }, 300);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [height_cm, height_uncertain, age_band, experience_seasons, first_touch_confidence, core_skills_stage, budget_band]);
 
   // "/stickwijzer?snel" (the homepage link for parents) opens with quick advice chosen.
   useEffect(() => {
@@ -529,6 +548,13 @@ export function QuizForm() {
             }}
           />
         </div>
+      )}
+      {liveCount !== null && (
+        <p className="mt-2 text-sm text-inkt/80" aria-live="polite">
+          {liveCount === 0
+            ? 'Met deze antwoorden past nog geen veldstick. Het advies zegt straks waarom.'
+            : `Nog ${liveCount} ${liveCount === 1 ? 'veldstick past' : 'veldsticks passen'} bij je antwoorden tot nu toe.`}
+        </p>
       )}
 
       <h2

@@ -2465,3 +2465,25 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/components/stickwijzer/{QuizForm,QuizResult,AdviceModeChoice,RecommendationCard}.tsx`;
 - `src/components/ui/TermHelp.tsx`, `src/components/catalog/ProductSpecTable.tsx`, `src/components/home/Hero.tsx`;
 - `src/components/offers/OfferRows.tsx` en tests, `CLAUDE.md`.
+
+## 2026-11-08 — UX fase 2: live teller, vergelijken met drie sticks en badges op eigenschappen
+
+**Opdracht eigenaar (2026-11-08):** fase 2 van de UX-opdracht, met de afwijkingen die de eigenaar goedkeurde.
+
+1. **Live teller in de stickwijzer:** "Nog X veldsticks passen bij je antwoorden tot nu toe", onder de voortgang (`countFittingSticks`, server action `countFittingAction`).
+   - **Wat hij telt:** de veldsticks die de controles doorstaan die de antwoorden tot dan toe toelaten: de adviesgegevens, de maat uit de lengte, het budgetmaximum en een niveau dat niet te hoog is. Dat gebeurt met de regels van de advieskern.
+   - **Grenzen:** het eindadvies kan minder tonen, omdat het ook veiligheid en de route controleert, maar nooit meer. Een test bewaakt dat op alle profielen van de vergelijkbank.
+   - **Privacy:** de teller leest alleen de antwoorden die hij nodig heeft, en slaat niets op.
+2. **Vergelijken met drie sticks:** `/vergelijk` neemt `a`, `b` en een optionele `c`. De tabel (`buildCompareTable`) heeft per stick ook het eerste sterke punt en het eerste aandachtspunt, uit de eigen gegevens van de stick.
+   - **Vinkje:** op elke stickkaart staat een vinkje "Vergelijk". Een balk onderin opent de vergelijking zodra er twee of drie zijn gekozen.
+   - **Opslag en meten:** de keuze staat alleen in `localStorage` van de bezoeker. Meting: `compare_open` (count).
+   - **Afwijking van de opdracht:** een pagina in plaats van een pop-up, zodat de vergelijking deelbaar en vindbaar is.
+3. **Badges op eigenschappen** (`ProductFacts`): "Voor beginners", "Voor gevorderden" of "Voor ervaren spelers" (alleen met een bron, niet bij onze inschatting), "Juniormaat" en het carbonpercentage.
+   - **Afwijking van de opdracht:** geen "Meest gekozen door ouders", "Populairst onder aanvallers" of "Beste prijs/kwaliteit". Daarvoor hebben we geen gegevens; het zou nep sociaal bewijs zijn, en "beste prijs" verbiedt CLAUDE.md. Een test bewaakt dat.
+
+**Advies ongewijzigd:** de advieskern zelf is niet aangepast.
+
+**Betrokken bestanden:**
+- `src/advice-engine/liveCount.ts` (+ test), `src/app/stickwijzer/actions.ts`, `src/components/stickwijzer/QuizForm.tsx`;
+- `src/catalog/compare.ts`, `src/app/vergelijk/page.tsx`, `src/components/compare/`;
+- `src/components/catalog/{ProductCard,ProductFacts}.tsx`, `src/app/layout.tsx`, `src/lib/analytics/events.ts`.

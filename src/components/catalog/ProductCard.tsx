@@ -4,6 +4,8 @@ import type { Product } from '@/catalog/types';
 import { OfferSummary } from '@/components/offers/WhereToBuy';
 import { ProductImage } from './ProductImage';
 import { ProductProsAndCons } from './ProductProsAndCons';
+import { ProductFacts } from './ProductFacts';
+import { CompareToggle } from '@/components/compare/CompareToggle';
 
 /**
  * Fills the height of its grid cell, with the shop row pinned to the
@@ -31,6 +33,7 @@ export function ProductCard({ product }: { product: Product }) {
           {product.name}
         </Link>
       </h3>
+      <ProductFacts product={product} />
       <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-lijngrijs">
         {product.summary}
       </p>
@@ -39,6 +42,9 @@ export function ProductCard({ product }: { product: Product }) {
       </div>
       <div className="relative z-10 mt-auto pt-5">
         <OfferSummary product={product} placement="catalogus" />
+        <div className="mt-1 flex justify-center">
+          <CompareToggle slug={product.slug} name={product.name} />
+        </div>
       </div>
     </article>
   );
