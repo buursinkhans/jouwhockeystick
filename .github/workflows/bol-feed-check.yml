@@ -25,6 +25,21 @@ jobs:
           BOL_CLIENT_SECRET: ${{ secrets.BOL_CLIENT_SECRET }}
         run: npm run --silent bol:feed-check > report.md
         continue-on-error: true
+      # The prices the weekly sync would write, as a file to check by hand (not committed).
+      - run: npm ci
+      - name: bol.com-prijzen ophalen
+        continue-on-error: true
+        env:
+          BOL_CLIENT_ID: ${{ secrets.BOL_CLIENT_ID }}
+          BOL_CLIENT_SECRET: ${{ secrets.BOL_CLIENT_SECRET }}
+        run: npm run --silent bol:prices -- bol-prices.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bol-prijzen
+          path: |
+            bol-prices.md
+            src/catalog/offers/bolPrices.ts
+          retention-days: 14
       - name: Rapport in issue zetten
         env:
           GH_TOKEN: ${{ github.token }}

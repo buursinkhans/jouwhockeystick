@@ -12,8 +12,6 @@ export const y1IndoorMidBowW1: Product = {
   name: 'Y1 Indoor Mid Bow W1',
   dataStatus: 'verified',
   bolNotSold: { checkedAt: CHECKED },
-  passaSportsProductUrl:
-    'https://www.passasports.nl/y1-indoor-mid-bow-w1-st-inm-c-26',
   imageAlt: 'Y1 Indoor Mid Bow W1 hockeystick',
   imageUrl: 'https://cdn.sportshop.com/catalog/product/600/600/4/2/420208_1.jpg',
   imageSourceUrl: 'https://www.passasports.nl/y1-indoor-mid-bow-w1-st-inm-c-26',

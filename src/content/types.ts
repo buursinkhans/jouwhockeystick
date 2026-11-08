@@ -14,7 +14,8 @@ export const articleBlockSchema = z.union([
   z.object({
     type: z.literal('table'),
     columns: z.array(z.string()).min(2),
-    rows: z.array(z.array(z.string())).min(1),
+    /** A cell is text, or text with a smaller note below it (e.g. the length in cm). */
+    rows: z.array(z.array(z.union([z.string(), z.object({ text: z.string(), note: z.string() })]))).min(1),
   }),
   z.object({
     type: z.literal('note'),

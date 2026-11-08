@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { brandSchema } from '@/catalog/types';
+import { suggestRoute } from './route';
 
 export const adviceRouteSchema = z.enum(['START', 'ONTWIKKEL', 'PRESTATIE']);
 export type AdviceRoute = z.infer<typeof adviceRouteSchema>;
@@ -20,6 +21,8 @@ export const routeSelfSelectSchema = z.enum([
   'first_stick',
   'next_stick',
   'advanced_compare',
+  /** "Weet ik nog niet" (2026-11-08): the route follows from age and experience. */
+  'unsure',
 ]);
 export const ageBandSchema = z.enum([
   'under_8',
@@ -286,7 +289,7 @@ export function isAnswered(value: unknown): boolean {
 }
 
 const ROUTE_BY_SELF_SELECT: Record<
-  z.infer<typeof routeSelfSelectSchema>,
+  Exclude<z.infer<typeof routeSelfSelectSchema>, 'unsure'>,
   AdviceRoute
 > = {
   first_stick: 'START',
@@ -294,11 +297,23 @@ const ROUTE_BY_SELF_SELECT: Record<
   advanced_compare: 'PRESTATIE',
 };
 
-/** The user's own choice always decides the route (spec §2.1). */
+/**
+ * The user's own choice decides the route (spec §2.1). "Weet ik nog niet"
+ * takes the suggested route from age and experience (2026-11-08); until those
+ * are answered it is the start route, whose first screens are the same.
+ */
 export function routeFromSelfSelect(
   value: AdviceAnswers['route_self_select'],
+  signals: Partial<Pick<AdviceAnswers, 'age_band' | 'experience_seasons' | 'core_skills_stage'>> = {},
 ): AdviceRoute {
-  return ROUTE_BY_SELF_SELECT[value];
+  if (value !== 'unsure') return ROUTE_BY_SELF_SELECT[value];
+  return signals.age_band && signals.experience_seasons
+    ? suggestRoute({
+        age_band: signals.age_band,
+        experience_seasons: signals.experience_seasons,
+        ...(signals.core_skills_stage && { core_skills_stage: signals.core_skills_stage }),
+      })
+    : 'START';
 }
 
 export function requiredQuestionIds(route: AdviceRoute): QuestionId[] {
@@ -310,7 +325,7 @@ export function requiredQuestionIds(route: AdviceRoute): QuestionId[] {
 
 export const adviceAnswersSchema = baseAnswersSchema.superRefine(
   (data, ctx) => {
-    const route = routeFromSelfSelect(data.route_self_select);
+    const route = routeFromSelfSelect(data.route_self_select, data);
     const required = requiredQuestionIds(route);
     // Owner's rule: why a new stick and the brand questions are required
     // once there is a stick

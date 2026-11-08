@@ -7,7 +7,7 @@ import slag from '@/assets/home/hero-speelster-slag.jpg';
 
 /**
  * Photos of a youth player (the owner's daughter, published with consent;
- * metadata stripped), both cropped square so they line up. Cross-fades every
+ * metadata stripped), both cropped square so they line up; shown 4:5, so the square is cut on the sides (fase 7). Cross-fades every
  * 10 seconds, without buttons: the point is that something happens on the
  * homepage (owner's choice, decision log 2026-10-19). Instead of a pause
  * button it pauses on hover, stops after three rounds, and with
@@ -56,7 +56,7 @@ export function HeroPhotos() {
   return (
     <div
       data-hero-photos
-      className="relative aspect-square w-full overflow-hidden rounded-3xl shadow-sm"
+      className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.75rem] shadow-card-hover ring-1 ring-inkt/5"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -67,7 +67,7 @@ export function HeroPhotos() {
           alt={photo.alt}
           priority={i === 0}
           placeholder="blur"
-          sizes="(min-width: 768px) 384px, 320px"
+          sizes="(min-width: 768px) 480px, 420px"
           aria-hidden={i !== index}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 motion-reduce:transition-none ${
             i === index ? 'opacity-100' : 'opacity-0'

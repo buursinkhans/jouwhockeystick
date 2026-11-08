@@ -15,6 +15,9 @@ export const DEFAULT_DESCRIPTION =
 const MAX_TITLE_LENGTH = 60;
 export const MAX_DESCRIPTION_LENGTH = 158;
 
+/** The length table, linked from stick pages and the advice (decision log 2026-10-29). */
+export const LENGTH_TABLE_PATH = '/kennis/hockeystick-lengte-tabel';
+
 export function absoluteUrl(path: string): string {
   return new URL(path, SITE_URL).toString();
 }

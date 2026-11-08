@@ -83,13 +83,13 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     question: 'Welke route past het best?',
     shortLabel: 'situatie',
     dataUse:
-      'De route bepaalt hoeveel we vragen en welke sticks in beeld komen. Twijfel je? Kies de eenvoudigere route; na de vragen over leeftijd en ervaring stellen we een andere route voor als die beter past, en je kunt altijd teruggaan.',
+      'De route bepaalt hoeveel we vragen. Je niveau volgt altijd uit je antwoorden. Twijfel je, kies dan "Weet ik nog niet": dan kiezen wij de route na de vragen over leeftijd en ervaring.',
     input: {
       kind: 'single',
       options: [
         {
           value: 'first_stick',
-          label: 'Start — eerste stick',
+          label: 'Start: eerste stick',
           details: [
             {
               term: 'Voor wie',
@@ -107,7 +107,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
         },
         {
           value: 'next_stick',
-          label: 'Ontwikkel — volgende stick',
+          label: 'Ontwikkel: volgende stick',
           details: [
             {
               term: 'Voor wie',
@@ -125,7 +125,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
         },
         {
           value: 'advanced_compare',
-          label: 'Prestatie — gericht vergelijken',
+          label: 'Prestatie: gericht vergelijken',
           details: [
             {
               term: 'Voor wie',
@@ -138,6 +138,16 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
             {
               term: 'Wat je krijgt',
               text: 'Een gedetailleerde match, ook op sticks voor ervaren spelers, met de trade-off per stick.',
+            },
+          ],
+        },
+        {
+          value: 'unsure',
+          label: 'Weet ik nog niet',
+          details: [
+            {
+              term: 'Wat er gebeurt',
+              text: 'Je beantwoordt eerst de vragen over leeftijd, ervaring en lengte. Daarna kiezen wij de route die daarbij past. Bovenaan zie je welke route het is geworden.',
             },
           ],
         },
@@ -181,7 +191,8 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
   },
   height_cm: {
     id: 'height_cm',
-    question: 'Hoe lang is de speler met schoenen aan?',
+    // Without shoes, like the length table on /kennis (decision log 2026-10-29).
+    question: 'Hoe lang is de speler, zonder schoenen?',
     shortLabel: 'lichaamslengte',
     helpText:
       'Koop niet extra groot ‘op de groei’; een te lange stick kan balcontrole en houding bemoeilijken.',
@@ -193,7 +204,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     question: 'Weet je de lengte niet precies?',
     shortLabel: 'lengte onzeker',
     helpText:
-      'Meten: laat de speler met hockeyschoenen aan rechtop tegen een muur staan en meet van de vloer tot de kruin.',
+      'Meten: laat de speler zonder schoenen rechtop tegen een muur staan en meet van de vloer tot de kruin.',
     dataUse:
       'Bij een geschatte lengte geven we het lengteadvies met een ruimere marge.',
     input: {
@@ -603,7 +614,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
     question: 'Wil je bij hetzelfde merk blijven?',
     shortLabel: 'zelfde merk',
     dataUse:
-      'Kies je voor hetzelfde merk, dan wegen we dat zwaar mee. We laten altijd ook een stick van een ander merk zien om mee te vergelijken.',
+      'Kies je voor hetzelfde merk, dan zetten we een passende stick van dat merk voorop, binnen je budget en niveau. We laten altijd ook een stick van een ander merk zien om mee te vergelijken.',
     showWhen: knowsCurrentBrand,
     input: {
       kind: 'single',
@@ -831,6 +842,13 @@ export const SCREENS: Record<AdviceRoute, ScreenDef[]> = {
     CURRENT_STICK,
     BUDGET,
   ],
+};
+
+/** The route names of the route cards ("Start — eerste stick"), for a cell already labelled "Route". */
+export const ROUTE_SHORT_LABELS: Record<AdviceRoute, string> = {
+  START: 'Start',
+  ONTWIKKEL: 'Ontwikkel',
+  PRESTATIE: 'Prestatie',
 };
 
 export const ROUTE_LABELS: Record<AdviceRoute, string> = {

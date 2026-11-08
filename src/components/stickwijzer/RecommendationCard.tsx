@@ -1,11 +1,16 @@
 import { productPath } from '@/catalog/paths';
 import Link from 'next/link';
-import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
+import { LENGTH_TABLE_PATH } from '@/lib/site';
+import { isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
+import { getOffers, lowestTotal } from '@/catalog/offers';
+import { WhereToBuy } from '@/components/offers/WhereToBuy';
 import type { AdviceRoute } from '@/advice-engine/answers';
+import { adviceLevel } from '@/advice-engine/productRules';
 import type {
   AdviceReason,
   AdviceResultItem,
   ReasonCode,
+  ResultRole,
 } from '@/advice-engine/types';
 import { BOW_LABELS } from '@/catalog/labels';
 import { getModelYear } from '@/catalog/modelYear';
@@ -25,9 +30,9 @@ import {
   sourceLine,
 } from '@/sources/productSources';
 import { Card } from '@/components/ui/Card';
+import { evidenceGaps, verdictLine } from '@/content/evidence';
 import { ProductNotice } from '@/components/ui/ProductNotice';
-import { RetailerLinks } from '@/components/ui/RetailerLinks';
-import { AlertIcon, CheckIcon } from '@/components/ui/icons';
+import { AlertIcon, BoltIcon, CheckIcon, ShieldIcon, StickIcon, TargetIcon } from '@/components/ui/icons';
 import { ProductImage } from '@/components/catalog/ProductImage';
 
 /**
@@ -74,6 +79,60 @@ function ReasonSource({
   );
 }
 
+/** An icon per role, so the three picks read at a glance; the label next to it says it in words. */
+const ROLE_ICONS: Partial<Record<ResultRole, typeof TargetIcon>> = {
+  best_match: TargetIcon,
+  safe_choice: ShieldIcon,
+  ambitious_choice: BoltIcon,
+};
+
+function RoleBadge({ role }: { role: ResultRole }) {
+  const RoleIcon = ROLE_ICONS[role] ?? StickIcon;
+  return (
+    <span
+      aria-hidden="true"
+      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+        role === 'best_match' ? 'bg-veld text-white' : 'bg-krijt text-veld'
+      }`}
+    >
+      <RoleIcon size={20} />
+    </span>
+  );
+}
+
+/**
+ * Reasons shown before the shop buttons; the rest sit one click away, each
+ * still with its source (spec §9.1, §9.5; CLAUDE.md: at least 2–3 visible).
+ * The engine lists them in order of weight.
+ */
+const VISIBLE_REASONS = 3;
+
+function ReasonList({
+  reasons,
+  product,
+  route,
+}: {
+  reasons: readonly AdviceReason[];
+  product: Product;
+  route: AdviceRoute;
+}) {
+  return (
+    <ul className="mt-2 space-y-3">
+      {reasons.map((reason) => (
+        <li key={reason.code} className="flex items-start gap-2 text-sm">
+          <CheckIcon size={16} className="mt-0.5 shrink-0 text-veld" />
+          <span>
+            {reasonText(reason, product, route)}
+            <span className="mt-0.5 block text-xs text-lijngrijs">
+              <ReasonSource reason={reason} product={product} />
+            </span>
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function RecommendationCard({
   item,
   route,
@@ -85,115 +144,149 @@ export function RecommendationCard({
   const modelYear = getModelYear(product);
   const carbon = product.carbonPercentage?.value;
   const sources = buildProductSourceRecords(product);
+  const offers = getOffers(product);
+  const lowest = lowestTotal(offers, { size: item.sizeInch, now: new Date() });
+  const verdict = verdictLine(product, item.sizeInch);
 
   return (
-    <Card>
-      <p className="text-xs font-semibold uppercase tracking-wide text-veld">
-        {roleLabel(item.role, route)}
-      </p>
-      <p className="mt-1 text-sm text-lijngrijs">{roleIntro(item)}</p>
-
-      <div className="mt-4 flex items-start gap-4">
-        <ProductImage product={product} className="h-20 w-20 shrink-0" />
+    <Card className={item.role === 'best_match' ? 'ring-2 ring-veld/20' : ''}>
+      {/* Role first, as a badge (redesign fase 6): what this stick is in the advice. */}
+      <div className="flex items-center gap-2.5">
+        <RoleBadge role={item.role} />
         <div>
-          <h4 className="text-lg font-bold">
+          <p className="text-sm font-bold text-inkt">{roleLabel(item.role, route)}</p>
+          <p className="text-sm text-lijngrijs">{roleIntro(item)}</p>
+        </div>
+      </div>
+
+      <div className="mt-5 flex items-start gap-4">
+        <ProductImage product={product} className="h-24 w-24 shrink-0 sm:h-32 sm:w-32" />
+        <div className="min-w-0">
+          <p className="text-xs font-semibold tracking-wide text-veld uppercase">{product.brand}</p>
+          <h4 className="mt-0.5 text-xl leading-snug font-bold">
             <Link href={productPath(product)} className="hover:underline">
               {product.name}
             </Link>
           </h4>
-          <p className="mt-1 text-sm text-lijngrijs">{product.summary}</p>
+          <p className="mt-1 text-sm text-inkt/80">{product.summary}</p>
+          {verdict && <p className="mt-2 text-sm font-semibold text-inkt">{verdict}</p>}
         </div>
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-        <div>
-          <dt className="text-lijngrijs">Maat</dt>
+      {/*
+        Fit before price (redesign fase 6): the size and the specs that made
+        the match; prices come only in "Waar te koop", after the reasons.
+      */}
+      <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-rand bg-rand text-sm sm:grid-cols-4">
+        <div className="bg-white px-3 py-2.5">
+          <dt className="text-xs text-lijngrijs">Jouw maat</dt>
           <dd className="font-semibold">{formatInch(item.sizeInch)}</dd>
-        </div>
-        <div>
-          <dt className="text-lijngrijs">Richtprijs</dt>
-          <dd className="font-semibold">
-            €{product.priceIndicativeEur.value.toFixed(2)}
+          <dd className="text-xs">
+            <Link href={LENGTH_TABLE_PATH} className="text-veld underline hover:no-underline">
+              Waarom deze maat?
+            </Link>
           </dd>
         </div>
-        <div>
-          <dt className="text-lijngrijs">Bow-profiel</dt>
-          <dd>
+        <div className="bg-white px-3 py-2.5">
+          <dt className="text-xs text-lijngrijs">Kromming</dt>
+          <dd className="font-semibold">
             {product.bowProfile
               ? BOW_LABELS[product.bowProfile.value]
               : 'Niet bevestigd'}
           </dd>
         </div>
-        <div>
-          <dt className="text-lijngrijs">Carbon</dt>
-          <dd>{carbon === undefined ? 'Niet vermeld' : `${carbon}%`}</dd>
+        <div className="bg-white px-3 py-2.5">
+          <dt className="text-xs text-lijngrijs">Carbon</dt>
+          <dd className="font-semibold">{carbon === undefined ? 'Niet vermeld' : `${carbon}%`}</dd>
         </div>
-        <div>
-          <dt className="text-lijngrijs">Modeljaar</dt>
-          <dd>{modelYear ?? 'Niet bevestigd'}</dd>
+        <div className="bg-white px-3 py-2.5">
+          <dt className="text-xs text-lijngrijs">Modeljaar</dt>
+          <dd className="font-semibold">{modelYear ?? 'Niet bevestigd'}</dd>
         </div>
       </dl>
-      <ProductNotice
-        notSoldAtBol={!isSoldAtBol(product)}
-        passaSportsOnly={isPassaSportsOnly(product)}
-        alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
-      />
 
-      <h5 className="mt-5 text-sm font-semibold">Waarom deze stick past</h5>
-      <ul className="mt-2 space-y-3">
-        {item.reasons.map((reason) => (
-          <li key={reason.code} className="flex items-start gap-2 text-sm">
-            <CheckIcon size={16} className="mt-0.5 shrink-0 text-veld" />
-            <span>
-              {reasonText(reason, product, route)}
-              <span className="mt-0.5 block text-xs text-lijngrijs">
-                <ReasonSource reason={reason} product={product} />
-              </span>
-            </span>
-          </li>
-        ))}
-      </ul>
+      {/* The match and the trade-off side by side from sm, so the compromise is never hidden. */}
+      <div className="mt-6 grid gap-6 sm:grid-cols-2">
+        <div>
+          <h5 className="text-sm font-semibold">Waarom deze stick past</h5>
+          <ReasonList reasons={item.reasons.slice(0, VISIBLE_REASONS)} product={product} route={route} />
+          {item.reasons.length > VISIBLE_REASONS && (
+            <details className="mt-3 text-sm">
+              <summary className="cursor-pointer select-none font-medium text-veld">
+                Nog {item.reasons.length - VISIBLE_REASONS}{' '}
+                {item.reasons.length - VISIBLE_REASONS === 1 ? 'reden' : 'redenen'}
+              </summary>
+              <ReasonList reasons={item.reasons.slice(VISIBLE_REASONS)} product={product} route={route} />
+            </details>
+          )}
+        </div>
 
-      <h5 className="mt-5 text-sm font-semibold">Let op vóór je koopt</h5>
-      <ul className="mt-2 space-y-2">
-        {item.cautions.map((code) => (
-          <li
-            key={code}
-            className="flex items-start gap-2 text-sm text-amber-900"
-          >
-            <AlertIcon size={16} className="mt-0.5 shrink-0" />
-            <span>{CAUTION_TEXT[code]}</span>
-          </li>
-        ))}
-        {item.cautions.length === 0 && (
-          <li className="flex items-start gap-2 text-sm text-amber-900">
-            <AlertIcon size={16} className="mt-0.5 shrink-0" />
-            <span>
-              {product.pointsOfAttention.value[0]}
-              <span className="mt-0.5 block text-xs text-lijngrijs">
-                {sourceLine(product, product.pointsOfAttention)}
-              </span>
-            </span>
-          </li>
-        )}
-      </ul>
-      <p className="mt-3 text-sm text-inkt/80">
-        {LESS_SUITABLE_FOR[product.experienceLevel.value]}
-      </p>
+        <div className="sm:border-l sm:border-rand sm:pl-6">
+          <h5 className="text-sm font-semibold">Waar je op inlevert</h5>
+          <ul className="mt-2 space-y-2">
+            {item.cautions.map((code) => (
+              <li
+                key={code}
+                className="flex items-start gap-2 text-sm text-amber-900"
+              >
+                <AlertIcon size={16} className="mt-0.5 shrink-0" />
+                <span>{CAUTION_TEXT[code]}</span>
+              </li>
+            ))}
+            {item.cautions.length === 0 && (
+              <li className="flex items-start gap-2 text-sm text-amber-900">
+                <AlertIcon size={16} className="mt-0.5 shrink-0" />
+                <span>
+                  {product.pointsOfAttention.value[0]}
+                  <span className="mt-0.5 block text-xs text-lijngrijs">
+                    {sourceLine(product, product.pointsOfAttention)}
+                  </span>
+                </span>
+              </li>
+            )}
+          </ul>
+          <p className="mt-3 text-sm text-inkt/80">
+            {LESS_SUITABLE_FOR[adviceLevel(product) ?? product.experienceLevel.value]}
+          </p>
+
+          {/* What we don't know, said plainly (fase 8): the limits of this advice. */}
+          <h5 className="mt-5 text-sm font-semibold">Wat we niet weten</h5>
+          <ul className="mt-2 space-y-1 text-sm text-lijngrijs">
+            {evidenceGaps(product, modelYear ?? null).map((gap) => (
+              <li key={gap}>{gap}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {lowest === null && (
+        // No current shop price: the indicative price, marked as such (CLAUDE.md, Testfase-scope).
+        <div className="mt-6 rounded-xl bg-krijt px-4 py-3 text-sm">
+          <p>
+            <span className="font-semibold">Richtprijs €{product.priceIndicativeEur.value.toFixed(2)}</span>
+            <span className="text-lijngrijs"> · geen actuele winkelprijs in deze maat</span>
+          </p>
+          <ProductNotice
+            notSoldAtBol={!isSoldAtBol(product)}
+            passaSportsOnly={isPassaSportsOnly(product)}
+            alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
+            alsoAtPlutosport={product.plutosportProductUrl !== undefined}
+            alsoAtHockeyCity={product.hockeyCityProductUrl !== undefined}
+            alsoAtDaka={product.dakaProductUrl !== undefined}
+          />
+        </div>
+      )}
 
       {/*
         Shop buttons right after the reasons and the points of attention, so
         on a phone they are not hidden below the sources (2026-10-22).
       */}
-      <div className="mt-5">
-        <RetailerLinks
-          brand={product.brand}
-          productName={product.name}
-          bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={!isSoldAtBol(product)}
-          bolUnchecked={isBolUnchecked(product)}
-          passaSportsProductUrl={product.passaSportsProductUrl}
+      <div className="mt-6">
+        <WhereToBuy
+          product={product}
           placement="stickwijzer"
+          variant="compact"
+          size={item.sizeInch}
         />
       </div>
 

@@ -15,7 +15,10 @@ import {
   type Period,
   type Source,
 } from '../src/analytics-report/sales';
-import { PASSASPORTS_TRADETRACKER } from '../src/lib/retailers';
+import {
+  HOCKEYCITY_TRADETRACKER,
+  PASSASPORTS_TRADETRACKER,
+} from '../src/lib/retailers';
 
 const DAY = 86_400_000;
 const iso = (d: Date) => d.toISOString().slice(0, 10);
@@ -131,11 +134,12 @@ async function tradeTrackerSession(): Promise<string> {
   return cookie;
 }
 
-async function passaReport(
+/** The reference report of one TradeTracker campaign: PassaHockey or HockeyCity. */
+async function tradeTrackerReport(
   session: string,
+  { campaignId, affiliateSiteId }: { campaignId: string; affiliateSiteId: string },
   period: Period,
 ): Promise<PassaRow[]> {
-  const { campaignId, affiliateSiteId } = PASSASPORTS_TRADETRACKER;
   const { text } = await soap(
     'getReportReference',
     `<affiliateSiteID>${affiliateSiteId}</affiliateSiteID><options><campaignID>${campaignId}</campaignID><dateFrom>${period.from}</dateFrom><dateTo>${period.to}</dateTo></options>`,
@@ -169,7 +173,10 @@ async function both<T>(
 }
 
 const { current, previous } = periods(new Date());
-const [bol, passa] = await Promise.all([
+// One TradeTracker login for both campaigns.
+const tradeTracker = tradeTrackerSession();
+tradeTracker.catch(() => undefined);
+const [bol, passa, hockeyCity] = await Promise.all([
   both(
     async () => {
       const token = await bolToken();
@@ -180,12 +187,24 @@ const [bol, passa] = await Promise.all([
   ),
   both(
     async () => {
-      const session = await tradeTrackerSession();
-      return (period: Period) => passaReport(session, period);
+      const session = await tradeTracker;
+      return (period: Period) =>
+        tradeTrackerReport(session, PASSASPORTS_TRADETRACKER, period);
+    },
+    current,
+    previous,
+  ),
+  both(
+    async () => {
+      const session = await tradeTracker;
+      return (period: Period) =>
+        tradeTrackerReport(session, HOCKEYCITY_TRADETRACKER, period);
     },
     current,
     previous,
   ),
 ]);
 
-process.stdout.write(formatSalesReport({ current, previous, bol, passa }));
+process.stdout.write(
+  formatSalesReport({ current, previous, bol, passa, hockeyCity }),
+);

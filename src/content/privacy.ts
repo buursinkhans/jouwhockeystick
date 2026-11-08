@@ -14,11 +14,11 @@ export type PrivacySection = {
 export const PRIVACY = {
   title: 'Privacyverklaring',
   metaDescription:
-    'Welke gegevens jouwhockeystick.nl verwerkt, waarom, hoe lang en met wie: de stickwijzer, het interesseformulier, cookieloze statistieken en hosting.',
-  version: '1.2',
-  updatedAt: '2026-10-16',
+    'Welke gegevens jouwhockeystick.nl verwerkt en waarom: de stick- en schoenenwijzer, het interesseformulier, cookieloze statistieken, hosting en partnerlinks.',
+  version: '1.7',
+  updatedAt: '2026-11-04',
   intro: [
-    `${SITE_NAME} gebruikt zo weinig persoonsgegevens als mogelijk. Voor de stickwijzer hoef je geen naam, e-mailadres of geboortedatum op te geven, we plaatsen geen cookies en we gebruiken statistieken zonder cookies of bezoekersprofielen. Alleen als je zelf het interesseformulier invult, ontvangen we contactgegevens.`,
+    `${SITE_NAME} gebruikt zo weinig persoonsgegevens als mogelijk. Voor de stickwijzer en de schoenenwijzer hoef je geen naam, e-mailadres of geboortedatum op te geven, we plaatsen geen cookies en we gebruiken statistieken zonder cookies of bezoekersprofielen. Alleen als je zelf het interesseformulier invult, ontvangen we contactgegevens.`,
   ],
   sections: [
     {
@@ -32,6 +32,16 @@ export const PRIVACY = {
       paragraphs: [
         'Je antwoorden in de stickwijzer (zoals leeftijdsgroep, lichaamslengte, ervaring en budget) worden tijdelijk in je eigen browser bewaard, zodat je kunt teruggaan zonder opnieuw te beginnen. Ze verdwijnen zodra je het tabblad sluit.',
         'Om het advies te berekenen, worden de antwoorden naar onze server gestuurd. We slaan ze daar niet op en koppelen ze niet aan jou. We vragen bewust geen naam, e-mailadres of geboortedatum.',
+        'Deel je het advies met de knop “Deel dit advies”, dan staan je antwoorden in de link zelf, samen met de sticks die je kreeg. Wij bewaren die link niet; iedereen die hem krijgt, kan het advies openen. Opent iemand de link, dan halen we de antwoorden uit het webadres voordat het in onze statistieken komt.',
+      ],
+    },
+    {
+      heading: 'De schoenenwijzer',
+      paragraphs: [
+        'Voor de schoenenwijzer gebruiken we je antwoorden over veld of zaal, je ondergrond, je pasvorm, je gebruik en je spel, je budget en je schoenmaat. Om het advies te berekenen, gaan die antwoorden naar onze server. We slaan ze daar niet op en koppelen ze niet aan jou. In je browser staan ze alleen zolang de pagina open is.',
+        'Je antwoord op de vraag over bijzonderheden bij het passen (eigen inlegzolen of een brace, terugkerende pijn of een blessure, blaren of drukplekken) blijft in je browser. Het gaat niet naar onze server, niet in de statistieken en niet in een deellink. Geef je pijn of een blessure aan, dan tonen we alleen een vaste tekst met het advies om je klachten te laten beoordelen; we stellen geen diagnose.',
+        'Van je antwoorden in de schoenenwijzer komt niets in de statistieken, ook niet via de klikken die PostHog registreert: we tellen alleen dat de schoenenwijzer is gestart en afgerond, en op welke winkellinks wordt geklikt.',
+        'Deel je het advies, dan staan je antwoorden in de link zelf, behalve die over bijzonderheden bij het passen. Wij bewaren die link niet; iedereen die hem krijgt, kan het advies openen.',
       ],
     },
     {
@@ -48,6 +58,7 @@ export const PRIVACY = {
         'We meten het gebruik van de site met Simple Analytics, een privacyvriendelijke dienst die geen cookies plaatst en geen bezoekersprofielen of IP-adressen opslaat. We zien daardoor alleen geanonimiseerde totalen, zoals het aantal bezoeken per pagina.',
         'Daarnaast tellen we anoniem welke stappen in de stickwijzer worden gezet, welke antwoorden vaak worden gekozen en op welke winkellinks wordt geklikt. Die gebeurtenissen bevatten geen naam, e-mailadres of ander kenmerk waarmee je te herkennen bent. We doen dit op basis van ons gerechtvaardigd belang om de stickwijzer te verbeteren.',
         'Om te zien waar de site onduidelijk is, gebruiken we ook PostHog, met opslag in de Europese Unie (Frankfurt). PostHog registreert anoniem op welke knoppen en links wordt geklikt, hoe ver pagina’s worden gelezen en waar bezoekers in de stickwijzer afhaken, en maakt daar heatmaps van. We gebruiken PostHog zonder cookies en zonder lokale opslag in je browser, we maken geen opnames van bezoeken, en we koppelen niets aan jou als persoon. Wat je in formulieren typt, wordt niet vastgelegd.',
+        'De metingen voor PostHog gaan via ons eigen domein naar PostHog in de Europese Unie.',
       ],
     },
     {
@@ -59,10 +70,14 @@ export const PRIVACY = {
     {
       heading: 'Afbeeldingen en links van derden',
       paragraphs: [
-        'Productfoto’s en logo’s laden we rechtstreeks van de websites van de merken en van bol.com. Daardoor ontvangt die website, zoals bij elke afbeelding op internet, technische gegevens zoals je IP-adres. Wij krijgen daar niets van te zien.',
-        'Als je doorklikt naar bol.com of PassaHockey, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken.',
+        'Productfoto’s en logo’s laden we rechtstreeks van de websites van de merken en van de winkels waar de gegevens vandaan komen (bol.com, PassaSports, Plutosport, HockeyCity en Daka), of van de beeldservers die zij daarvoor gebruiken. Daardoor ontvangt die website, zoals bij elke afbeelding op internet, technische gegevens zoals je IP-adres en browser. Wij krijgen daar niets van te zien.',
+        'Als je doorklikt naar bol.com, PassaHockey, Plutosport, HockeyCity of Daka, verlaat je onze site. Op die websites gelden hun eigen privacy- en cookiebeleid. Onze links bevatten geen persoonlijke kenmerken: alleen de plek op onze site waar je klikte (bijvoorbeeld de stickwijzer, de schoenenwijzer of een stick- of schoenpagina) en, bij bol.com, de naam van de stick.',
+        'Op onze eigen site plaatsen we geen cookies, ook niet voor partnerlinks. Cookies van de winkels en de affiliatenetwerken komen pas na een klik, op hun eigen websites.',
         'De links naar bol.com lopen via het bol.com Partnerprogramma. Na een klik registreert bol.com dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; bol.com kan daarvoor op zijn eigen website cookies plaatsen. Wij ontvangen daarbij geen gegevens over wie je bent of wat je koopt, alleen geanonimiseerde totalen.',
         'De links naar PassaHockey, de hockeywinkel van PassaSports, lopen via het affiliatenetwerk TradeTracker. Na een klik registreren PassaSports en TradeTracker dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; zij kunnen daarvoor cookies plaatsen. Ook hier ontvangen wij geen gegevens over wie je bent.',
+        'De links naar Plutosport lopen via het affiliatenetwerk Awin. Na een klik ga je eerst langs de website van Awin (awin1.com). Awin registreert dan technische gegevens zoals je IP-adres, je browser, het tijdstip en de pagina waar je vandaan kwam, en geeft een kenmerk van de klik mee aan Plutosport. Awin en Plutosport kunnen daarvoor cookies plaatsen, zodat een eventuele aankoop aan ons kan worden toegeschreven. Koop je iets, dan verwerkt Plutosport je bestelling volgens zijn eigen privacybeleid. Wij zien alleen kliks en aankopen, zonder naam, adres of andere gegevens over wie je bent.',
+        'De links naar HockeyCity lopen, net als die naar PassaHockey, via het affiliatenetwerk TradeTracker. Na een klik registreren HockeyCity en TradeTracker dat je via onze site kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; zij kunnen daarvoor cookies plaatsen. Ook hier ontvangen wij geen gegevens over wie je bent.',
+        'De links naar Daka lopen via het affiliatenetwerk Daisycon. Na een klik ga je eerst langs partner.daka.nl, het klikadres van Daka bij Daisycon. Daisycon registreert dan technische gegevens zoals je IP-adres, je browser, het tijdstip en de pagina waar je vandaan kwam, zodat een eventuele aankoop aan ons kan worden toegeschreven; Daisycon en Daka kunnen daarvoor cookies plaatsen. Koop je iets, dan verwerkt Daka je bestelling volgens zijn eigen privacybeleid. Wij zien alleen kliks en aankopen, zonder gegevens over wie je bent.',
       ],
     },
     {
@@ -80,7 +95,7 @@ export const PRIVACY = {
     {
       heading: 'Kinderen',
       paragraphs: [
-        'De stickwijzer kan ook voor kinderen worden ingevuld; daarvoor zijn geen persoonsgegevens nodig. Het interesseformulier is bedoeld voor volwassenen. Ben je jonger dan 16 jaar, vraag dan een ouder of verzorger om het formulier in te vullen.',
+        'De stickwijzer en de schoenenwijzer kunnen ook voor kinderen worden ingevuld; daarvoor zijn geen persoonsgegevens nodig. Het interesseformulier is bedoeld voor volwassenen. Ben je jonger dan 16 jaar, vraag dan een ouder of verzorger om het formulier in te vullen.',
       ],
     },
     {

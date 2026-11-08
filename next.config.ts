@@ -1,4 +1,9 @@
 import type { NextConfig } from 'next';
+import {
+  POSTHOG_ASSETS_ORIGIN,
+  POSTHOG_INGEST_ORIGIN,
+  POSTHOG_PROXY_PATH,
+} from './src/lib/analytics/posthog';
 
 /**
  * Security headers for every page (security check 2026-10-21). Kept
@@ -20,6 +25,30 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   // Don't advertise the framework in every response.
   poweredByHeader: false,
+  // PostHog's API paths end in a slash (/e/, /flags/); without this every
+  // measurement would get a 308 first. Pages keep their redirect from
+  // "/page/" to "/page" through the explicit redirect below.
+  skipTrailingSlashRedirect: true,
+  // Reverse proxy for PostHog (decision log 2026-10-26), as in PostHog's
+  // Next.js guide for the EU region. The request headers are passed on as
+  // they are, so PostHog still gets the visitor's IP from X-Forwarded-For,
+  // which its cookieless mode needs to count unique visitors per day.
+  async rewrites() {
+    return [
+      {
+        source: `${POSTHOG_PROXY_PATH}/static/:path*`,
+        destination: `${POSTHOG_ASSETS_ORIGIN}/static/:path*`,
+      },
+      {
+        source: `${POSTHOG_PROXY_PATH}/array/:path*`,
+        destination: `${POSTHOG_ASSETS_ORIGIN}/array/:path*`,
+      },
+      {
+        source: `${POSTHOG_PROXY_PATH}/:path*`,
+        destination: `${POSTHOG_INGEST_ORIGIN}/:path*`,
+      },
+    ];
+  },
   async headers() {
     return [{ source: '/:path*', headers: SECURITY_HEADERS }];
   },
@@ -33,6 +62,13 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // What Next.js did by itself before skipTrailingSlashRedirect: one URL
+      // per page, "/kennis/" → "/kennis". Not for the PostHog proxy path.
+      {
+        source: `/:path((?!${POSTHOG_PROXY_PATH.slice(1)}(?:/|$)).+)/`,
+        destination: '/:path',
+        permanent: true,
+      },
       // Short address for the TikTok bio, which has no clickable link on a
       // personal account. The UTM tags let PostHog attribute these visits.
       // Temporary (307) so the destination can change after the test.

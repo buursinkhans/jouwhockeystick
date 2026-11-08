@@ -1,13 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-
-const posthogMock = vi.hoisted(() => ({ __loaded: false, capture: vi.fn() }));
-vi.mock('posthog-js', () => ({ default: posthogMock }));
-
+import { expectPosthog, posthogUnavailable, resetPosthogClient, setPosthog } from './posthogClient';
 import { trackEvent } from './track';
+
+const posthogMock = { capture: vi.fn() };
 
 afterEach(() => {
   vi.unstubAllGlobals();
-  posthogMock.__loaded = false;
+  resetPosthogClient();
   posthogMock.capture.mockReset();
 });
 
@@ -55,7 +54,7 @@ describe('trackEvent', () => {
 
   it('sends the same event and metadata to PostHog once it is initialised', () => {
     vi.stubGlobal('window', { sa_event: vi.fn() });
-    posthogMock.__loaded = true;
+    setPosthog(posthogMock);
 
     trackEvent({
       name: 'retailer_click',
@@ -79,6 +78,32 @@ describe('trackEvent', () => {
     vi.stubGlobal('window', { sa_event: vi.fn() });
 
     trackEvent({ name: 'quiz_start' });
+    setPosthog(posthogMock);
+
+    expect(posthogMock.capture).not.toHaveBeenCalled();
+  });
+
+  it('keeps events from before PostHog has loaded and sends them in order once it has', () => {
+    vi.stubGlobal('window', { sa_event: vi.fn() });
+    expectPosthog();
+
+    trackEvent({ name: 'quiz_start', quiz: 'stick' });
+    trackEvent({ name: 'interest_submit', source: 'algemeen', hasProductSlug: false });
+    expect(posthogMock.capture).not.toHaveBeenCalled();
+
+    setPosthog(posthogMock);
+    expect(posthogMock.capture.mock.calls.map(([name]) => name)).toEqual(['quiz_start', 'interest_submit']);
+
+    trackEvent({ name: 'quiz_start', quiz: 'stick' });
+    expect(posthogMock.capture).toHaveBeenCalledTimes(3);
+  });
+
+  it('drops the queue when PostHog cannot load', () => {
+    vi.stubGlobal('window', { sa_event: vi.fn() });
+    expectPosthog();
+    trackEvent({ name: 'quiz_start', quiz: 'stick' });
+    posthogUnavailable();
+    setPosthog(posthogMock);
 
     expect(posthogMock.capture).not.toHaveBeenCalled();
   });

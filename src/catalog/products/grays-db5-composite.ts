@@ -94,7 +94,6 @@ export const graysDb5Composite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Alleen in 36,5" en 37,5" verkrijgbaar',
     ],
     source: 'editorial-estimate',

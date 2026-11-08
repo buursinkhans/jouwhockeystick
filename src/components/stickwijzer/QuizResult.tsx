@@ -14,9 +14,15 @@ import {
   SELLER_NOTE,
   START_FOOTNOTE,
   TRANSPARENCY_NOTE,
+  ADVICE_TRUST_POINTS,
+  adviceSteps,
   formatInch,
+  levelLabel,
   sizeAdviceText,
 } from '@/content/stickwijzer/resultCopy';
+import { ROUTE_SHORT_LABELS } from '@/content/stickwijzer/questions';
+import { CheckIcon } from '@/components/ui/icons';
+import { trackEvent } from '@/lib/analytics/track';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { RecommendationCard } from './RecommendationCard';
 import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
@@ -74,6 +80,16 @@ export function QuizResult({
 }) {
   const copy = ROUTE_RESULT_COPY[advice.route];
   const hasResults = advice.results.length > 0;
+  const [first, second] = advice.results;
+  const compare =
+    first && second
+      ? {
+          href: `/vergelijk?a=${first.product.slug}&b=${second.product.slug}`,
+          a: first.product.name,
+          b: second.product.name,
+          pair: `${first.role}+${second.role}`,
+        }
+      : null;
   const size = `${formatInch(advice.sizeAdvice.primaryInch)}${advice.sizeAdvice.alternativeInch !== undefined ? ` (of ${formatInch(advice.sizeAdvice.alternativeInch)})` : ''}`;
 
   // Since 2026-10-22 the result starts with the sticks (and the size in one
@@ -92,11 +108,44 @@ export function QuizResult({
               ? 'Onze aanbeveling'
               : 'Onze aanbevelingen'}
           </h2>
-          <p className="mt-2 text-inkt/80">
-            In maat <strong className="text-inkt">{size}</strong>
-            {advice.candidateCount > 0 &&
-              ` · ${candidateCountText(advice.candidateCount, advice.results.length)}`}
-          </p>
+          {/*
+            Profile card (redesign fase 2): what the advice is based on, in
+            one glance, before the sticks. Everything here comes from the
+            advice itself; the full explanation stays below.
+          */}
+          <dl className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-rand bg-rand shadow-card">
+            <div className="bg-white px-3 py-3 sm:px-4">
+              <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Jouw maat</dt>
+              <dd className="mt-1 text-[0.9375rem] leading-tight font-bold break-words text-inkt sm:text-xl">{size}</dd>
+              <dd className="text-xs">
+                <a href="#lengteadvies" className="text-veld underline hover:no-underline">
+                  Waarom deze maat?
+                </a>
+              </dd>
+            </div>
+            <div className="bg-white px-3 py-3 sm:px-4">
+              <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Niveau</dt>
+              <dd className="mt-1 text-[0.9375rem] leading-tight font-bold break-words text-inkt sm:text-xl">{levelLabel(advice.playerLevel.band)}</dd>
+            </div>
+            <div className="bg-white px-3 py-3 sm:px-4">
+              <dt className="text-xs font-semibold tracking-wide text-lijngrijs uppercase">Route</dt>
+              <dd className="mt-1 text-[0.9375rem] leading-tight font-bold break-words text-inkt sm:text-xl">{ROUTE_SHORT_LABELS[advice.route]}</dd>
+            </div>
+          </dl>
+          {advice.candidateCount > 0 && (
+            <p className="mt-3 text-sm text-inkt/80">
+              {candidateCountText(advice.candidateCount, advice.results.length)}
+            </p>
+          )}
+          {/* Why this ranking can be trusted, before the first stick (redesign fase 4). */}
+          <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-inkt/80">
+            {ADVICE_TRUST_POINTS.map((point) => (
+              <li key={point} className="flex items-center gap-1.5">
+                <CheckIcon size={14} className="shrink-0 text-veld" />
+                {point}
+              </li>
+            ))}
+          </ul>
           {advice.brandPreference && !advice.brandPreference.matched && (
             <p className="mt-3 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
               {brandNotFoundText(
@@ -130,6 +179,20 @@ export function QuizResult({
               />
             ))}
           </div>
+          {compare && (
+            // The doubt is largest between the first two picks (fase 9): one tap to see them side by side.
+            <p className="mt-4 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
+              <span className="font-semibold text-inkt">Twijfel je tussen de twee?</span>{' '}
+              <Link
+                href={compare.href}
+                onClick={() => trackEvent({ name: 'advice_compare_click', pair: compare.pair })}
+                className="font-semibold text-veld hover:underline"
+              >
+                Zet de {compare.a} en de {compare.b} naast elkaar
+              </Link>
+              .
+            </p>
+          )}
           {advice.noAmbitiousReason && (
             <p className="mt-4 rounded-lg bg-krijt px-4 py-3 text-sm text-inkt/80">
               <span className="font-semibold text-inkt">
@@ -209,12 +272,23 @@ export function QuizResult({
             tellen mee.
           </p>
         )}
-        <h4 className="mt-5 font-semibold text-inkt">Lengteadvies: {size}</h4>
+        <h4 id="lengteadvies" className="mt-5 scroll-mt-24 font-semibold text-inkt">
+          Lengteadvies: {size}
+        </h4>
         <ul className="mt-2 space-y-1 text-sm">
           {sizeAdviceText(advice.sizeAdvice).map((line) => (
             <li key={line}>{line}</li>
           ))}
         </ul>
+        {hasResults && (
+          // A quiet pointer to the shoe section (decision log 2026-11-01), not part of the advice.
+          <p className="mt-4 text-sm">
+            Ook nieuwe hockeyschoenen nodig?{' '}
+            <Link href="/hockeyschoenen" className="font-semibold text-veld hover:underline">
+              Bekijk de hockeyschoenen
+            </Link>
+          </p>
+        )}
       </section>
 
       <section
@@ -224,6 +298,13 @@ export function QuizResult({
         <h3 id="method-heading" className="text-lg font-semibold text-inkt">
           Waarom dit advies?
         </h3>
+        {hasResults && advice.candidateCount > 0 && (
+          <ol className="list-decimal space-y-1 pl-5">
+            {adviceSteps(advice.candidateCount, advice.results.length).map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        )}
         <p>{TRANSPARENCY_NOTE}</p>
         <p>{ADVICE_DISCLAIMER}</p>
         <p>{SELLER_NOTE}</p>

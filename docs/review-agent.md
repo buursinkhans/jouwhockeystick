@@ -21,8 +21,9 @@ De lint, typecheck, tests en build draaien al in de Kwaliteitscontrole. Herhaal 
 - **Claims en bronnen:** elke feitelijke claim heeft een bron uit `docs/source-policy.md` §2. Spelregels uit de FIH-regelboeken; merkclaims van de merksite. Redactioneel advies is als zodanig benoemd.
 - **Geen vaste productcijfers in tekst:** prijzen, lengtes, carbonpercentages en beschikbaarheid komen uit de catalogus, niet uit een zin.
 - **Verboden taal:** "de beste", "gegarandeerd", "bewezen", prestatiebeloften, medische claims, kortingsclaims, "review" in een titel, eigen testresultaten.
-- **Winkels:** bol.com is de enige winkel. Andere winkels alleen als bron, en dan op de `nofollow`-lijst in `src/content/linkPolicy.ts`.
+- **Winkels:** de partnerwinkels zijn bol.com, PassaHockey, Plutosport, HockeyCity en Daka; hun knoppen komen uit de catalogus. Een winkel die als bron wordt geciteerd (ook PassaHockey, Plutosport, HockeyCity of Daka), staat op de `nofollow`-lijst in `src/content/linkPolicy.ts`.
 - **Toon:** helder, persoonlijk, eerlijk; "je"; korte zinnen; jargon uitgelegd.
+- **AI-patronen:** de harde regels uit `docs/schrijfstijl.md`: hooguit één "niet X, maar Y", geen gedachtestreepjes in lopende tekst, geen uitroeptekens, geen labels als "Goed nieuws:" of "Tip:", geen cliffhangers zonder bron.
 - **Datum en links:** `publishedAt` klopt met de brief; een live pagina linkt niet naar een geplande pagina.
 - **Decision-log:** er staat een korte regel in `docs/decision-log.md`.
 

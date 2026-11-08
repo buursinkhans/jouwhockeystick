@@ -26,7 +26,14 @@
     "sales:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/sales-report.ts",
     "catalog:enrich-list": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-enrich-list.ts",
     "security:check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/security-check.ts",
-    "indexnow": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/indexnow.ts"
+    "indexnow": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/indexnow.ts",
+    "plutosport:feed": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/plutosport-feed.ts",
+    "hockeycity:feed": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/hockeycity-feed.ts",
+    "stickwijzer:bench": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/stickwijzer-bench.ts",
+    "daka:feed": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/daka-feed.ts",
+    "bol:prices": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/bol-prices.ts",
+    "shoes:feed-check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/shoe-feed-check.ts",
+    "shoes:import": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/shoe-import.ts"
   },
   "dependencies": {
     "next": "^16.4.2",

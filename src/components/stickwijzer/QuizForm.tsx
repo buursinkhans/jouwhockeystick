@@ -13,6 +13,8 @@ import {
   type QuestionId,
 } from '@/advice-engine/answers';
 import { suggestRoute } from '@/advice-engine/route';
+import type { StickUse } from '@/content/stickwijzer/stickUse';
+import { StickUseChoice, StickUseExit } from './StickUseChoice';
 import type { AdviceResult } from '@/advice-engine/types';
 import {
   FIRST_SCREEN,
@@ -24,7 +26,8 @@ import {
 import type { AdviceEventName } from '@/lib/analytics/events';
 import { trackEvent } from '@/lib/analytics/track';
 import { shareHref } from '@/lib/shareAdvice';
-import { remainingTimeText } from '@/content/stickwijzer/progress';
+import { remainingTimeText, routeStepRange } from '@/content/stickwijzer/progress';
+import { nextOpenQuestion } from '@/content/stickwijzer/flow';
 import { Button } from '@/components/ui/Button';
 import { QuestionField, type AnswerValue } from './QuestionField';
 import { QuizResult } from './QuizResult';
@@ -51,12 +54,16 @@ const SELF_SELECT_BY_ROUTE: Record<
 };
 
 /** "6 stappen" etc. per route card, derived from the screens so it can't drift. */
-const ROUTE_STEP_COUNTS: Record<string, string> = Object.fromEntries(
-  (Object.keys(SELF_SELECT_BY_ROUTE) as AdviceRoute[]).map((route) => [
-    SELF_SELECT_BY_ROUTE[route],
-    `${SCREENS[route].length} stappen`,
-  ]),
-);
+const ROUTE_STEP_COUNTS: Record<string, string> = {
+  ...Object.fromEntries(
+    (Object.keys(SELF_SELECT_BY_ROUTE) as AdviceRoute[]).map((route) => [
+      SELF_SELECT_BY_ROUTE[route],
+      `${SCREENS[route].length} stappen`,
+    ]),
+  ),
+  // "Weet ik nog niet" ends up on one of the routes.
+  unsure: `${Math.min(...Object.values(SCREENS).map((s) => s.length))}–${Math.max(...Object.values(SCREENS).map((s) => s.length))} stappen`,
+};
 
 /**
  * Random id for one wizard session. crypto.randomUUID only exists in secure
@@ -150,6 +157,22 @@ function focusQuestion(id: QuestionId) {
     ?.focus({ preventScroll: true });
 }
 
+/**
+ * Spec §1.3: one question per screen on mobile. The screens stay as they
+ * are (steps, stored progress and analytics are per screen); on a phone a
+ * single-choice answer brings the next open question into view, or the
+ * buttons when the screen is done, so the visitor sees one question at a time.
+ */
+function guideToNext(next: QuestionId | undefined) {
+  if (!window.matchMedia('(max-width: 767px)').matches) return;
+  const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Wait a frame so follow-up questions that the answer opens are rendered.
+  window.setTimeout(() => {
+    const target = next ? document.getElementById(`vraag-${next}`) : document.getElementById('wizard-acties');
+    target?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: next ? 'start' : 'center' });
+  }, 120);
+}
+
 /** Drops answers to questions that don't belong to the final route or are hidden. */
 function answersForRoute(answers: Answers, route: AdviceRoute): Answers {
   const cleaned: Record<string, unknown> = {};
@@ -182,11 +205,13 @@ export function QuizForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [advice, setAdvice] = useState<AdviceResult | null>(null);
   const [adviceShareHref, setAdviceShareHref] = useState<string | undefined>();
+  // Not an answer: the stickwijzer only runs for a field stick (2026-11-08).
+  const [stickUse, setStickUse] = useState<StickUse>('veld');
   const headingRef = useRef<HTMLHeadingElement>(null);
   const isFirstRender = useRef(true);
 
   const route = answers.route_self_select
-    ? routeFromSelfSelect(answers.route_self_select)
+    ? routeFromSelfSelect(answers.route_self_select, answers)
     : null;
   const screens = SCREENS[route ?? 'START'];
   const currentStep = Math.min(stepIndex, screens.length - 1);
@@ -239,7 +264,7 @@ export function QuizForm() {
     if (!activeSessionId) {
       activeSessionId = newSessionId();
       setSessionId(activeSessionId);
-      trackEvent({ name: 'quiz_start' });
+      trackEvent({ name: 'quiz_start', quiz: 'stick' });
       track('advice_started', activeSessionId);
     }
     if (
@@ -247,13 +272,22 @@ export function QuizForm() {
       typeof value === 'string' &&
       value !== answers.route_self_select
     ) {
-      const selected = routeFromSelfSelect(
-        value as AdviceAnswers['route_self_select'],
-      );
-      track('route_selected', activeSessionId, { route: selected });
+      // "Weet ik nog niet" has no route yet: it follows from the next screen.
+      if (value !== 'unsure') {
+        const selected = routeFromSelfSelect(
+          value as AdviceAnswers['route_self_select'],
+        );
+        track('route_selected', activeSessionId, { route: selected });
+      }
     }
     setErrorMessage(null);
-    setAnswers((previous) => ({ ...previous, [id]: value }) as Answers);
+    const nextAnswers = { ...answers, [id]: value } as Answers;
+    setAnswers(nextAnswers);
+    // The route cards on the first screen carry their own Start button.
+    const guided = QUESTIONS[id].input.kind === 'single' && id !== 'route_self_select';
+    if (guided && screen.questions.includes(id)) {
+      guideToNext(nextOpenQuestion(screen, nextAnswers, id));
+    }
   }
 
   function trackScreenAnswers() {
@@ -302,6 +336,7 @@ export function QuizForm() {
     );
     trackEvent({
       name: 'quiz_complete',
+      quiz: 'stick',
       ruleSetVersion: result.advice.ruleSetVersion,
       hasRecommendation: result.advice.results.length > 0,
       isUncertain: result.advice.isUncertain,
@@ -348,9 +383,11 @@ export function QuizForm() {
     );
   }
 
+  // With "Weet ik nog niet" the route already is the suggestion: no banner.
   const suggested =
     screen.id === 'age_experience' &&
     route &&
+    answers.route_self_select !== 'unsure' &&
     answers.age_band &&
     answers.experience_seasons
       ? suggestRoute({
@@ -397,6 +434,15 @@ export function QuizForm() {
     </div>
   );
 
+  if (currentStep === 0 && stickUse !== 'veld') {
+    return (
+      <div>
+        <StickUseChoice value={stickUse} onChange={setStickUse} />
+        <StickUseExit use={stickUse} />
+      </div>
+    );
+  }
+
   return (
     <form
       noValidate
@@ -421,9 +467,14 @@ export function QuizForm() {
         }
       }}
     >
+      {currentStep === 0 && (
+        <div className="mb-8">
+          <StickUseChoice value={stickUse} onChange={setStickUse} />
+        </div>
+      )}
       <p className="text-sm text-lijngrijs">
         Stap {currentStep + 1}
-        {route ? ` van ${screens.length}` : ''}
+        {route ? ` van ${screens.length}` : ` · ${routeStepRange()}, afhankelijk van de route`}
         {route ? ` · ${ROUTE_LABELS[route]}` : ''}
         {route ? ` · ${remainingTimeText(questionsLeft, isLastStep)}` : ''}
       </p>
@@ -555,7 +606,14 @@ export function QuizForm() {
         {errorMessage}
       </p>
 
-      <div className="mt-5 flex flex-wrap gap-3">
+      {/*
+        On a phone the buttons stay at the bottom of the screen (fase 9), so
+        "Volgende" is always one tap away; from md they sit under the questions.
+      */}
+      <div
+        id="wizard-acties"
+        className="sticky bottom-0 z-20 -mx-4 mt-5 flex flex-wrap gap-3 border-t border-rand bg-white/95 px-4 py-3 scroll-mt-24 backdrop-blur-sm sm:-mx-6 sm:px-6 md:static md:mx-0 md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none"
+      >
         {currentStep > 0 && (
           <Button
             variant="secondary"

@@ -26,9 +26,14 @@ export type AdviceAnalyticsEvent = {
 };
 
 export type AnalyticsEvent =
-  | { name: 'quiz_start' }
+  | {
+      name: 'quiz_start';
+      /** Absent on stickwijzer events from before 2026-11-01: those are 'stick'. No answers, ever. */
+      quiz?: 'stick' | 'schoen';
+    }
   | {
       name: 'quiz_complete';
+      quiz?: 'stick' | 'schoen';
       ruleSetVersion: string;
       hasRecommendation: boolean;
       isUncertain: boolean;
@@ -42,6 +47,18 @@ export type AnalyticsEvent =
       placement: string;
       /** Direct product page or a search; to compare their conversion. */
       linkType: 'product' | 'search';
+      /** In "Waar te koop": place in the sorted list (1 = top), number of shops, and whether an amount was shown. */
+      position?: number;
+      offerCount?: number;
+      priceShown?: boolean;
+    }
+  | {
+      /** The "Waar te koop" block came into view (once per page view and placement). */
+      name: 'offer_block_view';
+      placement: string;
+      offerCount: number;
+      /** Shops in the block with a current price. */
+      pricedCount: number;
     }
   | {
       /** The short indoor selector on /zaalsticks; no personal data. */
@@ -54,8 +71,11 @@ export type AnalyticsEvent =
   | {
       /** A click in a homepage block under the hero, to see what it adds to the funnel. */
       name: 'home_block_click';
-      /** 'hero' = the photo with the example reasons (2026-10-22). */
-      block: 'season' | 'buying' | 'hero';
+      /**
+       * 'hero' = the photo with the example reasons (2026-10-22); 'slot' = the closing call to the stickwijzer (fase 9);
+       * 'zoeken' = a category shortcut in the search block (2026-11-04).
+       */
+      block: 'season' | 'buying' | 'hero' | 'slot' | 'zoeken';
       target: string;
     }
   | {
@@ -64,9 +84,13 @@ export type AnalyticsEvent =
        * landing blocks on /sticks), like home_block_click for the homepage.
        */
       name: 'catalog_block_click';
-      page: 'sticks' | 'zaalsticks';
-      /** 'aanbod' = the button that loads the imported PassaHockey sticks (target 'aanbod-laden'). */
-      block: 'intro' | 'levels' | 'faq' | 'aanbod';
+      /** 'stickpagina' = a stick's own page (fase 9: the link to the stickwijzer). */
+      page: 'sticks' | 'zaalsticks' | 'hockeyschoenen' | 'stickpagina';
+      /**
+       * 'aanbod' = the button that loads the imported PassaHockey sticks (target 'aanbod-laden');
+       * 'filters', 'modellen', 'intenties' and 'pascontrole' are on /hockeyschoenen (decision log 2026-11-01).
+       */
+      block: 'intro' | 'levels' | 'faq' | 'aanbod' | 'filters' | 'modellen' | 'intenties' | 'pascontrole' | 'stickwijzer';
       target: string;
     }
   | {
@@ -84,6 +108,38 @@ export type AnalyticsEvent =
       /** "Deel dit advies": shared via the share sheet or copied link. */
       name: 'advice_shared';
       method: 'native' | 'copy';
+    }
+  | {
+      /**
+       * "Vergelijk prijzen bij N winkels" on a product card (2026-11-05): the
+       * visitor opens the comparison. A shop click from the card itself is
+       * retailer_click with the card's placement; from the comparison it has
+       * placement 'productpagina' or 'schoenpagina'.
+       */
+      name: 'offer_compare_click';
+      placement: string;
+      offerCount: number;
+    }
+  | {
+      /** The first stickwijzer question sent the visitor elsewhere: indoor selector or personal keeper advice (2026-11-08). */
+      name: 'stickwijzer_exit';
+      target: 'zaal' | 'keeper';
+    }
+  | {
+      /** "Zet ze naast elkaar" in an advice: the best match and the second pick on /vergelijk (fase 9). */
+      name: 'advice_compare_click';
+      /** Roles of the two sticks, e.g. 'best_match+safe_choice'. */
+      pair: string;
+    }
+  | {
+      /**
+       * A search on /zoeken (2026-11-04). Counts only: the typed text stays out of
+       * analytics, because a free-text field can hold anything.
+       */
+      name: 'search_results';
+      queryLength: number;
+      sticks: number;
+      shoes: number;
     }
   | {
       /** A shared advice link was opened; `changed` = sticks differ since sharing. */

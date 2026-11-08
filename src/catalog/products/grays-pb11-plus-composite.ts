@@ -83,7 +83,6 @@ export const graysPb11PlusComposite: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
       'Specialistische, dure stick — minder voor de hand liggend als eerste upgrade',
     ],
     source: 'editorial-estimate',

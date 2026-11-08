@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
+  aiAssistant,
+  aiLandingRows,
   formatReport,
   groupSources,
+  sourceLabel,
+  sourcesWithAiVisits,
   routeFunnel,
   largestDropOff,
   questionDropOff,
@@ -152,7 +156,7 @@ describe('groupSources', () => {
     expect(grouped).toContainEqual({ key: 'Google', now: 3, before: 0 });
     expect(grouped).toContainEqual({ key: 'Social: tiktok', now: 3, before: 0 });
     expect(grouped).toContainEqual({ key: 'Social: instagram', now: 2, before: 0 });
-    expect(grouped).toContainEqual({ key: 'AI-assistent', now: 1, before: 0 });
+    expect(grouped).toContainEqual({ key: 'AI-assistent: ChatGPT', now: 1, before: 0 });
     expect(grouped).toContainEqual({ key: 'Andere site: hockey.nl', now: 1, before: 0 });
   });
 
@@ -198,5 +202,76 @@ describe('formatReport', () => {
   it('escapes pipes in table cells', () => {
     const report = formatReport(data({ clicksByProduct: [c('Grays | DB 5', 3)] }), ORDER);
     expect(report).toContain('Grays \\| DB 5');
+  });
+});
+
+describe('AI assistants', () => {
+  it('recognises ChatGPT by its utm_source as well as by its referrer (decision log 2026-10-28)', () => {
+    expect(sourceLabel('utm:chatgpt.com')).toBe('AI-assistent: ChatGPT');
+    expect(sourceLabel('chatgpt.com')).toBe('AI-assistent: ChatGPT');
+    expect(sourceLabel('www.perplexity.ai')).toBe('AI-assistent: Perplexity');
+    expect(sourceLabel('copilot.microsoft.com')).toBe('AI-assistent: Copilot');
+    expect(sourceLabel('gemini.google.com')).toBe('AI-assistent: Gemini');
+    expect(sourceLabel('claude.ai')).toBe('AI-assistent: Claude');
+    expect(sourceLabel('www.google.nl')).toBe('Google');
+    expect(sourceLabel('utm:nieuwsbrief')).toBe('Campagne: nieuwsbrief');
+    expect(aiAssistant('openaigrants.nl')).toBeNull();
+  });
+
+  it('recognises only exact domains and documented utm values, not keywords', () => {
+    for (const notAi of [
+      'openai-tips.nl',
+      'mychatgpt.example',
+      'chatgpt.com.evil.nl',
+      'news.chatgpt.com',
+      'perplexity.com',
+      'copilot.example.com',
+      'utm:chatgpt',
+      'utm:perplexity',
+      'utm:openai',
+      'utm:copilot',
+      'utm:gemini',
+    ]) {
+      expect(aiAssistant(notAi), notAi).toBeNull();
+    }
+    expect(aiAssistant('ChatGPT.com')).toBe('ChatGPT');
+    expect(aiAssistant('UTM:ChatGPT.com')).toBe('ChatGPT');
+    expect(aiAssistant('chat.openai.com')).toBe('ChatGPT');
+    expect(sourceLabel('utm:perplexity')).toBe('Campagne: perplexity');
+  });
+
+  it('does not count a ChatGPT visitor twice in "Waar bezoekers vandaan komen"', () => {
+    // Per pageview the same visitor shows up under the utm on the first page and the referrer on later pages.
+    const byReferrer = [c('utm:chatgpt.com', 3), c('chatgpt.com', 3), c('www.google.nl', 7), c('$direct', 2)];
+    const visits = [c('utm:chatgpt.com → /kennis/hockeystick-lengte-tabel', 2), c('chatgpt.com → /sticks', 1)];
+    const rows = sourcesWithAiVisits(byReferrer, visits);
+    expect(rows).toContainEqual({ key: 'AI-assistent: ChatGPT', now: 3, before: 0 });
+    expect(rows).toContainEqual({ key: 'Google', now: 7, before: 0 });
+    expect(rows.filter((r) => r.key.startsWith('AI-assistent'))).toHaveLength(1);
+    // Without visit data (PostHog could not answer) the old grouping stays.
+    expect(sourcesWithAiVisits(byReferrer, undefined)).toContainEqual({ key: 'AI-assistent: ChatGPT', now: 6, before: 0 });
+  });
+
+  it('titles the table as landing pages of visits and explains the definition', () => {
+    const report = formatReport(data({ aiLandingPages: [c('utm:chatgpt.com → /kennis/hockeystick-lengte-tabel', 2, 1)] }), ORDER);
+    expect(report).toContain('### Bezoeken uit AI-assistenten, per landingspagina');
+    expect(report).toContain('De landingspagina is de eerste pagina van dat bezoek');
+    expect(report).toContain('| ChatGPT → /kennis/hockeystick-lengte-tabel | 2 | 1 |');
+    expect(formatReport(data({ aiLandingPages: [] }), ORDER)).toContain('Geen bezoeken via een AI-assistent');
+    expect(formatReport(data({ aiLandingPages: undefined }), ORDER)).toContain('PostHog kon deze vraag niet beantwoorden');
+  });
+
+  it('lists AI visitors per assistant and landing page, and nothing else', () => {
+    const rows = aiLandingRows([
+      { key: 'chatgpt.com → /kennis/hockeystick-lengte-tabel', now: 2, before: 1 },
+      { key: 'utm:chatgpt.com → /kennis/hockeystick-lengte-tabel', now: 3, before: 0 },
+      { key: 'www.perplexity.ai → /sticks', now: 1, before: 0 },
+      { key: 'www.google.nl → /sticks', now: 9, before: 9 },
+      { key: '', now: 4, before: 4 },
+    ]);
+    expect(rows).toEqual([
+      { key: 'ChatGPT → /kennis/hockeystick-lengte-tabel', now: 5, before: 1 },
+      { key: 'Perplexity → /sticks', now: 1, before: 0 },
+    ]);
   });
 });

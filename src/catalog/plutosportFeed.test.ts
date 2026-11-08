@@ -1,0 +1,306 @@
+import { describe, expect, it } from 'vitest';
+import type { CsvRow } from '@/lib/csv';
+import {
+  collectSticks,
+  isHockeyStickRow,
+  matchStick,
+  normalSize,
+  overlapSummary,
+  sameBrand,
+  seasonYear,
+  sizeFromArticleNumber,
+  type CatalogStick,
+  type OverlapRow,
+  type PlutoStickModel,
+  yearFromArticleCode,
+} from './plutosportFeed';
+
+function row(overrides: Partial<CsvRow> = {}): CsvRow {
+  return {
+    aw_product_id: '1',
+    aw_deep_link: 'https://www.awin1.com/pclick.php?p=1&a=3132918&m=8342',
+    merchant_deep_link: 'https://www.plutosport.nl/grays-jb12-plus?size=36.5',
+    product_name: 'Grays JB12+ Jumbow Hockeystick 2025/26',
+    search_price: '349.95',
+    currency: 'EUR',
+    brand_name: 'Grays',
+    merchant_product_category_path: 'Hockey > Hockeysticks > Veldhockeysticks',
+    in_stock: '1',
+    stock_quantity: '3',
+    is_for_sale: '1',
+    'Fashion:size': '36.5',
+    parent_product_id: 'P1',
+    ean: '5056323712345',
+    ...overrides,
+  };
+}
+
+function model(overrides: Partial<PlutoStickModel> = {}): PlutoStickModel {
+  return {
+    key: 'parent:P1',
+    description: '',
+    name: 'Grays JB12+ Jumbow Hockeystick 2025/26',
+    brand: 'Grays',
+    modelText: '',
+    specText: '',
+    url: 'https://www.plutosport.nl/grays-jb12-plus',
+    awDeepLink: 'https://www.awin1.com/pclick.php?p=1&a=3132918&m=8342',
+    discipline: 'veld',
+    junior: false,
+    eans: [],
+    sizes: ['36,5'],
+    sizesInStock: ['36,5'],
+    priceMin: 349.95,
+    priceMax: 349.95,
+    inStockPriceMin: 349.95,
+    inStock: true,
+    categories: [],
+    ...overrides,
+  };
+}
+
+function stick(overrides: Partial<CatalogStick> = {}): CatalogStick {
+  return {
+    slug: 'grays-jb12-plus-composite',
+    brand: 'Grays',
+    name: 'Grays JB 12+ Composite Hockey Stick',
+    discipline: 'veld',
+    bow: 'lowbow',
+    modelYear: 2025,
+    eans: [],
+    ...overrides,
+  };
+}
+
+describe('isHockeyStickRow', () => {
+  it('keeps field and indoor sticks', () => {
+    expect(isHockeyStickRow(row())).toBe(true);
+    expect(
+      isHockeyStickRow(row({ merchant_product_category_path: 'Hockey > Zaalhockey', product_name: 'Osaka Pro Tour Indoor Hockeystick' })),
+    ).toBe(true);
+    expect(isHockeyStickRow(row({ merchant_product_category_path: 'Sport > Hockey', product_type: 'Sticks' }))).toBe(true);
+  });
+
+  it('drops balls, bags, grips, keeper sticks, other sports and the rest of the assortment', () => {
+    const notSticks = [
+      { product_name: 'Grays Stickbag Zwart', merchant_product_category_path: 'Hockey > Sticktassen' },
+      { product_name: 'Grays Hockeybal Glad Wit', merchant_product_category_path: 'Hockey > Ballen' },
+      { product_name: 'Grays Twin Grip', merchant_product_category_path: 'Hockey > Accessoires > Grips' },
+      { product_name: 'Grays Goalie Stick', merchant_product_category_path: 'Hockey > Keeper' },
+      { product_name: 'Bauer Ijshockey Stick', merchant_product_category_path: 'Wintersport > IJshockey > Sticks' },
+      { product_name: 'Campingstoel Deluxe', merchant_product_category_path: 'Kamperen > Meubels' },
+      { product_name: 'Grays Mini Stick Souvenir', merchant_product_category_path: 'Hockey > Hockeysticks' },
+    ];
+    for (const overrides of notSticks) expect(isHockeyStickRow(row(overrides)), overrides.product_name).toBe(false);
+  });
+});
+
+describe('collectSticks', () => {
+  it('merges lengths of one model, skips rows not for sale and invalid rows', () => {
+    const models = collectSticks([
+      row(),
+      row({ 'Fashion:size': '37.5', search_price: '339.95', in_stock: '0', stock_quantity: '0', ean: '5056323712352' }),
+      row({ 'Fashion:size': '35', is_for_sale: '0' }),
+      row({ product_name: '', parent_product_id: 'P9' }),
+      row({ product_name: 'Grays Hockeybal', merchant_product_category_path: 'Hockey > Ballen', parent_product_id: 'P8' }),
+    ]);
+    expect(models).toHaveLength(1);
+    expect(models[0]).toMatchObject({
+      url: 'https://www.plutosport.nl/grays-jb12-plus',
+      sizes: ['36,5', '37,5'],
+      sizesInStock: ['36,5'],
+      priceMin: 339.95,
+      inStockPriceMin: 349.95,
+      inStock: true,
+      eans: ['5056323712345', '5056323712352'],
+    });
+  });
+
+  it('keeps only product pages on plutosport.nl (the English feed can bring in other domains)', () => {
+    const models = collectSticks([
+      row(),
+      row({ parent_product_id: 'P2', merchant_deep_link: 'https://www.plutosport.com/grays-jb12-plus' }),
+      row({ parent_product_id: 'P3', merchant_deep_link: 'https://www.plutosport.de/grays-jb12-plus' }),
+    ]);
+    expect(models.map((m) => m.key)).toEqual(['page:https://www.plutosport.nl/grays-jb12-plus']);
+  });
+
+  it('drops English names of accessories too', () => {
+    for (const product_name of ['Grays Hockey Shin Guards', 'Grays Hockey Gloves', 'Grays Stick Cover', 'Adidas Hockey Shoes']) {
+      expect(isHockeyStickRow(row({ product_name, merchant_product_category_path: 'Hockey > Sticks' })), product_name).toBe(false);
+    }
+  });
+
+  it('groups by product page, also when every length has its own parent_product_id', () => {
+    const models = collectSticks([
+      row({ parent_product_id: 'P1', 'Fashion:size': '36.5' }),
+      row({ parent_product_id: 'P2', 'Fashion:size': '37.5', merchant_deep_link: 'https://www.plutosport.nl/grays-jb12-plus?size=37.5' }),
+    ]);
+    expect(models).toHaveLength(1);
+  });
+
+  it('groups by product page when parent_product_id is missing', () => {
+    const models = collectSticks([
+      row({ parent_product_id: '', 'Fashion:size': '36.5' }),
+      row({ parent_product_id: '', 'Fashion:size': '37.5', merchant_deep_link: 'https://www.plutosport.nl/grays-jb12-plus?size=37.5' }),
+    ]);
+    expect(models).toHaveLength(1);
+    expect(models[0]?.sizes).toEqual(['36,5', '37,5']);
+  });
+
+  it('treats missing stock columns as unknown, not as in stock', () => {
+    const [m] = collectSticks([row({ in_stock: undefined, stock_quantity: undefined, stock_status: undefined })]);
+    expect(m?.inStock).toBe(false);
+    const [n] = collectSticks([row({ in_stock: undefined, stock_quantity: undefined, stock_status: 'in stock' })]);
+    expect(n?.inStock).toBe(true);
+  });
+});
+
+describe('helpers', () => {
+  it('reads collection years the way our catalog writes them', () => {
+    expect(seasonYear('JDH X93TT Pro Bow 2025/26')).toBe(2025);
+    expect(seasonYear('adidas Estro .60 26/27')).toBe(2026);
+    expect(seasonYear('Osaka Vision 2024-2025')).toBe(2024);
+    expect(seasonYear('Grays GR 2026')).toBe(2026);
+    expect(seasonYear('Princess Competition 1 Star PROBOW Pi/Wh')).toBeNull();
+    expect(seasonYear('Osaka Pro Tour 40 2.0')).toBeNull();
+  });
+
+  it('reads the length from Plutosport article numbers', () => {
+    expect(sizeFromArticleNumber('10221001_36 1/2')).toBe('36,5');
+    expect(sizeFromArticleNumber('10221065-JR_31')).toBe('31');
+    expect(sizeFromArticleNumber('10201041_18')).toBe('18');
+    expect(sizeFromArticleNumber('STK00415_37.5')).toBe('37,5');
+    expect(sizeFromArticleNumber('315-65002-000')).toBeNull();
+    expect(sizeFromArticleNumber('ABC_XL')).toBeNull();
+    expect(sizeFromArticleNumber('ABC_95')).toBeNull();
+    expect(sizeFromArticleNumber(undefined)).toBeNull();
+    const [m] = collectSticks([
+      row({ 'Fashion:size': undefined, merchant_product_id: '10221001_36 1/2' }),
+      row({ 'Fashion:size': undefined, merchant_product_id: '10221001_37 1/2', in_stock: '0', stock_quantity: '0' }),
+    ]);
+    expect(m).toMatchObject({ sizes: ['36,5', '37,5'], sizesInStock: ['36,5'] });
+  });
+
+  it('normalises lengths and brand names', () => {
+    expect(normalSize('36.5')).toBe('36,5');
+    expect(normalSize('36,5 inch')).toBe('36,5');
+    expect(normalSize('37"')).toBe('37');
+    expect(normalSize('M')).toBe('M');
+    expect(sameBrand('Indian Maharadja', 'The Indian Maharadja')).toBe(true);
+    expect(sameBrand('Csign Sports', 'Csign')).toBe(true);
+    expect(sameBrand('Adidas', 'adidas')).toBe(true);
+    expect(sameBrand('Grays', 'Gryphon')).toBe(false);
+  });
+});
+
+describe('matchStick', () => {
+  it('is sure on the same EAN, whatever the name', () => {
+    const result = matchStick(stick({ eans: ['5056323712345'] }), [model({ name: 'GR JB12+ 36.5', eans: ['5056323712345'] })]);
+    expect(result).toMatchObject({ level: 'zeker', method: 'ean' });
+  });
+
+  it('doubts an EAN match when Plutosport calls it senior and we call it junior', () => {
+    const osaka = stick({ slug: 'osaka-probow-gf-indoor-junior', brand: 'Osaka', name: 'Osaka Probow GF Indoor Junior', discipline: 'zaal', eans: ['8719'] });
+    const result = matchStick(osaka, [model({ brand: 'Osaka', name: 'Osaka Pro Bow GF Indoor Hockeystick Senior', discipline: 'zaal', eans: ['8719'] })]);
+    expect(result).toMatchObject({ level: 'twijfel', method: 'ean' });
+  });
+
+  it('reads the year from The Indian Maharadja article code in the page name', () => {
+    expect(yearFromArticleCode('https://www.plutosport.nl/the-indian-maharadja-blade-10-hockeystick-senior-10231006', 'The Indian Maharadja')).toBe(2023);
+    expect(yearFromArticleCode('https://www.plutosport.nl/the-indian-maharadja-red-hockeystick-junior-10221065-jr', 'The Indian Maharadja')).toBe(2022);
+    expect(yearFromArticleCode('https://www.plutosport.nl/osaka-pro-bow-25-10231006', 'Osaka')).toBeNull();
+    const blade = stick({ slug: 'indian-maharadja-blade-10', brand: 'The Indian Maharadja', name: 'The Indian Maharadja Blade 10', bow: undefined, modelYear: 2025 });
+    const old = model({ brand: 'The Indian Maharadja', name: 'The Indian Maharadja Blade 10 Hockeystick Senior', url: 'https://www.plutosport.nl/the-indian-maharadja-blade-10-hockeystick-senior-10231006' });
+    expect(matchStick(blade, [old]).note).toContain('2023');
+  });
+
+  it('is sure on brand, model, bow and year written differently ("JB 12+" vs "JB12+ Jumbow 2025/26")', () => {
+    expect(matchStick(stick(), [model()])).toMatchObject({ level: 'zeker', method: 'naam' });
+  });
+
+  it('reads "PB" as Pro Bow and "25/26" as 2025', () => {
+    const ours = stick({ slug: 'jdh-x93-pro-bow', brand: 'JDH', name: 'JDH X93 Pro Bow', bow: 'probow', modelYear: 2025 });
+    expect(matchStick(ours, [model({ brand: 'JDH', name: 'JDH X93 PB Hockeystick 25/26' })])).toMatchObject({ level: 'zeker' });
+  });
+
+  it('doubts when the shop name has extra model words ("X93TT", "DB10+")', () => {
+    const jdh = stick({ slug: 'jdh-x93-pro-bow', brand: 'JDH', name: 'JDH X93 Pro Bow', bow: 'probow', modelYear: 2025 });
+    const tt = matchStick(jdh, [model({ brand: 'JDH', name: 'JDH X93TT Probow Hockeystick 2025/26' })]);
+    expect(tt.level).toBe('twijfel');
+    expect(tt.note).toContain('tt');
+    const db = stick({ slug: 'grays-db10-composite', name: 'Grays DB 10 Composite', bow: 'dynabow' });
+    expect(matchStick(db, [model({ name: 'Grays DB10+ Dynabow Hockeystick 2025/26' })]).level).toBe('twijfel');
+  });
+
+  it('knows a youth stick by its lengths when "Junior" is not in our name', () => {
+    const youngstar = stick({ slug: 'adidas-youngstar-9', brand: 'adidas', name: 'adidas Youngstar .9 Hockeystick', bow: undefined, modelYear: undefined, junior: true });
+    const result = matchStick(youngstar, [model({ brand: 'Adidas', name: 'Adidas Youngstar .9 Wood Hockeystick Junior', junior: true })]);
+    expect(result.level).toBe('twijfel');
+  });
+
+  it('never matches junior with senior', () => {
+    const reece = stick({ slug: 'reece-alpha-jr', brand: 'Reece', name: 'Reece Alpha JR', bow: undefined, modelYear: undefined });
+    expect(matchStick(reece, [model({ brand: 'Reece', name: 'Reece Alpha Hockeystick Senior' })]).level).toBe('geen');
+    const junior = matchStick(reece, [model({ brand: 'Reece', name: 'Reece Alpha Junior Hockeystick', junior: true })]);
+    expect(junior.level).toBe('twijfel');
+    expect(junior.note).toContain('modeljaar niet bekend');
+  });
+
+  it('does not match another bow, another discipline or another collection year', () => {
+    const jdh = stick({ slug: 'jdh-x93-pro-bow', brand: 'JDH', name: 'JDH X93 Pro Bow', bow: 'probow', modelYear: 2025 });
+    expect(matchStick(jdh, [model({ brand: 'JDH', name: 'JDH X93 Low Bow 2025/26' })]).level).toBe('geen');
+    expect(matchStick(stick(), [model({ discipline: 'zaal' })]).level).toBe('geen');
+    const older = matchStick(stick(), [model({ name: 'Grays JB12+ Jumbow Hockeystick 2024/25' })]);
+    expect(older).toMatchObject({ level: 'geen' });
+    expect(older.note).toContain('2024');
+  });
+
+  it('takes the bow from the specifications when the name has none, but not from a list of options', () => {
+    const adidas = stick({ slug: 'adidas-estro-60-2627', brand: 'adidas', name: 'adidas Estro .60 26/27', bow: 'lowbow', modelYear: 2026 });
+    const plain = { brand: 'Adidas', name: 'Adidas Estro .60 Hockeystick 2026/27' };
+    expect(matchStick(adidas, [model({ ...plain, specText: 'Bow: Low Bow | Carbon: 60%' })]).level).toBe('zeker');
+    expect(matchStick(adidas, [model({ ...plain, specText: 'Bow: Mid Bow' })]).level).toBe('geen');
+    expect(matchStick(adidas, [model({ ...plain, specText: 'Kies uit Low Bow of Mid Bow' })]).level).toBe('twijfel');
+  });
+
+  it('marks an older collection of our stick, so it is never imported next to ours', () => {
+    const sword = stick({ slug: 'indian-maharadja-sword-20-lowbow-10261014', brand: 'The Indian Maharadja', name: 'Indian Maharadja Sword 20 LowBow', bow: undefined, modelYear: 2026 });
+    const result = matchStick(sword, [
+      model({ key: 'old', brand: 'The Indian Maharadja', name: 'The Indian Maharadja Sword 20 Hockeystick Senior', url: 'https://www.plutosport.nl/the-indian-maharadja-sword-20-hockeystick-senior-10251020' }),
+    ]);
+    expect(result).toMatchObject({ level: 'geen', olderCollectionKeys: ['old'] });
+  });
+
+  it('doubts when the year is missing on one side', () => {
+    expect(matchStick(stick({ modelYear: undefined }), [model()]).level).toBe('twijfel');
+    expect(matchStick(stick(), [model({ name: 'Grays JB12+ Jumbow Hockeystick' })]).level).toBe('twijfel');
+  });
+
+  it('picks the colour variant in stock with the lowest price', () => {
+    const result = matchStick(stick(), [
+      model({ key: 'a', name: 'Grays JB12+ Jumbow Hockeystick 2025/26 Zwart', inStock: false, inStockPriceMin: null, priceMin: 299 }),
+      model({ key: 'b', name: 'Grays JB12+ Jumbow Hockeystick 2025/26 Blauw', inStockPriceMin: 359.95 }),
+      model({ key: 'c', name: 'Grays JB12+ Jumbow Hockeystick 2025/26 Rood', inStockPriceMin: 349.95 }),
+    ]);
+    expect(result).toMatchObject({ level: 'zeker', model: { key: 'c' } });
+  });
+});
+
+describe('overlapSummary', () => {
+  const sure = { slug: 'x', level: 'zeker' as const, note: '' };
+  const base: OverlapRow = { slug: 'x', name: 'X', bol: 'nee', passaPrice: null, match: sure, plutoPrice: null, plutoShipping: null };
+
+  it('counts sticks at two or more shops and the median price difference', () => {
+    const rows: OverlapRow[] = [
+      { ...base, slug: 'a', bol: 'ja', passaPrice: 100, plutoPrice: 90, plutoShipping: 0 },
+      { ...base, slug: 'b', passaPrice: 60, plutoPrice: 70, plutoShipping: 6.95 },
+      { ...base, slug: 'c', bol: 'ja' },
+      { ...base, slug: 'd', passaPrice: 50, plutoPrice: 45, plutoShipping: 6.95, match: { ...sure, level: 'twijfel' } },
+    ];
+    const summary = overlapSummary(rows);
+    expect(summary).toMatchObject({ sticks: 4, multiShopSure: 2, multiShopIfDoubtsHold: 3, priced: 2, plutoCheaper: 1 });
+    expect(summary.medianDifference).toBe(10);
+    expect(summary.medianDifferenceWithShipping).toBeCloseTo((10 + 16.95) / 2);
+  });
+});

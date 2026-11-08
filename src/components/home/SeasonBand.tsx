@@ -15,7 +15,7 @@ export function SeasonBand() {
   return (
     <section
       aria-labelledby="seizoen-heading"
-      className="border-b border-rand bg-white"
+      className="bg-white"
     >
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-5 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-8">
         <div className="max-w-2xl">

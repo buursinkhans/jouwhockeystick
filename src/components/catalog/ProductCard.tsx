@@ -1,57 +1,44 @@
 import { productPath } from '@/catalog/paths';
 import Link from 'next/link';
-import { isBolUnchecked, isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import type { Product } from '@/catalog/types';
-import { ProductNotice } from '@/components/ui/ProductNotice';
-import { RetailerLinks } from '@/components/ui/RetailerLinks';
+import { OfferSummary } from '@/components/offers/WhereToBuy';
 import { ProductImage } from './ProductImage';
 import { ProductProsAndCons } from './ProductProsAndCons';
 
 /**
- * Fills the height of its grid cell, with the shop buttons pinned to the
+ * Fills the height of its grid cell, with the shop row pinned to the
  * bottom, so cards in one row line up regardless of text length.
  */
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <article className="flex h-full flex-col rounded-3xl border border-rand bg-white p-5 shadow-sm">
-      <div className="bg-hex-light flex h-40 items-center justify-center rounded-2xl bg-krijt">
-        <ProductImage product={product} className="h-32 w-32" />
+    // Fase 7: the whole card opens the stick page (the name's link is stretched
+    // over it); the shop row sits above that layer so it stays its own link.
+    <article className="card card-link group relative flex h-full flex-col p-5">
+      <div className="flex h-48 items-center justify-center">
+        <ProductImage
+          product={product}
+          className="h-44 w-44 transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+        />
       </div>
-      <p className="mt-4 text-xs font-semibold tracking-wide text-veld uppercase">
+      <p className="mt-4 text-xs font-semibold tracking-[0.06em] text-veld uppercase">
         {product.brand}
       </p>
-      <h3 className="mt-1 text-lg leading-snug font-bold">
-        <Link href={productPath(product)} className="hover:underline">
+      <h3 className="mt-1 text-[1.0625rem] leading-snug font-bold text-inkt">
+        <Link
+          href={productPath(product)}
+          className="after:absolute after:inset-0 after:rounded-[1.25rem]"
+        >
           {product.name}
         </Link>
       </h3>
-      <p className="mt-2 line-clamp-3 text-sm text-lijngrijs">
+      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-lijngrijs">
         {product.summary}
       </p>
-      <p className="mt-3 text-xl font-bold">
-        €{product.priceIndicativeEur.value.toFixed(2)}
-      </p>
-      <div className="mt-1">
-        <ProductNotice
-          notSoldAtBol={!isSoldAtBol(product)}
-          passaSportsOnly={isPassaSportsOnly(product)}
-          alsoAtPassaSports={product.passaSportsProductUrl !== undefined}
-        />
+      <div className="mt-4 border-t border-rand/70 pt-4">
+        <ProductProsAndCons product={product} limit={1} stacked compact />
       </div>
-      <div className="mt-4">
-        <ProductProsAndCons product={product} limit={1} stacked />
-      </div>
-      <div className="mt-auto pt-5">
-        <RetailerLinks
-          brand={product.brand}
-          productName={product.name}
-          bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={!isSoldAtBol(product)}
-          bolUnchecked={isBolUnchecked(product)}
-          passaSportsProductUrl={product.passaSportsProductUrl}
-          placement="catalogus"
-          stack
-        />
+      <div className="relative z-10 mt-auto pt-5">
+        <OfferSummary product={product} placement="catalogus" />
       </div>
     </article>
   );

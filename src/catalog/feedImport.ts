@@ -15,6 +15,9 @@ export const MIN_MODEL_YEAR = 2025;
 const BRAND_BY_FEED_NAME: Record<string, Brand> = Object.fromEntries([
   ...brandSchema.options.map((brand) => [brand.toLowerCase(), brand] as const),
   ['indian maharadja', 'The Indian Maharadja'] as const,
+  // HockeyCity's feed names (decision log 2026-11-03).
+  ['princess hockey', 'Princess'] as const,
+  ['tk hockey', 'TK'] as const,
 ]);
 
 export function catalogBrand(feedBrand: string): Brand | null {
@@ -116,18 +119,42 @@ const isJunior = (model: PassaStickModel) =>
   model.gender === 'Junior' || /\b(junior|jr|kids|kinder)\b/i.test(model.name);
 
 /** Our estimate: carbon and price are the only level signals the feed gives. */
-export function estimateLevel(carbon: number | null, price: number, junior = false): ExperienceLevel {
-  // A junior stick is for youth players: never estimated as "ervaren".
-  if ((carbon !== null && carbon >= 70) || price >= 200) return junior ? 'gevorderd' : 'ervaren';
-  if ((carbon !== null && carbon >= 30) || price >= 80) return 'gevorderd';
+/**
+ * The level a feed stick is estimated at, from the carbon percentage only
+ * (owner, 2026-11-08): a higher price is never a higher level. A junior stick
+ * is for youth players: never estimated as "ervaren".
+ */
+export function levelFromCarbon(carbon: number, junior = false): ExperienceLevel {
+  if (carbon >= 70) return junior ? 'gevorderd' : 'ervaren';
+  if (carbon >= 30) return 'gevorderd';
   return 'beginner';
 }
 
-function estimatePositions(bow: BowProfile | null): Position[] {
+/**
+ * The level shown in the catalog. Without a carbon percentage the price is the
+ * only signal: the label says so, and the stickwijzer does not use such a level
+ * (adviceLevel in src/advice-engine/productRules.ts).
+ */
+export function estimateLevel(carbon: number | null, price: number, junior = false): ExperienceLevel {
+  if (carbon !== null) return levelFromCarbon(carbon, junior);
+  if (price >= 200) return junior ? 'gevorderd' : 'ervaren';
+  return price >= 80 ? 'gevorderd' : 'beginner';
+}
+
+/** "Eigen inschatting op basis van …" for an estimated feed level. */
+export function levelEstimateLabel(shop: string, carbon: number | null, price: number, junior: boolean): string {
+  const basis =
+    carbon !== null
+      ? `het carbonpercentage (${carbon}%)`
+      : `de prijs (${euro(price)}), omdat het carbonpercentage onbekend is; de stickwijzer gebruikt deze schatting niet`;
+  return `${shop} noemt geen niveau. Eigen inschatting op basis van ${basis}${junior ? '; een juniorstick schatten we nooit als "ervaren" in' : ''}.`;
+}
+
+export function estimatePositions(bow: BowProfile | null): Position[] {
   return bow === 'extreme_lowbow' ? ['middenvelder', 'aanvaller'] : ['verdediger', 'middenvelder', 'aanvaller'];
 }
 
-const BOW_LABEL: Record<BowProfile, string> = {
+export const BOW_LABEL: Record<BowProfile, string> = {
   extreme_lowbow: 'extreme low bow',
   lowbow: 'low bow',
   midbow: 'mid bow',
@@ -136,7 +163,7 @@ const BOW_LABEL: Record<BowProfile, string> = {
   dynabow: 'dynabow',
 };
 
-const BOW_STRENGTH: Record<BowProfile, string> = {
+export const BOW_STRENGTH: Record<BowProfile, string> = {
   extreme_lowbow:
     'Extra lage kromming: een logische richting voor technische spelers die veel liften, slepen en sleeppushen',
   lowbow: 'Lage kromming: kan passen bij spelers die de bal willen liften en slepen',
@@ -237,11 +264,7 @@ export function toImportedProduct(
     },
     experienceLevel: {
       value: estimateLevel(carbon, price, junior),
-      ...estimate(
-        `PassaHockey noemt geen niveau. Eigen inschatting op basis van ${
-          carbon !== null ? `het carbonpercentage (${carbon}%) en ` : ''
-        }de prijs (${euro(price)})${junior ? '; een juniorstick schatten we nooit als "ervaren" in' : ''}.`,
-      ),
+      ...estimate(levelEstimateLabel('PassaHockey', carbon, price, junior)),
       ...year,
     },
     recommendedPositions: {

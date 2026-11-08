@@ -1,5 +1,6 @@
 import { getAllArticles } from '@/content';
 import { getAllBlogPosts } from '@/content/blog';
+import { HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
 import { METHODIEK } from '@/content/methodiek';
 import { ZAAL } from '@/content/zaal';
 import { DEFAULT_DESCRIPTION, SITE_NAME, absoluteUrl } from '@/lib/site';
@@ -19,6 +20,7 @@ export function GET() {
     '',
     '## Keuzehulp en methode',
     `- [Stickwijzer](${absoluteUrl('/stickwijzer')}): keuzehulp met drie routes (start, ontwikkel, prestatie).`,
+    `- [Schoenenwijzer](${absoluteUrl('/hockeyschoenen/wijzer')}): pasadvies voor veld- en zaalhockeyschoenen, met wat je nog moet controleren.`,
     `- [${METHODIEK.title}](${absoluteUrl('/methodiek')}): ${METHODIEK.metaDescription}`,
     '',
     '## Kennis',
@@ -34,6 +36,7 @@ export function GET() {
     '## Catalogus',
     `- [Veldhockeysticks](${absoluteUrl('/sticks')}): specificaties met bron en controledatum per stick.`,
     `- [${ZAAL.title}](${absoluteUrl('/zaalsticks')}): ${ZAAL.metaDescription}`,
+    `- [${HOCKEYSCHOENEN.title}](${absoluteUrl('/hockeyschoenen')}): ${HOCKEYSCHOENEN.metaDescription}`,
     `- [Merken](${absoluteUrl('/merken')}): de merken in de catalogus.`,
     '',
   ];

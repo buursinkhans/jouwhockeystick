@@ -86,6 +86,9 @@ export const brandSchema = z.enum([
   'Malik',
   'Nike',
   'Yibbi',
+  'Mercian',
+  'Cyclone',
+  'Naked',
 ]);
 export type Brand = z.infer<typeof brandSchema>;
 
@@ -118,12 +121,41 @@ export const productSchema = z.object({
   bolNotSold: z.object({ checkedAt: z.string() }).optional(),
   /**
    * PassaSports product page. A stick that bol.com does not sell links here
-   * through the PassaSports partner programme (see RetailerLinks).
+   * through the PassaSports partner programme (see getOffers in src/catalog/offers).
    */
   passaSportsProductUrl: z
     .string()
     .url()
     .startsWith('https://www.passasports.nl/')
+    .optional(),
+  /**
+   * Plutosport product page (Awin). Not written in the product files: the
+   * catalog adds it from src/catalog/offers/matches.ts, where only 'zeker'
+   * matches from the Plutosport feed are kept.
+   */
+  plutosportProductUrl: z
+    .string()
+    .url()
+    .startsWith('https://www.plutosport.nl/')
+    .optional(),
+  /**
+   * HockeyCity product page (TradeTracker). Not written in the product files
+   * either: the catalog adds it from src/catalog/offers/hockeyCity.ts, with the
+   * 'zeker' name matches and the matches the owner confirmed by hand.
+   */
+  hockeyCityProductUrl: z
+    .string()
+    .url()
+    .startsWith('https://www.hockeycity.nl/')
+    .optional(),
+  /**
+   * Daka product page (Daisycon), added by the catalog from
+   * src/catalog/offers/daka.ts like HockeyCity's; never written in the product files.
+   */
+  dakaProductUrl: z
+    .string()
+    .url()
+    .startsWith('https://www.daka.nl/p/')
     .optional(),
   /**
    * Set for sticks imported in bulk from a partner's product feed instead of
@@ -132,7 +164,7 @@ export const productSchema = z.object({
    * is unknown until checked. Removed once a stick is enriched by hand.
    */
   feedImport: z
-    .object({ feed: z.literal('passahockey'), importedAt: z.string() })
+    .object({ feed: z.enum(['passahockey', 'plutosport', 'hockeycity', 'daka']), importedAt: z.string() })
     .optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),

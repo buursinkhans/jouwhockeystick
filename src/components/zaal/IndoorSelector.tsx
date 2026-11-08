@@ -1,7 +1,6 @@
 'use client';
 
 import { productPath } from '@/catalog/paths';
-import { isSoldAtBol } from '@/catalog/shop';
 import { useState } from 'react';
 import Link from 'next/link';
 import type { Product } from '@/catalog/types';
@@ -16,7 +15,7 @@ import { formatInch, sizeAdviceText } from '@/content/stickwijzer/resultCopy';
 import { ProductImage } from '@/components/catalog/ProductImage';
 import { Button } from '@/components/ui/Button';
 import { AlertIcon, CheckIcon } from '@/components/ui/icons';
-import { RetailerLinks } from '@/components/ui/RetailerLinks';
+import { OfferSummary } from '@/components/offers/WhereToBuy';
 import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
 import { trackEvent } from '@/lib/analytics/track';
 
@@ -52,8 +51,8 @@ function ResultCard({
   hasBudget: boolean;
 }) {
   return (
-    <li className="flex flex-col gap-4 rounded-2xl border border-rand bg-white p-5 sm:flex-row">
-      <div className="bg-hex-light flex h-28 w-full shrink-0 items-center justify-center rounded-xl bg-krijt sm:w-28">
+    <li className="flex flex-col gap-4 card p-5 sm:flex-row">
+      <div className="flex h-28 w-full shrink-0 items-center justify-center rounded-xl bg-white sm:w-28">
         <ProductImage product={product} className="h-24 w-24" />
       </div>
       <div className="flex-1">
@@ -91,20 +90,7 @@ function ResultCard({
         </ul>
       </div>
       <div className="sm:w-56">
-        <p className="text-xl font-bold">
-          €{product.priceIndicativeEur.value.toFixed(2)}
-        </p>
-        <p className="text-xs text-lijngrijs">Richtprijs</p>
-        <RetailerLinks
-          brand={product.brand}
-          productName={product.name}
-          bolProductUrl={product.bolProductUrl}
-          notSoldAtBol={!isSoldAtBol(product)}
-          passaSportsProductUrl={product.passaSportsProductUrl}
-          placement="zaalkeuze"
-          className="mt-3"
-          stack
-        />
+        <OfferSummary product={product} placement="zaalkeuze" />
       </div>
     </li>
   );
@@ -163,7 +149,7 @@ export function IndoorSelector({ products }: { products: Product[] }) {
   }
 
   return (
-    <div className="rounded-3xl border border-rand bg-white p-4 sm:p-6">
+    <div className="card p-4 sm:p-6">
       <form
         noValidate
         className="space-y-4"
@@ -233,7 +219,7 @@ export function IndoorSelector({ products }: { products: Product[] }) {
                     className="w-24 rounded-lg border border-lijngrijs bg-white px-3 py-1.5"
                   />
                   <span className="text-sm text-lijngrijs">
-                    cm, met schoenen
+                    cm, zonder schoenen
                   </span>
                 </div>
                 <p

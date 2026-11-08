@@ -5,12 +5,15 @@ import type { IconComponent } from './stickwijzerIcons';
 
 export type AnswerValue = string | string[] | number | undefined;
 
+// Answers as touch targets (redesign fase 6): 48 px high, a clear chosen
+// state (blue border, krijt fill, ring, bold) and a short transition that
+// stops with prefers-reduced-motion.
 const OPTION_CLASSES =
-  'flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border border-lijngrijs bg-white px-3 py-2 text-sm has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-veld has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50';
+  'flex min-h-12 cursor-pointer items-center gap-2.5 rounded-xl border border-rand bg-white px-4 py-2.5 text-[0.9375rem] shadow-card transition-[border-color,background-color,box-shadow] duration-150 hover:border-veld/50 motion-reduce:transition-none has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:font-semibold has-[:checked]:ring-2 has-[:checked]:ring-veld/25 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-veld has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50';
 
 /** A route card: a label to choose plus a fold-out with more detail. */
 const OPTION_CARD_CLASSES =
-  'flex flex-col rounded-2xl border border-lijngrijs bg-white p-4 has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:ring-1 has-[:checked]:ring-veld has-[input:focus-visible]:outline has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-veld';
+  'flex flex-col rounded-2xl border border-rand bg-white p-4 shadow-card transition-[border-color,background-color,box-shadow] duration-150 hover:border-veld/50 motion-reduce:transition-none has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:ring-2 has-[:checked]:ring-veld/25 has-[input:focus-visible]:outline has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-veld';
 
 /** The explanation that sits next to a question: why we ask it, plus any help text. */
 function Explanation({ def }: { def: QuestionDef }) {
@@ -201,7 +204,8 @@ export function QuestionField({
             {suffix}
           </legend>
           <p className="mt-1 text-sm text-lijngrijs">{def.dataUse}</p>
-          <div className="mt-3 grid items-start gap-3 md:grid-cols-3">
+          {/* Four cards (the routes plus "Weet ik nog niet") as two by two, so none stands alone. */}
+          <div className={`mt-3 grid items-start gap-3 ${input.options.length === 4 ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
             {input.options.map((option) => {
               const OptionIcon = optionIcons?.[option.value];
               return (

@@ -13,6 +13,8 @@ export type LivePrices = {
   date: string;
   /** Lowest in-stock price per curated slug. */
   prices: Readonly<Record<string, number>>;
+  /** Lengths in inches in stock per curated slug (since 2026-10-27; older files lack it). */
+  lengths?: Readonly<Record<string, readonly number[]>>;
 };
 
 const euro = (value: number) =>
@@ -57,4 +59,19 @@ export function livePricesFromFeed(
     if (price !== undefined && price > 0) prices[product.slug] = price;
   }
   return prices;
+}
+
+/** Lengths in stock per curated stick that links to a PassaHockey page. */
+export function liveLengthsFromFeed(
+  curated: readonly Product[],
+  models: readonly { url: string; inStock: boolean; sizesInStockInches: readonly number[] }[],
+): Record<string, number[]> {
+  const byUrl = new Map(models.filter((m) => m.inStock).map((m) => [m.url, m.sizesInStockInches]));
+  const lengths: Record<string, number[]> = {};
+  for (const product of curated) {
+    const url = product.passaSportsProductUrl?.split('?')[0];
+    const sizes = url ? byUrl.get(url) : undefined;
+    if (sizes && sizes.length > 0) lengths[product.slug] = [...sizes];
+  }
+  return lengths;
 }

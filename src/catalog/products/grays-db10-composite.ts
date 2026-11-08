@@ -97,7 +97,6 @@ export const graysDb10Composite: Product = {
   pointsOfAttention: {
     value: [
       'Stijf en duur: echt voor ervaren spelers',
-      'Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey',
     ],
     source: 'editorial-estimate',
     sourceLabel: 'Eigen inschatting op basis van de productpagina van Grays.',

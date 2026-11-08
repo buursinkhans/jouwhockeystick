@@ -9,6 +9,9 @@ import { veldstickZaalhockey } from './articles/veldstick-zaalhockey';
 import { zaalstickBudget } from './articles/zaalstick-budget';
 import { meerCarbonHockeystickBeter } from './articles/meer-carbon-hockeystick-beter';
 import { waarKoopJeEenHockeystick } from './articles/waar-koop-je-een-hockeystick';
+import { welkeHockeyschoenenHebJeNodig } from './articles/welke-hockeyschoenen-heb-je-nodig';
+import { hockeyschoenenWaterveldZandveld } from './articles/hockeyschoenen-waterveld-zandveld';
+import { hockeyschoenenKinderenMaat } from './articles/hockeyschoenen-kinderen-maat';
 
 /** Listed on /kennis in this order. */
 const ALL_ARTICLES: Article[] = [
@@ -21,6 +24,9 @@ const ALL_ARTICLES: Article[] = [
   hoeKiesJeDeJuisteHockeystick,
   meerCarbonHockeystickBeter,
   waarKoopJeEenHockeystick,
+  welkeHockeyschoenenHebJeNodig,
+  hockeyschoenenWaterveldZandveld,
+  hockeyschoenenKinderenMaat,
 ];
 
 /** Articles a visitor may see now (scheduled ones only on previews). */

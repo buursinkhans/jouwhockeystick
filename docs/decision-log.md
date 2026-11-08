@@ -1351,3 +1351,1041 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 - Alleen een native Nederlandse stem (nl-NL). De stemmen die Synthesia's videomaker zelf kon kiezen, klonken buitenlands en zijn niet gebruikt. De eigenaar heeft daarom zijn eigen stem in Synthesia ingesproken; die stem gebruiken we voor Daan. Dat is een uitzondering op "geen gekloonde stem" (§9), omdat het zijn eigen stem is en hij er zelf voor kiest.
 
 **Betrokken bestanden:** `video/src/lengte-trainer/*`, `video/src/lengte/LengteVideo.tsx` (helpers geëxporteerd), `video/src/Root.tsx`, `video/render.mjs`, `video/teksten/hockeystick-lengte-trainer.md`, `docs/video.md`.
+
+## 2026-10-26 — PostHog via ons eigen domein (reverse proxy)
+
+**Aanleiding:** PostHog → Web analytics → Installation Health meldt "Reverse proxy: some metrics may not be accurate". Adblockers blokkeren verzoeken naar eu.i.posthog.com, ook de cookieloze meting.
+
+**Besluit eigenaar (26-10-2026):** PostHog-verkeer via het eigen domein laten lopen, inclusief akkoord op een aanpassing van de privacytekst.
+
+**Wat:**
+- **Rewrites in `next.config.ts`** volgens PostHogs Next.js-handleiding voor de EU: `/p8k/static/*` en `/p8k/array/*` gaan naar eu-assets.i.posthog.com, de rest van `/p8k/*` naar eu.i.posthog.com. Het pad `/p8k` is bewust neutraal; "ingest" of "posthog" staan op blokkeerlijsten.
+  - `api_host` is nu `/p8k`; `ui_host` blijft https://eu.posthog.com.
+  - De cookieloze instellingen zijn ongewijzigd.
+- **`skipTrailingSlashRedirect: true`**, op advies van PostHog. Hun API-paden eindigen op een slash, en zonder deze instelling zou elke meting eerst een 308 krijgen. Om toch één URL per pagina te houden, staat er een expliciete redirect "/pagina/" → "/pagina" voor alles behalve `/p8k`; dat deed Next.js eerst zelf.
+- **IP-adres:** PostHog gebruikt in de cookieloze modus het IP-adres (gehasht met een dagelijks wisselende salt, samen met browser en domein) om unieke bezoekers per dag te tellen. De rewrite van Next.js geeft de headers van het verzoek ongewijzigd door, en Netlify zet daarin `X-Forwarded-For` met het IP van de bezoeker. PostHog krijgt dus, net als vóór de proxy, het IP-adres; zonder dat zouden alle bezoekers als één bezoeker tellen. Er gaan geen extra gegevens mee.
+- **Privacytekst (versie 1.3, 26-10-2026):** één zin erbij: "De metingen voor PostHog gaan via ons eigen domein naar PostHog in de Europese Unie." De voorgestelde toevoeging dat PostHog het IP-adres daardoor niet ontvangt, staat er niet in, omdat dat niet klopt (zie hierboven).
+- **CSP/headers:** niet gewijzigd. De CSP bevat alleen `frame-ancestors` (besluit 2026-10-21), dus er is geen connect-src of script-src die eu.i.posthog.com toestaat of nu zou moeten weghalen.
+- **Conversierapport:** werkt ongewijzigd. Het filtert op `properties.$host`, en dat zet de browser uit het adres van de pagina, niet uit het adres waar het verzoek heen gaat.
+
+**Netlify:** op Netlify voert de Next-server de rewrites uit. Elk verzoek naar `/p8k` is dus een functie-aanroep. Schatting: 4–8 verzoeken per paginaweergave (config en flags bij het laden, en gebundelde events voor pageview, klikken, heatmap en pageleave); scripts blijven in de browsercache. Dat is ongeveer 4.000–8.000 verzoeken per 1.000 paginaweergaven.
+
+**Bewust niet:** geen wijziging aan src/proxy.ts, netlify.toml, DNS of Simple Analytics; geen cookies, opslag of opnames; het IP-adres niet weggefilterd (dan werkt de cookieloze telling niet meer).
+
+## 2026-10-26 — Prijsvergelijking per stick: besluit en spelregels (nog niet gebouwd)
+
+**Aanleiding:** met Plutosport (Awin) is er naast bol.com en PassaHockey een derde goedgekeurd partnerprogramma; HockeyCity, Jumbo Sports, DAKA en Decathlon zijn aangevraagd. Daarmee is vergelijken per stick haalbaar: na het advies ("welke stick past?") helpt de site ook met "waar koop ik hem?".
+
+**Besluit eigenaar:** de prijsvergelijking komt er, als tweede stap na het advies. Eerst de spelregels en de architectuur vastleggen, dan bouwen in fasen.
+
+**Wat (alleen documentatie):**
+- **Spelregels** in `CLAUDE.md` (Commerce): sorteren op totaalprijs inclusief verzending, nooit op commissie; alle winkelknoppen gelijk; alleen de actuele feedprijs met datum; geen van-/voorprijzen of kortingsclaims; bedrag verbergen als de prijs ouder is dan 14 dagen; uitleg over sortering en vergoeding bij het blok; alleen bevestigde koppelingen en goedgekeurde programma's.
+- **Architectuurnotitie** `docs/spec/prijsvergelijking.md`: gegevensmodel, koppelen van sticks tussen winkels, drie opties om prijzen actueel te houden en een gefaseerde aanpak.
+- **Partnertabel** in `docs/business-model.md` §5a bijgewerkt met commissie, cookieduur en status per winkel volgens de dashboards.
+
+**Advies architectuur (keuze eigenaar bij merge):** optie A, meeliften op de wekelijkse sync-PR. Kost geen extra Netlify-credits, want de wekelijkse merge gebeurt al, en elke prijswijziging blijft via PR, CI en preview lopen. Optie B (dagelijks, zonder PR) pas als metingen laten zien dat wekelijks te traag is; dat vraagt een apart besluit over prijsdata zonder PR en een Netlify-sleutel. Optie C (prijzen in de browser) valt af omdat de prijzen dan niet in de server-HTML staan.
+
+**Waarom de commissie geen rol speelt:** Jumbo Sports biedt 12% en 100 dagen cookie, ruim meer dan de rest. Juist daarom liggen de sorteerregels vast voordat Jumbo live gaat: de volgorde moet uitlegbaar blijven ("Eerlijk stickadvies op maat"), en de Europese consumentenregels vragen dat een vergelijker vertelt waarop hij rangschikt.
+
+**Bewust niet:** nog geen code, geen nieuwe winkel op de site, geen wijziging aan privacy- of cookietekst (nieuwe trackingdomeinen alleen op expliciete opdracht), geen wijziging aan de adviesscore of `ruleSetVersion`.
+
+**Volgende stap:** fase 0, de overlapmeting met de feeds van bol.com, PassaHockey en Plutosport (`business-model.md` §5a: bij minder dan zo'n 20% overlap levert vergelijken weinig op).
+
+## 2026-10-26 — Plutosport-feed en overlapmeting (fase 0 prijsvergelijking)
+
+**Wat:** een script en een handmatige workflow (`scripts/plutosport-feed.ts`, `.github/workflows/plutosport-feed.yml`) lezen de productfeed van Plutosport (Awin, CSV met gzip), houden alleen de veld- en zaalhockeysticks over en koppelen die aan onze gecontroleerde catalogus. Het rapport komt in één issue (label `plutosport-feed`): per stick bol.com ja/nee, de PassaHockey-prijs, de Plutosport-prijs plus verzending, de voorraad en de koppelzekerheid, met bovenaan het aandeel sticks dat bij 2 of meer winkels te koop is en het mediane prijsverschil. Er verandert niets aan de site.
+
+**Koppelen** (`src/catalog/plutosportFeed.ts`, volgens `spec/prijsvergelijking.md` §3.1):
+- **EAN eerst.** Onze catalogus heeft geen EAN's; die komen uit de PassaHockey-feed, via de PassaHockey-pagina van de stick. Zo is de EAN-route alleen beschikbaar voor sticks die we aan PassaHockey koppelen.
+- **Dan de naam:** merk, modelwoorden (dezelfde normalisatie als de PassaHockey-feed, dus "PB" = Pro Bow en "JB 12+" = "JB12+"), veld/zaal, junior/senior, bow en collectiejaar ("2025/26" en "25/26" = 2025, zoals onze modeljaren).
+- **Zeker** alleen bij dezelfde EAN, of als merk, model, bow en jaar allemaal kloppen. **Twijfel** als er iets ontbreekt (geen jaar aan een van beide kanten, bow niet vermeld, extra woorden in de naam zoals "TT" of "+"). **Geen** bij een andere bow, discipline, leeftijdsgroep of jaargang.
+- Lengtes worden samengevoegd via `parent_product_id`, anders via de productpagina.
+
+**Verzendkosten:** de feed heeft geen `delivery_cost`. In `src/lib/retailers.ts` staat daarom een vast bedrag uit de openbare voorwaarden van Plutosport (https://www.plutosport.nl/bezorgen-afhalen, gelezen 2026-10-26): €6,95 (laagste tarief, DHL ServicePoint), gratis vanaf €75.
+
+**Beveiliging:** de feed-URL bevat een API-sleutel en staat alleen in het GitHub-secret `AWIN_PLUTOSPORT_FEED_URL`. Het script print hem nooit; foutmeldingen noemen alleen de HTTP-status of het soort fout.
+
+**Bewust niet:** geen Plutosport-knop op de site (dat is PR 2, na akkoord op het rapport), geen van-/voorprijzen of kortingskolommen in de feed, geen wijziging aan de adviesscore, `ruleSetVersion` of privacytekst, geen nieuwe dependency (de CSV-lezer en gzip gebruiken alleen Node).
+
+**Aanvulling (2026-10-26, na de eerste run):** de feed is in Awin gefilterd op hockey (eigenaar), dus klein; de eerste run stopte op 93 regels. De ondergrens voor het aantal regels is daarom 50 (een kapotte download), en het aantal stickmodellen (minstens 15) is de echte controle. Het rapport toont nu altijd wat er in de feed zit (kolommen, productpagina's, parent-ID's, regels met maat en op voorraad, de hele feed per categorie en per merk), ook als de meting wordt afgebroken. Zo is te zien of het Awin-filter of ons filter sticks mist.
+
+## 2026-10-27 — Plutosport als derde partnerwinkel (knop, nog geen prijzen)
+
+**Wat:** sticks die Plutosport verkoopt, krijgen een knop "Bekijk en koop bij Plutosport" naast bol.com en PassaHockey: op de stickpagina, de catalogus, het stickadvies, de zaalkeuze en de vergelijkpagina. `retailer_click` krijgt `retailer: 'plutosport'`. Prijzen van Plutosport tonen we nog niet en er is nog geen blok "Waar te koop"; de richtprijsregel blijft gelden.
+
+**Welke sticks:** alleen koppelingen die de matcher 'zeker' noemt (`spec/prijsvergelijking.md` §3.1), met een leverbare stick bij Plutosport. Ze staan in `src/catalog/offers/matches.ts` (gegenereerd), los van de productdata; de catalogus voegt `plutosportProductUrl` toe aan het product. Bij de eerste meting: 39 sticks, 5 gecontroleerde en 34 geïmporteerde PassaHockey-sticks, bijna allemaal via dezelfde EAN. Twijfelgevallen krijgen geen knop; ze staan als lijstje in de PR om met de hand te bevestigen.
+
+**Trackinglink:** een Awin-deeplink, `https://www.awin1.com/cread.php?awinmid=8342&awinaffid=3132918&clickref=<plek>&ued=<productpagina>`. Niet de `pclick.php`-link uit de feed: de documentatie van Awin beschrijft `clickref` bij deeplinks, maar zegt niet dat het op `pclick.php` werkt. `src/lib/retailers.ts` accepteert alleen productpagina's op plutosport.nl (geen zoek- of categoriepagina, geen andere landensite, geen query) en valt nooit terug op een zoekopdracht. awin1.com is een nieuw trackingdomein; de privacy- en cookietekst is bewust niet aangepast (besluit eigenaar).
+
+**Opmaak:** de Plutosport-knop heeft dezelfde opmaak als die van bol.com; geen winkel krijgt een opvallender knop vanwege de vergoeding. De vermelding bij de knoppen noemt nu alle winkels die de stick verkopen ("Niet te koop bij bol.com, wel bij PassaHockey (PassaSports) en Plutosport. De winkel waar je koopt, is dan de verkoper."). Ook de partnerlink-zin en de uitleg op /methodiek noemen Plutosport.
+
+**Wekelijks:** de PassaHockey-sync (woensdag) draait na de import ook de Plutosport-feed en neemt een gewijzigde `matches.ts` mee in dezelfde PR (optie A: geen extra live-zetting). Mislukt de download bij Awin, dan blijven de koppelingen zoals ze waren.
+
+**Bewust niet:** geen wijziging aan de adviesscore of `ruleSetVersion`, geen commissie in de UI, geen kortingsclaims, geen privacy- of cookietekst. Het artikel `/kennis/waar-koop-je-een-hockeystick` noemt Plutosport nog niet.
+
+## 2026-10-27 — Plutosport-sticks die we nog niet hadden in de catalogus (import)
+
+**Wat:** Plutosport-sticks die niet in onze catalogus staan (niet gecontroleerd en niet via PassaHockey), staan nu in de catalogus en doen mee in de stickwijzer, net als de PassaHockey-import van 2026-10-17: pagina op /aanbod met `noindex`, niet in de sitemap, alleen een Plutosport-knop ("Plutosport is de verkoper."). Bij de eerste run: 14 sticks, vooral jeugdsticks van adidas en Princess en seniorsticks van The Indian Maharadja. Ze staan in `src/catalog/imported/plutosport.ts` (gegenereerd door `npm run plutosport:feed -- --write-import`) en worden elke woensdag bijgewerkt in de PassaHockey-sync, in dezelfde PR.
+
+**Geen dubbele sticks:**
+- Een Plutosport-stick die aan een stick in de catalogus is gekoppeld, ook als twijfelgeval, wordt niet geïmporteerd. Andere kleuren van hetzelfde model (Plutosport heeft een pagina per kleur) ook niet.
+- Een oudere jaargang van een stick die we al hebben (PassaHockey verkoopt de Sword 20 van 2026, Plutosport nog die van 2025), wordt niet geïmporteerd: twee bijna gelijke sticks maken het advies onduidelijk.
+- Een jeugdstick herkent de matcher nu ook aan onze lengtes (onze "adidas Youngstar .9" van 31 inch heeft geen "Junior" in de naam).
+- De bow wordt apart vergeleken: staat hij niet in de naam bij Plutosport, dan is dat een twijfelreden, geen uitsluiting. Een andere bow sluit nog steeds uit.
+
+**Gegevens:**
+- **Lengte:** uit het artikelnummer (`merchant_product_id`, bijv. "10221001_36 1/2"). Plutosport vult `Fashion:size` en `dimensions` niet.
+- **Bow:** alleen als de naam hem noemt (ook "PB", "LB").
+- **Carbon:** alleen als de omschrijving of de specificaties precies één percentage met het woord carbon noemen.
+- **Modeljaar:** uit de naam of de artikelcode van The Indian Maharadja. Een bekend modeljaar vóór 2025 wordt overgeslagen, net als bij PassaHockey.
+- **Niveau en posities:** onze eigen inschatting, zo vermeld.
+
+Babysticks (18 inch) en keepersticks slaan we over.
+
+**Teksten:** de knop en de regel op /sticks en /zaalsticks heten nu "sticks uit het aanbod van PassaHockey en Plutosport".
+
+**Bewust niet:** geen wijziging aan de adviesscore of `ruleSetVersion` (de import gebruikt dezelfde velden en dezelfde aftrek voor een geschat niveau), geen prijzen in een blok "Waar te koop", geen privacytekst.
+
+## 2026-10-26 — Hockeyschoenen als sectie, geen aparte site
+
+**Besluit eigenaar:** hockeyschoenen komen als sectie `/hockeyschoenen` op jouwhockeystick.nl. Het domein jouwhockeyschoen(en).nl is geregistreerd, maar er komt geen tweede site. Een doorverwijzing volgt alleen op expliciete opdracht (DNS).
+
+**Waarom:**
+- Alles is herbruikbaar: wijzer-opzet, catalogusmodel, agents, partnerlinks en de autoriteit van het domein.
+- Per verkoop blijft er veel minder over: ca. €2,20 per paar tegen €4,75 per stick. Dat komt door de lagere prijs en doordat de commissie vervalt bij retour (35% verondersteld).
+- Een sectie voegt in de businesscase ca. 25% commissie toe tegen bijna geen kosten. Cijfers: `business-model.md` §5b.
+
+**Marktverkenning:** de Marktverkenner kon deze vraag niet beantwoorden. Hij scant alleen sticks (`marketScan.ts` filtert schoenen er bewust uit) en meet geen zoekvolume. Daarom is eenmalig met de hand verkend: Decathlon (ca. 400 paren, keuzegids), Plutosport (ca. 240), Daka (125, €31–€160, pasvormadvies per merk), schoenen.nl (422 paren van ca. 10 winkels). Geen van hen combineert ondergrond, pasvorm per merk en groeimarge in één keuzehulp.
+
+**Plan:** issue #100 (schoenenwijzer, 5 tot 8 artikelen, aparte schoenencatalogus, meetpunten na 3 maanden).
+
+**Bewust niet:** nog geen code, geen DNS, geen wijziging aan de stickwijzer, adviesscore of `ruleSetVersion`, en de Marktverkenner nog niet uitgebreid (pas als de sectie doorgaat).
+
+## 2026-10-27 — Prijsvergelijking fase 1: blok "Waar te koop"
+
+**Wat:** het blok "Waar te koop" vervangt de losse winkelknoppen op de stickpagina en in elk stickadvies (`docs/spec/prijsvergelijking.md`, fase 1; ontwerp "Funnel advies naar winkel").
+- **Volledige versie op de stickpagina:**
+  - per winkel een kaart met de totaalprijs en daaronder prijs + verzending en de voorraad in de gekozen maat;
+  - een knop "Naar [winkel]";
+  - maatknoppen; de stickwijzer stuurt de geadviseerde maat mee met `?maat=`.
+- **Compacte versie in de advieskaart:**
+  - de twee bovenste winkels in de geadviseerde maat;
+  - "Vergelijk alle N winkels" naar `#waar-te-koop` op de stickpagina, alleen bij 3 of meer winkels.
+- **Beide versies:**
+  - de regel "N partnerwinkels · op prijs incl. verzending · gelezen op [datum]";
+  - de uitklapper "Hoe we vergelijken";
+  - de partnerlink-vermelding en "de winkel is de verkoper".
+- **Prijsveld:** de advieskaart en de stickpagina tonen "vanaf €X bij N partnerwinkels" als er een actuele prijs is, anders de richtprijs zoals voorheen.
+
+**Gegevens** (`src/catalog/offers/`, alles via de wekelijkse sync-PR, optie A):
+- **bol.com:** de prijs via de Marketing Catalog API (`scripts/bol-prices.ts`, nieuw bestand `bolPrices.ts`). Alleen sticks met een bevestigde bol.com-pagina; zonder prijs staat bol.com er zonder bedrag. Geeft de API minder dan de helft van de prijzen van vorige week terug, dan blijft het oude bestand staan.
+- **PassaHockey:** prijs en (nieuw) leverbare lengtes in `passaPrices.ts`. Voor geïmporteerde sticks de feedgegevens van de stick zelf.
+- **Plutosport:** prijs en lengtes (nieuw) in `matches.ts`. Voor geïmporteerde sticks de feedgegevens van de stick zelf.
+- **Verzendkosten**, de goedkoopste standaardoptie per winkel, met bron en datum in `src/lib/retailers.ts`:
+  - PassaHockey: €5,95 onder €25, €3,95 tot en met €79, gratis daarboven (passasports.nl/faq-verzenden-bezorgen);
+  - Plutosport: €6,95, gratis vanaf €75 (plutosport.nl/bezorgen-afhalen);
+  - bol.com: gratis vanaf €25, daaronder onbekend (€2,99 als bol.com verstuurt, niets bij een partner).
+
+**Sortering** (`src/catalog/offers/sort.ts`, met tests):
+1. Op totaalprijs (prijs + verzending; onbekende verzendkosten tellen als €0 en staan er zo bij).
+2. Een winkel zonder de gekozen maat komt onder de winkels die hem wel hebben. Een winkel die geen lengtes noemt (bol.com), telt als "maat kiezen bij de winkel".
+3. Zonder prijs of met een prijs ouder dan 14 dagen (hele kalenderdagen) onderaan, zonder bedrag, met de knop "Bekijk de actuele prijs".
+4. Bij een gelijke prijs eerst de recentst gelezen prijs, dan alfabetisch.
+
+Nooit op commissie, netwerk of cookieduur. De leeftijd van een prijs wordt bepaald bij het bouwen van de pagina; door de wekelijkse deploy is een prijs normaal hooguit 7 dagen oud.
+
+**Opmaak:** alle winkelknoppen zijn een outline in veldblauw (`variant="shop"`), ook op de catalogus- en vergelijkpagina's. De rode PassaHockey-knop vervalt, zodat geen winkel opvallender is.
+
+**Structured data:** op de stickpagina `Offer` (één winkel) of `AggregateOffer` (meer), alleen voor prijzen die zichtbaar en niet ouder dan 14 dagen zijn; anders geen `offers`.
+
+**Meten:**
+- nieuw event `offer_block_view`: blok in beeld, met plek, aantal winkels en aantal winkels met prijs;
+- `retailer_click` krijgt in het blok `position`, `offerCount` en `priceShown`.
+
+**Bewust niet:** geen kortings- of "goedkoopst"-teksten, geen van-/voorprijzen, geen wijziging aan de adviesscore of `ruleSetVersion`, geen privacytekst. Een stick zonder bevestigde winkelpagina krijgt geen bol.com-zoeklink meer in het blok (spelregel 6). Dat zijn nu 5 gecontroleerde sticks; die tonen "We kennen nog geen partnerwinkel".
+
+## 2026-10-27 — Schoenen in de feeds: eenmalige controle (stap 2 plan /hockeyschoenen)
+
+**Wat:** een script en een handmatige workflow (`scripts/shoe-feed-check.ts`, `.github/workflows/schoenen-feedcheck.yml`, Actions → "Schoenen in de feeds") tellen de hockeyschoenen in de PassaHockey-feed (TradeTracker) en de Plutosport-feed (Awin). Per winkel: aantal modellen, veld/zaal, junior, merken, prijsbereik en mediaan van wat op voorraad is, aandeel met EAN, en de categorieteksten waarop het filter heeft geselecteerd. Het rapport komt in één issue (label `schoenen-feed`). Plan: #100.
+
+**Hoe:** de logica staat los in `src/catalog/shoeFeed.ts`, met tests. Hij gebruikt de bestaande feedlezers (`parseRecord` uit `passaFeed.ts` is daarvoor geëxporteerd). Een schoen is een product met "hockey" in categorie of naam en "schoen/shoe" in de categorie (of "hockeyschoen" in de naam), zonder sokken, inlegzolen, handschoenen, keeper- of ijshockeyspullen.
+
+**Beveiliging:** de Plutosport-feed-URL bevat een API-sleutel en komt alleen uit het secret `AWIN_PLUTOSPORT_FEED_URL`; het script print hem nooit.
+
+**Bewust niet:** geen schoenen in de catalogus of op de site, geen wijziging aan de stickfilters (`isPlayerStick`, `isHockeyStickRow`, `marketScan.ts`), de adviesscore of de privacytekst. bol.com wordt nog niet gemeten.
+
+## 2026-10-27 — Schoenen in de feeds: strenger filter na de eerste meting
+
+**Waarom:** de eerste meting (#107) telde 540 modellen bij PassaHockey, waaronder slippers (Adilette), schoenverzorging en volleybal- en korfbalschoenen. PassaHockey hangt één schoen in veel categorieën, en elk pad met "hockey" telde mee (bijv. "Hockey > Black Friday"). Bij Plutosport zaten er twee sticks tussen, en de overlap op naam was 0 omdat de winkels hun schoenen anders noemen.
+
+**Wat:** een schoen telt alleen nog mee als minstens één categoriepad zelf over hockeyschoenen gaat ("Hockey > Hockeyschoenen", "Hockey > Zaalhockey > Zaalhockey schoenen", "Hockey > Schoenen > Veldhockey"), of als de naam "hockeyschoen" bevat. Paden met accessoires of verzorging, en namen met stick, slipper of sandaal vallen af. Veld of zaal volgt alleen uit die hockeyschoenenpaden. De overlap tussen de winkels wordt nu op EAN bepaald; beide feeds hebben bij elk model een EAN.
+
+## 2026-10-27 — "Waar te koop" compacter, onder elke stick
+
+**Waarom:** het eerste ontwerp (een kaart per winkel met een eigen knop) werd te lang. Er komen nog minstens drie partnerwinkels bij. De eigenaar wilde het compacter, met een duidelijke call to action. Na een opzet in twee varianten koos hij variant A: de bovenste rij met een iets dikkere rand, niet gevuld.
+
+**Wat:**
+- **Rijen:** elke winkel is één aanklikbare rij (min. 56 px hoog) met "Koop bij [winkel]", daaronder verzending en voorraad, en rechts de prijs incl. verzending. Volgorde zoals eerder: laagste prijs incl. verzending bovenaan (`sortOffers`). De bovenste rij met een actuele prijs heeft een rand van 2 px in veldblauw, de andere 1 px lichtgrijs. Die nadruk volgt alleen de prijs, nooit de vergoeding; CLAUDE.md en `spec/prijsvergelijking.md` zijn daarop aangepast. Nergens "goedkoopst" of "beste prijs".
+- **Stickpagina:** maatknoppen, drie rijen, de rest achter "Toon nog N winkels".
+- **Stickwijzer-advies:** twee rijen in de geadviseerde maat en "Vergelijk alle N winkels" naar de stickpagina.
+- **Onder elke stickkaart** (catalogus, vergelijkpagina, zaalkeuze): één rij met de winkel met de laagste prijs incl. verzending, en "Vergelijk alle N winkels" als er meer zijn. Zonder winkel staat de richtprijs er, met "nog geen partnerwinkel bekend". De losse knoppen (`RetailerLinks`) en de knopvarianten `passa` en `shop` zijn weg.
+- **Onder elk blok:** één regel "Op prijs incl. verzending · gelezen op [datum] · Partnerlink, de winkel is de verkoper" en de uitklapper "Hoe we vergelijken".
+
+**Meten:** ongewijzigd. `retailer_click` met `position`, `offerCount` en `priceShown`; `offer_block_view` op de stickpagina en in het advies, niet op de honderden kaarten in de catalogus.
+
+## 2026-10-28 — PostHog: events ongecomprimeerd door de proxy (herstel)
+
+**Probleem:** sinds de PostHog-proxy op ons eigen domein live ging (`/p8k`, 2026-10-26), kwamen er geen events meer binnen in PostHog. De browser verstuurde ze wel, maar PostHog weigerde elk event met HTTP 400 ("invalid GZIP data", "invalid UTF8 in request payload").
+
+**Oorzaak:** posthog-js verstuurt events gecomprimeerd (gzip). De proxy (Next.js-rewrites op Netlify) beschadigt zo'n binaire inhoud onderweg; gewone JSON komt wel heel aan. Getoetst met een testbericht met een ongeldige sleutel, dus zonder data in ons project: via de proxy geeft gzip 400 en JSON 200; rechtstreeks naar PostHog werken beide. Het laden van de scripts en de configuratie via `/p8k` werkte wel; daarom leek de koppeling in orde.
+
+**Herstel:** `disable_compression: true` in de PostHog-instellingen. De instellingen staan nu in `POSTHOG_INIT_OPTIONS` (`src/lib/analytics/posthog.ts`), met een test. Getoetst in een echte browser op de lokale build: de events vertrekken nu als JSON. Events zijn klein, dus ongecomprimeerd versturen kost weinig.
+
+**Verloren:** de PostHog-events van 26 oktober (na de livegang van de proxy) tot het moment dat deze wijziging live staat. Simple Analytics liep gewoon door en heeft de bezoekersaantallen over die dagen.
+
+**Later te overwegen:** de proxy als Netlify-proxyregel (`netlify.toml`, op CDN-niveau) in plaats van een Next.js-rewrite, zodat ook gecomprimeerde verzoeken heel blijven. Niet nu: dat is op de beveiligde preview niet te testen.
+
+## 2026-10-28 — Technische geschiktheid voor ChatGPT Search en andere AI-zoekmachines
+
+**Audit van de live site.** Alle 115 sitemap-URL's opgehaald met de user-agent van OAI-SearchBot, en de belangrijkste pagina's ook met GPTBot, ChatGPT-User, Bingbot, PerplexityBot, ClaudeBot, Googlebot en Applebot.
+- **In orde:**
+  - robots.txt staat alles toe, behalve /aanbod/ (bewust);
+  - geen firewall of CDN die bots weert: Netlify antwoordt elke crawler met dezelfde volledige HTML;
+  - alle URL's geven 200, met een canonical naar zichzelf, geen noindex, één H1, een eigen titel en beschrijving, geldige JSON-LD (Organization/WebSite, BreadcrumbList, Product met prijzen, Article, BlogPosting, FAQPage) en 244 tot ruim 1.000 woorden tekst in de server-HTML;
+  - geen weespagina's, en geen intern gelinkte pagina die in de sitemap ontbreekt;
+  - `llms.txt` bestaat; IndexNow meldt wijzigingen aan Bing.
+- **Kleine punten:**
+  - 11 hubpagina's zonder `lastmod`;
+  - 3 paren sticks met dezelfde automatische beschrijving;
+  - 15 titels langer dan 60 tekens;
+  - `http://www` gaat in twee stappen naar `https://` zonder www;
+  - `llms.txt` en het artikel "Waar koop je een hockeystick" noemen Plutosport nog niet.
+
+**Gedaan (veilig, alleen toevoegingen):**
+- **Sitemap:** `lastmod` voor /sticks, /zaalsticks, /kennis, /blog en /privacy, uit de datum die de pagina zelf toont (of het nieuwste artikel). Dezelfde 115 URL's als live, gecontroleerd. IndexNow werkt op gewijzigde bestanden en verandert hierdoor niet.
+- **Technical SEO-rapport (wekelijks):** een sectie "AI-crawlers en zoekmachines" (`src/seo/aiCrawlers.ts`). Per crawler: staat robots.txt het toe (RFC 9309), en krijgt hij met zijn eigen user-agent dezelfde HTML als een gewone bezoeker? Een blokkade op IP-adres is zo niet te zien.
+- **Conversierapport (wekelijks):**
+  - ChatGPT zet `utm_source=chatgpt.com` in zijn links. Dat telde als "Campagne: chatgpt.com"; nu als "AI-assistent: ChatGPT", net als een verwijzing vanaf chatgpt.com. Zo ook Perplexity, Copilot, Gemini en Claude, elk apart.
+  - **Alleen exacte waarden, geen trefwoorden:**
+    - verwijzende domeinen: chatgpt.com, chat.openai.com, perplexity.ai, www.perplexity.ai, copilot.microsoft.com, gemini.google.com en claude.ai;
+    - `utm_source`: alleen de gedocumenteerde waarde `chatgpt.com`.
+
+    Lijsten `AI_REFERRER_DOMAINS` en `AI_UTM_SOURCES` in `src/analytics-report/conversion.ts`.
+  - **Nieuw: "Bezoeken uit AI-assistenten, per landingspagina".**
+    - Een bezoek is één bezoeker op één dag (PostHog draait cookieloos en kent geen sessies).
+    - De landingspagina is de eerste pageview van die dag, en de bron de `utm_source` of verwijzende site van díe pageview.
+    - Elk bezoek telt één keer.
+
+    Per pageview zou dezelfde ChatGPT-bezoeker dubbel tellen: Next.js laat de referrer bij interne navigatie staan, en de eerste pagina draagt ook de utm. Gemeten: 284 pageviews tegenover 154 bezoeken in twee weken.
+  - **"Waar bezoekers vandaan komen":** de AI-regels komen nu uit dezelfde telling per bezoek, zodat ze niet dubbel tellen. De andere bronnen zijn niet veranderd.
+  - **Gevalideerd tegen PostHog** met een tijdelijke stap op de PR-branch (weer verwijderd):
+    - de query draait zonder fout;
+    - dezelfde opbouw zonder AI-filter geeft echte landingspagina's;
+    - een testbezoek met `utm_source=chatgpt.com` op /kennis/hockeystick-lengte-tabel (28 oktober, 21:5x UTC, door mij) komt er precies één keer uit. Dat testbezoek staat dus in PostHog.
+
+**Bewust niet:** geen wijziging aan titels, beschrijvingen, canonicals, robots.txt of noindex (bestaande SEO), geen eigen bezoekregistratie van crawlers (dat vraagt een functie op elk verzoek, en die kost Netlify-credits).
+
+## 2026-10-29 — /zaalsticks: tekst voor kiezen, kopen en vergelijken (SEO-groei, nulmeting)
+
+**Aanleiding:** SEO-groeianalyse van /zaalsticks met akkoord van de eigenaar op de voorstellen A t/m F.
+- **Search Console** (28 september t/m 25 oktober): de pagina staat voor haar hoofdzoekwoorden op pagina 2: "zaalhockeystick" op 12,8 met 99 vertoningen, "zaalstick hockey" op 14,0. Het meervoud "zaalhockeysticks" staat veel lager (35,4). De vraag "verschil veldhockey zaalhockey stick" komt binnen op /zaalsticks (23,9) en op /kennis/zaalstick-budget (15,7).
+- **Teksten verouderd sinds "Waar te koop" (2026-10-27):** de beschrijving noemde "richtprijs", de prijsvraag alleen richtprijzen, en de notitie alleen bol.com als bron.
+
+**Wat (alleen tekst; titel, H1, URL, canonical, ankers, productgegevens, winkelknoppen en structured data ongewijzigd, geen FAQPage):**
+- **A. Meta description:** "Zaalhockeystick kiezen of kopen? … met alle zaalsticks uit onze catalogus naast elkaar en wekelijks bijgewerkte winkelprijzen." Er staat bewust "wekelijks bijgewerkt" en niet "actueel": de winkelprijzen komen via de wekelijkse sync en vervallen na 14 dagen.
+- **B. Intro:** één zin erbij over vergelijken en de partnerwinkels, met het meervoud "zaalhockeysticks". Het antwoord blijft in de eerste 80 woorden.
+- **C. Kop van de lijst:** "Alle zaalhockeysticks in onze catalogus". Het anker `#alle-zaalsticks` blijft gelijk.
+- **D. Prijsvraag:** het bereik blijft een richtprijs; erbij staat dat je per stick de prijs bij de partnerwinkels ziet, "inclusief verzendkosten voor zover die bekend zijn" (bij bol.com onder €25 zijn ze onbekend), en dat die wekelijks wordt bijgewerkt.
+- **E. Nieuwe FAQ "Waar kun je een zaalhockeystick kopen?":** geschreven vanuit de bezoeker ("waar je wilt"), met de tip om model en lengte mee te nemen, de partnerlink-vermelding en een link naar het winkelartikel.
+- **F. Notitie bij de lijst:** de bron van een gegeven (merk of winkel) en de partnerwinkels, niet meer alleen bol.com.
+- **Artikel "Waar koop je een hockeystick?":** Plutosport toegevoegd, met verzendkosten, retour (30 dagen, €1,95) en bezorging, nagekeken op plutosport.nl op 29 oktober. De H1 noemt de drie winkels. Zoektitel (nieuw, korter): "Waar koop je een hockeystick? De winkels naast elkaar". Aantallen per winkel en "bij twee of meer winkels" komen uit de catalogus. De partnerlink-uitleg blijft; erbij staat dat de winkels op prijs inclusief bekende verzendkosten staan. URL ongewijzigd. Ook de linktekst op /methodiek noemt nu de drie winkels.
+
+**Aanvulling vóór de merge (review eigenaar):**
+- **Footer:** "Aankopen verlopen via onze partnerwinkels bol.com, PassaHockey en Plutosport; de winkel is de verkoper. Winkelprijzen werken we wekelijks bij en richtprijzen zijn een indicatie: de actuele prijs zie je bij de winkel." De oude tekst noemde alleen bol.com en PassaHockey, en alleen richtprijzen.
+- **`ZAAL.updatedAt` → 2026-10-29.** Die datum bepaalt de zichtbare "bijgewerkt op" (twee keer op de pagina), `dateModified` in de Article-markup en `lastmod` in de sitemap (#116).
+- **Claims getoetst:**
+  - De woensdagsync draaide op 21 en 28 oktober en beide PR's zijn dezelfde dag gemerged. Alle prijsbronnen (bol.com, PassaHockey, Plutosport) staan op 28 oktober.
+  - "Wekelijks bijgewerkt" klopt zolang de wekelijkse sync-PR wordt gemerged. Blijft hij liggen, dan verdwijnt een prijs na 14 dagen vanzelf (`isPriceFresh`) en staat de richtprijs er weer.
+  - De verzendkosten zijn het goedkoopste standaardtarief uit de openbare voorwaarden. Bij bol.com onder €25 zijn ze onbekend en staat dat erbij. Dat dekt "inclusief verzendkosten voor zover die bekend zijn".
+- **Bijgesteld:** de kaarten in de lijst tonen per stick alleen de winkel met de laagste prijs en "Vergelijk alle N winkels"; de complete lijst staat op de stickpagina. Intro, prijsvraag, koop-FAQ en notitie zeggen dat nu zo ("met bij elke stick een link naar de partnerwinkels", "op de pagina van elke stick").
+- **Privacyverklaring:** niet gewijzigd (alleen op akkoord van de eigenaar). Een voorstel staat in PR #117.
+
+**Bewust niet:** geen wijziging aan het budgetartikel. Het is nu de best scorende pagina voor de vraag over het verschil, en het effect van de wijziging van /kennis/veldstick-zaalhockey (2026-10-24) is nog niet meetbaar. Geen nieuwe pagina. Geen andere volgorde van de blokken. De privacytekst noemt Plutosport nog niet; die wordt alleen op opdracht van de eigenaar aangepast.
+
+**Nulmeting (livegang = merge-datum van deze PR):**
+- **Pagina /zaalsticks** (opgave eigenaar uit Search Console): 526 vertoningen, 3 kliks, gemiddelde positie 14,3.
+- **Per zoekwoord** (28 september t/m 25 oktober):
+
+  | Zoekwoord | Positie | Vertoningen | Kliks |
+  |---|---|---|---|
+  | zaalhockeystick | 12,8 | 99 | 0 |
+  | zaalstick hockey | 14,0 | 46 | 0 |
+  | zaalhockeysticks | 35,4 | 38 | 0 |
+  | hockeystick zaalhockey | 25,4 | 32 | 0 |
+  | zaalsticks | 8,4 | 19 | 0 |
+  | zaalhockeystick kopen | 20,0 | 4 | 1 |
+  | verschil veldhockey zaalhockey stick | 23,9 (/zaalsticks), 15,7 (/kennis/zaalstick-budget) | 29 + 6 | 0 |
+
+**Meetplan:** na 4 en na 8 weken, telkens 28 dagen in Search Console met de filter pagina = /zaalsticks.
+- **Per zoekwoord:** de positie en de CTR van de zoekwoorden hierboven, en welke pagina Google kiest voor de vraag over het verschil.
+- **Winkelkliks:** `retailer_click` vanaf /zaalsticks in het conversierapport (PostHog; let op de meetstoring van 26 tot 28 oktober, #113).
+- **Seizoen:** november t/m februari is zaalseizoen, dus vertoningen en kliks stijgen sowieso. Beoordeel vooral de positie en de CTR per zoekwoord, en vergelijk met de seizoenstrend van de site als geheel.
+- **Geen automatisch terugdraaien:** daalt de positie, dan volgt eerst een advies op basis van voldoende gegevens (besluit eigenaar). Een daling van één of twee weken is bij zo weinig vertoningen geen betrouwbaar signaal.
+
+## 2026-10-29 — Privacyverklaring 1.4: Awin, Plutosport, partnerlinks en externe afbeeldingen; nofollow voor plutosport.nl
+
+**Opdracht eigenaar:** de privacyverklaring bijwerken voor Plutosport/Awin, de partnerlinks en externe afbeeldingen, en het nofollow-punt uit de review van PR #117 afhandelen.
+
+**Privacyverklaring (versie 1.4, 29 oktober), sectie "Afbeeldingen en links van derden":**
+- **Afbeeldingen:** behalve de merken en bol.com ook PassaSports en Plutosport, en de beeldservers die zij gebruiken. Gecontroleerd in de catalogus: de meeste foto's komen van cdn.sportshop.com (de PassaHockey-feed), verder van media.s-bol.com, cdn.plutosport.com, de sites van de merken en een Webflow-CDN.
+- **Doorklikken:** bol.com, PassaHockey of Plutosport. Erbij staat wat onze links meegeven: alleen de plek op onze site (`subid`, `reference`, `clickref`) en, bij bol.com, de naam van de stick (`name`, zie `src/lib/retailers.ts`). Geen persoonlijke kenmerken.
+- **Nieuw:** wij plaatsen geen cookies, ook niet voor partnerlinks; cookies van winkels en netwerken komen pas na een klik, op hun eigen websites.
+- **Nieuw: Awin en Plutosport.** Na een klik gaat de bezoeker langs awin1.com. Awin registreert technische gegevens (IP-adres, browser, tijdstip, verwijzende pagina) en geeft een klikkenmerk mee aan Plutosport. Awin en Plutosport kunnen cookies plaatsen om een aankoop toe te schrijven, en Plutosport verwerkt een bestelling onder zijn eigen beleid. Wij zien kliks en aankopen zonder naam, adres of andere identificerende gegevens.
+- **Ongewijzigd:** de bestaande alinea's over bol.com en TradeTracker, en de rest van de verklaring. Ook de intro ("we plaatsen geen cookies") klopt nog.
+- **Niet beoordeeld:** of en hoe Awin gegevens buiten de EER verwerkt. Dat staat in het privacybeleid van Awin. Dit is geen juridisch advies.
+
+**Nofollow:**
+- **`plutosport.nl` op de `nofollow`-lijst** (`src/content/linkPolicy.ts`), net als `passasports.nl`. Een bronlink naar een winkel in een artikel (bijv. de verzend- en retourvoorwaarden in "Waar koop je een hockeystick?") is geen winkelknop. De winkelknoppen zelf blijven partnerlinks met `rel="sponsored"`.
+- **bol.com staat niet op de lijst:** het was de enige partner toen de lijst ontstond. Of bol.com-bronlinks ook `nofollow` moeten krijgen, is een open keuze voor de eigenaar.
+- **Handboeken:** `docs/content-agent.md` en `docs/review-agent.md` noemen nu de drie partnerwinkels en de nofollow-regel voor winkels als bron.
+
+## 2026-10-29 — Lengtetabel: meten zonder schoenen, compacte tabel, interne links, lengte versus leeftijd
+
+**Aanleiding:** SEO-analyse van /kennis/hockeystick-lengte-tabel (nulmeting 157 vertoningen, 2 kliks, positie 8,1) met akkoord van de eigenaar.
+- **Bewezen:** de stickwijzer vroeg de lengte "met schoenen aan", het artikel zei "zonder schoenen", terwijl ze dezelfde tabel gebruiken.
+- **Bewezen:** op mobiel viel de vierde tabelkolom buiten beeld.
+- **Bewezen:** stickpagina's en de advieskaart linkten niet naar de tabel.
+
+**Wat:**
+- **Overal zonder schoenen.**
+  - Stickwijzer-vraag: "Hoe lang is de speler, zonder schoenen?"
+  - /methodiek: "lichaamslengte zonder schoenen".
+  - Zaalkeuze op /zaalsticks: "cm, zonder schoenen".
+  - Het artikel en /clubs zeiden al "zonder schoenen".
+  - `LENGTH_GUIDE` en de adviesregels zijn niet veranderd, dus geen nieuwe `ruleSetVersion`.
+  - **Meetinstructie bij "Weet je de lengte niet precies?"** (`height_uncertain`): "laat de speler zonder schoenen rechtop tegen een muur staan…". Er stond "met hockeyschoenen aan". Die bleef bij de eerste versie van deze PR staan, omdat de test alleen op "met schoenen" zocht. Gecorrigeerd na review van de eigenaar.
+  - **Leidende spec bijgewerkt** op opdracht van de eigenaar: `docs/spec/keuzehulp-instructie-v1.1.md` zegt nu bij `height_cm` en in de flow "zonder schoenen", met een wijzigingsregel bovenaan.
+  - **Regressietest:** doorzoekt de hele `src`-map en de spec op "met (…)schoenen" en "schoenen aan", en controleert dat elke stickwijzer-vraag die schoenen noemt "zonder schoenen" zegt.
+- **Tabel in drie kolommen:** "Lichaamslengte", "Stick (inch)" en "Kan ook (inch)".
+  - De aanbevolen lengte staat ook in centimeters, in kleinere tekst ("ca. 93 cm").
+  - Onder de tabel: "1 inch = 2,54 cm."
+  - Alle maten en alternatieven komen nog steeds uit `LENGTH_GUIDE` en `alsoFitsInch`.
+  - Een tabelcel in een artikel mag daarvoor nu `{ text, note }` zijn (`src/content/types.ts`, `ArticleBody`).
+  - Op kleine schermen is de celpadding iets kleiner (`px-3`, vanaf `sm` weer `px-4`); dat geldt voor alle artikeltabellen.
+- **Interne links:**
+  - Op de stickpagina staat onder "Beschikbare lengtes" de zin "Welke lengte past bij jou? Bekijk de hockeystick lengte tabel."
+  - Op de advieskaart staat onder de maat de link "Waarom deze maat?".
+  - Geen link tijdens het invullen van de stickwijzer. Het pad staat op één plek: `LENGTH_TABLE_PATH` in `src/lib/site.ts`.
+- **Sectie "Lichaamslengte, niet leeftijd":** de door de eigenaar aangeleverde tekst. Geen leeftijdstabel en geen nieuwe maatclaims.
+- **Wijzigingsdatum:** het artikel krijgt `updatedAt` 2026-10-29. Die datum is zichtbaar, staat als `dateModified` in de Article-markup en als `lastmod` in de sitemap. De opbouw van de structured data verandert niet.
+
+**Ongewijzigd:** SEO-title, meta description, H1, URL, canonical, structured data (Article en BreadcrumbList, geen FAQ), bestaande links en bronnen, productgegevens en partnerlinks. De titel en beschrijving blijven zo tot de zoekopdrachten uit Search Console zijn beoordeeld.
+
+**Meten:** na 4 en 8 weken, zoals in de analyse. Eerst de zoekopdrachten van deze pagina exporteren uit Search Console als nulmeting per zoekwoord.
+
+## 2026-10-30 — /sticks: meta description met aantallen, datum van het aanbod, prijs- en carbonvraag
+
+**Wat:**
+1. **Meta description.** De oude tekst (183 tekens) werd op 158 tekens afgekapt, ook in de Open Graph-beschrijving ("…per niveau en…"). Nieuw: `Vergelijk {N} veldhockeysticks van {M} merken op lengte, bow, carbon en niveau, met de bron bij elk gegeven. Plus een eerste keuze per niveau.` N en M komen uit `getCatalogStats` (dezelfde telling als de koppen en het merkfilter op de pagina), via `generateMetadata`. Met de huidige catalogus 141 tekens; met vier cijfers per aantal nog binnen 158. Ontbreekt een aantal of wordt de tekst te lang, dan valt hij terug op een vaste tekst zonder getallen (148 tekens). SEO-title, H1 en canonical zijn ongewijzigd.
+2. **Datum van aanbod en prijzen.** Onder de byline staat apart: "Aanbod en winkelprijzen gelezen op {datum}" (of "tussen {datum} en {datum}" als de feeds op verschillende dagen zijn gelezen). De datums komen uit de vijf bestanden die de wekelijkse sync genereert (PassaHockey-import en -prijzen, Plutosport-import en -koppelingen, bol.com-prijzen); elk script schrijft zijn datum alleen na een geslaagde lezing. Ontbreekt een datum of is hij ongeldig, dan staat er geen regel; de huidige datum wordt nooit gebruikt (`src/catalog/feedDates.ts`).
+3. **Redactionele datum.** `VELD.updatedAt` blijft alleen voor inhoudelijke wijzigingen en is daarom nu eenmalig 2026-10-30 (deze FAQ-wijziging). De sitemap-`lastmod` van /sticks volgt die datum en verandert niet bij een prijs- of catalogusupdate.
+4. **Prijsvraag.** Het antwoord zegt nu dat het aantal en de prijzen juniorsticks en sticks voor volwassenen samen zijn, geeft beide ranges apart en meldt dat de ranges per niveau ook beide bevatten. Alles blijft berekend uit de catalogus.
+5. **Carbonvraag.** Het bereik uit de catalogus (live 0% tot 100%: houten en glasvezelsticks naast volledig carbon) is vervangen door praktische uitleg in lijn met het carbonartikel, met de link ernaar.
+
+**Reden:** analyse van /sticks op 2026-10-29 (afgekapte meta description, verouderd ogende datum, weinig zeggende carbonrange, prijsrange zonder vermelding van juniorsticks).
+
+**Ongewijzigd:** SEO-title, H1, URL, canonical, FAQPage-markup (zelfde vijf vragen, tekst gelijk aan de zichtbare antwoorden), merkfilter, productaantallen, de lijst en de knop met feedsticks, winkelknoppen en partnerlinks.
+
+**Betrokken bestanden:** `src/app/sticks/page.tsx`, `src/content/veld.ts`, `src/catalog/feedDates.ts`, `src/content/sticksSeo.test.ts`, `src/content/veld.test.ts`, `src/content/articles.test.ts`.
+
+**Meten:** nulmeting is de Search Console-export van 29 oktober (/sticks: 0 klikken, 226 vertoningen, positie 32,54). Klikratio en vertoningen van /sticks na 4 en 8 weken vergelijken.
+
+## 2026-10-31 — Hockeyschoenen fase 1a: datamodel, feedimport en keuzemodel als spec
+
+**Wat:**
+1. **Spec.** Het keuzemodel van de eigenaar (`advies_hockeyschoenen_keuzemodel.docx`) staat letterlijk als `docs/spec/hockeyschoenen-keuzemodel.md` en is leidend voor `/hockeyschoenen`. In `CLAUDE.md` staat een korte sectie "Hockeyschoenen" met de harde regels.
+2. **Datamodel** (`src/catalog/shoes/types.ts`, Zod), los van de stickcatalogus. Elke eigenschap uit §7 is óf onbekend (`{ value: 'onbekend' }`, zonder bron), óf een `SourcedValue` met bronsoort en controledatum. Ondergronden zijn `bevestigd`/`ongeschikt`/`onbekend`; pasvorm per voorvoet, hiel en wreef apart, met de beschrijving van de bron en een code (`smal`/`normaal`/`ruim`); vochtbescherming houdt waterafstotend en waterdicht uit elkaar.
+3. **Feedimport** (`src/catalog/shoes/feedImport.ts`, `scripts/shoe-import.ts`, gegenereerd `src/catalog/shoes/imported.ts`):
+   - kleurpagina's van één model worden één model (merk plus genormaliseerde naam; heren, dames, junior en indoor blijven aparte modellen);
+   - zelfde naam maar een ander artikelnummer in de URL (bijv. ASICS `1071a101` en `1071a133`) blijft apart, met het artikelnummer in de slug, en staat in het rapport;
+   - PassaHockey en Plutosport worden alleen op EAN gekoppeld, nooit op naam;
+   - alle inhoudelijke eigenschappen staan op onbekend; alleen de maten uit de feed staan erin, als winkelgegeven;
+   - per winkel een listing met de goedkoopste kleur op voorraad, de laagste feedprijs, voorraad, maten (ook per maat op voorraad) en leesdatum;
+   - geïmporteerde modellen hebben `feedImport` en krijgen `noindex` tot ze met de hand zijn verrijkt (zoals sticks, 2026-10-17).
+4. **Veld of zaal alleen uit een winkel die het zegt.** PassaHockey zet alle schoenen in de algemene categorie "Hockeyschoenen" en alleen zaalschoenen daarnaast onder zaalhockey; een veldcategorie heeft die winkel niet. Daarom: zaal als een winkel het model (in welke kleur ook) onder zaalhockey zet of "indoor" in de naam staat; veld alleen als Plutosport het onder "Veldhockey" zet; anders onbekend. Zeggen de winkels het tegenovergestelde, dan onbekend en in het rapport. Het bestaande feedrapport (`shoe-feed-check`) telt de algemene categorie nog als veld; dat rapport verandert niet.
+5. **Wekelijkse sync.** `passa-sync.yml` draait `shoes:import` na de Plutosport-stap en zet het bestand en het rapport in dezelfde PR. Kan een van beide feeds niet worden gelezen, dan blijft het bestand van vorige week staan. De Plutosport-URL komt alleen uit het secret `AWIN_PLUTOSPORT_FEED_URL`; de feedlezers en `redact` staan nu gedeeld in `scripts/shoe-feeds.ts`.
+6. **Eerste bestand.** Lokaal gemaakt met alleen de PassaHockey-feed (`--passa-only`; het Awin-secret staat alleen in GitHub): 190 modellen uit 451 pagina's, 49 zaal en 141 onbekend, 0 veld. De eerste woensdagsync vult Plutosport aan, met de veldindeling en de koppelingen.
+
+**Reden:** fase 1 van het plan voor `/hockeyschoenen` (#100), op verzoek van de eigenaar gesplitst in 1a (dit) en 1b (10–15 gecontroleerde modellen). Akkoord eigenaar op 2026-10-31: kleuren samenvoegen, eerste bestand alleen PassaHockey.
+
+**Niet in deze stap:** pagina's, de schoenenwijzer, artikelen, gecontroleerde modellen. De privacyverklaring wordt op verzoek van de eigenaar aangepast in fase 3, als duidelijk is wat de schoenenwijzer verwerkt.
+
+**Betrokken bestanden:** `src/catalog/shoes/*`, `src/catalog/shoeFeed.ts` (maten op voorraad en afbeelding per model), `scripts/shoe-import.ts`, `scripts/shoe-feeds.ts`, `scripts/shoe-feed-check.ts`, `.github/workflows/passa-sync.yml`, `package.json`, `docs/spec/hockeyschoenen-keuzemodel.md`, `docs/README.md`, `CLAUDE.md`.
+
+## 2026-10-31 — Hockeyschoenen fase 1b: 13 gecontroleerde modellen
+
+**Wat:** 13 schoenmodellen met gegevens van de merksite (gelezen op 2026-10-31), in `src/catalog/shoes/products/`: Grays AeroCage X10, AeroCage X10 Junior, Raid 2.0, Stealth en Stealth Junior; Osaka KAI Mk1 - Pro Tour en Furo Court; Brabo Elite, Force, Force Zaal en Tribute Zaal; Mizuno Wave Lynx 3 en Wave Lynx 3 Jr. Verdeling: 10 veld en 3 zaal; 7 senior en 6 junior.
+
+**Regels die we hierbij hebben toegepast:**
+1. **Alleen wat het merk zegt, letterlijk.** Elke ingevulde eigenschap heeft de URL van de productpagina, het citaat van het merk en de controledatum. Wat het merk niet noemt, blijft onbekend; per model staat in `evidenceLimits` wat niet is vastgesteld.
+2. **Ondergrond alleen bij naam.** Water- of zandkunstgras is alleen bevestigd als het merk die ondergrond noemt (Grays AeroCage X10: beide; Osaka KAI: water). "All surfaces", "all pitches" of "kunstgras" is geen claim over water of zand en blijft onbekend (Grays Raid 2.0 en Stealth, Brabo, Mizuno). "Sand-based courts" bij Osaka gaat over padelbanen en telt niet als zandveld. Semi-water of hybride noemt geen enkel merk.
+3. **Pasvorm alleen met een breedte.** Geen merk zegt iets over de breedte van voorvoet, hiel of wreef. Claims als "COMFORT FIT PLUS last", "Superior Heel Fit" of "sock-like fit" staan daarom bij de beperkingen, niet als pasvorm.
+4. **Gewicht alleen met maat.** Mizuno noemt 340 g (senior) en 275 g (junior) zonder schoenmaat; dat gewicht blijft onbekend.
+5. **Non-marking** is alleen bevestigd bij de twee Brabo-zaalschoenen, waar Brabo "non-marking zool" schrijft. Osaka Furo Court noemt het niet.
+6. **Waterdicht ≠ waterafstotend:** Grays Raid 2.0 "waterproof upper" (waterdicht volgens de fabrikant), Grays Stealth "water-repellent PU vamp" (waterafstotend).
+7. **Modeljaar** uit het seizoenslabel van het merk (Grays: Season_2024–2026; Osaka: "26-27"). Brabo en Mizuno noemen geen seizoen: geen modeljaar.
+8. **Koppeling met de feeds op EAN.** Voor Grays, Osaka en Brabo zijn de EAN's de barcodes uit de productgegevens van het merk, van alle kleuren (`products/eans.ts`). Mizuno publiceert geen barcodes; daar zijn het de EAN's uit de PassaHockey-feed onder hetzelfde Mizuno-artikelnummer (X1GA2630, X1GC2630), met de hand bevestigd. Een feedmodel met een gedeelde EAN wordt verborgen en geeft zijn winkelgegevens aan het gecontroleerde model; de volgende sync haalt zulke modellen ook uit `imported.ts`. Daarbij bleek dat de twee Osaka-artikelen die de import apart hield (`ftw00033`, `ftw00044`) kleuren van één model zijn.
+
+**Niet opgenomen:** ASICS en adidas (de merksite weigert automatische toegang, HTTP 403), The Indian Maharadja (geen productgegevens in de pagina) en Nike (geen hockeyschoenen op de eigen site). Voor die merken is een andere bron nodig: de eigenaar beslist of winkelgegevens (`partner-shop`, zichtbaar gemarkeerd) daarvoor mogen.
+
+**Betrokken bestanden:** `src/catalog/shoes/products/{source,eans,grays,osaka,brabo,mizuno,index}.ts`, `src/catalog/shoes/index.ts`, `src/catalog/shoes/feedImport.ts` (`mergeListings`), tests in `src/catalog/shoes/`.
+
+## 2026-11-01 — Hockeyschoenen: besluiten eigenaar na fase 1b
+
+**Besluiten van de eigenaar (2026-11-01):**
+1. **Winkelgegevens mogen** voor merken waarvan de site niet te lezen is (ASICS, adidas, The Indian Maharadja, Nike), zichtbaar als winkelbron (`partner-shop`).
+2. **"Alle ondergronden" telt als water én zand.** Een claim van de bron als "all surfaces", "all pitches" of "every surface" bevestigt waterveld en zandveld. Semi-water of hybride blijft een eigen claim nodig hebben. "Kunstgras" of "grip in all directions" is geen claim voor alle ondergronden.
+3. **Brabo Tribute Zaal blijft junior.**
+
+**Wat er daardoor veranderde:**
+- **Grays Raid 2.0, Stealth en Stealth Junior:** water en zand bevestigd (Grays: "all surfaces", "all playing surfaces").
+- **Osaka KAI Mk1 - Pro Tour:** zand bevestigd via "across every surface". Water was al bevestigd. Osaka bedoelt met de claim ook padel en training; dat staat bij de beperkingen.
+- **Twee modellen met winkelbron**, uit de productomschrijving in de PassaHockey-feed (de site van PassaHockey zelf weigert automatische toegang):
+  - ASICS Gel-Peake 3: veld, senior;
+  - The Indian Maharadja Pro Slim Indoor: zaal, senior; de eerste zaalschoen voor volwassenen met een hockeyclaim.
+  Die winkelteksten zijn algemeen en verschillen per kleur. Ze leggen alleen veld of zaal en de maten vast. Ondergrond, pasvorm en non-marking blijven onbekend. EAN's komen uit de feed voor dat model.
+- **adidas en Nike:** niet opgenomen, omdat het maximum van 15 modellen bereikt is. Nike heeft bovendien geen hockeyschoenen op de eigen site.
+
+**Totaal:** 15 gecontroleerde modellen; 11 veld en 4 zaal; 9 senior en 6 junior.
+
+**Betrokken bestanden:** `src/catalog/shoes/products/{grays,osaka,shopSourced,source,eans,index}.ts`, `src/catalog/shoes/health.test.ts`, `CLAUDE.md`.
+
+## 2026-11-01 — Hockeyschoenen fase 2: pagina's, winkelknoppen en navigatie
+
+**Wat:**
+1. **`/hockeyschoenen`:**
+   - de intro beantwoordt "welke hockeyschoenen heb je nodig?" in de eerste 80 woorden;
+   - filters veld/zaal en junior/senior als gewone links (`?type=`, `?leeftijd=`), canonical `/hockeyschoenen`;
+   - de gecontroleerde modellen staan als kaarten; de feedmodellen laadt een knop pas na een klik, als lichte lijst uit `/data/aanbod-schoenen.json`, net als de feedsticks (besluit eigenaar 2026-11-01; `noindex` op hun pagina's);
+   - verder uitleg over de status en de "Pascontrole" uit §10.
+   Een model met onbekend veld of zaal staat niet in een gefilterde lijst: onbekend telt niet als match.
+2. **`/hockeyschoenen/[slug]`** voor alle modellen. Op elke pagina:
+   - de statusregel "Basis en zekerheid", met bronsoort en controledatum;
+   - "Waar te koop";
+   - "Wat je nog moet controleren": de concrete controles die uit de onbekende eigenschappen volgen;
+   - "Wat de bron zegt": per eigenschap de waarde of "Onbekend", met bronsoort, citaat, link en datum;
+   - "Wat niet is vastgesteld", de pascontrole en vergelijkbare modellen (zelfde soort en leeftijdsgroep, nooit aangevuld met onbekende soorten).
+   Feedmodellen krijgen `noindex` en een melding dat ze niet gecontroleerd zijn.
+3. **Status per model (laag C):**
+   - **onvoldoende informatie:** een feedmodel, of veld/zaal onbekend;
+   - **voorwaardelijk:** gecontroleerd, met veld of zaal bevestigd;
+   - **goede onderbouwing:** daarnaast ook ondergrond (veld) of non-marking (zaal) bevestigd, plus een pasvormgegeven.
+   Nu staan alle 15 gecontroleerde modellen op voorwaardelijk, omdat geen enkel merk een breedte noemt. Het schoenadvies in fase 3 voegt de antwoorden van de speler toe.
+4. **"Waar te koop" voor schoenen** gebruikt dezelfde `Offer`-vorm, `OfferRows` en voetregel als bij sticks: sorteren op prijs plus verzending, geen bedrag na 14 dagen, de partnerlink-vermelding en "de winkel is de verkoper". Maatknoppen zijn er niet, want schoenmaten zijn geen inch-lengtes. Wel staan de maten die de feed per maat op voorraad noemt per winkel vermeld, over alle kleuren samen, met de opmerking dat de winkel de maat bij het bestellen bevestigt. bol.com doet nog niet mee: er zijn geen bol-gegevens voor schoenen.
+5. **Structured data:** `Product` met `Offer` of `AggregateOffer` alleen voor zichtbare prijzen die hooguit 14 dagen oud zijn; geen review- of rating-schema.
+6. **SEO:** in de sitemap staan het overzicht en alleen de gecontroleerde modellen (lastmod = laatste controledatum); in `llms.txt` staat het overzicht; overal breadcrumbs.
+7. **Navigatie:** "Hockeyschoenen" in het menu en de footer, en op de uitkomst van de stickwijzer de rustige regel "Ook nieuwe hockeyschoenen nodig?". Niet op de homepage.
+8. **Analytics:**
+   - `retailer_click` met de nieuwe placements `schoenpagina` en `schoenencatalogus` (`schoenwijzer` staat klaar voor fase 3);
+   - `offer_block_view` op de modelpagina;
+   - `catalog_block_click` met `page: 'hockeyschoenen'` en de blokken `intro`, `filters`, `modellen` en `pascontrole`;
+   - het verkooprapport kent de nieuwe placements.
+9. **Kleine, veilige verbredingen in gedeelde code:**
+   - `RetailerLink`, `OfferRows` en `Retailer.getUrl` nemen het merk als `string`, want schoenmerken staan niet in de stick-`Brand`-lijst;
+   - `OfferFoot` (de voetregel van "Waar te koop") is geëxporteerd en kent een schoentekst ("voor één paar").
+   De stickpagina's veranderen niet.
+10. **Foto's:** elke listing krijgt voortaan de feedafbeelding van de gelinkte kleur. Tot de volgende sync neemt de catalogus die over van het verborgen feedmodel.
+
+**Nog niet in deze fase:** de knop naar de schoenenwijzer (fase 3) en links naar schoenartikelen (fase 4).
+
+**Betrokken bestanden:**
+- nieuw: `src/app/hockeyschoenen/{page,[slug]/page}.tsx`, `src/components/shoes/*`, `src/catalog/shoes/{offers,certainty}.ts`, `src/content/hockeyschoenen.ts` (+ test);
+- gewijzigd: `src/catalog/shoes/{index,types,feedImport}.ts`, `src/lib/retailers.ts`, `src/lib/analytics/events.ts`, `src/components/ui/RetailerLink.tsx`, `src/components/offers/{OfferRows,WhereToBuy}.tsx`, `src/components/catalog/TrackedBlock.tsx`, `src/content/offers.ts`, `src/components/layout/{Header,Footer}.tsx`, `src/components/stickwijzer/QuizResult.tsx`, `src/app/sitemap.ts`, `src/app/llms.txt/route.ts`, `src/analytics-report/sales.ts`.
+
+## 2026-11-01 — Hockeyschoenen fase 3: de schoenenwijzer (`schoen-v1.0`) en privacyverklaring 1.5
+
+**Wat:**
+1. **Vragen** (`src/content/schoenenwijzer/questions.ts`): de acht hoofdvragen uit §5 en de maatvraag. Vervolgvragen staan er alleen waar het antwoord de selectie of de uitleg verandert: tweede ondergrond, sessieduur, positie (optioneel, alleen context) en toestemming voor een duurder alternatief. De vervolgvragen over de huidige schoen (merk, model, wat past) zijn in v1 weggelaten, omdat ze de selectie nog niet veranderen. "Voor beide" geeft twee aparte adviezen.
+2. **Adviesregels** (`src/shoe-advice/`, los van de stickengine):
+   - **Laag A, harde voorwaarden:** veld/zaal, ondergrond of non-marking, maat en voorraad, budget. Elke voorwaarde is `voldoet`, `voldoet-niet` (uitgesloten) of `onbekend` (voorwaardelijk, met een controle).
+   - **Modellen met onbekend veld/zaal** zijn geen kandidaat, omdat het de verkeerde soort schoen kan zijn.
+   - **Maat:** alleen wat de feed per maat op voorraad noemt. "41,5" en "41 1/2" zijn dezelfde maat. Een maat die de winkel wel noemt maar niet op voorraad heeft, sluit het model uit; zonder maatgegevens blijft de maat onbekend.
+   - **Budget:** boven het budget alleen met toestemming, en dan nooit als eerste advies.
+   - **Laag B, persoonlijke aansluiting:** een geordende vergelijking zonder gewichten, in deze volgorde: boven budget, primaire voorwaarde, aantal onbekende voorwaarden, pasvormconflicten, pasvormmatches (voorvoet, hiel en wreef apart), ondergronden, leeftijdsgroep, belasting, bewegingsstijl, voorkeuren, prijs. Een latere stap telt alleen bij gelijkstand, dus een voorkeur compenseert nooit een pasvormconflict. Onbekend telt nergens. Positie wordt niet gebruikt.
+   - **Leeftijdsgroep:** bij gelijke gegevens eerst het model voor de leeftijdsgroep van de speler (junior voor kind of jeugd, senior voor een volwassene). Het is nooit een uitsluiting, en komt het andere model in beeld, dan staat dat bij "Mogelijk minder geschikt wanneer".
+   - **Laag C, zekerheid:**
+     - onvoldoende informatie: de primaire voorwaarde (ondergrond bij veld, non-marking bij zaal) is niet bevestigd;
+     - goede onderbouwing: geen onbekende harde voorwaarde, een pasvormgegeven en geen open pascontrole;
+     - voorwaardelijk: al het andere.
+   - **Resultaat:** hooguit drie modellen, alleen echte kandidaten: eerste pasadvies, alternatief met een ander eigenschappenprofiel en een voordeliger alternatief. Er wordt nooit opgevuld.
+   - **Geen dooie advisering:** heeft geen model de primaire voorwaarde bevestigd, of valt alles af, dan volgt een eerlijke melding met de reden en een link naar het overzicht.
+   - **Keepers:** een vaste begrenzingstekst, zonder schoenen.
+3. **Vraag 7 blijft in de browser** (`fitNotes.ts`):
+   - het antwoordschema van de server weigert vraag 7, en `toServerAnswers` laat hem weg;
+   - pijn of blessure geeft alleen een vaste verwijstekst, zonder diagnose en zonder invloed op de selectie;
+   - een eigen inlegzool of brace maakt "goede onderbouwing" voorwaardelijk en voegt een pascontrole toe;
+   - blaren geeft een pascontrole zonder oorzaakclaim.
+4. **Analytics:**
+   - `quiz_start` en `quiz_complete` krijgen `quiz: 'stick' | 'schoen'`; de stickwijzer stuurt nu `'stick'`;
+   - de schoenenwijzer stuurt geen antwoorden;
+   - `retailer_click` met placement `schoenwijzer`;
+   - het formulier heeft `ph-no-capture`, zodat PostHog-autocapture geen knopteksten van antwoorden vastlegt;
+   - `before_send` haalt de querystring (met de antwoorden) van gedeelde schoenadviezen uit alle eventeigenschappen.
+5. **Delen:** `/hockeyschoenen/wijzer/advies` (noindex, opnieuw berekend). De link bevat de antwoorden zonder vraag 7. `shareHref` en de deelknop zijn generiek gemaakt (pad en tekst).
+6. **Pagina's en links:** `/hockeyschoenen/wijzer` staat in de sitemap en `llms.txt`, en het overzicht heeft de knop "Doe de schoenenwijzer". De wijzer adviseert alleen uit de gecontroleerde modellen.
+7. **Privacyverklaring 1.5** (opdracht eigenaar, 2026-11-01):
+   - nieuwe sectie "De schoenenwijzer": antwoorden niet opgeslagen, vraag 7 alleen in de browser, geen antwoorden in de statistieken, deellink zonder vraag 7;
+   - de schoenenwijzer staat er ook bij in de intro, de beschrijving, de passage over partnerlinks en de passage over kinderen.
+
+**Geverifieerd in een echte browser (Edge headless, 390 px):** de wizard doorgeklikt met pijn of blessure bij vraag 7 en maat 42. De enige POST naar de server bevat geen vraag 7, en de uitkomst toont de vaste verwijstekst, het profiel, twee modellen met redenen, controles, basis en winkelrij.
+
+**Open punt (niet aangepast, buiten opdracht):**
+- de deellink van de stickwijzer (`/stickwijzer/advies?a=…`) staat niet in de privacyverklaring;
+- de antwoorden van de stickwijzer gaan via de URL en PostHog-autocapture wel in de statistieken. Dat laatste is in lijn met de tekst ("welke antwoorden vaak worden gekozen"), maar de deellink niet.
+
+**Betrokken bestanden:**
+- nieuw: `src/shoe-advice/*`, `src/content/schoenenwijzer/*`, `src/components/schoenenwijzer/*`, `src/app/hockeyschoenen/wijzer/**`;
+- gewijzigd: `src/lib/analytics/{events,posthog}.ts`, `src/lib/shareAdvice.ts`, `src/components/stickwijzer/{QuizForm,ShareAdviceButton}.tsx`, `src/content/privacy.ts` (+ test), `src/content/hockeyschoenen.ts`, `src/app/hockeyschoenen/page.tsx`, `src/app/sitemap.ts`, `src/app/llms.txt/route.ts`, `CLAUDE.md`.
+
+## 2026-11-01 — Hockeyschoenen: non-marking uit de foto, goede onderbouwing zonder pasvorm, deellink stickwijzer
+
+**Besluiten van de eigenaar (2026-11-01, na PR #126):**
+1. **Kleur van de zool:**
+   - controleer de kleur van de zool op de foto's;
+   - bij elke kleur behalve zwart gaan we uit van non-marking;
+   - bij schoenen waar non-marking niet bevestigd is, komt een waarschuwing.
+2. **"Goede onderbouwing"** mag zonder pasvormgegevens.
+3. **De deellink van de stickwijzer** wordt rechtgezet in de privacyverklaring.
+
+**Wat er daardoor veranderde:**
+1. **Non-marking uit de foto:**
+   - de productfoto's van de winkel (vier aanzichten per kleur) zijn op 2026-11-01 met het oog bekeken bij de twee gecontroleerde zaalschoenen zonder bevestiging door het merk:
+     - Osaka Furo Court (kleur Pineneedle): donkergroene loopzool met een gomkleurig middenstuk;
+     - The Indian Maharadja Pro Slim Indoor (wit en mint): lichtgrijze loopzool.
+   - Geen van beide is zwart, dus beide hebben nu `indoorNonMarking` = bevestigd als **`editorial-estimate`**, met de zoolkleur en de fotopagina als bron.
+   - Brabo Force Zaal en Tribute Zaal waren al bevestigd door Brabo.
+   - De feedmodellen zijn niet op de foto beoordeeld; hun non-marking blijft onbekend.
+2. **Waarschuwing:** elke zaalschoen zonder bevestiging door merk of winkel (een inschatting of onbekend) krijgt een waarschuwing:
+   - op de modelpagina, als blok onder de status;
+   - op de kaarten, kort;
+   - in de uitkomst van de schoenenwijzer.
+   In de eigenschappentabel staat bij een inschatting "Aangenomen (inschatting, niet bevestigd)", nooit "Bevestigd".
+3. **Schoenenwijzer:** een geschatte non-marking zool telt als voldaan, maar geeft de controle "niet bevestigd door merk of winkel" en nooit "goede onderbouwing".
+4. **Goede onderbouwing zonder pasvorm:**
+   - **per model:** de ondergrond (veld) of de non-marking zool (zaal) is bevestigd door merk of winkel;
+   - **in de wijzer:** daarnaast geen onbekende harde voorwaarde, geen open pascontrole voor een probleem dat de speler noemde, en geen conflict;
+   - de teksten zeggen dat de pasvorm de eigen controle blijft;
+   - gevolg: de gecontroleerde veldschoenen met een ondergrondclaim en de Brabo-zaalschoenen staan nu op goede onderbouwing.
+5. **Deellink stickwijzer:**
+   - de sectie "De stickwijzer" in de privacyverklaring beschrijft nu dat "Deel dit advies" de antwoorden en sticks in de link zet, dat wij die niet bewaren, en dat de antwoorden uit het webadres worden gehaald voordat het in de statistieken komt;
+   - de PostHog-filter (`before_send`) haalt de antwoorden nu uit gedeelde stick- én schoenadviezen;
+   - dit valt binnen versie 1.5, die nog niet live is.
+
+**Betrokken bestanden:**
+- `src/catalog/shoes/{certainty.ts,products/{source,osaka,shopSourced}.ts}`;
+- `src/components/shoes/{NonMarkingWarning,ShoeCard,ShoeSpecTable}.tsx`, `src/app/hockeyschoenen/[slug]/page.tsx`, `src/components/schoenenwijzer/ShoeAdviceView.tsx`;
+- `src/shoe-advice/{engine,types}.ts`, `src/content/{hockeyschoenen,privacy}.ts`, `src/content/schoenenwijzer/resultCopy.ts`, `src/lib/analytics/posthog.ts`;
+- tests.
+
+## 2026-11-01 — Hockeyschoenen fase 4: content-briefs en interne links
+
+**Wat:**
+1. **Zes content-briefs** als issues met het label `content-brief`. Elke brief heeft een vaste slug en verwijst naar de juiste paragrafen van het keuzemodel; ook staat erin wat er niet in mag (verboden claims, geen diagnose, geen vaste prijzen of maten, geen millimeterregel).
+   - #127: Welke hockeyschoenen heb je nodig?
+   - #128: water-, zand- of semi-waterveld
+   - #129: kinderen, maat en groeiruimte
+   - #130: smalle of brede voet
+   - #131: zaalhockeyschoenen of gewone indoorschoenen
+   - #132: wanneer zijn je hockeyschoenen versleten
+2. **De agent start pas na akkoord per brief.** De briefs bevatten bewust geen "@claude": een issue van de eigenaar met "@claude" start de content-agent meteen (`claude.yml`). De agent start nu pas als de eigenaar het label `akkoord` zet. Gecontroleerd: alle runs bij het aanmaken waren "skipped".
+3. **Links naar de artikelen zodra ze live staan** (`src/content/shoeArticles.ts`). Het overzicht, de modelpagina's, de uitkomst van de schoenenwijzer en het gedeelde advies tonen "Meer weten over hockeyschoenen" met alleen de artikelen die nu zichtbaar zijn, op de afgesproken slug. Zolang er geen enkel artikel is, is er geen blok. De links gaan als prop naar de wizard, zodat de browser geen artikelen laadt.
+4. **Rustige verwijzingen:**
+   - in de lengtetabel een zin in de laatste sectie naar `/hockeyschoenen`;
+   - op `/zaalsticks` een regel naar `/hockeyschoenen?type=zaal`.
+   De `updatedAt` van beide pagina's is niet veranderd: het gaat alleen om een link, niet om de inhoud.
+5. **De linkcontrole in de tests** (`articles.test.ts`) kent nu `/hockeyschoenen/wijzer` en de modelpagina's, zodat schoenartikelen daarnaar kunnen linken.
+6. **Handboek content-agent:** een regel voor schoenartikelen (keuzemodel, schoencatalogus, vaste slug).
+7. **Issue #100** bijgewerkt met de status per stap.
+
+**Betrokken bestanden:** `src/content/shoeArticles.ts` (+ test), `src/components/shoes/ShoeArticleLinks.tsx`, de pagina's van `/hockeyschoenen`, `src/components/schoenenwijzer/{ShoeQuiz,ShoeAdviceView}.tsx`, `src/content/articles/hockeystick-lengte-tabel.ts`, `src/content/zaal.ts`, `src/app/zaalsticks/page.tsx`, `src/content/articles.test.ts`, `docs/content-agent.md`.
+
+## 2026-11-01 — Artikel "Welke hockeyschoenen heb je nodig?" (#127)
+
+**Wat:** kennisartikel `/kennis/welke-hockeyschoenen-heb-je-nodig`, de uitgebreide uitleg achter `/hockeyschoenen`, in de volgorde van het keuzemodel (§2). Het aantal gecontroleerde modellen komt uit `src/catalog/shoes`.
+**Bewust niet:** "beste schoen", blessure- of pasvormbeloftes, grip-/dempingsscores, prijzen, maten, millimeterregel, schoen per positie, diagnose bij pijn. Geen botsing met bestaande artikelen: geen enkel artikel behandelt schoenen.
+
+## 2026-11-01 — /hockeyschoenen: drie intentiesecties, voortgang van de schoenenwijzer, fix geplande publicatie
+
+**Wat (PR A uit de SEO-analyse van 2026-11-01):**
+1. **Drie H2-secties op `/hockeyschoenen`:** Veldhockeyschoenen, Zaalhockeyschoenen en Hockeyschoenen voor kinderen.
+   - Elke sectie beantwoordt één keuzevraag, met een feitenregel uit de catalogus (`intentFacts`), een crawlbare filterlink (`?type=veld`, `?type=zaal`, `?leeftijd=junior`) en de link naar het bijbehorende artikel zodra dat live staat (#128, #131, #129).
+   - Een model met onbekend veld of zaal telt nergens mee; feedmodellen tellen alleen waar de categorie van de winkel het zegt.
+   - Title, H1 en canonical zijn ongewijzigd, en er zijn geen nieuwe pagina's.
+   - Meetblok `intenties` in `catalog_block_click`.
+2. **Voortgang van de schoenenwijzer:**
+   - "Vraag 3 van 8" telt de hoofdvragen die bij de antwoorden horen (7 bij zaal, 2 bij een keeper);
+   - een vervolgvraag houdt het nummer van zijn hoofdvraag ("· aanvullende vraag");
+   - de maat is "Laatste stap: je maat";
+   - "stap x van y" blijft zichtbaar en de balk volgt de echte stappen;
+   - zolang vraag 1 open is, telt de voortgang met het veldpad, zodat hij niet van 7 naar 8 springt;
+   - de laatste stap volgt nu alleen uit de getoonde vragen;
+   - metadata en intro zeggen "maximaal acht vragen … plus je maat".
+3. **Fix geplande publicatie:**
+   - de workflow *Geplande publicatie* draaide zonder `npm ci`;
+   - sinds het eerste schoenartikel (#134) importeert de artikellijst de schoencatalogus (`zod`), en de ochtendcontrole faalde op 2026-11-01 met `ERR_MODULE_NOT_FOUND`;
+   - zonder fix waren de artikelen van 2 tot en met 6 november niet automatisch live gegaan;
+   - nu: npm-cache en `npm ci` vóór de planningscontrole, met een test.
+4. **Publicatie gecontroleerd:**
+   - een gepland artikel is vóór zijn datum (Nederlandse tijd) niet bereikbaar (`getArticleBySlug` → 404), niet in de sitemap en niet gelinkt (`shoeArticleLinks` gebruikt dezelfde zichtbare lijst);
+   - de ochtendrun bouwt de site op de datum opnieuw;
+   - een artikel dat ná zijn datum wordt gemerged, staat meteen live bij de merge-build.
+
+**Restrisico:** `/hockeyschoenen` wordt per aanvraag opgebouwd en toont de link vanaf middernacht. De artikelpagina zelf komt na de ochtendbuild (ongeveer 05:00–06:00) live, tenzij die al eerder op aanvraag wordt opgebouwd. Een link kan dus een paar uur naar een pagina wijzen die nog niet in de build zit.
+
+**Betrokken bestanden:** `src/content/hockeyschoenen.ts`, `src/content/shoeArticles.ts`, `src/app/hockeyschoenen/page.tsx`, `src/content/schoenenwijzer/questions.ts`, `src/components/schoenenwijzer/ShoeQuiz.tsx`, `src/app/hockeyschoenen/wijzer/page.tsx`, `src/lib/analytics/events.ts`, `src/components/catalog/TrackedBlock.tsx`, `.github/workflows/publicatie.yml`, `src/content/shoesSeo.test.ts`.
+
+## 2026-11-01 — Kennisartikel: hockeyschoenen voor water-, zand- of semi-waterveld (#128, live 2026-11-02)
+
+**Wat:** `/kennis/hockeyschoenen-waterveld-zandveld`, fase 4 van #100. Beantwoordt in de intro of je een water-, zand- of semi-waterschoen nodig hebt, hoe je je ondergrond herkent (vraag je club, denk aan uitwedstrijden) en wat "volgens de fabrikant geschikt" op onze pagina's betekent, inclusief "alle ondergronden" = water én zand (besluit 2026-11-01).
+**Waarom dit onderwerp:** keuzemodel §3 (geen kunstmatige scheiding water/zand). De slug staat in `SHOE_ARTICLE_SLUGS`, dus de schoenpagina's linken er vanzelf naar zodra het live is. Geen botsing met `welke-hockeyschoenen-heb-je-nodig`: dat artikel geeft de volgorde van stappen, dit gaat alleen over de ondergrond.
+**Bewust niet:** modelclaims en aantallen in vaste tekst (tellingen komen uit `src/catalog/shoes`), grip- of slijtagescores, "waterveld = lange noppen"-regels, prijzen, millimeterregel, blessure- of pijnadvies.
+
+## 2026-11-01 — Artikel `hockeyschoenen-kinderen-maat` (#129)
+
+- **Wat:** kennisartikel "Hockeyschoenen voor kinderen: maat en groeiruimte", live op 2026-11-03; beantwoordt hoe je de maat kiest en hoeveel groeiruimte goed is.
+- **Waarom:** fase 4 van #100; de schoenpagina's linken er vanzelf naar (slug uit `shoeArticles.ts`). Basis: keuzemodel §5, §9 profiel D en §10.
+- **Bewust niet:** millimeterregel, prijzen, maten of modelclaims in vaste tekst (alleen het aantal juniormodellen uit de catalogus), premiummodellen voor kinderen, advies bij pijn of blessure, grip-/dempingsscores.
+
+## 2026-11-03 — HockeyCity als vierde partnerwinkel (fase 1: knop en prijzen)
+
+**Opdracht eigenaar (2026-11-03):** HockeyCity heeft de samenwerking via TradeTracker goedgekeurd; toevoegen als extra partner, ook in de privacyverklaring.
+
+1. **Trackinglink** (`src/lib/retailers.ts`): `hockeycity.nl/tracking/tradetracker/redirect/?tt=27931_1633756_517408_<plek>&r=<productpagina>`, de vorm uit de links in de productfeed van HockeyCity (campagne 27931, materiaal = de feed 1633756, onze site 517408). De plek op de site gaat als referentie mee, zoals bij PassaHockey. Alleen productpagina's (`*.html` op www.hockeycity.nl, zonder query), nooit een zoek- of categoriepagina.
+2. **Feed** (`src/catalog/hockeyCityFeed.ts`, feed "HockeyCity.nl - Algemeen", XML): ongeveer 620 producten, waarvan ongeveer 260 sticks en 70 schoenen. Eén regel per productpagina, zonder lengtes of maten en met één prijs: de actuele prijs. De `fromPrice` (een hogere van-prijs bij ongeveer 130 producten) gebruiken we nergens.
+3. **Sticks koppelen alleen op naam.** De GTIN's van sticks (en tassen, kleding) zijn eigen nummers van HockeyCity (prefix 52619…), geen EAN van het merk; die vergelijken we nergens. De matcher van Plutosport (`matchStick`, nu algemeen voor elke winkel) eist merk, model, bow en modeljaar. HockeyCity zet het modeljaar zelden in de naam; alleen bij The Indian Maharadja staat het in het artikelnummer (10 + jaar). Eerste run: **4 zekere koppelingen** (Indian Maharadja Gold 95), 155 twijfelgevallen. Twijfel krijgt géén knop; klopt een koppeling (zelfde model én modeljaar), dan zet de eigenaar hem in `src/catalog/offers/hockeyCityConfirmed.ts`. De wekelijkse sync-PR toont de eerste 40.
+4. **Schoenen alleen op EAN** (CLAUDE.md, Hockeyschoenen): bij adidas, ASICS, Indian Maharadja, Brabo en een deel van Osaka staat de echte EAN. Een pagina gaat naar het model (gecontroleerd of uit de feeds) met die EAN; een gecontroleerd model gaat voor. Eerste run: 23 modellen. Zonder maten per voorraad zegt de site bij HockeyCity niets over maten.
+5. **Wekelijks** in de PassaHockey-sync (`passa-sync.yml`), ná de schoenenimport: `npm run hockeycity:feed -- --write` schrijft `src/catalog/offers/hockeyCity.ts`. Een mislukte download laat het bestand van vorige week staan. Alleen pagina's die de feed op voorraad heeft, krijgen een knop.
+6. **Verzendkosten:** de veelgestelde vragen zeggen €5 en gratis boven €75; de banner op elke pagina en de winkelmand zeggen gratis vanaf €100. We rekenen met €5 onder €100, zodat een totaalprijs nooit te laag uitvalt (bron https://www.hockeycity.nl/service/, gelezen 2026-11-03). In het artikel staan beide bedragen.
+7. **Teksten:** partnerlink-vermelding, footer, methodiek, "Richtprijs · bekijk actuele prijs bij …", het artikel `waar-koop-je-een-hockeystick` (vierde kolom, met de voorwaarden van HockeyCity en bronnen), de `nofollow`-lijst voor bronlinks, de docs voor de content- en review-agent.
+8. **Privacyverklaring 1.6** (opdracht eigenaar): HockeyCity bij de winkels voor productfoto's en doorklikken, en een alinea dat links naar HockeyCity via TradeTracker lopen, zoals bij PassaHockey.
+9. **Verkooprapport:** dezelfde TradeTracker-login, het referentierapport van campagne 27931 als eigen kolom.
+
+**Bewust niet:** sticks of schoenen die alleen HockeyCity verkoopt importeren (fase 2, aparte PR), maten of lengtes bij HockeyCity tonen, de van-prijs, koppelen op HockeyCity's eigen nummers.
+
+**Betrokken bestanden:** `src/lib/retailers.ts`, `src/catalog/hockeyCityFeed.ts`, `src/catalog/plutosportFeed.ts` (matcher algemeen), `src/catalog/offers/{index,hockeyCity,hockeyCityConfirmed}.ts`, `src/catalog/{index,types,feedDates}.ts`, `src/catalog/shoes/{index,types}.ts`, `scripts/hockeycity-feed.ts`, `scripts/sales-report.ts`, `src/analytics-report/sales.ts`, `.github/workflows/passa-sync.yml`, de teksten hierboven en hun tests, `src/catalog/hockeyCityFeed.test.ts`.
+
+## 2026-11-03 — HockeyCity fase 2: wat alleen HockeyCity verkoopt (sticks en schoenen, noindex)
+
+**Opdracht eigenaar (2026-11-03):** ook de sticks en schoenen tonen die alleen HockeyCity verkoopt; de eigenaar wil een zo breed mogelijk aanbod ("wij bieden alles"). Keuze eigenaar: lengtes en maten van de productpagina's van HockeyCity lezen, omdat de feed ze niet heeft.
+
+1. **Productpagina's:** de wekelijkse sync leest per HockeyCity-stick en -schoen de openbare productgegevens van de pagina (`<pagina>?format=json`, Lightspeed), één verzoek per seconde, hoogstens 500 per run, met een herkenbare user-agent. Eerste run: 177 pagina's in ongeveer 3,5 minuut, geen enkele mislukt. Kan meer dan 20% niet gelezen worden, dan schrijft de sync niets en blijven de bestanden van vorige week staan. Dit is geen feed: HockeyCity kan het blokkeren; dan meldt de sync-PR dat.
+2. **Sticks die alleen HockeyCity verkoopt** (`src/catalog/imported/hockeycity.ts`): op voorraad, niet gekoppeld (zeker of twijfel) aan iets wat we al tonen (gecontroleerd, PassaHockey- of Plutosport-import), één per modelnaam. Lengtes en prijs per leverbare lengte van de productpagina. Dezelfde import als Plutosport (`toFeedProduct`, nu voor beide winkels): specs alleen van de winkel, niveau en positie onze inschatting, `noindex`, alleen de HockeyCity-knop. Twijfelgevallen worden niet apart geïmporteerd, zodat een stick nooit twee keer verschijnt.
+3. **Sticks die we al hadden:** de HockeyCity-knop krijgt nu ook de leverbare lengtes en de prijs van een leverbare lengte; staat op de pagina geen lengte op voorraad, dan vervalt de knop.
+4. **Schoenen** gaan door de bestaande schoenenimport (`buildShoeImport`, HockeyCity als derde winkel): EU-maten, voorraad per maat en de EAN van het merk per maat van de pagina. Een pagina met een EAN die we al kennen, wordt een winkelrij bij dat model; de rest wordt een eigen feedmodel (`src/catalog/shoes/importedHockeyCity.ts`, `noindex`), veld of zaal uit de categorie van HockeyCity ("Veldhockeyschoenen", "Zaalhockeyschoenen") als winkelbron. **Heeft een HockeyCity-schoen dezelfde naam als een model dat we al tonen maar geen gedeelde EAN, dan importeren we hem niet** (geen koppeling op naam, en ook niet dubbel tonen); de sync-PR noemt ze. UK- of US-maten nemen we nooit over. Een schoen met alleen maten onder EU 36 is een kinderschoen, ook zonder "JR" in de naam (adidas Youngstar). Een schoenendroger en riemen in de schoenencategorie vallen eruit.
+5. **Merken:** "Princess Hockey" en "TK Hockey" in de feed zijn Princess en TK. **Mercian, Cyclone en Naked** zijn nieuw in de merkenlijst, met een merkprofiel dat zegt dat de gegevens van HockeyCity komen en nog niet met de merksite zijn vergeleken.
+6. **Workflow:** de HockeyCity-stap draait na de Plutosport- en schoenenimport, dus wat die al tonen, wordt niet nog eens geïmporteerd; `src/catalog/shoes/importedHockeyCity.ts` mag in de sync-PR.
+
+**Bewust niet:** twijfelgevallen automatisch koppelen of importeren, schoenen op naam koppelen, sticks zonder leverbare lengte, de van-prijs.
+
+**Betrokken bestanden:** `src/catalog/hockeyCityFeed.ts`, `scripts/hockeycity-feed.ts`, `src/catalog/plutosportImport.ts` (import voor beide winkels), `src/catalog/shoes/{feedImport,index,types,importedHockeyCity}.ts`, `src/catalog/shoeFeed.ts`, `src/catalog/imported/hockeycity.ts`, `src/catalog/{index,types,feedImport,feedDates}.ts`, `src/catalog/offers/{index,hockeyCity}.ts`, `src/content/brands.ts`, `src/components/catalog/ImportedSticks.tsx`, `src/content/catalogLists.ts`, `.github/workflows/passa-sync.yml`, `CLAUDE.md` en de tests.
+
+## 2026-11-03 — Redesign fase 1: minder uitleg, eerder naar de stick
+
+**Opdracht eigenaar (2026-11-03):** een designreview van de hele site, en daarna de aanbevelingen kritisch beoordelen en in fasen uitvoeren, eerst lokaal om te bekijken. Fase 1 zijn de kleine verbeteringen; fase 2 (stickwijzer per vraag, filters in de catalogus, stickpagina in twee kolommen, lichter laden) en fase 3 (eigen fotografie, vastgelegd designsysteem) volgen na akkoord.
+
+1. **Homepage:** de drie uitlegsecties ("Wat doet de stickwijzer?", "Drie routes", "Zo werkt het") zijn één sectie in drie stappen, met de routes als één regel. Het voorbeeldadvies en de uitgelichte sticks blijven. Het woordmerk in de hero blijft staan (merkinstructie §4: homepage-hero met pay-off), net als de zaalseizoenband (de stickwijzer adviseert geen zaalsticks).
+2. **Hoofdmenu:** van acht naar zes links. Vergelijk en Blog staan nu in de footer; vergelijken begint op een stickpagina of in een advies, waar de eerste stick al gekozen is. URL's blijven gelijk.
+3. **Stickadvies:** per stick drie redenen zichtbaar, de rest onder "Nog N redenen", elk nog steeds met de bron ernaast (spec §9.1 en §9.5; minimaal 2–3 zichtbare redenen). Grotere productfoto. De prijs heet "vanaf €X in [maat]", omdat die alleen winkels telt met de geadviseerde maat op voorraad; eerder stond er "bij N partnerwinkels" terwijl het blok ook rijen zonder die maat toont.
+4. **Stickwijzer, eerste stap:** "Stap 1 · 5 tot 7 stappen, afhankelijk van de route"; na de routekeuze verandert er niets.
+5. **Stickpagina:** grotere foto op desktop. De rij "Voorraadstatus" uit de catalogus vervalt als "Waar te koop" een actuele winkelprijs toont: daar staat de voorraad per winkel en lengte, en de algemene status sprak die soms tegen.
+6. **Over ons en clubpagina:** noemden nog één of twee winkels; nu alle vier. Over ons heeft een alinea "Zo verdienen we geld" (vergoeding per aankoop, telt niet mee in het advies, winkels op volgorde van prijs incl. verzending).
+7. **Merkprofielen:** Mercian aangevuld vanaf de eigen site (herkomst, 1974, productie, FIH-regels, een citaat). Voor Cyclone en Naked vonden we geen officiële merksite (nakedhockey.com is een geparkeerd domein); hun profiel zegt dat nu met datum.
+
+**Bewust niet overgenomen uit de review:** alleen sticks met foto uitlichten (de lege vlakken in de review kwamen door lazy loading in de screenshot; alle uitgelichte sticks en gecontroleerde schoenen hebben een foto), de schoenlabels "Goede onderbouwing" en "Voorwaardelijk" hernoemen (begrippen uit het keuzemodel, laag C), contrast van grijze tekst (#5b6b7f op #eef3fa is 5,0:1 en haalt AA).
+
+**Betrokken bestanden:** `src/components/home/StickwijzerExplainer.tsx`, `src/components/layout/{Header,Footer}.tsx`, `src/components/stickwijzer/{RecommendationCard,QuizForm}.tsx`, `src/content/stickwijzer/progress.ts`, `src/components/catalog/{ProductDetail,ProductSpecTable}.tsx`, `src/app/over-ons/page.tsx`, `src/content/clubs.ts`, `src/content/brands.ts` en de tests.
+
+## 2026-11-03 — Redesign fase 2: structuur van wijzer, advies, catalogus en stickpagina
+
+**Opdracht eigenaar (2026-11-03):** na akkoord op fase 1 ook fase 2 en 3 bouwen, eerst lokaal bekijken.
+
+1. **Stickwijzer, één vraag tegelijk op mobiel (spec §1.3):** de schermen blijven zoals ze zijn, dus stappen, opgeslagen voortgang en analytics veranderen niet. Op een telefoon schuift een antwoord op een keuzevraag de volgende open vraag van het scherm in beeld, en na de laatste de knoppen (`src/content/stickwijzer/flow.ts`). Optionele vragen tellen niet mee, en bij `prefers-reduced-motion` springt het zonder animatie. **Afwijking van de review:** geen aparte schermen per vraag. Dat zou het aantal stappen verdrievoudigen, de opgeslagen voortgang en de trechter per scherm breken en botsen met "maximaal zes inhoudelijke schermen" (spec §4.1).
+2. **Advies, profielkaart:** boven de sticks staan drie vakken: jouw maat (met "Waarom deze maat?"), het niveau waarvoor we adviseren en de route. Alles komt uit het advies zelf; de uitleg staat eronder.
+3. **Catalogus, filters (`/sticks`):** niveau, lengte, budget, kromming en merk als gewoon GET-formulier. Het werkt zonder JavaScript, de canonical blijft `/sticks` en het bestaande `?brand=` blijft werken. Met een filter tonen we gecontroleerde én geïmporteerde sticks, 48 per pagina. Het budget telt de laagste actuele winkelprijs incl. verzending (in de gekozen lengte), anders de richtprijs. Bij nul resultaten volgt een eerlijke melding met een link naar de stickwijzer, en we versoepelen geen filter. Met een filter tonen we de merkchips niet, omdat het formulier het merk al heeft.
+4. **Stickpagina, twee kolommen vanaf `lg`:** links foto, naam en details, rechts prijs en "Waar te koop", die bij scrollen in beeld blijven. Op mobiel blijft de volgorde: kop, kopen, details.
+5. **Laden:** PostHog laadt met een dynamische import na het eerste beeld (305 kB onverpakt, het grootste script op elke pagina). Events van vóór dat moment wachten in een wachtrij van hoogstens 50 (`src/lib/analytics/posthogClient.ts`) en gaan in volgorde mee zodra PostHog klaar is. Lukt het laden niet, dan vervalt de wachtrij. Simple Analytics krijgt alles zoals voorheen. De PostHog-instellingen (cookieloos, proxy, gedeelde adviezen eruit) zijn ongewijzigd.
+6. **Vergelijken:** sticks per merk gegroepeerd in de keuzelijst. Met één stick gekozen tonen we drie vergelijkbare sticks als directe vergelijking; zonder keuze drie voorbeeldvergelijkingen. Grotere foto's, en rijen met een verschil zijn gemarkeerd (ook voor schermlezers).
+7. **Kennisbank:** vier thema's (Een stick kiezen, Zaalhockey, Hockeyschoenen, Kopen) met snelkoppelingen, kaarten met leestijd en wijzigingsdatum. Een nieuw artikel zonder thema komt onder "Meer uitleg", zodat het nooit wegvalt (`src/content/kennisThemes.ts`).
+8. **Merken:** een index met logo's bovenaan die naar elk profiel springt.
+
+**Betrokken bestanden:** `src/components/stickwijzer/{QuizForm,QuizResult}.tsx`, `src/content/stickwijzer/{flow,resultCopy}.ts`, `src/catalog/filters.ts`, `src/components/catalog/{CatalogFilters,ProductDetail}.tsx`, `src/app/sticks/page.tsx`, `src/instrumentation-client.ts`, `src/lib/analytics/{posthogClient,track}.ts`, `src/app/vergelijk/page.tsx`, `src/content/kennisThemes.ts`, `src/app/kennis/page.tsx`, `src/app/merken/page.tsx`, `src/components/ui/Card.tsx` en de tests.
+
+## 2026-11-03 — Redesign fase 3: designsysteem vastgelegd en toegepast
+
+**Wat:** `docs/designsysteem.md` legt vast hoe pagina's eruitzien: kleurrollen, typeschaal, drie breedtes, kaarten, foto's, ritme, beweging en wat we bewust niet doen. Bij strijd gaat de merkinstructie voor.
+
+1. **Witte basis:** de `body` is wit in plaats van krijt. Krijt blijft het accentvlak van de merkinstructie ("lichte vlakken, achtergrond van secties"): de hero, één band op de homepage ("Zo werkt het"), meldingen en gemarkeerde rijen.
+2. **Zeshoekpatroon** alleen nog in de homepage-hero en de footer, als merkaccent. Het staat niet meer achter productfoto's (catalogus, schoenen, zaalstickkiezer) en niet meer in de zaalsectie.
+3. **Productfoto's** staan op wit en zijn groter in de kaarten (160 px). De foto's van merken en winkels hebben zelf een witte achtergrond, dus er staat geen wit vlak meer op een gekleurd vlak.
+
+**Open, vraagt de eigenaar:** eigen fotografie op een club (met toestemming van ouders en club), en Over ons met foto, naam en hockeyachtergrond van de oprichter.
+
+**Betrokken bestanden:** `docs/designsysteem.md`, `docs/README.md`, `src/app/layout.tsx`, `src/components/catalog/ProductCard.tsx`, `src/components/shoes/ShoeCard.tsx`, `src/components/zaal/IndoorSelector.tsx`, `src/app/zaalsticks/page.tsx`, `src/components/home/StickwijzerExplainer.tsx`.
+
+## 2026-11-03 — Redesign fase 3: een gezicht in plaats van clubfotografie
+
+**Opdracht eigenaar (2026-11-03):** foto's op een club lukken nog niet; bedenk een alternatief of houd de oude foto. Voor Over ons: deze foto, naam Hans Buursink, en als achtergrond alleen "Hockeyvader".
+
+1. **Over ons:** portret met naam en "Hockeyvader", direct onder de inleiding. De foto is verkleind (720×960, 42 kB) en zonder metadata opgeslagen (`src/assets/over-ons/hans-buursink.jpg`), net als de herofoto's.
+2. **Homepage-hero:** onder de vertrouwensregel staat een kleine link "Gemaakt door Hans Buursink, hockeyvader" met het portret, naar `/over-ons`. Klikken meten we als `home_block_click` (block `hero`, target `/over-ons`). Een echt gezicht bovenaan is het alternatief voor clubfotografie; de foto's van de jeugdspeelster blijven.
+3. **Geen stockfoto's** van spelers of clubs (`docs/designsysteem.md` §9).
+
+**Betrokken bestanden:** `src/app/over-ons/page.tsx` (+ test), `src/components/home/Hero.tsx`, `src/assets/over-ons/hans-buursink.jpg`, `src/lib/analytics/events.ts` (commentaar), `docs/designsysteem.md`.
+
+## 2026-11-03 — Redesign fase 4: vertrouwen met bewijs
+
+**Opdracht eigenaar (2026-11-03):** meer vertrouwen, autoriteit en bewijs inbouwen in homepage, stickwijzer, advies, vergelijken, navigatie en footer; direct bouwen in plaats van adviseren.
+
+1. **Getelde feiten** (`src/catalog/trustFacts.ts`): veldsticks, merken, partnerwinkels, met de hand nagelopen sticks en de leesdatum van de prijzen, allemaal uit catalogus en feeds. Op de homepage als vier tegels.
+2. **Vier afspraken** (`src/content/trust.ts`, `PromiseList`): de vergoeding telt nooit mee; bron en datum bij elk gegeven; actuele prijzen zonder kortingstrucs; eerlijk over de afweging. Elke afspraak linkt naar de pagina die het laat zien. Op de homepage ("Waarom jouwhockeystick.nl") en bovenaan `/methodiek`.
+3. **Vergelijking met één webshop:** aanbod, prijs, keuze, gegevens en belang, neutraal over de winkel. **Bewust geen namen van andere winkels:** een vergelijking met een genoemde winkel moet per winkel objectief en controleerbaar zijn, en een winkel kan partner worden.
+4. **Homepage-hero:** de tekst noemt nu ook dat je per stick ziet bij welke van de vier partnerwinkels hij te koop is, met de prijs incl. verzending.
+5. **Stickwijzer:** drie zekerheden boven de eerste vraag (geen account, antwoorden in je browser, vergoedingen tellen niet mee); het aantal stappen staat in de stapteller eronder. Dezelfde beloftes als ervoor; "geen geboortedatum" staat nog bij de leeftijdsvraag zelf.
+6. **Advies:** drie vaste afspraken boven de eerste stick.
+7. **Footer:** vier kolommen (merk en partnervermelding, Kiezen, Leren, Over ons), met "Gemaakt door Hans Buursink, hockeyvader".
+
+**Bewust niet:**
+- **Reviews, sterren en gebruikersaantallen:** we hebben geen bron die we kunnen tonen, en het zou verboden schijnbewijs zijn (CLAUDE.md, GEO/SEO).
+- **Het aandeel merkgegevens als feit op de homepage:** 33% van de specificaties van de nagelopen sticks komt van de merksite. Dat staat per gegeven op de stickpagina, maar helpt op de homepage geen keuze.
+
+**Betrokken bestanden:** `src/catalog/trustFacts.ts`, `src/content/trust.ts` (+ test), `src/components/trust/{ProofFacts,PromiseList}.tsx`, `src/components/home/{WhyUs,HomePage,Hero}.tsx`, `src/app/stickwijzer/page.tsx`, `src/components/stickwijzer/QuizResult.tsx`, `src/content/stickwijzer/resultCopy.ts`, `src/app/methodiek/page.tsx`, `src/components/layout/Footer.tsx`, `docs/designsysteem.md`.
+
+## 2026-11-04 — Redesign fase 5: globale UI, weg van het documentgevoel
+
+**Opdracht eigenaar (2026-11-03):** een moderne, sportieve en strakke huisstijl met Tailwind, met duidelijke hiërarchie, subtiele kaarten met lichte schaduwen en een header die direct laat zien dat we een onafhankelijke vergelijker zijn.
+
+1. **Header:** een donkere balk erboven: "Onafhankelijke stickvergelijker", "Prijzen van 4 partnerwinkels" (geteld uit `src/lib/retailers.ts`), "Vergoeding telt niet mee in het advies" en een link naar /methodiek. Op een telefoon staat alleen het eerste punt. De header zelf scrolt mee (sticky, licht doorschijnend). Ankers en de sticky kolom op de stickpagina houden daar ruimte voor.
+2. **Diepte:** drie schaduwtokens en de utilities `card`, `card-link` en `eyebrow` in `globals.css`. Alle losse kaarten gebruiken `card`; kaarten die in hun geheel een link zijn (kennisbank, vergelijkingen, merkenindex) krijgen `card-link`. Een kaart binnen een kaart blijft vlak.
+3. **Paginakop** (`PageHeader`/`PageBody`): sticks, zaalsticks, hockeyschoenen, kennisbank, merken, vergelijken, Over ons en methodiek beginnen met een band (kruimelpad, label, H1, intro; bij sticks ook de filters). De H1 en de intro blijven gelijk, dus de hoofdvraag staat nog steeds in de eerste 80 woorden.
+4. **Typografie:** H1 zwaarder en strakker (800, −0,025 em, `text-wrap: balance`), en antialiasing.
+
+Binnen de merkinstructie: veldblauw als hoofdkleur, oranje alleen voor de stickwijzer, het zeshoekpatroon alleen in hero en footer.
+
+**Betrokken bestanden:** `src/app/globals.css`, `src/components/layout/Header.tsx`, `src/components/ui/{PageHeader,Card}.tsx`, de pagina's hierboven, de kaartcomponenten (`ProductCard`, `ShoeCard`, `SimilarSticks`, `WhereToBuy`, `ShoeWhereToBuy`, `CatalogFilters`, `IndoorSelector`, `ShoeQuiz`, `ShoeAdviceView`), `src/components/catalog/ProductDetail.tsx` (sticky afstand), `docs/designsysteem.md`.
+
+## 2026-11-04 — Redesign fase 6: eerst de pasvorm, dan de winkels
+
+**Opdracht eigenaar (2026-11-04):** het advies is het product; eerst de pasvorm, dan pas de prijs. Gezag zichtbaar vóór er iets gevraagd wordt, mobiel eerst, nette randgevallen.
+
+1. **Stickkaart in het advies** (`RecommendationCard`):
+   - de rol staat als badge bovenaan (Beste match met doel-icoon en blauw vlak, Veilige keuze met schild, Ambitieuze keuze met bliksem), en de beste match heeft een lichte blauwe rand;
+   - daaronder merk, naam en samenvatting, en vier vakken: jouw maat, kromming, carbon en modeljaar. **De prijs staat niet meer bovenaan**, maar pas in "Waar te koop";
+   - "Waarom deze stick past" en "Waar je op inlevert" (de afweging en voor wie hij minder past) staan vanaf `sm` naast elkaar;
+   - zonder actuele winkelprijs volgt de richtprijs, gemarkeerd, vlak boven "Waar te koop".
+2. **Profielkaart:** op een telefoon drie vakken naast elkaar in plaats van onder elkaar; de route heet kort Start, Ontwikkel of Prestatie, omdat het vak al "Route" heet. Gemeten op 390×844, op een gedeeld advies met melding: de naam van de beste match staat op 1,16 schermhoogte, de eerste koopknop op 2,3.
+3. **Stickwijzer:** antwoorden zijn 48 px hoge tikvlakken met een duidelijke gekozen staat (blauwe rand, krijt, ring, vet) en een korte overgang, die stopt bij `prefers-reduced-motion`.
+4. **Homepage:** de getelde feiten staan direct onder de hero (`ProofStrip`). Het vierde feit zegt nu "prijzen wekelijks bijgewerkt, laatst op …". "Waarom jouwhockeystick.nl" opent met de volgorde: "Eerst kiezen we de stick die bij de speler past. Pas daarna zie je waar hij te koop is …" (`ORDER_PROMISE`).
+5. **Randgevallen van "Waar te koop"** hebben nu tests: geen partnerwinkel, één winkel, en nooit een korting, doorgestreepte prijs of "goedkoopst". Verouderde prijzen (> 14 dagen) en een maat die niet op voorraad is, handelde het blok al af.
+
+**Bewust niet:**
+- **Concurrenten bij naam:** HockeyDirect, HockeyHouse en HockeyOranje noemen we niet. Een vergelijking met een genoemde winkel moet per winkel objectief en controleerbaar zijn, en een winkel kan partner worden.
+- **Reviews, sterren of gebruikersaantallen:** we hebben geen bron die we kunnen tonen.
+- **Levertijden:** de feeds hebben er geen, dus we tonen ook geen schatting.
+- **Winkellogo's:** pas na toestemming via het partnerprogramma van elke winkel.
+- **Emoji als markering van de rollen:** iconen in de huisstijl, met de rol in woorden ernaast.
+
+**Betrokken bestanden:** `src/components/stickwijzer/{RecommendationCard,QuizResult,QuestionField}.tsx`, `src/components/ui/icons.tsx` (ShieldIcon), `src/content/stickwijzer/questions.ts` (ROUTE_SHORT_LABELS), `src/components/home/{ProofStrip,WhyUs,HomePage}.tsx`, `src/components/trust/ProofFacts.tsx`, `src/content/trust.ts` (+ test), `src/components/offers/WhereToBuy.test.ts`, `docs/designsysteem.md`.
+
+## 2026-11-04 — Portret alleen op Over ons
+
+**Opdracht eigenaar (2026-11-04):** de foto en de tekst over hockeyvader van de homepage halen.
+
+De link "Gemaakt door Hans Buursink, hockeyvader" met portret is uit de homepage-hero verwijderd, en dezelfde tekst uit de footer (die staat ook op de homepage). De foto, naam en "Hockeyvader" blijven op Over ons. Het analytics-commentaar bij `home_block_click` noemt de link niet meer.
+
+**Betrokken bestanden:** `src/components/home/Hero.tsx`, `src/components/layout/Footer.tsx`, `src/lib/analytics/events.ts` (commentaar), `docs/designsysteem.md`.
+
+## 2026-11-04 — Redesign fase 7: visuele uitvoering
+
+**Opdracht eigenaar (2026-11-04):** alleen de visuele uitvoering verbeteren (hiërarchie, witruimte, typografie, kleur, ritme, consistentie, iconen, beeld en interactie), niet de inhoud, structuur of adviesregels.
+
+1. **Kleur:** stappen `veld-donker`, `bal-donker` en `mist` naast de merkkleuren. Hover maakt donkerder in plaats van lichter.
+2. **Typografie:** strakkere en zwaardere H1 en H2, de optische maat van Bricolage, `text-wrap: pretty` voor alinea's en een selectiekleur in veldblauw. De fonts en gewichten blijven die van de merkinstructie (§2.2).
+3. **Knoppen:** één hoogte en vorm, een iets groter label, een binnenrand, donkerder bij hover en een korte druk.
+4. **Hero:** zonder patroon, een grotere titel met een korte lead en een aparte regel over de winkels, een staande foto met één bijschrift (in plaats van drie zwevende pillen) en meer witruimte. **Afwijking van het designsysteem uit fase 3:** het zeshoekpatroon staat nu alleen nog in de footer.
+5. **Ritme:** homepage-secties en paginakoppen met meer lucht, één kopmaat voor de homepage-secties, ruimere footer.
+6. **Kaarten:** product- en schoenkaarten zijn als geheel klikbaar (de kooprij blijft een eigen link erboven), met een grotere foto die bij hover licht vergroot, een rustigere tekst en compacte sterke punten. De focusring blijft voor toetsenbordgebruik.
+7. **Navigatie:** stillere links, de huidige pagina in veldblauw op een mist-vlak.
+
+Geen wijziging aan inhoud, routes, adviesregels of analytics-events.
+
+**Betrokken bestanden:** `src/app/globals.css`, `src/components/ui/{Button,PageHeader}.tsx`, `src/components/home/{Hero,HeroPhotos,StickwijzerExplainer,WhyUs,FeaturedProducts}.tsx`, `src/components/catalog/{ProductCard,ProductProsAndCons}.tsx`, `src/components/shoes/ShoeCard.tsx`, `src/components/layout/{Header,MainNav,Footer}.tsx`, `docs/designsysteem.md`.
+
+## 2026-11-04 — Redesign fase 8: zeggen wat we weten, en wat niet
+
+**Opdracht eigenaar (2026-11-04):** vertrouwen, gezag, bewijs, geloofwaardigheid en de uitleg van het advies verbeteren, zonder het visuele ontwerp te veranderen. Alleen tekst in bestaande stijlen.
+
+1. **"Kort gezegd" per geadviseerde stick:** één concrete regel uit de eigen gegevens van de stick ("Kort gezegd: een low bow met 40% carbon, in 34 inch."). Zonder kromming en carbon vervalt de regel, want dan is er niets concreets te zeggen (`verdictLine`).
+2. **"Wat we niet weten" per geadviseerde stick:** wat ontbreekt (kromming, carbon, gewicht, modeljaar), wanneer kromming of carbon van een winkel komt in plaats van het merk, en altijd dat we de stick niet zelf in de hand hadden of gemeten (`evidenceGaps`). Dit volgt de bestaande bronregel "Eigen meting: niet gemeten. Praktijktest: nog niet getest."
+3. **Stickpagina:** onder de specificaties staat één zin over de herkomst ("Van de 6 gegevens over deze stick komen er 5 van JDH zelf en 1 is onze inschatting."), met wat er ontbreekt (`sourceMixText`). De volledige bronnenlijst blijft onder "Bronnen en methode".
+4. **"Waarom dit advies?"** begint met drie genummerde stappen met de aantallen van dít advies: wat afviel, hoe we wegen (zonder vergoeding, marge of winkel), en wat je ziet (`adviceSteps`).
+
+Alles komt uit de bronvelden van de stick en uit het advies zelf; er komt geen bewering bij die de gegevens niet dragen. Adviesregels, scores en analytics zijn ongewijzigd.
+
+**Betrokken bestanden:** `src/content/evidence.ts` (+ test), `src/content/stickwijzer/resultCopy.ts` (`adviceSteps`), `src/components/stickwijzer/{RecommendationCard,QuizResult}.tsx`, `src/components/catalog/ProductDetail.tsx`.
+
+## 2026-11-04 — Redesign fase 9: meer afgeronde adviezen en doorkliks
+
+**Opdracht eigenaar (2026-11-04):** de afronding van de stickwijzer, de doorkliks en de betrokkenheid bij het advies verhogen, zonder het designsysteem te veranderen. Alleen bestaande knoppen, kaarten en tekststijlen.
+
+1. **Stickwijzer:** op een telefoon blijven "Vorige" en "Volgende" sticky onderaan het scherm, zodat de volgende stap altijd één tik weg is. Vanaf `md` staan ze onder de vragen, zoals voorheen. Gemeten op 390×844: de balk staat op 775–844 px van een pagina van 4218 px.
+2. **Advies:** onder de sticks staat "Twijfel je tussen de twee? Zet de [beste match] en de [tweede keuze] naast elkaar", met een link naar /vergelijk met beide sticks. Nieuw event `advice_compare_click` met de rollen van het paar (bijv. `best_match+safe_choice`).
+3. **Homepage:** een slotblok na de laatste sectie ("Weet in 5 tot 7 stappen welke stick past", geen account, de stickwijzer-knop). Gemeten als `home_block_click`, block `slot`.
+4. **Stickpagina (veldsticks):** onder "Stel een vraag" de zin "Twijfel je of deze stick bij je past? Doe de stickwijzer", gemeten als `catalog_block_click`, page `stickpagina`, block `stickwijzer`. Zaalsticks krijgen hem niet, omdat de stickwijzer alleen veldsticks adviseert.
+
+**Meten:** na twee weken vergelijken met de twee weken ervoor: quiz_complete ten opzichte van quiz_start (afronding), retailer_click per quiz_complete (doorklik), en het aantal advice_compare_click en de klikken op het slotblok.
+
+**Bewust niet:** nep-urgentie, aftellers, "nog X op voorraad" zonder voorraaddata, of een vooraf aangevinkte route. Adviesregels en volgorde blijven gelijk.
+
+**Betrokken bestanden:** `src/components/stickwijzer/{QuizForm,QuizResult}.tsx`, `src/components/home/{ClosingCta,HomePage,HomeBlockLink}.tsx` (+ test), `src/components/catalog/{ProductDetail,TrackedBlock}.tsx`, `src/lib/analytics/events.ts`.
+
+## 2026-11-04 — Wekelijkse sync hersteld (workflowbestand ongeldig sinds 2026-11-03)
+
+**Wat:** bij de aanpassing van `.github/workflows/passa-sync.yml` voor HockeyCity fase 2 (2026-11-03) ging er in de stap "Pull request openen" iets mis:
+
+- één regel brak af: de `grep -v` miste `' -e '^src/catalog/shoes/importedHockeyCity.ts' || true)`;
+- er bleven twee kopieën van het slot van die stap staan, met te weinig inspringing.
+
+GitHub keurde het bestand daardoor af. Elke run sinds de merge van #141 faalde meteen, en de geplande run van woensdag 2026-11-04 04:41 UTC is niet gestart.
+
+**Herstel:** de regel staat er weer heel en de kopieën zijn weg (#152, en hetzelfde in deze PR). Na de merge start de eigenaar de sync één keer met de hand.
+
+**Les:** workflowbestanden pas ik niet meer aan met tekstvervanging in PowerShell; die maakte de regel kapot. Nieuw: `src/lib/workflows.test.ts` leest elk workflowbestand in als YAML. De kapotte versie van main keurt die test af ("bad indentation", regel 110).
+
+## 2026-11-04 — Daka als vijfde partnerwinkel (Daisycon)
+
+**Opdracht eigenaar (2026-11-04):** Daka koppelen via Daisycon. Het programma is goedgekeurd (eigenaar, 2026-11-04). Ook in de privacyverklaring.
+
+1. **Links:** het Daisycon-deeplinkformaat uit de feed, `partner.daka.nl/c/?si=7290&li=1765148&wi=441384&ws=<plek>&dl=<pad>`, zonder de `pid` per product van de feed. Alleen productpagina's (`/p/…`, zonder query). Geen geheim: de feed-URL en de ID's staan in elke link.
+2. **Feed ("Daka.nl: Fashion", standaard 7):**
+   - ongeveer 48.700 regels, één per maat of lengte, met prijs, voorraad en verzendkosten;
+   - de categorie is overal "Sporten";
+   - bijna nooit een EAN (2 van de 970 stickregels, 1 van de 1545 schoenregels);
+   - zelden een modeljaar.
+
+   We tonen nooit `price_old`.
+3. **Herkennen** (`src/catalog/dakaFeed.ts`, geijkt op de feed van 2026-11-04):
+   - **Een stick:** een hockeymerk, geen kleding of accessoire, het woord "stick" op de pagina of in de omschrijving, en minstens één lengte in inches.
+   - **Een hockeyschoen:** een schoenwoord en "hockey" op de pagina, geen stick in naam of pad, en EU-maten. Veld of zaal alleen uit de naam ("indoor", "zaal"), anders onbekend. Een algemene winkelcategorie is geen bron.
+4. **Koppelen:**
+   - **Sticks:** op naam via `matchStick`. Alleen 'zeker' of met de hand bevestigd (`dakaConfirmed.ts`) geeft een knop. In de eerste run: 0 zeker, 182 twijfel; de afvinklijst staat bij de eigenaar.
+   - **Schoenen:** alleen op EAN, in de eerste run 1 model.
+5. **Alleen bij Daka** (`noindex`):
+   - 80 sticks en 28 schoenen;
+   - dezelfde import als HockeyCity en Plutosport;
+   - een schoen met de naam van een model dat we al tonen, maar zonder gedeelde EAN, importeren we niet (17 namen).
+6. **Verzendkosten:** daka.nl weigerde automatisch lezen (HTTP 429). Bron is daarom de campagnepagina van Daisycon ("gratis verzending vanaf €50"), en de feed bevestigt die:
+   - alle regels vanaf €50 zijn gratis;
+   - onder €50 is het meestal €4,95, maar 7.187 regels zijn ook daaronder gratis.
+
+   We rekenen €4,95 onder €50, zodat een totaal nooit te laag is. **De eigenaar bevestigt dit op daka.nl.**
+7. **Wekelijkse sync:** de stap `daka:feed` draait na HockeyCity, en `src/catalog/shoes/importedDaka.ts` mag in de sync-PR.
+8. **Teksten:**
+   - partnervermelding, footer, Over ons, methodiek, clubs, catalogus, ProductNotice en de `nofollow`-lijst;
+   - het artikel "Waar koop je een hockeystick?" krijgt een vijfde kolom; retourvoorwaarden "nog niet nagekeken", omdat daka.nl niet te lezen was;
+   - **privacyverklaring 1.7**, met een alinea over Daisycon en `partner.daka.nl` (opdracht eigenaar).
+9. **Verkooprapport:** nog niet. Daisycon heeft een eigen login of API-sleutel nodig, en die zet de eigenaar als geheim in GitHub.
+
+**Bewust niet:** twijfelgevallen automatisch koppelen, schoenen op naam koppelen, de oude prijs uit de feed tonen, levertijden tonen.
+
+**Betrokken bestanden:**
+- `src/lib/retailers.ts`, `src/catalog/dakaFeed.ts` (+ test), `scripts/daka-feed.ts`, `package.json`;
+- `src/catalog/{index,types,feedDates,plutosportImport,shoeFeed}.ts`, `src/catalog/offers/{index,daka,dakaConfirmed}.ts`, `src/catalog/imported/daka.ts`;
+- `src/catalog/shoes/{feedImport,index,types,importedDaka}.ts`;
+- de teksten en tests hierboven, `.github/workflows/passa-sync.yml`, `CLAUDE.md` en de docs.
+
+## 2026-11-04 — Homepage: bijschrift onder de foto, datumtegel en naam alleen op Over ons
+
+**Opdracht eigenaar (2026-11-04):**
+- **Bijschrift:** "Juiste stick · Past bij het niveau · Binnen budget" stond op de foto en bedekte de stick en de bal. Het staat nu onder de foto.
+- **Datumtegel:** heeft dezelfde vorm als de andere: groot "Wekelijks", klein "prijzen bijgewerkt, laatst 3 nov".
+- **Naam:** Hans Buursink en "Hockeyvader" staan alleen op Over ons. Een test bewaakt dat ze niet in de homepage-blokken, de header of de footer staan.
+
+## 2026-11-04 — Twee schoenentests hingen aan de data van 31 oktober
+
+**Wat:** de eerste sync na het herstel (PR #154) liet twee tests falen. De nieuwe feed en de code waren in orde; de tests leunden op oude data.
+
+- **Adviestest op de echte catalogus:** rekende met de vaste datum 2026-11-01. De prijzen van 4 november lagen daardoor "in de toekomst", telden als onbekend, en het advies zakte van "goede onderbouwing" naar "voorwaardelijk". De test rekent nu met de dag van de laatste feedlezing.
+- **Test op verborgen feedmodellen:** verwachtte dat het importbestand nog feedmodellen met de EAN van een nagekeken model bevat. Sinds fase 1b slaat de import die over en geeft hun winkelregels aan het nagekeken model; alleen het oude bestand van 31 oktober had ze nog. De test controleert nu alleen dat zo'n model nooit los zichtbaar is, en dat elk nagekeken model winkelregels heeft.
+
+Adviesregels en `ruleSetVersion` zijn niet veranderd.
+
+## 2026-11-04 — Daka: dezelfde naam zonder modeljaar telt als koppeling
+
+**Besluit eigenaar (2026-11-04):** bij Daka telt een stick als gekoppeld als de naam na het gelijkmaken hetzelfde is, er maar één kandidaat is en alleen het modeljaar onbekend is. Dat wijkt af van de regel "zelfde model én modeljaar" (Commerce, Prijsvergelijking) en geldt alleen voor Daka.
+
+**Waarom:** Daka zet bijna nooit een modeljaar in de feed, en bij 139 van onze sticks staat ook geen modeljaar. Alle 182 twijfelgevallen hadden daardoor een modeljaarprobleem. Verschillen als PB/Probow, LB/Lowbow en Kids/Junior telden al als gelijk; die waren niet de reden.
+
+**Voorwaarden** (`matchStick`, `yearOnly`; `dakaStickMatches`, methode `naam-zonder-jaar`):
+- dezelfde naam: merk, modelwoorden en bow; geen extra woord bij Daka (zoals "Limited", "Forged" of "SG9") en de bow niet weggelaten;
+- precies één kandidaat bij Daka en geen andere jaargang van dat model;
+- een bekend modeljaar dat aan beide kanten verschilt, blijft altijd een uitsluiting;
+- op voorraad, zoals elke Daka-knop.
+
+**Resultaat eerste run:** 44 sticks krijgen een Daka-knop. Ze staan niet meer op de afvinklijst. Wat overblijft, beslist de eigenaar nog steeds met de hand. Een voorbeeld is de Grays Dynabow 10: Daka heeft twee pagina's met die naam en verschillende prijzen.
+
+**Risico:** Daka verkoopt soms een oudere jaargang onder dezelfde naam. Dan klopt de prijsvergelijking voor die stick niet. De eigenaar aanvaardt dat risico.
+
+**Betrokken bestanden:** `src/catalog/plutosportFeed.ts`, `src/catalog/dakaFeed.ts` (+ test), `src/catalog/offers/{index,daka}.ts`, `scripts/daka-feed.ts`, `CLAUDE.md`.
+
+**Aanvulling (2026-11-04, zelfde avond):** de eigenaar heeft de afvinklijst nagelopen. Uitkomst: 181 keer "klopt", 1 keer "klopt niet" (`osaka-midbow-10-stk00262-retroblue-s`).
+- **Klopt:** staat in `DAKA_CONFIRMED`. De Grays Dynabow 10 is gekoppeld aan de pagina van €244,99.
+- **Klopt niet:** staat in `DAKA_REJECTED`. Die stick krijgt nooit een Daka-knop, ook niet via de regel "dezelfde naam".
+- **Resultaat:** 171 sticks met een Daka-knop. Tien bevestigde sticks staan nu niet op voorraad bij Daka; zij krijgen de knop zodra de feed ze weer op voorraad heeft. Tien nieuwe twijfelgevallen gaan naar de volgende sync-PR.
+
+## 2026-11-04 — Homepage: zoeken op merk of model, rustigere header en geen scheidingslijnen
+
+**Opdracht eigenaar (2026-11-04):** een zoekblok op de homepage, en de bijbehorende verbeteringen die de eigenaar lokaal heeft bekeken en goedgekeurd.
+
+1. **Zoeken:**
+   - **Pagina `/zoeken`:** een GET-formulier, dat op de server wordt gelezen en zonder JavaScript werkt. De pagina krijgt `noindex`, want elke zoekopdracht zou een dunne pagina zijn.
+   - **Wat het zoekt:** alleen op merk en modelnaam, in veld- en zaalsticks en in schoenen, ook in de feedimport. De met de hand nagekeken modellen komen eerst; prijs, winkel of vergoeding tellen niet mee voor de volgorde.
+   - **Afkortingen:** PB, LB, MB, DB, JB en UB tellen als de bow; jr en kids tellen als junior. Een getal moet helemaal kloppen, dus "dynabow 5" vindt geen Grays 500.
+2. **Homepage:**
+   - **Zoekblok:** "Weet je al welk model?" staat direct onder de hero, met snelkoppelingen naar Veldsticks, Zaalsticks en Hockeyschoenen. Geen "Tassen", want die verkopen we niet. Geen slogans als "snel" of "slim", want niets onderbouwt ze.
+   - **Cijferstrook:** die staat weer los onder het zoekblok. De vier waarden staan nu op één lijn.
+   - **Vinkjesregel in de hero:** "606 veldsticks van 20 merken" is weg, omdat de cijferstrook hetzelfde getal toont.
+3. **Geen scheidingslijnen tussen de blokken:** de achtergronden wisselen af tussen wit en krijt, zodat er nooit twee krijtblokken na elkaar staan. De volgorde: hero (krijt naar wit), zoeken, cijfers en seizoen op wit; "Zo werkt het" krijt; het voorbeeldadvies wit; "Waarom" krijt; catalogus en Instagram wit; slotblok krijt.
+4. **Header:**
+   - **Pay-off:** "Eerlijk stickadvies op maat" staat niet meer als woordmerk met pay-off in de hero. Het is nu een korte blauwe regel boven de H1. Dat wijkt af van merkinstructie §4 ("Met pay-off: homepage hero"); het woordmerk staat al in de header.
+   - **Menu:** "Sticks" heet nu "Veldsticks", naast "Zaalsticks". Ook de kruimel op de stickpagina is aangepast. De URL blijft `/sticks`.
+   - **Donkere balk:** de balk boven de header staat alleen nog op mobiel. Op bredere schermen staan dezelfde punten al in de hero.
+5. **Meten:**
+   - `search_results` met de lengte van de zoekopdracht en het aantal gevonden sticks en schoenen. De getypte tekst gaat niet naar analytics, omdat in een vrij tekstveld van alles kan staan.
+   - Klikken op de snelkoppelingen komen in `home_block_click` met `block: 'zoeken'`.
+
+**Betrokken bestanden:**
+- `src/catalog/search.ts` (+ test);
+- `src/app/zoeken/page.tsx`, `src/components/search/`;
+- `src/components/home/{QuickFind,Hero,HomePage,ProofStrip,SeasonBand,BuyingIntro,StickwijzerExplainer,WhyUs,FeaturedProducts,InstagramFeed,ClosingCta,HomeBlockLink}.tsx`;
+- `src/components/trust/ProofFacts.tsx`, `src/components/layout/Header.tsx`, `src/components/catalog/ProductDetail.tsx`;
+- `src/lib/analytics/events.ts`.
+
+## 2026-11-05 — Productkaarten: de vergelijking is de held, niet de winkel
+
+**Opdracht eigenaar (2026-11-05):** de kaarten moesten minder als webwinkel ogen en meer als onafhankelijke vergelijker.
+
+1. **Productkaart** (veldsticks, zaalsticks, vergelijkpagina, zaalkeuze en schoenen; `OfferCardSummary`):
+   - **Bovenaan:** "Laagste prijs" met rechts het aantal winkels. Daaronder groot de laagste actuele totaalprijs van de winkels die op voorraad hebben, en daaronder de verzending en de winkel ("gratis verzending · bij Daka", "incl. €4,95 verzending · bij Daka").
+   - **Verzendkosten onbekend:** dan staat er "verzendkosten onbekend", nooit "incl. verzending".
+   - **Woordkeuze:** "Laagste prijs" is de laagste prijs bij onze partners, in dezelfde volgorde als "Waar te koop". Nooit "goedkoopst" of "beste prijs".
+   - **Acties:** "Vergelijk prijzen bij N winkels" is de knop. "Direct naar [winkel]" is een rustige link naar de winkel van die prijs. Bij één winkel is "Bekijk bij [winkel]" de knop, met "Alleen bij [winkel] gevonden".
+   - **Geen actuele prijs:** de richtprijs, gemarkeerd als richtprijs.
+   - **Partnerlink:** "Partnerlink bij doorklikken naar winkels" staat onderaan.
+2. **Stick- en schoenpagina:** alle winkels staan direct open, zonder "Toon nog N winkels"; het zijn er hooguit vijf. Bij betaalde verzending toont een rij "prijs + verzending", met het totaal rechts.
+3. **Bronvermeldingen:** de regel "Grays vermeldt het carbonpercentage zelf niet; het komt van PassaHockey" en vergelijkbare regels zijn uit de aandachtspunten van 16 sticks gehaald. Op de kaart stonden ze als waarschuwing vlak boven de koopknop. De bron staat al volledig bij de specificatie zelf.
+   - **Specificatietabel:** een gegeven van een winkel krijgt daar een rustig info-icoon en "Van de winkel.", geen waarschuwingsicoon.
+   - **Uitzondering:** bij 3 sticks (Grays AC500, AC600 en MB7) is die regel het enige aandachtspunt. Er moet er minstens één zijn, en we verzinnen er geen, dus daar staat hij nog. Open punt voor de redactie.
+4. **Meten:**
+   - `offer_compare_click` (placement, offerCount) bij "Vergelijk prijzen";
+   - `retailer_click` met de plek van de kaart (bijvoorbeeld `catalogus`) is direct doorklikken;
+   - `retailer_click` met `productpagina` of `schoenpagina` is doorklikken vanuit de vergelijking.
+
+   Zo zijn de drie routes in PostHog te onderscheiden. Er is geen nieuwe tracking op winkelklikken.
+
+**Niet veranderd:** de sortering, de prijsregels (14 dagen), de partnerlinks en hun parameters, `rel="sponsored"`, de structured data, de URL's en de stickwijzer. De kaarten blijven server-side gerenderd.
+
+**Betrokken bestanden:**
+- `src/components/offers/{OfferCardSummary,CompareLink,WhereToBuy,OfferRows}.tsx` (+ test);
+- `src/components/shoes/ShoeWhereToBuy.tsx`, `src/components/ui/SourceBadge.tsx`;
+- `src/content/offers.ts`, `src/lib/analytics/events.ts`;
+- 16 stickbestanden in `src/catalog/products/`;
+- `docs/designsysteem.md`.
+
+**Aanvulling (2026-11-05):** "Vergelijk prijzen" op een kaart en "Vergelijk alle winkels" in het stick- en schoenadvies gaan naar de bovenkant van de productpagina, niet meer naar `#waar-te-koop`. Op een laptop staat dat blok in de meescrollende rechterkolom; de sprong naar het anker scrolde de pagina tot halverwege de specificaties, zonder foto (eigenaar). Bovenaan staan op elk scherm de foto, de naam, de prijs en de winkels. Het anker blijft voor de link "vanaf €…" op de pagina zelf.
+
+## 2026-11-05 — Badge "Laagste prijs" in "Waar te koop"
+
+**Besluit eigenaar (2026-11-05):** het advies "geef de scherpste prijs of de snelste levering een opvallende badge" gedeeltelijk overnemen.
+
+- **Wel:** de bovenste rij krijgt een blauwe badge "Laagste prijs" op de rand (`hasLowestBadge`). Dat gebeurt alleen als aan alle voorwaarden is voldaan:
+  - de prijs is actueel;
+  - de stick is op voorraad, in de gekozen maat;
+  - de verzendkosten zijn bekend;
+  - de prijs is echt lager dan bij minstens één andere winkel met een actuele prijs op voorraad.
+
+  Bij één winkel of een gelijke prijs komt er geen badge. De badge volgt alleen de prijs, nooit de vergoeding. Hij staat op de stickpagina, de schoenpagina en in het stick- en schoenadvies.
+- **Niet:**
+  - "scherpste prijs", "goedkoopst", "beste prijs" of "winnaar": dat zijn claims over de hele markt, terwijl we vijf partners vergelijken;
+  - een badge voor de snelste levering: de feeds geven geen betrouwbare levertijden, en CLAUDE.md verbiedt een leverbelofte zonder bevestigde maat en voorraad.
+
+Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere rand na" in CLAUDE.md en in `docs/spec/prijsvergelijking.md`.
+
+**Betrokken bestanden:** `src/catalog/offers/sort.ts` (+ `badge.test.ts`), `src/components/offers/OfferRows.tsx`, `src/content/offers.ts`, `CLAUDE.md`, `docs/spec/prijsvergelijking.md`.
+
+## 2026-11-07: schrijfstijl zonder AI-patronen
+
+**Wat:** De sitetekst is getoetst met de skill vermijd-ai-schrijfstijl van de eigenaar. Op basis daarvan:
+1. Over ons herschreven: de lijst met vier waarden (vet, gedachtestreepje) is één alinea met concrete afspraken geworden (we testen niet zelf, bij elke reden staat de bron, geen prestatiebeloften).
+2. Blog "Met welke stick speelt Oranje": "Zijn exacte wedstrijdmodel? Dat houdt hij voor zich." vervangen door "is niet bekend" (dat was een bewering zonder bron), plus "Superleuk!" en "leuk!" eruit.
+3. Blog "Hockeystick kopen" herschreven: van zo'n acht "niet X, maar Y"-zinnen naar één, geen tussenkreten ("Goed nieuws:", "Je zult zien:", "Tip:"), minder "fijn" en "lekker". Koppen, links, tabel, lijsten en bronnen zijn gelijk gebleven.
+4. Gedachtestreepjes in bronlabels ("Grays — Over Grays") vervangen door een dubbele punt, en in lopende tekst door komma, punt of haakjes.
+5. Nieuw: `docs/schrijfstijl.md` met de harde regels. `CLAUDE.md`, `docs/content-agent.md` en `docs/review-agent.md` verwijzen ernaar. De toonregel in `content-agent.md` vroeg om uitroepen ("Op naar de zaal!") en een "sprankelende" toon; die is nu "vriendelijk, persoonlijk en concreet", zonder uitroeptekens.
+
+**Reden:** De teksten moeten betrouwbaar lezen. Herkenbare AI-tics kosten vertrouwen bij lezers. De oude toonregel was de bron van een deel van die tics.
+
+**Na review-agent (zelfde PR):** ook de uitroeptekens en "Goed om te weten:" uit de intro's van drie kennisartikelen gehaald, en het streepje in de lijstregels van `stickListItem` (`src/content/catalogLinks.ts`) vervangen door een dubbele punt.
+
+**Bewust niet:** `src/content/privacy.ts` (privacytekst alleen op expliciete opdracht van de eigenaar) en de streepjes in UI-onderdelen (bronvermelding in het stickadvies, citaattoeschrijving), waar het een interfaceconventie is. Artikelen die alleen licht gekleurd zijn, zijn niet herschreven.
+
+**Betrokken bestanden:** `src/app/over-ons/page.tsx`, `src/content/blogPosts/hockeystick-kopen.ts`, `src/content/blogPosts/met-welke-stick-speelt-oranje.ts`, `src/content/brands.ts`, `src/app/merken/page.tsx`, diverse bestanden in `src/content/articles/` en `src/content/stickwijzer/`, `docs/schrijfstijl.md`, `docs/content-agent.md`, `docs/review-agent.md`, `docs/README.md`, `CLAUDE.md`.
+## 2026-11-08 — Stickwijzer v13: vier regels eerlijker, en een vergelijkbank
+
+**Opdracht eigenaar (2026-11-08):** stap 1 uit de vergelijking met de bouwopdracht van Perplexity. Vier regels gingen in tegen eerlijk advies. `ruleSetVersion` gaat van `v12-2026-10-19` naar `v13-2026-11-08`.
+
+1. **Budget is een maximum, geen bestedingsdoel.** Elke stick binnen het budget krijgt dezelfde budgetpunten. Eerder scoorde een stick ver onder de ondergrens van de gekozen budgetklasse lager. Daardoor kreeg een volwassen beginner bij een hoger budget een duurdere stick als beste match.
+2. **Een merkvoorkeur gaat niet boven een harde voorwaarde.** Budget en niveau werden voor het voorkeursmerk versoepeld; dat gebeurt niet meer. Past er geen stick van het merk, dan volgt het gewone advies, met de reden waarom het merk ontbreekt (`brandPreference.missReason`). Voorbeeld: "alleen Ritual, budget onder €75" gaf een Ritual van €298.
+3. **De gekozen route en het teamniveau verhogen het niveau niet.** Alleen 4+ seizoenen met een zekere aanname geeft een niveau hoger, zoals voorheen behalve als de basis nog geleerd wordt. De prestatieroute stelt nog wel meer vragen.
+4. **Het niveau van een feedstick komt nooit uit de prijs** (`adviceLevel`).
+   - **Met carbonpercentage:** het niveau wordt alleen daaruit geschat (`levelFromCarbon`; besluit eigenaar: alleen schatten uit carbon, zichtbaar als schatting).
+   - **Zonder carbonpercentage:** het niveau is onbekend en de stick telt niet mee in het advies (`unknown_level`).
+   - **Catalogus:** daar staat bij zo'n stick nog een niveau uit de prijs, met de bron "omdat het carbonpercentage onbekend is; de stickwijzer gebruikt deze schatting niet".
+   - **Bestanden:** de import schrijft deze schatting vanaf de volgende wekelijkse sync. Tot dan rekent de advieskern de oude bestanden opnieuw door.
+
+**Vergelijkbank:** `npm run stickwijzer:bench` rekent 13 vaste, fictieve profielen door, waaronder paren die op één antwoord verschillen. Hij legt de uitkomst vast als JSON en zet twee regelversies naast elkaar. De vergelijking van v12 en v13 staat in `docs/stickwijzer/vergelijking-v12-v13.md`. Invarianttests (`invariants.test.ts`) bewaken de vier regels en de herhaalbaarheid.
+
+**Gevolgen in de vergelijking:**
+- De competitiespeler krijgt als beste match de Brabo Traditional Carbon 70 (€133) in plaats van de Elite X One (€249); de Elite X One wordt de ambitieuze keuze.
+- De "veilige keuze" voor een volwassen beginner kan nu een goedkope houten stick zijn: die is eenvoudiger en past binnen het budget. **Open punt voor de eigenaar:** is dat gewenst, of moet de veilige keuze een ondergrens krijgen in opbouw (niet in prijs)?
+
+**Niet veranderd:** de vragenlijst, de maatregels, de veiligheidsfilters, het gevoel uit carbon (open beslissing) en het budget op de richtprijs in plaats van de winkelprijs.
+
+**Betrokken bestanden:**
+- `src/advice-engine/{scoring,engine,hardFilters,playerContext,productRules,ruleSetVersion,benchProfiles}.ts`, `invariants.test.ts` en bijgewerkte tests;
+- `src/catalog/{feedImport,plutosportImport}.ts`, `src/content/stickwijzer/{questions,resultCopy}.ts`, `src/components/stickwijzer/RecommendationCard.tsx`;
+- `src/content/methodiek.ts` (uitleg aangepast aan de nieuwe regels, bijgewerkt 2026-11-08);
+- `scripts/stickwijzer-bench.ts`, `package.json`, `docs/stickwijzer/`.
+
+## 2026-11-08 — Stickwijzer stap 2: eerste vraag veld, zaal of keeper, en "Weet ik nog niet"
+
+**Opdracht eigenaar (2026-11-08):** stap 2 uit het plan voor de stickwijzer.
+
+1. **Eerste vraag "Waarvoor zoek je een stick?"** met de keuzes Veldhockey, Zaalhockey en Keeper. Veldhockey staat vooraan geselecteerd.
+   - **Zaalhockey:** gaat naar de zaalkeuze op `/zaalsticks`. De stickwijzer adviseert alleen veldsticks.
+   - **Keeper:** krijgt persoonlijk advies via `/interesse?source=stickwijzer-keeper`, met de uitleg dat er nog geen gecontroleerde adviesregels voor keepersticks zijn. Zo loopt een keeper nooit ongemerkt door de regels voor veldspelers.
+   - **Opslag:** de keuze is geen antwoord in het advies en wordt niet bewaard.
+   - **Meten:** `stickwijzer_exit` met `target` `zaal` of `keeper`.
+   - **Nieuwe bron:** `stickwijzer-keeper` in `interestSourceSchema`.
+2. **"Weet ik nog niet" als vierde keuze bij de route** (`route_self_select: 'unsure'`). De route volgt dan uit leeftijd en ervaring, via dezelfde `suggestRoute` als de bestaande routesuggestie; tot die bekend zijn is het de startroute, waarvan de eerste schermen gelijk zijn. Er komt dan geen wisselbanner.
+   - **Meten:** `route_selected` wordt niet gemeten voor "Weet ik nog niet", omdat er dan nog geen route is.
+   - **Weergave:** de vier kaarten staan op laptop in een raster van 2×2. De uitleg "Drie routes in de stickwijzer" toont alleen de drie routes.
+3. **Minder dan drie resultaten:** dat kon de stickwijzer al. Een ambitieuze keuze komt er alleen als die verantwoord is (`noAmbitiousReason`), en bij nul passende sticks volgt een eerlijke melding. Er is niets veranderd.
+
+**Advies ongewijzigd:** de vergelijkbank geeft voor alle 13 profielen dezelfde uitkomst als `v13-2026-11-08`, dus `ruleSetVersion` blijft gelijk.
+
+**Bewust niet:** lengte meten tot de heup. Daarvoor is een lengtetabel op heuphoogte met een eigen bron nodig; de huidige tabel gaat uit van de lichaamslengte zonder schoenen (decision log 2026-10-29). Dit is een open punt.
+
+**Betrokken bestanden:**
+- `src/components/stickwijzer/{StickUseChoice,QuizForm,QuestionField}.tsx`, `src/components/stickwijzer/stickwijzerIcons.ts`;
+- `src/content/stickwijzer/{stickUse,questions}.ts`, `src/app/stickwijzer/page.tsx`;
+- `src/advice-engine/{answers,playerContext}.ts` (+ test);
+- `src/lib/analytics/events.ts`, `src/interest/types.ts`.

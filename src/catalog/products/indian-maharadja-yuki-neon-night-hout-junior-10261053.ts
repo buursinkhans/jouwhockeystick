@@ -100,7 +100,6 @@ export const indianMaharadjaYukiNeonNightHoutJunior: Product = {
   },
   pointsOfAttention: {
     value: [
-      'Het carbonpercentage (0%) komt van PassaHockey, niet van het merk',
       'Een houten stick kan zwaarder aanvoelen dan een composietstick; dit is een eigen inschatting',
     ],
     source: 'editorial-estimate',

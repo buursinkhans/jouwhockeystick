@@ -5,6 +5,8 @@ import {
   routeFromSelfSelect,
 } from './answers';
 import { suggestRoute } from './route';
+import { getAllProducts } from '@/catalog';
+import { getAdvice } from './engine';
 import {
   buildDevelopAnswers,
   buildPerformanceAnswers,
@@ -105,5 +107,27 @@ describe('route', () => {
     expect(
       suggestRoute({ age_band: '16_18', experience_seasons: '4_plus' }),
     ).toBe('PRESTATIE');
+  });
+});
+
+describe('"Weet ik nog niet" as route choice (2026-11-08)', () => {
+  it('takes the suggested route from age and experience, and the start route before they are known', () => {
+    expect(routeFromSelfSelect('unsure')).toBe('START');
+    expect(routeFromSelfSelect('unsure', { age_band: '8_10', experience_seasons: 'lt_1' })).toBe('START');
+    expect(routeFromSelfSelect('unsure', { age_band: '13_15', experience_seasons: '1' })).toBe('ONTWIKKEL');
+    expect(routeFromSelfSelect('unsure', { age_band: '16_18', experience_seasons: '4_plus' })).toBe('PRESTATIE');
+  });
+
+  it('gives the same advice as choosing the suggested route yourself', () => {
+    const products = getAllProducts(new Date('2026-11-08T12:00:00Z'), { includeImported: true });
+    const now = new Date('2026-11-08T12:00:00Z');
+    // One season: the suggestion is the development route, the route these answers were made for.
+    const chosen = buildDevelopAnswers({ experience_seasons: '1' });
+    const unsure = { ...chosen, route_self_select: 'unsure' as const };
+    expect(adviceAnswersSchema.safeParse(unsure).success).toBe(true);
+    const a = getAdvice(chosen, products, { now });
+    const b = getAdvice(unsure, products, { now });
+    expect(b.route).toBe(a.route);
+    expect(b.results.map((r) => r.product.slug)).toEqual(a.results.map((r) => r.product.slug));
   });
 });

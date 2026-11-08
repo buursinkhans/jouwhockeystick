@@ -1,33 +1,28 @@
-import posthog from 'posthog-js';
 import {
-  POSTHOG_API_HOST,
+  POSTHOG_INIT_OPTIONS,
   POSTHOG_KEY,
-  POSTHOG_UI_HOST,
   isTrackedHost,
 } from '@/lib/analytics/posthog';
+import { expectPosthog, posthogUnavailable, setPosthog } from '@/lib/analytics/posthogClient';
 
 /**
- * PostHog runs cookieless: no cookies, no local or session storage, no
- * session recordings and no person profiles. That keeps the site free of a
- * consent banner, as described in the privacy statement. Clicks, page views
- * and heatmap data are captured; our own funnel events are sent through
- * src/lib/analytics/track.ts.
+ * PostHog runs cookieless (options and reasons in POSTHOG_INIT_OPTIONS).
+ * Clicks, page views and heatmap data are captured; our own funnel events
+ * are sent through src/lib/analytics/track.ts.
+ *
+ * Loaded with a dynamic import, so it is a separate script that does not
+ * hold up the page (redesign fase 2, 2026-11-03); events from before it is
+ * ready are queued in posthogClient.ts.
  */
 try {
   if (POSTHOG_KEY && isTrackedHost(window.location.hostname)) {
-    posthog.init(POSTHOG_KEY, {
-      api_host: POSTHOG_API_HOST,
-      ui_host: POSTHOG_UI_HOST,
-      cookieless_mode: 'always',
-      person_profiles: 'identified_only',
-      capture_pageview: 'history_change',
-      capture_pageleave: true,
-      autocapture: true,
-      enable_heatmaps: true,
-      capture_dead_clicks: true,
-      disable_session_recording: true,
-      disable_surveys: true,
-    });
+    expectPosthog();
+    import('posthog-js')
+      .then(({ default: posthog }) => {
+        posthog.init(POSTHOG_KEY, POSTHOG_INIT_OPTIONS);
+        setPosthog(posthog);
+      })
+      .catch(posthogUnavailable);
   }
 } catch {
   // Analytics must never break the site.

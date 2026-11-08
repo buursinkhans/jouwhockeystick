@@ -13,6 +13,14 @@
   --color-lijngrijs: #5b6b7f;
   --color-nl-negatief: #c9d6f0;
   --color-rand: #d5deea;
+  /*
+   * Steps of the brand colours (redesign fase 7): a darker field blue and
+   * orange for hover and pressed states (darker, never lighter, reads as
+   * solid), and a mist surface between white and krijt.
+   */
+  --color-veld-donker: #12378a;
+  --color-bal-donker: #f07a0c;
+  --color-mist: #f6f8fc;
   /* PassaHockey's red, only for its shop button (white text: 4.5:1). */
   --color-passa: #ed003b;
   --color-passa-donker: #c40031;
@@ -23,6 +31,65 @@
   --font-heading: var(--font-bricolage), system-ui, sans-serif;
 }
 
+/*
+ * Elevation (redesign fase 5, docs/designsysteem.md §5): light, ink-tinted
+ * shadows instead of flat borders only. Three steps: a card at rest, a card
+ * that is pointed at, and the sticky header.
+ */
+@theme {
+  --shadow-card: 0 1px 2px rgb(13 27 46 / 0.04), 0 4px 16px -6px rgb(13 27 46 / 0.08);
+  --shadow-card-hover: 0 2px 4px rgb(13 27 46 / 0.05), 0 14px 32px -12px rgb(13 27 46 / 0.18);
+  --shadow-header: 0 1px 0 rgb(13 27 46 / 0.06), 0 6px 20px -14px rgb(13 27 46 / 0.25);
+}
+
+/* A card: white, rounded, a hairline border and the resting shadow. */
+@utility card {
+  background-color: #ffffff;
+  border: 1px solid color-mix(in srgb, var(--color-rand) 80%, transparent);
+  border-radius: 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+/* A card that is one big link: lifts a little when pointed at or focused. */
+@utility card-link {
+  transition:
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    border-color 160ms ease;
+  &:hover,
+  &:focus-visible {
+    box-shadow: var(--shadow-card-hover);
+    border-color: color-mix(in srgb, var(--color-veld) 35%, var(--color-rand));
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
+  }
+}
+
+/* The small uppercase label above a heading, with a short field-blue bar. */
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-veld);
+  &::before {
+    content: '';
+    width: 1.25rem;
+    height: 3px;
+    border-radius: 9999px;
+    background-color: var(--color-veld);
+  }
+}
+
 @layer base {
   h1,
   h2,
@@ -30,6 +97,55 @@
   h4 {
     font-family: var(--font-heading);
     letter-spacing: -0.015em;
+  }
+
+  /* Page titles a step tighter and heavier: the first thing a visitor reads. */
+  h1 {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  /* Section titles: heavy, tight and balanced (fase 7); h3/h4 stay calmer. */
+  h2 {
+    font-weight: 750;
+    letter-spacing: -0.022em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  h3,
+  h4 {
+    line-height: 1.25;
+  }
+
+  /* Bricolage is drawn for its size: let display sizes use the display cut. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-optical-sizing: auto;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-veld) 18%, transparent);
+  }
+
+  /* The header is sticky (fase 5): anchors land below it, not under it. */
+  html {
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
   }
 
   /* A clear keyboard focus ring in the brand blue (WCAG 2.4.7 / 2.4.11). */

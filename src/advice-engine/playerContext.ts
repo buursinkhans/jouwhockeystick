@@ -35,29 +35,22 @@ const FIRST_SEASON: ReadonlyArray<AdviceAnswers['experience_seasons']> = [
   'trial',
   'lt_1',
 ];
-const PERFORMANCE_LEVELS: ReadonlyArray<
-  NonNullable<AdviceAnswers['playing_level']>
-> = ['selection', 'senior_competitive', 'top'];
 const CONFIDENT_FIRST_TOUCH: ReadonlyArray<
   NonNullable<AdviceAnswers['first_touch_confidence']>
 > = ['good_under_pressure', 'very_confident'];
 
 /**
- * A clear sign the player performs above the age-based starting level: the
- * performance route, a selection/competitive/top team, or 4+ seasons with a
- * confident first touch.
+ * A clear sign the player performs above the age-based starting level: 4+
+ * seasons with a confident first touch. The chosen route and the team level
+ * are context, never proof of technique (owner, 2026-11-08): the route only
+ * decides which questions are asked, and a selection team says nothing about
+ * how a player handles the ball.
  */
-export function hasPerformanceSignal(
-  answers: AdviceAnswers,
-  route: AdviceRoute,
-): boolean {
+export function hasPerformanceSignal(answers: AdviceAnswers): boolean {
   return (
-    route === 'PRESTATIE' ||
-    (answers.playing_level !== undefined &&
-      PERFORMANCE_LEVELS.includes(answers.playing_level)) ||
-    (answers.experience_seasons === '4_plus' &&
-      answers.first_touch_confidence !== undefined &&
-      CONFIDENT_FIRST_TOUCH.includes(answers.first_touch_confidence))
+    answers.experience_seasons === '4_plus' &&
+    answers.first_touch_confidence !== undefined &&
+    CONFIDENT_FIRST_TOUCH.includes(answers.first_touch_confidence)
   );
 }
 
@@ -73,7 +66,6 @@ export function hasPerformanceSignal(
  */
 export function derivePlayerBand(
   answers: AdviceAnswers,
-  route: AdviceRoute,
 ): { band: ExperienceBand; basis: LevelBasis } {
   if (FIRST_SEASON.includes(answers.experience_seasons)) {
     return {
@@ -88,7 +80,7 @@ export function derivePlayerBand(
   const stillLearning =
     answers.first_touch_confidence === 'learning' ||
     answers.core_skills_stage === 'practicing_basics';
-  const steppedUp = hasPerformanceSignal(answers, route) && !stillLearning;
+  const steppedUp = hasPerformanceSignal(answers) && !stillLearning;
   const band = steppedUp
     ? (BAND_ORDER[BAND_ORDER.indexOf(base) + 1] ?? base)
     : base;
@@ -194,7 +186,7 @@ function resolveFeelPreference(
   // Young players without a preference: soft, unless they clearly perform above their age.
   if (
     YOUNG_AGE_BANDS.includes(answers.age_band) &&
-    !hasPerformanceSignal(answers, route)
+    !hasPerformanceSignal(answers)
   ) {
     return 'soft';
   }
@@ -205,7 +197,7 @@ export function buildPlayerContext(
   answers: AdviceAnswers,
   now: Date = new Date(),
 ): PlayerContext {
-  const route = routeFromSelfSelect(answers.route_self_select);
+  const route = routeFromSelfSelect(answers.route_self_select, answers);
   const currentLength =
     answers.current_length_inch && answers.current_length_inch !== 'unknown'
       ? Number(answers.current_length_inch)
@@ -218,7 +210,7 @@ export function buildPlayerContext(
         answers.skill_dragflick !== 'none'
       : (answers.primary_goals ?? []).includes('dragflick');
 
-  const level = derivePlayerBand(answers, route);
+  const level = derivePlayerBand(answers);
 
   return {
     answers,

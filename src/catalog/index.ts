@@ -1,8 +1,15 @@
 import { getDiscipline } from './discipline';
 import type { Brand, Discipline, Product } from './types';
 import { PASSAHOCKEY_PRODUCTS } from './imported/passahockey';
+import { PLUTOSPORT_PRODUCTS } from './imported/plutosport';
+import { HOCKEYCITY_PRODUCTS } from './imported/hockeycity';
 import { PASSAHOCKEY_LIVE_PRICES } from './imported/passaPrices';
 import { withLivePrice } from './livePrice';
+import { withDaka, withHockeyCity, withPlutosport } from './offers';
+import { HOCKEYCITY_OFFERS } from './offers/hockeyCity';
+import { DAKA_OFFERS } from './offers/daka';
+import { DAKA_PRODUCTS } from './imported/daka';
+import { PLUTOSPORT_MATCHES } from './offers/matches';
 
 export { getDiscipline };
 import { graysJb6Composite } from './products/grays-jb6-composite';
@@ -32,10 +39,13 @@ import { grays6iDynabowIndoor } from './products/grays-6i-dynabow-indoor';
 import { grays4iDynabowIndoor } from './products/grays-4i-dynabow-indoor';
 import { scoopIndoorMidBow20Carbon } from './products/scoop-indoor-mid-bow-20-carbon';
 import { scoopWdnJuniorIndoor } from './products/scoop-wdn-junior-indoor';
+import { indianMaharadjaBlackSparkWoodIndoor } from './products/indian-maharadja-black-spark-wood-indoor';
+import { indianMaharadjaGravity00Midbow } from './products/indian-maharadja-gravity-00-midbow';
 import { indianMaharadjaArcticWoodIndoor } from './products/indian-maharadja-arctic-wood-indoor';
 import { tk3ControlBowJuniorIndoor } from './products/tk-3-control-bow-junior-indoor';
 import { adidasYoungstar102627 } from './products/adidas-youngstar-10-2627';
 import { graysImpulseGtJunior } from './products/grays-impulse-gt-junior';
+import { braboOgeezPinkAquaJuniorIndoor } from './products/brabo-ogeez-pink-aqua-junior-indoor';
 import { braboOgeezSnowleopardJunior } from './products/brabo-ogeez-snowleopard-junior';
 import { osakaProTourGf20Junior } from './products/osaka-pro-tour-gf-20-junior';
 import { tkMaxiJunior } from './products/tk-maxi-junior';
@@ -95,6 +105,13 @@ import { graysAc600ProbowS } from './products/grays-ac600-probow-s';
 import { graysAc500DynabowS } from './products/grays-ac500-dynabow-s';
 import { indianMaharadjaYukiNeonNightHoutJunior } from './products/indian-maharadja-yuki-neon-night-hout-junior-10261053';
 import { indianMaharadjaYukiTangyTwistHoutJunior } from './products/indian-maharadja-yuki-tangy-twist-hout-junior-10261052';
+import { braboGForcePure40Junior3156528000 } from './products/brabo-g-force-pure-40-junior-3156528000';
+import { braboTraditionalCarbon70Lowbow31561262000 } from './products/brabo-traditional-carbon-70-lowbow-31561262000';
+import { braboTraditionalCarbon70Probow31561261000 } from './products/brabo-traditional-carbon-70-probow-31561261000';
+import { braboPure20Probow31563461010 } from './products/brabo-pure-20-probow-31563461010';
+import { braboTribute30Probow31562321020 } from './products/brabo-tribute-30-probow-31562321020';
+import { graysJb6Junior27055 } from './products/grays-jb-6-junior-27055';
+import { graysDynabow6Junior23274 } from './products/grays-dynabow-6-junior-23274';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -187,6 +204,16 @@ const ALL_PRODUCTS: Product[] = [
   scoop48Indoor,
   indianMaharadjaYukiNeonNightHoutJunior,
   indianMaharadjaYukiTangyTwistHoutJunior,
+  braboGForcePure40Junior3156528000,
+  braboTraditionalCarbon70Lowbow31561262000,
+  braboTraditionalCarbon70Probow31561261000,
+  braboPure20Probow31563461010,
+  braboTribute30Probow31562321020,
+  graysJb6Junior27055,
+  graysDynabow6Junior23274,
+  braboOgeezPinkAquaJuniorIndoor,
+  indianMaharadjaBlackSparkWoodIndoor,
+  indianMaharadjaGravity00Midbow,
 ];
 
 /**
@@ -228,6 +255,21 @@ export function getImportedProducts(): readonly Product[] {
   return PASSAHOCKEY_PRODUCTS;
 }
 
+/** Sticks imported in bulk from the Plutosport feed that PassaHockey does not sell (generated). */
+export function getPlutosportImportedProducts(): readonly Product[] {
+  return PLUTOSPORT_PRODUCTS;
+}
+
+/** Sticks imported from the HockeyCity feed and pages that no other shop sells (generated). */
+export function getHockeyCityImportedProducts(): readonly Product[] {
+  return HOCKEYCITY_PRODUCTS;
+}
+
+/** Sticks imported from the Daka feed that no other shop sells (generated). */
+export function getDakaImportedProducts(): readonly Product[] {
+  return DAKA_PRODUCTS;
+}
+
 /** True for a stick from the bulk feed import: noindex page, not in the sitemap or articles. */
 export function isFeedImport(product: Product): boolean {
   return product.feedImport !== undefined;
@@ -242,17 +284,47 @@ export type ProductQuery = {
   includeImported?: boolean;
 };
 
-/** Curated sticks, with the current PassaHockey price where the shop sells them. */
+/**
+ * Curated sticks, with the current PassaHockey price where the shop sells
+ * them, the Plutosport page where the feed match is 'zeker' and the
+ * HockeyCity page where the match is 'zeker' or confirmed by hand.
+ */
 const CURATED_WITH_LIVE_PRICES: Product[] = ALL_PRODUCTS.map((product) =>
-  withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
+  withDaka(
+    withHockeyCity(
+      withPlutosport(
+        withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
+        PLUTOSPORT_MATCHES,
+      ),
+      HOCKEYCITY_OFFERS,
+    ),
+    DAKA_OFFERS,
+  ),
 );
+
+/**
+ * Imported sticks: PassaHockey's (with the Plutosport page where the feed
+ * match is 'zeker'), then the Plutosport sticks that PassaHockey does not
+ * sell; both with the HockeyCity page where there is one; then the
+ * HockeyCity sticks that no other shop sells; all with the Daka page where
+ * there is one; then the Daka sticks that no other shop sells.
+ */
+const IMPORTED_WITH_OFFERS: Product[] = [
+  ...[
+    ...PASSAHOCKEY_PRODUCTS.map((product) => withPlutosport(product, PLUTOSPORT_MATCHES)),
+    ...PLUTOSPORT_PRODUCTS,
+  ].map((product) => withHockeyCity(product, HOCKEYCITY_OFFERS)),
+  ...HOCKEYCITY_PRODUCTS,
+]
+  .map((product) => withDaka(product, DAKA_OFFERS))
+  .concat(DAKA_PRODUCTS);
 
 export function getAllProducts(
   now: Date = new Date(),
   { includeImported = false }: ProductQuery = {},
 ): Product[] {
   const products = includeImported
-    ? [...CURATED_WITH_LIVE_PRICES, ...PASSAHOCKEY_PRODUCTS]
+    ? [...CURATED_WITH_LIVE_PRICES, ...IMPORTED_WITH_OFFERS]
     : CURATED_WITH_LIVE_PRICES;
   return products.filter((product) => isProductActive(product, now));
 }

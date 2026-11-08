@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getAllArticles } from '@/content';
-import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { groupArticles, readingMinutes } from '@/content/kennisThemes';
+import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 import { pageMetadata } from '@/lib/site';
 
 export const metadata = pageMetadata({
@@ -10,54 +11,91 @@ export const metadata = pageMetadata({
   path: '/kennis',
 });
 
+const DUTCH_DATE = new Intl.DateTimeFormat('nl-NL', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
 export default function KennisIndexPage() {
-  const articles = getAllArticles();
+  const groups = groupArticles(getAllArticles());
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <Breadcrumbs
-        items={[
+    <>
+      <PageHeader
+        width="tussen"
+        eyebrow="Uitleg zonder vaktaal"
+        title="Kennisbank"
+        breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Kennisbank', href: '/kennis' },
         ]}
-      />
-      <h1 className="text-3xl font-bold">Kennisbank</h1>
-      <p className="mt-2 text-inkt/80">
-        Uitleg over de keuzes achter een hockeystick. Wil je weten hoe je alles
-        samen afweegt? Lees{' '}
-        <Link
-          href="/blog/hockeystick-kopen"
-          className="text-veld underline underline-offset-2"
-        >
-          hockeystick kopen: zo kies je een stick die bij je past
-        </Link>{' '}
-        of doe de{' '}
-        <Link
-          href="/stickwijzer"
-          className="text-veld underline underline-offset-2"
-        >
-          stickwijzer
-        </Link>
-        .
-      </p>
+      >
+        <p className="max-w-2xl text-lg text-inkt/80">
+          Uitleg over de keuzes achter een hockeystick. Wil je weten hoe je alles
+          samen afweegt? Lees{' '}
+          <Link
+            href="/blog/hockeystick-kopen"
+            className="text-veld underline underline-offset-2"
+          >
+            hockeystick kopen: zo kies je een stick die bij je past
+          </Link>{' '}
+          of doe de{' '}
+          <Link
+            href="/stickwijzer"
+            className="text-veld underline underline-offset-2"
+          >
+            stickwijzer
+          </Link>
+          .
+        </p>
 
-      <ul className="mt-8 space-y-6">
-        {articles.map((article) => (
-          <li key={article.slug} className="border-b border-rand pb-6">
-            <h2 className="text-xl font-semibold">
-              <Link
-                href={`/kennis/${article.slug}`}
-                className="hover:underline"
-              >
-                {article.title}
-              </Link>
+        <nav aria-label="Thema's" className="mt-6 flex flex-wrap gap-2">
+          {groups.map((group) => (
+            <a
+              key={group.id}
+              href={`#${group.id}`}
+              className="inline-flex min-h-11 items-center rounded-full border border-rand bg-white px-4 text-sm font-medium text-inkt/80 shadow-card hover:border-veld hover:text-veld"
+            >
+              {group.heading} <span className="ml-1 text-lijngrijs">({group.articles.length})</span>
+            </a>
+          ))}
+        </nav>
+      </PageHeader>
+
+      <PageBody width="tussen">
+        {groups.map((group, index) => (
+          <section
+            key={group.id}
+            id={group.id}
+            aria-labelledby={`${group.id}-heading`}
+            className={index === 0 ? '' : 'mt-14'}
+          >
+            <h2 id={`${group.id}-heading`} className="text-2xl font-bold">
+              {group.heading}
             </h2>
-            <p className="mt-2 text-sm text-inkt/80">
-              {article.metaDescription}
-            </p>
-          </li>
+            {group.intro && <p className="mt-1 text-inkt/80">{group.intro}</p>}
+            <ul className="mt-5 grid gap-4 sm:grid-cols-2">
+              {group.articles.map((article) => (
+                <li key={article.slug}>
+                  <Link
+                    href={`/kennis/${article.slug}`}
+                    className="card card-link flex h-full flex-col p-5"
+                  >
+                    <h3 className="text-lg leading-snug font-semibold text-inkt">{article.title}</h3>
+                    <p className="mt-2 line-clamp-3 text-sm text-inkt/80">{article.metaDescription}</p>
+                    <p className="mt-auto pt-4 text-xs text-lijngrijs">
+                      {readingMinutes(article)} min lezen · bijgewerkt op{' '}
+                      <time dateTime={article.updatedAt}>{DUTCH_DATE.format(new Date(`${article.updatedAt}T00:00:00Z`))}</time>
+                    </p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
         ))}
-      </ul>
-    </div>
+      </PageBody>
+    </>
   );
 }

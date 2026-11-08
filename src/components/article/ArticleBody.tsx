@@ -38,7 +38,7 @@ function Block({ block }: { block: ArticleBlock }) {
                   <th
                     key={column}
                     scope="col"
-                    className="px-4 py-2 font-semibold"
+                    className="px-3 py-2 font-semibold sm:px-4"
                   >
                     {column}
                   </th>
@@ -47,13 +47,23 @@ function Block({ block }: { block: ArticleBlock }) {
             </thead>
             <tbody>
               {block.rows.map((row) => (
-                <tr key={row.join('|')} className="border-t border-rand">
+                <tr
+                  key={row.map((cell) => (typeof cell === 'string' ? cell : cell.text)).join('|')}
+                  className="border-t border-rand"
+                >
                   {row.map((cell, index) => (
                     <td
                       key={index}
-                      className="px-4 py-2 align-top text-inkt/80"
+                      className="px-3 py-2 align-top text-inkt/80 sm:px-4"
                     >
-                      <InlineText text={cell} />
+                      {typeof cell === 'string' ? (
+                        <InlineText text={cell} />
+                      ) : (
+                        <>
+                          <InlineText text={cell.text} />
+                          <span className="block text-xs text-lijngrijs">{cell.note}</span>
+                        </>
+                      )}
                     </td>
                   ))}
                 </tr>

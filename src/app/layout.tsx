@@ -83,7 +83,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       lang="nl"
       className={`h-full antialiased ${bricolage.variable} ${instrumentSans.variable}`}
     >
-      <body className="flex min-h-full flex-col bg-krijt font-sans text-inkt">
+      <body className="flex min-h-full flex-col bg-white font-sans text-inkt">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLdHtml(siteJsonLd) }}

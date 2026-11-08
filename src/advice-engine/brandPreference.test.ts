@@ -149,7 +149,7 @@ describe('brand preference', () => {
     }
   });
 
-  it('shows a stick of the brand above budget, with a caution, when none fits within it', () => {
+  it('never shows a stick of the brand above budget: the preference does not overrule a hard condition (owner, 2026-11-08)', () => {
     const advice = getAdvice(
       buildPerformanceAnswers({
         ...loyalTo('Grays'),
@@ -161,13 +161,11 @@ describe('brand preference', () => {
       catalog,
       { now: NOW },
     );
-    const own = advice.results.find((r) => r.product.brand === 'Grays');
-    expect(own?.role).toBe('same_brand');
-    expect(own?.cautions).toContain('ABOVE_BUDGET');
-    expect(advice.results.some((r) => r.product.brand !== 'Grays')).toBe(true);
-    // Only the brand's own stick may exceed the budget.
-    for (const r of advice.results.filter((r) => r.product.brand !== 'Grays')) {
+    // A Grays stick may still lead, but only one within the budget (here a simpler one).
+    expect(advice.results.length).toBeGreaterThan(0);
+    for (const r of advice.results) {
       expect(r.cautions).not.toContain('ABOVE_BUDGET');
+      expect(r.product.priceIndicativeEur.value).toBeLessThanOrEqual(75);
     }
   });
 

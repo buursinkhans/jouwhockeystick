@@ -44,6 +44,14 @@ export const TargetIcon = createIcon(
   </>,
 );
 
+/** "Veilige keuze" in the advice (redesign fase 6). */
+export const ShieldIcon = createIcon(
+  <>
+    <path d="M12 3 5 6v5c0 4.4 2.9 8.3 7 9.5 4.1-1.2 7-5.1 7-9.5V6l-7-3Z" strokeLinejoin="round" />
+    <path d="m9 12 2 2 4-4" />
+  </>,
+);
+
 export const BoltIcon = createIcon(
   <path d="M12 2 4 14h6l-1 8 9-13h-6l1-7Z" strokeLinejoin="round" />,
 );

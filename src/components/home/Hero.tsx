@@ -1,10 +1,10 @@
-import { Logo } from '@/components/brand/Logo';
 import { HeroPhotos } from './HeroPhotos';
 import { HomeBlockLink } from './HomeBlockLink';
 import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import Link from 'next/link';
-import { getCatalogStats } from '@/catalog/stats';
+import { getTrustFacts } from '@/catalog/trustFacts';
+import { BRAND_PAYOFF } from '@/lib/site';
 
 const EXAMPLE_REASONS = [
   'Juiste stick',
@@ -26,18 +26,14 @@ function HeroVisual() {
       href="/stickwijzer"
       aria-hidden="true"
       tabIndex={-1}
-      className="relative mx-auto block w-full max-w-xs sm:max-w-sm"
+      className="relative mx-auto block w-full max-w-sm"
     >
       <HeroPhotos />
-      <ul className="mt-3 flex flex-wrap gap-2 sm:absolute sm:top-4 sm:-left-8 sm:mt-0 sm:block sm:space-y-2 lg:-left-16">
+      {/* One quiet caption under the photo (owner, 2026-11-04): on the photo it covered the stick and ball. */}
+      <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[0.8125rem] font-semibold text-inkt">
         {EXAMPLE_REASONS.map((reason) => (
-          <li
-            key={reason}
-            className="flex items-center gap-2 rounded-full border border-rand bg-white px-3 py-1.5 text-sm font-semibold text-inkt shadow-sm"
-          >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-veld text-white">
-              <CheckIcon size={13} />
-            </span>
+          <li key={reason} className="flex items-center gap-1.5">
+            <CheckIcon size={14} className="shrink-0 text-veld" />
             {reason}
           </li>
         ))}
@@ -46,7 +42,7 @@ function HeroVisual() {
   );
 }
 
-/** Homepage hero: primary wordmark with pay-off on a light background (merkinstructie §4). */
+/** Homepage hero; the pay-off sits under the header logo (owner, 2026-11-04). */
 /**
  * Why the advice can be trusted, visible without scrolling. Every claim is
  * counted from the catalog or documented on /methodiek. "Onafhankelijk
@@ -55,11 +51,8 @@ function HeroVisual() {
  * button and explained on /methodiek.
  */
 function TrustLine() {
-  const stats = getCatalogStats();
-  const sticks = stats.fieldSticks;
-  const brands = stats.fieldBrands.length;
+  // The catalog size is in the facts strip under the search block (2026-11-04), so not here as well.
   const items = [
-    `${sticks} veldsticks van ${brands} merken`,
     'Bron bij elk gegeven',
     'Onafhankelijk advies',
   ];
@@ -83,24 +76,30 @@ function TrustLine() {
   );
 }
 
+
 export function Hero() {
+  const { shops } = getTrustFacts();
   return (
-    <section className="bg-hex-light border-b border-rand bg-krijt">
-      <div className="mx-auto grid max-w-5xl items-center gap-8 px-4 py-10 sm:px-6 sm:py-12 md:grid-cols-[3fr_2fr]">
+    // Fase 7: a calm krijt-to-white field without the pattern, a larger title
+    // with a short lead, and the photo as the one strong image.
+    <section className="bg-gradient-to-b from-krijt to-white">
+      <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 pt-8 pb-12 sm:px-6 sm:pt-12 sm:pb-12 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
         <div>
-          <div className="hidden sm:block">
-            <Logo variant="wordmark" size={30} tagline href={null} />
-          </div>
-          <h1 className="text-4xl leading-tight font-extrabold text-inkt sm:mt-5 sm:text-5xl">
+          <p className="text-sm font-semibold text-veld sm:text-base">{BRAND_PAYOFF}</p>
+          <h1 className="mt-3 text-[2.6rem] text-inkt sm:text-6xl">
             Vind de hockeystick die bij jou past
           </h1>
-          <p className="mt-4 max-w-xl text-lg text-inkt/80">
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-inkt/80 sm:text-xl">
             Beantwoord een paar vragen over lengte, ervaring, speelwensen en
-            budget. Je krijgt maximaal drie sticks, elk met de redenen waarom
-            hij past — en eerlijk waar je op inlevert.
+            budget. Je krijgt de juiste maat en maximaal drie sticks, elk met
+            de redenen waarom hij past en eerlijk waar je op inlevert.
           </p>
-          <div className="mt-6">
-            <ButtonLink href="/stickwijzer" variant="accent">
+          <p className="mt-3 max-w-xl text-inkt/70">
+            Per stick zie je bij welke van onze {shops} partnerwinkels hij te
+            koop is, met de prijs incl. verzending.
+          </p>
+          <div className="mt-8">
+            <ButtonLink href="/stickwijzer" variant="accent" className="min-h-12 px-7 text-base">
               Start de stickwijzer
             </ButtonLink>
           </div>

@@ -17,7 +17,7 @@ export async function InstagramFeed() {
   return (
     <section
       aria-labelledby="instagram-heading"
-      className="border-t border-rand bg-white"
+      className="bg-white"
     >
       <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-3">

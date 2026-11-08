@@ -1,5 +1,5 @@
-import posthog from 'posthog-js';
 import type { AnalyticsEvent } from './events';
+import { capture } from './posthogClient';
 
 type EventMetadata = Record<string, string | number | boolean>;
 type SaEvent = ((name: string, metadata?: EventMetadata) => void) & {
@@ -32,9 +32,10 @@ function toMetadata(event: AnalyticsEvent): EventMetadata {
 /**
  * Sends an event to Simple Analytics (visitor counts) and PostHog (funnels).
  * Simple Analytics calls made before its script has loaded are queued the
- * same way the official snippet does. PostHog is only called once it has
- * been initialised (see src/instrumentation-client.ts), so local previews
- * stay out of the statistics. No-ops during server rendering.
+ * same way the official snippet does. PostHog gets the event once it has
+ * loaded (queued until then, see posthogClient.ts); on local previews it is
+ * never loaded, so they stay out of the statistics. No-ops during server
+ * rendering.
  */
 export function trackEvent(event: AnalyticsEvent): void {
   if (typeof window === 'undefined') {
@@ -51,7 +52,5 @@ export function trackEvent(event: AnalyticsEvent): void {
   }
   window.sa_event(event.name, metadata);
 
-  if (posthog.__loaded) {
-    posthog.capture(event.name, metadata);
-  }
+  capture(event.name, metadata);
 }

@@ -23,9 +23,10 @@ describe('server HTML of the catalog lists (decision log 2026-10-24)', () => {
     for (const p of all.filter((p) => !isFeedImport(p)))
       expect(links, p.slug).toContain(productPath(p));
     for (const p of all.filter(isFeedImport))
-      expect(html, p.slug).not.toContain(p.slug);
+      // The link, not the slug: "malik-lowbow-4" is part of the checked "malik-lowbow-4-junior".
+      expect(links, p.slug).not.toContain(productPath(p));
     expect(html).toContain(
-      `Toon ook ${all.filter(isFeedImport).length} sticks uit het aanbod van PassaHockey`,
+      `Toon ook ${all.filter(isFeedImport).length} sticks uit het aanbod van PassaHockey, Plutosport, HockeyCity en Daka`,
     );
   });
 
@@ -36,18 +37,24 @@ describe('server HTML of the catalog lists (decision log 2026-10-24)', () => {
     for (const p of all.filter((p) => !isFeedImport(p)))
       expect(links, p.slug).toContain(productPath(p));
     for (const p of all.filter(isFeedImport))
-      expect(html, p.slug).not.toContain(p.slug);
+      // The link, not the slug: "malik-lowbow-4" is part of the checked "malik-lowbow-4-junior".
+      expect(links, p.slug).not.toContain(productPath(p));
   });
 
   it('with a brand filter, /sticks shows every stick of that brand, imported ones too', async () => {
     const all = getFieldProducts(new Date(), query);
     const brand = all.find(isFeedImport)!.brand;
-    const html = renderToStaticMarkup(
-      await SticksPage({ searchParams: Promise.resolve({ brand }) }),
-    );
-    const links = linksIn(html);
-    for (const p of all.filter((p) => p.brand === brand))
-      expect(links, p.slug).toContain(productPath(p));
-    expect(html).not.toContain('uit het aanbod van PassaHockey');
+    // Filtered lists come 48 sticks a page (redesign fase 2); together the
+    // pages hold every stick of the brand.
+    const ofBrand = all.filter((p) => p.brand === brand);
+    const links = new Set<string | undefined>();
+    for (let page = 1; page <= Math.ceil(ofBrand.length / 48); page++) {
+      const html = renderToStaticMarkup(
+        await SticksPage({ searchParams: Promise.resolve({ brand, pagina: String(page) }) }),
+      );
+      for (const link of linksIn(html)) links.add(link);
+      expect(html).not.toContain('uit het aanbod van PassaHockey');
+    }
+    for (const p of ofBrand) expect(links, p.slug).toContain(productPath(p));
   });
 });

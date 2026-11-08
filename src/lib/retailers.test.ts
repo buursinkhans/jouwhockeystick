@@ -4,8 +4,11 @@ import { isPassaSportsOnly } from '@/catalog/shop';
 import {
   BOL_PARTNER_SITE_ID,
   RETAILERS,
+  PLUTOSPORT_AWIN,
   bolPartnerUrl,
+  isPlutosportProductPage,
   passaSportsTrackingUrl,
+  plutosportTrackingUrl,
 } from './retailers';
 
 /** The bol.com page a partner link eventually lands on. */
@@ -116,6 +119,59 @@ describe('PassaSports retailer (TradeTracker)', () => {
         productUrl: product.passaSportsProductUrl,
       });
       expect(url?.startsWith(PASSA_PREFIX), product.slug).toBe(true);
+    }
+  });
+});
+
+describe('Plutosport retailer (Awin)', () => {
+  const page = 'https://www.plutosport.nl/the-indian-maharadja-swift-hockeystick-indoor-junior-10251018';
+
+  it('builds an Awin deep link with advertiser 8342, our publisher ID and the place on the site', () => {
+    const url = new URL(plutosportTrackingUrl(page, 'stickwijzer') ?? '');
+    expect(url.origin + url.pathname).toBe('https://www.awin1.com/cread.php');
+    expect(url.searchParams.get('awinmid')).toBe(PLUTOSPORT_AWIN.advertiserId);
+    expect(url.searchParams.get('awinmid')).toBe('8342');
+    expect(url.searchParams.get('awinaffid')).toBe('3132918');
+    expect(url.searchParams.get('clickref')).toBe('stickwijzer');
+    expect(url.searchParams.get('ued')).toBe(page);
+  });
+
+  it('only links to product pages on plutosport.nl, never a search or another site', () => {
+    for (const bad of [
+      'https://www.plutosport.nl/catalogsearch/result/?q=hockeystick',
+      'https://www.plutosport.nl/zoeken?q=stick',
+      'https://www.plutosport.nl/',
+      'https://www.plutosport.be/the-indian-maharadja-swift-hockeystick-indoor-junior-10251018',
+      'http://www.plutosport.nl/the-indian-maharadja-swift',
+      'https://www.awin1.com/pclick.php?p=1&a=3132918&m=8342',
+      'geen url',
+    ]) {
+      expect(plutosportTrackingUrl(bad, 'catalogus'), bad).toBeNull();
+    }
+    expect(isPlutosportProductPage(new URL(page))).toBe(true);
+  });
+
+  it('keeps characters Awin does not accept out of the clickref', () => {
+    const url = new URL(plutosportTrackingUrl(page, 'a&b#c+d') ?? '');
+    expect(url.searchParams.get('clickref')).toBe('a-b-c-d');
+  });
+
+  it('never falls back to a search: no product page, no link', () => {
+    expect(
+      RETAILERS.plutosport.getUrl({ productName: 'X', brand: 'Osaka', placement: 'catalogus' }),
+    ).toBeNull();
+  });
+
+  it('gives every stick with a Plutosport match a working partner link', () => {
+    for (const product of getAllProducts(new Date(), { includeImported: true })) {
+      if (!product.plutosportProductUrl) continue;
+      const url = RETAILERS.plutosport.getUrl({
+        productName: product.name,
+        brand: product.brand,
+        placement: 'productpagina',
+        productUrl: product.plutosportProductUrl,
+      });
+      expect(url?.startsWith('https://www.awin1.com/cread.php?awinmid=8342&'), product.slug).toBe(true);
     }
   });
 });

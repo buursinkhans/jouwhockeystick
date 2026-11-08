@@ -7,9 +7,14 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | Document | Waarvoor |
 |---|---|
 | [`spec/keuzehulp-instructie-v1.1.md`](spec/keuzehulp-instructie-v1.1.md) | De specificatie van de stickwijzer: routes, vragen, adviesregels en bronnen. **Leidend**; afwijkingen leggen we vast in de decision log. |
+| [`stickwijzer/vergelijking-v12-v13.md`](stickwijzer/vergelijking-v12-v13.md) | Vaste testprofielen, oude en nieuwe regels naast elkaar (`npm run stickwijzer:bench`). |
+| [`spec/hockeyschoenen-keuzemodel.md`](spec/hockeyschoenen-keuzemodel.md) | Het keuzemodel voor hockeyschoenen: vragen, beslisregels, productmodel, resultaatpagina en acceptatietests van de sectie `/hockeyschoenen` (issue #100). **Leidend**; afwijkingen leggen we vast in de decision log. |
+| [`spec/prijsvergelijking.md`](spec/prijsvergelijking.md) | Prijsvergelijking per stick: spelregels, gegevensmodel, koppelen tussen winkels en de architectuurkeuze. Besloten 2026-10-26, nog niet gebouwd. |
 | [`source-policy.md`](source-policy.md) | Bronbeleid: hoe we claims onderbouwen, bronnen vermelden en de catalogus elk kwartaal controleren. Bindend voor content, productdata en advies. |
+| [`schrijfstijl.md`](schrijfstijl.md) | Schrijfstijl zonder AI-patronen: harde regels en wat je vermijdt. Geldt voor alle Nederlandse tekst; komt uit de skill vermijd-ai-schrijfstijl. |
 | [`merkinstructie.md`](merkinstructie.md) | Logo, kleuren, typografie en tone of voice. `scripts/build-brand-assets.mjs` bouwt de logobestanden hieruit. |
-| [`business-model.md`](business-model.md) | Verdienmodel en strategie. De actuele situatie (bol.com en PassaHockey als partnerwinkels) staat in sectie 5. |
+| [`designsysteem.md`](designsysteem.md) | Hoe pagina's eruitzien: kleurrollen, typeschaal, breedtes, kaarten, foto's en wat we bewust niet doen. Volgt de merkinstructie. |
+| [`business-model.md`](business-model.md) | Verdienmodel en strategie. De actuele situatie staat in sectie 5; de partnerprogramma's per winkel in sectie 5a; hockeyschoenen in sectie 5b. |
 | [`decision-log.md`](decision-log.md) | Elke wijziging aan adviesregels, catalogus of afspraken, met de reden. Nieuwste onderaan. |
 
 ## Handboeken per agent of taak
@@ -36,14 +41,15 @@ Deze workflows lezen alleen en maken een rapport, meestal als issue. De orchestr
 | `search-console.yml` | Kansen per zoekopdracht uit Google Search Console |
 | `security.yml` | Maandag: beveiliging van de live site, kwetsbaarheden en nieuwere versies van pakketten, sleutels in de code; opent een PR met veilige updates (zie [`beveiliging.md`](beveiliging.md)) |
 | `indexnow.yml` | Na elke deploy: meldt nieuwe en gewijzigde pagina's uit de sitemap bij Bing en andere IndexNow-zoekmachines. Met de hand: GitHub → Actions → *IndexNow* → *Run workflow*, kies `all` voor de hele sitemap of `changed` voor de laatste commit |
-| `technical-seo.yml` | Crawlt de live sitemap op technische SEO-problemen |
+| `technical-seo.yml` | Crawlt de live sitemap op technische SEO-problemen, en controleert of AI-crawlers (OAI-SearchBot, GPTBot, PerplexityBot, ClaudeBot) en Bingbot de site kunnen lezen |
 | `sales-report.yml` | Kliks en bestellingen per plek en per stick bij bol.com en PassaHockey (alleen aantallen, want de repo is openbaar) |
-| `conversion-report.yml` | Stickwijzer-trechter, afhaken per vraag en winkelkliks (PostHog) |
+| `conversion-report.yml` | Stickwijzer-trechter, afhaken per vraag, winkelkliks en bezoekers uit AI-assistenten per pagina (PostHog) |
 | `marktverkenning.yml` | Nieuwe hockeypagina's bij concurrenten |
-| `passa-sync.yml` | Woensdag: importeert de PassaHockey-productfeed opnieuw (prijzen, voorraad, nieuwe en verdwenen sticks) en opent een PR |
+| `passa-sync.yml` | Woensdag: importeert de PassaHockey-productfeed opnieuw (prijzen, voorraad, nieuwe en verdwenen sticks), werkt de Plutosport-koppelingen, de bol.com-prijzen, de hockeyschoenen uit beide feeds (`src/catalog/shoes/imported.ts`) de HockeyCity-koppelingen (`src/catalog/offers/hockeyCity.ts`) en de Daka-koppelingen (`src/catalog/offers/daka.ts`) bij en opent één PR |
 | `instagram-token.yml` | Elke maand: ververst het Instagram-token in Netlify en start een nieuwe deploy |
 | `catalog-health.yml` | Welke sticks aan hun kwartaalcontrole toe zijn |
 | `bol-feed-check.yml` | Testrun: zoekt elke stick op in de bol.com-feed |
+| `plutosport-feed.yml` | Met de hand: leest de Plutosport-feed (Awin), koppelt de hockeysticks aan de catalogus en meet de overlap tussen de winkels (fase 0 van `spec/prijsvergelijking.md`) |
 | `publicatie.yml` | Bouwt de site opnieuw op de dag dat een gepland artikel live gaat |
 | `ci.yml` | Lint, typecheck, tests en build bij elke pull request |
 

@@ -1,5 +1,6 @@
 import type { AdviceRoute, Goal } from '@/advice-engine/answers';
 import { feelFromCarbon } from '@/advice-engine/carbon';
+import { adviceLevel } from '@/advice-engine/productRules';
 import type { SizeAdvice } from '@/advice-engine/sizeAdvice';
 import type {
   AdviceReason,
@@ -51,6 +52,20 @@ export const ADVICE_DISCLAIMER =
 export const TRANSPARENCY_NOTE =
   'We vertellen niet alleen wát we adviseren, maar ook waarop dat is gebaseerd. Per stick maken we onderscheid tussen gegevens van de fabrikant en onze eigen redactionele adviesregels. Eigen metingen en praktijktests hebben we nog niet; dat staat er dan ook bij.';
 
+/**
+ * "Hoe we dit advies maakten" (fase 8): the three steps the engine takes,
+ * with the numbers of this advice. The wording follows the engine: hard
+ * filters (size, level, budget), then the weighed fit (homepage "Zo werkt
+ * het"), no fee or shop input (methodiek).
+ */
+export function adviceSteps(candidates: number, shown: number): string[] {
+  return [
+    `Eerst vallen de sticks af die niet bij de maat, het niveau of het budget passen. Er ${candidates === 1 ? 'bleef er 1' : `bleven er ${candidates}`} over.`,
+    'Die wegen we op ervaring, doelen, bow-profiel en gevoel. Vergoeding, marge en winkel tellen daarbij niet mee.',
+    `${shown === 1 ? 'De stick' : `De ${shown} sticks`} met de beste aansluiting zie je hierboven, met de redenen, de afweging en wat we niet weten.`,
+  ];
+}
+
 /** How many sticks passed the filters, so a visitor sees the advice is a selection. */
 export function candidateCountText(candidates: number, shown: number): string {
   if (candidates <= shown) {
@@ -95,7 +110,7 @@ const ROLE_INTRO: Record<
   safe_choice:
     'Een rustiger of gelijkwaardig alternatief dat niet lastiger speelt dan de beste match.',
   ambitious_choice:
-    'Eén stap vooruit — passend als de basis er staat, maar niet noodzakelijk.',
+    'Eén stap vooruit: passend als de basis er staat, maar niet noodzakelijk.',
   closest_option:
     'Geen duidelijke match: dit komt het dichtst in de buurt, maar past op meerdere punten minder goed.',
   other_size:
@@ -169,7 +184,8 @@ export function reasonText(
     case 'SIZE_ALTERNATIVE':
       return `Beschikbaar in ${formatInch(reason.inch ?? 0)}, de tweede maat uit het lengteadvies.`;
     case 'EXPERIENCE_FIT':
-      return EXPERIENCE_REASON[product.experienceLevel.value];
+      // The level the advice was made with (adviceLevel), not a price-based estimate.
+      return EXPERIENCE_REASON[adviceLevel(product) ?? product.experienceLevel.value];
     case 'CONTROL_FOCUS':
       return `Met ${carbon}% carbon is dit een relatief zachte, controlegerichte opbouw; dat past doorgaans beter bij het leren aannemen en passen.`;
     case 'GOAL_FIT':
@@ -286,6 +302,24 @@ const LEVEL_NAMES: Record<ExperienceBand, string> = {
   developing: 'gevorderde speler',
   advanced: 'ervaren speler',
 };
+
+/**
+ * Three rules the advice keeps, shown above the first stick (redesign fase 4).
+ * Each one is enforced in code: fees are no score input (advice-engine),
+ * every reason carries its source (RecommendationCard), shop rows show the
+ * read date (WhereToBuy).
+ */
+export const ADVICE_TRUST_POINTS = [
+  'Vergoedingen van winkels tellen niet mee',
+  'Bron bij elke reden',
+  'Winkelprijzen met de datum waarop we ze lazen',
+] as const;
+
+/** "Beginnende speler" etc., for the profile card above the sticks. */
+export function levelLabel(band: ExperienceBand): string {
+  const name = LEVEL_NAMES[band];
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
 
 /** One line on the level the advice is made for, and why. */
 export function playerLevelText(level: AdviceResult['playerLevel']): string {

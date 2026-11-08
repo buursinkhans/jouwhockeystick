@@ -1,10 +1,16 @@
-import type { Brand } from '@/catalog/types';
-
-export type RetailerId = 'bolcom' | 'passasports';
+export type RetailerId = 'bolcom' | 'passasports' | 'plutosport' | 'hockeycity' | 'daka';
 
 /** Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert. */
 export type RetailerPlacement =
-  'stickwijzer' | 'productpagina' | 'catalogus' | 'vergelijk' | 'zaalkeuze';
+  | 'stickwijzer'
+  | 'productpagina'
+  | 'catalogus'
+  | 'vergelijk'
+  | 'zaalkeuze'
+  /** Hockey shoes (decision log 2026-11-01): model page, overview, shoe advice. */
+  | 'schoenpagina'
+  | 'schoenencatalogus'
+  | 'schoenwijzer';
 
 /**
  * bol.com Partnerprogramma site ID of jouwhockeystick.nl. Not a secret — it is
@@ -82,13 +88,273 @@ export function passaSportsTrackingUrl(
   return `https://www.passasports.nl/tt/passa-nl/?${params.toString()}`;
 }
 
+/**
+ * Plutosport NL affiliate programme via Awin. Not secrets: both IDs are part
+ * of every tracking link.
+ */
+export const PLUTOSPORT_AWIN = {
+  advertiserId: '8342',
+  publisherId: '3132918',
+} as const;
+
+/** Product pages only: no search, category or other pages, no query string. */
+export function isPlutosportProductPage(url: URL): boolean {
+  return (
+    /^(www\.)?plutosport\.nl$/i.test(url.hostname) &&
+    url.protocol === 'https:' &&
+    url.search === '' &&
+    url.pathname.length > 1 &&
+    !/^\/(catalogsearch|zoeken|search|klantenservice|checkout|customer)(\/|$)/i.test(url.pathname)
+  );
+}
+
+/**
+ * Wraps a Plutosport product page in an Awin deep link (cread.php). The
+ * place on our site goes in `clickref`, which Awin documents for cread.php
+ * links and reports back per click. We do not use the feed's pclick.php link:
+ * Awin's documentation does not say that clickref works there (decision log
+ * 2026-10-27). Awin does not accept "&", "#" or "+" in a clickref.
+ */
+export function plutosportTrackingUrl(
+  productUrl: string,
+  placement: string,
+): string | null {
+  let target: URL;
+  try {
+    target = new URL(productUrl);
+  } catch {
+    return null;
+  }
+  if (!isPlutosportProductPage(target)) {
+    return null;
+  }
+  const params = new URLSearchParams({
+    awinmid: PLUTOSPORT_AWIN.advertiserId,
+    awinaffid: PLUTOSPORT_AWIN.publisherId,
+    clickref: placement.replace(/[&#+]/g, '-'),
+    ued: target.toString(),
+  });
+  return `https://www.awin1.com/cread.php?${params.toString()}`;
+}
+
+/**
+ * HockeyCity affiliate programme via TradeTracker (campaign 27931, approved
+ * 2026-11-03). Not secrets: they are part of every tracking link. Format taken
+ * from the links in HockeyCity's TradeTracker product feed (material = the
+ * feed, 1633756) on 2026-11-03:
+ * hockeycity.nl/tracking/tradetracker/redirect/?tt=<campaign>_<material>_<site>_<reference>&r=<url>
+ */
+export const HOCKEYCITY_TRADETRACKER = {
+  campaignId: '27931',
+  materialId: '1633756',
+  affiliateSiteId: '517408',
+} as const;
+
+const HOCKEYCITY_HOST = 'www.hockeycity.nl';
+
+/** Product pages only (they end in .html), no query: never a search or category page. */
+export function isHockeyCityProductPage(url: URL): boolean {
+  return (
+    url.hostname === HOCKEYCITY_HOST &&
+    url.protocol === 'https:' &&
+    url.search === '' &&
+    /^\/[a-z0-9-]+\.html$/i.test(url.pathname)
+  );
+}
+
+/**
+ * Wraps a HockeyCity product page in a TradeTracker direct link, like
+ * PassaHockey's: the reference (where on our site the link sits) shows up in
+ * TradeTracker's reports and may not contain "_", the separator inside `tt`.
+ */
+export function hockeyCityTrackingUrl(
+  productUrl: string,
+  reference: string,
+): string | null {
+  let target: URL;
+  try {
+    target = new URL(productUrl);
+  } catch {
+    return null;
+  }
+  if (!isHockeyCityProductPage(target)) {
+    return null;
+  }
+  const { campaignId, materialId, affiliateSiteId } = HOCKEYCITY_TRADETRACKER;
+  const params = new URLSearchParams({
+    tt: [
+      campaignId,
+      materialId,
+      affiliateSiteId,
+      reference.replaceAll('_', '-'),
+    ].join('_'),
+    r: target.toString(),
+  });
+  return `https://${HOCKEYCITY_HOST}/tracking/tradetracker/redirect/?${params.toString()}`;
+}
+
+/**
+ * Daka affiliate programme via Daisycon (programme 7290, media 441384,
+ * approved; decision log 2026-11-04). Not secrets: they are part of every
+ * tracking link. Format taken from the links in Daka's Daisycon product feed
+ * on 2026-11-04, without the feed's per-product `pid`:
+ * partner.daka.nl/c/?si=<programme>&li=<link>&wi=<media>&ws=<sub id>&dl=<path>
+ */
+export const DAKA_DAISYCON = {
+  programId: '7290',
+  linkId: '1765148',
+  mediaId: '441384',
+} as const;
+
+const DAKA_HOST = 'www.daka.nl';
+
+/** Product pages only (/p/<slug>), no query: never a search or category page. */
+export function isDakaProductPage(url: URL): boolean {
+  return (
+    url.hostname === DAKA_HOST &&
+    url.protocol === 'https:' &&
+    url.search === '' &&
+    /^\/p\/[a-z0-9_-]+$/i.test(url.pathname)
+  );
+}
+
+/**
+ * Wraps a Daka product page in a Daisycon deeplink: `ws` (the sub id) says
+ * where on our site the link sits, like the placement at the other shops;
+ * `dl` is the page path without the leading slash, as in the feed.
+ */
+export function dakaTrackingUrl(productUrl: string, placement: string): string | null {
+  let target: URL;
+  try {
+    target = new URL(productUrl);
+  } catch {
+    return null;
+  }
+  if (!isDakaProductPage(target)) return null;
+  const { programId, linkId, mediaId } = DAKA_DAISYCON;
+  const params = new URLSearchParams({
+    si: programId,
+    li: linkId,
+    wi: mediaId,
+    ws: placement,
+    dl: target.pathname.slice(1),
+  });
+  return `https://partner.daka.nl/c/?${params.toString()}`;
+}
+
+/**
+ * Shipping for one stick, from the shop's public delivery terms, until a feed
+ * states it (docs/spec/prijsvergelijking.md §7.1). The first tier whose
+ * bound the price stays under applies; `costEur: null` means unknown, and the
+ * site then says so. Always the cheapest standard option (a pick-up point
+ * where the shop has one), the same for every shop.
+ */
+export type ShippingTerms = {
+  tiers: readonly {
+    /** Applies while the order value is below this (or up to and including it, with `inclusive`); null = no upper bound. */
+    belowEur: number | null;
+    inclusive?: boolean;
+    costEur: number | null;
+  }[];
+  sourceUrl: string;
+  checkedAt: string;
+  note: string;
+};
+
+/** Plutosport has no delivery_cost in its Awin feed. */
+export const PLUTOSPORT_SHIPPING: ShippingTerms = {
+  tiers: [
+    { belowEur: 75, costEur: 6.95 },
+    { belowEur: null, costEur: 0 },
+  ],
+  sourceUrl: 'https://www.plutosport.nl/bezorgen-afhalen',
+  checkedAt: '2026-10-26',
+  note: "Laagste tarief in Nederland (bezorgen bij een DHL ServicePoint), gratis vanaf €75; overdag thuisbezorgen kost €7,95, 's avonds €8,95.",
+};
+
+/** "Boven de €79" is free, so €79 itself still pays €3,95. */
+export const PASSASPORTS_SHIPPING: ShippingTerms = {
+  tiers: [
+    { belowEur: 25, costEur: 5.95 },
+    { belowEur: 79, inclusive: true, costEur: 3.95 },
+    { belowEur: null, costEur: 0 },
+  ],
+  sourceUrl: 'https://www.passasports.nl/faq-verzenden-bezorgen',
+  checkedAt: '2026-10-27',
+  note: 'Afhalen bij een DHL ServicePoint: €5,95 onder €25, €3,95 tot en met €79, gratis daarboven; thuisbezorgen kost €1 extra.',
+};
+
+/**
+ * From €25 bol.com charges nothing; below that it depends on the seller
+ * (€2,99 when bol.com ships, nothing when a partner ships), so unknown.
+ */
+export const BOL_SHIPPING: ShippingTerms = {
+  tiers: [
+    { belowEur: 25, costEur: null },
+    { belowEur: null, costEur: 0 },
+  ],
+  sourceUrl: 'https://www.bol.com/nl/nl/klantenservice/a/5711226101301248/bezorgopties-en-kosten',
+  checkedAt: '2026-10-27',
+  note: 'Geen verzendkosten vanaf €25; daaronder €2,99 als bol.com verstuurt en niets als een partner verstuurt.',
+};
+
+/**
+ * The FAQ says €5 and free above €75; the banner on every page and the cart
+ * say free from €100. We take the cart's €100, so a total is never too low
+ * (decision log 2026-11-03).
+ */
+export const HOCKEYCITY_SHIPPING: ShippingTerms = {
+  tiers: [
+    { belowEur: 100, costEur: 5 },
+    { belowEur: null, costEur: 0 },
+  ],
+  sourceUrl: 'https://www.hockeycity.nl/service/',
+  checkedAt: '2026-11-03',
+  note: 'Verzending in Nederland €5, gratis vanaf €100 (volgens de winkelmand en de banner; de FAQ noemt gratis boven €75). Geen afhaalpunt genoemd.',
+};
+
+/**
+ * daka.nl refused automated reading on 2026-11-04 (HTTP 429), so not the shop's
+ * page itself: Daisycon's campaign page says free shipping from €50, and the
+ * feed's own `price_shipping` agrees (every item from €50 ships free; below
+ * €50 €4,95, some items free). We take €4,95 below €50, so a total is never
+ * too low (decision log 2026-11-04). To confirm on daka.nl by the owner.
+ */
+export const DAKA_SHIPPING: ShippingTerms = {
+  tiers: [
+    { belowEur: 50, costEur: 4.95 },
+    { belowEur: null, costEur: 0 },
+  ],
+  sourceUrl: 'https://daisycon.com/campaigns/7290-daka-nl',
+  checkedAt: '2026-11-04',
+  note: 'Bezorging via PostNL: €4,95 onder €50, gratis vanaf €50 (campagnepagina van Daisycon en de productfeed van Daka; daka.nl zelf was niet te lezen).',
+};
+
+export const SHIPPING: Record<RetailerId, ShippingTerms> = {
+  bolcom: BOL_SHIPPING,
+  passasports: PASSASPORTS_SHIPPING,
+  plutosport: PLUTOSPORT_SHIPPING,
+  hockeycity: HOCKEYCITY_SHIPPING,
+  daka: DAKA_SHIPPING,
+};
+
+/** Shipping for an order of one item at this price; null when unknown. */
+export function shippingCostEur(terms: ShippingTerms, priceEur: number): number | null {
+  for (const tier of terms.tiers) {
+    if (tier.belowEur === null) return tier.costEur;
+    if (tier.inclusive ? priceEur <= tier.belowEur : priceEur < tier.belowEur) return tier.costEur;
+  }
+  return null;
+}
+
 export type Retailer = {
   id: RetailerId;
   label: string;
   /** Returns null when this retailer has no verified link for the given brand. */
   getUrl: (params: {
     productName: string;
-    brand: Brand;
+    /** Stick or shoe brand (shoe brands are not in the stick Brand list). */
+    brand: string;
     placement: RetailerPlacement;
     /** Direct product page at this retailer; without it the link is a search. */
     productUrl?: string;
@@ -128,5 +394,26 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
     // Only direct product links: we never send people to a PassaSports search.
     getUrl: ({ placement, productUrl }) =>
       productUrl ? passaSportsTrackingUrl(productUrl, placement) : null,
+  },
+  plutosport: {
+    id: 'plutosport',
+    label: 'Plutosport',
+    // Only direct product links, like PassaHockey: never a Plutosport search.
+    getUrl: ({ placement, productUrl }) =>
+      productUrl ? plutosportTrackingUrl(productUrl, placement) : null,
+  },
+  hockeycity: {
+    id: 'hockeycity',
+    label: 'HockeyCity',
+    // Only direct product links, like PassaHockey: never a HockeyCity search.
+    getUrl: ({ placement, productUrl }) =>
+      productUrl ? hockeyCityTrackingUrl(productUrl, placement) : null,
+  },
+  daka: {
+    id: 'daka',
+    label: 'Daka',
+    // Only direct product links: never a Daka search.
+    getUrl: ({ placement, productUrl }) =>
+      productUrl ? dakaTrackingUrl(productUrl, placement) : null,
   },
 };
