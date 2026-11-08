@@ -36,8 +36,10 @@ import { jsonLdHtml } from '@/lib/jsonLd';
  */
 export function productPageMetadata(product: Product): Metadata {
   // "review" is deliberately not used: we do not test sticks ourselves.
+  // A long name keeps the title within 60 characters by dropping the addition (Technical SEO, 2026-11-08).
+  const full = `${product.name}: specs en advies`;
   return pageMetadata({
-    title: `${product.name}: specs en advies`,
+    title: full.length > 60 ? product.name : full,
     // Built from catalog data, not the summary (decision log 2026-10-23).
     description: productMetaDescription(product),
     path: productPath(product),
