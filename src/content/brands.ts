@@ -407,3 +407,8 @@ export const BRAND_PROFILES: BrandProfile[] = [
     hasCatalogProducts: true,
   },
 ];
+
+/** The id of a brand's card on /merken, e.g. "merk-grays"; also the anchor articles link to. */
+export function brandAnchor(brand: string): string {
+  return `merk-${brand.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+}

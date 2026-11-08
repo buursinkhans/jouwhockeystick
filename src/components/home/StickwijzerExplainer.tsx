@@ -1,5 +1,7 @@
 import type { ComponentType, ReactNode, SVGProps } from 'react';
 import Link from 'next/link';
+import { absoluteUrl } from '@/lib/site';
+import { howToJsonLd, jsonLdHtml } from '@/lib/jsonLd';
 import type { AdviceRoute } from '@/advice-engine/answers';
 import { QUESTIONS } from '@/content/stickwijzer/questions';
 import { routeStepRange } from '@/content/stickwijzer/progress';
@@ -207,6 +209,21 @@ export function StickwijzerExplainer({
             </p>
           </SectionHeading>
 
+          {/* The three steps below, in the same words (decision log 2026-11-08). */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: jsonLdHtml(
+                howToJsonLd('Een hockeystick kiezen met de stickwijzer', absoluteUrl('/stickwijzer'), [
+                  {
+                    name: 'Jij vertelt over de speler',
+                    text: LOOKS_AT.map(({ title, body }) => `${title}: ${body}`).join(' '),
+                  },
+                  ...FLOW.map(({ title, body }) => ({ name: title, text: body })),
+                ]),
+              ),
+            }}
+          />
           <ol className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
             <li>
               <StepNumber n={1} />

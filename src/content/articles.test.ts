@@ -8,6 +8,7 @@ import { todayInSiteTimeZone } from './schedule';
 import { articleSchema } from './types';
 import { VELD, veldFaq } from './veld';
 import { ZAAL } from './zaal';
+import { BRAND_PROFILES, brandAnchor } from './brands';
 
 // Scheduled content is checked too, before it goes live.
 const ALL = [
@@ -25,9 +26,17 @@ function linksIn(text: string): string[] {
   return [...text.matchAll(/\]\(([^)\s]+)\)/g)].map((match) => match[1] ?? '');
 }
 
+/** The anchors of the brand cards on /merken, as the page writes them. */
+const BRAND_ANCHORS = new Set(BRAND_PROFILES.map((b) => brandAnchor(b.brand)));
+
 /** The page exists and (for articles and posts) is live on `liveFrom`. */
 function internalPathExists(path: string, liveFrom: string): boolean {
-  const [pathname = ''] = path.split('?');
+  const [withoutHash = '', hash] = path.split('#');
+  // A brand anchor on /merken must be a brand that has a card there (decision log 2026-11-08).
+  if (withoutHash === '/merken' && hash !== undefined) {
+    return BRAND_ANCHORS.has(hash);
+  }
+  const [pathname = ''] = withoutHash.split('?');
   const [, section, slug] = pathname.split('/');
   if (slug === undefined) {
     return existsSync(`src/app/${section}/page.tsx`);

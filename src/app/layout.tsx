@@ -61,6 +61,7 @@ const siteJsonLd = {
       name: SITE_NAME,
       url: SITE_URL,
       email: CONTACT_EMAIL,
+      description: DEFAULT_DESCRIPTION,
       // The same icon that is visible in the header.
       logo: `${SITE_URL}/icon-512.png`,
       // Visible as a link in the footer.
@@ -72,6 +73,7 @@ const siteJsonLd = {
       name: SITE_NAME,
       url: SITE_URL,
       inLanguage: 'nl-NL',
+      description: DEFAULT_DESCRIPTION,
       publisher: { '@id': `${SITE_URL}/#organization` },
     },
   ],

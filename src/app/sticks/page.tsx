@@ -16,11 +16,12 @@ import { ImportedSticks } from '@/components/catalog/ImportedSticks';
 import { getCatalogStats } from '@/catalog/stats';
 import { TrackedBlock } from '@/components/catalog/TrackedBlock';
 import { InlineText } from '@/components/article/InlineText';
-import { plainText } from '@/components/article/inlineMarkup';
+import { FaqSection } from '@/components/article/FaqSection';
+import { productPath } from '@/catalog/paths';
+import { itemListJsonLd, jsonLdHtml } from '@/lib/jsonLd';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 import { VELD, veldFaq, veldMetaDescription } from '@/content/veld';
 import { splitListNote } from '@/content/catalogLists';
-import { jsonLdHtml } from '@/lib/jsonLd';
 
 /** The counts in the description come from the same stats as the page. */
 export function generateMetadata(): Metadata {
@@ -76,26 +77,8 @@ export default async function SticksPage({
   // which (with the sitemap lastmod) only moves for content changes.
   const feedDates = getFeedReadDates();
 
-  // Describes only the questions and answers visible on this page.
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    url: absoluteUrl('/sticks'),
-    mainEntity: faq.map((item) => ({
-      '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: { '@type': 'Answer', text: plainText(item.answer) },
-    })),
-  };
-
   return (
     <>
-      {showLanding && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqJsonLd) }}
-        />
-      )}
       <PageHeader
         eyebrow="Catalogus"
         title={VELD.title}
@@ -169,23 +152,18 @@ export default async function SticksPage({
         )}
 
         {showLanding && (
-          <section className="mt-12 max-w-3xl" aria-labelledby="veld-faq-heading">
-            <h2 id="veld-faq-heading" className="text-2xl font-bold">
-              {VELD.faq.heading}
-            </h2>
-            <TrackedBlock page="sticks" block="faq">
-              <div className="mt-5 space-y-6">
-                {faq.map((item) => (
-                  <div key={item.question}>
-                    <h3 className="text-lg font-bold">{item.question}</h3>
-                    <p className="mt-2 text-inkt/80">
-                      <InlineText text={item.answer} />
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </TrackedBlock>
-          </section>
+          // Visible questions and their FAQPage markup from one source (FaqSection).
+          <FaqSection
+            id="veld-faq-heading"
+            heading={VELD.faq.heading}
+            items={faq}
+            url={absoluteUrl('/sticks')}
+            wrap={(list) => (
+              <TrackedBlock page="sticks" block="faq">
+                {list}
+              </TrackedBlock>
+            )}
+          />
         )}
 
         <h2
@@ -260,6 +238,21 @@ export default async function SticksPage({
           </p>
         )}
         <div className="mt-4">
+          {showLanding && (
+            // The hand-checked sticks this page shows, as links (no Product markup on an overview).
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: jsonLdHtml(
+                  itemListJsonLd(
+                    'Veldhockeysticks met de hand nagekeken',
+                    absoluteUrl('/sticks'),
+                    products.map((product) => ({ name: product.name, url: absoluteUrl(productPath(product)) })),
+                  ),
+                ),
+              }}
+            />
+          )}
           <ProductGrid products={products} />
         </div>
         {filtered && pageCount > 1 && (

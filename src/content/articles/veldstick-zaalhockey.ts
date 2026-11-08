@@ -81,7 +81,7 @@ export const veldstickZaalhockey: Article = {
       heading: 'Wanneer is een zaalstick een logische stap?',
       level: 2,
       body: [
-        'Merken ontwerpen zaalsticks speciaal voor het spel binnen. Grays geeft zijn zaalsticks bijvoorbeeld een kleinere kop, gemaakt voor snelle acties in een kleine ruimte.',
+        'Merken ontwerpen zaalsticks speciaal voor het spel binnen. [Grays](/merken#merk-grays) geeft zijn zaalsticks bijvoorbeeld een kleinere kop, gemaakt voor snelle acties in een kleine ruimte.',
         'Speel je vaak in de zaal, of neem je het zaalspel serieus? Dan kan een zaalstick een mooie stap zijn. Het blijft een voorkeur, geen must. Wij testen sticks niet zelf, dus wat een zaalstick in jouw spel oplevert, kunnen we niet voor je meten.',
       ],
     },
