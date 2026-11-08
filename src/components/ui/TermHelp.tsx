@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { TERMS, type TermKey } from '@/content/terms';
 
 /**
@@ -6,7 +7,16 @@ import { TERMS, type TermKey } from '@/content/terms';
  * <details>: works without JavaScript, by keyboard and on a phone, where a
  * hover tooltip would not. The text is in the HTML for search engines too.
  */
-export function TermHelp({ terms, label = 'Wat betekent dit?' }: { terms: readonly TermKey[]; label?: string }) {
+export function TermHelp({
+  terms,
+  label = 'Wat betekent dit?',
+  children,
+}: {
+  terms: readonly TermKey[];
+  label?: string;
+  /** Shown under the explanation, e.g. the bow figure in an advice. */
+  children?: ReactNode;
+}) {
   return (
     <details className="group mt-1 text-sm">
       <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-1 font-semibold text-veld [&::-webkit-details-marker]:hidden">
@@ -25,6 +35,7 @@ export function TermHelp({ terms, label = 'Wat betekent dit?' }: { terms: readon
             </Link>
           </p>
         ))}
+        {children}
       </div>
     </details>
   );

@@ -571,7 +571,8 @@ export function QuizForm() {
         {screen.title}
       </h2>
 
-      <div className="mt-4 space-y-8">
+      {/* Keyed on the screen, so each new screen plays the short slide-in (UX phase 3). */}
+      <div key={screen.id} className="screen-in mt-4 space-y-8">
         {requiredIds.map((id) => renderField(id, false))}
 
         {optionalIds.length > 0 && (

@@ -4,39 +4,15 @@ import { useId, useState } from 'react';
 import {
   BOW_FIGURE_OPTIONS,
   MAX_BOW_DEPTH_MM,
-  bowDepthAt,
   type BowFigureOption,
 } from '@/content/bowProfiles';
+import { BASE_Y, DEPTH, GRIP_X, HOOK_PATH, HOOK_X, bowPath, peakX } from './bowGeometry';
 import { trackEvent } from '@/lib/analytics/track';
 
-// Drawing geometry (SVG user units). The stick lies horizontally: grip on the
-// left, hook on the right. The bow is drawn exaggerated so it is visible.
-const GRIP_X = 40;
-const HOOK_X = 520;
-const BASE_Y = 96;
-const DEPTH = 46;
-const SAMPLES = 60;
-
-function bowPath(peak: number): string {
-  const points: string[] = [];
-  for (let i = 0; i <= SAMPLES; i += 1) {
-    const t = i / SAMPLES; // 0 = hook end, 1 = grip end
-    const x = HOOK_X - t * (HOOK_X - GRIP_X);
-    const y = BASE_Y - bowDepthAt(t, peak) * DEPTH;
-    points.push(`${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`);
-  }
-  return points.join(' ');
-}
-
-const HOOK_PATH = `M${HOOK_X} ${BASE_Y} C ${HOOK_X + 46} ${BASE_Y} ${HOOK_X + 62} ${BASE_Y + 34} ${HOOK_X + 36} ${BASE_Y + 46} C ${HOOK_X + 20} ${BASE_Y + 53} ${HOOK_X + 6} ${BASE_Y + 44} ${HOOK_X + 12} ${BASE_Y + 32}`;
-
-function peakX(option: BowFigureOption): number {
-  return HOOK_X - option.peak * (HOOK_X - GRIP_X);
-}
-
-export function BowProfileFigure() {
+/** `initial`: the profile shown first (a stick page opens on the stick's own bow). */
+export function BowProfileFigure({ initial = 'midbow' }: { initial?: BowFigureOption['id'] } = {}) {
   const [selectedId, setSelectedId] =
-    useState<BowFigureOption['id']>('midbow');
+    useState<BowFigureOption['id']>(initial);
   const groupName = useId();
   const captionId = useId();
   const selected =

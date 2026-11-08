@@ -2487,3 +2487,24 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/advice-engine/liveCount.ts` (+ test), `src/app/stickwijzer/actions.ts`, `src/components/stickwijzer/QuizForm.tsx`;
 - `src/catalog/compare.ts`, `src/app/vergelijk/page.tsx`, `src/components/compare/`;
 - `src/components/catalog/{ProductCard,ProductFacts}.tsx`, `src/app/layout.tsx`, `src/lib/analytics/events.ts`.
+
+## 2026-11-08 — UX fase 3: bow-illustratie, carbonbalk en rustige overgangen
+
+**Opdracht eigenaar (2026-11-08):** fase 3 van de UX-opdracht.
+
+1. **Bow-illustratie** (`BowMiniFigure`): op de stickpagina, in de rij Bow-profiel van de specificaties, en in elk advies onder "Wat betekenen kromming en carbon?".
+   - **Weergave:** de kromming van de stick in blauw, met de andere profielen in grijs.
+   - **Hergebruik:** dezelfde schematische tekening als de interactieve figuur in het artikel over bow-profielen. De tekencode staat nu in `bowGeometry.ts`; de figuur in het artikel kan met `initial` op een profiel openen.
+   - **Dynabow:** valt in de figuur onder "Pro bow / dynabow", zoals in het artikel.
+   - **Status:** het blijft een redactionele weergave, geen meting.
+2. **Carbonbalk** (`CarbonBar`): het percentage op een schaal van 0 tot 100%, in de specificaties en in elk advies. Bewust neutraal: een grijze balk met een donkere stip, zonder kleur die zegt dat meer beter is (carbon is geen maat voor stijfheid, besluit 2026-11-08).
+3. **Overgangen:**
+   - **Nieuw scherm:** schuift in de stickwijzer kort in (220 ms).
+   - **Keuzes:** geven een kleine druk-reactie.
+   - **Bewegingsgevoeligheid:** met `prefers-reduced-motion` staat beides uit.
+   - **Afwijking van de opdracht:** gemaakt met CSS, zonder Framer Motion. Een extra pakket is niet nodig (CLAUDE.md: geen dependency zonder noodzaak).
+
+**Betrokken bestanden:**
+- `src/components/article/{bowGeometry.ts,BowProfileFigure.tsx}`, `src/components/catalog/{BowMiniFigure,CarbonBar,ProductSpecTable}.tsx`;
+- `src/components/ui/TermHelp.tsx`, `src/components/stickwijzer/{RecommendationCard,QuestionField,QuizForm}.tsx`;
+- `src/app/globals.css`.
