@@ -2535,3 +2535,13 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 **Waarom:** Node 20 is end-of-life, CI en alle workflows draaien al op 22, en vitest 5 vraagt `^22.12`. Zo bouwt Netlify met dezelfde versie als de tests.
 
 **Bewust niet:** de workflows zijn niet aangepast; alle 23 gebruiken al `node-version: 22`.
+
+## 2026-11-08 — Catalogus-agents niet tegelijk (code-review)
+
+**Wat:**
+- De catalogus-hercontrole draait op vrijdag 05:23 UTC (was donderdag); de verrijker blijft op donderdag.
+- Beide workflows slaan hun week over zolang er een open PR van een van beide staat (branches `hercontrole/` en `catalogus/`). De log noemt welke PR de oorzaak is.
+
+**Waarom:** beide startten donderdag 05:23 UTC en bewerken allebei `src/catalog/products/`. Twee PR's tegelijk op dezelfde bestanden geven conflicten.
+
+**Bewust niet:** de catalogus-aanvuller (dinsdag) wacht nog alleen op `catalogus/`-PR's. Het open-PR-overslaan van de aanvuller viel buiten deze opdracht.
