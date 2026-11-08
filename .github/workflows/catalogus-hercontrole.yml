@@ -1,13 +1,13 @@
 # Catalog re-check: re-verifies the sticks whose quarterly check (docs/source-policy.md §3)
 # falls due within four weeks, at most 12 per run, following
 # docs/catalogus-hercontroleur.md, and opens one pull request. Never merges.
-# Skips the week if a re-check PR is still open, or if no stick is due yet.
+# Skips the week if a re-check or catalog PR is still open, or if no stick is due yet.
 # Runs on the owner's Claude subscription (secret CLAUDE_CODE_OAUTH_TOKEN).
 name: Catalogus-hercontrole
 
 on:
   schedule:
-    - cron: '23 5 * * 4' # Thursday 05:23 UTC
+    - cron: '23 5 * * 5' # Friday 05:23 UTC: the enricher has Thursday; both edit src/catalog/products/
   workflow_dispatch:
 
 permissions:
@@ -32,14 +32,20 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Nog open hercontrole-PR?
+      - name: Nog open hercontrole- of catalogus-PR?
         id: open
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          open=$(gh pr list --state open --json headRefName --jq '[.[] | select(.headRefName | startswith("hercontrole/"))] | length')
+          # Also wait for an open PR of the other catalog agent: both edit
+          # src/catalog/products/ and would otherwise conflict (code review 2026-11-08).
+          prs=$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | startswith("hercontrole/") or startswith("catalogus/")) | "#\(.number) (\(.headRefName))"')
+          open=$(printf '%s' "$prs" | grep -c . || true)
           echo "open=$open" >> "$GITHUB_OUTPUT"
-          if [ "$open" -gt 0 ]; then echo "Er staat nog een hercontrole-PR open; deze week niets nieuws."; fi
+          if [ "$open" -gt 0 ]; then
+            echo "Er staat nog een hercontrole- of catalogus-PR open; deze week niets nieuws. Oorzaak:"
+            printf '%s\n' "$prs"
+          fi
 
       - run: npm ci
         if: steps.open.outputs.open == '0'
