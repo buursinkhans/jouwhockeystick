@@ -2527,3 +2527,20 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 **Betrokken bestanden:**
 - `src/catalog/offers/{sort.ts,index.ts,sizeStock.test.ts}`, `src/content/offers.ts`;
 - `src/components/offers/{WhereToBuy,OfferBlockView}.tsx`, `src/lib/analytics/events.ts`.
+
+## 2026-11-08 — Geen Netlify-build voor alleen docs (code-review)
+
+**Wat:** `netlify.toml` krijgt `ignore = "bash scripts/netlify-ignore.sh"`. Het script slaat een build over als tussen de vorige build (`CACHED_COMMIT_REF`) en deze commit (`COMMIT_REF`) alleen deze paden veranderd zijn:
+- `docs/`, `.github/`, `video/` en `assets/video/`;
+- `README.md`, `AGENTS.md` en `CLAUDE.md`;
+- `*.test.ts(x)`.
+
+**Altijd bouwen bij:**
+- een build via de build hook (`INCOMING_HOOK_TITLE` of `INCOMING_HOOK_URL` gezet). Netlify past het ignore-commando daar volgens de documentatie al niet op toe; dit is een tweede slot;
+- geen of dezelfde vorige commit;
+- een mislukte `git diff`;
+- elk ander gewijzigd pad. Een verplaatst bestand telt met zijn oude pad mee.
+
+**Waarom:** elke productie-deploy kost 15 Netlify-credits, ook als alleen documentatie of een workflow verandert.
+
+**Bewust niet:** geen lijst van paden die wél bouwen. Bij een onbekend pad bouwt het script, dus bij twijfel wordt er gebouwd.
