@@ -2414,3 +2414,13 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/app/{layout,sticks/page,merken/page}.tsx`, `src/components/home/StickwijzerExplainer.tsx`;
 - `src/content/brands.ts`, `src/content/articles/{low-bow-vs-mid-bow,veldstick-zaalhockey}.ts`;
 - tests: `src/seo/structuredData.test.ts`, `src/content/{articles,sticksSeo}.test.ts`.
+
+## 2026-11-08 — SEO stap C: unieke meta descriptions en kortere titels voor stickpagina's
+
+**Opdracht eigenaar (2026-11-08):** de punten uit de technische check van stap A.
+
+- **Meta descriptions:** die noemen nu de modelnaam ("Veldstick Grays JB 10 Composite met low bow ..."). Vier paren sticks met dezelfde specificaties hadden dezelfde tekst. Past het niet, dan valt eerst de vaste slotzin weg en pas daarna de lengtes. Een test eist dat elke geïndexeerde stick een eigen omschrijving heeft.
+- **Titels van stickpagina's:** een titel die met ": specs en advies" boven de 60 tekens komt, wordt alleen de naam. Een test bewaakt dat elke titel uniek is en hooguit 60 tekens telt.
+- **Bewust niet:** de titels van drie artikelen ("Hockeystick lengte tabel: ...", "Hockeystick-begrippen uitgelegd: ...", "Met welke stick speelt Oranje? ...") zijn 62 tot 64 tekens. Dat zijn rankende pagina's; inkorten is een redactionele keuze, en Google kort zelf af. Ook de trage pagina's /stickwijzer en /zaalsticks (ruim 4 s HTML) blijven nog open: daarvoor is eerst meten nodig.
+
+**Betrokken bestanden:** `src/catalog/metaDescription.ts` (+ test), `src/components/catalog/ProductDetail.tsx`, `src/catalog/productTitle.test.ts`.

@@ -23,7 +23,7 @@ describe('productMetaDescription', () => {
   it('describes the Grays JB 10 from its specs', () => {
     const jb10 = getProductBySlug('grays-jb10-composite')!;
     expect(productMetaDescription(jb10)).toBe(
-      'Veldstick van Grays met low bow en 95% carbon, voor ervaren spelers. In 36,5, 37,5 en 38,5 inch. Bekijk specs, passende lengte en vergelijkbare sticks.',
+      'Veldstick Grays JB 10 Composite met low bow en 95% carbon, voor ervaren spelers. In 36,5, 37,5 en 38,5 inch.',
     );
   });
 
@@ -34,7 +34,12 @@ describe('productMetaDescription', () => {
       bowProfile: undefined,
       carbonPercentage: undefined,
     });
-    expect(text).toMatch(/^Veldstick van Grays, voor ervaren spelers\./);
+    expect(text).toMatch(/^Veldstick Grays JB 10 Composite, voor ervaren spelers\./);
+  });
+
+  it('gives every indexed stick its own description (Technical SEO, 2026-11-08)', () => {
+    const texts = getAllProducts(new Date()).map((p) => productMetaDescription(p));
+    expect(new Set(texts).size).toBe(texts.length);
   });
 });
 
@@ -56,7 +61,7 @@ describe('carbon wording', () => {
   it('says "zonder carbon" for a stick with 0% carbon', () => {
     const scoop = getProductBySlug('scoop-wdn-junior-indoor')!;
     expect(productMetaDescription(scoop)).toMatch(
-      /^Zaalstick van Scoop met mid bow, zonder carbon, voor beginnende spelers\./,
+      /^Zaalstick Scoop .+ met mid bow, zonder carbon, voor beginnende spelers\./,
     );
   });
 });
@@ -73,7 +78,7 @@ describe('estimates', () => {
       },
     });
     expect(text).toMatch(
-      /^Veldstick van Grays met 95% carbon, kan passen bij ervaren spelers\./,
+      /^Veldstick Grays JB 10 Composite met 95% carbon, kan passen bij ervaren spelers\./,
     );
   });
 });
