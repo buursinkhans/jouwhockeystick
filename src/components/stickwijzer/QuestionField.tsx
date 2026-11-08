@@ -9,11 +9,11 @@ export type AnswerValue = string | string[] | number | undefined;
 // state (blue border, krijt fill, ring, bold) and a short transition that
 // stops with prefers-reduced-motion.
 const OPTION_CLASSES =
-  'flex min-h-12 cursor-pointer items-center gap-2.5 rounded-xl border border-rand bg-white px-4 py-2.5 text-[0.9375rem] shadow-card transition-[border-color,background-color,box-shadow] duration-150 hover:border-veld/50 motion-reduce:transition-none has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:font-semibold has-[:checked]:ring-2 has-[:checked]:ring-veld/25 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-veld has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50';
+  'flex min-h-12 cursor-pointer items-center gap-2.5 rounded-xl border border-rand bg-white px-4 py-2.5 text-[0.9375rem] shadow-card transition-[border-color,background-color,box-shadow,transform] duration-150 hover:border-veld/50 active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100 has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:font-semibold has-[:checked]:ring-2 has-[:checked]:ring-veld/25 has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-veld has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50';
 
 /** A route card: a label to choose plus a fold-out with more detail. */
 const OPTION_CARD_CLASSES =
-  'flex flex-col rounded-2xl border border-rand bg-white p-4 shadow-card transition-[border-color,background-color,box-shadow] duration-150 hover:border-veld/50 motion-reduce:transition-none has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:ring-2 has-[:checked]:ring-veld/25 has-[input:focus-visible]:outline has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-veld';
+  'flex flex-col rounded-2xl border border-rand bg-white p-4 shadow-card transition-[border-color,background-color,box-shadow,transform] duration-150 hover:border-veld/50 active:scale-[0.99] motion-reduce:transition-none motion-reduce:active:scale-100 has-[:checked]:border-veld has-[:checked]:bg-krijt has-[:checked]:ring-2 has-[:checked]:ring-veld/25 has-[input:focus-visible]:outline has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-veld';
 
 /** The explanation that sits next to a question: why we ask it, plus any help text. */
 function Explanation({ def }: { def: QuestionDef }) {

@@ -7,6 +7,8 @@ import { WhereToBuy } from '@/components/offers/WhereToBuy';
 import type { AdviceRoute } from '@/advice-engine/answers';
 import { adviceLevel } from '@/advice-engine/productRules';
 import { TermHelp } from '@/components/ui/TermHelp';
+import { BowMiniFigure } from '@/components/catalog/BowMiniFigure';
+import { CarbonBar } from '@/components/catalog/CarbonBar';
 import type {
   AdviceReason,
   AdviceResultItem,
@@ -199,13 +201,20 @@ export function RecommendationCard({
         <div className="bg-white px-3 py-2.5">
           <dt className="text-xs text-lijngrijs">Carbon</dt>
           <dd className="font-semibold">{carbon === undefined ? 'Niet vermeld' : `${carbon}%`}</dd>
+          {carbon !== undefined && (
+            <dd>
+              <CarbonBar percentage={carbon} />
+            </dd>
+          )}
         </div>
         <div className="bg-white px-3 py-2.5">
           <dt className="text-xs text-lijngrijs">Modeljaar</dt>
           <dd className="font-semibold">{modelYear ?? 'Niet bevestigd'}</dd>
         </div>
       </dl>
-      <TermHelp terms={['bow', 'carbon']} label="Wat betekenen kromming en carbon?" />
+      <TermHelp terms={['bow', 'carbon']} label="Wat betekenen kromming en carbon?">
+        {product.bowProfile && <BowMiniFigure bow={product.bowProfile.value} label={BOW_LABELS[product.bowProfile.value]} />}
+      </TermHelp>
 
       {/* The match and the trade-off side by side from sm, so the compromise is never hidden. */}
       <div className="mt-6 grid gap-6 sm:grid-cols-2">
