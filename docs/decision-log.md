@@ -2527,3 +2527,14 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 **Betrokken bestanden:**
 - `src/catalog/offers/{sort.ts,index.ts,sizeStock.test.ts}`, `src/content/offers.ts`;
 - `src/components/offers/{WhereToBuy,OfferBlockView}.tsx`, `src/lib/analytics/events.ts`.
+
+## 2026-11-08 — Kleine opschoning na code-review
+
+**Wat:**
+- **a. PostHog meet alleen op productie:** op `jouwhockeystick.nl` en `www.jouwhockeystick.nl`, met de host uit `SITE_URL`. Netlify-previews en lokaal tellen niet meer mee.
+- **b. Artikel "Kun je met een veldstick zaalhockeyen?":** zegt "Een zaalstick met een lage richtprijs uit onze catalogus" in plaats van "De goedkoopste zaalstick". Een test in `articles.test.ts` weert "goedkoopst", "beste prijs" en "scherpste prijs" in artikelen en blogs.
+- **c. Zeven sticks zonder `bolProductUrl` of `bolNotSold`:** niets gewijzigd. bol.com weigert automatisch lezen (HTTP 403), en een botcheck omzeilen we niet. De eigenaar controleert ze met de hand.
+
+**Waarom:** previewbezoeken vervuilden de statistiek, en "goedkoopst" is volgens CLAUDE.md niet toegestaan.
+
+**Bewust niet:** de sterke punten van drie sticks in `src/catalog/products/` noemen "een van de goedkoopste juniorsticks in onze catalogus" of iets vergelijkbaars. Dat valt buiten deze opdracht en staat als open punt in de PR.

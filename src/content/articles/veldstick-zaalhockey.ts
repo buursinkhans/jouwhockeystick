@@ -16,7 +16,7 @@ const differences = disciplineDifferences(
 );
 
 const priceSentence = cheapest
-  ? `De goedkoopste zaalstick in onze catalogus die bij bol.com te koop is: ${stickListItem(cheapest)}. Controleer de actuele prijs en de leverbare maat bij de winkel.`
+  ? `Een zaalstick met een lage richtprijs uit onze catalogus die bij bol.com te koop is: ${stickListItem(cheapest)}. Controleer de actuele prijs en de leverbare maat bij de winkel.`
   : 'We hebben op dit moment geen zaalsticks in onze catalogus die bij bol.com te koop zijn.';
 
 export const veldstickZaalhockey: Article = {

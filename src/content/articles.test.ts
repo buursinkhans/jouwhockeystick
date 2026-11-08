@@ -96,6 +96,15 @@ describe('articles and blog posts', () => {
   );
 
   it.each(ALL)(
+    '$base/$article.slug makes no "goedkoopst" or "beste prijs" claim',
+    ({ article }) => {
+      // CLAUDE.md, Commerce: no "goedkoopst", "beste prijs" or "scherpste prijs" (code review 2026-11-08).
+      const text = JSON.stringify([article.title, article.seoTitle, article.metaDescription, article.intro, article.sections]);
+      expect(text).not.toMatch(/goedkoopst|beste prijs|scherpste prijs/i);
+    },
+  );
+
+  it.each(ALL)(
     '$base/$article.slug keeps sources out of the text and lists them below',
     ({ article }) => {
       // House style (docs/content-agent.md §3): no "[Bron: …]" links or
