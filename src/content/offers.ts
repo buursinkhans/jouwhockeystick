@@ -76,6 +76,30 @@ export function priceBreakdown(price: number, shipping: number | null): string {
   return `${euro(price)} + ${euro(shipping)} verzending`;
 }
 
+/**
+ * One line above the shops in an advice (UX phase 4, 2026-11-08): whether the
+ * advised length is in stock, according to the feeds and with their date.
+ * Never a delivery promise ("morgen in huis"): the feeds give no reliable
+ * delivery time, and the shop confirms stock after the click. Null when no
+ * shop has a current price in stock.
+ */
+export function sizeStockLine(
+  stock: { inSize: number; unknown: number; stocked: number; total: number; readAt: readonly string[] },
+  size: number,
+): { tone: 'yes' | 'unknown' | 'none'; text: string } | null {
+  if (stock.stocked === 0) return null;
+  if (stock.inSize > 0) {
+    const read = readLine(stock.readAt);
+    const where =
+      stock.total === 1
+        ? 'volgens de feed van de winkel'
+        : `bij ${stock.inSize === stock.total ? `alle ${stock.total}` : `${stock.inSize} van ${stock.total}`} winkels volgens hun feeds`;
+    return { tone: 'yes', text: `${inch(size)} op voorraad ${where}${read ? `, ${read}` : ''}` };
+  }
+  if (stock.unknown > 0) return { tone: 'unknown', text: `Of ${inch(size)} op voorraad is, zie je na de klik bij de winkel` };
+  return { tone: 'none', text: `${inch(size)} is volgens de feeds nu nergens op voorraad, andere lengtes wel` };
+}
+
 /** What the feed says about lengths, for one shop. */
 export function stockLine({
   inStock,

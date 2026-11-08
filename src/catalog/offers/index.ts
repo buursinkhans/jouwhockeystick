@@ -16,8 +16,8 @@ import { HOCKEYCITY_OFFERS } from './hockeyCity';
 import { PLUTOSPORT_MATCHES } from './matches';
 import type { Offer } from './sort';
 
-export type { Offer } from './sort';
-export { MAX_PRICE_AGE_DAYS, hasLength, isPriceFresh, lowestTotal, sortOffers, totalPrice } from './sort';
+export type { Offer, SizeStock } from './sort';
+export { MAX_PRICE_AGE_DAYS, hasLength, isPriceFresh, lowestTotal, sizeStock, sortOffers, totalPrice } from './sort';
 
 export type PlutosportMatch = {
   /** Product page on plutosport.nl; the tracking link is built in src/lib/retailers.ts. */

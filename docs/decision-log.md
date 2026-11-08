@@ -2508,3 +2508,22 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/components/article/{bowGeometry.ts,BowProfileFigure.tsx}`, `src/components/catalog/{BowMiniFigure,CarbonBar,ProductSpecTable}.tsx`;
 - `src/components/ui/TermHelp.tsx`, `src/components/stickwijzer/{RecommendationCard,QuestionField,QuizForm}.tsx`;
 - `src/app/globals.css`.
+
+## 2026-11-08 — UX fase 4: voorraad in de geadviseerde lengte
+
+**Opdracht eigenaar (2026-11-08):** fase 4 van de UX-opdracht (conversie).
+
+1. **Al gebouwd:** de knoppen heten "Bekijk prijs bij [winkel]" (besluit 2026-11-08) en elke stick heeft een prijsvergelijking ("Waar te koop").
+2. **Nieuw: één regel boven de winkels in elk advies**, bijvoorbeeld "36,5" op voorraad bij 2 van 4 winkels volgens hun feeds, gelezen op 6 nov".
+   - **Bron:** alleen feeds die hooguit 14 dagen oud zijn, net als de prijzen. Een oudere feed zegt niets over vandaag.
+   - **Geen lengtes in de feed:** geen regel; de winkelrij zegt al "maat kiezen bij de winkel".
+   - **Lengte nergens op voorraad:** "36,5" is volgens de feeds nu nergens op voorraad, andere lengtes wel". De rijen eronder tonen welke.
+   - **Geen winkel met een actuele prijs op voorraad:** geen regel.
+3. **Analytics:** `offer_block_view` krijgt in een advies `inSizeCount`, het aantal winkels met de geadviseerde lengte op voorraad. Zo is te meten of voorraad in de maat samenhangt met doorkliks.
+4. **Afwijking van de opdracht:** geen "Morgen in huis" of andere leverbelofte. De feeds geven geen betrouwbare levertijd (CLAUDE.md: geen badge voor levertijd; zonder bevestigde voorraad geen belofte van levering). Een test bewaakt dat de regel geen levering, "goedkoopst" of "beste prijs" noemt.
+
+**Advies ongewijzigd:** de volgorde van de winkels en de adviesscore zijn niet aangepast.
+
+**Betrokken bestanden:**
+- `src/catalog/offers/{sort.ts,index.ts,sizeStock.test.ts}`, `src/content/offers.ts`;
+- `src/components/offers/{WhereToBuy,OfferBlockView}.tsx`, `src/lib/analytics/events.ts`.

@@ -59,6 +59,8 @@ export type AnalyticsEvent =
       offerCount: number;
       /** Shops in the block with a current price. */
       pricedCount: number;
+      /** In an advice: shops whose feed lists the advised length in stock (UX phase 4). */
+      inSizeCount?: number;
     }
   | {
       /** The short indoor selector on /zaalsticks; no personal data. */

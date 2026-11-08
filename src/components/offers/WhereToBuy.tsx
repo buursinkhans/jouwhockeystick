@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { getOffers, isPriceFresh, type Offer } from '@/catalog/offers';
+import { getOffers, isPriceFresh, sizeStock, type Offer } from '@/catalog/offers';
 import { productPath } from '@/catalog/paths';
 import type { Product } from '@/catalog/types';
 import type { RetailerPlacement } from '@/lib/retailers';
-import { OFFER_TEXT, inch, readLine } from '@/content/offers';
+import { OFFER_TEXT, inch, readLine, sizeStockLine } from '@/content/offers';
+import { AlertIcon, CheckIcon } from '@/components/ui/icons';
 import { PARTNER_LINK_LABEL, PARTNER_LINK_URL } from '@/content/partnerLinks';
 import { OfferBlockView } from './OfferBlockView';
 import { OfferRows } from './OfferRows';
@@ -94,13 +95,32 @@ export function WhereToBuy({
   const pricedCount = offers.filter((o) => isPriceFresh(o, now)).length;
 
   if (variant === 'compact') {
+    const stock = size !== null ? sizeStock(offers, { size, now }) : null;
+    // "Unknown" is left out here: the rows below already say "maat kiezen bij de winkel".
+    const stockLine = stock && size !== null ? sizeStockLine(stock, size) : null;
+    const stockText = stockLine?.tone === 'unknown' ? null : stockLine;
     return (
-      <OfferBlockView placement={placement} offerCount={offers.length} pricedCount={pricedCount}>
+      <OfferBlockView
+        placement={placement}
+        offerCount={offers.length}
+        pricedCount={pricedCount}
+        {...(stock && { inSizeCount: stock.inSize })}
+      >
         <div className="border-t border-rand pt-4">
           <h5 className="text-base font-bold">
             {OFFER_TEXT.heading}
             {size !== null && offers.length > 0 && ` in ${inch(size)}`}
           </h5>
+          {stockText && (
+            <p className={`mt-1.5 flex items-start gap-1.5 text-sm ${stockText.tone === 'yes' ? 'text-inkt' : 'text-inkt/80'}`}>
+              {stockText.tone === 'yes' ? (
+                <CheckIcon size={16} className="mt-0.5 shrink-0 text-veld" />
+              ) : stockText.tone === 'none' ? (
+                <AlertIcon size={16} className="mt-0.5 shrink-0 text-inkt/60" />
+              ) : null}
+              <span>{stockText.text}</span>
+            </p>
+          )}
           {offers.length === 0 ? (
             <p className="mt-2 text-sm text-inkt/80">{OFFER_TEXT.none}</p>
           ) : (
