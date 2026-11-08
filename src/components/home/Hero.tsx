@@ -98,10 +98,18 @@ export function Hero() {
             Per stick zie je bij welke van onze {shops} partnerwinkels hij te
             koop is, met de prijs incl. verzending.
           </p>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col items-start sm:flex-row sm:items-center">
             <ButtonLink href="/stickwijzer" variant="accent" className="min-h-12 px-7 text-base">
               Start de stickwijzer
             </ButtonLink>
+            {/* For parents and beginners: the same stickwijzer with only four questions (UX phase 1). */}
+            <HomeBlockLink
+              block="hero"
+              href="/stickwijzer?snel"
+              className="mt-3 inline-flex min-h-11 items-center gap-1 font-semibold text-veld hover:underline sm:mt-0 sm:ml-5"
+            >
+              Of kies snel advies in 2 stappen →
+            </HomeBlockLink>
           </div>
           <TrustLine />
         </div>

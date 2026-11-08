@@ -2440,3 +2440,28 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - **Tests:** bewaken dat elke link bestaat en dat de teksten de schrijfstijl volgen: geen gedachtestreepje, geen uitroepteken, hooguit één contrastzin.
 
 **Betrokken bestanden:** `src/content/landingFaqs.ts` (+ test), `src/app/{stickwijzer,kennis,merken}/page.tsx`.
+
+## 2026-11-08 — UX fase 1: snel advies voor ouders, uitleg bij vaktermen en "Bekijk prijs bij"
+
+**Opdracht eigenaar (2026-11-08):** fase 1 van de UX-opdracht, met de afwijkingen die de eigenaar goedkeurde.
+
+1. **Twee ingangen.** Bovenaan de stickwijzer staat de keuze "Snel advies · 2 stappen" of "Uitgebreid advies · 5 tot 7 stappen".
+   - **Link vanaf de homepage:** onder de hoofdknop staat "Of kies snel advies in 2 stappen" (`/stickwijzer?snel`), gemeten als `home_block_click`, block `hero`.
+   - **Snel advies** (`route_self_select: 'quick'`) vraagt voor wie, leeftijd, lichaamslengte, hoeveel seizoenen en budget.
+   - **Afwijking van de opdracht:** lichaamslengte is toegevoegd. Zonder lengte is er geen maatadvies, en de maat is een harde voorwaarde.
+   - **Geen aannames:** de route volgt uit leeftijd en ervaring (zoals bij "Weet ik nog niet"). Alle andere antwoorden blijven leeg en worden niet aangenomen. `has_current_stick` is daarom alleen bij snel advies optioneel.
+   - **Niveau:** iemand met 4+ seizoenen gaat met snel advies geen niveau omhoog, omdat de aanname niet gevraagd is. Boven het resultaat staat waarop het snelle advies is gebaseerd, met een knop naar de uitgebreide stickwijzer.
+2. **Budget als bovengrens in de vraag.** "Wat wil je maximaal uitgeven aan alleen de stick?" met de keuzes Tot €75, Tot €125, Tot €175, Tot €250, Geen bovengrens en Eerst vergelijken. Dat past bij v13, waar het budget een maximum werd.
+   - **Afwijking van de opdracht:** €50, €100 en €150 zijn niet overgenomen, omdat de budgetklassen van de advieskern gelijk blijven.
+3. **Uitleg bij vaktermen** (`src/content/terms.ts`, `TermHelp`): bij bow-profiel, carbon en ervaringsniveau in de specificatietabel, en onder de vakjes in elk advies.
+   - **Vorm:** een `<details>`, dus het werkt zonder JavaScript en met het toetsenbord, en staat in de HTML.
+   - **Formulering:** genuanceerd ("meestal stijver en directer; minder carbon vergeeft meer"), met een link naar het artikel.
+   - **Afwijking van de opdracht:** de voorgestelde tekst over trillen bij koud weer is niet overgenomen; daarvoor is geen bron.
+4. **Knoptekst "Bekijk prijs bij [winkel]"** in plaats van "Koop bij [winkel]" (besluit eigenaar), ook in CLAUDE.md.
+
+**Betrokken bestanden:**
+- `src/advice-engine/answers.ts` (+ test);
+- `src/content/stickwijzer/{questions,quick}.ts`, `src/content/terms.ts`;
+- `src/components/stickwijzer/{QuizForm,QuizResult,AdviceModeChoice,RecommendationCard}.tsx`;
+- `src/components/ui/TermHelp.tsx`, `src/components/catalog/ProductSpecTable.tsx`, `src/components/home/Hero.tsx`;
+- `src/components/offers/OfferRows.tsx` en tests, `CLAUDE.md`.

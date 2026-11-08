@@ -1,5 +1,6 @@
 import { useState, type RefObject } from 'react';
 import Link from 'next/link';
+import { ADVICE_MODE_TEXT } from '@/content/stickwijzer/quick';
 import type { AdviceAnswers } from '@/advice-engine/answers';
 import type { AdviceResult } from '@/advice-engine/types';
 import {
@@ -66,6 +67,7 @@ export function QuizResult({
   onFeedback,
   shareHref,
   shared = false,
+  quick = false,
 }: {
   advice: AdviceResult;
   adviceGoal: AdviceAnswers['advice_goal'] | undefined;
@@ -77,6 +79,8 @@ export function QuizResult({
   shareHref?: string;
   /** Opened from a shared link: one "do it yourself" button instead of edit/restart. */
   shared?: boolean;
+  /** Quick advice (UX phase 1): say what it is based on, and offer the full stickwijzer. */
+  quick?: boolean;
 }) {
   const copy = ROUTE_RESULT_COPY[advice.route];
   const hasResults = advice.results.length > 0;
@@ -108,6 +112,16 @@ export function QuizResult({
               ? 'Onze aanbeveling'
               : 'Onze aanbevelingen'}
           </h2>
+          {quick && (
+            <p className="mt-3 max-w-2xl rounded-xl border border-rand bg-krijt px-4 py-3 text-sm text-inkt/80">
+              {ADVICE_MODE_TEXT.resultNote}{' '}
+              {!shared && (
+                <button type="button" onClick={onRestart} className="font-semibold text-veld underline hover:no-underline">
+                  Doe de uitgebreide stickwijzer
+                </button>
+              )}
+            </p>
+          )}
           {/*
             Profile card (redesign fase 2): what the advice is based on, in
             one glance, before the sticks. Everything here comes from the

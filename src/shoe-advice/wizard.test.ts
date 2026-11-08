@@ -105,7 +105,7 @@ describe('the outcome page', () => {
       expect(html).toContain('Jouw profiel');
       expect(html).not.toMatch(FORBIDDEN);
       if (html.includes('Waarom dit model')) {
-        for (const heading of ['Wat je nog moet controleren', 'Basis en zekerheid van het advies', 'Koop bij']) expect(html).toContain(heading);
+        for (const heading of ['Wat je nog moet controleren', 'Basis en zekerheid van het advies', 'Bekijk prijs bij']) expect(html).toContain(heading);
       } else {
         expect(html).toMatch(/We versoepelen geen voorwaarde|Een verantwoord advies is daarom niet mogelijk/);
       }
@@ -115,7 +115,7 @@ describe('the outcome page', () => {
   it('gives a keeper the boundary text and no shoes', () => {
     const html = render(shoeAnswersSchema.parse({ purpose: 'veld', player: 'keeper' }));
     expect(html).toContain('Schoenen voor keepers');
-    expect(html).not.toContain('Koop bij');
+    expect(html).not.toContain('Bekijk prijs bij');
   });
 
   it('opens a shared advice without question 7 and keeps it out of Google', async () => {

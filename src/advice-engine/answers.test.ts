@@ -131,3 +131,38 @@ describe('"Weet ik nog niet" as route choice (2026-11-08)', () => {
     expect(b.results.map((r) => r.product.slug)).toEqual(a.results.map((r) => r.product.slug));
   });
 });
+
+describe('quick advice (UX phase 1, 2026-11-08)', () => {
+  const now = new Date('2026-11-08T12:00:00Z');
+  const products = getAllProducts(now, { includeImported: true });
+  const quick = {
+    advice_goal: 'child',
+    route_self_select: 'quick',
+    age_band: '8_10',
+    height_cm: 132,
+    experience_seasons: 'lt_1',
+    budget_band: '75_125',
+  } as const;
+
+  it('needs only who, age, height, seasons and budget', () => {
+    expect(adviceAnswersSchema.safeParse(quick).success).toBe(true);
+    const withoutHeight = Object.fromEntries(Object.entries(quick).filter(([key]) => key !== 'height_cm'));
+    expect(adviceAnswersSchema.safeParse(withoutHeight).success).toBe(false);
+  });
+
+  it('gives an advice in the advised size and within the budget, from the suggested route', () => {
+    const advice = getAdvice(adviceAnswersSchema.parse(quick), products, { now });
+    expect(advice.route).toBe('START');
+    expect(advice.results.length).toBeGreaterThan(0);
+    for (const r of advice.results) expect(r.product.priceIndicativeEur.value).toBeLessThanOrEqual(125);
+  });
+
+  it('a player with four seasons is not stepped up on quick advice alone: technique was not asked', () => {
+    const advice = getAdvice(
+      adviceAnswersSchema.parse({ ...quick, advice_goal: 'self', age_band: '18_plus', height_cm: 178, experience_seasons: '4_plus' }),
+      products,
+      { now },
+    );
+    expect(advice.playerLevel.band).toBe('developing');
+  });
+});

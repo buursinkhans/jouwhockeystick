@@ -23,6 +23,12 @@ export const routeSelfSelectSchema = z.enum([
   'advanced_compare',
   /** "Weet ik nog niet" (2026-11-08): the route follows from age and experience. */
   'unsure',
+  /**
+   * Quick advice for parents and beginners (UX phase 1, 2026-11-08): only who,
+   * age, height, seasons played and budget. The route follows from age and
+   * experience, like 'unsure'; nothing else is filled in for the player.
+   */
+  'quick',
 ]);
 export const ageBandSchema = z.enum([
   'under_8',
@@ -182,7 +188,8 @@ const answersShape = {
     .enum(['yes', 'sometimes', 'no', 'unknown'])
     .optional(),
   // G. Huidige stick en reden van vervanging
-  has_current_stick: z.enum(['yes', 'no']),
+  /** Required on every route except quick advice, which does not ask it (see adviceAnswersSchema). */
+  has_current_stick: z.enum(['yes', 'no']).optional(),
   current_stick_like: z
     .array(
       z.enum([
@@ -289,7 +296,7 @@ export function isAnswered(value: unknown): boolean {
 }
 
 const ROUTE_BY_SELF_SELECT: Record<
-  Exclude<z.infer<typeof routeSelfSelectSchema>, 'unsure'>,
+  Exclude<z.infer<typeof routeSelfSelectSchema>, 'unsure' | 'quick'>,
   AdviceRoute
 > = {
   first_stick: 'START',
@@ -306,7 +313,7 @@ export function routeFromSelfSelect(
   value: AdviceAnswers['route_self_select'],
   signals: Partial<Pick<AdviceAnswers, 'age_band' | 'experience_seasons' | 'core_skills_stage'>> = {},
 ): AdviceRoute {
-  if (value !== 'unsure') return ROUTE_BY_SELF_SELECT[value];
+  if (value !== 'unsure' && value !== 'quick') return ROUTE_BY_SELF_SELECT[value];
   return signals.age_band && signals.experience_seasons
     ? suggestRoute({
         age_band: signals.age_band,
@@ -315,6 +322,9 @@ export function routeFromSelfSelect(
       })
     : 'START';
 }
+
+/** The questions of quick advice (UX phase 1, 2026-11-08). */
+export const QUICK_REQUIRED = ['advice_goal', 'route_self_select', 'age_band', 'height_cm', 'experience_seasons', 'budget_band'] as const satisfies readonly QuestionId[];
 
 export function requiredQuestionIds(route: AdviceRoute): QuestionId[] {
   return QUESTION_IDS.filter(
@@ -326,7 +336,8 @@ export function requiredQuestionIds(route: AdviceRoute): QuestionId[] {
 export const adviceAnswersSchema = baseAnswersSchema.superRefine(
   (data, ctx) => {
     const route = routeFromSelfSelect(data.route_self_select, data);
-    const required = requiredQuestionIds(route);
+    // Quick advice asks only these; every other answer stays empty, never assumed.
+    const required = data.route_self_select === 'quick' ? [...QUICK_REQUIRED] : requiredQuestionIds(route);
     // Owner's rule: why a new stick and the brand questions are required
     // once there is a stick
     // (and, for staying with it, once its brand is known).

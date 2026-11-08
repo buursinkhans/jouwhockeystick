@@ -9,6 +9,8 @@ import {
   STOCK_LABELS,
 } from '@/catalog/labels';
 import { SourceBadge, type SourceMeta } from '@/components/ui/SourceBadge';
+import { TermHelp } from '@/components/ui/TermHelp';
+import type { TermKey } from '@/content/terms';
 
 export function ProductSpecTable({
   product,
@@ -18,11 +20,12 @@ export function ProductSpecTable({
   /** "Waar te koop" on the same page shows a current shop price and stock. */
   hasCurrentOffers?: boolean;
 }) {
-  const rows: Array<{ label: string; value: string; sourced: SourceMeta; lengthHelp?: boolean }> = [
+  const rows: Array<{ label: string; value: string; sourced: SourceMeta; lengthHelp?: boolean; term?: TermKey }> = [
     {
       label: 'Ervaringsniveau',
       value: EXPERIENCE_LABELS[product.experienceLevel.value],
       sourced: product.experienceLevel,
+      term: 'level',
     },
     {
       label: 'Vaak gebruikt op positie',
@@ -46,6 +49,7 @@ export function ProductSpecTable({
       label: 'Bow-profiel',
       value: BOW_LABELS[product.bowProfile.value],
       sourced: product.bowProfile,
+      term: 'bow',
     });
   }
 
@@ -54,6 +58,7 @@ export function ProductSpecTable({
       label: 'Carbonpercentage',
       value: `${product.carbonPercentage.value}%`,
       sourced: product.carbonPercentage,
+      term: 'carbon',
     });
   }
 
@@ -95,6 +100,7 @@ export function ProductSpecTable({
             </th>
             <td className="py-3">
               <p>{row.value}</p>
+              {row.term && <TermHelp terms={[row.term]} />}
               {row.lengthHelp && (
                 <p className="mt-1 text-sm text-inkt/80">
                   Welke lengte past bij jou? Bekijk de{' '}
