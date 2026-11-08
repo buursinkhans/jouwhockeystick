@@ -1,7 +1,7 @@
 # Catalog enricher: turns the most popular imported PassaHockey sticks into
 # curated ones (checked data, own text, indexable page), 20 per week, most
 # popular first. Lets Claude follow docs/catalogus-verrijker.md and opens one
-# pull request. Never merges. Skips the week if a catalog PR is still open.
+# pull request. Never merges. Skips the week if a catalog or re-check PR is still open.
 # Runs on the owner's Claude subscription (secret CLAUDE_CODE_OAUTH_TOKEN).
 name: Catalogus-verrijker
 
@@ -32,14 +32,20 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Nog open catalogus-PR?
+      - name: Nog open catalogus- of hercontrole-PR?
         id: open
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          open=$(gh pr list --state open --json headRefName --jq '[.[] | select(.headRefName | startswith("catalogus/"))] | length')
+          # Also wait for an open PR of the other catalog agent: both edit
+          # src/catalog/products/ and would otherwise conflict (code review 2026-11-08).
+          prs=$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | startswith("hercontrole/") or startswith("catalogus/")) | "#\(.number) (\(.headRefName))"')
+          open=$(printf '%s' "$prs" | grep -c . || true)
           echo "open=$open" >> "$GITHUB_OUTPUT"
-          if [ "$open" -gt 0 ]; then echo "Er staat nog een catalogus-PR open; deze week niets nieuws."; fi
+          if [ "$open" -gt 0 ]; then
+            echo "Er staat nog een hercontrole- of catalogus-PR open; deze week niets nieuws. Oorzaak:"
+            printf '%s\n' "$prs"
+          fi
 
       - name: Laatste marktmeting ophalen
         if: steps.open.outputs.open == '0'
