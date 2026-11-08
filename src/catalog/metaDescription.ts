@@ -5,7 +5,7 @@ import type { ExperienceLevel, Product } from './types';
 
 /**
  * The meta description of a stick page, built from catalog data only
- * (decision log 2026-10-23): discipline, brand, bow and carbon (only from the
+ * (decision log 2026-10-23): discipline, model name, bow and carbon (only from the
  * brand or a shop), level (nuanced when estimated) and lengths, then a fixed
  * closing sentence. It no longer uses product.summary, which can contain
  * brand marketing. A missing value is left out, never estimated. Parts are
@@ -59,15 +59,20 @@ export function productMetaDescription(product: Product): string {
     product.experienceLevel.source === 'editorial-estimate'
       ? `kan passen bij ${audience}`
       : `voor ${audience}`;
-  const first = `${kind} van ${product.brand}${detail}, ${level}.`;
+  // The model name makes each description unique: sticks with the same specs
+  // (JB 10 and JB 12+) had the same text (Technical SEO, 2026-11-08).
+  const model = product.name.replace(/\s*hockey\s*stick\s*$/i, '');
+  const named = model.toLowerCase().startsWith(product.brand.toLowerCase()) ? model : `${product.brand} ${model}`;
+  const first = `${kind} ${named}${detail}, ${level}.`;
   const parts = [
     first,
     lengthsText(product.lengthsInches.value),
     CLOSING,
   ].filter((part): part is string => part !== null);
 
-  // Drop the lengths first, then the closing sentence, before cutting words.
-  for (const candidate of [parts, [first, CLOSING], [first]]) {
+  // Drop the closing sentence first (the lengths say more), then the lengths, before cutting words.
+  const lengths = lengthsText(product.lengthsInches.value);
+  for (const candidate of [parts, lengths ? [first, lengths] : [first], [first, CLOSING], [first]]) {
     const text = candidate.join(' ');
     if (text.length <= MAX_DESCRIPTION_LENGTH) return text;
   }
