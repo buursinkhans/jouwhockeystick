@@ -2544,3 +2544,26 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 **Waarom:** elke productie-deploy kost 15 Netlify-credits, ook als alleen documentatie of een workflow verandert.
 
 **Bewust niet:** geen lijst van paden die wél bouwen. Bij een onbekend pad bouwt het script, dus bij twijfel wordt er gebouwd.
+
+## 2026-11-08 — Dagelijkse live-zetting voorbereid (code-review)
+
+**Wat:** de workflow "Geplande publicatie" (`publicatie.yml`) bouwt elke ochtend via de build hook als minstens één van deze redenen geldt (de log noemt welke, of waarom niet):
+- **a.** er staat geplande content klaar;
+- **b.** main heeft commits die nog niet live staan en die de site raken. Dat beslist `scripts/netlify-ignore.sh`, met dezelfde padregels als bij Netlify;
+- **c.** de live build is meer dan 10 dagen oud.
+
+Ook bouwt hij als hij handmatig met "forceer" gestart is.
+
+**Overige wijzigingen:**
+- **`version.txt`:** heeft een tweede regel met de builddatum. De workflow leest daar de live commit en datum uit.
+- **IndexNow:** leest alleen de eerste regel en kan na de build met de vorige en nieuwe live commit gestart worden.
+- **Schakelaar:** het ignore-script slaat een productiebuild na een push over als in Netlify `DAILY_BUILD_ONLY=1` staat. Previews en build hooks bouwen dan gewoon.
+
+**Waarom:** ongeveer 186 productie-deploys per maand (ongeveer 2.800 credits) worden er hooguit 30 (ongeveer 450). Reden c houdt de prijzen op de statische pagina's binnen de grens van 14 dagen (`MAX_PRICE_AGE_DAYS`).
+
+**Bewust niet:**
+- **Geen "Stop builds" in Netlify:** volgens de Netlify-documentatie stopt dat ook deploy previews en builds via de build hook. Daarom de schakelaar `DAILY_BUILD_ONLY` (besluit eigenaar 2026-11-08).
+- **Geen Netlify-API-sleutel en geen nieuwe secrets.**
+- **`scripts/indexnow.ts` is niet aangepast:** het leest `version.txt` niet; alleen de workflow doet dat.
+
+**Gevolg:** met de schakelaar aan staat een merge pas de volgende ochtend rond 05:03 live. Een spoedfix gaat met "Run workflow" en "forceer".

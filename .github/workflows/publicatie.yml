@@ -1,23 +1,42 @@
-# Scheduled publishing: every morning, check whether an article or blog post
-# reaches its publication date (publishedAt) since the last production build.
-# If so, rebuild the live site through a Netlify build hook (secret
-# NETLIFY_BUILD_HOOK). Costs Netlify credits only on those days. Also keeps
-# one issue with the publication schedule up to date.
+# Daily publishing (decision log 2026-11-08): every morning, decide whether
+# the live site needs a new build, and if so rebuild it through a Netlify
+# build hook (secret NETLIFY_BUILD_HOOK). At most one production build a day
+# instead of one per push. It builds when at least one of these holds:
+#   a. an article or blog post reaches its publication date (publishedAt)
+#      since the last live build;
+#   b. main has commits that are not live yet and that touch the site (the
+#      same path rules as scripts/netlify-ignore.sh);
+#   c. the live build is more than MAX_LIVE_AGE_DAYS days old, so shop prices
+#      on the static pages never pass the 14-day limit (MAX_PRICE_AGE_DAYS in
+#      src/catalog/offers/sort.ts);
+#   or it was started by hand with "forceer".
+# The live commit and build date come from https://jouwhockeystick.nl/version.txt
+# (line 1 commit, line 2 build date). After a build it starts IndexNow for the
+# pages that changed since the previous live commit. Also keeps one issue
+# with the publication schedule up to date.
 name: Geplande publicatie
 
 on:
   schedule:
     - cron: '3 4 * * *' # daily 04:03 UTC = 05:03/06:03 Dutch time
   workflow_dispatch:
+    inputs:
+      forceer:
+        description: 'Altijd bouwen (bijvoorbeeld een spoedfix)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
   issues: write
-  actions: read
+  actions: write # start IndexNow after a build
 
 concurrency:
   group: publicatie
   cancel-in-progress: false
+
+env:
+  MAX_LIVE_AGE_DAYS: 10
 
 jobs:
   publish:
@@ -25,6 +44,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # reason b compares the live commit with main
       - uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -33,31 +54,102 @@ jobs:
       # catalog (zod and other packages): without the dependencies it failed on
       # 2026-11-01 and no scheduled article would have gone live.
       - run: npm ci
+
+      - name: Live versie lezen
+        id: live
+        run: |
+          body=$(curl -fsS --max-time 20 https://jouwhockeystick.nl/version.txt || true)
+          sha=$(printf '%s\n' "$body" | sed -n 1p | tr -d '[:space:]')
+          built=$(printf '%s\n' "$body" | sed -n 2p | tr -d '[:space:]')
+          case "$sha" in *[!0-9a-f]* | '') sha='';; esac
+          if ! date -d "$built" +%s >/dev/null 2>&1; then built=''; fi
+          echo "Live commit: ${sha:-onbekend}; live gebouwd: ${built:-onbekend}"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "built=$built" >> "$GITHUB_OUTPUT"
+
       - name: Laatste live-build bepalen
         id: since
         env:
           GH_TOKEN: ${{ github.token }}
+          BUILT: ${{ steps.live.outputs.built }}
         run: |
-          # Last production build = the last push to main, or the last time
-          # this workflow rebuilt the site, whichever is later (Dutch dates).
-          head=$(TZ=Europe/Amsterdam date -d "$(git log -1 --format=%cI)" +%F)
-          hook=0000-00-00
-          for id in $(gh api "repos/${{ github.repository }}/actions/workflows/publicatie.yml/runs?status=success&per_page=30" --jq '.workflow_runs[].id'); do
-            ran=$(gh api "repos/${{ github.repository }}/actions/runs/$id/jobs" --jq '[.jobs[].steps[] | select(.name == "Netlify opnieuw bouwen" and .conclusion == "success")] | length')
-            if [ "$ran" -gt 0 ]; then
-              hook=$(TZ=Europe/Amsterdam date -d "$(gh api "repos/${{ github.repository }}/actions/runs/$id" --jq .run_started_at)" +%F)
-              break
-            fi
-          done
-          since=$head
-          if [[ "$hook" > "$since" ]]; then since=$hook; fi
-          echo "Laatste push naar main: $head; laatste herbouw door deze workflow: $hook"
+          if [ -n "$BUILT" ]; then
+            # The build date on the live site (Dutch date).
+            since=$(TZ=Europe/Amsterdam date -d "$BUILT" +%F)
+            echo "Laatste live-build volgens version.txt: $since"
+          else
+            # Older builds have no date: the last push to main, or the last
+            # time this workflow rebuilt the site, whichever is later.
+            head=$(TZ=Europe/Amsterdam date -d "$(git log -1 --format=%cI)" +%F)
+            hook=0000-00-00
+            for id in $(gh api "repos/${{ github.repository }}/actions/workflows/publicatie.yml/runs?status=success&per_page=30" --jq '.workflow_runs[].id'); do
+              ran=$(gh api "repos/${{ github.repository }}/actions/runs/$id/jobs" --jq '[.jobs[].steps[] | select(.name == "Netlify opnieuw bouwen" and .conclusion == "success")] | length')
+              if [ "$ran" -gt 0 ]; then
+                hook=$(TZ=Europe/Amsterdam date -d "$(gh api "repos/${{ github.repository }}/actions/runs/$id" --jq .run_started_at)" +%F)
+                break
+              fi
+            done
+            since=$head
+            if [[ "$hook" > "$since" ]]; then since=$hook; fi
+            echo "Geen builddatum live; laatste push naar main: $head; laatste herbouw door deze workflow: $hook"
+          fi
           echo "since=$since" >> "$GITHUB_OUTPUT"
+
       - name: Planning controleren
         id: plan
         run: npm run --silent content:schedule -- "${{ steps.since.outputs.since }}" planning.md
+
+      - name: Bouwen of niet?
+        id: decide
+        env:
+          DUE: ${{ steps.plan.outputs.due }}
+          LIVE_SHA: ${{ steps.live.outputs.sha }}
+          BUILT: ${{ steps.live.outputs.built }}
+          FORCE: ${{ inputs.forceer || false }}
+        run: |
+          head=$(git rev-parse HEAD)
+          reasons=()
+          [ "$FORCE" = "true" ] && reasons+=("handmatig gestart met forceer")
+          [ "$DUE" = "true" ] && reasons+=("a: geplande content staat klaar")
+          # b: main differs from live and the difference touches the site.
+          # The Netlify ignore script decides on the same path rules
+          # (exit 1 = build); an unknown live commit also means build.
+          if [ -z "$LIVE_SHA" ]; then
+            reasons+=("b: live commit onbekend")
+          elif [ "$LIVE_SHA" != "$head" ]; then
+            if out=$(env -u INCOMING_HOOK_TITLE -u INCOMING_HOOK_URL -u DAILY_BUILD_ONLY \
+                CACHED_COMMIT_REF="$LIVE_SHA" COMMIT_REF="$head" bash scripts/netlify-ignore.sh); then
+              echo "Main verschilt van live, maar raakt de site niet: $out"
+            else
+              why=${out#*(}
+              reasons+=("b: main is nieuwer dan live en raakt de site: ${why%)}")
+            fi
+          fi
+          # c: the live build is too old for the prices on the static pages.
+          if [ -z "$BUILT" ]; then
+            reasons+=("c: builddatum live onbekend")
+          else
+            age=$(( ( $(date -u +%s) - $(date -u -d "$BUILT" +%s) ) / 86400 ))
+            echo "Live build is $age dagen oud (grens $MAX_LIVE_AGE_DAYS)."
+            if [ "$age" -gt "$MAX_LIVE_AGE_DAYS" ]; then
+              reasons+=("c: live build is $age dagen oud")
+            fi
+          fi
+          today=$(TZ=Europe/Amsterdam date +%F)
+          if [ "${#reasons[@]}" -gt 0 ]; then
+            line="$today: bouwen. Reden: $(IFS=';'; echo "${reasons[*]}" | sed 's/;/; /g')."
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            line="$today: niet gebouwd. Geen geplande content, live is gelijk aan main of het verschil raakt de site niet, en de live build is jong genoeg."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "$line"
+          echo "head=$head" >> "$GITHUB_OUTPUT"
+          { echo "### Live-zetting"; echo; echo "$line"; } >> "$GITHUB_STEP_SUMMARY"
+          { echo; echo "## Laatste controle"; echo; echo "$line"; } >> planning.md
+
       - name: Netlify opnieuw bouwen
-        if: steps.plan.outputs.due == 'true'
+        if: steps.decide.outputs.build == 'true'
         env:
           HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
         run: |
@@ -67,6 +159,18 @@ jobs:
           fi
           curl --fail --silent --show-error -X POST -d '{}' "$HOOK"
           echo "Netlify bouwt de site opnieuw."
+
+      - name: IndexNow na de build starten
+        if: steps.decide.outputs.build == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BEFORE: ${{ steps.live.outputs.sha }}
+          AFTER: ${{ steps.decide.outputs.head }}
+        run: |
+          # IndexNow waits until version.txt shows this commit, then reports
+          # the pages that changed since the previous live commit.
+          gh workflow run indexnow.yml --ref main -f before="$BEFORE" -f after="$AFTER"
+
       - name: Planning in issue zetten
         if: always() && steps.plan.outcome == 'success'
         env:
