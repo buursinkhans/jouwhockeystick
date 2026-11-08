@@ -2528,6 +2528,86 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/catalog/offers/{sort.ts,index.ts,sizeStock.test.ts}`, `src/content/offers.ts`;
 - `src/components/offers/{WhereToBuy,OfferBlockView}.tsx`, `src/lib/analytics/events.ts`.
 
+## 2026-11-08 — Node 22 overal (code-review)
+
+**Wat:** Netlify bouwt met Node 22 (was 20); `package.json` krijgt `engines.node` `>=22.12` en er is een `.nvmrc` met 22.
+
+**Waarom:** Node 20 is end-of-life, CI en alle workflows draaien al op 22, en vitest 5 vraagt `^22.12`. Zo bouwt Netlify met dezelfde versie als de tests.
+
+**Bewust niet:** de workflows zijn niet aangepast; alle 23 gebruiken al `node-version: 22`.
+
+## 2026-11-08 — Catalogus-agents niet tegelijk (code-review)
+
+**Wat:**
+- De catalogus-hercontrole draait op vrijdag 05:23 UTC (was donderdag); de verrijker blijft op donderdag.
+- Beide workflows slaan hun week over zolang er een open PR van een van beide staat (branches `hercontrole/` en `catalogus/`). De log noemt welke PR de oorzaak is.
+
+**Waarom:** beide startten donderdag 05:23 UTC en bewerken allebei `src/catalog/products/`. Twee PR's tegelijk op dezelfde bestanden geven conflicten.
+
+**Bewust niet:** de catalogus-aanvuller (dinsdag) wacht nog alleen op `catalogus/`-PR's. Het open-PR-overslaan van de aanvuller viel buiten deze opdracht.
+
+## 2026-11-08 — Review-agent alleen op PR's uit deze repo (code-review)
+
+**Wat:** `review.yml` controleert vóór de checkout met de GitHub-API of de head-repo van de PR deze repo is. Zo niet, dan stopt de job met een foutmelding.
+
+**Waarom:** bij een handmatige start (`workflow_dispatch`) gold de fork-controle op jobniveau niet. Een PR uit een fork zou dan `npm ci` met install-scripts draaien in dezelfde job als het secret `CLAUDE_CODE_OAUTH_TOKEN`.
+
+**Bewust niet:** de controle bij `pull_request` blijft zoals hij was; die gold al.
+
+## 2026-11-08 — Geen Netlify-build voor alleen docs (code-review)
+
+**Wat:** `netlify.toml` krijgt `ignore = "bash scripts/netlify-ignore.sh"`. Het script slaat een build over als tussen de vorige build (`CACHED_COMMIT_REF`) en deze commit (`COMMIT_REF`) alleen deze paden veranderd zijn:
+- `docs/`, `.github/`, `video/` en `assets/video/`;
+- `README.md`, `AGENTS.md` en `CLAUDE.md`;
+- `*.test.ts(x)`.
+
+**Altijd bouwen bij:**
+- een build via de build hook (`INCOMING_HOOK_TITLE` of `INCOMING_HOOK_URL` gezet). Netlify past het ignore-commando daar volgens de documentatie al niet op toe; dit is een tweede slot;
+- geen of dezelfde vorige commit;
+- een mislukte `git diff`;
+- elk ander gewijzigd pad. Een verplaatst bestand telt met zijn oude pad mee.
+
+**Waarom:** elke productie-deploy kost 15 Netlify-credits, ook als alleen documentatie of een workflow verandert.
+
+**Bewust niet:** geen lijst van paden die wél bouwen. Bij een onbekend pad bouwt het script, dus bij twijfel wordt er gebouwd.
+
+## 2026-11-08 — Dagelijkse live-zetting voorbereid (code-review)
+
+**Wat:** de workflow "Geplande publicatie" (`publicatie.yml`) bouwt elke ochtend via de build hook als minstens één van deze redenen geldt (de log noemt welke, of waarom niet):
+- **a.** er staat geplande content klaar;
+- **b.** main heeft commits die nog niet live staan en die de site raken. Dat beslist `scripts/netlify-ignore.sh`, met dezelfde padregels als bij Netlify;
+- **c.** de live build is meer dan 10 dagen oud.
+
+Ook bouwt hij als hij handmatig met "forceer" gestart is.
+
+**Overige wijzigingen:**
+- **`version.txt`:** heeft een tweede regel met de builddatum. De workflow leest daar de live commit en datum uit.
+- **IndexNow:** leest alleen de eerste regel en kan na de build met de vorige en nieuwe live commit gestart worden.
+- **Schakelaar:** het ignore-script slaat een productiebuild na een push over als in Netlify `DAILY_BUILD_ONLY=1` staat. Previews en build hooks bouwen dan gewoon.
+
+**Waarom:** ongeveer 186 productie-deploys per maand (ongeveer 2.800 credits) worden er hooguit 30 (ongeveer 450). Reden c houdt de prijzen op de statische pagina's binnen de grens van 14 dagen (`MAX_PRICE_AGE_DAYS`).
+
+**Bewust niet:**
+- **Geen "Stop builds" in Netlify:** volgens de Netlify-documentatie stopt dat ook deploy previews en builds via de build hook. Daarom de schakelaar `DAILY_BUILD_ONLY` (besluit eigenaar 2026-11-08).
+- **Geen Netlify-API-sleutel en geen nieuwe secrets.**
+- **`scripts/indexnow.ts` is niet aangepast:** het leest `version.txt` niet; alleen de workflow doet dat.
+
+**Gevolg:** met de schakelaar aan staat een merge pas de volgende ochtend rond 05:03 live. Een spoedfix gaat met "Run workflow" en "forceer".
+
+## 2026-11-08 — Prijsversheid in de browser bewaakt (code-review)
+
+**Wat:**
+- `OfferRows` rekent na het laden de versheid opnieuw uit met de datum van de browser (`freshnessNow` in `src/catalog/offers/sort.ts`).
+- Is een prijs inmiddels ouder dan 14 dagen, dan verdwijnen het bedrag en de badge "Laagste prijs", en zakt de rij naar de groep zonder actuele prijs.
+- De eerste render is gelijk aan die van de server, dus er ontstaat geen hydration-mismatch.
+
+**Waarom:** stickpagina's zijn statisch. `isPriceFresh` rekende alleen met de builddatum, dus tussen twee builds kon een bedrag ouder dan 14 dagen blijven staan. De dagelijkse live-zetting herbouwt binnen 10 dagen; dit is het tweede slot.
+
+**Bewust niet:**
+- **Browserklok die achterloopt op de builddatum:** wordt genegeerd. Die zou alleen meer prijzen laten zien.
+- **Server-rendering:** de kaarten (`OfferCardSummary`), de leesdatum onder het blok en de structured data blijven bij de build berekend. Daarvoor zorgt de herbouw binnen 10 dagen.
+- **Geen DOM-testpakket toegevoegd:** de tests dekken `freshnessNow` en de weergave via server-rendering met de datum die de browser zou kiezen.
+
 ## 2026-11-08 — Kleine opschoning na code-review
 
 **Wat:**
