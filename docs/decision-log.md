@@ -2528,6 +2528,14 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/catalog/offers/{sort.ts,index.ts,sizeStock.test.ts}`, `src/content/offers.ts`;
 - `src/components/offers/{WhereToBuy,OfferBlockView}.tsx`, `src/lib/analytics/events.ts`.
 
+## 2026-11-08 — Node 22 overal (code-review)
+
+**Wat:** Netlify bouwt met Node 22 (was 20); `package.json` krijgt `engines.node` `>=22.12` en er is een `.nvmrc` met 22.
+
+**Waarom:** Node 20 is end-of-life, CI en alle workflows draaien al op 22, en vitest 5 vraagt `^22.12`. Zo bouwt Netlify met dezelfde versie als de tests.
+
+**Bewust niet:** de workflows zijn niet aangepast; alle 23 gebruiken al `node-version: 22`.
+
 ## 2026-11-08 — Catalogus-agents niet tegelijk (code-review)
 
 **Wat:**
