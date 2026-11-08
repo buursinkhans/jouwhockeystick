@@ -2527,3 +2527,11 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 **Betrokken bestanden:**
 - `src/catalog/offers/{sort.ts,index.ts,sizeStock.test.ts}`, `src/content/offers.ts`;
 - `src/components/offers/{WhereToBuy,OfferBlockView}.tsx`, `src/lib/analytics/events.ts`.
+
+## 2026-11-08 — Review-agent alleen op PR's uit deze repo (code-review)
+
+**Wat:** `review.yml` controleert vóór de checkout met de GitHub-API of de head-repo van de PR deze repo is. Zo niet, dan stopt de job met een foutmelding.
+
+**Waarom:** bij een handmatige start (`workflow_dispatch`) gold de fork-controle op jobniveau niet. Een PR uit een fork zou dan `npm ci` met install-scripts draaien in dezelfde job als het secret `CLAUDE_CODE_OAUTH_TOKEN`.
+
+**Bewust niet:** de controle bij `pull_request` blijft zoals hij was; die gold al.
