@@ -126,6 +126,11 @@ export type AnalyticsEvent =
       target: 'zaal' | 'keeper';
     }
   | {
+      /** The compare bar was used: two or three ticked sticks opened side by side (UX phase 2, 2026-11-08). */
+      name: 'compare_open';
+      count: number;
+    }
+  | {
       /** "Zet ze naast elkaar" in an advice: the best match and the second pick on /vergelijk (fase 9). */
       name: 'advice_compare_click';
       /** Roles of the two sticks, e.g. 'best_match+safe_choice'. */
