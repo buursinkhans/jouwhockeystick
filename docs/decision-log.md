@@ -1339,6 +1339,19 @@ De eerste run (met de hand gestart) maakte geen pull request. Claude had `npm ru
 
 **Bewust niet:** geen wijziging aan netlify.toml, DNS, beveiligingsheaders of andere redirects.
 
+## 2026-10-24 — Vaste AI-trainer "Daan" (Synthesia) in de lengte-Short
+
+**Wat:** Een tweede AI-presentator-test naast de Colossyan-test (`docs/video.md` §9): een vaste, verzonnen AI-trainer, *Daan*, gemaakt in Synthesia (Londen). Hij doet alleen de opening en de afsluiting van een nieuwe Short over sticklengte (`video/src/lengte-trainer/`); de uitleg, de tabel en de houdingscheck maken we in Remotion. Script: Claude Doc "Videoscript: Welke lengte hockeystick? (AI-trainer, Short)".
+
+**Reden:** Besluit van de eigenaar (24 oktober). Een gezicht in beeld kan beter werken in Shorts en Reels. De cijfers blijven uit `LENGTH_GUIDE` komen, zodat de video niet afwijkt van de site; Synthesia gratis heeft te weinig credits voor de hele video.
+
+**Belangrijke keuzes:**
+- De tabel in de briefing week af van de site (bijv. 165 cm: 35 tegenover 36,5 inch). We gebruiken de tabel van de site, samengevat in 7 rijen.
+- Daan zegt dat hij een AI-trainer is, en in elke scène staat "Presentator gemaakt met AI" (EU AI Act art. 50). Geen echte spelers of kinderen in beeld: de houding is het silhouet uit `Figure`.
+- Alleen een native Nederlandse stem (nl-NL). De stemmen die Synthesia's videomaker zelf kon kiezen, klonken buitenlands en zijn niet gebruikt. De eigenaar heeft daarom zijn eigen stem in Synthesia ingesproken; die stem gebruiken we voor Daan. Dat is een uitzondering op "geen gekloonde stem" (§9), omdat het zijn eigen stem is en hij er zelf voor kiest.
+
+**Betrokken bestanden:** `video/src/lengte-trainer/*`, `video/src/lengte/LengteVideo.tsx` (helpers geëxporteerd), `video/src/Root.tsx`, `video/render.mjs`, `video/teksten/hockeystick-lengte-trainer.md`, `docs/video.md`.
+
 ## 2026-10-26 — PostHog via ons eigen domein (reverse proxy)
 
 **Aanleiding:** PostHog → Web analytics → Installation Health meldt "Reverse proxy: some metrics may not be accurate". Adblockers blokkeren verzoeken naar eu.i.posthog.com, ook de cookieloze meting.
@@ -2376,3 +2389,20 @@ Dit wijzigt de regel "alle winkelrijen zien er hetzelfde uit, op een dikkere ran
 - `src/content/stickwijzer/{stickUse,questions}.ts`, `src/app/stickwijzer/page.tsx`;
 - `src/advice-engine/{answers,playerContext}.ts` (+ test);
 - `src/lib/analytics/events.ts`, `src/interest/types.ts`.
+
+## 2026-11-08 — Daan wordt vaste explainer-trainer: reeks "Daan legt uit"
+
+**Besluit eigenaar:** "Ik wil Daan als explainer trainer: uitleggen in een korte video waar je op moet letten, uitleg geven over kromming, enz." Daan blijft bij stickkennis; trainingsoefeningen vallen erbuiten.
+
+**Wat:**
+- **Reeks** in `video/teksten/daan-reeks.md`: vijf onderwerpen, elk bij een kennispagina die live staat (lengte, kromming, carbon, veldstick in de zaal, eerste stick voor een kind), met de gesproken takes voor Synthesia. Zo kunnen alle clips in één maand Synthesia Starter worden opgenomen.
+- **Tweede video:** `kromming-trainer-short` (+ zonder muziek), *Low bow of mid bow?*, bij `/kennis/low-bow-vs-mid-bow`. De plek van de kromming en de maximale diepte (25 mm, FIH) komen uit `src/content/bowProfiles.ts`; de stick is schematisch en dat staat in beeld. Uploadteksten in `video/teksten/kromming-trainer.md`.
+- **Gedeelde onderdelen** naar `video/src/trainer/Trainer.tsx` (clip, ondertitels, AI-label, muziek die zachter gaat, eindkaart). De lengtevideo gebruikt ze nu ook; die verandert daardoor niet.
+- **Regels** in `docs/video.md` §9a: Daan zegt alleen algemene zinnen (geen merken, maten, aantallen of prijzen, want een clip kun je niet opnieuw renderen), geen trainersclaims, geen oefeningen of blessureadvies, AI-label in elke scène.
+- **Ritme:** hooguit één Daan-video per week, op de plek van de vrijdagvideo, zodat het bij drie Shorts per week blijft (besluit 22 oktober) en de woensdag zijn YouTube-video houdt.
+
+**Vervangt:** "Bewust niet: AI-avatars" (16 oktober) en "Daan in de wekelijkse video's vraagt een nieuw besluit" (24 oktober), alleen voor de Daan-reeks. Daan in de Social-studio zelf blijft uit tot na de evaluatie.
+
+**Open:** de clips. Het gratis pakket van Synthesia kan geen MP4 downloaden; de eigenaar neemt één maand Starter. Zonder clip openen beide video's met een tekst, zonder AI-label.
+
+**Evaluatie:** eind november, met de pilot: kijkers die blijven en sitebezoek per `utm_campaign`, Daan tegenover de video's zonder Daan.

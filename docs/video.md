@@ -26,8 +26,8 @@ Eén onderwerp, *Welke lengte hockeystick?*, in twee vormen:
 - **Alle cijfers komen uit de repo**, net als in de artikelen: importeer de bron (bijv. `LENGTH_GUIDE`) in plaats van getallen over te typen. Dan klopt de video na een nieuwe render altijd met de site.
 - **Geen prijzen, voorraad of merk- en modelnamen als aanbeveling** in beeld of tekst. Een geplaatste video wordt niet bijgewerkt. Uitzondering: een sticklijstje (§7a) noemt modellen met hun vaste specificaties (kromming, carbonpercentage, niveau), zonder prijs, ranking of oordeel.
 - Spelregels alleen met de FIH als bron, zoals op de site.
-- **Geen mensen in beeld**: geen spelers, geen kinderen, geen foto's of citaten. Een neutraal silhouet mag. Uitzondering: de AI-presentator-test (§9).
-- Geen AI-avatars en geen gegenereerde stemmen van bestaande mensen, behalve in de AI-presentator-test (§9).
+- **Geen mensen in beeld**: geen spelers, geen kinderen, geen foto's of citaten. Een neutraal silhouet mag. Uitzondering: de AI-presentator (§9 en §9a).
+- Geen AI-avatars en geen gegenereerde stemmen van bestaande mensen, behalve de AI-presentator (§9 en §9a).
 - Huisstijl: kleuren en logo uit `src/components/brand/logoGeometry.ts`, letters uit `assets/fonts` (Bricolage, Instrument Sans). Oranje is voor de oproep naar de stickwijzer.
 - Taal volgens `docs/content-agent.md` §3: vriendelijk, *je*, korte zinnen, genuanceerd ("kan passen").
 - **Alle tekst staat in beeld**, zodat de video zonder geluid te volgen is. Een voice-over is optioneel en spreekt de eigenaar zelf in.
@@ -97,6 +97,18 @@ Eén video, *Low bow of mid bow?*, bij `/kennis/low-bow-vs-mid-bow`. De eigenaar
 - **Inhoud:** dezelfde regels als hierboven en als de site: feiten uit de pagina, geen merken of modellen als aanbeveling, geen prijzen, geen "beste". De figuren zijn dezelfde schematische krommingen als op de site.
 - **Werkwijze:** een PowerPoint in de huisstijl met het gesproken script als sprekersnotities; Colossyan maakt van elke dia een scène en van de notities de tekst van de avatar.
 - **Bewust niet:** een eigen avatar op basis van een foto of video van iemand anders, een gekloonde stem, AI-avatars in de wekelijkse video's van de Social-studio. Daarvoor is na de evaluatie een nieuw besluit nodig.
+
+### 9a. Vaste AI-trainer Daan (Synthesia): reeks "Daan legt uit"
+
+Sinds 24 oktober 2026 als test, sinds 8 november 2026 als vaste explainer-trainer (besluiten eigenaar, zie de decision log). Daan is een verzonnen AI-trainer, gemaakt in Synthesia. Hij legt in korte video's uit waar je op let bij het kiezen van een stick: lengte, kromming, carbon, zaal of veld, de eerste stick voor een kind. Onderwerpen, takes en status staan in `video/teksten/daan-reeks.md`.
+
+- **Vorm:** Daan doet alleen de opening en de afsluiting (elk ±6–8 s). De uitleg ertussen maken we in Remotion, met de feiten uit de repo (`LENGTH_GUIDE`, `src/content/bowProfiles.ts`, enz.), zodat de video niet afwijkt van de site. Elke video hoort bij één kennispagina die live staat (§2). De gedeelde onderdelen (clip, ondertitels, AI-label, muziek die zachter gaat als Daan praat, eindkaart) staan in `video/src/trainer/Trainer.tsx`; per video een map `video/src/<onderwerp>-trainer/`.
+- **Wat Daan zegt:** in de opening dat hij een AI-trainer van jouwhockeystick.nl is, en verder alleen algemene zinnen: de vraag van de video en een verwijzing naar de stickwijzer. Geen merken, modellen, prijzen, aantallen of maten in zijn tekst, want een clip kunnen we niet opnieuw renderen. Geen "beste", geen prestatiebeloften, geen diploma's of trainerservaring die hij niet heeft, en geen trainingsoefeningen of blessureadvies (daarvoor is een apart besluit nodig).
+- **Eerlijk:** dezelfde regels als §9. In elke scène staat "Presentator gemaakt met AI", en bij het uploaden staat het AI-label aan. Een schematische tekening (zoals de kromming) zegt in beeld dat hij niet op schaal is.
+- **Uiterlijk en stem:** één vast uiterlijk en één native Nederlandse stem (nl-NL): de eigen stem van de eigenaar, die hij zelf in Synthesia heeft ingesproken (zijn keuze, 24 oktober). Nooit een buitenlands accent, het gezicht van een bestaand persoon of de stem van iemand anders.
+- **Clips:** in `assets/video/trainer/<onderwerp>-trainer.mp4`, alle takes van een onderwerp in één bestand. `TRAINER_CLIP_READY` en `TAKES` in de `data.ts` van de video zeggen waar de takes zitten; `CAPTIONS` bevat de gesproken tekst. Zonder clip opent de video met een tekst en eindigt hij op de eindkaart, zonder AI-label. Het gratis pakket van Synthesia kan geen MP4 downloaden; de clips vragen een betaald pakket. Werkwijze: alle clips van de reeks in één maand Starter opnemen.
+- **Ritme:** hooguit één Daan-video per week. Hij neemt de plek in van de video op vrijdag (algemene hockey of kennis), zodat het bij drie Shorts per week blijft en de woensdag zijn YouTube-video houdt (§7). Keur de studio-video van die vrijdag dan niet goed. Daan in de Social-studio zelf is er nog niet; dat vraagt eerst de evaluatie.
+- **Evaluatie** samen met de pilot eind november: kijkers die blijven en sitebezoek met `utm_campaign=<onderwerp>-trainer`, naast de video's zonder Daan.
 
 ## 10. Automatisch inplannen op YouTube
 

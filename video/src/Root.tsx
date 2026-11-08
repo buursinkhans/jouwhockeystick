@@ -2,6 +2,8 @@ import './fonts';
 import { Composition, Still } from 'remotion';
 import { FPS, LengteVideo, durationInFrames } from './lengte/LengteVideo';
 import { LengteThumbnail } from './lengte/Thumbnail';
+import { KrommingVideo, krommingDurationInFrames } from './kromming-trainer/KrommingVideo';
+import { TrainerVideo, trainerDurationInFrames } from './lengte-trainer/TrainerVideo';
 
 export function Root() {
   return (
@@ -36,6 +38,44 @@ export function Root() {
         width={1920}
         height={1080}
         defaultProps={{ variant: 'uitleg' as const, music: true }}
+      />
+      {/* Short with the AI trainer (Synthesia clip for the opening and the close). */}
+      <Composition
+        id="lengte-trainer-short"
+        component={TrainerVideo}
+        durationInFrames={trainerDurationInFrames()}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ music: true }}
+      />
+      <Composition
+        id="lengte-trainer-short-zonder-muziek"
+        component={TrainerVideo}
+        durationInFrames={trainerDurationInFrames()}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ music: false }}
+      />
+      {/* Trainer Short "Low bow of mid bow?" (docs/video.md §9a). */}
+      <Composition
+        id="kromming-trainer-short"
+        component={KrommingVideo}
+        durationInFrames={krommingDurationInFrames()}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ music: true }}
+      />
+      <Composition
+        id="kromming-trainer-short-zonder-muziek"
+        component={KrommingVideo}
+        durationInFrames={krommingDurationInFrames()}
+        fps={FPS}
+        width={1080}
+        height={1920}
+        defaultProps={{ music: false }}
       />
       <Still id="lengte-thumbnail" component={LengteThumbnail} width={1280} height={720} />
     </>

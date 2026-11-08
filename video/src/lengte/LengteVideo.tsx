@@ -38,7 +38,7 @@ export const FPS = 30;
  * cuts land on the beat.
  */
 export const BEAT_FRAMES = 14;
-const b = (beats: number) => Math.round(beats * BEAT_FRAMES);
+export const b = (beats: number) => Math.round(beats * BEAT_FRAMES);
 
 type Scene = {
   id: string;
@@ -111,7 +111,7 @@ export function LengteVideo({ variant, music }: LengteProps) {
 
 /* ---------- sound ---------- */
 
-type SfxName = 'whoosh' | 'pop' | 'thud' | 'ding' | 'nope' | 'tick';
+export type SfxName = 'whoosh' | 'pop' | 'thud' | 'ding' | 'nope' | 'tick';
 const SFX_VOLUME: Record<SfxName, number> = {
   whoosh: 0.2,
   pop: 0.4,
@@ -121,7 +121,7 @@ const SFX_VOLUME: Record<SfxName, number> = {
   tick: 0.3,
 };
 
-function Sfx({ name, at }: { name: SfxName; at: number }) {
+export function Sfx({ name, at }: { name: SfxName; at: number }) {
   return (
     <Sequence from={Math.max(0, Math.round(at))} durationInFrames={30} layout="none">
       <Audio src={staticFile(`video/sfx-${name}.mp3`)} volume={SFX_VOLUME[name]} />
@@ -131,7 +131,7 @@ function Sfx({ name, at }: { name: SfxName; at: number }) {
 
 /* ---------- layout and motion helpers ---------- */
 
-function useLayout() {
+export function useLayout() {
   const { width, height } = useVideoConfig();
   const portrait = height > width;
   return {
@@ -151,11 +151,11 @@ function useLayout() {
 // Shorts, Reels and TikTok cover the bottom ~20% and the right edge with
 // their own buttons, so on portrait the brand line sits at the top and the
 // visuals stop well above the bottom.
-const PORTRAIT_SAFE_BOTTOM = 400;
+export const PORTRAIT_SAFE_BOTTOM = 400;
 const WIPE = 7;
 
 /** Brand-coloured panel that sweeps across every cut, plus a whoosh. */
-function SceneShell({
+export function SceneShell({
   frames,
   dark,
   wipeIn,
@@ -250,7 +250,7 @@ function ProgressBar({ total }: { total: number }) {
 }
 
 /** Spring 0 → 1 (with a little overshoot when `bouncy`), starting at `delay`. */
-function useIn(delay = 0, bouncy = false) {
+export function useIn(delay = 0, bouncy = false) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   return spring({
@@ -261,12 +261,12 @@ function useIn(delay = 0, bouncy = false) {
 }
 
 /** Scale pulse on every beat, for things that should feel alive. */
-function useBeatPulse(strength = 0.04) {
+export function useBeatPulse(strength = 0.04) {
   const frame = useCurrentFrame();
   return 1 + strength * Math.exp(-(frame % BEAT_FRAMES) / 3);
 }
 
-function Rise({
+export function Rise({
   delay = 0,
   children,
   style,
@@ -287,7 +287,7 @@ function Rise({
  * Kinetic heading: words punch in one by one; `accent` words turn orange.
  * `instant`: the hook. The whole heading is readable on frame 0, with a short punch.
  */
-function Words({
+export function Words({
   text,
   size,
   delay = 0,
@@ -351,7 +351,7 @@ function Words({
   );
 }
 
-function Body({
+export function Body({
   children,
   size,
   color = C.inkt,
@@ -368,7 +368,7 @@ function Body({
 }
 
 /** Pill that pops in with overshoot and a pop sound. */
-function PopPill({
+export function PopPill({
   children,
   delay,
   size,
@@ -401,7 +401,7 @@ function PopPill({
   );
 }
 
-function Chip({ children, size }: { children: ReactNode; size: number }) {
+export function Chip({ children, size }: { children: ReactNode; size: number }) {
   return (
     <div
       style={{
@@ -420,7 +420,7 @@ function Chip({ children, size }: { children: ReactNode; size: number }) {
   );
 }
 
-function Corner({ dark = false }: { dark?: boolean }) {
+export function Corner({ dark = false }: { dark?: boolean }) {
   const { pad, small, portrait } = useLayout();
   const position = portrait ? { top: pad * 0.6 } : { bottom: pad * 0.7 };
   return (
@@ -431,7 +431,7 @@ function Corner({ dark = false }: { dark?: boolean }) {
 }
 
 /** Two columns on landscape, stacked on portrait. */
-function Split({ text, visual }: { text: ReactNode; visual: ReactNode }) {
+export function Split({ text, visual }: { text: ReactNode; visual: ReactNode }) {
   const { portrait, pad } = useLayout();
   return (
     <AbsoluteFill
