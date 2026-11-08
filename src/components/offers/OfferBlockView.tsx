@@ -11,11 +11,14 @@ export function OfferBlockView({
   placement,
   offerCount,
   pricedCount,
+  inSizeCount,
   children,
 }: {
   placement: string;
   offerCount: number;
   pricedCount: number;
+  /** Shops with the advised length in stock; only in an advice. */
+  inSizeCount?: number;
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -26,7 +29,13 @@ export function OfferBlockView({
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {
-          trackEvent({ name: 'offer_block_view', placement, offerCount, pricedCount });
+          trackEvent({
+            name: 'offer_block_view',
+            placement,
+            offerCount,
+            pricedCount,
+            ...(inSizeCount !== undefined && { inSizeCount }),
+          });
           observer.disconnect();
         }
       },
@@ -34,7 +43,7 @@ export function OfferBlockView({
     );
     observer.observe(element);
     return () => observer.disconnect();
-  }, [placement, offerCount, pricedCount]);
+  }, [placement, offerCount, pricedCount, inSizeCount]);
 
   return <div ref={ref}>{children}</div>;
 }

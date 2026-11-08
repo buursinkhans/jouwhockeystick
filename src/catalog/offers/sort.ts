@@ -80,3 +80,34 @@ export function lowestTotal(offers: readonly Offer[], { size, now }: { size: num
   const totals = offers.filter((o) => isPriceFresh(o, now) && o.inStock && hasLength(o, size)).map(totalPrice);
   return totals.length ? Math.min(...totals) : null;
 }
+
+/** What the feeds say about one length across the shops (UX phase 4, 2026-11-08). */
+export type SizeStock = {
+  /** Shops with a current price that list this length in stock. */
+  inSize: number;
+  /** Shops with a current price in stock whose feed gives no lengths. */
+  unknown: number;
+  /** Shops with a current price in stock (any length). */
+  stocked: number;
+  /** All shops in the block. */
+  total: number;
+  /** Read dates of the shops counted in `inSize`. */
+  readAt: string[];
+};
+
+/**
+ * Stock in the advised length, only from feeds read at most 14 days ago: an
+ * older feed says nothing about today. Never a delivery promise; the shop
+ * confirms stock after the click.
+ */
+export function sizeStock(offers: readonly Offer[], { size, now }: { size: number; now: Date }): SizeStock {
+  const stocked = offers.filter((o) => isPriceFresh(o, now) && o.inStock);
+  const inSize = stocked.filter((o) => o.lengths && hasLength(o, size));
+  return {
+    inSize: inSize.length,
+    unknown: stocked.filter((o) => !o.lengths).length,
+    stocked: stocked.length,
+    total: offers.length,
+    readAt: inSize.flatMap((o) => (o.readAt ? [o.readAt] : [])),
+  };
+}
