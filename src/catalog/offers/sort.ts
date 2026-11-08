@@ -34,6 +34,18 @@ export function isPriceFresh(offer: Offer, now: Date): boolean {
   return age >= -1 && age <= MAX_PRICE_AGE_DAYS;
 }
 
+/**
+ * The date to judge freshness by in the browser (code review 2026-11-08).
+ * Stick pages are static: the server rendered them with the build date. After
+ * mount the browser's own date takes over when it is later, so a price that
+ * has passed 14 days since the build loses its amount and its badge. A
+ * browser clock behind the build date is ignored: it could only show more.
+ */
+export function freshnessNow(serverIso: string, browserMs: number): Date {
+  const server = Date.parse(serverIso);
+  return new Date(Number.isFinite(server) && browserMs <= server ? server : browserMs);
+}
+
 /** Price plus shipping; unknown shipping counts as 0 here and says so on the page. */
 export const totalPrice = (offer: Offer) => (offer.priceEur ?? 0) + (offer.shippingEur ?? 0);
 

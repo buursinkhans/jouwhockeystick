@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { hasLowestBadge, isPriceFresh, sortOffers, totalPrice, type Offer } from '@/catalog/offers/sort';
+import { freshnessNow, hasLowestBadge, isPriceFresh, sortOffers, totalPrice, type Offer } from '@/catalog/offers/sort';
 import { RETAILERS, type RetailerPlacement } from '@/lib/retailers';
 import { OFFER_TEXT, euro, inch, priceBreakdown, stockLine } from '@/content/offers';
 import { RetailerLink } from '@/components/ui/RetailerLink';
@@ -42,7 +42,10 @@ export function OfferRows({
   productName: string;
   placement: RetailerPlacement;
   offers: readonly Offer[];
-  /** When the page was built, so server and browser sort the same way. */
+  /**
+   * When the page was rendered: the first render in the browser uses it too,
+   * so it matches the server. After mount the browser's date takes over.
+   */
   nowIso: string;
   /** Lengths for the size buttons; none = no buttons. */
   sizes?: readonly number[];
@@ -59,7 +62,16 @@ export function OfferRows({
 }) {
   const [size, setSize] = useState<number | null>(givenSize);
   const [open, setOpen] = useState(false);
-  const now = new Date(nowIso);
+  // Static pages keep the build date; recheck freshness with the browser's
+  // date after mount, so a price older than 14 days hides its amount and the
+  // "Laagste prijs" badge (code review 2026-11-08). No hydration mismatch:
+  // the first render is the server's.
+  const [now, setNow] = useState(() => new Date(nowIso));
+  useEffect(() => {
+    const browserNow = freshnessNow(nowIso, Date.now());
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the browser's date is only known after mount.
+    if (browserNow.getTime() !== Date.parse(nowIso)) setNow(browserNow);
+  }, [nowIso]);
 
   useEffect(() => {
     if (!sizeFromUrl) return;

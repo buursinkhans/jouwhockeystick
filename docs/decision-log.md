@@ -2593,3 +2593,17 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **`scripts/indexnow.ts` is niet aangepast:** het leest `version.txt` niet; alleen de workflow doet dat.
 
 **Gevolg:** met de schakelaar aan staat een merge pas de volgende ochtend rond 05:03 live. Een spoedfix gaat met "Run workflow" en "forceer".
+
+## 2026-11-08 — Prijsversheid in de browser bewaakt (code-review)
+
+**Wat:**
+- `OfferRows` rekent na het laden de versheid opnieuw uit met de datum van de browser (`freshnessNow` in `src/catalog/offers/sort.ts`).
+- Is een prijs inmiddels ouder dan 14 dagen, dan verdwijnen het bedrag en de badge "Laagste prijs", en zakt de rij naar de groep zonder actuele prijs.
+- De eerste render is gelijk aan die van de server, dus er ontstaat geen hydration-mismatch.
+
+**Waarom:** stickpagina's zijn statisch. `isPriceFresh` rekende alleen met de builddatum, dus tussen twee builds kon een bedrag ouder dan 14 dagen blijven staan. De dagelijkse live-zetting herbouwt binnen 10 dagen; dit is het tweede slot.
+
+**Bewust niet:**
+- **Browserklok die achterloopt op de builddatum:** wordt genegeerd. Die zou alleen meer prijzen laten zien.
+- **Server-rendering:** de kaarten (`OfferCardSummary`), de leesdatum onder het blok en de structured data blijven bij de build berekend. Daarvoor zorgt de herbouw binnen 10 dagen.
+- **Geen DOM-testpakket toegevoegd:** de tests dekken `freshnessNow` en de weergave via server-rendering met de datum die de browser zou kiezen.
