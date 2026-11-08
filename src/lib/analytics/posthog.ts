@@ -1,3 +1,6 @@
+// Relative: next.config.ts loads this file, where the @/ alias does not resolve.
+import { SITE_URL } from '../site';
+
 /**
  * PostHog (EU cloud, Frankfurt) for click behaviour, funnels and heatmaps.
  * The project key is public by design — it ends up in every page — and can
@@ -18,9 +21,16 @@ export const POSTHOG_INGEST_ORIGIN = 'https://eu.i.posthog.com';
 export const POSTHOG_ASSETS_ORIGIN = 'https://eu-assets.i.posthog.com';
 export const POSTHOG_UI_HOST = 'https://eu.posthog.com';
 
-/** Local previews and test runs must not pollute the real statistics. */
+const SITE_HOST = new URL(SITE_URL).hostname;
+const TRACKED_HOSTS: ReadonlySet<string> = new Set([SITE_HOST, `www.${SITE_HOST}`]);
+
+/**
+ * Only the production site counts (code review 2026-11-08): local previews,
+ * test runs and Netlify deploy previews (deploy-preview-*.netlify.app) must
+ * not pollute the real statistics.
+ */
 export function isTrackedHost(hostname: string): boolean {
-  return hostname !== 'localhost' && hostname !== '127.0.0.1';
+  return TRACKED_HOSTS.has(hostname.toLowerCase());
 }
 
 /** A shared stick or shoe advice carries the answers in its query (?a=…): never in the statistics (privacy statement 1.5). */
