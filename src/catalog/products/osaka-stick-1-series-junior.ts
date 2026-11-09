@@ -66,7 +66,7 @@ export const osakaStick1SeriesJunior: Product = {
     'Een eenvoudige junior-veldstick van Osaka voor beginners, op bol.com in 34 inch.',
   strengths: {
     value: [
-      'Een van de goedkoopste juniorsticks in onze catalogus',
+      'Lage richtprijs voor een juniorstick',
       'Bedoeld voor beginnende kinderen',
     ],
     source: 'editorial-estimate',

@@ -78,7 +78,7 @@ export const scoopWdnJuniorVeld: Product = {
     'Een goedkope houten junior-veldstick van Scoop met mid bow en Maxi-krul.',
   strengths: {
     value: [
-      'Een van de goedkoopste juniorsticks in onze catalogus',
+      'Lage richtprijs voor een juniorstick',
       'Maxi-krul maakt aannemen volgens de listing makkelijker',
     ],
     source: 'editorial-estimate',
