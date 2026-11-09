@@ -63,12 +63,40 @@ export type AnalyticsEvent =
       inSizeCount?: number;
     }
   | {
-      /** The short indoor selector on /zaalsticks; no personal data. */
+      /**
+       * The zaalstick finder on /zaalsticks: all three questions answered (or
+       * changed after that). No height: only the length it gave. Since
+       * 2026-11-09 the finder filters the list live; sizeSource says whether
+       * the length was picked ('maat') or came from a height ('lengte').
+       */
       name: 'indoor_selection';
       player: string;
       budget: string;
       sizes: string;
       resultCount: number;
+      sizeSource?: 'maat' | 'lengte';
+    }
+  | {
+      /** The first answer in the zaalstick finder (2026-11-09): the start of the funnel. */
+      name: 'indoor_finder_start';
+      first: 'speler' | 'maat' | 'lengte' | 'budget';
+    }
+  | {
+      /**
+       * A click on a stick card that opens its page (2026-11-09). Position in
+       * the list as shown (1 = top); `filtered` = after an answer in the finder.
+       */
+      name: 'product_card_click';
+      page: 'zaalsticks';
+      position: number;
+      checked: boolean;
+      filtered: boolean;
+    }
+  | {
+      /** "Vergelijk deze stick" ticked or unticked on a card (2026-11-09); count = sticks selected after it. */
+      name: 'compare_select';
+      action: 'add' | 'remove';
+      count: number;
     }
   | {
       /** A click in a homepage block under the hero, to see what it adds to the funnel. */
@@ -113,7 +141,7 @@ export type AnalyticsEvent =
     }
   | {
       /**
-       * "Vergelijk prijzen bij N winkels" on a product card (2026-11-05): the
+       * "Bekijk maten en prijzen" (before 2026-11-09 "Vergelijk prijzen bij N winkels") on a product card (2026-11-05): the
        * visitor opens the comparison. A shop click from the card itself is
        * retailer_click with the card's placement; from the comparison it has
        * placement 'productpagina' or 'schoenpagina'.

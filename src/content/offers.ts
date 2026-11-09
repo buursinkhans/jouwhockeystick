@@ -28,6 +28,10 @@ export const OFFER_TEXT = {
    * shipping is, or that it is unknown.
    */
   cardLowest: 'Laagste prijs',
+  /** One shop with a current price, or unknown shipping: nothing to call "laagste" (2026-11-09). */
+  cardPrice: 'Prijs',
+  /** The card's main action, to the shops on the stick page; the count stands top right. */
+  cardCompareShops: 'Bekijk maten en prijzen',
   cardIndicative: 'Richtprijs',
   cardNoCurrentPrice: 'geen actuele winkelprijs op voorraad',
   cardNoShop: 'nog geen partnerwinkel bekend',

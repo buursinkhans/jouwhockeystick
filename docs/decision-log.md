@@ -2618,3 +2618,51 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 **Waarom:** previewbezoeken vervuilden de statistiek, en "goedkoopst" is volgens CLAUDE.md niet toegestaan.
 
 **Bewust niet:** de sterke punten van drie sticks in `src/catalog/products/` noemen "een van de goedkoopste juniorsticks in onze catalogus" of iets vergelijkbaars. Dat valt buiten deze opdracht en staat als open punt in de PR.
+
+## 2026-11-09 — /zaalsticks als begeleide keuze (UX, SEO en GEO)
+
+**Opdracht eigenaar (2026-11-09):** maak van `/zaalsticks` een keuze-ervaring in plaats van een catalogus, met behoud van SEO, en met een aanvulling voor AI-zoekmachines.
+
+**Wat er mis was:**
+1. De keuzehulp zag 25 van de 196 zaalsticks; de 171 uit de winkelfeeds deden niet mee.
+2. Drie lijsten met dezelfde sticks: resultaten van de keuzehulp, "Zaalsticks per budget" en "Alle zaalsticks". De keuzehulp filterde de grote lijst niet en werkte pas na een knop.
+3. Budget overlapte en klopte niet. "Meer dan €200" toonde alles, en "€50–100" ook sticks onder €50. De filter rekende met de richtprijs, de kaart met de winkelprijs; bij 10 sticks gaf dat een andere prijsklasse.
+4. Een volwassene kon geen maat kiezen (alleen 36,5" en 37,5"; 37 sticks zijn er ook in 38,5"), en "Ik weet mijn maat niet" ontbrak.
+5. Op de kaart:
+   - stond "Laagste prijs" ook bij één winkel;
+   - stonden twee acties met "Vergelijk" (prijzen en sticks naast elkaar).
+
+**Wat er veranderd is:**
+- **Eén lijst met een keuzehulp erboven** (`IndoorFinder`, `src/catalog/indoorFinder.ts`).
+  - **Drie vragen:** voor wie, sticklengte (of de lichaamslengte zonder schoenen, met dezelfde lengtetabel als de stickwijzer) en budget.
+  - **Live filter:** elk antwoord filtert meteen, met het aantal per prijsklasse op de knop. De keuze staat in de URL (`?voor=&maat=&budget=`, nooit de lichaamslengte), zodat terug-navigeren hem bewaart. De canonical blijft `/zaalsticks`.
+  - **Zonder antwoord:** de met de hand nagekeken sticks staan server-side in de HTML, zoals voorheen.
+  - **Na een antwoord:** de sticks uit de winkelfeeds laden erbij, in een eigen groep met de melding dat ze niet met de hand zijn gecontroleerd.
+- **Budget:** niet-overlappende klassen (onder €50, €50 tot €100, €100 tot €200, €200 of meer, geen voorkeur), met dezelfde grenzen als de prijsgroepen van het budgetartikel.
+  - **Grondslag:** de prijs op de kaart (`cardPrice`): de laagste winkelprijs uit de feeds inclusief verzending, anders de richtprijs.
+  - **Zonder prijs:** een stick zonder prijs valt buiten elk budget.
+- **Geen resultaat:** de melding is eerlijk en biedt een knop "Toon alle prijsklassen". Voor kinderen staat er de bestaande regel bij: één maat korter, nooit langer.
+- **Kaarten** (op de hele site):
+  - "Laagste prijs" alleen bij minstens twee winkels met een actuele prijs op voorraad en bekende verzendkosten, anders "Prijs";
+  - de hoofdactie heet "Bekijk maten en prijzen" (was "Vergelijk prijzen bij N winkels");
+  - het vinkje heet "Vergelijk deze stick".
+- **Kaarten** (op `/zaalsticks`): compact, met de maten erop en zonder sterke punten en let op (die staan op de stickpagina). Placement `zaalkeuze`.
+- **"Zaalsticks per budget" is weg.** De budgetkeuze doet hetzelfde, en dezelfde kaarten stonden dubbel op de pagina.
+- **GEO:**
+  - **Nieuw blok "Welke zaalstick past bij wie?":** kind, beginner, carbon en wanneer een duurdere stick zinvol is. Elk antwoord is kort, gelabeld als redactioneel en linkt naar het artikel dat dieper gaat.
+  - **Nieuw blok "Zo maken we deze pagina":** wie, welke bronnen, hoe de prijzen werken en de vergoeding.
+  - **Structured data:** de FAQ krijgt FAQPage-markup via `FaqSection`, zoals `/sticks`. De nagekeken sticks staan als ItemList. Article en BreadcrumbList blijven.
+  - **Ongewijzigd:** H1, SEO-titel, meta-beschrijving, URL, canonical en de ankers `#zaal-selector-heading` en `#alle-zaalsticks`. `updatedAt` 2026-11-09.
+- **Analytics:**
+  - `indoor_finder_start` (eerste antwoord);
+  - `indoor_selection` (alle drie beantwoord, plus `sizeSource`);
+  - `product_card_click` (positie, nagekeken of feed, gefilterd);
+  - `compare_select`;
+  - `retailer_click` met placement `zaalkeuze`.
+
+**Bewust niet:**
+- **Geen "aanbevolen" of "beste keuze":** de lijst staat op prijs.
+- **Geen nieuwe dependency.**
+- **Geen Product/Offer-markup op een overzicht.** Die staat op de stickpagina's.
+- **Geen sticks uit de winkelfeeds in de eerste HTML** (besluit 2026-10-24).
+- **Drie sticks noemen nog "goedkoopste" of "laagste prijs" in hun sterke punten.** Die staan niet meer op de compacte kaarten; aanpassen is een aparte catalogusklus.

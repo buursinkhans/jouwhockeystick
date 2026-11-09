@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { isPriceFresh, sortOffers, totalPrice, type Offer } from '@/catalog/offers/sort';
+import { cardPrice, sortOffers, type Offer } from '@/catalog/offers/sort';
 import { RETAILERS, type RetailerPlacement } from '@/lib/retailers';
 import { OFFER_TEXT, euro, shippingAt } from '@/content/offers';
 import { PARTNER_LINK_URL } from '@/content/partnerLinks';
@@ -28,7 +28,7 @@ function Arrow({ external = false }: { external?: boolean }) {
 /**
  * The bottom of every product card (2026-11-05): the comparison is the hero,
  * not the shop. The lowest current total of the shops in stock, how many
- * shops we compare, "Vergelijk prijzen" as the main action and the shop of
+ * shops we compare, "Bekijk maten en prijzen" (until 2026-11-09 "Vergelijk prijzen") as the main action and the shop of
  * that price as a quiet direct link. Same order and price rules as "Waar te
  * koop" (docs/spec/prijsvergelijking.md); without a current price the
  * indicative price, marked as such. Server-rendered: the price is in the HTML.
@@ -52,11 +52,14 @@ export function OfferCardSummary({
 }) {
   const now = new Date();
   const sorted = sortOffers(offers, { size: null, now });
-  const lowest = sorted.find((offer) => isPriceFresh(offer, now) && offer.inStock) ?? null;
+  // Same rule as the /zaalsticks filters (cardPrice): the price shown is the price filtered on.
+  const price = cardPrice(offers, indicativeEur, now);
+  const lowest = price.kind === 'shop' ? price.offer : null;
   // The direct link goes to the shop of the lowest price, else to the first in the comparison order.
   const direct = lowest ?? sorted[0] ?? null;
   const count = offers.length;
-  const label = lowest ? OFFER_TEXT.cardLowest : OFFER_TEXT.cardIndicative;
+  // "Laagste prijs" only with something to compare (2026-11-09); one shop or unknown shipping: "Prijs".
+  const label = price.kind === 'shop' ? (price.lowest ? OFFER_TEXT.cardLowest : OFFER_TEXT.cardPrice) : OFFER_TEXT.cardIndicative;
 
   return (
     <div>
@@ -71,7 +74,7 @@ export function OfferCardSummary({
       {lowest ? (
         <>
           <p className="mt-1 font-heading text-[1.75rem] leading-tight font-extrabold text-inkt tabular-nums">
-            {euro(totalPrice(lowest))}
+            {euro(price.totalEur ?? 0)}
           </p>
           <p className="text-sm text-inkt/75">{shippingAt(lowest.shippingEur, RETAILERS[lowest.retailer].label)}</p>
         </>
@@ -89,10 +92,11 @@ export function OfferCardSummary({
           {count > 1 ? (
             <>
               <CompareLink href={compareHref} placement={placement} offerCount={count}>
-                {/* Below 360 px "bij N winkels" drops: the count stands top right, the label stays on one line. */}
-                <span>
-                  Vergelijk prijzen<span className="hidden min-[360px]:inline"> bij {count} winkels</span>
-                </span>
+                {/*
+                  "Bekijk maten en prijzen" (2026-11-09): "Vergelijk" is the tick box that puts
+                  sticks side by side; two different actions no longer share one word.
+                */}
+                <span>{OFFER_TEXT.cardCompareShops}</span>
                 <Arrow />
               </CompareLink>
               <RetailerLink
