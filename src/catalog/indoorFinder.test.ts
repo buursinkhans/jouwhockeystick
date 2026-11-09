@@ -15,6 +15,7 @@ import {
   type IndoorItem,
 } from './indoorFinder';
 import { INDOOR_TIERS } from './indoorTiers';
+import { GET } from '@/app/data/[file]/route';
 
 // The zaalstick finder (2026-11-09).
 const item = (o: Partial<IndoorItem> & Pick<IndoorItem, 'slug'>): IndoorItem => ({
@@ -133,5 +134,18 @@ describe('the real indoor catalog', () => {
   it('has sticks for both players', () => {
     expect(lengthsFor(list, 'kind').length).toBeGreaterThan(0);
     expect(lengthsFor(list, 'volwassene')).toEqual(expect.arrayContaining([36.5, 37.5]));
+  });
+});
+
+describe('/data/zaal-index.json', () => {
+  it('holds only the shop-feed sticks, with the same card price, and stays out of the index', async () => {
+    const response = await GET(new Request('http://localhost/data/zaal-index.json'), {
+      params: Promise.resolve({ file: 'zaal-index.json' }),
+    });
+    expect(response.headers.get('X-Robots-Tag')).toBe('noindex');
+    const list = (await response.json()) as IndoorItem[];
+    const feed = getIndoorProducts(new Date(), { includeImported: true }).filter((p) => !getIndoorProducts(new Date()).some((c) => c.slug === p.slug));
+    expect(list.length).toBe(feed.length);
+    expect(list.every((i) => !i.checked)).toBe(true);
   });
 });

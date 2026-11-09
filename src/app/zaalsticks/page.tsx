@@ -29,8 +29,11 @@ export const metadata = pageMetadata({
 export default function ZaalsticksPage() {
   const now = new Date();
   const allProducts = getIndoorProducts(now, { includeImported: true });
-  const items = allProducts.map((product) => indoorItem(product, now));
   const checked = allProducts.filter((p) => !isFeedImport(p));
+  // Only the hand-checked sticks go to the browser with the page; the shop-feed
+  // sticks load after the first answer (/data/zaal-index.json, decision log 2026-10-24).
+  const items = checked.map((product) => indoorItem(product, now));
+  const importedCount = allProducts.length - checked.length;
   // Server-rendered cards of the hand-checked sticks; the finder only decides which show.
   const checkedCards = Object.fromEntries(
     checked.map((product) => [product.slug, <ProductCard key={product.slug} product={product} placement="zaalkeuze" showLengths compact />]),
@@ -113,7 +116,7 @@ export default function ZaalsticksPage() {
           </h2>
           <p className="mt-1 max-w-3xl text-inkt/80">{ZAAL.finder.intro}</p>
           <div className="mt-4">
-            <IndoorFinder items={items} checkedCards={checkedCards} />
+            <IndoorFinder items={items} checkedCards={checkedCards} importedCount={importedCount} />
           </div>
           <p className="mt-6 flex max-w-3xl items-start gap-2 text-sm text-inkt/80">
             <InfoIcon size={18} className="mt-0.5 shrink-0 text-veld" />

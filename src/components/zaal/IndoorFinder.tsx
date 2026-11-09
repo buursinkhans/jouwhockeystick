@@ -49,7 +49,13 @@ type Imported =
   | { kind: 'idle' }
   | { kind: 'loading' }
   | { kind: 'error' }
-  | { kind: 'done'; Card: typeof ProductCardType; bySlug: ReadonlyMap<string, Product> };
+  | {
+      kind: 'done';
+      Card: typeof ProductCardType;
+      bySlug: ReadonlyMap<string, Product>;
+      /** The light list of the shop-feed sticks (/data/zaal-index.json). */
+      items: readonly IndoorItem[];
+    };
 
 /** The answers as ?voor=…&maat=…&budget=…, so a visitor who goes back finds them again. No height. */
 function readUrl(): { player: IndoorPlayer | null; size: number | null; budget: BudgetChoice } {
@@ -86,16 +92,21 @@ function Fieldset({ legend, children }: { legend: string; children: ReactNode })
  * The zaalstick finder (2026-11-09): three questions that filter the one list
  * of indoor sticks on the page, live. Without an answer it shows the
  * hand-checked sticks, server-rendered, exactly like the page did before;
- * the sticks from the shop feeds load after the first answer (or a click),
- * so they are not in the first page load (decision log 2026-10-24).
+ * the sticks from the shop feeds (their light list and their cards) load
+ * after the first answer or a click, so neither is in the first page load
+ * (decision log 2026-10-24). Counts wait for the full list.
  */
 export function IndoorFinder({
-  items,
+  items: checkedItems,
   checkedCards,
+  importedCount,
 }: {
+  /** The hand-checked sticks only. */
   items: readonly IndoorItem[];
   /** The hand-checked sticks as server-rendered cards, by slug. */
   checkedCards: Readonly<Record<string, ReactNode>>;
+  /** How many shop-feed sticks there are; their data loads on demand. */
+  importedCount: number;
 }) {
   const [player, setPlayer] = useState<IndoorPlayer | null>(null);
   const [size, setSize] = useState<SizeChoice>(null);
@@ -105,6 +116,12 @@ export function IndoorFinder({
   const [importedShown, setImportedShown] = useState(PAGE);
   const started = useRef(false);
   const lastSent = useRef('');
+  const items = useMemo(
+    () => (imported.kind === 'done' ? [...checkedItems, ...imported.items] : checkedItems),
+    [checkedItems, imported],
+  );
+  // Every stick is known: counts and the selection event may use the totals.
+  const complete = importedCount === 0 || imported.kind === 'done';
 
   const heightCm = height === '' ? NaN : Number(height);
   const advice = size?.kind === 'lengte' ? sizeAdviceFor(heightCm) : null;
@@ -132,7 +149,7 @@ export function IndoorFinder({
   const sizeButtons = player ? lengthsFor(items, player) : [];
   const checkedMatches = matches.filter((m) => m.item.checked);
   const importedMatches = matches.filter((m) => !m.item.checked);
-  const importedTotal = items.filter((i) => !i.checked).length;
+  const importedTotal = importedCount;
 
   // Answers from the URL (back from a stick page); the first render stays the server's.
   useEffect(() => {
@@ -152,7 +169,7 @@ export function IndoorFinder({
 
   // The funnel step "selection complete": who, which length and a budget (also "Geen voorkeur").
   useEffect(() => {
-    if (!player || !sizes || budget === null) return;
+    if (!player || !sizes || budget === null || !complete) return;
     const key = `${player}|${sizes.join('+')}|${budget}`;
     if (key === lastSent.current) return;
     const timer = window.setTimeout(() => {
@@ -167,16 +184,25 @@ export function IndoorFinder({
       });
     }, 800);
     return () => window.clearTimeout(timer);
-  }, [player, sizes, budget, matches.length, size?.kind]);
+  }, [player, sizes, budget, matches.length, size?.kind, complete]);
 
   async function loadImported() {
     if (imported.kind === 'loading' || imported.kind === 'done') return;
     setImported({ kind: 'loading' });
     try {
-      const [card, response] = await Promise.all([import('@/components/catalog/ProductCard'), fetch('/data/aanbod-zaal.json')]);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const products = (await response.json()) as Product[];
-      setImported({ kind: 'done', Card: card.ProductCard, bySlug: new Map(products.map((p) => [p.slug, p])) });
+      const [card, response, index] = await Promise.all([
+        import('@/components/catalog/ProductCard'),
+        fetch('/data/aanbod-zaal.json'),
+        fetch('/data/zaal-index.json'),
+      ]);
+      if (!response.ok || !index.ok) throw new Error(`HTTP ${response.status}/${index.status}`);
+      const [products, list] = (await Promise.all([response.json(), index.json()])) as [Product[], IndoorItem[]];
+      setImported({
+        kind: 'done',
+        Card: card.ProductCard,
+        bySlug: new Map(products.map((p) => [p.slug, p])),
+        items: list,
+      });
     } catch {
       setImported({ kind: 'error' });
     }
@@ -383,7 +409,7 @@ export function IndoorFinder({
                   }}
                 />
                 {range.label}
-                <span className="font-normal opacity-75">({budgetCounts[range.id]})</span>
+                {complete && <span className="font-normal opacity-75">({budgetCounts[range.id]})</span>}
               </label>
             ))}
             <label className={CHIP}>
@@ -411,8 +437,10 @@ export function IndoorFinder({
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1" aria-live="polite">
           <p className="font-semibold text-inkt">
             {filtered
-              ? `${matches.length} ${matches.length === 1 ? 'zaalstick past' : 'zaalsticks passen'}${summary.length ? `: ${summary.join(' · ')}` : ''}`
-              : `${items.length} zaalsticks: ${items.length - importedTotal} met de hand nagekeken, ${importedTotal} uit de winkelfeeds`}
+              ? complete
+                ? `${matches.length} ${matches.length === 1 ? 'zaalstick past' : 'zaalsticks passen'}${summary.length ? `: ${summary.join(' · ')}` : ''}`
+                : TEXT.counting
+              : `${checkedItems.length + importedTotal} zaalsticks: ${checkedItems.length} met de hand nagekeken, ${importedTotal} uit de winkelfeeds`}
           </p>
           {filtered && (
             <button type="button" onClick={clear} className="min-h-11 text-sm font-semibold text-veld underline hover:no-underline">
@@ -422,7 +450,7 @@ export function IndoorFinder({
         </div>
         <p className="mt-1 max-w-3xl text-sm text-inkt/80">{TEXT.sortNote}</p>
 
-        {filtered && matches.length === 0 && (
+        {filtered && complete && matches.length === 0 && (
           <div className="mt-5 rounded-xl bg-amber-50 p-4 text-sm text-amber-900">
             {filters.budget !== null && withoutBudget > 0 ? (
               <p>

@@ -127,9 +127,10 @@ export function sizeStock(offers: readonly Offer[], { size, now }: { size: numbe
 /**
  * The price on a product card and the price the /zaalsticks filters use, so
  * both always agree (2026-11-09): the lowest current total of the shops in
- * stock, else the indicative price. "Laagste prijs" only when there is
- * something to compare: at least two shops with a current price in stock,
- * and known shipping on the lowest one. One shop or unknown shipping: "Prijs".
+ * stock, else the indicative price. "Laagste prijs" only when it is really
+ * lower (CLAUDE.md, Prijsvergelijking): known shipping on the lowest, and a
+ * strictly higher total at another shop with a current price in stock and
+ * known shipping. One shop, a tie or unknown shipping: "Prijs".
  */
 export type CardPrice =
   | { kind: 'shop'; offer: Offer; totalEur: number; lowest: boolean }
@@ -140,5 +141,8 @@ export function cardPrice(offers: readonly Offer[], indicativeEur: number | null
   const current = sorted.filter((o) => isPriceFresh(o, now) && o.inStock);
   const [first] = current;
   if (!first) return { kind: 'indicative', totalEur: indicativeEur };
-  return { kind: 'shop', offer: first, totalEur: totalPrice(first), lowest: current.length >= 2 && first.shippingEur !== null };
+  const lowest =
+    first.shippingEur !== null &&
+    current.slice(1).some((o) => o.shippingEur !== null && totalPrice(o) > totalPrice(first));
+  return { kind: 'shop', offer: first, totalEur: totalPrice(first), lowest };
 }

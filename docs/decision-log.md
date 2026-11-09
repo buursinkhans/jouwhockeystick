@@ -2637,13 +2637,13 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
   - **Drie vragen:** voor wie, sticklengte (of de lichaamslengte zonder schoenen, met dezelfde lengtetabel als de stickwijzer) en budget.
   - **Live filter:** elk antwoord filtert meteen, met het aantal per prijsklasse op de knop. De keuze staat in de URL (`?voor=&maat=&budget=`, nooit de lichaamslengte), zodat terug-navigeren hem bewaart. De canonical blijft `/zaalsticks`.
   - **Zonder antwoord:** de met de hand nagekeken sticks staan server-side in de HTML, zoals voorheen.
-  - **Na een antwoord:** de sticks uit de winkelfeeds laden erbij, in een eigen groep met de melding dat ze niet met de hand zijn gecontroleerd.
+  - **Na een antwoord:** de sticks uit de winkelfeeds laden erbij, in een eigen groep met de melding dat ze niet met de hand zijn gecontroleerd. Hun lichte lijst (slug, kaartprijs, lengtes) komt uit het statische `/data/zaal-index.json` (noindex), samen met `aanbod-zaal.json`. De eerste lading bevat dus geen feedgegevens (besluit 2026-10-24); de aantallen op de budgetknoppen verschijnen pas als de lijst compleet is (opmerking review-agent).
 - **Budget:** niet-overlappende klassen (onder €50, €50 tot €100, €100 tot €200, €200 of meer, geen voorkeur), met dezelfde grenzen als de prijsgroepen van het budgetartikel.
   - **Grondslag:** de prijs op de kaart (`cardPrice`): de laagste winkelprijs uit de feeds inclusief verzending, anders de richtprijs.
   - **Zonder prijs:** een stick zonder prijs valt buiten elk budget.
 - **Geen resultaat:** de melding is eerlijk en biedt een knop "Toon alle prijsklassen". Voor kinderen staat er de bestaande regel bij: één maat korter, nooit langer.
 - **Kaarten** (op de hele site):
-  - "Laagste prijs" alleen bij minstens twee winkels met een actuele prijs op voorraad en bekende verzendkosten, anders "Prijs";
+  - "Laagste prijs" alleen als de prijs echt lager is: bekende verzendkosten, en een strikt hoger totaal bij een andere winkel met een actuele prijs op voorraad en bekende verzendkosten. Anders "Prijs" (regel uit CLAUDE.md, aangescherpt na de review-agent);
   - de hoofdactie heet "Bekijk maten en prijzen" (was "Vergelijk prijzen bij N winkels");
   - het vinkje heet "Vergelijk deze stick".
 - **Kaarten** (op `/zaalsticks`): compact, met de maten erop en zonder sterke punten en let op (die staan op de stickpagina). Placement `zaalkeuze`.
@@ -2664,5 +2664,6 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Geen "aanbevolen" of "beste keuze":** de lijst staat op prijs.
 - **Geen nieuwe dependency.**
 - **Geen Product/Offer-markup op een overzicht.** Die staat op de stickpagina's.
-- **Geen sticks uit de winkelfeeds in de eerste HTML** (besluit 2026-10-24).
+- **Geen sticks uit de winkelfeeds in de eerste HTML** (besluit 2026-10-24): ook hun lichte lijst laadt pas na een antwoord.
+- **De FAQ over lengte** noemt geen vaste maten meer ("meestal 36,5 en 37,5 inch"); hij verwijst naar de lengtetabel en de keuzehulp (opmerking review-agent).
 - **Drie sticks noemen nog "goedkoopste" of "laagste prijs" in hun sterke punten.** Die staan niet meer op de compacte kaarten; aanpassen is een aparte catalogusklus.

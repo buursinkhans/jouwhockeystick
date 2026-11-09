@@ -117,6 +117,7 @@ export const ZAAL = {
     importedNote:
       'Deze gegevens komen uit de productfeeds van PassaHockey, Plutosport, HockeyCity en Daka. Controleer maat en specificaties bij de winkel.',
     loading: 'Sticks uit de winkelfeeds laden…',
+    counting: 'Even tellen…',
     loadError: 'Laden lukte niet. Probeer het nog een keer.',
     more: 'Toon meer sticks',
     noneInBudget: (count: number) =>
@@ -178,7 +179,7 @@ export const ZAAL = {
       {
         question: 'Welke lengte zaalhockeystick heb je nodig?',
         answer:
-          'Dezelfde lengte als je veldstick. Volwassen zaalsticks vind je meestal in 36,5 en 37,5 inch. Voor kinderen gebruik je de [lengtetabel](/kennis/hockeystick-lengte-tabel), en koop je niet extra groot ‘op de groei’.',
+          'Dezelfde lengte als je veldstick. Weet je die niet, gebruik dan de [lengtetabel](/kennis/hockeystick-lengte-tabel) of vul in de keuzehulp bovenaan je lichaamslengte in; die laat ook zien in welke maten de zaalsticks er zijn. Koop een kinderstick niet extra groot ‘op de groei’.',
       },
       {
         question: 'Kun je met je veldstick zaalhockeyen?',
