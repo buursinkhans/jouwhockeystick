@@ -6,7 +6,8 @@ import type { Channel, ContentItem } from './content';
  * the Social-planner applies it with the Metricool MCP.
  *
  * Rules:
- * - Only "goedgekeurd" items go over, and only as a Metricool draft.
+ * - Only "goedgekeurd" items go over. Since 2026-11-09 approving means going
+ *   live: the planner schedules them to publish by themselves (social-planner.md, STAP 5).
  * - A stored Metricool id means done: never a second post.
  * - Before creating, the planner reads Metricool's scheduled posts around the
  *   date. A post with the same text start on the same day and network is this

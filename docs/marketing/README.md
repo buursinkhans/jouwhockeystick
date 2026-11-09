@@ -52,13 +52,15 @@ De opdracht van de Social-planner staat sinds 2026-11-09 in de repo: [social-pla
 
 ## 4. Van studio naar Metricool
 
-**Statussen** (`src/marketing/content.ts`): concept → goedgekeurd → naar-metricool → concept-in-metricool → ingepland → geplaatst, plus afgewezen en onzeker.
+**Goedkeuren is online gaan** (besluit eigenaar 2026-11-09). Klikt de eigenaar in de studio op Goedkeuren, dan maakt de pagina de beelden (PNG) en video's (MP4) in de browser en zet ze in de gedeelde Drive-map `jouwhockeystick-social` (iedereen met de link kan lezen). De links komen in het item (`metricoolAkkoord.media`) en de pagina start de Social-planner. Die zet het item per kanaal in Metricool op de geplande dag en tijd, met automatisch publiceren aan (`autoPublish: true`, `draft: false`). Intrekken kan tot het moment van plaatsen: de planner zet de post in Metricool dan terug op concept. Een goedgekeurd item kun je in de studio niet herschrijven of verzetten; eerst intrekken. De precieze stappen staan in [social-planner.md](social-planner.md), STAP 5.
+
+**Statussen** (`src/marketing/content.ts`): concept → goedgekeurd → naar-metricool → ingepland → geplaatst, plus afgewezen en onzeker. `concept-in-metricool` is een ingetrokken post.
 
 - **concept:** door de planner gemaakt en door de redactiecontrole gekomen (`npm run marketing:check`).
 - **goedgekeurd:** alleen de eigenaar zet dit, in de studio.
 - **naar-metricool:** de planner zet dit vóórdat hij Metricool aanroept.
-- **concept-in-metricool:** Metricool gaf een ID; dat staat per kanaal in het item. De post is een concept (`draft: true`, `autoPublish: false`) en publiceert niets.
-- **ingepland:** de eigenaar plant het concept in Metricool in. Dat is de tweede, bewuste goedkeuring.
+- **ingepland:** Metricool gaf een ID; dat staat per kanaal in het item (`metricoolPosts`). De post gaat op het moment zelf online.
+- **concept-in-metricool:** de eigenaar trok de goedkeuring in; de post staat in Metricool als concept en publiceert niets.
 - **geplaatst:** de planner ziet de post in de statistieken van Metricool.
 - **onzeker:** een overdracht is gestart maar er is geen ID en geen bericht gevonden. Een mens kijkt in Metricool; er wordt niets opnieuw aangemaakt.
 
@@ -66,7 +68,7 @@ De opdracht van de Social-planner staat sinds 2026-11-09 in de repo: [social-pla
 1. Een opgeslagen Metricool-ID betekent klaar.
 2. Vóór elke aanmaak leest de planner de geplande posts rond de datum. Een post op dezelfde dag, hetzelfde netwerk en met hetzelfde begin van de tekst is dit item: koppelen, niet aanmaken. Zo vangt hij een aanroep op die wel lukte maar waarvan het antwoord niet aankwam.
 3. Een item op "naar-metricool" zonder ID en zonder gevonden post wordt "onzeker". Een ontbrekend ID leidt nooit vanzelf tot een tweede post.
-4. De Metricool-MCP kan niets verwijderen en een wijziging overschrijft direct. De planner wijzigt daarom geen bestaande posts en maakt alleen concepten.
+4. De Metricool-MCP kan niets verwijderen en een wijziging overschrijft direct. De planner wijzigt alleen posts die hij zelf voor een studio-item aanmaakte, en alleen om ze bij intrekken op concept te zetten of na opnieuw goedkeuren terug te zetten.
 
 **Beperkingen van het gratis plan:** hooguit 20 ingeplande posts per maand en 30 dagen statistieken. Goedkeuren met reviewers (`createScheduledPostForReview`) vraagt een plan met teambeheer; de route hierboven werkt zonder. Of één post op Instagram en Facebook als één of twee telt, meten we bij de eerste maand. Een betaald plan alleen na overleg.
 
@@ -104,7 +106,7 @@ Eén issue per week (label `marketing`), maandag, na de bestaande rapporten. De 
 | P0 | UTM-standaard | Klaar (deze PR) |
 | P0 | Cloud: planner met Metricool-connector | Proefrun nodig (§3) |
 | P1 | Social-planner: redactiecontrole en status uit Metricool terug in de studio | Klaar ([social-planner.md](social-planner.md)) |
-| P1 | Concepten automatisch naar Metricool | Wacht op twee dingen: een goedkeurknop in de studio, en beelden op een openbare URL (Metricool eist een beeld of video voor Instagram, Reels en Shorts; de studio tekent slides alleen in de browser) |
+| P1 | Goedgekeurde items automatisch online via Metricool | Gebouwd: goedkeurknop in de studio, beelden via Google Drive, STAP 5 in de planner. Eerste echte post bewijst de keten |
 | P1 | Weekrapport en GEO-meting | Fase 2 |
 | P2 | E-mail met expliciete opt-in, video op schaal, campagne-orkestratie | Later; geen leverancier gekozen |
 
@@ -116,4 +118,4 @@ Kosten nu: geen nieuwe. Metricool gratis plan, PostHog en Search Console zoals n
 2. Een run van de Social-planner die alleen leest, met de Metricool-connector, bewijst dat studio en Metricool in één cloudrun werken.
 3. De prompt van de Social-planner krijgt de stappen uit §4 en `npm run marketing:check`.
 4. De eigenaar zet de Social-planner weer aan.
-5. Elke week: in de studio goedkeuren (ongeveer 10 minuten) en in Metricool de concepten inplannen (ongeveer 5 minuten).
+5. Elke week: in de studio goedkeuren (ongeveer 10 minuten, plus de tijd dat de pagina de video's maakt). Daarna gaat alles vanzelf online.
