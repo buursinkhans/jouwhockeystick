@@ -2762,3 +2762,18 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Geen nieuwe database, geen betaald plan en geen e-mail.**
 - **Geen wijziging aan live content.**
 - **Proefroutine:** de eenmalige proefroutine (alleen lezen) staat uitgeschakeld in claude.ai.
+
+## 2026-11-09 — Opdracht van de Social-planner in de repo; status uit Metricool
+
+**Wat:**
+- **Opdracht in de repo:** de opdracht van de geplande taak Social-planner staat nu in `docs/marketing/social-planner.md`. De routine leest het bestand van `main`, zodat een wijziging via een PR en de review-agent gaat.
+- **Inhoudelijk ongewijzigd** ten opzichte van de laatste versie in de routine, plus twee aanvullingen:
+  - **Redactiecontrole** op elk voorstel, volgens `docs/marketing/merkstem.md` en `src/marketing/editorCheck.ts`;
+  - **STAP 4:** de planner leest de geplande posts in Metricool en zet de kanalen in de studio op "ingepland" of "geplaatst". De eigenaar hoeft dat niet meer zelf te klikken. In Metricool leest hij alleen.
+- **Routine:** de Metricool-connector is toegevoegd. De routine draait met de tags `cowork-remote` en `product:cowork-remote`; daarmee is de databasetool van de studio beschikbaar (tweede proefrun, 2026-11-09).
+
+**Bewust niet:**
+- **Geen concepten automatisch naar Metricool.** Daarvoor ontbreken nog twee dingen:
+  - **beelden op een openbare URL:** Metricool eist een beeld of video voor Instagram, Reels en Shorts, en de studio tekent de slides alleen in de browser;
+  - **een goedkeurknop in de studio.**
+- Dat wordt een volgende stap.
