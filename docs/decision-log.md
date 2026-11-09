@@ -2667,3 +2667,17 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Geen sticks uit de winkelfeeds in de eerste HTML** (besluit 2026-10-24): ook hun lichte lijst laadt pas na een antwoord.
 - **De FAQ over lengte** noemt geen vaste maten meer ("meestal 36,5 en 37,5 inch"); hij verwijst naar de lengtetabel en de keuzehulp (opmerking review-agent).
 - **Drie sticks noemen nog "goedkoopste" of "laagste prijs" in hun sterke punten.** Die staan niet meer op de compacte kaarten; aanpassen is een aparte catalogusklus.
+
+## 2026-11-09 — Hercontrole wacht alleen op hercontrole en verrijker; signaal bij twee keer overslaan
+
+**Opdracht eigenaar (2026-11-09).**
+
+**Wat:**
+- **Hercontrole:** `catalogus-hercontrole.yml` wacht nog alleen op open PR's met een branch `hercontrole/` of `catalogus/verrijkt-` (de verrijker).
+- **Aanvuller:** een open PR van de catalogus-aanvuller (`catalogus/<datum>`, nieuwe sticks in eigen bestanden) houdt de hercontrole niet meer tegen.
+- **Verrijker:** `catalogus-verrijker.yml` wacht ongewijzigd op `catalogus/` en `hercontrole/`.
+- **Orchestrator:** de workflow heeft een stap "Hercontrole bewaken". Zijn de laatste twee geplande runs van de hercontrole overgeslagen door een open PR (de stap "Sticks van deze week kiezen" is dan `skipped`) en zijn er sticks aan de beurt (`npm run catalog:recheck`), dan schrijft hij `hercontrole-signaal.md`. De orchestrator zet dat als eerste punt onder **Voor jou** (`docs/orchestrator.md` §1).
+
+**Waarom:** de aanvuller en de hercontrole raken andere bestanden. Wachten op elkaar kon de kwartaalcontrole van bronbeleid §3 weken stilleggen zonder dat iemand het zag.
+
+**Bewust niet:** de aanvuller wacht nog alleen op zijn eigen `catalogus/`-PR's (ongewijzigd).
