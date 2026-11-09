@@ -2684,3 +2684,17 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Sneller herbouwen bij een verlopen prijs:** de nieuwe regel bouwt precies op de dag dat een getoond bedrag de grens van 14 dagen passeert. Zo valt het weg op de statische pagina's.
 
 **Bewust niet:** reden a (geplande content) en b (main nieuwer dan live) zijn ongewijzigd.
+
+## 2026-11-09 — Hercontrole wacht alleen op hercontrole en verrijker; signaal bij twee keer overslaan
+
+**Opdracht eigenaar (2026-11-09).**
+
+**Wat:**
+- **Hercontrole:** `catalogus-hercontrole.yml` wacht nog alleen op open PR's met een branch `hercontrole/` of `catalogus/verrijkt-` (de verrijker).
+- **Aanvuller:** een open PR van de catalogus-aanvuller (`catalogus/<datum>`, nieuwe sticks in eigen bestanden) houdt de hercontrole niet meer tegen.
+- **Verrijker:** `catalogus-verrijker.yml` wacht ongewijzigd op `catalogus/` en `hercontrole/`.
+- **Orchestrator:** de workflow heeft een stap "Hercontrole bewaken". Zijn de laatste twee geplande runs van de hercontrole overgeslagen door een open PR (de stap "Sticks van deze week kiezen" is dan `skipped`) en zijn er sticks aan de beurt (`npm run catalog:recheck`), dan schrijft hij `hercontrole-signaal.md`. De orchestrator zet dat als eerste punt onder **Voor jou** (`docs/orchestrator.md` §1).
+
+**Waarom:** de aanvuller en de hercontrole raken andere bestanden. Wachten op elkaar kon de kwartaalcontrole van bronbeleid §3 weken stilleggen zonder dat iemand het zag.
+
+**Bewust niet:** de aanvuller wacht nog alleen op zijn eigen `catalogus/`-PR's (ongewijzigd).

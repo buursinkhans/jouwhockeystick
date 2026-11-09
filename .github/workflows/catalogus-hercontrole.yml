@@ -1,7 +1,7 @@
 # Catalog re-check: re-verifies the sticks whose quarterly check (docs/source-policy.md §3)
 # falls due within four weeks, at most 12 per run, following
 # docs/catalogus-hercontroleur.md, and opens one pull request. Never merges.
-# Skips the week if a re-check or catalog PR is still open, or if no stick is due yet.
+# Skips the week if a re-check or enrichment PR is still open, or if no stick is due yet.
 # Runs on the owner's Claude subscription (secret CLAUDE_CODE_OAUTH_TOKEN).
 name: Catalogus-hercontrole
 
@@ -32,18 +32,20 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Nog open hercontrole- of catalogus-PR?
+      - name: Nog open hercontrole- of verrijkings-PR?
         id: open
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Also wait for an open PR of the other catalog agent: both edit
-          # src/catalog/products/ and would otherwise conflict (code review 2026-11-08).
-          prs=$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | startswith("hercontrole/") or startswith("catalogus/")) | "#\(.number) (\(.headRefName))"')
+          # Also wait for an open PR of the enricher (catalogus/verrijkt-…): both edit the
+          # same curated product files (code review 2026-11-08). The catalog filler's new
+          # sticks (other catalogus/ branches) are separate files, so they do not block the
+          # re-check any more (owner, 2026-11-09).
+          prs=$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | startswith("hercontrole/") or startswith("catalogus/verrijkt-")) | "#\(.number) (\(.headRefName))"')
           open=$(printf '%s' "$prs" | grep -c . || true)
           echo "open=$open" >> "$GITHUB_OUTPUT"
           if [ "$open" -gt 0 ]; then
-            echo "Er staat nog een hercontrole- of catalogus-PR open; deze week niets nieuws. Oorzaak:"
+            echo "Er staat nog een hercontrole- of verrijkings-PR open; deze week niets nieuws. Oorzaak:"
             printf '%s\n' "$prs"
           fi
 
