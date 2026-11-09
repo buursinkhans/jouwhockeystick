@@ -179,7 +179,7 @@ export function WhereToBuy({
 
 /**
  * Under every stick card (catalog, compare page, indoor selector): the lowest
- * current total, the number of shops, "Vergelijk prijzen" to the stick page
+ * current total, the number of shops, "Bekijk maten en prijzen" to the stick page
  * and a direct link to the shop of that price (OfferCardSummary). No current
  * price: the indicative price, marked as such.
  */

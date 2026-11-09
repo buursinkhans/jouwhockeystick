@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import ZaalsticksPage, { metadata } from '@/app/zaalsticks/page';
 import { MAX_DESCRIPTION_LENGTH } from '@/lib/site';
+import { getIndoorProducts, isFeedImport } from '@/catalog';
+import { productPath } from '@/catalog/paths';
 import { ZAAL } from './zaal';
 
 /** Claims the data does not support: prices are weekly, shipping is sometimes unknown (decision log 2026-10-29). */
@@ -56,25 +58,58 @@ describe('/zaalsticks copy (SEO change of 2026-10-29)', () => {
     for (const text of [ZAAL.intro, ZAAL.stickwijzerNote, ZAAL.faq.price.answer(1, '€1', '€2'), ...ZAAL.faq.items.map((i) => i.answer)]) {
       expect(text).not.toMatch(/bij elke stick zie je bij welke|per stick bij welke partnerwinkels/i);
     }
-    expect(ZAAL.stickwijzerNote).toMatch(/Op de pagina van elke stick/);
+    // Since 2026-11-09 "Zo maken we deze pagina" says where the sources and shops are.
+    expect(ZAAL.howWeWork.items.join(' ')).toMatch(/Op de pagina van elke stick/);
   });
 
   it('shows the change date of this edit, also as dateModified', () => {
-    expect(ZAAL.updatedAt).toBe('2026-10-29');
+    expect(ZAAL.updatedAt).toBe('2026-11-09');
     const html = renderToStaticMarkup(ZaalsticksPage());
-    expect(html).toContain('"dateModified":"2026-10-29"');
-    expect(html).toContain('<time dateTime="2026-10-29">2026-10-29</time>');
+    expect(html).toContain('"dateModified":"2026-11-09"');
+    expect(html).toContain('<time dateTime="2026-11-09">2026-11-09</time>');
   });
 
-  it('renders with the same structured data (Article and breadcrumbs, no FAQPage) and the same anchor', () => {
+  it('renders Article, breadcrumbs, the hand-checked sticks as ItemList and the visible FAQ as FAQPage (2026-11-09), with the same anchors', () => {
     const html = renderToStaticMarkup(ZaalsticksPage());
     const types = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(
       (m) => (JSON.parse(m[1] ?? '{}') as { '@type'?: string })['@type'],
     );
-    expect(types).toEqual(['Article', 'BreadcrumbList']);
-    expect(html).not.toContain('FAQPage');
+    expect([...types].sort()).toEqual(['Article', 'BreadcrumbList', 'FAQPage', 'ItemList']);
     expect(html).toContain('id="alle-zaalsticks"');
+    expect(html).toContain('id="zaal-selector-heading"');
     expect(html).toContain('Alle zaalhockeysticks in onze catalogus');
     expect(html).toContain('Waar kun je een zaalhockeystick kopen?');
+  });
+});
+
+describe('/zaalsticks without JavaScript (redesign 2026-11-09)', () => {
+  const html = renderToStaticMarkup(ZaalsticksPage());
+  const all = getIndoorProducts(new Date(), { includeImported: true });
+
+  it('has every hand-checked stick as a crawlable link, and no shop-feed stick in the first load', () => {
+    for (const product of all.filter((p) => !isFeedImport(p))) {
+      expect(html, product.slug).toContain(`href="${productPath(product)}"`);
+    }
+    for (const product of all.filter(isFeedImport).slice(0, 20)) {
+      expect(html, product.slug).not.toContain(`href="${productPath(product)}"`);
+    }
+  });
+
+  it('shows the three questions, the advice per player and how the page is made', () => {
+    for (const text of [ZAAL.finder.playerLabel, ZAAL.finder.budgetLabel, ZAAL.whoFits.heading, ZAAL.howWeWork.heading]) {
+      expect(html).toContain(text);
+    }
+    for (const item of ZAAL.whoFits.items) expect(html).toContain(item.title);
+    expect(html).toContain(`${all.length} zaalsticks`);
+  });
+
+  it('keeps the advice honest: no best stick, no overclaims, no em dash in running text', () => {
+    const texts = [ZAAL.finder.intro, ZAAL.finder.sortNote, ZAAL.finder.budgetNote, ...ZAAL.whoFits.items.map((i) => i.body), ...ZAAL.howWeWork.items];
+    for (const text of texts) {
+      expect(text).not.toMatch(OVERCLAIMS);
+      // "Er is geen beste zaalstick voor iedereen" is allowed; a claim that one is best is not.
+      expect(text).not.toMatch(/(?<!geen )beste zaalstick|aanrader|!/i);
+      expect(text).not.toMatch(/ [–—] /);
+    }
   });
 });

@@ -1,5 +1,6 @@
 'use client';
 
+import { trackEvent } from '@/lib/analytics/track';
 import { MAX_COMPARE, toggleCompare, useCompareSelection } from './compareStore';
 
 /** "Vergelijk" checkbox on a stick card (UX phase 2, 2026-11-08); above the card's stretched link. */
@@ -16,11 +17,14 @@ export function CompareToggle({ slug, name }: { slug: string; name: string }) {
         type="checkbox"
         checked={checked}
         disabled={full}
-        onChange={() => toggleCompare(slug)}
+        onChange={() => {
+          toggleCompare(slug);
+          trackEvent({ name: 'compare_select', action: checked ? 'remove' : 'add', count: selection.length + (checked ? -1 : 1) });
+        }}
         className="h-5 w-5 accent-veld"
         aria-label={`Vergelijk ${name}`}
       />
-      <span aria-hidden="true">{full ? `Vergelijk (max. ${MAX_COMPARE})` : 'Vergelijk'}</span>
+      <span aria-hidden="true">{full ? `Vergelijk (max. ${MAX_COMPARE})` : 'Vergelijk deze stick'}</span>
     </label>
   );
 }

@@ -43,7 +43,8 @@ describe('OfferCardSummary', () => {
     expect(html).toContain('3 winkels');
     expect(html).toContain('€244,95');
     expect(html).toContain('incl. €4,95 verzending · bij Daka');
-    expect(html).toMatch(/Vergelijk prijzen<span[^>]*> bij (<!-- -->)?3(<!-- -->)? winkels/);
+    expect(html).toContain(OFFER_TEXT.cardCompareShops);
+    expect(html).toContain(OFFER_TEXT.cardLowest);
     expect(html).toContain('href="/sticks/x"');
     expect(html).toMatch(/Direct naar (<!-- -->)?Daka/);
     expect(html).toContain('rel="noopener noreferrer sponsored"');
@@ -53,10 +54,23 @@ describe('OfferCardSummary', () => {
   it('with one shop: no comparison, one button to that shop', () => {
     const html = render([offer({ ...PASSA })]);
     expect(html).toContain('1 winkel');
-    expect(html).not.toContain('Vergelijk prijzen');
+    expect(html).not.toContain(OFFER_TEXT.cardCompareShops);
     expect(html).toMatch(/Bekijk bij (<!-- -->)?PassaHockey/);
     expect(html).toContain('gratis verzending · bij PassaHockey');
     expect(html).toContain('Alleen bij PassaHockey gevonden');
+  });
+
+  it('calls a price "Laagste prijs" only with something to compare (2026-11-09)', () => {
+    const label = (html: string) => (html.includes(`>${OFFER_TEXT.cardLowest}<`) ? 'lowest' : html.includes(`>${OFFER_TEXT.cardPrice}<`) ? 'price' : 'other');
+    expect(label(render([offer({ ...PASSA })]))).toBe('price');
+    // Two shops, but only one with a current price in stock.
+    expect(label(render([offer({ ...PASSA }), offer({ ...BOL, inStock: false })]))).toBe('price');
+    // Unknown shipping on the lowest: no "laagste" claim.
+    expect(label(render([offer({ ...BOL, priceEur: 100, shippingEur: null }), offer({ ...PASSA, priceEur: 300 })]))).toBe('price');
+    // A tie, or the other shop's shipping unknown: nothing is really lower.
+    expect(label(render([offer({ ...BOL, priceEur: 200 }), offer({ ...PASSA, priceEur: 200 })]))).toBe('price');
+    expect(label(render([offer({ ...BOL, priceEur: 100 }), offer({ ...PASSA, priceEur: 300, shippingEur: null })]))).toBe('price');
+    expect(label(render([offer({ ...BOL, priceEur: 100 }), offer({ ...PASSA, priceEur: 300 })]))).toBe('lowest');
   });
 
   it('never says shipping is included when it is unknown', () => {
@@ -82,7 +96,7 @@ describe('OfferCardSummary', () => {
     expect(stale).toContain(OFFER_TEXT.cardNoCurrentPrice);
     const none = render([]);
     expect(none).toContain(OFFER_TEXT.cardNoShop);
-    expect(none).not.toContain('Vergelijk prijzen');
+    expect(none).not.toContain(OFFER_TEXT.cardCompareShops);
     expect(none).not.toContain(OFFER_TEXT.cardPartnerNote);
   });
 
