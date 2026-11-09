@@ -2777,3 +2777,15 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
   - **beelden op een openbare URL:** Metricool eist een beeld of video voor Instagram, Reels en Shorts, en de studio tekent de slides alleen in de browser;
   - **een goedkeurknop in de studio.**
 - Dat wordt een volgende stap.
+
+## 2026-11-09 — Social: goedkeuren is online gaan, via Google Drive en Metricool
+
+**Besluit eigenaar:** "goedkeuren = live". Een klik op Goedkeuren in de Social-studio betekent dat het item op de geplande dag en tijd vanzelf online gaat via Metricool. Intrekken moet kunnen tot het moment van plaatsen. Dit vervangt "alleen concepten naar Metricool" uit de vorige stap.
+
+**Gebouwd:**
+- **Social-studio (versie 20):** Goedkeuren maakt in de browser de slides (PNG) of de video's (MP4, H.264) met covers en zet ze in de Drive-map `jouwhockeystick-social`. Die map is gedeeld als "iedereen met de link kan lezen", zodat Metricool de bestanden kan ophalen. De pagina bewaart de links in `metricoolAkkoord.media` en start de Social-planner. Een video maken duurt ongeveer zo lang als de video. Intrekken zet `metricoolAkkoord` op null. Een goedgekeurd item kan niet worden herschreven of verzet; eerst intrekken.
+- **Social-planner, STAP 5** ([social-planner.md](marketing/social-planner.md)): per kanaal een Metricool-post met `autoPublish: true` en `draft: false`, eerst controleren of hij al bestaat, en id en uuid terug in `metricoolPosts`. Bij intrekken zet de planner de post op concept (`draft: true`); de MCP kan niets verwijderen. Een onduidelijke eerdere poging geeft "onzeker" en nooit een tweede post.
+
+**Waarom Drive via de pagina:** een cloudrun kan bestanden alleen als tekst in de aanroep meesturen, wat voor echte beelden en video's niet werkt. De pagina stuurt de bestanden zelf met de Drive-koppeling van de eigenaar. De Drive-koppeling binnen Metricool is betaald; een openbare downloadlink werkt ook in het gratis plan (getest met een concept op 2026-11-09).
+
+**Grenzen:** het gratis plan van Metricool staat 20 ingeplande posts per maand toe. Een video die groter is dan 15 MB gaat niet mee. Video's maken lukt alleen in Chrome of Edge op de computer.
