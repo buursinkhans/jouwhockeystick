@@ -15,7 +15,7 @@ Uitgangspunten: bestaande systemen eerst, geen tweede planner of database, niets
 | Metricool vanuit de cloud (claude.ai-connector) | Bewezen werkend | Proefroutine van 2026-11-09 las `getBrandSettings` zonder laptop. |
 | Kanalen in Metricool | Bewezen | Instagram, Facebook, YouTube en TikTok. |
 | Metricool-statistieken | Aanwezig, nog leeg | Verzamelen begon op 2026-11-09; gratis plan bewaart 30 dagen. |
-| Social-studio vanuit een nieuwe cloudroutine | Technisch beperkt | De ArtifactData-tool ontbrak in een generieke routine. De Social-planner (aangemaakt vanuit claude.ai) had hem wel. Zie §3. |
+| Social-studio vanuit een cloudroutine | Bewezen werkend | Met de routinetags `cowork-remote` en `product:cowork-remote` is de ArtifactData-tool er (tweede proefrun, 2026-11-09). Zonder die tags niet. Zie §3. |
 | GitHub vanuit de cloud | Technisch beperkt | `gh api` geeft 403 zonder gekoppelde repo; `git clone` werkt, want de repo is openbaar. |
 | PostHog | Bewezen werkend | Cookieloos. Wekelijks Conversie-rapport (issue met label `conversie`) met bron per bezoek, ook AI-assistenten (`AI_REFERRER_DOMAINS`). |
 | Google Search Console | Bewezen werkend | Wekelijks rapport (issue met label `search-console`, workflow `search-console.yml`). |
@@ -46,7 +46,9 @@ Getest op 2026-11-09 met een eenmalige routine die alleen leest (`Cloudvalidatie
 | Social-studio lezen vanuit een nieuwe routine | FOUT: ArtifactData-tool niet beschikbaar |
 | Repo lezen met `gh api` | FOUT: 403; `git clone` werkt wel |
 
-De Social-planner las en schreef de studio wel (laatste run 30 oktober geslaagd). Dat type routine heeft de databasetool; een via de API aangemaakte routine niet. Nog te bewijzen, met een run die alleen leest: de Social-planner zelf met de Metricool-connector erbij. Lukt dat, dan draait de hele kring zonder laptop. Lukt het niet, dan is het alternatief een geplande taak die vanuit claude.ai wordt aangemaakt (zoals de planner), niet een nieuwe database.
+Tweede proefrun (2026-11-09, alleen lezen), met de tags van de Social-planner (`cowork-remote`, `product:cowork-remote`): de studio lezen met ArtifactData, de repo klonen en Metricool lezen werkten in één run. De hele kring kan dus zonder laptop draaien.
+
+De opdracht van de Social-planner staat sinds 2026-11-09 in de repo: [social-planner.md](social-planner.md). De routine leest dat bestand van `main`.
 
 ## 4. Van studio naar Metricool
 
@@ -101,7 +103,8 @@ Eén issue per week (label `marketing`), maandag, na de bestaande rapporten. De 
 | P0 | Redactiecontrole en merkstem | Klaar (deze PR) |
 | P0 | UTM-standaard | Klaar (deze PR) |
 | P0 | Cloud: planner met Metricool-connector | Proefrun nodig (§3) |
-| P1 | Social-planner bijwerken: controle draaien, concepten naar Metricool, status terug | Na de proefrun |
+| P1 | Social-planner: redactiecontrole en status uit Metricool terug in de studio | Klaar ([social-planner.md](social-planner.md)) |
+| P1 | Concepten automatisch naar Metricool | Wacht op twee dingen: een goedkeurknop in de studio, en beelden op een openbare URL (Metricool eist een beeld of video voor Instagram, Reels en Shorts; de studio tekent slides alleen in de browser) |
 | P1 | Weekrapport en GEO-meting | Fase 2 |
 | P2 | E-mail met expliciete opt-in, video op schaal, campagne-orkestratie | Later; geen leverancier gekozen |
 
