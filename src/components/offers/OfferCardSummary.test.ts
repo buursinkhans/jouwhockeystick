@@ -67,9 +67,10 @@ describe('OfferCardSummary', () => {
     expect(label(render([offer({ ...PASSA }), offer({ ...BOL, inStock: false })]))).toBe('price');
     // Unknown shipping on the lowest: no "laagste" claim.
     expect(label(render([offer({ ...BOL, priceEur: 100, shippingEur: null }), offer({ ...PASSA, priceEur: 300 })]))).toBe('price');
-    // A tie, or the other shop's shipping unknown: nothing is really lower.
+    // A tie: nothing is really lower.
     expect(label(render([offer({ ...BOL, priceEur: 200 }), offer({ ...PASSA, priceEur: 200 })]))).toBe('price');
-    expect(label(render([offer({ ...BOL, priceEur: 100 }), offer({ ...PASSA, priceEur: 300, shippingEur: null })]))).toBe('price');
+    // The other shop's shipping unknown but its price alone already higher: really lower (one rule, 2026-11-09).
+    expect(label(render([offer({ ...BOL, priceEur: 100 }), offer({ ...PASSA, priceEur: 300, shippingEur: null })]))).toBe('lowest');
     expect(label(render([offer({ ...BOL, priceEur: 100 }), offer({ ...PASSA, priceEur: 300 })]))).toBe('lowest');
   });
 
