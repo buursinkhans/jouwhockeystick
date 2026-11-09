@@ -2668,6 +2668,37 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **De FAQ over lengte** noemt geen vaste maten meer ("meestal 36,5 en 37,5 inch"); hij verwijst naar de lengtetabel en de keuzehulp (opmerking review-agent).
 - **Drie sticks noemen nog "goedkoopste" of "laagste prijs" in hun sterke punten.** Die staan niet meer op de compacte kaarten; aanpassen is een aparte catalogusklus.
 
+## 2026-11-09 — Dagelijkse live-zetting: herbouwen als een prijs verloopt
+
+**Opdracht eigenaar (2026-11-09):** vervang reden c van "Geplande publicatie" ("live build ouder dan 10 dagen") door een regel die naar de prijzen zelf kijkt.
+
+**Wat:**
+- **Script:** `scripts/price-expiry.ts` (`npm run price:expiry -- <builddatum>`) verzamelt de leesdatum van elke prijs die de site toont: sticks (ook uit de feeds) via `getOffers`, schoenen via `getShoeOffers`. De logica staat in `src/catalog/offers/expiry.ts`.
+- **Wanneer bouwen:**
+  - als een prijs op de live builddatum (regel 2 van `version.txt`) nog vers was en vandaag niet meer. Daarvoor is `isReadDateFresh` toegevoegd: dezelfde regel als `isPriceFresh`, in hele kalenderdagen;
+  - **vangnet:** de live build is ouder dan 14 dagen, of de datum is onbekend of ongeldig.
+- **In de log:** de reden noemt de verlopen leesdatums, bijvoorbeeld "prijzen gelezen op 2026-11-05 zijn sinds de live build ouder dan 14 dagen".
+
+**Waarom:**
+- **Minder builds:** de oude regel bouwde elke 10 dagen, ook als er niets verliep.
+- **Sneller herbouwen bij een verlopen prijs:** de nieuwe regel bouwt precies op de dag dat een getoond bedrag de grens van 14 dagen passeert. Zo valt het weg op de statische pagina's.
+
+**Bewust niet:** reden a (geplande content) en b (main nieuwer dan live) zijn ongewijzigd.
+
+## 2026-11-09 — Hercontrole wacht alleen op hercontrole en verrijker; signaal bij twee keer overslaan
+
+**Opdracht eigenaar (2026-11-09).**
+
+**Wat:**
+- **Hercontrole:** `catalogus-hercontrole.yml` wacht nog alleen op open PR's met een branch `hercontrole/` of `catalogus/verrijkt-` (de verrijker).
+- **Aanvuller:** een open PR van de catalogus-aanvuller (`catalogus/<datum>`, nieuwe sticks in eigen bestanden) houdt de hercontrole niet meer tegen.
+- **Verrijker:** `catalogus-verrijker.yml` wacht ongewijzigd op `catalogus/` en `hercontrole/`.
+- **Orchestrator:** de workflow heeft een stap "Hercontrole bewaken". Zijn de laatste twee geplande runs van de hercontrole overgeslagen door een open PR (de stap "Sticks van deze week kiezen" is dan `skipped`) en zijn er sticks aan de beurt (`npm run catalog:recheck`), dan schrijft hij `hercontrole-signaal.md`. De orchestrator zet dat als eerste punt onder **Voor jou** (`docs/orchestrator.md` §1).
+
+**Waarom:** de aanvuller en de hercontrole raken andere bestanden. Wachten op elkaar kon de kwartaalcontrole van bronbeleid §3 weken stilleggen zonder dat iemand het zag.
+
+**Bewust niet:** de aanvuller wacht nog alleen op zijn eigen `catalogus/`-PR's (ongewijzigd).
+
 ## 2026-11-09 — Eén regel voor "Laagste prijs"
 
 **Opdracht eigenaar (2026-11-09):** de badge in "Waar te koop" en het label op een productkaart volgen dezelfde, strengste regel.

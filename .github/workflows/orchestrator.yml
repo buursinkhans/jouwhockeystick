@@ -17,6 +17,7 @@ permissions:
   contents: read
   issues: write
   pull-requests: read
+  actions: read # the last re-check runs
   id-token: write
 
 jobs:
@@ -30,6 +31,29 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
+          cache: npm
+      # The re-check list imports the catalog (zod and other packages).
+      - run: npm ci
+      - name: Hercontrole bewaken
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Signal for the owner (2026-11-09): the re-check skipped its last two
+          # scheduled runs because of an open PR, while sticks are due. The step
+          # "Sticks van deze week kiezen" is only skipped for an open PR.
+          skipped=0
+          runs=0
+          for id in $(gh api "repos/${{ github.repository }}/actions/workflows/catalogus-hercontrole.yml/runs?event=schedule&status=completed&per_page=2" --jq '.workflow_runs[].id'); do
+            runs=$((runs + 1))
+            n=$(gh api "repos/${{ github.repository }}/actions/runs/$id/jobs" --jq '[.jobs[].steps[] | select(.name == "Sticks van deze week kiezen" and .conclusion == "skipped")] | length')
+            [ "$n" -gt 0 ] && skipped=$((skipped + 1))
+          done
+          due=$(npm run --silent catalog:recheck -- "$RUNNER_TEMP/recheck.md" | grep -oE '^[0-9]+' || echo 0)
+          echo "Hercontrole: $skipped van de laatste $runs geplande runs overgeslagen; $due sticks aan de beurt."
+          if [ "$runs" -ge 2 ] && [ "$skipped" -ge 2 ] && [ "$due" -gt 0 ]; then
+            open=$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | startswith("hercontrole/") or startswith("catalogus/verrijkt-")) | "#\(.number) (\(.headRefName))"' | paste -sd ', ' -)
+            printf '%s\n' "De catalogus-hercontrole is twee weken op rij overgeslagen door een open PR, terwijl er $due sticks aan de beurt zijn voor de kwartaalcontrole. Open PR's: ${open:-geen meer}." > hercontrole-signaal.md
+          fi
       - name: Labels klaarzetten
         env:
           GH_TOKEN: ${{ github.token }}
@@ -44,6 +68,7 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
             Je bent de orchestrator van jouwhockeystick.nl. Lees docs/orchestrator.md en voer het volledig uit voor vandaag.
+            Staat er een bestand hercontrole-signaal.md in de root, lees het dan (zie §1 van het handboek).
             Repository: ${{ github.repository }}. Gebruik `gh` voor issues en pull requests.
           claude_args: |
             --max-turns 40

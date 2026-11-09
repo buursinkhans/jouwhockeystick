@@ -20,6 +20,7 @@ Gebruik `gh` voor GitHub (de repo is de huidige repo).
 4. **De catalogus:** `npm run catalog:health`, en waar nodig `src/catalog/products/` (merken, zaal of veld, niveau, prijs, junior of senior).
 5. **Eerdere besluiten van de eigenaar:** `docs/decision-log.md`. Een besluit daar gaat voor op een kans die jij ziet (bijvoorbeeld: sticks die bol.com niet verkoopt blijven in het advies).
 6. **Het seizoen:** de datum van vandaag. Het zaalseizoen loopt van december tot en met februari; content daarvoor moet vóór december live staan. Het veldseizoen begint in september en loopt na de winterstop vanaf maart weer.
+7. **Het hercontrole-signaal:** staat er een bestand `hercontrole-signaal.md` in de root, dan is de catalogus-hercontrole twee geplande runs op rij overgeslagen door een open PR, terwijl er sticks aan de beurt zijn voor de kwartaalcontrole (de workflow schrijft het in de stap "Hercontrole bewaken"). Zet dat als eerste punt onder **Voor jou**, met het aantal sticks en de open PR's uit het bestand. Geen bestand = niets melden.
 
 ## 2. Kansen kiezen
 
@@ -63,7 +64,7 @@ Eén regel per rapport: wat het zegt, en of het oud is.
 Per brief: link, en in één zin waarom deze nu.
 
 ## Voor jou
-Wat alleen de eigenaar kan doen of beslissen (bijv. een fout uit Technical SEO, ontbrekende productfoto's, een PR die al lang open staat). Leeg = "Niets."
+Wat alleen de eigenaar kan doen of beslissen (bijv. een fout uit Technical SEO, ontbrekende productfoto's, een PR die al lang open staat, of het hercontrole-signaal uit §1). Leeg = "Niets."
 
 ## Overwogen, niet gedaan
 Kansen die je zag maar liet liggen, met de reden.

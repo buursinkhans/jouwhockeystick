@@ -6,9 +6,10 @@
 #      since the last live build;
 #   b. main has commits that are not live yet and that touch the site (the
 #      same path rules as scripts/netlify-ignore.sh);
-#   c. the live build is more than MAX_LIVE_AGE_DAYS days old, so shop prices
-#      on the static pages never pass the 14-day limit (MAX_PRICE_AGE_DAYS in
-#      src/catalog/offers/sort.ts);
+#   c. a shop price that was still shown on the live build has passed the
+#      14-day limit since (MAX_PRICE_AGE_DAYS in src/catalog/offers/sort.ts),
+#      so the static pages drop its amount; safety net: the live build is
+#      older than 14 days or its date is unknown (scripts/price-expiry.ts);
 #   or it was started by hand with "forceer".
 # The live commit and build date come from https://jouwhockeystick.nl/version.txt
 # (line 1 commit, line 2 build date). After a build it starts IndexNow for the
@@ -34,9 +35,6 @@ permissions:
 concurrency:
   group: publicatie
   cancel-in-progress: false
-
-env:
-  MAX_LIVE_AGE_DAYS: 10
 
 jobs:
   publish:
@@ -125,22 +123,20 @@ jobs:
               reasons+=("b: main is nieuwer dan live en raakt de site: ${why%)}")
             fi
           fi
-          # c: the live build is too old for the prices on the static pages.
-          if [ -z "$BUILT" ]; then
-            reasons+=("c: builddatum live onbekend")
+          # c: a price on the live pages has expired since the build (or the safety net).
+          expiry=$(npm run --silent price:expiry -- "$BUILT")
+          expiry_reason=$(printf '%s\n' "$expiry" | sed -n 2p)
+          if [ "$(printf '%s\n' "$expiry" | sed -n 1p)" = "build=true" ]; then
+            reasons+=("c: $expiry_reason")
           else
-            age=$(( ( $(date -u +%s) - $(date -u -d "$BUILT" +%s) ) / 86400 ))
-            echo "Live build is $age dagen oud (grens $MAX_LIVE_AGE_DAYS)."
-            if [ "$age" -gt "$MAX_LIVE_AGE_DAYS" ]; then
-              reasons+=("c: live build is $age dagen oud")
-            fi
+            echo "Prijzen: $expiry_reason."
           fi
           today=$(TZ=Europe/Amsterdam date +%F)
           if [ "${#reasons[@]}" -gt 0 ]; then
             line="$today: bouwen. Reden: $(IFS=';'; echo "${reasons[*]}" | sed 's/;/; /g')."
             echo "build=true" >> "$GITHUB_OUTPUT"
           else
-            line="$today: niet gebouwd. Geen geplande content, live is gelijk aan main of het verschil raakt de site niet, en de live build is jong genoeg."
+            line="$today: niet gebouwd. Geen geplande content, live is gelijk aan main of het verschil raakt de site niet, en geen prijs verlopen sinds de live build."
             echo "build=false" >> "$GITHUB_OUTPUT"
           fi
           echo "$line"

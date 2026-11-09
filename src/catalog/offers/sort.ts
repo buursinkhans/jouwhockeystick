@@ -28,9 +28,14 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 /** A price we may show: read at most MAX_PRICE_AGE_DAYS before `now`. */
 export function isPriceFresh(offer: Offer, now: Date): boolean {
   if (offer.priceEur === null || !offer.readAt) return false;
+  return isReadDateFresh(offer.readAt, now);
+}
+
+/** The date rule of isPriceFresh on its own (YYYY-MM-DD), also for the daily publishing check. */
+export function isReadDateFresh(readAt: string, now: Date): boolean {
   // Whole calendar days: read on the 13th is still current on the 27th.
   const today = Date.parse(now.toISOString().slice(0, 10));
-  const age = (today - Date.parse(offer.readAt)) / DAY_MS;
+  const age = (today - Date.parse(readAt)) / DAY_MS;
   return age >= -1 && age <= MAX_PRICE_AGE_DAYS;
 }
 
