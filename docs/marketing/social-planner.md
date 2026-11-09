@@ -78,6 +78,7 @@ a. Lees getScheduledPosts van vandaag−14 t/m vandaag+21. Een Metricool-post ho
 b. Voor elke gekoppelde studio-post of -video: zet in `kanalen` het kanaal (insta, fb, reels, shorts, youtube, tiktok; volg de namen die al in `kanalen` staan) op "ingepland" als de Metricool-post nog niet gepubliceerd is, en bewaar `metricool: {<kanaal>: {uuid, gezien: ISO-tijd}}`. Update met if_version. Een kanaal dat al op "geplaatst" of "overslaan" staat, laat je staan.
 c. Een studio-item met een datum vóór vandaag waarvan een kanaal op "ingepland" stond en dat niet meer in getScheduledPosts voorkomt, is waarschijnlijk geplaatst: zet dat kanaal op "geplaatst". Kun je het niet vaststellen, laat het staan.
 d. Noem in het slotbericht hoeveel kanalen je op ingepland en geplaatst zette, en welke Metricool-posts je niet kon koppelen.
+e. Goedkeuring: een post of video met het veld `metricoolAkkoord: {op}` heeft de eigenaar goedgekeurd met de knop "Goedkeuren voor Metricool" in de studio (los van `goedkeuring`, dat bij de YouTube-flow hoort). Zet die items nog NIET in Metricool: daarvoor zijn eerst openbare beelden nodig (docs/marketing/README.md §8). Noem ze in het slotbericht als "klaar voor Metricool", met datum en titel.
 
 STAP 3 — Opruimen: meer dan 60 documenten in "commands": verwijder de oudste met status "klaar" of "mislukt" tot er 60 over zijn. Meer dan 150 in "posts" of 120 in "videos": verwijder de oudste met status "weggegooid".
 
