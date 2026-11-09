@@ -10,3 +10,160 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Extra domains → primary domain (decision log 2026-11-09, "Extra domeinen").
+# Domain-level redirects run on Netlify's CDN before the Next.js runtime and
+# before the cache, unlike redirects() in next.config.ts. One 301 per request,
+# path and query string kept (Netlify passes the query on by itself). HTTP
+# and HTTPS each need their own rule. The rules only fire for hosts that are
+# added to this site as domain aliases in Netlify. The primary domain
+# (jouwhockeystick.nl, www included) is not listed here and is not affected.
+# Tested in src/seo/domainRedirects.test.ts; check live with
+# scripts/check-domain-redirects.sh.
+
+# jouwhockeyschoenen.nl: the home page goes to the shoe section (live, indexed);
+# every other path goes to the same path on jouwhockeystick.nl, like the
+# other domains. These root rules must stay above the "/*" rules.
+[[redirects]]
+  from = "https://jouwhockeyschoenen.nl/"
+  to = "https://jouwhockeystick.nl/hockeyschoenen"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://jouwhockeyschoenen.nl/"
+  to = "https://jouwhockeystick.nl/hockeyschoenen"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.jouwhockeyschoenen.nl/"
+  to = "https://jouwhockeystick.nl/hockeyschoenen"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.jouwhockeyschoenen.nl/"
+  to = "https://jouwhockeystick.nl/hockeyschoenen"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://jouwhockeystick.info/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://jouwhockeystick.info/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.jouwhockeystick.info/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.jouwhockeystick.info/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://jouwhockeystick.be/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://jouwhockeystick.be/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.jouwhockeystick.be/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.jouwhockeystick.be/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://jouwhockeystick.com/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://jouwhockeystick.com/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.jouwhockeystick.com/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.jouwhockeystick.com/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://jouwhockeystick.store/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://jouwhockeystick.store/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.jouwhockeystick.store/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.jouwhockeystick.store/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://jouwhockeyschoenen.nl/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://jouwhockeyschoenen.nl/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.jouwhockeyschoenen.nl/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.jouwhockeyschoenen.nl/*"
+  to = "https://jouwhockeystick.nl/:splat"
+  status = 301
+  force = true

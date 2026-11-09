@@ -2789,3 +2789,21 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 **Waarom Drive via de pagina:** een cloudrun kan bestanden alleen als tekst in de aanroep meesturen, wat voor echte beelden en video's niet werkt. De pagina stuurt de bestanden zelf met de Drive-koppeling van de eigenaar. De Drive-koppeling binnen Metricool is betaald; een openbare downloadlink werkt ook in het gratis plan (getest met een concept op 2026-11-09).
 
 **Grenzen:** het gratis plan van Metricool staat 20 ingeplande posts per maand toe. Een video die groter is dan 15 MB gaat niet mee. Video's maken lukt alleen in Chrome of Edge op de computer.
+
+## 2026-11-09 — Extra domeinen: 301 naar jouwhockeystick.nl
+
+**Opdracht eigenaar (2026-11-09):** de extra domeinen jouwhockeystick.info, .be, .com, .store en jouwhockeyschoenen.nl sturen bezoekers met een permanente redirect (301) naar `https://jouwhockeystick.nl`. SSL gratis via Netlify; STRATO blijft registrar en DNS-beheerder. Dit vervangt "een doorverwijzing volgt alleen op expliciete opdracht" uit het hockeyschoenen-besluit.
+
+**Wat:**
+- **24 domeinregels in `netlify.toml`** (`[[redirects]]`, `status = 301`, `force = true`): per domein met en zonder www, elk voor HTTP en HTTPS, `/*` naar `https://jouwhockeystick.nl/:splat`. Het pad gaat mee; de querystring geeft Netlify bij een 301 zelf door.
+- **jouwhockeyschoenen.nl:** de homepage (`/`) gaat naar `/hockeyschoenen`, de live en geïndexeerde schoenensectie. Andere paden gaan, zoals bij de andere domeinen, naar hetzelfde pad op jouwhockeystick.nl. Het domein heeft nooit een eigen site gehad, dus er bestaan geen oude paden om te behouden.
+- **Test** `src/seo/domainRedirects.test.ts`: leest de regels uit `netlify.toml` en speelt ze na (alle domeinen, beide hostnamen, HTTP en HTTPS, bestaande pagina's, querystring). Controleert ook dat het primaire domein, www.jouwhockeystick.nl en jouwhockeystick.netlify.app nooit worden doorgestuurd en dat elke bestemming https://jouwhockeystick.nl is (geen lus, geen tweede stap).
+- **Livecontrole** `scripts/check-domain-redirects.sh` (curl, geen `-k`): na deployment en certificaatuitgifte per variant de status, de bestemming en het certificaat.
+
+**Waarom netlify.toml en niet `redirects()` in next.config.ts of de proxy:** de redirects van Next.js draait de Next-server, en die wordt bij een cachetreffer op Netlify niet aangeroepen (zie 2026-10-24). Domeinregels in `netlify.toml` draait Netlify zelf, op het CDN. De proxy (`src/proxy.ts`) reageert alleen op paden met `//` en botst hier niet mee.
+
+**Stand DNS op 2026-11-09 (gelezen via dns.google):** alle vijf extra domeinen hebben al een A-record naar 75.2.60.5 (Netlify) en `www` een CNAME naar `jouwhockeystick.netlify.app`; nameservers bij STRATO (`*.rzone.de`). `https://jouwhockeystick.info` gaf een certificaatfout (certificaat voor een ander adres): het domein staat nog niet als alias in Netlify of het certificaat is nog niet uitgegeven. Welke domeinen in Netlify staan, is zonder Netlify-toegang niet te controleren.
+
+**Voorwaarde in Netlify (eigenaar):** elk domein, met www, als domeinalias aan de site toevoegen; pas dan geeft Netlify een Let's Encrypt-certificaat uit en werken de regels. Deploy previews tonen deze regels niet, want die draaien op een netlify.app-adres.
+
+**Bewust niet:** geen wijziging aan DNS, nameservers, e-mailrecords, canonical-tags, sitemap, robots.txt of structured data. Die wijzen al naar jouwhockeystick.nl (`SITE_URL` in `src/lib/site.ts`).
