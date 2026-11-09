@@ -2667,3 +2667,24 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Geen sticks uit de winkelfeeds in de eerste HTML** (besluit 2026-10-24): ook hun lichte lijst laadt pas na een antwoord.
 - **De FAQ over lengte** noemt geen vaste maten meer ("meestal 36,5 en 37,5 inch"); hij verwijst naar de lengtetabel en de keuzehulp (opmerking review-agent).
 - **Drie sticks noemen nog "goedkoopste" of "laagste prijs" in hun sterke punten.** Die staan niet meer op de compacte kaarten; aanpassen is een aparte catalogusklus.
+
+## 2026-11-09 — Eén regel voor "Laagste prijs"
+
+**Opdracht eigenaar (2026-11-09):** de badge in "Waar te koop" en het label op een productkaart volgen dezelfde, strengste regel.
+
+**Wat:**
+- **Eén functie:** `isStrictlyLowest` in `src/catalog/offers/sort.ts`, gebruikt door `hasLowestBadge` en `cardPrice`.
+- **De regel:** "Laagste prijs" alleen als de bovenste prijs bekende verzendkosten heeft en strikt lager is dan bij alle andere winkels met een actuele prijs op voorraad. Eén winkel, onbekende verzendkosten bovenaan, of gelijke prijzen geven geen label.
+- **CLAUDE.md** (Prijsvergelijking) zegt dit nu ook ("alle andere" in plaats van "minstens één").
+
+**Gevolgen:**
+- **Badge:** ongewijzigd; die gebruikte al "alle andere".
+- **Kaartlabel:**
+  - **strenger:** met twee winkels op gelijke laagste prijs en een derde duurder staat er nu "Prijs";
+  - **iets ruimer:** een andere winkel met onbekende verzendkosten telt mee met haar prijs zonder verzending. Is de bovenste prijs al lager dan dat bedrag, dan is hij echt lager.
+
+**Tests:**
+- het geval gelijk-gelijk-hoger;
+- strikt lager;
+- onbekende verzendkosten en één winkel;
+- 200 willekeurige lijsten waarin badge en kaart hetzelfde zeggen.

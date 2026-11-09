@@ -75,16 +75,22 @@ export function sortOffers(offers: readonly Offer[], { size, now }: { size: numb
 }
 
 /**
- * Whether the top row of a sorted list gets the "Laagste prijs" badge (owner,
- * 2026-11-05): a current price, in stock in the chosen length, known shipping,
- * and strictly lower than at least one other shop with a current price in
- * stock. A tie, one shop or unknown shipping: no badge. Price only, never fee.
+ * The one "Laagste prijs" rule (owner, 2026-11-09), for the badge in "Waar te
+ * koop" and the label on a card alike: the first of the comparable offers
+ * (current price, in stock, sorted) has known shipping and a total strictly
+ * lower than every other comparable offer. One shop, unknown shipping on the
+ * first, or any tie: no "Laagste prijs". Price only, never fee.
  */
+export function isStrictlyLowest(comparable: readonly Offer[]): boolean {
+  const [top, ...rest] = comparable;
+  if (!top || top.shippingEur === null || rest.length === 0) return false;
+  return rest.every((o) => totalPrice(top) < totalPrice(o));
+}
+
+/** Whether the top row of a sorted list gets the "Laagste prijs" badge, in the chosen length (isStrictlyLowest). */
 export function hasLowestBadge(sorted: readonly Offer[], { size, now }: { size: number | null; now: Date }): boolean {
   const comparable = sorted.filter((o) => isPriceFresh(o, now) && o.inStock && hasLength(o, size));
-  const [top, ...rest] = comparable;
-  if (!top || top !== sorted[0] || top.shippingEur === null || rest.length === 0) return false;
-  return rest.every((o) => totalPrice(top) < totalPrice(o));
+  return comparable[0] !== undefined && comparable[0] === sorted[0] && isStrictlyLowest(comparable);
 }
 
 /** Lowest total of the shops with a current price (in this length when given); null when none. */
@@ -127,10 +133,8 @@ export function sizeStock(offers: readonly Offer[], { size, now }: { size: numbe
 /**
  * The price on a product card and the price the /zaalsticks filters use, so
  * both always agree (2026-11-09): the lowest current total of the shops in
- * stock, else the indicative price. "Laagste prijs" only when it is really
- * lower (CLAUDE.md, Prijsvergelijking): known shipping on the lowest, and a
- * strictly higher total at another shop with a current price in stock and
- * known shipping. One shop, a tie or unknown shipping: "Prijs".
+ * stock, else the indicative price. "Laagste prijs" with the same rule as
+ * the badge (isStrictlyLowest); otherwise "Prijs".
  */
 export type CardPrice =
   | { kind: 'shop'; offer: Offer; totalEur: number; lowest: boolean }
@@ -141,8 +145,5 @@ export function cardPrice(offers: readonly Offer[], indicativeEur: number | null
   const current = sorted.filter((o) => isPriceFresh(o, now) && o.inStock);
   const [first] = current;
   if (!first) return { kind: 'indicative', totalEur: indicativeEur };
-  const lowest =
-    first.shippingEur !== null &&
-    current.slice(1).some((o) => o.shippingEur !== null && totalPrice(o) > totalPrice(first));
-  return { kind: 'shop', offer: first, totalEur: totalPrice(first), lowest };
+  return { kind: 'shop', offer: first, totalEur: totalPrice(first), lowest: isStrictlyLowest(current) };
 }
