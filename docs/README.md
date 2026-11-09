@@ -31,6 +31,9 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | [`instagram-community.md`](instagram-community.md) | Volgers en clubs zoeken voor @jouwhockeystick (alleen voorstellen) | Via de Instagram-studio |
 | [`club-outreach.md`](club-outreach.md) | Clubs helpen aan stickmateriaal voor nieuwe leden (nu op pauze) | Op verzoek |
 | [`video.md`](video.md) | Uitlegvideo's maken in code (Remotion, map `video/`) | Issue met label `video-brief` |
+| [`marketing/README.md`](marketing/README.md) | Marketingmachine: taakverdeling, Social-studio naar Metricool, meten, GEO-meting en weekrapport | Social-planner en de eigenaar |
+| [`marketing/merkstem.md`](marketing/merkstem.md) | Merkstem per doelgroep en kanaal, en de redactiecontrole (`npm run marketing:check`) | Elke social- of campagnetekst |
+| [`marketing/pilot-zaalhockey.md`](marketing/pilot-zaalhockey.md) | Eerste campagne: tien zaalhockey-items, nog niet goedgekeurd | Goedkeuring door de eigenaar |
 
 ## Rapporten zonder eigen handboek
 
