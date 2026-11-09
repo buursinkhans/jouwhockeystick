@@ -2736,3 +2736,29 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - Een vaste zin als "laagste prijs in onze catalogus" klopt niet meer zodra de prijzen of de catalogus veranderen. "Laagste prijs" hoort alleen bij de berekende badge en het kaartlabel.
 
 **Bewust niet:** de bronnen en `lastVerifiedAt` zijn ongewijzigd, want alleen de formulering verandert, niet de gegevens.
+
+## 2026-11-09 — Marketingmachine, fase 1: fundament zonder publicatie
+
+**Opdracht eigenaar (2026-11-09):** een grotendeels autonome marketingmachine (PLAN, PULSE, PUSH, PEAK) op de bestaande infrastructuur, met de Social-studio als planner en Metricool via de MCP. Eerst de inventarisatie en een cloudtest, daarna één veilige fase.
+
+**Vastgesteld:**
+- **Social-studio** is bereikbaar en betrouwbaar (database met versienummers).
+- **Social-planner, Video-publicatie en community-agent** staan sinds begin november uit. Sinds 24 oktober is niets geplaatst; het handmatig inplannen is de flessenhals.
+- **Metricool-MCP** werkt lokaal en vanuit de cloud (claude.ai-connector).
+- **Een via de API aangemaakte routine** heeft geen databasetool voor de studio; de Social-planner had die wel.
+
+**Wat:**
+- **Documentatie** in `docs/marketing/`: README (inventaris, taakverdeling, cloudtest, statussen, meten, GEO-meting, weekrapport, fasen), `merkstem.md` en `pilot-zaalhockey.md`.
+- **`src/marketing/`**:
+  - het contentschema met statussen en Metricool-ID per kanaal;
+  - de UTM-standaard (`utm_medium` blijft `social`; `utm_content` = content-ID);
+  - de redactiecontrole (`npm run marketing:check`);
+  - de beslisregel voor de overdracht naar Metricool, die nooit dubbel aanmaakt en bij twijfel stopt;
+  - de pilot met tien zaalhockey-items, met tests.
+
+**Bewust niet:**
+- **Niets naar buiten:** geen schrijfacties in de studio of in Metricool, niets gepubliceerd.
+- **Social-planner blijft uit:** hij is niet aangezet of gewijzigd.
+- **Geen nieuwe database, geen betaald plan en geen e-mail.**
+- **Geen wijziging aan live content.**
+- **Proefroutine:** de eenmalige proefroutine (alleen lezen) staat uitgeschakeld in claude.ai.
