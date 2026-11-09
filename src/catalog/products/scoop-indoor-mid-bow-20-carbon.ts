@@ -83,7 +83,7 @@ export const scoopIndoorMidBow20Carbon: Product = {
     'Een betaalbare composiet-zaalstick met 20% carbon en een rustige mid bow (19 mm). Volgens de listing gemaakt voor spelers die "houden van controle, snelheid en nauwkeurigheid".',
   strengths: {
     value: [
-      'Laagste prijs van de senior zaalsticks in onze catalogus',
+      'Lage richtprijs voor een senior zaalstick',
       'Rustig mid bow-profiel (19 mm) met weinig carbon, een logische richting voor beginnende zaalspelers',
     ],
     source: 'editorial-estimate',

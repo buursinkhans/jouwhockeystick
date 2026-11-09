@@ -2667,3 +2667,20 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Geen sticks uit de winkelfeeds in de eerste HTML** (besluit 2026-10-24): ook hun lichte lijst laadt pas na een antwoord.
 - **De FAQ over lengte** noemt geen vaste maten meer ("meestal 36,5 en 37,5 inch"); hij verwijst naar de lengtetabel en de keuzehulp (opmerking review-agent).
 - **Drie sticks noemen nog "goedkoopste" of "laagste prijs" in hun sterke punten.** Die staan niet meer op de compacte kaarten; aanpassen is een aparte catalogusklus.
+
+## 2026-11-09 — Geen prijsclaims in de productteksten
+
+**Opdracht eigenaar (2026-11-09):** herschrijf de sterke punten met "goedkoopste" zonder prijsclaim, en breid de test uit naar de catalogus.
+
+**Wat:**
+- **Acht productbestanden** hadden een vaste prijsclaim; die zijn herschreven tot "Lage richtprijs voor …" of "Lage adviesprijs volgens de website van Grays":
+  - "goedkoopste" in de vier genoemde: Grays PB9i (sterk punt en samenvatting), Grays DB2Xi, Osaka Stick 1 Series Junior en Scoop WDN Junior veld;
+  - "Laagste prijs van … in onze catalogus" in vier andere: Grays 4i Dynabow, Scoop Indoor Mid Bow 20, Scoop WDN Junior zaal en Stag Magic Jr.
+- **Grays DB2Xi** zegt nu "Een stap tussen de houten zaalsticks en de modellen met meer carbon".
+- **Test:** `src/catalog/productClaims.test.ts` scant elk bestand in `src/catalog/products/` op "goedkoopst", "beste prijs", "scherpste prijs" en "laagste (advies)prijs". Met de oude teksten faalt hij op precies deze acht.
+
+**Waarom:**
+- CLAUDE.md verbiedt "goedkoopst"-claims.
+- Een vaste zin als "laagste prijs in onze catalogus" klopt niet meer zodra de prijzen of de catalogus veranderen. "Laagste prijs" hoort alleen bij de berekende badge en het kaartlabel.
+
+**Bewust niet:** de bronnen en `lastVerifiedAt` zijn ongewijzigd, want alleen de formulering verandert, niet de gegevens.

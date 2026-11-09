@@ -73,7 +73,7 @@ export const graysDb2xiDynabowIndoor: Product = {
   strengths: {
     value: [
       'Wat carbon voor een directer gevoel, voor een instapprijs',
-      'Vult het gat tussen de goedkoopste en de duurdere zaalsticks',
+      'Een stap tussen de houten zaalsticks en de modellen met meer carbon',
     ],
     source: 'editorial-estimate',
     sourceLabel:

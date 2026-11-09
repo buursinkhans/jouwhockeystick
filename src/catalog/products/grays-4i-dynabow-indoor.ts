@@ -84,7 +84,7 @@ export const grays4iDynabowIndoor: Product = {
     'De instap-zaalstick van Grays op bol.com: een houten stick met Dynabow-profiel die volgens de listing is gemaakt voor "control and technique in small spaces".',
   strengths: {
     value: [
-      'Laagste prijs van de Grays-zaalsticks in onze catalogus',
+      'Lage richtprijs voor een zaalstick van Grays',
       'Houten stick zonder carbon, wat doorgaans past bij een zacht, controlegericht gevoel',
     ],
     source: 'editorial-estimate',

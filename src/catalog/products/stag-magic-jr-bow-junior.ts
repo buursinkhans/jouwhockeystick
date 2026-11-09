@@ -82,7 +82,7 @@ export const stagMagicJrBowJunior: Product = {
     'Een eenvoudige houten junior-veldstick met een rechte, rustige kromming, op bol.com in 33 inch.',
   strengths: {
     value: [
-      'Laagste prijs van alle veldsticks in onze catalogus',
+      'Lage richtprijs voor een veldstick',
       'Verkrijgbaar in 33 inch, een maat die verder weinig voorkomt',
     ],
     source: 'editorial-estimate',
