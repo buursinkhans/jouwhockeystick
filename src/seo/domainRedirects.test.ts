@@ -37,17 +37,21 @@ function readRules(): Rule[] {
       if (current) tables.push(current);
       continue;
     }
-    const match = /^(\w+)\s*=\s*(.+)$/.exec(line);
-    if (current && match) current[match[1]] = match[2];
+    const [, key, value] = /^(\w+)\s*=\s*(.+)$/.exec(line) ?? [];
+    if (current && key && value) current[key] = value;
   }
-  return tables.map((raw) => {
-    return {
-      from: JSON.parse(raw.from) as string,
-      to: JSON.parse(raw.to) as string,
-      status: Number(raw.status),
-      force: raw.force === 'true',
-    };
-  });
+  return tables.map((raw) => ({
+    from: readString(raw, 'from'),
+    to: readString(raw, 'to'),
+    status: Number(raw.status),
+    force: raw.force === 'true',
+  }));
+}
+
+function readString(table: Record<string, string>, key: string): string {
+  const value = table[key];
+  if (value === undefined) throw new Error(`redirect without "${key}"`);
+  return JSON.parse(value) as string;
 }
 
 const RULES = readRules();
