@@ -17,6 +17,7 @@
     "bol:feed-check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/bol-feed-check.ts",
     "seo:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/search-console-report.ts",
     "dashboard:data": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/agent-dashboard-data.ts",
+    "seo:bing": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/bing-webmaster-report.ts",
     "seo:technical": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/technical-seo.ts",
     "content:schedule": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/content-schedule.ts",
     "catalog:gaps": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-gaps.ts",

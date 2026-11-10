@@ -1,0 +1,53 @@
+# Weekly Bing report (read-only): clicks, impressions, CTR and position of the
+# last week, top queries and pages, and queries that grow, from the Bing
+# Webmaster API. One issue per ISO week with label `bing`; a rerun in the same
+# week updates that issue. Never changes code, content or the live site.
+name: Bing-rapport
+
+on:
+  schedule:
+    - cron: '47 5 * * 1' # Mondays 05:47 UTC, before the Orchestrator (07:37) and the Weekrapport (08:30)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Rapport maken
+        id: report
+        env:
+          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+          BING_TITLE_FILE: title.txt
+        run: npm run --silent seo:bing > report.md
+        continue-on-error: true
+      - name: Rapport in issue zetten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ! -s report.md ] || [ ! -s title.txt ]; then
+            echo "Geen rapport gemaakt."
+            exit 1
+          fi
+          title=$(head -n 1 title.txt)
+          gh label create bing --color 00809D --force
+          number=$(gh issue list --label bing --state all --search "\"$title\" in:title" --json number,title \
+            --jq "map(select(.title == \"$title\")) | .[0].number // empty")
+          if [ -n "$number" ]; then
+            gh issue edit "$number" --body-file report.md
+            gh issue comment "$number" --body "Rapport bijgewerkt op $(date -u +%F)."
+          else
+            gh issue create --title "$title" --label bing --body-file report.md
+          fi
+      - name: Mislukt of onvolledig rapport zichtbaar maken
+        if: steps.report.outcome == 'failure'
+        run: exit 1

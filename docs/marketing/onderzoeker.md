@@ -17,7 +17,7 @@ c. Nu: `TZ=Europe/Amsterdam date '+%F %V'` (datum en weeknummer). Lees de stand:
 d. Markt: alleen NL. De markt BE staat in de kalender, maar Vlaamse voorstellen maak je pas als de eigenaar dat in docs/decision-log.md heeft vastgelegd.
 
 STAP 1 — Bronnen (alleen lezen).
-a. Rapport-issues: voor elk label `search-console`, `conversie`, `verkoop` en `marktverkenning`: `gh api "repos/$R/issues?labels=<label>&state=open&per_page=1"` en lees de body. Haal er signalen van vraag uit: zoekvragen met vertoningen, pagina's die bezoek naar de stickwijzer of naar winkels brengen, nieuwe modellen. Uit het verkooprapport alleen aantallen, nooit bedragen.
+a. Rapport-issues: voor elk label `search-console`, `bing`, `conversie`, `verkoop` en `marktverkenning`: `gh api "repos/$R/issues?labels=<label>&state=open&per_page=1"` en lees de body. Haal er signalen van vraag uit: zoekvragen met vertoningen, pagina's die bezoek naar de stickwijzer of naar winkels brengen, nieuwe modellen. Uit het verkooprapport alleen aantallen, nooit bedragen. Een zoekvraag die in het Bing-rapport ("Bing-rapport <week>") onder "Zoekvragen die groeien of nieuw zijn" staat, telt mee voor het criterium "er is vraag": `vraag = {bron: "Bing-rapport <week>", signaal: "<zoekvraag>: <nu> vertoningen, was <ervoor>"}`. Wat er ontbreekt, is geen signaal.
 b. Live pagina's: zoals de Social-planner (social-planner.md, STAP 0c). Een pagina met `publishedAt` in de toekomst is niet live.
 c. Studio: alle posts en video's. Noteer per pagina de laatste `datum` van een post of video.
 d. Kalender: `npm run --silent marketing:research -- kalender <vandaag> <vandaag+21> NL`.

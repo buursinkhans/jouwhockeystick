@@ -48,6 +48,7 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 | 2 | Nieuwe studio in `social/studio/index.html`: één statusregel, kaarten met echte preview, Goedkeuren en Aanpassen | Gebouwd en gepubliceerd (versie 25); de eigenaar test op de telefoon |
 | 3 | Onderzoeker, leren van resultaten, gepaarde tests, Pulse, Push en Peak in het kwartaalplan | Gebouwd (PR); proefrun na de merge |
 | 4 | Configuratie per site, woordenlijst BE, Weekrapport en KPI-definities | Gebouwd (PR); Weekrapport-routine na de merge |
+| Bing | Bing-rapport: wekelijks issue uit de Bing Webmaster API, bron voor de Onderzoeker en het Weekrapport | Gebouwd (PR); eerste run met de hand na de merge |
 
 ### Fase 0: proef
 
@@ -107,6 +108,14 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 - **Woordenlijst BE:** indoor (NL zaal), lidgeld (NL contributie), U8 tot en met U19 (NL JO en MO), Sinterklaas op 6 december 's ochtends. `localize` en `foreignWords` passen hem toe en controleren hem. BE staat uit tot de eigenaar bevestigt dat bol.com/be vergoedt.
 - **KPI's:** [weekrapport.md](weekrapport.md) met de definities en de opdracht, en `src/marketing/kpi.ts`. De noordster is het aantal stickwijzer-starts uit social; het Conversie-rapport toont die nu (`quiz_start` per social-bron, uit de UTM van het bezoek). Verder de trechter, leren en gezondheid, NL en BE apart, vergeleken met het gemiddelde van 4 weken, zonder doelen.
 - **Weekrapport:** een GitHub-issue met het label `marketing`; het dashboard (Dashboard-type) leest uit die issues. De instructie staat onderaan weekrapport.md.
+
+### Bing-rapport
+
+- **`.github/workflows/bing-webmaster.yml`:** elke maandag om 05:47 UTC, vóór de Orchestrator en het Weekrapport, en met de hand. Leest alleen, met de sleutel uit het secret `BING_WEBMASTER_API_KEY`. De sleutel staat in de query van elk verzoek; elke foutmelding gaat eerst door `redact`, en het script print nooit een foutobject.
+- **`scripts/bing-webmaster-report.ts`** (`npm run seo:bing`) en **`src/marketing/bingReport.ts`** (Zod voor de antwoorden, tests op fixtures in `src/marketing/__fixtures__/`). Methoden: `GetUserSites` (welke site-url staat er, uit `merk.domein` in de configuratie), `GetRankAndTrafficStats` (kliks en vertoningen per dag), `GetQueryStats` en `GetPageStats` (per zoekvraag en pagina, per Bing-week).
+- **Het issue:** "Bing-rapport <ISO-week>" met label `bing`; een tweede run in dezelfde week werkt het bij. Kliks, vertoningen, CTR en gemiddelde positie van de week naast de week ervoor, de top 20 zoekvragen en pagina's, en zoekvragen die groeien (minstens 3 vertoningen en 50% meer) of nieuw zijn. Ontbrekende data staat er als "ontbreekt". Onderaan een blok `<!-- bingcijfers … -->`.
+- **Citaties in Copilot (AI Performance):** niet via de API te lezen. De lijst met methoden van de API ([IWebmasterApi](https://learn.microsoft.com/en-us/dotnet/api/microsoft.bing.webmaster.api.interfaces.iwebmasterapi?view=bing-webmaster-dotnet)) heeft er geen methode voor; het rapport staat alleen in de webomgeving ([aankondiging](https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview)). Nagekeken op 2026-11-10. Komt er een methode, dan bouwen we die erbij.
+- **Bron voor:** de Onderzoeker (een groeiende zoekvraag telt als "er is vraag") en het Weekrapport (context bij SEO en AI-verkeer). `kpi.ts` blijft ongewijzigd: Bing is context, geen KPI.
 
 Zoals in de opdracht van 10 november 2026. Per fase komt hier een korte samenvatting bij zodra die start.
 

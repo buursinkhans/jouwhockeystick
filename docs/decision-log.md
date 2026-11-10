@@ -2969,3 +2969,11 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Social-planner** (`social-planner.md`): het tiktok-object krijgt `titel`, de hook in één korte zin van hooguit 90 tekens. Ook bij `video_herschrijven`.
 - **Geen codewijziging nodig:** `video/studio/social-names.mjs` geeft het hele tiktok-object door (`VIDEO_FIELDS`), en de studio toont geen TikTok-velden.
 - **Aanleiding:** TikTok voor `videos/20261106-zaal-is-geen-veld` (11 november, 19:30) stond niet in Metricool. Die video heeft een Short-titel, dus de eerste run van de Publiceerder na de merge plant TikTok vanzelf in.
+
+## 2026-11-10 — Bing-rapport
+
+- **Wat:** een wekelijks rapport uit de Bing Webmaster API (`bing-webmaster.yml`, maandag 05:47 UTC, en met de hand). Eén issue per ISO-week, "Bing-rapport <week>" met label `bing`; een tweede run in dezelfde week werkt het bij. Alleen lezen; de sleutel komt uit het secret `BING_WEBMASTER_API_KEY` en komt in geen melding terecht.
+- **Weken:** kliks en vertoningen per dag (GetRankAndTrafficStats) over maandag tot en met zondag. Zoekvragen, pagina's en de positie komen per Bing-week (GetQueryStats, GetPageStats), en Bing telt die week anders; het issue noemt de einddatum.
+- **Groeien:** minstens 3 vertoningen en 50% meer dan de Bing-week ervoor; nieuw is zonder vertoningen de week ervoor. Ontbrekende data heet "ontbreekt", nooit nul.
+- **Citaties in Copilot:** het AI Performance-rapport is niet via de API te lezen. De methodenlijst van de API (IWebmasterApi, Microsoft Learn) heeft er geen methode voor. Dat staat in het issue, met de bron; geen verzonnen endpoint.
+- **Gebruik:** de Onderzoeker telt een groeiende Bing-zoekvraag als "er is vraag"; het Weekrapport noemt Bing als context. `kpi.ts` blijft ongewijzigd.
