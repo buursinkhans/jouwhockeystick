@@ -133,7 +133,7 @@
         "gestart": "2026-11-10T15:22:21Z",
         "klaar": "2026-11-10T15:25:14Z"
       },
-      "fout": null,
+      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt.",
       "media": {
         "reel": {
           "name": "20261120-stick-op-de-groei-reel.mp4",
@@ -154,14 +154,18 @@
       },
       "kanalen": {
         "reels": {
-          "bezig": "2026-11-10T15:26:00Z"
+          "id": 423301468,
+          "uuid": "-3642801494354342450",
+          "moment": "2026-11-20T19:30:00",
+          "op": "2026-11-10T15:26:30Z"
         },
         "shorts": {
-          "bezig": "2026-11-10T15:26:00Z"
+          "id": 423301553,
+          "uuid": "2559234727153256569",
+          "moment": "2026-11-20T19:30:00",
+          "op": "2026-11-10T15:26:30Z"
         },
-        "tiktok": {
-          "bezig": "2026-11-10T15:26:00Z"
-        }
+        "tiktok": {}
       }
     },
     "posts/20261113-veld-of-zaalstick": {
@@ -189,7 +193,7 @@
     "gebruikt": 4,
     "grens": 20
   },
-  "wijziging": "98faad4f-2042-4f59-bcdb-540bc27ae829",
+  "wijziging": "895020e3-9138-4c41-b497-8a07feae4d8b",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
