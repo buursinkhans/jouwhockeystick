@@ -9,6 +9,8 @@ export const RELEASE_TAG = 'social-media';
 export const TEST_PREFIX = 'test-';
 
 const VIDEO_CHANNELS = ['reels', 'shorts', 'tiktok', 'youtube'];
+/** The fixed series of docs/marketing/merkplatform.md; slideart.js draws their opening slide. */
+export const SERIES = ['maatje', 'kromming', 'eerste-stick', 'zaal', 'fih', 'nieuw'];
 
 /** The video formats an item needs: reels → reel; shorts and tiktok → short; youtube → uitleg. A channel on "overslaan" is skipped. */
 export function videoFormats(item) {
@@ -54,7 +56,7 @@ export function studioItem({ collection, id, data }) {
   if (typeof id !== 'string' || !/^[a-z0-9-]{1,80}$/.test(id)) throw new Error('id: alleen a-z, 0-9 en -, hooguit 80 tekens');
   if (collection === 'posts') {
     if (!Array.isArray(d.slides) || d.slides.length < 1 || d.slides.length > 10) throw new Error('slides: 1 tot 10 slides nodig');
-    return { kind: 'post', id, slides: d.slides };
+    return { kind: 'post', id, slides: d.slides, ...(SERIES.includes(d.serie) && { serie: d.serie }) };
   }
   if (collection === 'videos') {
     if (!Array.isArray(d.scenes) || d.scenes.length < 1 || d.scenes.length > 20) throw new Error('scenes: 1 tot 20 scènes nodig');

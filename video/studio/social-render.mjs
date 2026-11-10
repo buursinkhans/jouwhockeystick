@@ -52,15 +52,15 @@ async function renderSlides(item, outDir) {
   try {
     const page = await browser.newPage();
     await page.goto('file://' + slideHarness(work));
-    const pngs = await page.evaluate(async (slides) => {
+    const pngs = await page.evaluate(async ({ slides, serie }) => {
       await Promise.all(['800 80px "Bricolage Grotesque"', '400 40px "Instrument Sans"'].map((f) => document.fonts.load(f)));
       await window.SlideArt.fontsReady;
       return slides.map((s, i) => {
         const c = document.createElement('canvas');
-        window.SlideArt.render(c, s, i, slides.length);
+        window.SlideArt.render(c, s, i, slides.length, { serie });
         return c.toDataURL('image/png').slice('data:image/png;base64,'.length);
       });
-    }, item.slides);
+    }, { slides: item.slides, serie: item.serie ?? null });
     return pngs.map((b64, i) => {
       const file = path.join(outDir, `slide-${i + 1}.png`);
       fs.writeFileSync(file, Buffer.from(b64, 'base64'));
