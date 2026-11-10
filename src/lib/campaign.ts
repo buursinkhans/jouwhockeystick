@@ -109,3 +109,45 @@ export function sortShopPromos<T extends ShopPromo>(
         label(a.promo.retailer).localeCompare(label(b.promo.retailer), 'nl'),
     );
 }
+
+export type CampaignHighlights = {
+  /** Shops whose action runs now or is announced. */
+  withAction: number;
+  total: number;
+  /** Confirmed dates, soonest first: "Plutosport tot en met 15 november". */
+  facts: string[];
+  /** Latest check, or null when every check is older than 14 days (then the band names no numbers). */
+  lastCheck: string | null;
+};
+
+const shortNlDate = (date: string) =>
+  new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`));
+
+/**
+ * What the homepage band says (decision log 2026-11-10): how many shops have
+ * an action and the confirmed dates, from the same config as the campaign
+ * page. Only checks of the last 14 days count; dates only as the shop states them.
+ */
+export function campaignHighlights(
+  promos: readonly ShopPromo[],
+  today: string,
+  phase: CampaignPhase,
+  label: (retailer: RetailerId) => string,
+  maxFacts = 2,
+): CampaignHighlights {
+  const rows = sortShopPromos(promos, today, phase, label);
+  const fresh = promos
+    .map((p) => p.verifiedAt)
+    .filter((d): d is string => d !== null && daysBetween(d, today) <= MAX_PROMO_CHECK_AGE_DAYS);
+  const dated = rows.flatMap(({ promo, state }) => {
+    if (state === 'actueel' && promo.endsAt) return [{ date: promo.endsAt, text: `${label(promo.retailer)} tot en met ${shortNlDate(promo.endsAt)}` }];
+    if (state === 'binnenkort' && promo.startsAt) return [{ date: promo.startsAt, text: `${label(promo.retailer)} vanaf ${shortNlDate(promo.startsAt)}` }];
+    return [];
+  });
+  return {
+    withAction: rows.filter((r) => r.state === 'actueel' || r.state === 'binnenkort').length,
+    total: promos.length,
+    facts: dated.sort((a, b) => a.date.localeCompare(b.date)).slice(0, maxFacts).map((f) => f.text),
+    lastCheck: fresh.length ? fresh.reduce((a, b) => (b > a ? b : a)) : null,
+  };
+}

@@ -1,5 +1,7 @@
 import { SearchForm } from '@/components/search/SearchForm';
 import { HomeBlockLink } from './HomeBlockLink';
+import { BLACK_FRIDAY, BLACK_FRIDAY_EDITION } from '@/content/blackFriday';
+import { amsterdamDate, showCampaignNote } from '@/lib/campaign';
 
 const SHORTCUTS = [
   { label: 'Veldsticks', href: '/sticks' },
@@ -13,6 +15,10 @@ const SHORTCUTS = [
  * the hero without a dividing line; the counted facts stay in ProofStrip below.
  */
 export function QuickFind() {
+  // During the campaign one extra shortcut to /black-friday-hockey (2026-11-10).
+  const shortcuts = showCampaignNote(BLACK_FRIDAY_EDITION, amsterdamDate(new Date()))
+    ? [...SHORTCUTS, { label: BLACK_FRIDAY.shortcutLabel, href: BLACK_FRIDAY.path }]
+    : SHORTCUTS;
   return (
     <section aria-labelledby="quickfind-title" className="bg-white">
       <div className="mx-auto max-w-5xl px-4 pt-6 pb-2 sm:px-6 sm:pt-8 sm:pb-4">
@@ -25,7 +31,7 @@ export function QuickFind() {
             <SearchForm id="quickfind-q" />
           </div>
           <ul className="mt-4 flex flex-wrap gap-2" aria-label="Of begin bij een soort">
-            {SHORTCUTS.map((shortcut) => (
+            {shortcuts.map((shortcut) => (
               <li key={shortcut.href}>
                 <HomeBlockLink
                   block="zoeken"

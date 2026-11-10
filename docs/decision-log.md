@@ -2843,4 +2843,9 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Wat wel is nagekeken (2026-11-10):**
   - bol.com: de Black Friday-pagina staat online, zonder datums, en hockey wordt niet apart genoemd;
   - HockeyCity: een sale-pagina, geen Black Friday-actie en geen einddatum.
+- **Homepage (zelfde PR, op verzoek van de eigenaar):**
+  - Van 10 tot en met 30 november staat er een band direct onder de hero (`CampaignBand`). Die vervangt in die periode de zaalseizoen-band, zodat er één band tegelijk staat. De band toont alleen feiten uit dezelfde config: hoeveel partnerwinkels een actie hebben, de bevestigde begin- of einddatums (hooguit twee) en de datum van controle. Als elke controle ouder is dan 14 dagen, noemt de band geen aantallen. Blauw, want oranje blijft van de stickwijzer. Geen percentage en geen aftelklok.
+  - Het zoekblok krijgt in dezelfde periode een snelkoppeling "Black Friday". In de bovenbalk op telefoons wijst de link rechts dan naar de actiepagina in plaats van naar /methodiek; de methodiek blijft bereikbaar via de hero en de footer.
+  - Meten: `home_block_click` met block `blackfriday` (band) of `zoeken` (snelkoppeling, target /black-friday-hockey), en `campaign_link_click` met source `bovenbalk`.
+  - Pagina's die niet dagelijks opnieuw worden gebouwd, kunnen de link in de bovenbalk tot de volgende build houden. Die link leidt dan naar de melding dat de editie is afgelopen.
 - **Attributie via actiepagina's** (deeplinks naar een categorie- of actiepagina) controleren we na de eerste klikken in de dashboards van de netwerken.

@@ -241,4 +241,13 @@ export const BLACK_FRIDAY = {
   transparency:
     'jouwhockeystick.nl verkoopt zelf niets. We vergelijken sticks en schoenen bij vijf partnerwinkels en krijgen een vergoeding als je via onze link koopt. Die vergoeding speelt geen rol in de volgorde van de winkels, de selectie van de sticks of ons advies.',
   campaignNote: `Black Friday is op ${nlDate(day)}: zie welke hockeywinkels een actie hebben.`,
+  /** The band under the homepage hero (CampaignBand) and the links in the search block and the top bar. */
+  homeBand: {
+    eyebrow: `Black Friday · ${nlDate(day).replace(` ${year}`, '')}`,
+    heading: { voor: 'Hockeyacties per winkel, nagekeken', actief: 'Het is Black Friday-weekend' },
+    fallback: 'Zie per winkel welke actie er is, en vergelijk hockeysticks en hockeyschoenen op prijs.',
+    cta: 'Bekijk de acties per winkel',
+  },
+  shortcutLabel: 'Black Friday',
+  barLabel: 'Black Friday-acties',
 } as const;

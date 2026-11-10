@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BLACK_FRIDAY, BLACK_FRIDAY_EDITION, BLACK_FRIDAY_PROMOS } from '@/content/blackFriday';
-import { amsterdamDate, campaignPhase, promoState, showCampaignNote, sortShopPromos, type ShopPromo } from './campaign';
+import { amsterdamDate, campaignHighlights, campaignPhase, promoState, showCampaignNote, sortShopPromos, type ShopPromo } from './campaign';
 import { RETAILERS, shopPageTrackingUrl } from './retailers';
 
 const promo = (over: Partial<ShopPromo> = {}): ShopPromo => ({
@@ -135,5 +135,37 @@ describe('shopPageTrackingUrl', () => {
     expect(shopPageTrackingUrl('daka', 'https://www.example.com/sale', 'blackfriday')).toBeNull();
     expect(shopPageTrackingUrl('bolcom', 'http://www.bol.com/nl/', 'blackfriday')).toBeNull();
     expect(shopPageTrackingUrl('hockeycity', 'https://hockeycity.evil.nl/', 'blackfriday')).toBeNull();
+  });
+});
+
+describe('campaignHighlights', () => {
+  const label = (r: keyof typeof RETAILERS) => RETAILERS[r].label;
+  const promos = [
+    promo({ retailer: 'plutosport', kind: 'nieuwsbrief', startsAt: '2026-11-06', endsAt: '2026-11-15' }),
+    promo({ retailer: 'passasports', startsAt: '2026-11-20' }),
+    promo({ retailer: 'bolcom' }),
+    promo({ retailer: 'daka', kind: 'geen' }),
+    promo({ retailer: 'hockeycity', status: 'niet-gecontroleerd', verifiedAt: null }),
+  ];
+
+  it('counts running and announced actions and gives the confirmed dates, soonest first', () => {
+    expect(campaignHighlights(promos, '2026-11-10', 'voor', label)).toEqual({
+      withAction: 3,
+      total: 5,
+      facts: ['Plutosport tot en met 15 november', 'PassaHockey vanaf 20 november'],
+      lastCheck: '2026-11-10',
+    });
+  });
+
+  it('drops an action once it has ended', () => {
+    const h = campaignHighlights(promos.map((p) => ({ ...p, verifiedAt: p.verifiedAt && '2026-11-16' })), '2026-11-16', 'voor', label);
+    expect(h.facts).toEqual(['PassaHockey vanaf 20 november']);
+    expect(h.withAction).toBe(2);
+  });
+
+  it('names no numbers when every check is older than 14 days', () => {
+    const h = campaignHighlights(promos, '2026-11-25', 'voor', label);
+    expect(h.lastCheck).toBeNull();
+    expect(h.withAction).toBe(0);
   });
 });

@@ -103,9 +103,10 @@ export type AnalyticsEvent =
       name: 'home_block_click';
       /**
        * 'hero' = the photo with the example reasons (2026-10-22); 'slot' = the closing call to the stickwijzer (fase 9);
-       * 'zoeken' = a category shortcut in the search block (2026-11-04).
+       * 'zoeken' = a category shortcut in the search block (2026-11-04);
+       * 'blackfriday' = the campaign band under the hero (2026-11-10; the search-block shortcut is 'zoeken').
        */
-      block: 'season' | 'buying' | 'hero' | 'slot' | 'zoeken';
+      block: 'season' | 'buying' | 'hero' | 'slot' | 'zoeken' | 'blackfriday';
       target: string;
     }
   | {
@@ -180,5 +181,11 @@ export type AnalyticsEvent =
       /** A shared advice link was opened; `changed` = sticks differ since sharing. */
       name: 'shared_advice_opened';
       changed: boolean;
+    }
+  | {
+      /** The campaign link in the thin bar above the header, on phones (Black Friday, 2026-11-10). */
+      name: 'campaign_link_click';
+      source: 'bovenbalk';
+      target: string;
     }
   | AdviceAnalyticsEvent;
