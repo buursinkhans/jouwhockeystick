@@ -145,7 +145,22 @@
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261113-lengte-volwassenen-short-cover.png"
         }
       },
-      "fout": null
+      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt.",
+      "kanalen": {
+        "reels": {
+          "id": 423309950,
+          "uuid": "-780598427679373823",
+          "moment": "2026-11-13T19:30:00",
+          "op": "2026-11-10T15:33:37Z"
+        },
+        "shorts": {
+          "id": 423310031,
+          "uuid": "2802607227839596671",
+          "moment": "2026-11-13T19:30:00",
+          "op": "2026-11-10T15:33:37Z"
+        },
+        "tiktok": {}
+      }
     },
     "videos/20261120-stick-op-de-groei": {
       "render": {
@@ -191,13 +206,13 @@
       "fout": null
     }
   },
-  "laatsteRun": "2026-11-10T15:28:59Z",
+  "laatsteRun": "2026-11-10T15:33:37Z",
   "tegoed": {
     "maand": "2026-11",
-    "gebruikt": 6,
+    "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "ac2ee262-85a3-4896-b832-0dd4197e90db",
+  "wijziging": "cae6d046-d84d-4c72-8c23-baf55babc577",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
