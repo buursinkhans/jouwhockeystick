@@ -125,9 +125,8 @@
     "videos/20261113-lengte-volwassenen": {
       "render": {
         "gestart": "2026-11-10T15:20:06Z",
-        "klaar": "2026-11-10T15:32:32Z"
+        "klaar": "2026-11-10T15:33:21Z"
       },
-      "fout": null,
       "media": {
         "reel": {
           "name": "20261113-lengte-volwassenen-reel.mp4",
@@ -146,24 +145,13 @@
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261113-lengte-volwassenen-short-cover.png"
         }
       },
-      "kanalen": {
-        "reels": {
-          "bezig": "2026-11-10T15:33:03Z"
-        },
-        "shorts": {
-          "bezig": "2026-11-10T15:33:03Z"
-        },
-        "tiktok": {
-          "bezig": "2026-11-10T15:33:03Z"
-        }
-      }
+      "fout": null
     },
     "videos/20261120-stick-op-de-groei": {
       "render": {
         "gestart": "2026-11-10T15:22:21Z",
-        "klaar": "2026-11-10T15:25:14Z"
+        "klaar": "2026-11-10T15:33:21Z"
       },
-      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt.",
       "media": {
         "reel": {
           "name": "20261120-stick-op-de-groei-reel.mp4",
@@ -182,21 +170,7 @@
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261120-stick-op-de-groei-short-cover.png"
         }
       },
-      "kanalen": {
-        "reels": {
-          "id": 423301468,
-          "uuid": "-3642801494354342450",
-          "moment": "2026-11-20T19:30:00",
-          "op": "2026-11-10T15:26:30Z"
-        },
-        "shorts": {
-          "id": 423301553,
-          "uuid": "2559234727153256569",
-          "moment": "2026-11-20T19:30:00",
-          "op": "2026-11-10T15:26:30Z"
-        },
-        "tiktok": {}
-      }
+      "fout": null
     },
     "posts/20261113-veld-of-zaalstick": {
       "render": {
@@ -223,7 +197,7 @@
     "gebruikt": 6,
     "grens": 20
   },
-  "wijziging": "760d488f-c340-4a9a-84d7-43ed11d25fae",
+  "wijziging": "ac2ee262-85a3-4896-b832-0dd4197e90db",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
