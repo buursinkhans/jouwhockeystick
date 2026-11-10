@@ -78,5 +78,184 @@
     "gebruikt": 2,
     "grens": 20
   },
-  "wijziging": "1afebbc0-df50-450f-97e8-d13cad0a8634"
+  "wijziging": "d4ef1a03-b4c3-4de4-b72f-0bbe86955106",
+  "resultaten": {},
+  "onderzoek": {
+    "week": 46,
+    "issue": 207,
+    "voorstellen": [
+      {
+        "id": "alle-veldsticks-naast-elkaar",
+        "onderwerp": "Alle veldsticks naast elkaar",
+        "pagina": "/sticks",
+        "vorm": "carrousel",
+        "serie": null,
+        "punten": 4,
+        "redenen": [
+          "Er is vraag: 'veldhockeysticks' 22 en 'veldsticks' 20 vertoningen (Search Console #11).",
+          "Het past nu: Black Friday.",
+          "Er is een pagina: /sticks.",
+          "De pagina had nog geen post."
+        ]
+      },
+      {
+        "id": "grays-db10-composite-prijzen-per",
+        "onderwerp": "Grays DB10 Composite: prijzen per winkel naast elkaar",
+        "pagina": "/sticks/grays-db10-composite",
+        "vorm": "beeld",
+        "serie": null,
+        "punten": 4,
+        "redenen": [
+          "Er is vraag: 4 kliks naar winkels deze week, meeste van alle sticks (Conversie-rapport #54).",
+          "Het past nu: Black Friday.",
+          "Er is een pagina: /sticks/grays-db10-composite.",
+          "De pagina had nog geen post."
+        ]
+      },
+      {
+        "id": "hockeystick-kopen-als-cadeau-zo",
+        "onderwerp": "Hockeystick kopen als cadeau: zo kies je",
+        "pagina": "/blog/hockeystick-kopen",
+        "vorm": "carrousel",
+        "serie": null,
+        "punten": 4,
+        "redenen": [
+          "Er is vraag: 'welke hockeystick kopen' 21 en 'beste hockeystick voor beginners' 22 vertoningen (Search Console #11).",
+          "Het past nu: Sinterklaas (pakjesavond 5 december).",
+          "Er is een pagina: /blog/hockeystick-kopen.",
+          "De pagina had nog geen post."
+        ]
+      },
+      {
+        "id": "hockeystick-voor-een-jeugdspeler-junior",
+        "onderwerp": "Hockeystick voor een jeugdspeler: junior of senior",
+        "pagina": "/sticks",
+        "vorm": "carrousel",
+        "serie": null,
+        "punten": 4,
+        "redenen": [
+          "Er is vraag: 'hockeystick junior' 33 vertoningen (Search Console #11).",
+          "Het past nu: Sinterklaas (pakjesavond 5 december).",
+          "Er is een pagina: /sticks.",
+          "De pagina had nog geen post."
+        ]
+      },
+      {
+        "id": "merken-naast-elkaar",
+        "onderwerp": "Merken naast elkaar",
+        "pagina": "/merken",
+        "vorm": "carrousel",
+        "serie": null,
+        "punten": 4,
+        "redenen": [
+          "Er is vraag: 'westicks' 6 vertoningen op positie 7 (Search Console #11).",
+          "Het past nu: Black Friday.",
+          "Er is een pagina: /merken.",
+          "De pagina had nog geen post."
+        ]
+      },
+      {
+        "id": "waar-koop-je-een-hockeystick",
+        "onderwerp": "Waar koop je een hockeystick: vijf winkels naast elkaar",
+        "pagina": "/kennis/waar-koop-je-een-hockeystick",
+        "vorm": "carrousel",
+        "serie": null,
+        "punten": 4,
+        "redenen": [
+          "Er is vraag: kliks naar winkels van 4 naar 9 per week (Conversie-rapport #54).",
+          "Het past nu: Black Friday.",
+          "Er is een pagina: /kennis/waar-koop-je-een-hockeystick.",
+          "De pagina had nog geen post."
+        ]
+      },
+      {
+        "id": "eerste-stick-voor-je-kind",
+        "onderwerp": "Eerste stick voor je kind: op welke merken let je",
+        "pagina": "/kennis/hockeystick-kinderen-en-beginners",
+        "vorm": "carrousel",
+        "serie": "eerste-stick",
+        "punten": 3,
+        "redenen": [
+          "Er is vraag: 'hockey strick beginnen kind welke merken' 45 vertoningen op positie 5 (Search Console #11).",
+          "Het past nu: Sinterklaas (pakjesavond 5 december).",
+          "Er is een pagina: /kennis/hockeystick-kinderen-en-beginners."
+        ]
+      },
+      {
+        "id": "grays-jb10-composite-uitgelegd",
+        "onderwerp": "Grays JB10 Composite uitgelegd",
+        "pagina": "/sticks/grays-jb10-composite",
+        "vorm": "beeld",
+        "serie": null,
+        "punten": 3,
+        "redenen": [
+          "Er is vraag: 'grays jb10' en varianten 34 vertoningen, 81 voor de pagina (Search Console #11).",
+          "Er is een pagina: /sticks/grays-jb10-composite.",
+          "De pagina had nog geen post."
+        ]
+      },
+      {
+        "id": "is-meer-carbon-altijd-beter",
+        "onderwerp": "Is meer carbon altijd beter (test hooktype: A mythe op do 19 nov, B vraag op do 26 nov, 19:30)",
+        "pagina": "/kennis/meer-carbon-hockeystick-beter",
+        "vorm": "video",
+        "serie": null,
+        "punten": 3,
+        "redenen": [
+          "Er is vraag: 'hockeystick carbon procent' 14 vertoningen (Search Console #11).",
+          "Er is een pagina: /kennis/meer-carbon-hockeystick-beter.",
+          "De pagina had nog geen post."
+        ],
+        "paar": {
+          "vraag": "hook",
+          "a": {
+            "id": "meer-carbon-a",
+            "onderwerp": "Is meer carbon altijd beter",
+            "datum": "2026-11-19",
+            "tijd": "19:30",
+            "labels": {
+              "hook": "mythe",
+              "soort": "kennis",
+              "vorm": "video",
+              "pagina": "/kennis/meer-carbon-hockeystick-beter",
+              "markt": "NL",
+              "dag": "do",
+              "tijd": "19:30"
+            }
+          },
+          "b": {
+            "id": "meer-carbon-b",
+            "onderwerp": "Is meer carbon altijd beter",
+            "datum": "2026-11-26",
+            "tijd": "19:30",
+            "labels": {
+              "hook": "vraag",
+              "soort": "kennis",
+              "vorm": "video",
+              "pagina": "/kennis/meer-carbon-hockeystick-beter",
+              "markt": "NL",
+              "dag": "do",
+              "tijd": "19:30"
+            }
+          }
+        }
+      },
+      {
+        "id": "stick-als-sinterklaascadeau-eerst-de",
+        "onderwerp": "Stick als Sinterklaascadeau: eerst de juiste maat",
+        "pagina": "/kennis/hockeystick-lengte-tabel",
+        "vorm": "carrousel",
+        "serie": "maatje",
+        "punten": 3,
+        "redenen": [
+          "Er is vraag: 'hockeystick junior maat' 14 vertoningen (Search Console #11).",
+          "Het past nu: Sinterklaas (pakjesavond 5 december).",
+          "Er is een pagina: /kennis/hockeystick-lengte-tabel."
+        ]
+      }
+    ],
+    "lessen": [],
+    "test": null,
+    "besloten": []
+  }
 }
