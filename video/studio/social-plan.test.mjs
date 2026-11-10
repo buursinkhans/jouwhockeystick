@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { decodeItem } from './social-items.mjs';
+import { decodeItem, itemFromStudio } from './social-items.mjs';
 import { plan } from './social-plan.mjs';
 
 const postDoc = {
@@ -45,4 +45,9 @@ test('a document that cannot be rendered is refused', () => {
   assert.throws(() => plan({ ...postDoc, data: { slides: [] } }), /slides/);
   assert.throws(() => plan({ ...postDoc, collection: 'plan' }), /Onbekende collectie/);
   assert.throws(() => plan({ ...postDoc, id: 'Fout ID' }), /id/);
+});
+
+test('the item from the plan passes the full check of the workflow', () => {
+  assert.equal(decodeItem(plan(postDoc).item_b64).kind, 'post');
+  assert.equal(itemFromStudio(videoDoc).kind, 'video');
 });

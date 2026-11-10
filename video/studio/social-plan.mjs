@@ -7,10 +7,11 @@
 
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { itemFromStudio, mediaFor, mediaUrls } from './social-items.mjs';
+// Only social-names.mjs: no dependencies, so it runs where npm cannot (a claude.ai cloud session).
+import { mediaFor, mediaUrls, studioItem } from './social-names.mjs';
 
 export function plan(doc, { test = false } = {}) {
-  const item = itemFromStudio(doc);
+  const item = studioItem(doc);
   const media = mediaFor(item, { test });
   return { item_b64: Buffer.from(JSON.stringify(item)).toString('base64'), test, media, urls: mediaUrls(media) };
 }
