@@ -2960,3 +2960,12 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 **Besluiten:**
 - **Het Weekrapport is een GitHub-issue** met het label `marketing`, om dezelfde reden als de voorstellen: een geplande taak die in een claude.ai-pagina schrijft, vraagt per run om toestemming. De cijfers van elke week staan onderaan het issue als verborgen JSON. Het Weekrapport leest daarmee de vorige 4 weken, en het dashboard (Dashboard-type, gemaakt in een claude.ai-sessie) leest dezelfde issues.
 - **Onderzoeker:** vooraf toegestaan zijn alleen de leestools van Metricool (getAnalyticsAvailableMetrics, getAnalyticsDataByMetrics, getScheduledPosts) en van vidIQ (keyword_research). vidIQ kan tegoed bij vidIQ kosten; dat houdt de eigenaar in de gaten.
+
+## 2026-11-10 — TikTok-posts krijgen een titel
+
+2026-11-10: TikTok-posts krijgen een titel (tiktok.titel, anders de Short-titel), omdat Metricool die verplicht stelt.
+
+- **Publiceerder** (`publiceerder.md`, STAP 3d): `tiktokData.title` is `tiktok.titel`, of anders `short.titel` zonder " #shorts". Hooguit 90 tekens, afgebroken op een heel woord, en bij een proef met "PROEF: " ervoor. Zonder titel maakt hij geen TikTok-post en zet hij een fout.
+- **Social-planner** (`social-planner.md`): het tiktok-object krijgt `titel`, de hook in één korte zin van hooguit 90 tekens. Ook bij `video_herschrijven`.
+- **Geen codewijziging nodig:** `video/studio/social-names.mjs` geeft het hele tiktok-object door (`VIDEO_FIELDS`), en de studio toont geen TikTok-velden.
+- **Aanleiding:** TikTok voor `videos/20261106-zaal-is-geen-veld` (11 november, 19:30) stond niet in Metricool. Die video heeft een Short-titel, dus de eerste run van de Publiceerder na de merge plant TikTok vanzelf in.
