@@ -1,0 +1,547 @@
+<title>Social-studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column for the phone (status line, the next 14 days as cards, then three tabs); two card columns from tablet width. */
+  :root {
+    --ground: #F6F8FC; --surface: #FFFFFF; --sunk: #EEF3FA; --line: #D5DEEA;
+    --ink: #0D1B2E; --muted: #5B6B7F; --brand: #1846A3; --brand-ink: #FFFFFF;
+    --ball: #FF8A1F; --ball-ink: #0D1B2E;
+    --ok: #1E7A46; --ok-soft: #E4F3EA; --wait: #9A5200; --wait-soft: #FFF1E2; --bad: #B3261E; --bad-soft: #FCE8E6;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+    --radius: 18px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0B1524; --surface: #12203A; --sunk: #0F1B30; --line: #24365A;
+      --ink: #EEF3FA; --muted: #A8B6CC; --brand: #8FB0F0; --brand-ink: #0B1524;
+      --ok: #7DD3A0; --ok-soft: #14301F; --wait: #FFB870; --wait-soft: #3A2410; --bad: #FF9A8F; --bad-soft: #3A1714;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0B1524; --surface: #12203A; --sunk: #0F1B30; --line: #24365A;
+    --ink: #EEF3FA; --muted: #A8B6CC; --brand: #8FB0F0; --brand-ink: #0B1524;
+    --ok: #7DD3A0; --ok-soft: #14301F; --wait: #FFB870; --wait-soft: #3A2410; --bad: #FF9A8F; --bad-soft: #3A1714;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--ground); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+  .wrap { max-width: 1060px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 48px; display: grid; gap: 28px; }
+  h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+  h1 { font-size: 1.55rem; font-weight: 800; }
+  h2 { font-size: 1.2rem; font-weight: 800; }
+  p { margin: 0; }
+  .muted { color: var(--muted); }
+  .small { font-size: 0.875rem; }
+  button { font: inherit; }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+  /* Buttons: at least 44 px. Orange only for the main action, approving. */
+  .btn { min-height: 44px; padding: 10px 18px; border-radius: 999px; border: 1px solid transparent; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn-main { background: var(--ball); color: var(--ball-ink); }
+  .btn-main:hover:not(:disabled) { filter: brightness(0.95); }
+  .btn-quiet { background: var(--surface); color: var(--brand); border-color: var(--line); }
+  .btn-quiet:hover:not(:disabled) { border-color: var(--brand); }
+  .btn-text { background: none; border: 0; color: var(--brand); padding-inline: 4px; text-decoration: underline; text-underline-offset: 3px; }
+  .btn-sure { background: var(--wait-soft); color: var(--wait); border-color: var(--wait); }
+
+  header.top { display: grid; gap: 14px; }
+  .title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .status { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 16px; border-radius: var(--radius); background: var(--sunk); border: 1px solid var(--line); }
+  .status .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--muted); flex: none; }
+  .status[data-tone="ok"] { background: var(--ok-soft); border-color: transparent; }
+  .status[data-tone="ok"] .dot { background: var(--ok); }
+  .status[data-tone="wait"] { background: var(--wait-soft); border-color: transparent; }
+  .status[data-tone="wait"] .dot { background: var(--wait); }
+  .status .msg { flex: 1 1 220px; min-width: 0; font-weight: 600; }
+  .status .msg span { display: block; font-weight: 400; color: var(--muted); font-size: 0.9rem; }
+
+  .cards { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .cards { grid-template-columns: 1fr 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 12px; min-width: 0; }
+  .card-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .when { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .chip { font-size: 0.8rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--sunk); color: var(--muted); }
+  .chip[data-state="keuren"], .chip[data-state="opnieuw"] { background: var(--wait-soft); color: var(--wait); }
+  .chip[data-state="goed"] { background: var(--sunk); color: var(--brand); }
+  .chip[data-state="ingepland"] { background: var(--ok-soft); color: var(--ok); }
+  .chip[data-state="wacht"], .chip[data-state="herschrijven"] { background: var(--wait-soft); color: var(--wait); }
+  .chip[data-state="voorbij"] { background: var(--sunk); color: var(--muted); }
+  .preview { position: relative; border-radius: 12px; overflow: hidden; background: var(--sunk); }
+  .preview canvas { display: block; width: 100%; height: auto; }
+  .strip { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; border-radius: 12px; }
+  .strip canvas { flex: 0 0 82%; max-width: 82%; height: auto; scroll-snap-align: start; border-radius: 12px; }
+  .vid { max-width: 260px; margin-inline: auto; width: 100%; }
+  .play { position: absolute; inset: auto 12px 12px auto; }
+  .card h3 { font-size: 1.05rem; font-weight: 800; }
+  .caption { color: var(--muted); font-size: 0.92rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-line; }
+  .caption.open { display: block; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .note { font-size: 0.9rem; color: var(--muted); }
+  .fout { font-size: 0.9rem; color: var(--bad); background: var(--bad-soft); padding: 8px 12px; border-radius: 10px; }
+  .adjust { display: grid; gap: 10px; padding: 12px; border-radius: 12px; background: var(--sunk); }
+  .adjust textarea { width: 100%; min-height: 88px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; resize: vertical; }
+  .quick { display: flex; gap: 8px; flex-wrap: wrap; }
+  .quick button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+  .empty { padding: 20px; border-radius: var(--radius); border: 1px dashed var(--line); color: var(--muted); }
+
+  .tabs { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--sunk); width: fit-content; max-width: 100%; overflow-x: auto; }
+  .tabs button { min-height: 44px; padding: 8px 18px; border-radius: 999px; border: 0; background: none; color: var(--muted); font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgb(13 27 46 / 0.12); }
+  .panel { display: grid; gap: 14px; }
+  .rows { display: grid; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+  .row { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: 0; }
+  .row .t { min-width: 0; overflow-wrap: anywhere; }
+  @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+
+  .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+  .cal .dow { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; text-align: center; }
+  .day { min-height: 92px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); padding: 6px; display: grid; align-content: start; gap: 4px; min-width: 0; }
+  .day.today { border-color: var(--brand); }
+  .day.past { opacity: 0.55; }
+  .day .n { font-family: var(--display); font-weight: 800; font-variant-numeric: tabular-nums; }
+  .ev { font-size: 0.72rem; line-height: 1.25; padding: 3px 5px; border-radius: 6px; background: var(--sunk); color: var(--ink); border: 0; text-align: left; cursor: pointer; overflow-wrap: anywhere; min-height: 28px; }
+  .ev[data-state="ingepland"] { background: var(--ok-soft); color: var(--ok); }
+  .ev[data-state="keuren"], .ev[data-state="opnieuw"], .ev[data-state="wacht"] { background: var(--wait-soft); color: var(--wait); }
+  .add { font-size: 0.72rem; color: var(--brand); background: none; border: 1px dashed var(--line); border-radius: 6px; min-height: 28px; cursor: pointer; }
+  @media (max-width: 560px) { .cal { grid-template-columns: 1fr; } .cal .dow { display: none; } .day { min-height: 0; grid-template-columns: 3.2rem minmax(0, 1fr); align-items: start; } }
+
+  .tiles { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 4px; }
+  .tile b { font-family: var(--display); font-size: 1.7rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); max-width: min(560px, calc(100% - 32px)); background: var(--ink); color: var(--ground); padding: 12px 16px; border-radius: 14px; box-shadow: 0 8px 24px rgb(13 27 46 / 0.25); z-index: 20; }
+  @media (prefers-reduced-motion: no-preference) { .card { transition: border-color 0.2s; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="title-row">
+      <h1>Social-studio</h1>
+      <span class="muted small" id="who">Laden…</span>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite">
+      <span class="dot" aria-hidden="true"></span>
+      <p class="msg" id="status-msg">De planning wordt geladen.<span>Even geduld.</span></p>
+    </div>
+  </header>
+
+  <section aria-labelledby="komend-h" class="panel">
+    <h2 id="komend-h">De komende 14 dagen</h2>
+    <div class="cards" id="cards"><p class="empty">Hier komen de posts en video's van de komende twee weken, met een voorbeeld en de knoppen Goedkeuren en Aanpassen. De Social-planner maakt ze op vrijdag.</p></div>
+  </section>
+
+  <section class="panel" aria-label="Overzicht">
+    <div class="tabs" role="tablist" aria-label="Overzicht">
+      <button role="tab" id="tab-keuren" aria-controls="p-keuren" aria-selected="true">Te keuren</button>
+      <button role="tab" id="tab-kalender" aria-controls="p-kalender" aria-selected="false">Kalender</button>
+      <button role="tab" id="tab-cijfers" aria-controls="p-cijfers" aria-selected="false">Cijfers</button>
+    </div>
+    <div role="tabpanel" id="p-keuren" aria-labelledby="tab-keuren" class="panel"></div>
+    <div role="tabpanel" id="p-kalender" aria-labelledby="tab-kalender" class="panel" hidden></div>
+    <div role="tabpanel" id="p-cijfers" aria-labelledby="tab-cijfers" class="panel" hidden></div>
+  </section>
+
+  <p class="muted small">Goedkeuren is online gaan: na je tik zet de Publiceerder het item binnen een uur in Metricool, en op de geplande dag en tijd gaat het vanzelf online. Intrekken kan tot dat moment.</p>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="slideart.js"></script>
+<script src="videoart.js"></script>
+<script>
+(() => {
+  /* ---------- fixed values (docs/marketing/publiceerder.md) ---------- */
+  const PUBLISHER = 'trig_01WshnXeQ89cRtc5Xks53xge';
+  const PLANNER = 'trig_01Mr6yhTjbF8qiuwzdNhDdpY';
+  const REMOTE = 'Claude Code Remote';
+  const METRICOOL = 'Metricool Social Media Management';
+  const BRAND = '7987234';
+  const RHYTHM = { posts: 2, videos: 2 }; // per week, owner decision 2026-11-10
+  const LIMIT = 20; // Metricool free plan, src/marketing/metricoolBudget.ts
+  const CH = { insta: { naam: 'Instagram + Facebook', tijd: '19:30' }, reels: { naam: 'Reel', tijd: '19:30' }, shorts: { naam: 'Short', tijd: '19:30' }, tiktok: { naam: 'TikTok', tijd: '19:30' }, youtube: { naam: 'YouTube', tijd: '17:00' } };
+  const VIDEO_CH = ['reels', 'shorts', 'tiktok', 'youtube'];
+  const SERIE = { maatje: 'Maatje', kromming: 'Kromming', 'eerste-stick': 'Eerste stick', zaal: 'Zaal en Indoor', fih: 'Wist je dat FIH', nieuw: 'Nieuw in de catalogus' };
+  const STATE = { keuren: 'Te keuren', opnieuw: 'Opnieuw goedkeuren', goed: 'Goedgekeurd', wacht: 'Nog niet in Metricool', ingepland: 'Ingepland', herschrijven: 'Wordt herschreven', voorbij: 'Voorbij' };
+
+  /* ---------- helpers ---------- */
+  const $ = (id) => document.getElementById(id);
+  const h = (tag, props = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(props)) {
+      if (v == null || v === false) continue;
+      if (k === 'class') n.className = v; else if (k === 'text') n.textContent = v;
+      else if (k.startsWith('on')) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v === true ? '' : v);
+    }
+    for (const c of kids) if (c != null && c !== false) n.append(c);
+    return n;
+  };
+  const str = (v, max = 2000) => (typeof v === 'string' ? v : '').slice(0, max);
+  const obj = (v) => (v && typeof v === 'object' && !Array.isArray(v) ? v : {});
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const parse = (s) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || '')); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
+  const today = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
+  const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  const monday = (d) => addDays(d, -((d.getDay() + 6) % 7));
+  const DOW = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+  const MON = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+  const dayLabel = (d) => `${DOW[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
+  const norm = (t) => str(t, 4000).replace(/^PROEF:\s*/i, '').replace(/\s+/g, ' ').trim().toLowerCase().slice(0, 60);
+  let toastTimer = null;
+  const toast = (msg) => { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 5200); };
+
+  /* ---------- state ---------- */
+  let db = null, mcp = null, owner = false;
+  let posts = [], videos = [], scheduled = null; // scheduled: Metricool posts, or null when unreadable
+  const expanded = new Set(), adjusting = new Set(), sent = new Map(); // sent: item key → time a rewrite was asked
+  let tab = 'keuren';
+  try { const t = localStorage.getItem('studio-tab'); if (['keuren', 'kalender', 'cijfers'].includes(t)) tab = t; } catch (e) { /* no storage */ }
+
+  const items = () => [...posts.map((p) => ({ ...p, kind: 'post' })), ...videos.map((v) => ({ ...v, kind: 'video' }))]
+    .filter((x) => x.status !== 'weggegooid');
+  const coll = (it) => (it.kind === 'video' ? 'videos' : 'posts');
+  const chans = (it) => (it.kind === 'video' ? VIDEO_CH.filter((k) => obj(it.kanalen)[k] !== 'overslaan') : ['insta']);
+  const tijd = (it, k) => { const t = obj(it.tijden)[k]; return /^\d{2}:\d{2}$/.test(t || '') ? t : CH[k].tijd; };
+  const moment = (it, k) => { const d = parse(it.datum); if (!d) return null; const [hh, mm] = tijd(it, k).split(':').map(Number); d.setHours(hh, mm, 0, 0); return d; };
+  const akkoord = (it) => obj(it.metricoolAkkoord);
+  const approved = (it) => !!str(akkoord(it).op) && akkoord(it).v === 2;
+  const oldApproval = (it) => !!str(akkoord(it).op) && akkoord(it).v !== 2;
+  const hashtags = (v) => (Array.isArray(v) ? v.join(' ') : str(v, 500));
+  const join = (a, b) => [str(a), b].filter(Boolean).join('\n\n');
+  // The text the Publiceerder sends per channel (publiceerder.md STAP 3d), to recognise the post in Metricool.
+  function channelText(it, k) {
+    if (k === 'insta') return join(it.onderschrift, hashtags(it.hashtags));
+    if (k === 'reels') return join(obj(it.reel).onderschrift, hashtags(obj(it.reel).hashtags));
+    if (k === 'shorts') return str(obj(it.short).beschrijving);
+    if (k === 'tiktok') return join(obj(it.tiktok).onderschrift, hashtags(obj(it.tiktok).hashtags));
+    return str(obj(it.youtube).beschrijving);
+  }
+  const NETWORK = { insta: 'instagram', reels: 'instagram', shorts: 'youtube', tiktok: 'tiktok', youtube: 'youtube' };
+  function inMetricool(it, k) {
+    if (!scheduled || !it.datum) return false;
+    const want = norm(channelText(it, k));
+    return scheduled.some((p) => str(obj(p.publicationDate).dateTime).startsWith(it.datum)
+      && (p.providers || []).some((x) => x && x.network === NETWORK[k]) && norm(p.text) === want);
+  }
+  /** One state per item, for the chip, the status line and the calendar. */
+  function stateOf(it) {
+    const first = chans(it).map((k) => moment(it, k)).filter(Boolean).sort((a, b) => a - b)[0];
+    if (it.status === 'herschrijven' || Date.now() - (sent.get(it.kind + ':' + it.id) || 0) < 15 * 60000) return 'herschrijven';
+    if (approved(it)) {
+      if (scheduled && chans(it).every((k) => inMetricool(it, k))) return 'ingepland';
+      if (first && first < new Date()) return 'voorbij';
+      const sinceMin = (Date.now() - Date.parse(akkoord(it).op)) / 60000;
+      return scheduled && sinceMin > 70 ? 'wacht' : 'goed';
+    }
+    if (first && first < new Date()) return 'voorbij';
+    return oldApproval(it) ? 'opnieuw' : 'keuren';
+  }
+  const window14 = () => { const t0 = iso(today()), t1 = iso(addDays(today(), 13)); return items().filter((it) => it.datum && it.datum >= t0 && it.datum <= t1).sort((a, b) => (a.datum < b.datum ? -1 : a.datum > b.datum ? 1 : a.kind === 'post' ? -1 : 1)); };
+  const toApprove = () => window14().filter((it) => ['keuren', 'opnieuw'].includes(stateOf(it)));
+
+  /* ---------- actions ---------- */
+  async function fire(trigger) {
+    if (!mcp) return false;
+    try { await mcp.callTool(REMOTE, 'fire_trigger', { trigger_id: trigger }); return true; } catch (e) { return false; }
+  }
+  async function update(it, fields) {
+    if (!db || !owner) { toast('Alleen de eigenaar kan dit doen.'); return false; }
+    try { await db.doc(coll(it) + '/' + it.id).update({ ...fields, bijgewerkt: new Date().toISOString() }); return true; }
+    catch (e) { toast('Opslaan lukte niet. Probeer het opnieuw.'); return false; }
+  }
+  const go = () => ({ metricoolAkkoord: { op: new Date().toISOString(), v: 2 }, metricoolFout: null, metricoolIntrekken: null });
+  async function approve(list, btn) {
+    if (btn) btn.disabled = true;
+    let n = 0;
+    for (const it of list) if (await update(it, go())) n++;
+    if (!n) { if (btn) btn.disabled = false; return; }
+    const started = await fire(PUBLISHER);
+    toast(n === 1 ? `Goedgekeurd. ${started ? 'De Publiceerder zet het nu in Metricool.' : 'De Publiceerder zet het binnen een uur in Metricool.'}`
+      : `${n} items goedgekeurd. ${started ? 'De Publiceerder zet ze nu in Metricool.' : 'De Publiceerder zet ze binnen een uur in Metricool.'}`);
+    setTimeout(loadMetricool, 120000);
+  }
+  async function withdraw(it, btn) {
+    btn.disabled = true;
+    if (!(await update(it, { metricoolAkkoord: null, metricoolIntrekken: new Date().toISOString() }))) { btn.disabled = false; return; }
+    await fire(PUBLISHER);
+    toast('Ingetrokken. Staat het al in Metricool, dan zet de Publiceerder het terug op concept.');
+  }
+  async function command(type, args, key) {
+    if (!db || !owner) { toast('Alleen de eigenaar kan dit doen.'); return false; }
+    try {
+      await db.collection('commands').add({ type, args, status: 'nieuw', aangemaakt: new Date().toISOString() });
+      if (key) sent.set(key, Date.now());
+      const started = await fire(PLANNER);
+      toast(started ? 'Verstuurd. De planner is begonnen; dit duurt een paar minuten.' : 'Verstuurd. De planner pakt het bij de volgende run op.');
+      render();
+      return true;
+    } catch (e) { toast('Versturen lukte niet. Probeer het opnieuw.'); return false; }
+  }
+  // Two taps for an action that touches many items or removes one: the button asks once more for 5 seconds.
+  function sureButton(label, sureLabel, action, cls = 'btn btn-quiet') {
+    const b = h('button', { class: cls, type: 'button', text: label });
+    let armed = false, t = null;
+    b.addEventListener('click', () => {
+      if (!armed) { armed = true; b.textContent = sureLabel; b.className = 'btn btn-sure'; t = setTimeout(() => { armed = false; b.textContent = label; b.className = cls; }, 5000); return; }
+      clearTimeout(t); action(b);
+    });
+    return b;
+  }
+
+  /* ---------- previews: the same drawing code as GitHub (slideart.js, videoart.js) ---------- */
+  const fontsReady = Promise.all([window.SlideArt?.fontsReady, window.VideoArt?.fontsReady].filter(Boolean));
+  function slideCanvas(it, i) {
+    const c = h('canvas', { width: '1080', height: '1350', role: 'img', 'aria-label': str((it.altTeksten || [])[i], 300) || `Beeld ${i + 1}` });
+    const slides = Array.isArray(it.slides) ? it.slides : [];
+    fontsReady.then(() => window.SlideArt && slides[i] && SlideArt.render(c, slides[i], i, slides.length, { serie: it.serie }));
+    return c;
+  }
+  function postPreview(it) {
+    const slides = Array.isArray(it.slides) ? it.slides : [];
+    const key = it.kind + ':' + it.id;
+    if (!slides.length) return h('p', { class: 'empty', text: 'Deze post heeft nog geen beelden.' });
+    if (expanded.has(key)) return h('div', { class: 'strip', tabindex: '0', 'aria-label': `Alle ${slides.length} beelden` }, ...slides.map((_, i) => slideCanvas(it, i)));
+    const box = h('div', { class: 'preview' }, slideCanvas(it, 0));
+    if (slides.length > 1) box.append(h('button', { class: 'btn btn-quiet play', type: 'button', text: `Alle ${slides.length} beelden`, onclick: () => { expanded.add(key); render(); } }));
+    return box;
+  }
+  function videoPreview(it) {
+    if (!window.VideoArt || !Array.isArray(it.scenes) || !it.scenes.length) return h('p', { class: 'empty', text: 'Van deze video is geen voorbeeld te maken.' });
+    const c = h('canvas', { role: 'img', 'aria-label': `Voorbeeld van de video: ${str(it.titel, 120)}` });
+    fontsReady.then(() => VideoArt.still(c, it, 'short'));
+    let stop = null;
+    const play = h('button', { class: 'btn btn-quiet play', type: 'button', text: 'Afspelen' });
+    play.addEventListener('click', async () => {
+      if (stop) { stop(); stop = null; play.textContent = 'Afspelen'; VideoArt.still(c, it, 'short'); return; }
+      play.textContent = 'Stoppen';
+      try { stop = await VideoArt.play(c, it, 'short', () => { stop = null; play.textContent = 'Opnieuw afspelen'; }); }
+      catch (e) { stop = null; play.textContent = 'Afspelen'; toast('Afspelen lukt niet in deze weergave.'); }
+    });
+    return h('div', { class: 'preview vid' }, c, play);
+  }
+
+  /* ---------- cards ---------- */
+  function adjustPanel(it) {
+    const key = it.kind + ':' + it.id;
+    const ta = h('textarea', { id: 'fb-' + it.kind + '-' + it.id, maxlength: '800', placeholder: it.kind === 'video' ? 'Bijvoorbeeld: maak de tweede scène korter' : 'Bijvoorbeeld: maak het tweede beeld korter' });
+    const add = (t) => { ta.value = ta.value ? ta.value + '. ' + t : t; ta.focus(); };
+    return h('div', { class: 'adjust' },
+      h('label', { for: ta.id, class: 'small', text: 'Wat moet er anders? De planner herschrijft het.' }), ta,
+      h('div', { class: 'quick' }, ...['Korter', 'Meer voor ouders', 'Andere opening', 'Eenvoudiger woorden'].map((t) => h('button', { type: 'button', text: t, onclick: () => add(t) }))),
+      h('div', { class: 'actions' },
+        h('button', { class: 'btn btn-quiet', type: 'button', text: 'Stuur naar de planner', onclick: async (ev) => {
+          const v = ta.value.trim(); if (!v) { ta.focus(); return; }
+          ev.currentTarget.disabled = true;
+          const ok = it.kind === 'video' ? await command('video_herschrijven', { video: it.id, feedback: v }, key) : await command('herschrijven', { post: it.id, feedback: v }, key);
+          if (ok) adjusting.delete(key); else ev.currentTarget.disabled = false;
+          render();
+        } }),
+        h('button', { class: 'btn btn-text', type: 'button', text: 'Annuleren', onclick: () => { adjusting.delete(key); render(); } }),
+        sureButton('Niet plaatsen', 'Zeker? Niet plaatsen', async (b) => { b.disabled = true; await update(it, { status: 'weggegooid' }); }, 'btn btn-text')));
+  }
+  function card(it) {
+    const st = stateOf(it);
+    const key = it.kind + ':' + it.id;
+    const d = parse(it.datum);
+    const times = [...new Set(chans(it).map((k) => tijd(it, k)))].join(' / ');
+    const where = chans(it).map((k) => CH[k].naam).join(', ');
+    const cap = it.kind === 'video' ? str(obj(it.reel).onderschrift) || str(obj(it.short).beschrijving) : str(it.onderschrift);
+    const capEl = h('p', { class: 'caption', text: cap });
+    const head = h('div', { class: 'card-head' },
+      h('span', { class: 'when', text: `${dayLabel(d)} · ${times}` }),
+      h('span', { class: 'chip', text: it.kind === 'video' ? 'Video' : (Array.isArray(it.slides) && it.slides.length === 1 ? 'Post' : 'Carrousel') }),
+      SERIE[it.serie] ? h('span', { class: 'chip', text: SERIE[it.serie] }) : null,
+      it.test ? h('span', { class: 'chip', text: 'Proef' }) : null,
+      h('span', { class: 'chip', 'data-state': st, text: STATE[st] }));
+    const acts = h('div', { class: 'actions' });
+    let note = null;
+    if (owner && (st === 'keuren' || st === 'opnieuw')) {
+      acts.append(
+        h('button', { class: 'btn btn-main', type: 'button', text: st === 'opnieuw' ? 'Opnieuw goedkeuren' : 'Goedkeuren', onclick: (ev) => approve([it], ev.currentTarget) }),
+        h('button', { class: 'btn btn-quiet', type: 'button', text: 'Aanpassen', 'aria-expanded': String(adjusting.has(key)), onclick: () => { adjusting.has(key) ? adjusting.delete(key) : adjusting.add(key); render(); } }));
+      note = h('p', { class: 'note', text: st === 'opnieuw' ? `Goedgekeurd met de oude studio, toen alleen als concept. Na Goedkeuren gaat het vanzelf online (${where}).` : `Na Goedkeuren gaat het vanzelf online: ${where}.` });
+    } else if (owner && ['goed', 'wacht', 'ingepland'].includes(st)) {
+      acts.append(h('button', { class: 'btn btn-quiet', type: 'button', text: 'Intrekken', onclick: (ev) => withdraw(it, ev.currentTarget) }));
+      note = h('p', { class: 'note', text: st === 'ingepland' ? `Staat in Metricool en gaat vanzelf online: ${where}. Intrekken kan tot dat moment.`
+        : st === 'wacht' ? 'Goedgekeurd, maar nog niet in Metricool. De Publiceerder probeert het elk uur; bij een fout krijg je een melding.'
+          : 'Goedgekeurd. De Publiceerder zet het binnen een uur in Metricool.' });
+    } else if (st === 'herschrijven') {
+      note = h('p', { class: 'note', text: 'De planner herschrijft dit. Daarna kun je het opnieuw bekijken en goedkeuren.' });
+    }
+    const fout = str(it.metricoolFout, 300);
+    return h('article', { class: 'card', id: 'card-' + it.kind + '-' + it.id },
+      head,
+      it.kind === 'video' ? videoPreview(it) : postPreview(it),
+      h('h3', { text: str(it.titel, 200) || (it.kind === 'video' ? 'Video' : 'Post') }),
+      cap ? capEl : null,
+      cap && cap.length > 180 ? h('button', { class: 'btn btn-text', type: 'button', text: 'Hele tekst', onclick: (ev) => { capEl.classList.toggle('open'); ev.currentTarget.textContent = capEl.classList.contains('open') ? 'Minder tekst' : 'Hele tekst'; } }) : null,
+      fout ? h('p', { class: 'fout', text: fout }) : null,
+      note, acts.childNodes.length ? acts : null,
+      adjusting.has(key) && owner ? adjustPanel(it) : null);
+  }
+  function renderCards() {
+    const list = window14();
+    if (!list.length) { $('cards').replaceChildren(h('p', { class: 'empty', text: 'Er staat niets gepland voor de komende twee weken. De Social-planner vult de planning op vrijdag; in de kalender kun je ook iets laten maken.' })); return; }
+    $('cards').replaceChildren(...list.map(card));
+  }
+
+  /* ---------- status line: one sentence, green when all runs, orange when something waits ---------- */
+  function weekCounts(start) {
+    const a = iso(start), b = iso(addDays(start, 6));
+    const inWeek = items().filter((it) => it.datum && it.datum >= a && it.datum <= b);
+    return { posts: inWeek.filter((x) => x.kind === 'post').length, videos: inWeek.filter((x) => x.kind === 'video').length };
+  }
+  function renderStatus() {
+    const el = $('status'), msg = $('status-msg');
+    const old = el.querySelector('button'); if (old) old.remove();
+    const list = window14();
+    const waiting = list.filter((it) => stateOf(it) === 'wacht');
+    const todo = toApprove();
+    const next = addDays(monday(today()), 7);
+    const nw = weekCounts(next);
+    let tone = 'ok', text = '', sub = '', btn = null;
+    if (waiting.length) {
+      tone = 'wait'; text = `${waiting.length === 1 ? '1 goedgekeurd item staat' : `${waiting.length} goedgekeurde items staan`} nog niet in Metricool.`;
+      sub = 'De Publiceerder probeert het elk uur. Bij een fout krijg je een melding.';
+      btn = owner ? h('button', { class: 'btn btn-quiet', type: 'button', text: 'Nu opnieuw proberen', onclick: async (ev) => { ev.currentTarget.disabled = true; toast((await fire(PUBLISHER)) ? 'De Publiceerder is gestart.' : 'Starten lukte nu niet; hij probeert het binnen een uur zelf.'); } }) : null;
+    } else if (todo.length) {
+      tone = 'wait'; text = `${todo.length === 1 ? '1 item wacht' : `${todo.length} items wachten`} op je goedkeuring.`;
+      sub = `Het eerste: ${dayLabel(parse(todo[0].datum))}, ${str(todo[0].titel, 80)}.`;
+      btn = h('button', { class: 'btn btn-main', type: 'button', text: 'Bekijken', onclick: () => { setTab('keuren'); $('p-keuren').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); } });
+    } else if (nw.posts < RHYTHM.posts || nw.videos < RHYTHM.videos) {
+      tone = 'wait'; text = `Volgende week staan er ${nw.posts} van ${RHYTHM.posts} posts en ${nw.videos} van ${RHYTHM.videos} video's.`;
+      sub = 'De planner vult vrijdag aan, of nu als je dat wilt.';
+      btn = owner ? h('button', { class: 'btn btn-quiet', type: 'button', text: 'Nu laten aanvullen', onclick: (ev) => { ev.currentTarget.disabled = true; command('plannen', {}, null); } }) : null;
+    } else {
+      const ready = list.filter((it) => ['ingepland', 'goed'].includes(stateOf(it)));
+      const first = ready[0];
+      text = 'Alles loopt.';
+      sub = first ? `${ready.length} goedgekeurd voor de komende twee weken. Het volgende: ${dayLabel(parse(first.datum))}, ${str(first.titel, 80)}.` : 'Er wacht niets op je.';
+    }
+    if (scheduled === null && mcp) sub += ' De stand in Metricool is nu niet te lezen.';
+    el.dataset.tone = tone;
+    msg.replaceChildren(text, h('span', { text: sub }));
+    if (btn) el.append(btn);
+  }
+
+  /* ---------- tabs ---------- */
+  function setTab(t) {
+    tab = t;
+    try { localStorage.setItem('studio-tab', t); } catch (e) { /* no storage */ }
+    for (const name of ['keuren', 'kalender', 'cijfers']) {
+      $('tab-' + name).setAttribute('aria-selected', String(name === t));
+      $('p-' + name).hidden = name !== t;
+    }
+  }
+  for (const name of ['keuren', 'kalender', 'cijfers']) $('tab-' + name).addEventListener('click', () => setTab(name));
+  $('tab-keuren').parentElement.addEventListener('keydown', (ev) => {
+    if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft') return;
+    const order = ['keuren', 'kalender', 'cijfers'];
+    const next = order[(order.indexOf(tab) + (ev.key === 'ArrowRight' ? 1 : 2)) % 3];
+    setTab(next); $('tab-' + next).focus();
+  });
+
+  function renderKeuren() {
+    const todo = toApprove();
+    const p = $('p-keuren');
+    if (!todo.length) { p.replaceChildren(h('p', { class: 'empty', text: 'Niets te keuren. Wat de planner maakt, staat hier vanzelf.' })); return; }
+    p.replaceChildren(
+      owner ? h('div', { class: 'actions' }, sureButton(`Alles goedkeuren (${todo.length})`, `Zeker? Keur ${todo.length} items goed`, (b) => { b.disabled = true; approve(todo, b); }, 'btn btn-main')) : null,
+      h('div', { class: 'rows' }, ...todo.map((it) => h('div', { class: 'row' },
+        h('span', { class: 'when small', text: dayLabel(parse(it.datum)) }),
+        h('span', { class: 't' }, h('b', { text: str(it.titel, 140) || 'Zonder titel' }), h('span', { class: 'muted small', text: ` · ${it.kind === 'video' ? 'Video' : 'Post'}` })),
+        h('span', { class: 'actions' },
+          h('button', { class: 'btn btn-text', type: 'button', text: 'Bekijken', onclick: () => document.getElementById('card-' + it.kind + '-' + it.id)?.scrollIntoView({ block: 'start' }) }),
+          owner ? h('button', { class: 'btn btn-main', type: 'button', text: 'Goedkeuren', onclick: (ev) => approve([it], ev.currentTarget) }) : null)))));
+  }
+
+  let makeFor = null;
+  function renderKalender() {
+    const start = monday(today());
+    const t0 = iso(today());
+    const all = items();
+    const days = [];
+    for (let i = 0; i < 14; i++) {
+      const d = addDays(start, i), key = iso(d);
+      const here = all.filter((x) => x.datum === key);
+      const past = key < t0;
+      days.push(h('div', { class: 'day' + (key === t0 ? ' today' : '') + (past ? ' past' : ''), role: 'group', 'aria-label': d.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' }) },
+        h('span', { class: 'n', text: `${DOW[d.getDay()]} ${d.getDate()}` }),
+        h('div', { style: 'display:grid;gap:4px;min-width:0' },
+          ...here.map((it) => h('button', { class: 'ev', type: 'button', 'data-state': stateOf(it), text: `${it.kind === 'video' ? 'Video' : 'Post'}: ${str(it.titel, 60)}`, onclick: () => document.getElementById('card-' + it.kind + '-' + it.id)?.scrollIntoView({ block: 'start' }) })),
+          !past && owner ? h('button', { class: 'add', type: 'button', text: 'Laat iets maken', onclick: () => { makeFor = key; renderKalender(); } }) : null)));
+    }
+    const p = $('p-kalender');
+    const kids = [h('div', { class: 'cal' }, ...['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'].map((x) => h('span', { class: 'dow', text: x })), ...days)];
+    if (makeFor) {
+      const onderwerp = h('input', { id: 'mk-onderwerp', type: 'text', maxlength: '200', placeholder: 'Bijvoorbeeld: de juiste lengte zaalstick', style: 'min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;width:100%' });
+      const kind = h('select', { id: 'mk-soort', style: 'min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit' }, h('option', { value: 'post', text: 'Post' }), h('option', { value: 'video', text: 'Video' }));
+      kids.push(h('div', { class: 'adjust' },
+        h('b', { text: `Iets laten maken voor ${dayLabel(parse(makeFor))}` }),
+        h('label', { for: kind.id, class: 'small', text: 'Soort' }), kind,
+        h('label', { for: onderwerp.id, class: 'small', text: 'Onderwerp (mag leeg: dan kiest de planner)' }), onderwerp,
+        h('div', { class: 'actions' },
+          h('button', { class: 'btn btn-quiet', type: 'button', text: 'Laat de planner het maken', onclick: async (ev) => {
+            ev.currentTarget.disabled = true;
+            const args = { pagina: '', onderwerp: onderwerp.value.trim(), wensen: '', datum: makeFor, ...(kind.value === 'post' ? { vorm: 'carrousel', thema: '' } : {}) };
+            if (await command(kind.value === 'video' ? 'video_maken' : 'post_maken', args, null)) { makeFor = null; renderKalender(); } else ev.currentTarget.disabled = false;
+          } }),
+          h('button', { class: 'btn btn-text', type: 'button', text: 'Annuleren', onclick: () => { makeFor = null; renderKalender(); } }))));
+    }
+    p.replaceChildren(...kids);
+  }
+
+  function renderCijfers() {
+    const wk = weekCounts(monday(today()));
+    const nx = weekCounts(addDays(monday(today()), 7));
+    const month = iso(today()).slice(0, 7);
+    const planned = scheduled ? new Set(scheduled.filter((p) => str(obj(p.publicationDate).dateTime).startsWith(month)).map((p) => p.uuid)).size : null;
+    const waits = items().filter((it) => approved(it) && str(it.aangemaakt)).map((it) => (Date.parse(akkoord(it).op) - Date.parse(it.aangemaakt)) / 3600000).filter((x) => x >= 0).sort((a, b) => a - b);
+    const median = waits.length ? waits[Math.floor(waits.length / 2)] : null;
+    const tile = (label, value, sub) => h('div', { class: 'tile' }, h('span', { class: 'muted small', text: label }), h('b', { text: value }), sub ? h('span', { class: 'muted small', text: sub }) : null);
+    $('p-cijfers').replaceChildren(
+      h('div', { class: 'tiles' },
+        tile('Deze week', `${wk.posts + wk.videos}`, `${wk.posts} posts, ${wk.videos} video's · ritme ${RHYTHM.posts} + ${RHYTHM.videos}`),
+        tile('Volgende week', `${nx.posts + nx.videos}`, `${nx.posts} posts, ${nx.videos} video's · ritme ${RHYTHM.posts} + ${RHYTHM.videos}`),
+        tile('Nog gepland in Metricool deze maand', planned === null ? 'Onbekend' : `${planned}`, `Gratis plan: ${LIMIT} posts per maand, geplaatste posts tellen mee`),
+        tile('Te keuren', `${toApprove().length}`, 'in de komende twee weken'),
+        tile('Tijd tot goedkeuring', median === null ? 'Nog niet' : median < 24 ? `${Math.round(median)} uur` : `${Math.round(median / 24)} dagen`, 'mediaan, van gemaakt tot goedgekeurd')),
+      h('p', { class: 'muted small', text: 'Bereik, bewaard, gedeeld en de stickwijzer-starts uit social komen in het Weekrapport (fase 4 van het bouwplan).' }));
+  }
+
+  function render() {
+    renderStatus(); renderCards(); renderKeuren(); renderKalender(); renderCijfers();
+  }
+
+  /* ---------- Metricool: read only, to show what is planned ---------- */
+  async function loadMetricool() {
+    if (!mcp) return;
+    const from = iso(today()), to = iso(addDays(today(), 31));
+    try {
+      const r = await mcp.callTool(METRICOOL, 'getScheduledPosts', { brandId: BRAND, fromDate: `${from}T00:00:00+01:00`, toDate: `${to}T23:59:59+01:00`, timezone: 'Europe/Amsterdam' }, { cache: false });
+      const data = obj(r.payload).data;
+      scheduled = Array.isArray(data) ? data : [];
+    } catch (e) { scheduled = null; }
+    render();
+  }
+
+  /* ---------- start ---------- */
+  setTab(tab);
+  render();
+  (async () => {
+    const [dbNs, userNs, mcpNs] = await Promise.all([claude.use('db'), claude.use('user'), claude.use('mcp')]);
+    db = dbNs; mcp = mcpNs;
+    owner = userNs ? await userNs.isOwner().catch(() => false) : false;
+    $('who').textContent = owner ? 'Jij keurt goed; de rest gaat vanzelf.' : 'Je bekijkt de planning. Goedkeuren kan alleen de eigenaar.';
+    if (!db) { $('status-msg').replaceChildren('De planning is niet te laden in deze weergave.', h('span', { text: 'Open de studio in claude.ai.' })); return; }
+    db.collection('posts').orderBy('aangemaakt', 'desc').limit(200).onSnapshot((s) => { posts = s.docs.map((d) => ({ id: d.id, ...(d.data() || {}) })); render(); }, () => toast('De posts konden niet worden geladen.'));
+    db.collection('videos').orderBy('aangemaakt', 'desc').limit(200).onSnapshot((s) => { videos = s.docs.map((d) => ({ id: d.id, ...(d.data() || {}) })); render(); }, () => toast('De video\'s konden niet worden geladen.'));
+    loadMetricool();
+    setInterval(loadMetricool, 5 * 60 * 1000);
+  })();
+})();
+</script>

@@ -51,3 +51,8 @@ test('the item from the plan passes the full check of the workflow', () => {
   assert.equal(decodeItem(plan(postDoc).item_b64).kind, 'post');
   assert.equal(itemFromStudio(videoDoc).kind, 'video');
 });
+
+test('a post keeps its series, and only a known series', () => {
+  assert.equal(decodeItem(plan({ ...postDoc, data: { ...postDoc.data, serie: 'maatje' } }).item_b64).serie, 'maatje');
+  assert.equal(decodeItem(plan({ ...postDoc, data: { ...postDoc.data, serie: 'onbekend' } }).item_b64).serie, undefined);
+});

@@ -1,6 +1,7 @@
 /*
  * SlideArt: the slide renderer of the Social-studio (Instagram posts, 1080 x 1350),
- * moved here unchanged from the studio page on 2026-11-10 (docs/marketing/bouwplan-2.0.md).
+ * moved here from the studio page on 2026-11-10 (docs/marketing/bouwplan-2.0.md); the fixed series
+ * (opening slide per series) came in fase 2.
  * The studio and the workflow social-render.yml load this same file, so a post looks
  * the same in the studio and in Metricool. Browser code: needs a canvas and document.fonts.
  */
@@ -85,31 +86,88 @@ window.SlideArt = (() => {
   }
   const bottom = H - BOT - 96;
 
-  function opening(ctx, s, idx, total) {
-    ctx.fillStyle = C.veld; ctx.fillRect(0, 0, W, H);
+  // Fixed series (docs/marketing/merkplatform.md, bouwplan 2.0 fase 2): recognisable by ground and motif on
+  // the opening slide, never by new colours. Without a series the opening stays the veldblauw pitch.
+  const SERIES = {
+    maatje: { ground: C.krijt, dark: false, motif: ruler },
+    kromming: { ground: C.inkt, dark: 'inkt', motif: bowLine },
+    'eerste-stick': { ground: C.krijt, dark: false, motif: silhouette },
+    zaal: { ground: C.veld, dark: 'veld', motif: indoorFloor },
+    fih: { ground: C.veld, dark: 'veld', motif: pitch, label: 'Volgens de FIH-spelregels' },
+    nieuw: { ground: C.inkt, dark: 'inkt', motif: null, label: 'Nieuw in onze catalogus' },
+  };
+  function pitch(ctx) {
     // Pitch lines: the shooting circle and the dashed 5-metre line, faint.
     ctx.strokeStyle = 'rgba(255,255,255,0.10)'; ctx.lineWidth = 6;
     ctx.beginPath(); ctx.arc(W / 2, H + 80, 560, Math.PI, 2 * Math.PI); ctx.stroke();
     ctx.setLineDash([28, 26]); ctx.beginPath(); ctx.arc(W / 2, H + 80, 760, Math.PI, 2 * Math.PI); ctx.stroke(); ctx.setLineDash([]);
+  }
+  function ruler(ctx) {
+    // A measuring stick along the right edge, inches with a longer tick every 6.
+    const x = W - 64;
+    ctx.fillStyle = C.rand; ctx.fillRect(x, 0, 64, H);
+    ctx.strokeStyle = C.grijs; ctx.lineWidth = 3;
+    for (let i = 0, y = 40; y < H; i++, y += 38) {
+      const len = i % 6 === 0 ? 40 : 20;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + len, y); ctx.stroke();
+    }
+  }
+  function bowLine(ctx) {
+    // The bow of a stick seen from the side: a long, low curve along the bottom.
+    ctx.strokeStyle = 'rgba(201,214,240,0.22)'; ctx.lineWidth = 10; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-40, H - 300); ctx.quadraticCurveTo(W * 0.55, H - 140, W + 40, H - 330); ctx.stroke();
+    ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-40, H - 260); ctx.lineTo(W + 40, H - 260); ctx.stroke();
+  }
+  function silhouette(ctx) {
+    // A player without a face: head, body and stick as plain shapes, bottom right.
+    ctx.fillStyle = C.rand;
+    const x = W - 270, y = H - 720; // clear of the footer line (H - BOT - 56)
+    ctx.beginPath(); ctx.arc(x + 70, y, 46, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.roundRect(x + 20, y + 62, 100, 190, 40); ctx.fill();
+    ctx.strokeStyle = C.rand; ctx.lineWidth = 16; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x + 110, y + 120); ctx.lineTo(x + 40, y + 360); ctx.quadraticCurveTo(x + 20, y + 400, x - 20, y + 385); ctx.stroke();
+  }
+  function indoorFloor(ctx) {
+    // Hall floor with the side boarding of indoor hockey along the bottom.
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 2;
+    for (let y = H - 420; y < H; y += 34) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(255,255,255,0.14)'; ctx.fillRect(0, H - 470, W, 50);
+    ctx.fillStyle = 'rgba(13,27,46,0.25)'; ctx.fillRect(0, H - 420, W, 8);
+  }
+
+  function opening(ctx, s, idx, total, serie) {
+    const look = SERIES[serie] || { ground: C.veld, dark: 'veld', motif: pitch };
+    ctx.fillStyle = look.ground; ctx.fillRect(0, 0, W, H);
+    if (look.motif) look.motif(ctx);
+    const light = !look.dark;
     ctx.textBaseline = 'top';
     let y = 250;
-    const kicker = str(s.boven, 60);
-    if (kicker) {
+    const kicker = look.label || str(s.boven, 60);
+    if (look.label) {
+      // A fixed label of the series: a pill, so it reads as the series and not as a heading.
+      ctx.font = `600 34px ${FB}`;
+      const w = ctx.measureText(look.label).width + 64;
+      ctx.strokeStyle = light ? C.veld : C.wit; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.roundRect(PAD, y - 8, w, 64, 32); ctx.stroke();
+      ctx.fillStyle = light ? C.veld : C.wit; ctx.fillText(look.label, PAD + 32, y + 8);
+      y += 100;
+    } else if (kicker) {
       ctx.fillStyle = C.bal; ctx.beginPath(); ctx.arc(PAD + 14, y + 20, 14, 0, Math.PI * 2); ctx.fill();
-      ctx.font = `600 34px ${FB}`; ctx.fillStyle = C.nl;
+      ctx.font = `600 34px ${FB}`; ctx.fillStyle = light ? C.grijs : C.nl;
       ctx.fillText(kicker.toUpperCase().split('').join(String.fromCharCode(8202)), PAD + 46, y + 2);
       y += 90;
     }
-    ctx.fillStyle = C.wit;
-    const b = fit(ctx, str(s.kop, 140), 800, FD, W - 2 * PAD, 600, 124, 64, 1.04);
+    ctx.fillStyle = light ? C.veld : C.wit;
+    const textW = W - 2 * PAD - (serie === 'maatje' ? 60 : 0);
+    const b = fit(ctx, str(s.kop, 140), 800, FD, textW, 600, 124, 64, 1.04);
     draw(ctx, b, PAD, y, 1.04);
     y += b.height + 44;
     if (str(s.tekst)) {
-      ctx.fillStyle = C.nl;
-      const t = fit(ctx, str(s.tekst, 240), 400, FB, W - 2 * PAD - 60, bottom - 80 - y, 46, 32, 1.3);
+      ctx.fillStyle = light ? C.inkt : C.nl;
+      const t = fit(ctx, str(s.tekst, 240), 400, FB, textW - 60, bottom - 80 - y, 46, 32, 1.3);
       draw(ctx, t, PAD, y, 1.3);
     }
-    footer(ctx, 'veld', idx, total);
+    footer(ctx, look.dark, idx, total);
   }
   function tekst(ctx, s, idx, total) {
     ctx.fillStyle = C.krijt; ctx.fillRect(0, 0, W, H); ctx.textBaseline = 'top';
@@ -199,11 +257,12 @@ window.SlideArt = (() => {
   }
   const KINDS = { opening, tekst, lijst, tabel, slot };
 
-  function render(canvas, slide, idx, total) {
+  /** Draws one slide. `opts.serie` (a key of SERIES) gives the opening slide its series look. */
+  function render(canvas, slide, idx, total, opts = {}) {
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
     const s = slide && typeof slide === 'object' ? slide : {};
-    (KINDS[s.soort] || tekst)(ctx, s, idx, total);
+    (KINDS[s.soort] || tekst)(ctx, s, idx, total, opts && opts.serie);
   }
   const fontsReady = (async () => {
     try {
@@ -213,5 +272,5 @@ window.SlideArt = (() => {
       ]);
     } catch (e) { /* draw with the fallback faces */ }
   })();
-  return { render, fontsReady, W, H };
+  return { render, fontsReady, W, H, SERIES: Object.keys(SERIES) };
 })();

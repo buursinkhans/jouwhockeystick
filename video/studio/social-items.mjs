@@ -6,9 +6,9 @@
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
 
-import { studioItem } from './social-names.mjs';
+import { SERIES, studioItem } from './social-names.mjs';
 
-export { REPO, RELEASE_TAG, TEST_PREFIX, fileNames, formatName, mediaFor, mediaUrls, releaseUrl, studioItem, videoFormats } from './social-names.mjs';
+export { REPO, RELEASE_TAG, SERIES, TEST_PREFIX, fileNames, formatName, mediaFor, mediaUrls, releaseUrl, studioItem, videoFormats } from './social-names.mjs';
 
 const text = (max) => z.string().max(max);
 const id = z.string().regex(/^[a-z0-9-]{1,80}$/, 'id: alleen a-z, 0-9 en -, hooguit 80 tekens');
@@ -33,6 +33,7 @@ const post = z
     kind: z.literal('post'),
     id,
     slides: z.array(slide).min(1).max(10),
+    serie: z.enum(SERIES).optional(),
   })
   .loose();
 
