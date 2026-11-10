@@ -70,6 +70,12 @@
           "op": "2026-11-10T14:07:55Z"
         }
       }
+    },
+    "videos/20261106-zaal-is-geen-veld": {
+      "render": {
+        "gestart": "2026-11-10T15:17:41Z"
+      },
+      "fout": null
     }
   },
   "laatsteRun": "2026-11-10T15:13:04Z",
@@ -78,7 +84,7 @@
     "gebruikt": 2,
     "grens": 20
   },
-  "wijziging": "ea5b47d4-0706-4b23-83fd-9ebf44b98daa",
+  "wijziging": "080d4b73-57ac-4b23-82d6-f69cc5631f86",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
