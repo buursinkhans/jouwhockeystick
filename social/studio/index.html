@@ -356,6 +356,8 @@
       h('span', { class: 'chip', text: it.kind === 'video' ? 'Video' : (Array.isArray(it.slides) && it.slides.length === 1 ? 'Post' : 'Carrousel') }),
       SERIE[it.serie] ? h('span', { class: 'chip', text: SERIE[it.serie] }) : null,
       it.test ? h('span', { class: 'chip', text: 'Proef' }) : null,
+      // A paired test (docs/marketing/onderzoeker.md, STAP 4): the same subject twice, one thing different.
+      ['A', 'B'].includes(obj(it.abtest).rol) ? h('span', { class: 'chip', title: 'Gepaarde test: hetzelfde onderwerp, één ding anders', text: `Test ${obj(it.abtest).rol}` }) : null,
       h('span', { class: 'chip', 'data-state': st, text: STATE[st] }));
     const acts = h('div', { class: 'actions' });
     let note = null;

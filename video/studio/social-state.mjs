@@ -25,7 +25,10 @@ export const STATE_PATH = 'video/studio/state/publiceerder.json';
 const REPO = process.env.GITHUB_REPOSITORY || 'buursinkhans/jouwhockeystick';
 const KEY = /^(posts|videos)\/[a-z0-9-]{1,80}$/;
 
-export const emptyState = () => ({ versie: 1, items: {}, laatsteRun: null, tegoed: null, wijziging: null });
+export const emptyState = () => ({ versie: 1, items: {}, laatsteRun: null, tegoed: null, wijziging: null, resultaten: {}, onderzoek: null });
+
+// Results of the Onderzoeker (docs/marketing/onderzoeker.md): one per Metricool post, kept beyond Metricool's 30 days.
+const RESULT_KEY = /^[a-z]+\/[A-Za-z0-9_-]{1,40}$/;
 
 /** The key of a studio item in the record: "posts/<id>" or "videos/<id>". */
 export const itemKey = (collection, id) => `${collection}/${id}`;
@@ -46,10 +49,10 @@ export function parseState(text) {
   return s;
 }
 
-/** A patch: whole item records per key (null removes one), and optionally laatsteRun and tegoed. Throws on anything else. */
+/** A patch: whole item records per key (null removes one), results per "<kanaal>/<uuid>" (merged the same way), and optionally laatsteRun, tegoed and onderzoek. Throws on anything else. */
 export function validatePatch(patch) {
   if (!patch || typeof patch !== 'object' || Array.isArray(patch)) throw new Error('De wijziging is geen object.');
-  const allowed = new Set(['id', 'items', 'laatsteRun', 'tegoed']);
+  const allowed = new Set(['id', 'items', 'laatsteRun', 'tegoed', 'resultaten', 'onderzoek']);
   for (const k of Object.keys(patch)) if (!allowed.has(k)) throw new Error(`Onbekend veld in de wijziging: ${k}`);
   if (typeof patch.id !== 'string' || !/^[a-z0-9-]{8,64}$/.test(patch.id)) throw new Error('De wijziging heeft geen geldige id.');
   const items = patch.items ?? {};
@@ -58,6 +61,13 @@ export function validatePatch(patch) {
     if (!KEY.test(key)) throw new Error(`Ongeldige sleutel: ${key}`);
     if (value !== null && (typeof value !== 'object' || Array.isArray(value))) throw new Error(`Ongeldige stand voor ${key}`);
   }
+  const results = patch.resultaten ?? {};
+  if (typeof results !== 'object' || Array.isArray(results)) throw new Error('resultaten moet een object zijn.');
+  for (const [key, value] of Object.entries(results)) {
+    if (!RESULT_KEY.test(key)) throw new Error(`Ongeldige sleutel voor een resultaat: ${key}`);
+    if (value !== null && (typeof value !== 'object' || Array.isArray(value))) throw new Error(`Ongeldig resultaat voor ${key}`);
+  }
+  if (patch.onderzoek !== undefined && patch.onderzoek !== null && (typeof patch.onderzoek !== 'object' || Array.isArray(patch.onderzoek))) throw new Error('onderzoek moet een object zijn.');
   if (JSON.stringify(patch).length > 40_000) throw new Error('De wijziging is te groot.');
   return patch;
 }
@@ -70,9 +80,16 @@ export function applyPatch(state, patch) {
     if (value === null) delete items[key];
     else items[key] = value;
   }
+  const resultaten = { ...(state.resultaten ?? {}) };
+  for (const [key, value] of Object.entries(patch.resultaten ?? {})) {
+    if (value === null) delete resultaten[key];
+    else resultaten[key] = value;
+  }
   return {
     ...state,
     items,
+    resultaten,
+    ...(patch.onderzoek !== undefined && { onderzoek: patch.onderzoek }),
     ...(patch.laatsteRun !== undefined && { laatsteRun: patch.laatsteRun }),
     ...(patch.tegoed !== undefined && { tegoed: patch.tegoed }),
     wijziging: patch.id,

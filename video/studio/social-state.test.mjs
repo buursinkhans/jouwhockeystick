@@ -57,3 +57,12 @@ test('plannedPosts lists every Metricool post once per channel, never a channel 
     { uuid: 'u2', moment: '2026-11-18T19:30:00' },
   ]);
 });
+
+test('results are merged per key and research is replaced as a whole', () => {
+  const one = applyPatch(emptyState(), { id, resultaten: { 'instagram/u1': { waarde: 120, datum: '2026-11-13' } }, onderzoek: { week: '47', issue: 5 } });
+  const two = applyPatch(one, { id: 'b2c3d4e5-patch', resultaten: { 'youtube/u2': { waarde: 40, datum: '2026-11-14' } } });
+  assert.deepEqual(Object.keys(two.resultaten).sort(), ['instagram/u1', 'youtube/u2']);
+  assert.deepEqual(two.onderzoek, { week: '47', issue: 5 });
+  assert.throws(() => validatePatch({ id, resultaten: { 'u1': {} } }), /Ongeldige sleutel/);
+  assert.throws(() => validatePatch({ id, onderzoek: [] }), /onderzoek/);
+});

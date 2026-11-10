@@ -25,6 +25,7 @@
     "price:expiry": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/price-expiry.ts",
     "marketing:check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/marketing-check.ts",
     "marketing:budget": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/metricool-budget.ts",
+    "marketing:research": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/marketing-research.ts",
     "catalog:recheck": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/catalog-recheck.ts",
     "passa:feed": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/passa-feed.ts",
     "passa:import": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/passa-import.ts",
