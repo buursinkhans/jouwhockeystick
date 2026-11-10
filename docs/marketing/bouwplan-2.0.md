@@ -43,7 +43,7 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 
 | Fase | Inhoud | Status |
 |---|---|---|
-| 0 | Proef: SlideArt in de repo, `social-render.yml`, bewijs dat Metricool de bestanden ophaalt | In uitvoering |
+| 0 | Proef: SlideArt in de repo, `social-render.yml`, bewijs dat Metricool de bestanden ophaalt | Bewezen op 2026-11-10 (PR #200) |
 | 1 | Kern: Publiceerder, teller voor het Metricool-tegoed, merkplatform, uitgebreide redactiecontrole | Nog niet gestart |
 | 2 | Nieuwe studio in `social/studio/index.html`: één statusregel, kaarten met echte preview, Goedkeuren en Aanpassen | Nog niet gestart |
 | 3 | Onderzoeker, leren van resultaten, gepaarde tests, Pulse, Push en Peak in het kwartaalplan | Nog niet gestart |
@@ -55,6 +55,8 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 - `.github/workflows/social-render.yml`: start met een item (JSON in base64) en een testvlag. Controleert het item met Zod, rendert in headless Chromium (Playwright) en uploadt naar de release `social-media` met de GITHUB_TOKEN. Een bestand met dezelfde inhoud blijft staan. Bij een pull request die de renderer raakt, draait hij één testpost.
 - `video/studio/social-items.mjs` met tests (`node --test`): controle van het item, bestandsnamen, url's en de beslissing of een bestand geüpload moet worden.
 - **Klaar als:** een testrun voor één post 1 tot 5 PNG's (of meer, één per slide) oplevert op een openbare url, en een claude.ai-sessie met die url's één proefpost als concept in Metricool zet (`draft: true`). Lukt dat niet, dan is Netlify het alternatief voor de opslag.
+
+**Uitkomst (2026-11-10):** de proefrun bij PR #200 maakte zes PNG's (1080 × 1350) van de post `20261113-veld-of-zaalstick`, elk op een openbare url (`test-…-1.png` tot en met `-6.png`). Met drie daarvan stond daarna een concept in Metricool (Instagram, `draft: true`, `autoPublish: false`, 28 november). Metricool kopieerde de beelden naar zijn eigen opslag. Netlify als opslag is dus niet nodig.
 
 ### Fase 1 tot en met 4
 
