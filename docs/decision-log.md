@@ -2850,6 +2850,24 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
   - Pagina's die niet dagelijks opnieuw worden gebouwd, kunnen de link in de bovenbalk tot de volgende build houden. Die link leidt dan naar de melding dat de editie is afgelopen.
 - **Attributie via actiepagina's** (deeplinks naar een categorie- of actiepagina) controleren we na de eerste klikken in de dashboards van de netwerken.
 
+## 2026-11-10 — Black Friday-kaart op de homepage: voordeel en urgentie voor de bezoeker
+
+**Opdracht eigenaar:** de kaart onder de hero vertelt wat de bezoeker eraan heeft en waarom nu, in plaats van wat wij deden.
+
+**Besluit:**
+- **Wat de kaart telt.** De kaart telt alleen Black Friday-acties die lopen of zijn aangekondigd (`kind: 'black-friday'`). Een gewone sale (HockeyCity) en "geen actie" (Daka) tellen niet mee en worden niet genoemd. Het woord "partnerwinkels" staat niet in de kaart.
+- **Eigen actienamen.** Elke actie krijgt de naam die de winkel zelf gebruikt (nieuw veld `name`, bijvoorbeeld "Black Friday Early Access"). De voorwaarde staat erbij zoals de winkel die noemt (nieuw veld `audience`, bijvoorbeeld "met een code via de nieuwsbrief"). Ontbreken die in de data, dan blijven ze weg. Een actie die "op alles" geldt heet nu categorie `alles`; bol.com noemt geen productgroep en heeft er dus geen meer.
+- **Urgentie, berekend per dag in Europe/Amsterdam (`campaignCard`, `promoTiming`).**
+  - Eerst een einddatum binnen 7 dagen: "stopt over X dagen (t/m 15 nov)", "stopt morgen" of "laatste dag".
+  - Daarna een start: "begint 20 nov".
+  - Een verlopen actie verdwijnt uit de kaart.
+  - Het label is "Black Friday · nu al bezig" als er een actie loopt, anders "Black Friday · 27 november".
+  - Na Cyber Monday (30 november) is de kaart weg.
+  - Is elke controle ouder dan 14 dagen, dan noemt de kaart geen aantallen.
+- **Vorm.** Donkere kaart (inkt) met lichte tekst en een witte knop "Bekijk de acties". Daaronder een tekstlink naar de stickwijzer en klein onderaan "Nagekeken op … bij de winkels zelf". De contrasten liggen boven WCAG AA. Op mobiel staan alleen de kop, één urgentieregel en de knop; de extra regels verschijnen vanaf tabletbreedte.
+- **/black-friday-hockey** toont per winkel dezelfde naam, voorwaarde en status ("Nu bezig, stopt over 5 dagen (t/m 15 november)", "Begint op 20 november", "Afgelopen").
+- **Geen kortingsclaims.** Er staan geen percentages, geen aftelklok en geen "beste".
+
 ## 2026-11-10 — Social-machine 2.0, fase 0: renderen in GitHub Actions in plaats van de browser
 
 **Aanleiding:** goedkeuren in de Social-studio werkt niet. Renderen in de browser en opslaan via Google Drive faalt op de browser, de koppeling en de toestemmingen. Sinds 24 oktober is er niets geplaatst. Het plan staat in [bouwplan-2.0.md](marketing/bouwplan-2.0.md).

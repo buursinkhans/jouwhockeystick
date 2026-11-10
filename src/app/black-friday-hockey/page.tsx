@@ -6,7 +6,7 @@ import { getCuratedShoes, shoePath } from '@/catalog/shoes';
 import { isJuniorStick } from '@/catalog/similar';
 import type { Product } from '@/catalog/types';
 import type { Shoe } from '@/catalog/shoes/types';
-import { BLACK_FRIDAY, BLACK_FRIDAY_EDITION, BLACK_FRIDAY_PROMOS, formatNlDate } from '@/content/blackFriday';
+import { BLACK_FRIDAY, BLACK_FRIDAY_EDITION, BLACK_FRIDAY_PROMOS, categoryText, formatNlDate, pageTimingText } from '@/content/blackFriday';
 import { FaqSection } from '@/components/article/FaqSection';
 import { ShopPromoLink } from '@/components/campaign/ShopPromoLink';
 import { ProductCard } from '@/components/catalog/ProductCard';
@@ -15,7 +15,7 @@ import { ShoeCard } from '@/components/shoes/ShoeCard';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 import { PartnerLinkNote } from '@/components/ui/PartnerLinkNote';
 import { CheckIcon } from '@/components/ui/icons';
-import { amsterdamDate, campaignPhase, sortShopPromos, type PromoState } from '@/lib/campaign';
+import { amsterdamDate, campaignPhase, promoTiming, sortShopPromos, type PromoState } from '@/lib/campaign';
 import { itemListJsonLd, jsonLdHtml } from '@/lib/jsonLd';
 import { RETAILERS } from '@/lib/retailers';
 import { absoluteUrl, pageMetadata, SITE_NAME } from '@/lib/site';
@@ -153,9 +153,21 @@ export default function BlackFridayPage() {
                 <li key={promo.retailer} className="card p-5">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                     <h3 className="text-lg font-bold">{label(promo.retailer)}</h3>
-                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATE_CLASS[state]}`}>{BLACK_FRIDAY.shops.stateLabel[state]}</span>
-                    {showDetails && state !== 'geen' && <span className="text-sm text-inkt/80">{BLACK_FRIDAY.shops.kindLabel[promo.kind]}</span>}
+                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATE_CLASS[state]}`}>
+                      {pageTimingText(promoTiming(promo, today, phase))}
+                    </span>
                   </div>
+                  {showDetails && state !== 'geen' && (
+                    <p className="mt-2 font-semibold text-inkt">
+                      {promo.name ?? BLACK_FRIDAY.shops.kindLabel[promo.kind]}
+                      {[promo.audience, categoryText(promo)].filter(Boolean).map((part) => (
+                        <span key={part} className="font-normal text-inkt/80">
+                          {' · '}
+                          {part}
+                        </span>
+                      ))}
+                    </p>
+                  )}
                   {state === 'afgelopen' ? null : <p className="mt-2 max-w-3xl text-inkt/80">{promo.summary}</p>}
                   {showDetails && (promo.startsAt || promo.endsAt) && (
                     <p className="mt-2 text-sm font-semibold text-inkt">
