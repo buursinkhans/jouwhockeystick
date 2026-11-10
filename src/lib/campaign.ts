@@ -46,17 +46,22 @@ export const showCampaignNote = (edition: CampaignEdition, today: string) =>
 
 /**
  * One shop's action as we checked it on the shop's own pages. Never a
- * percentage or a former price (CLAUDE.md, Commerce): the type of action,
- * its dates when the shop states them, and where we read it.
+ * percentage or a former price (CLAUDE.md, Commerce): the type of action, the
+ * shop's own name for it, who can use it, its dates when the shop states them,
+ * and where we read it.
  */
 export type ShopPromo = {
   retailer: RetailerId;
-  /** 'geen' = we checked and found no action. */
-  kind: 'black-friday' | 'sale' | 'nieuwsbrief' | 'geen';
+  /** 'geen' = we checked and found no action; 'sale' = a regular sale, not a Black Friday action. */
+  kind: 'black-friday' | 'sale' | 'geen';
+  /** The shop's own name for the action, as on its page (e.g. "Black Friday Early Access"); null when it gives none. */
+  name: string | null;
+  /** Who can use it, short, as the shop states it (e.g. "met een code via de nieuwsbrief"); null when open to all or not stated. */
+  audience: string | null;
   /** 'niet-gecontroleerd' = we could not read the shop's page; nothing is claimed. */
   status: 'gecontroleerd' | 'niet-gecontroleerd';
-  /** Product groups the shop names for the action; empty when it names none. */
-  categories: readonly ('hockeysticks' | 'hockeyschoenen' | 'hockey' | 'algemeen')[];
+  /** What the action is on, as the shop states it; empty when it does not say. */
+  categories: readonly ('hockeysticks' | 'hockeyschoenen' | 'hockey' | 'alles')[];
   /** YYYY-MM-DD as the shop states it, else null. */
   startsAt: string | null;
   endsAt: string | null;
@@ -88,6 +93,38 @@ export function promoState(promo: ShopPromo, today: string, phase: CampaignPhase
   return 'actueel';
 }
 
+/**
+ * When an action starts or stops, relative to today (Europe/Amsterdam), for
+ * the "stopt over 5 dagen" and "begint 20 nov" lines on the homepage card and
+ * the campaign page. Days are whole calendar days.
+ */
+export type PromoTiming =
+  | { kind: 'laatste-dag'; endsAt: string }
+  | { kind: 'stopt'; days: number; endsAt: string }
+  | { kind: 'loopt' }
+  | { kind: 'begint'; days: number; startsAt: string }
+  | { kind: 'aangekondigd' }
+  | { kind: 'afgelopen' }
+  | { kind: 'geen' }
+  | { kind: 'onbekend' };
+
+export function promoTiming(promo: ShopPromo, today: string, phase: CampaignPhase): PromoTiming {
+  const state = promoState(promo, today, phase);
+  if (state === 'actueel') {
+    if (!promo.endsAt) return { kind: 'loopt' };
+    const days = daysBetween(today, promo.endsAt);
+    return days === 0 ? { kind: 'laatste-dag', endsAt: promo.endsAt } : { kind: 'stopt', days, endsAt: promo.endsAt };
+  }
+  if (state === 'binnenkort') {
+    return promo.startsAt ? { kind: 'begint', days: daysBetween(today, promo.startsAt), startsAt: promo.startsAt } : { kind: 'aangekondigd' };
+  }
+  return { kind: state };
+}
+
+/** A Black Friday action that runs or is announced; a regular sale or "no action" never counts. */
+export const isBlackFridayAction = (promo: ShopPromo, state: PromoState) =>
+  promo.kind === 'black-friday' && (state === 'actueel' || state === 'binnenkort');
+
 const STATE_ORDER: Record<PromoState, number> = { actueel: 0, binnenkort: 1, geen: 2, onbekend: 3, afgelopen: 4 };
 
 /**
@@ -110,44 +147,50 @@ export function sortShopPromos<T extends ShopPromo>(
     );
 }
 
-export type CampaignHighlights = {
-  /** Shops whose action runs now or is announced. */
-  withAction: number;
-  total: number;
-  /** Confirmed dates, soonest first: "Plutosport tot en met 15 november". */
-  facts: string[];
-  /** Latest check, or null when every check is older than 14 days (then the band names no numbers). */
+/** Within this many days an end date counts as urgent on the homepage card. */
+export const URGENT_DAYS = 7;
+
+export type CampaignCard = {
+  /** Black Friday actions running now. */
+  running: number;
+  /** Black Friday actions announced, not started. */
+  announced: number;
+  /** Shops with a running or announced Black Friday action, as shown: running first, then by name. */
+  shops: RetailerId[];
+  /** The urgent lines, most urgent first: an end within URGENT_DAYS (soonest first), then starts (soonest first). */
+  urgent: { promo: ShopPromo; timing: Extract<PromoTiming, { kind: 'laatste-dag' | 'stopt' | 'begint' }> }[];
+  /** Latest check within 14 days, else null. */
   lastCheck: string | null;
 };
 
-const shortNlDate = (date: string) =>
-  new Intl.DateTimeFormat('nl-NL', { day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`));
-
 /**
- * What the homepage band says (decision log 2026-11-10): how many shops have
- * an action and the confirmed dates, from the same config as the campaign
- * page. Only checks of the last 14 days count; dates only as the shop states them.
+ * What the homepage card says (decision log 2026-11-10, second version): only
+ * Black Friday actions that run or are announced, from the same config as the
+ * campaign page. An ended action never appears.
  */
-export function campaignHighlights(
+export function campaignCard(
   promos: readonly ShopPromo[],
   today: string,
   phase: CampaignPhase,
   label: (retailer: RetailerId) => string,
-  maxFacts = 2,
-): CampaignHighlights {
-  const rows = sortShopPromos(promos, today, phase, label);
-  const fresh = promos
-    .map((p) => p.verifiedAt)
+): CampaignCard {
+  const rows = sortShopPromos(promos, today, phase, label).filter(({ promo, state }) => isBlackFridayAction(promo, state));
+  const ending: CampaignCard['urgent'] = [];
+  const starting: CampaignCard['urgent'] = [];
+  for (const { promo } of rows) {
+    const timing = promoTiming(promo, today, phase);
+    if (timing.kind === 'laatste-dag' || (timing.kind === 'stopt' && timing.days <= URGENT_DAYS)) ending.push({ promo, timing });
+    if (timing.kind === 'begint') starting.push({ promo, timing });
+  }
+  const at = (u: CampaignCard['urgent'][number]) => ('endsAt' in u.timing ? u.timing.endsAt : u.timing.startsAt);
+  const fresh = rows
+    .map(({ promo }) => promo.verifiedAt)
     .filter((d): d is string => d !== null && daysBetween(d, today) <= MAX_PROMO_CHECK_AGE_DAYS);
-  const dated = rows.flatMap(({ promo, state }) => {
-    if (state === 'actueel' && promo.endsAt) return [{ date: promo.endsAt, text: `${label(promo.retailer)} tot en met ${shortNlDate(promo.endsAt)}` }];
-    if (state === 'binnenkort' && promo.startsAt) return [{ date: promo.startsAt, text: `${label(promo.retailer)} vanaf ${shortNlDate(promo.startsAt)}` }];
-    return [];
-  });
   return {
-    withAction: rows.filter((r) => r.state === 'actueel' || r.state === 'binnenkort').length,
-    total: promos.length,
-    facts: dated.sort((a, b) => a.date.localeCompare(b.date)).slice(0, maxFacts).map((f) => f.text),
+    running: rows.filter((r) => r.state === 'actueel').length,
+    announced: rows.filter((r) => r.state === 'binnenkort').length,
+    shops: rows.map((r) => r.promo.retailer),
+    urgent: [...ending.sort((a, b) => at(a).localeCompare(at(b))), ...starting.sort((a, b) => at(a).localeCompare(at(b)))],
     lastCheck: fresh.length ? fresh.reduce((a, b) => (b > a ? b : a)) : null,
   };
 }

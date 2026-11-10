@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { BLACK_FRIDAY, BLACK_FRIDAY_EDITION, BLACK_FRIDAY_PROMOS } from '@/content/blackFriday';
-import { amsterdamDate, campaignHighlights, campaignPhase, promoState, showCampaignNote, sortShopPromos, type ShopPromo } from './campaign';
+import { amsterdamDate, campaignCard, campaignPhase, promoState, promoTiming, showCampaignNote, sortShopPromos, type ShopPromo } from './campaign';
 import { RETAILERS, shopPageTrackingUrl } from './retailers';
 
 const promo = (over: Partial<ShopPromo> = {}): ShopPromo => ({
   retailer: 'bolcom',
   kind: 'black-friday',
+  name: null,
+  audience: null,
   status: 'gecontroleerd',
   categories: [],
   startsAt: null,
@@ -138,34 +140,61 @@ describe('shopPageTrackingUrl', () => {
   });
 });
 
-describe('campaignHighlights', () => {
+
+describe('promoTiming', () => {
+  const p = promo({ startsAt: '2026-11-06', endsAt: '2026-11-15', verifiedAt: '2026-11-10' });
+  it('counts whole days to the end, with the last day apart', () => {
+    expect(promoTiming(p, '2026-11-10', 'voor')).toEqual({ kind: 'stopt', days: 5, endsAt: '2026-11-15' });
+    expect(promoTiming(p, '2026-11-14', 'voor')).toEqual({ kind: 'stopt', days: 1, endsAt: '2026-11-15' });
+    expect(promoTiming(p, '2026-11-15', 'voor')).toEqual({ kind: 'laatste-dag', endsAt: '2026-11-15' });
+    expect(promoTiming(p, '2026-11-16', 'voor')).toEqual({ kind: 'afgelopen' });
+  });
+
+  it('counts days to the start before it begins', () => {
+    const later = promo({ startsAt: '2026-11-20' });
+    expect(promoTiming(later, '2026-11-10', 'voor')).toEqual({ kind: 'begint', days: 10, startsAt: '2026-11-20' });
+    expect(promoTiming(later, '2026-11-19', 'voor')).toEqual({ kind: 'begint', days: 1, startsAt: '2026-11-20' });
+    expect(promoTiming(later, '2026-11-20', 'voor')).toEqual({ kind: 'loopt' });
+  });
+
+  it('is over after Black Friday weekend for an action without an end date', () => {
+    expect(promoTiming(promo({ verifiedAt: '2026-11-28' }), '2026-12-01', 'afgelopen')).toEqual({ kind: 'afgelopen' });
+  });
+});
+
+describe('campaignCard', () => {
   const label = (r: keyof typeof RETAILERS) => RETAILERS[r].label;
   const promos = [
-    promo({ retailer: 'plutosport', kind: 'nieuwsbrief', startsAt: '2026-11-06', endsAt: '2026-11-15' }),
+    promo({ retailer: 'plutosport', name: 'Black Friday Early Access', startsAt: '2026-11-06', endsAt: '2026-11-15' }),
     promo({ retailer: 'passasports', startsAt: '2026-11-20' }),
     promo({ retailer: 'bolcom' }),
+    promo({ retailer: 'hockeycity', kind: 'sale' }),
     promo({ retailer: 'daka', kind: 'geen' }),
-    promo({ retailer: 'hockeycity', status: 'niet-gecontroleerd', verifiedAt: null }),
   ];
 
-  it('counts running and announced actions and gives the confirmed dates, soonest first', () => {
-    expect(campaignHighlights(promos, '2026-11-10', 'voor', label)).toEqual({
-      withAction: 3,
-      total: 5,
-      facts: ['Plutosport tot en met 15 november', 'PassaHockey vanaf 20 november'],
-      lastCheck: '2026-11-10',
-    });
+  it('counts only Black Friday actions, never a regular sale or a shop without action', () => {
+    const card = campaignCard(promos, '2026-11-10', 'voor', label);
+    expect(card.running).toBe(2);
+    expect(card.announced).toBe(1);
+    expect(card.shops).toEqual(['bolcom', 'plutosport', 'passasports']);
   });
 
-  it('drops an action once it has ended', () => {
-    const h = campaignHighlights(promos.map((p) => ({ ...p, verifiedAt: p.verifiedAt && '2026-11-16' })), '2026-11-16', 'voor', label);
-    expect(h.facts).toEqual(['PassaHockey vanaf 20 november']);
-    expect(h.withAction).toBe(2);
+  it('puts the nearest end first, then the start', () => {
+    const card = campaignCard(promos, '2026-11-10', 'voor', label);
+    expect(card.urgent.map((u) => [u.promo.retailer, u.timing.kind])).toEqual([
+      ['plutosport', 'stopt'],
+      ['passasports', 'begint'],
+    ]);
   });
 
-  it('names no numbers when every check is older than 14 days', () => {
-    const h = campaignHighlights(promos, '2026-11-25', 'voor', label);
-    expect(h.lastCheck).toBeNull();
-    expect(h.withAction).toBe(0);
+  it('an end further than 7 days away is not urgent', () => {
+    const card = campaignCard([promo({ endsAt: '2026-11-30' })], '2026-11-10', 'voor', label);
+    expect(card.urgent).toEqual([]);
+  });
+
+  it('drops an ended action', () => {
+    const card = campaignCard(promos, '2026-11-16', 'voor', label);
+    expect(card.shops).toEqual(['bolcom', 'passasports']);
+    expect(card.urgent.map((u) => u.promo.retailer)).toEqual(['passasports']);
   });
 });

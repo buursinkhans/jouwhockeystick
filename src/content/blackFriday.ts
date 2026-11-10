@@ -1,11 +1,13 @@
-import type { CampaignEdition, ShopPromo } from '@/lib/campaign';
+import type { CampaignCard, CampaignEdition, PromoTiming, ShopPromo } from '@/lib/campaign';
+import type { RetailerId } from '@/lib/retailers';
 
 /**
  * /black-friday-hockey: one URL that comes back every year (decision log
  * 2026-11-10). Everything that changes per year or per shop lives here.
  *
  * A shop action changes? Edit its entry in BLACK_FRIDAY_PROMOS: set `kind`,
- * the dates the shop states, `verifiedAt` (the day you checked the shop's own
+ * `name` (the shop's own name for the action, as on its page), `audience` (who
+ * can use it, as the shop states it), the dates the shop states, `verifiedAt` (the day you checked the shop's own
  * page), a short `summary`, `conditions`, `sourceUrl` and `url`. Never a
  * percentage or a former price: we have no verifiable reference price
  * (CLAUDE.md, Commerce). A check older than 14 days shows as "nog niet
@@ -25,8 +27,11 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   {
     retailer: 'bolcom',
     kind: 'black-friday',
+    name: 'Black Friday',
+    audience: null,
     status: 'gecontroleerd',
-    categories: ['algemeen'],
+    // The page names no product groups and no hockey.
+    categories: [],
     startsAt: null,
     endsAt: null,
     verifiedAt: '2026-11-10',
@@ -38,6 +43,8 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   {
     retailer: 'hockeycity',
     kind: 'sale',
+    name: 'Sale',
+    audience: null,
     status: 'gecontroleerd',
     categories: ['hockey'],
     startsAt: null,
@@ -51,6 +58,9 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   {
     retailer: 'passasports',
     kind: 'black-friday',
+    // The page's own words: "Black Friday aanbiedingen", for everyone from 20 November.
+    name: 'Black Friday-aanbiedingen',
+    audience: null,
     // Checked by the owner in the browser on 2026-11-10 (the page blocks automated reads).
     status: 'gecontroleerd',
     categories: ['hockey'],
@@ -64,10 +74,14 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   },
   {
     retailer: 'plutosport',
-    kind: 'nieuwsbrief',
+    kind: 'black-friday',
+    // The page's own name and the code it needs (www.plutosport.nl/black-friday).
+    name: 'Black Friday Early Access',
+    audience: 'met een code via de nieuwsbrief',
     // Checked by the owner in the browser on 2026-11-10 (the page blocks automated reads).
     status: 'gecontroleerd',
-    categories: ['algemeen'],
+    // "op alles", in the shop's words.
+    categories: ['alles'],
     startsAt: '2026-11-06',
     endsAt: '2026-11-15',
     verifiedAt: '2026-11-10',
@@ -79,6 +93,8 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   {
     retailer: 'daka',
     kind: 'geen',
+    name: null,
+    audience: null,
     // Checked by the owner in the browser on 2026-11-10; the owner checks daily.
     status: 'gecontroleerd',
     categories: [],
@@ -133,17 +149,9 @@ export const BLACK_FRIDAY = {
     intro: 'Per partnerwinkel staat hier wat de winkel zelf over zijn actie zegt en wanneer we dat hebben nagekeken. Kortingspercentages noemen we niet: dat doet de winkel op zijn eigen pagina, met de voorwaarden.',
     order: 'Volgorde: eerst lopende acties, dan aangekondigde, dan winkels zonder of met nog niet nagekeken actie; daarbinnen op naam. De vergoeding van een winkel speelt geen rol.',
     afgelopen: `De acties van Black Friday ${year} zijn afgelopen. Volgend jaar staan de nieuwe acties hier.`,
-    stateLabel: {
-      actueel: 'Loopt nu',
-      binnenkort: 'Aangekondigd',
-      geen: 'Geen actie gevonden',
-      onbekend: 'Nog niet nagekeken',
-      afgelopen: 'Afgelopen',
-    },
     kindLabel: {
       'black-friday': 'Black Friday-actie',
       sale: 'Sale',
-      nieuwsbrief: 'Actie voor nieuwsbriefleden',
       geen: 'Geen actie',
     },
   },
@@ -243,11 +251,108 @@ export const BLACK_FRIDAY = {
   campaignNote: `Black Friday is op ${nlDate(day)}: zie welke hockeywinkels een actie hebben.`,
   /** The band under the homepage hero (CampaignBand) and the links in the search block and the top bar. */
   homeBand: {
-    eyebrow: `Black Friday · ${nlDate(day).replace(` ${year}`, '')}`,
-    heading: { voor: 'Hockeyacties per winkel, nagekeken', actief: 'Het is Black Friday-weekend' },
-    fallback: 'Zie per winkel welke actie er is, en vergelijk hockeysticks en hockeyschoenen op prijs.',
-    cta: 'Bekijk de acties per winkel',
+    eyebrow: { bezig: 'Black Friday · nu al bezig', datum: `Black Friday · ${nlDate(day).replace(` ${year}`, '')}` },
+    /** Without a current Black Friday action (or without a check of the last 14 days). */
+    emptyHeading: `Black Friday is op ${nlDate(day).replace(` ${year}`, '')}`,
+    emptyLine: 'Zie per winkel of er een actie is, en vergelijk hockeysticks en hockeyschoenen op prijs.',
+    cta: 'Bekijk de acties',
+    stickwijzer: { prefix: 'Eerst weten welke stick je nodig hebt?', label: 'Doe de stickwijzer' },
   },
   shortcutLabel: 'Black Friday',
   barLabel: 'Black Friday-acties',
 } as const;
+
+/* ---------- dynamic texts (decision log 2026-11-10, second version) ---------- */
+
+const MONTHS_SHORT = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+const shortDate = (date: string) => `${Number(date.slice(8, 10))} ${MONTHS_SHORT[Number(date.slice(5, 7)) - 1]}`;
+const dayMonth = (date: string) => nlDate(date).replace(/ \d{4}$/, '');
+
+/** "Plutosport Black Friday Early Access", or the shop alone without a name of its own. */
+export const actionName = (promo: ShopPromo, shop: string) => (promo.name ? `${shop} ${promo.name}` : shop);
+
+const CATEGORY_TEXT: Record<ShopPromo['categories'][number], string> = {
+  alles: 'het hele assortiment',
+  hockey: 'hockey',
+  hockeysticks: 'hockeysticks',
+  hockeyschoenen: 'hockeyschoenen',
+};
+/** "op het hele assortiment", only when the shop states it. */
+export const categoryText = (promo: ShopPromo) =>
+  promo.categories.length ? `op ${promo.categories.map((c) => CATEGORY_TEXT[c]).join(' en ')}` : null;
+
+const joinNl = (items: readonly string[]) =>
+  items.length <= 1 ? (items[0] ?? '') : `${items.slice(0, -1).join(', ')} en ${items[items.length - 1]}`;
+
+/** The urgent part of a line on the card: "stopt over 5 dagen (t/m 15 nov)", "begint 20 nov". */
+export function cardTimingText(timing: CampaignCard['urgent'][number]['timing']): string {
+  switch (timing.kind) {
+    case 'laatste-dag':
+      return 'laatste dag';
+    case 'stopt':
+      return timing.days === 1 ? 'stopt morgen' : `stopt over ${timing.days} dagen (t/m ${shortDate(timing.endsAt)})`;
+    case 'begint':
+      return timing.days === 1 ? 'begint morgen' : `begint ${shortDate(timing.startsAt)}`;
+  }
+}
+
+export type CardText = {
+  eyebrow: string;
+  heading: string;
+  /** The first line shows on every screen, the rest from tablet width. */
+  lines: string[];
+  /** "Nagekeken op 10 november bij de winkels zelf.", or null without a check of the last 14 days. */
+  checked: string | null;
+};
+
+/** The texts of the homepage card, from campaignCard(). Shops without a Black Friday action are never named. */
+export function cardText(card: CampaignCard, label: (retailer: RetailerId) => string): CardText {
+  const total = card.running + card.announced;
+  const band = BLACK_FRIDAY.homeBand;
+  if (total === 0 || !card.lastCheck) {
+    return { eyebrow: band.eyebrow.datum, heading: band.emptyHeading, lines: [band.emptyLine], checked: null };
+  }
+  const shops = total === 1 ? 'hockeywinkel' : 'hockeywinkels';
+  const has = total === 1 ? 'heeft' : 'hebben';
+  const heading =
+    card.running === total
+      ? `${total} ${shops} ${has} nu een Black Friday-actie`
+      : card.running === 0
+        ? `${total} ${shops} ${has} een Black Friday-actie aangekondigd`
+        : `${total} ${shops} ${has} een Black Friday-actie`;
+  const urgent = card.urgent.map(({ promo, timing }) => {
+    const shop = label(promo.retailer);
+    const who = timing.kind === 'begint' ? shop : actionName(promo, shop);
+    const sep = timing.kind === 'laatste-dag' ? ': ' : ' ';
+    return `${who}${sep}${cardTimingText(timing)}${promo.audience ? `, ${promo.audience}` : ''}`;
+  });
+  const shopLine = `${card.running > 0 ? 'Nu bezig bij' : 'Bij'} ${joinNl(card.shops.map(label))}.`;
+  return {
+    eyebrow: card.running > 0 ? band.eyebrow.bezig : band.eyebrow.datum,
+    heading,
+    lines: urgent.length ? [urgent[0] ?? '', ...urgent.slice(1, 2), shopLine] : [shopLine],
+    checked: `Nagekeken op ${dayMonth(card.lastCheck)} bij de winkels zelf.`,
+  };
+}
+
+/** The status of a shop on /black-friday-hockey: "Nu bezig, stopt over 5 dagen (t/m 15 november)". */
+export function pageTimingText(timing: PromoTiming): string {
+  switch (timing.kind) {
+    case 'laatste-dag':
+      return 'Nu bezig, laatste dag';
+    case 'stopt':
+      return `Nu bezig, stopt ${timing.days === 1 ? 'morgen' : `over ${timing.days} dagen`} (t/m ${dayMonth(timing.endsAt)})`;
+    case 'loopt':
+      return 'Nu bezig';
+    case 'begint':
+      return timing.days === 1 ? 'Begint morgen' : `Begint op ${dayMonth(timing.startsAt)}`;
+    case 'aangekondigd':
+      return 'Aangekondigd';
+    case 'afgelopen':
+      return 'Afgelopen';
+    case 'geen':
+      return 'Geen actie gevonden';
+    case 'onbekend':
+      return 'Nog niet nagekeken';
+  }
+}
