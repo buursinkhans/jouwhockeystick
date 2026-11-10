@@ -45,7 +45,7 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 |---|---|---|
 | 0 | Proef: SlideArt in de repo, `social-render.yml`, bewijs dat Metricool de bestanden ophaalt | Bewezen op 2026-11-10 (PR #200) |
 | 1 | Kern: Publiceerder, teller voor het Metricool-tegoed, merkplatform, uitgebreide redactiecontrole | Bewezen op 2026-11-10 (PR #201); Publiceerder staat aan |
-| 2 | Nieuwe studio in `social/studio/index.html`: één statusregel, kaarten met echte preview, Goedkeuren en Aanpassen | Nog niet gestart |
+| 2 | Nieuwe studio in `social/studio/index.html`: één statusregel, kaarten met echte preview, Goedkeuren en Aanpassen | Gebouwd en gepubliceerd (versie 25); de eigenaar test op de telefoon |
 | 3 | Onderzoeker, leren van resultaten, gepaarde tests, Pulse, Push en Peak in het kwartaalplan | Nog niet gestart |
 | 4 | Configuratie per site, woordenlijst BE, Weekrapport en KPI-definities | Nog niet gestart |
 
@@ -69,7 +69,16 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 - **Klaar (2026-11-10, na de merge):** een run vanaf `main` las het goedgekeurde proefitem, sloeg de beelden en de Metricool-gegevens op in de stand en koppelde de bestaande post in Metricool, zonder een tweede te maken en zonder één toestemmingsvraag. In Metricool staat één concept (Instagram en Facebook, 28 november 19:30, drie beelden); het tegoed staat op 1 van 20. De Publiceerder draait sindsdien elk uur.
 - **Nog niet in fase 1:** de studio laat de status uit de stand of uit Metricool nog niet zien (fase 2). De Social-planner schrijft zelf nog in de studio en vraagt daarvoor per run toestemming; dat lossen we op in fase 2 of 3.
 
-### Fase 2 tot en met 4
+### Fase 2: nieuwe studio
+
+- **`social/studio/index.html`** met de publiceerinstructie in `social/studio/README.md`. Gepubliceerd naar de bestaande url (versie 25), met dezelfde database.
+- **Statusregel.** Oranje bij: een goedgekeurd item dat na ruim een uur nog niet in Metricool staat (knop: nu opnieuw proberen), items om te keuren (knop: bekijken), of minder dan het ritme volgende week (knop: nu laten aanvullen). Anders groen.
+- **Kaarten.** De komende 14 dagen, met Goedkeuren en Aanpassen; Intrekken na goedkeuren. De tabs zijn Te keuren (met Alles goedkeuren), Kalender en Cijfers.
+- **Voorbeelden en status.** De voorbeelden tekent de pagina met dezelfde renderers als de workflow, want een artifact mag geen beelden van GitHub laden. De status komt uit Metricool via de koppeling van de eigenaar, alleen lezen.
+- **Vaste series in `slideart.js`.** Een eigen openingsslide per serie (achtergrond en motief, geen nieuwe kleuren). De planner geeft een post het veld `serie`.
+- **Vervallen in de studio:** downloads, de oude YouTube-route via GitHub, community, markt en kwartaalplan. Hun gegevens blijven in de database.
+
+### Fase 3 en 4
 
 Zoals in de opdracht van 10 november 2026. Per fase komt hier een korte samenvatting bij zodra die start.
 
