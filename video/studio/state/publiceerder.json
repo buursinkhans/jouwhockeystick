@@ -130,9 +130,28 @@
     },
     "videos/20261120-stick-op-de-groei": {
       "render": {
-        "gestart": "2026-11-10T15:22:21Z"
+        "gestart": "2026-11-10T15:22:21Z",
+        "klaar": "2026-11-10T15:25:14Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "reel": {
+          "name": "20261120-stick-op-de-groei-reel.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261120-stick-op-de-groei-reel.mp4"
+        },
+        "reelCover": {
+          "name": "20261120-stick-op-de-groei-reel-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261120-stick-op-de-groei-reel-cover.png"
+        },
+        "short": {
+          "name": "20261120-stick-op-de-groei-short.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261120-stick-op-de-groei-short.mp4"
+        },
+        "shortCover": {
+          "name": "20261120-stick-op-de-groei-short-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261120-stick-op-de-groei-short-cover.png"
+        }
+      }
     },
     "posts/20261113-veld-of-zaalstick": {
       "render": {
@@ -159,7 +178,7 @@
     "gebruikt": 4,
     "grens": 20
   },
-  "wijziging": "15c95869-570e-426f-82b0-37c8fbf12140",
+  "wijziging": "562b159a-67c3-4c0a-b183-b810d98cb055",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
