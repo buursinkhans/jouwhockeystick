@@ -64,16 +64,19 @@
       "fout": null,
       "kanalen": {
         "insta": {
-          "bezig": "2026-11-10T14:07:28Z"
+          "id": 423201700,
+          "uuid": "7481316443998604276",
+          "moment": "2026-11-10T19:30:00",
+          "op": "2026-11-10T14:07:55Z"
         }
       }
     }
   },
-  "laatsteRun": "2026-11-10T13:31:29Z",
+  "laatsteRun": "2026-11-10T14:07:55Z",
   "tegoed": {
     "maand": "2026-11",
-    "gebruikt": 1,
+    "gebruikt": 2,
     "grens": 20
   },
-  "wijziging": "733a9ae3-5f83-45ce-af3b-a611ce7b3828"
+  "wijziging": "c97ec977-70f5-46d6-becd-2418942cecd5"
 }
