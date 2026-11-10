@@ -2838,7 +2838,8 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Schoenen:** curated modellen met minstens één actuele winkelprijs, één per merk.
 - **Alle vijf partnerwinkels** staan erin, ook HockeyCity, die in de opdracht niet werd genoemd. Zo lijkt de pagina niet op een advertentie voor één winkel. De volgorde: eerst lopende acties, daarbinnen op naam; nooit op vergoeding.
 - **PassaSports:** de eigenaar las de actiepagina op 2026-11-10 in de browser: Black Friday-aanbiedingen vanaf vrijdag 20 november, zonder einddatum en zonder genoemde producten. Die staat nu als aangekondigd, met knop. Een jaartal staat niet op de pagina; voor 27 november opnieuw nakijken.
-- **Niet nagekeken is geen claim.** PassaSports en Plutosport gaven op 2026-11-10 een 403, Daka een 429. We hebben de blokkade niet omzeild. Plutosport en Daka staan op "nog niet nagekeken", zonder knop, tot de eigenaar of een volgende controle de actie bevestigt.
+- **Plutosport:** de eigenaar las www.plutosport.nl/black-friday op 2026-11-10: Black Friday Early Access met een persoonlijke code na aanmelding voor de nieuwsbrief, tot en met 15 november (nieuwsbriefleden kregen hem op 6 november). Het percentage nemen we niet over. Na 15 november staat de actie vanzelf op afgelopen.
+- **Niet nagekeken is geen claim.** PassaSports en Plutosport gaven op 2026-11-10 een 403, Daka een 429. We hebben de blokkade niet omzeild. Daka staat op "nog niet nagekeken", zonder knop, tot de eigenaar of een volgende controle de actie bevestigt.
 - **Wat wel is nagekeken (2026-11-10):**
   - bol.com: de Black Friday-pagina staat online, zonder datums, en hockey wordt niet apart genoemd;
   - HockeyCity: een sale-pagina, geen Black Friday-actie en geen einddatum.

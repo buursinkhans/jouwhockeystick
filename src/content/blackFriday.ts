@@ -65,15 +65,16 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   {
     retailer: 'plutosport',
     kind: 'nieuwsbrief',
-    status: 'niet-gecontroleerd',
-    categories: [],
-    startsAt: null,
-    endsAt: null,
-    verifiedAt: null,
-    summary: 'We konden de actievoorwaarden van Plutosport nog niet nalezen. Zodra dat lukt, staat hier wat de actie is, voor wie en tot wanneer.',
-    conditions: null,
-    sourceUrl: 'https://www.plutosport.nl/actievoorwaarden',
-    url: 'https://www.plutosport.nl/actievoorwaarden',
+    // Checked by the owner in the browser on 2026-11-10 (the page blocks automated reads).
+    status: 'gecontroleerd',
+    categories: ['algemeen'],
+    startsAt: '2026-11-06',
+    endsAt: '2026-11-15',
+    verifiedAt: '2026-11-10',
+    summary: 'Plutosport heeft een Black Friday Early Access: wie zich aanmeldt voor de nieuwsbrief, krijgt een persoonlijke kortingscode. Volgens de winkel geldt die op het hele assortiment.',
+    conditions: 'Alleen met de persoonlijke code, die je per mail krijgt na aanmelding. Nieuwsbriefleden kregen hem op 6 november. Uitzonderingen staan in de actievoorwaarden van Plutosport.',
+    sourceUrl: 'https://www.plutosport.nl/black-friday',
+    url: 'https://www.plutosport.nl/black-friday',
   },
   {
     retailer: 'daka',
@@ -208,7 +209,7 @@ export const BLACK_FRIDAY = {
       },
       {
         question: 'Wanneer beginnen de Black Friday-aanbiedingen voor hockey?',
-        answer: 'Dat verschilt per winkel. PassaHockey kondigt zijn Black Friday-aanbiedingen aan vanaf vrijdag 20 november. bol.com had zijn Black Friday-pagina op 10 november al online, zonder begin- en einddatum. Bij de andere winkels noemen we een datum zodra de winkel die zelf vermeldt en we die hebben nagekeken.',
+        answer: 'Dat verschilt per winkel. Plutosport had al een Early Access met een persoonlijke code, tot en met 15 november. PassaHockey kondigt zijn Black Friday-aanbiedingen aan vanaf vrijdag 20 november. bol.com had zijn Black Friday-pagina op 10 november al online, zonder begin- en einddatum. Bij de andere winkels noemen we een datum zodra de winkel die zelf vermeldt en we die hebben nagekeken.',
       },
       {
         question: 'Zijn hockeysticks tijdens Black Friday echt goedkoper?',
