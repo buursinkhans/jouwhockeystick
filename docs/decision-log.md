@@ -2880,3 +2880,24 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Proef al vóór de merge.** Bij een pull request die de renderer raakt, rendert de workflow één testpost (`video/studio/fixtures/test-post.json`). Dat gebeurt alleen voor branches van deze repo, niet voor forks.
 - **`render.mjs`:** een Reel heet nu `<id>-reel.mp4` (die viel eerder onder de naam "youtube"), en de Reel-cover komt erbij. De namen van Short en YouTube-video blijven gelijk.
 - **Zod staat nu ook in de installatiestap van `video-publiceren.yml`**, omdat de tests in `video/studio` het nodig hebben.
+
+## 2026-11-10 — Social-machine 2.0, fase 1: Publiceerder, tegoedteller, merkplatform en redactiecontrole
+
+**Gebouwd:**
+- **[publiceerder.md](marketing/publiceerder.md):** de opdracht van de nieuwe geplande taak Publiceerder (`trig_01WshnXeQ89cRtc5Xks53xge`, elk uur en na een tik).
+  - De taak zoekt goedgekeurde items en start `social-render.yml` via `gh api`. Daarna wacht hij tot de url's antwoorden, schrijft `metricoolAkkoord.media` en plant per kanaal in volgens de regels die eerder STAP 5 van de Social-planner waren: bezig, uuid, nooit dubbel, onzeker bij twijfel.
+  - Hij verwerkt ook intrekken, zet fouten in `metricoolFout` en schrijft de stand in `state/publiceerder`.
+  - `social-planner.md` plant zelf niets meer in en verwijst naar de Publiceerder.
+- **`video/studio/social-plan.mjs` en `social-names.mjs`:** maken van een studio-document het render-item en de vaste url's, zonder dependencies. De volledige Zod-controle blijft in de workflow (`social-items.mjs`).
+- **Teller voor het Metricool-tegoed** (`src/marketing/metricoolBudget.ts`, `npm run marketing:budget`). Per maand telt elke Metricool-post één keer per uuid, uit getScheduledPosts en de studio. Instagram met Facebook samen is één post. Bij de grens plant de Publiceerder niets meer in, met een duidelijke melding. De grens is `METRICOOL_MONTHLY_LIMIT` (20, het gratis plan).
+- **[merkplatform.md](marketing/merkplatform.md):** het merkplatform uit bijlage A. De Social-planner en de content-agent lezen het.
+- **Redactiecontrole** (`editorCheck.ts`). Nieuw zijn de regels die een patroon kan vaststellen: geen live pagina (P0, met een lijst live pagina's), verkooppraat, een eerste beeld van meer dan 6 woorden, geen feit met getal of bron, en een te lange vervolgstap (P1). `MANUAL_CHECKS` noemt wat een mens of de planner zelf nagaat: helpt het de lezer, herkenning en belofte. De pilot-items zijn van vóór het merkplatform; sommige moeten op de nieuwe regels worden herschreven voor ze worden goedgekeurd.
+- **Studio (versie 23):** Goedkeuren schrijft alleen nog `metricoolAkkoord: {op, v: 2}` en start de Publiceerder. Er wordt niets meer in de browser gerenderd en Google Drive is niet meer nodig. Goedkeuren werkt daardoor op elke telefoon en in elke browser.
+
+**Besluiten:**
+- **Alleen goedkeuringen met `v: 2` tellen.** De oude goedkeuringen kwamen van de studio van vóór 10 november; toen betekende goedkeuren "concept in Metricool". Die items staan in de studio als "opnieuw goedkeuren". Zo gaat er niets online zonder een akkoord met de nieuwe betekenis.
+- **Een proefitem (`test: true`)** gaat met testbestanden en alleen als concept naar Metricool (`draft: true`, `autoPublish: false`, "PROEF: " voor de tekst). Het verandert de kanalen in de studio niet.
+- **In de cloud is npm niet bereikbaar.** Wat de Publiceerder draait, gebruikt daarom alleen Node. `gh api` werkt met de toegang van de sessie, ook zonder `add_repo`.
+- **Toestemming vooraf.** Een geplande taak kan geen toestemmingsvraag beantwoorden. De Publiceerder heeft daarom vooraf toestemming voor ArtifactData en voor getScheduledPosts, createScheduledPost en updateScheduledPost van Metricool. Verwijderen kan de Metricool-connector niet.
+- **Proefrun (2026-11-10).** De Publiceerder las de studio, maakte het plan voor het proefitem en startte `social-render.yml` via `gh api` (HTTP 204). De workflow maakte de drie beelden. Achter de proxy van de cloudsessie geeft GitHub op HEAD een 401; een kleine GET (`-r 0-0`) werkt, en de opdracht gebruikt nu die.
+- **Open: schrijven in de studio vraagt per run toestemming.** Elke run vraagt bij de eerste schrijfactie in de studio-database om toestemming ("Approving covers data edits to any artifact for the rest of this session"). Dat gold ook voor de Social-planner op 9 november, die met de hand werd goedgekeurd. ArtifactData in de toegestane tools van de routine helpt niet. Een vaste auto mode-regel heb ik niet gezet: die omzeilt de toestemmingscontrole, dus dat besluit ligt bij de eigenaar. Tot dat besluit staat de Publiceerder uit en is fase 1 niet af.

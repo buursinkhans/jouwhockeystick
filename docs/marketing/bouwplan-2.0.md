@@ -44,7 +44,7 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 | Fase | Inhoud | Status |
 |---|---|---|
 | 0 | Proef: SlideArt in de repo, `social-render.yml`, bewijs dat Metricool de bestanden ophaalt | Bewezen op 2026-11-10 (PR #200) |
-| 1 | Kern: Publiceerder, teller voor het Metricool-tegoed, merkplatform, uitgebreide redactiecontrole | Nog niet gestart |
+| 1 | Kern: Publiceerder, teller voor het Metricool-tegoed, merkplatform, uitgebreide redactiecontrole | Gebouwd (PR); open: toestemming om in de studio te schrijven |
 | 2 | Nieuwe studio in `social/studio/index.html`: één statusregel, kaarten met echte preview, Goedkeuren en Aanpassen | Nog niet gestart |
 | 3 | Onderzoeker, leren van resultaten, gepaarde tests, Pulse, Push en Peak in het kwartaalplan | Nog niet gestart |
 | 4 | Configuratie per site, woordenlijst BE, Weekrapport en KPI-definities | Nog niet gestart |
@@ -58,7 +58,16 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 
 **Uitkomst (2026-11-10):** de proefrun bij PR #200 maakte zes PNG's (1080 × 1350) van de post `20261113-veld-of-zaalstick`, elk op een openbare url (`test-…-1.png` tot en met `-6.png`). Met drie daarvan stond daarna een concept in Metricool (Instagram, `draft: true`, `autoPublish: false`, 28 november). Metricool kopieerde de beelden naar zijn eigen opslag. Netlify als opslag is dus niet nodig.
 
-### Fase 1 tot en met 4
+### Fase 1: kern
+
+- [publiceerder.md](publiceerder.md): de opdracht van de Publiceerder. STAP 5 van de Social-planner verhuist hierheen.
+- `video/studio/social-plan.mjs` en `social-names.mjs`: render-item en url's uit een studio-document, zonder dependencies.
+- `src/marketing/metricoolBudget.ts` en `npm run marketing:budget`: de teller voor het Metricool-tegoed (grens 20).
+- [merkplatform.md](merkplatform.md) en de uitgebreide redactiecontrole in `editorCheck.ts`.
+- Studio versie 23: Goedkeuren schrijft alleen het akkoord (`v: 2`) en start de Publiceerder.
+- **Proef (2026-11-10):** het starten van de render en het maken van de beelden werkten vanuit de cloud. Het open punt: elke run vraagt één keer toestemming om in de studio te schrijven (zie de decision log).
+
+### Fase 2 tot en met 4
 
 Zoals in de opdracht van 10 november 2026. Per fase komt hier een korte samenvatting bij zodra die start.
 
