@@ -253,11 +253,9 @@
           "moment": "2026-11-20T19:30:00",
           "op": "2026-11-10T15:34:53Z"
         },
-        "tiktok": {
-          "bezig": "2026-11-10T21:57:49Z"
-        }
+        "tiktok": {}
       },
-      "fout": null
+      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt."
     },
     "posts/20261113-veld-of-zaalstick": {
       "render": {
@@ -366,13 +364,13 @@
       }
     }
   },
-  "laatsteRun": "2026-11-10T21:56:37Z",
+  "laatsteRun": "2026-11-10T21:58:21Z",
   "tegoed": {
     "maand": "2026-11",
     "gebruikt": 14,
     "grens": 20
   },
-  "wijziging": "a2f8a660-d056-4572-a810-69047abf0374",
+  "wijziging": "790c0c7d-92cb-4240-81aa-b3079c99b7d2",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
