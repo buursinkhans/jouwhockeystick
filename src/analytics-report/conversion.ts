@@ -52,6 +52,12 @@ export type ConversionData = {
    * Undefined when PostHog could not answer.
    */
   aiLandingPages?: Count[];
+  /**
+   * Stickwijzer starts (`quiz_start`) per social source, from the session's entry
+   * UTM (utm_medium=social): the north star of the marketing machine
+   * (docs/marketing/weekrapport.md). Undefined when PostHog could not answer.
+   */
+  socialStarts?: Count[];
   /** `home_block_click` per "block → target". */
   homeBlocks: Count[];
   deadClicksByPage: Count[];
@@ -183,6 +189,19 @@ export function sourcesWithAiVisits(byReferrer: readonly Count[], aiVisits: read
   const totals = new Map<string, Count>();
   for (const row of aiLandingRows(aiVisits)) addTo(totals, `AI-assistent: ${row.key.split(' → ')[0]}`, row);
   return [...other, ...totals.values()].sort(byCount);
+}
+
+/** Stickwijzer starts per social source; the empty key is "not from social" and stays out. */
+export function socialSection(starts: readonly Count[] | undefined): string[] {
+  if (!starts) return ['_PostHog kon dit deze week niet beantwoorden._'];
+  const rows = starts.filter((c) => c.key);
+  if (!rows.length) return ['_Geen stickwijzer-starts uit social deze week of vorige week._'];
+  const total = rows.reduce((a, c) => ({ key: 'Totaal', now: a.now + c.now, before: a.before + c.before }), { key: 'Totaal', now: 0, before: 0 });
+  return [
+    table(['Bron', 'Deze week', 'Vorige week', 'Verschil'], countRows([...rows, total])),
+    '',
+    '_Per start van de stickwijzer, toegekend aan de bron waarmee het bezoek binnenkwam (utm_medium=social). Dit is de noordster van de marketingmachine._',
+  ];
 }
 
 function aiSection(visits: readonly Count[] | undefined): string[] {
@@ -517,6 +536,10 @@ export function formatReport(
     table(['Bron', 'Deze week', 'Vorige week', 'Verschil'], countRows(sourcesWithAiVisits(data.visitorsByReferrer, data.aiLandingPages))),
     '',
     '_Per bezoeker per dag. "Direct" is ook een link uit WhatsApp, e-mail of een app, en je eigen bezoeken: die geven geen bron mee._',
+    '',
+    '### Stickwijzer-starts uit social',
+    '',
+    ...socialSection(data.socialStarts),
     '',
     '### Bezoeken uit AI-assistenten, per landingspagina',
     '',

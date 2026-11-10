@@ -97,6 +97,8 @@ Een vaste set van tien vragen, eens per maand met de hand in ChatGPT, Perplexity
 
 Eén issue per week (label `marketing`), maandag, na de bestaande rapporten. De orchestrator leest ze al; het weekrapport wordt een extra sectie in zijn weekplanning, geen vijfde rapport. Inhoud: SEO (uit het Search Console-rapport), GEO (AI-verkeer en de laatste maandmeting), social (Metricool: bereik, nieuwe volgers, beste post per kanaal), website (PostHog: bezoek, keuzehulpen, vergelijker, winkelkliks) en een samenvatting met drie inzichten, drie acties en hooguit één beslissing. Ontbrekende data staat er als ontbrekend in. Bouwen in fase 2, na de proef in §3.
 
+> **Sinds 10 november 2026** loopt de marketingmachine volgens [bouwplan-2.0.md](bouwplan-2.0.md): goedkeuren met één tik in de studio, beelden uit GitHub Actions, de Publiceerder naar Metricool, de Onderzoeker met voorstellen in een GitHub-issue, en het Weekrapport. Waar dit bestand iets anders zegt, gaat het bouwplan voor.
+
 ## 8. Fasen en kosten
 
 | Prioriteit | Onderdeel | Status |
@@ -107,7 +109,7 @@ Eén issue per week (label `marketing`), maandag, na de bestaande rapporten. De 
 | P0 | Cloud: planner met Metricool-connector | Proefrun nodig (§3) |
 | P1 | Social-planner: redactiecontrole en status uit Metricool terug in de studio | Klaar ([social-planner.md](social-planner.md)) |
 | P1 | Goedgekeurde items automatisch online via Metricool | Gebouwd: goedkeurknop in de studio, beelden via Google Drive, STAP 5 in de planner. Eerste echte post bewijst de keten |
-| P1 | Weekrapport en GEO-meting | Fase 2 |
+| P1 | Weekrapport en GEO-meting | Weekrapport gebouwd in Social-machine 2.0, fase 4 ([weekrapport.md](weekrapport.md)); GEO-meting nog niet |
 | P2 | E-mail met expliciete opt-in, video op schaal, campagne-orkestratie | Later; geen leverancier gekozen |
 
 Kosten nu: geen nieuwe. Metricool gratis plan, PostHog en Search Console zoals nu, routines binnen het bestaande Claude-abonnement.

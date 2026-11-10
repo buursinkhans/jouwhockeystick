@@ -5,7 +5,8 @@
  * facts (report issues, Metricool, the calendar, the live pages) and passes
  * them in.
  */
-import { momentsOn, pushOn, type Market } from './calendar';
+import { momentsOn, pushOn } from './calendar';
+import { market, type SiteConfig } from './siteConfig';
 
 export type IdeaFacts = {
   onderwerp: string;
@@ -13,11 +14,12 @@ export type IdeaFacts = {
   pagina: string | null;
   /** Evidence of demand, e.g. a Search Console query with impressions or a question from the community; null when none. */
   vraag: { bron: string; signaal: string } | null;
-  /** The pillar of the idea (docs/marketing/merkplatform.md). */
-  pijler: 'maat' | 'spel' | 'zaal' | 'vergelijken';
+  /** The pillar of the idea: an id from `pijlers` in the site configuration. */
+  pijler: string;
   /** The planned day (YYYY-MM-DD) and market. */
   datum: string;
-  markt: Market;
+  /** A market id from the site configuration. */
+  markt: string;
   /** How the form (or series) did before: median index against the channel median (1 = as usual) and the number of posts. */
   vorm: { naam: string; index: number; posts: number } | null;
   /** YYYY-MM-DD of the last post on this page, or null if it never had one. */
@@ -33,16 +35,17 @@ export const MIN_POSTS = 5;
 /** Six weeks without a post on the page (docs/instagram.md §7). */
 export const PAGE_REST_DAYS = 42;
 
-export function scoreIdea(f: IdeaFacts): Score {
+export function scoreIdea(f: IdeaFacts, config: SiteConfig): Score {
   const redenen: string[] = [];
   const ontbreekt: string[] = [];
   const point = (ok: boolean, yes: string, no: string) => (ok ? redenen.push(yes) : ontbreekt.push(no));
 
   point(!!f.vraag, `Er is vraag: ${f.vraag?.signaal} (${f.vraag?.bron}).`, 'Geen teken van vraag gevonden.');
 
-  const moments = momentsOn(f.datum, f.markt).filter((m) => m.pijler === f.pijler);
-  const push = pushOn(f.datum, f.markt);
-  const fitsNow = moments.length > 0 || (push !== null && (f.pijler === 'zaal') === (push.id === 'indoor-push'));
+  const m = market(config, f.markt);
+  const moments = momentsOn(f.datum, m, config.seizoenStart).filter((x) => x.pijler === f.pijler);
+  const push = pushOn(f.datum, m, config.seizoenStart);
+  const fitsNow = moments.length > 0 || push?.pijler === f.pijler;
   point(
     fitsNow,
     `Het past nu: ${moments[0]?.naam ?? push?.naam}.`,
@@ -69,9 +72,9 @@ export function scoreIdea(f: IdeaFacts): Score {
 }
 
 /** The best ideas first; on equal points the one with a page and demand, then by subject. At most `limit`. */
-export function rankIdeas(ideas: readonly IdeaFacts[], limit = 10): { idee: IdeaFacts; score: Score }[] {
+export function rankIdeas(ideas: readonly IdeaFacts[], config: SiteConfig, limit = 10): { idee: IdeaFacts; score: Score }[] {
   return ideas
-    .map((idee) => ({ idee, score: scoreIdea(idee) }))
+    .map((idee) => ({ idee, score: scoreIdea(idee, config) }))
     .sort(
       (a, b) =>
         b.score.punten - a.score.punten ||

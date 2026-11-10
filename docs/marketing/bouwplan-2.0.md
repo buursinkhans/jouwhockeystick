@@ -47,7 +47,7 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 | 1 | Kern: Publiceerder, teller voor het Metricool-tegoed, merkplatform, uitgebreide redactiecontrole | Bewezen op 2026-11-10 (PR #201); Publiceerder staat aan |
 | 2 | Nieuwe studio in `social/studio/index.html`: één statusregel, kaarten met echte preview, Goedkeuren en Aanpassen | Gebouwd en gepubliceerd (versie 25); de eigenaar test op de telefoon |
 | 3 | Onderzoeker, leren van resultaten, gepaarde tests, Pulse, Push en Peak in het kwartaalplan | Gebouwd (PR); proefrun na de merge |
-| 4 | Configuratie per site, woordenlijst BE, Weekrapport en KPI-definities | Nog niet gestart |
+| 4 | Configuratie per site, woordenlijst BE, Weekrapport en KPI-definities | Gebouwd (PR); Weekrapport-routine na de merge |
 
 ### Fase 0: proef
 
@@ -100,7 +100,13 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
   - Het ritme is 2 posts (di en do) en 2 video's (wo en vr) per week.
 - **Studio (versie 26):** een kaart in een test toont "Test A" of "Test B".
 
-### Fase 4
+### Fase 4: motor, Vlaanderen en dashboard
+
+- **Configuratie per site:** `marketing/sites/jouwhockeystick.json`, met het Zod-schema in `src/marketing/siteConfigSchema.ts`. Daarin staan merknaam, domein, kleuren, lettertypes, kanalen, ritme, tijden, Metricool-merk en -grens, pijlers, series, partnerlink-zin, verboden claims, noordster, en de markten NL en BE met woordenlijst, kalender en Push-blokken. `marketing/sites/standaard.txt` noemt de site die de motor bedient (of `MARKETING_SITE`).
+- **De motor leest alleen de configuratie.** Dat zijn kalender, scoren, leren, testen, tegoed, het voorstellen-issue, de KPI's en de redactiecontrole. Een test faalt als een van die bestanden een woord van het onderwerp van deze site bevat (stick, zaal, bow, hockey).
+- **Woordenlijst BE:** indoor (NL zaal), lidgeld (NL contributie), U8 tot en met U19 (NL JO en MO), Sinterklaas op 6 december 's ochtends. `localize` en `foreignWords` passen hem toe en controleren hem. BE staat uit tot de eigenaar bevestigt dat bol.com/be vergoedt.
+- **KPI's:** [weekrapport.md](weekrapport.md) met de definities en de opdracht, en `src/marketing/kpi.ts`. De noordster is het aantal stickwijzer-starts uit social; het Conversie-rapport toont die nu (`quiz_start` per social-bron, uit de UTM van het bezoek). Verder de trechter, leren en gezondheid, NL en BE apart, vergeleken met het gemiddelde van 4 weken, zonder doelen.
+- **Weekrapport:** een GitHub-issue met het label `marketing`; het dashboard (Dashboard-type) leest uit die issues. De instructie staat onderaan weekrapport.md.
 
 Zoals in de opdracht van 10 november 2026. Per fase komt hier een korte samenvatting bij zodra die start.
 

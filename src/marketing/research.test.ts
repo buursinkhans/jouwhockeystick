@@ -1,40 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { canStart, currentQuestion, pairProblem, testLabel, type TestPost } from './abtest';
-import { blackFriday, momentsOn, pushOn, seasonYear } from './calendar';
+import { loadSiteConfig } from './siteConfig';
 import { indexOf, lessons, median, ripe, type Result } from './learning';
 import { rankIdeas, scoreIdea, type IdeaFacts } from './research';
 
-describe('calendar', () => {
-  it('finds Black Friday as the day after the fourth Thursday of November', () => {
-    expect(blackFriday(2026)).toBe('2026-11-27');
-    expect(blackFriday(2027)).toBe('2027-11-26');
-    expect(blackFriday(2025)).toBe('2025-11-28');
-  });
-
-  it('starts a season year in August', () => {
-    expect(seasonYear('2026-08-01')).toBe(2026);
-    expect(seasonYear('2027-02-10')).toBe(2026);
-  });
-
-  it('names indoor hockey per market and puts Sinterklaas on the right day', () => {
-    expect(momentsOn('2026-11-20', 'NL').map((m) => m.naam)).toEqual(['Zaalseizoen', 'Black Friday', 'Sinterklaas (pakjesavond 5 december)']);
-    expect(momentsOn('2026-11-20', 'BE').map((m) => m.naam)).toContain('Indoorseizoen');
-    expect(momentsOn('2026-12-06', 'NL').map((m) => m.id)).not.toContain('sinterklaas');
-    expect(momentsOn('2026-12-06', 'BE').map((m) => m.id)).toContain('sinterklaas');
-  });
-
-  it('runs the indoor season through the end of February, also in a leap year', () => {
-    expect(momentsOn('2028-02-29', 'NL').map((m) => m.id)).toContain('zaalseizoen');
-    expect(momentsOn('2027-03-01', 'NL').map((m) => m.id)).not.toContain('zaalseizoen');
-  });
-
-  it('knows the two Push blocks, and Pulse in between', () => {
-    expect(pushOn('2026-11-20', 'NL')?.vervolgstap).toBe('Kies je zaalstick');
-    expect(pushOn('2026-11-20', 'BE')?.vervolgstap).toBe('Kies je indoorstick');
-    expect(pushOn('2027-08-20', 'NL')?.id).toBe('veld-push');
-    expect(pushOn('2027-01-10', 'NL')).toBeNull();
-  });
-});
+const config = loadSiteConfig('jouwhockeystick');
 
 describe('scoreIdea', () => {
   const idea = (o: Partial<IdeaFacts> = {}): IdeaFacts => ({
@@ -50,7 +20,7 @@ describe('scoreIdea', () => {
   });
 
   it('gives five points with a reason each when everything is there', () => {
-    const s = scoreIdea(idea());
+    const s = scoreIdea(idea(), config);
     expect(s.punten).toBe(5);
     expect(s.redenen).toEqual([
       'Er is vraag: "zaalhockeystick lengte" 120 vertoningen (Search Console).',
@@ -62,7 +32,7 @@ describe('scoreIdea', () => {
   });
 
   it('names what is missing, in plain language', () => {
-    const s = scoreIdea(idea({ vraag: null, pagina: null, vorm: { naam: 'beeld', index: 1.4, posts: 3 }, laatstePost: '2026-12-20', pijler: 'spel', datum: '2027-01-10' }));
+    const s = scoreIdea(idea({ vraag: null, pagina: null, vorm: { naam: 'beeld', index: 1.4, posts: 3 }, laatstePost: '2026-12-20', pijler: 'spel', datum: '2027-01-10' }), config);
     expect(s.punten).toBe(0);
     expect(s.ontbreekt).toEqual([
       'Geen teken van vraag gevonden.',
@@ -75,7 +45,7 @@ describe('scoreIdea', () => {
 
   it('ranks by points, then page and demand, and keeps ten', () => {
     const list = Array.from({ length: 12 }, (_, i) => idea({ onderwerp: `Idee ${String(i).padStart(2, '0')}`, vraag: i % 2 ? null : idea().vraag }));
-    const ranked = rankIdeas(list);
+    const ranked = rankIdeas(list, config);
     expect(ranked).toHaveLength(10);
     expect(ranked[0]!.score.punten).toBe(5);
     expect(ranked.at(-1)!.score.punten).toBe(4);

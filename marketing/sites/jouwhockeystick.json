@@ -1,0 +1,86 @@
+{
+  "merk": {
+    "naam": "jouwhockeystick.nl",
+    "domein": "jouwhockeystick.nl",
+    "payoff": "Eerlijk stickadvies op maat",
+    "kernzin": "Eerlijk, passend advies",
+    "belofte": "In een paar minuten de juiste maat en hooguit drie sticks die passen, met de reden en de bron.",
+    "doelgroep": "Ouders van jeugdspelers en beginners in Nederland en Vlaanderen."
+  },
+  "huisstijl": {
+    "kleuren": { "primair": "#1846A3", "inkt": "#0D1B2E", "accent": "#FF8A1F", "licht": "#EEF3FA", "secundair": "#5B6B7F", "lichtOpPrimair": "#C9D6F0", "rand": "#D5DEEA" },
+    "lettertypes": { "kop": "Bricolage Grotesque", "tekst": "Instrument Sans" },
+    "accentRegel": "Het accent alleen voor de hoofdknop en de bal."
+  },
+  "noordster": { "naam": "Stickwijzer-starts uit social", "event": "quiz_start" },
+  "kanalen": ["instagram", "facebook", "youtube", "tiktok"],
+  "ritme": { "posts": 2, "videos": 2, "postdagen": ["di", "do"], "videodagen": ["wo", "vr"] },
+  "tijden": { "insta": "19:30", "reels": "19:30", "shorts": "19:30", "tiktok": "19:30", "youtube": "17:00" },
+  "metricool": { "merk": "7987234", "tijdzone": "Europe/Amsterdam", "maandlimiet": 20 },
+  "pijlers": [
+    { "id": "maat", "naam": "De juiste maat" },
+    { "id": "spel", "naam": "Kiezen op je spel" },
+    { "id": "zaal", "naam": "Zaal of indoor" },
+    { "id": "vergelijken", "naam": "Eerlijk vergelijken" }
+  ],
+  "series": [
+    { "id": "maatje", "naam": "Maatje" },
+    { "id": "kromming", "naam": "Kromming" },
+    { "id": "eerste-stick", "naam": "Eerste stick" },
+    { "id": "zaal", "naam": "Zaal en Indoor" },
+    { "id": "fih", "naam": "Wist je dat FIH", "label": "Volgens de FIH-spelregels" },
+    { "id": "nieuw", "naam": "Nieuw in de catalogus", "label": "Nieuw in onze catalogus" }
+  ],
+  "partnerlinkZin": "Op de site staan partnerlinks naar bol.com en andere winkels; daarvoor krijgen we een kleine vergoeding. Die speelt geen rol in ons advies.",
+  "verbodenClaims": [
+    "goedkoopst", "beste prijs", "scherpste prijs", "laagste prijs", "\\bde beste\\b", "\\bbeste (zaal)?stick\\b",
+    "gegarandeerd", "bewezen", "\\bkorting\\b", "\\breview\\b", "voorkomt blessures", "\\baanrader\\b"
+  ],
+  "seizoenStart": 8,
+  "markten": [
+    {
+      "id": "NL",
+      "actief": true,
+      "woordenlijst": {},
+      "kalender": [
+        { "id": "veld-start-najaar", "naam": "Start veldseizoen", "van": "08-15", "tot": "09-30", "pijler": "maat" },
+        { "id": "zaalseizoen", "naam": "Zaalseizoen", "van": "10-01", "tot": "02-29", "pijler": "zaal" },
+        { "id": "black-friday", "naam": "Black Friday", "van": "11-01", "tot": "11-30", "pijler": "vergelijken" },
+        { "id": "sinterklaas", "naam": "Sinterklaas (pakjesavond 5 december)", "van": "11-15", "tot": "12-05", "pijler": "maat" },
+        { "id": "kerst", "naam": "Kerst", "van": "12-06", "tot": "12-24", "pijler": "maat" },
+        { "id": "veld-start-voorjaar", "naam": "Veldseizoen weer van start", "van": "02-15", "tot": "03-31", "pijler": "spel" }
+      ],
+      "push": [
+        { "id": "veld-push", "naam": "Veldseizoen-Push", "van": "08-15", "tot": "09-15", "pijler": "maat", "vervolgstap": "Doe de stickwijzer" },
+        { "id": "indoor-push", "naam": "Indoor-Push", "van": "11-15", "tot": "12-15", "pijler": "zaal", "vervolgstap": "Kies je zaalstick" }
+      ]
+    },
+    {
+      "id": "BE",
+      "actief": false,
+      "actiefNotitie": "Geen Vlaamse posts tot de eigenaar bevestigt dat bol.com/be vergoedt (besluit 2026-11-10).",
+      "woordenlijst": {
+        "zaalhockey": "indoorhockey",
+        "zaalstick": "indoorstick",
+        "zaalsticks": "indoorsticks",
+        "zaalseizoen": "indoorseizoen",
+        "zaal": "indoor",
+        "contributie": "lidgeld",
+        "JO8": "U8", "JO9": "U9", "JO10": "U10", "JO11": "U11", "JO12": "U12", "JO13": "U13", "JO14": "U14", "JO15": "U15", "JO16": "U16", "JO17": "U17", "JO18": "U18", "JO19": "U19",
+        "MO8": "U8", "MO9": "U9", "MO10": "U10", "MO11": "U11", "MO12": "U12", "MO13": "U13", "MO14": "U14", "MO15": "U15", "MO16": "U16", "MO17": "U17", "MO18": "U18", "MO19": "U19"
+      },
+      "kalender": [
+        { "id": "veld-start-najaar", "naam": "Start veldseizoen", "van": "08-15", "tot": "09-30", "pijler": "maat" },
+        { "id": "zaalseizoen", "naam": "Indoorseizoen", "van": "10-01", "tot": "02-29", "pijler": "zaal" },
+        { "id": "black-friday", "naam": "Black Friday", "van": "11-01", "tot": "11-30", "pijler": "vergelijken" },
+        { "id": "sinterklaas", "naam": "Sinterklaas (6 december, ochtend)", "van": "11-15", "tot": "12-06", "pijler": "maat" },
+        { "id": "kerst", "naam": "Kerst", "van": "12-06", "tot": "12-24", "pijler": "maat" },
+        { "id": "veld-start-voorjaar", "naam": "Veldseizoen weer van start", "van": "02-15", "tot": "03-31", "pijler": "spel" }
+      ],
+      "push": [
+        { "id": "veld-push", "naam": "Veldseizoen-Push", "van": "08-15", "tot": "09-15", "pijler": "maat", "vervolgstap": "Doe de stickwijzer" },
+        { "id": "indoor-push", "naam": "Indoor-Push", "van": "11-15", "tot": "12-15", "pijler": "zaal", "vervolgstap": "Kies je indoorstick" }
+      ]
+    }
+  ]
+}
