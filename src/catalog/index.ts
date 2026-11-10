@@ -112,6 +112,7 @@ import { braboPure20Probow31563461010 } from './products/brabo-pure-20-probow-31
 import { braboTribute30Probow31562321020 } from './products/brabo-tribute-30-probow-31562321020';
 import { graysJb6Junior27055 } from './products/grays-jb-6-junior-27055';
 import { graysDynabow6Junior23274 } from './products/grays-dynabow-6-junior-23274';
+import { indianMaharadjaMoveIndoor } from './products/indian-maharadja-move-indoor';
 
 const ALL_PRODUCTS: Product[] = [
   graysJb6Composite,
@@ -211,6 +212,7 @@ const ALL_PRODUCTS: Product[] = [
   braboTribute30Probow31562321020,
   graysJb6Junior27055,
   graysDynabow6Junior23274,
+  indianMaharadjaMoveIndoor,
   braboOgeezPinkAquaJuniorIndoor,
   indianMaharadjaBlackSparkWoodIndoor,
   indianMaharadjaGravity00Midbow,
