@@ -292,9 +292,28 @@
     },
     "videos/20261101-zaal-carbon": {
       "render": {
-        "gestart": "2026-11-10T21:50:13Z"
+        "gestart": "2026-11-10T21:50:13Z",
+        "klaar": "2026-11-10T21:51:59Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "reel": {
+          "name": "20261101-zaal-carbon-reel.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261101-zaal-carbon-reel.mp4"
+        },
+        "reelCover": {
+          "name": "20261101-zaal-carbon-reel-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261101-zaal-carbon-reel-cover.png"
+        },
+        "short": {
+          "name": "20261101-zaal-carbon-short.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261101-zaal-carbon-short.mp4"
+        },
+        "shortCover": {
+          "name": "20261101-zaal-carbon-short-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261101-zaal-carbon-short-cover.png"
+        }
+      }
     }
   },
   "laatsteRun": "2026-11-10T15:35:26Z",
@@ -303,7 +322,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "d9555962-2d13-4117-8795-135073654827",
+  "wijziging": "d3f9add5-00ec-4016-a3f8-b33d32e63479",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
