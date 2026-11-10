@@ -73,7 +73,26 @@
     },
     "videos/20261106-zaal-is-geen-veld": {
       "render": {
-        "gestart": "2026-11-10T15:18:04Z"
+        "gestart": "2026-11-10T15:17:41Z",
+        "klaar": "2026-11-10T15:21:16Z"
+      },
+      "media": {
+        "reel": {
+          "name": "20261106-zaal-is-geen-veld-reel.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261106-zaal-is-geen-veld-reel.mp4"
+        },
+        "reelCover": {
+          "name": "20261106-zaal-is-geen-veld-reel-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261106-zaal-is-geen-veld-reel-cover.png"
+        },
+        "short": {
+          "name": "20261106-zaal-is-geen-veld-short.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261106-zaal-is-geen-veld-short.mp4"
+        },
+        "shortCover": {
+          "name": "20261106-zaal-is-geen-veld-short-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261106-zaal-is-geen-veld-short-cover.png"
+        }
       },
       "fout": null
     },
@@ -101,7 +120,7 @@
     "gebruikt": 2,
     "grens": 20
   },
-  "wijziging": "3fdab9ae-7559-4dac-bf67-88f38997b617",
+  "wijziging": "5a4d8eb4-8231-404d-bb93-8ec1fbb8dd16",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
