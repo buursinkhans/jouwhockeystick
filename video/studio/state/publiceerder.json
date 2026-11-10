@@ -185,6 +185,20 @@
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261120-stick-op-de-groei-short-cover.png"
         }
       },
+      "kanalen": {
+        "reels": {
+          "id": 423301468,
+          "uuid": "-3642801494354342450",
+          "moment": "2026-11-20T19:30:00",
+          "op": "2026-11-10T15:34:53Z"
+        },
+        "shorts": {
+          "id": 423301553,
+          "uuid": "2559234727153256569",
+          "moment": "2026-11-20T19:30:00",
+          "op": "2026-11-10T15:34:53Z"
+        }
+      },
       "fout": null
     },
     "posts/20261113-veld-of-zaalstick": {
@@ -212,7 +226,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "cae6d046-d84d-4c72-8c23-baf55babc577",
+  "wijziging": "6f0fae7a-009b-4e65-9c1d-21e88ab383a1",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
