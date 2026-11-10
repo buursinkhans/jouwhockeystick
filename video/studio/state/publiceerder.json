@@ -107,7 +107,9 @@
           "moment": "2026-11-11T19:30:00",
           "op": "2026-11-10T15:22:35Z"
         },
-        "tiktok": {}
+        "tiktok": {
+          "bezig": "2026-11-10T22:14:25Z"
+        }
       },
       "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt."
     },
@@ -214,7 +216,9 @@
           "moment": "2026-11-13T19:30:00",
           "op": "2026-11-10T15:33:37Z"
         },
-        "tiktok": {}
+        "tiktok": {
+          "bezig": "2026-11-10T22:14:25Z"
+        }
       }
     },
     "videos/20261120-stick-op-de-groei": {
@@ -253,7 +257,9 @@
           "moment": "2026-11-20T19:30:00",
           "op": "2026-11-10T15:34:53Z"
         },
-        "tiktok": {}
+        "tiktok": {
+          "bezig": "2026-11-10T22:14:25Z"
+        }
       },
       "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt."
     },
@@ -360,7 +366,9 @@
           "moment": "2026-11-18T19:30:00",
           "op": "2026-11-10T21:55:43Z"
         },
-        "tiktok": {}
+        "tiktok": {
+          "bezig": "2026-11-10T22:14:25Z"
+        }
       }
     }
   },
@@ -370,7 +378,7 @@
     "gebruikt": 14,
     "grens": 20
   },
-  "wijziging": "790c0c7d-92cb-4240-81aa-b3079c99b7d2",
+  "wijziging": "8fac764b-1be3-4bcd-bdde-6f72639e69bd",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
