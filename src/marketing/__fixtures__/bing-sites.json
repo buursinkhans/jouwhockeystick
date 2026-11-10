@@ -1,0 +1,16 @@
+{
+ "d": [
+  {
+   "__type": "Site:#Microsoft.Bing.Webmaster.Api",
+   "AuthenticationCode": "x",
+   "DnsVerificationCode": "y",
+   "IsVerified": true,
+   "Url": "https://jouwhockeystick.nl/"
+  },
+  {
+   "__type": "Site:#Microsoft.Bing.Webmaster.Api",
+   "IsVerified": true,
+   "Url": "https://example.org/"
+  }
+ ]
+}

@@ -106,7 +106,7 @@ describe('KPIs', () => {
 
 describe('the engine is site-neutral', () => {
   // The engine reads everything about a site from marketing/sites/<site>.json.
-  const ENGINE = ['calendar.ts', 'research.ts', 'learning.ts', 'abtest.ts', 'metricoolBudget.ts', 'voorstellenIssue.ts', 'kpi.ts', 'siteConfig.ts', 'siteConfigSchema.ts', 'editorCheck.ts'];
+  const ENGINE = ['calendar.ts', 'research.ts', 'learning.ts', 'abtest.ts', 'metricoolBudget.ts', 'voorstellenIssue.ts', 'kpi.ts', 'siteConfig.ts', 'siteConfigSchema.ts', 'editorCheck.ts', 'bingReport.ts'];
   it.each(ENGINE)('%s holds no words of this site\'s subject', (file) => {
     const text = readFileSync(join(process.cwd(), 'src/marketing', file), 'utf8');
     expect(text.match(/stick|zaal|bow|hockey/gi) ?? []).toEqual([]);

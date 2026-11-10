@@ -1,0 +1,22 @@
+{
+ "d": [
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": 6,
+   "AvgImpressionPosition": 6,
+   "Clicks": 3,
+   "Date": "/Date(1794556800000)/",
+   "Impressions": 50,
+   "Query": "https://jouwhockeystick.nl/kennis/lengte"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": 10,
+   "AvgImpressionPosition": 10,
+   "Clicks": 1,
+   "Date": "/Date(1794556800000)/",
+   "Impressions": 30,
+   "Query": "https://jouwhockeystick.nl/"
+  }
+ ]
+}

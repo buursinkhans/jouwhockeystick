@@ -1,0 +1,67 @@
+{
+ "d": [
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": 6.5,
+   "AvgImpressionPosition": 6.5,
+   "Clicks": 2,
+   "Date": "/Date(1793952000000)/",
+   "Impressions": 40,
+   "Query": "hockeystick lengte"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": 6,
+   "AvgImpressionPosition": 6,
+   "Clicks": 3,
+   "Date": "/Date(1794556800000)/",
+   "Impressions": 48,
+   "Query": "hockeystick lengte"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": 12,
+   "AvgImpressionPosition": 12,
+   "Clicks": 0,
+   "Date": "/Date(1793952000000)/",
+   "Impressions": 4,
+   "Query": "zaalhockey stick"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": 9,
+   "AvgImpressionPosition": 9,
+   "Clicks": 1,
+   "Date": "/Date(1794556800000)/",
+   "Impressions": 10,
+   "Query": "zaalhockey stick"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": 8,
+   "AvgImpressionPosition": 8,
+   "Clicks": 1,
+   "Date": "/Date(1793952000000)/",
+   "Impressions": 20,
+   "Query": "low bow"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": 8.5,
+   "AvgImpressionPosition": 8.5,
+   "Clicks": 0,
+   "Date": "/Date(1794556800000)/",
+   "Impressions": 21,
+   "Query": "low bow"
+  },
+  {
+   "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+   "AvgClickPosition": -1,
+   "AvgImpressionPosition": -1,
+   "Clicks": 0,
+   "Date": "/Date(1794556800000-0800)/",
+   "Impressions": 5,
+   "Query": "kinderstick maat"
+  }
+ ]
+}

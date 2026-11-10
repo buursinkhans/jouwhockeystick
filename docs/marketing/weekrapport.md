@@ -33,6 +33,7 @@ STAP 1 — Cijfers van de vorige week, per actieve markt in `marketing/sites/<si
 - Conversie-rapport en Verkooprapport: `gh api "repos/$R/issues?labels=conversie&state=open&per_page=1"` (en `verkoop`), de body. De rapporten vergelijken de laatste 7 dagen met de 7 dagen ervoor; gebruik de kolom "Deze week". Ontbreekt een cijfer, zet het op 0 en noem het in het rapport als ontbrekend.
 - Metricool: getAnalyticsDataByMetrics per netwerk voor de week.
 - Studio: posts en video's van de week; de stand: `node video/studio/social-state.mjs get`.
+- Bing-rapport (context bij SEO en AI-verkeer, geen KPI): het issue "Bing-rapport <week>" met label `bing` (`gh api "repos/$R/issues?labels=bing&state=open&per_page=1"`). Noem in het rapport onder Trechter, op één regel, de kliks en vertoningen uit Bing naast de week ervoor, en de zoekvragen die groeien. Citaties in Copilot staan niet in de API; noem ze niet.
 
 STAP 2 — Vorige weken: lees de laatste 4 issues met label `marketing` en titel "Weekrapport …" (`gh api "repos/$R/issues?labels=marketing&state=all&per_page=10"`). Elk bevat onderaan een blok `<!-- weekcijfers [...] -->` met hun `WeekNumbers`. Zet die en de nieuwe in /tmp/weken.json en draai `npm run --silent marketing:research -- kpi /tmp/weken.json`.
 
@@ -41,6 +42,7 @@ STAP 3 — Issue "Weekrapport <week>", label `marketing`, met per markt:
 2. De trechter als tabel (cijfer, deze week, gemiddelde 4 weken, verschil).
 3. Leren: kijkers die blijven per hooktype (alleen hooktypes met video's die week).
 4. Gezondheid: gepland tegenover ritme, tegoed, fouten, tijd tot goedkeuring.
+   Onder de trechter staat de Bing-regel uit STAP 1 als context; die telt niet mee in de vergelijking met 4 weken.
 5. Drie inzichten, drie acties en hooguit één beslissing voor de eigenaar, in gewone taal, zonder conclusies die de cijfers niet dragen.
 
 Ontbrekende data staat er als ontbrekend in. Onderaan, op één regel: `<!-- weekcijfers <JSON-lijst van de WeekNumbers van deze week, per markt> -->`. Maak het met `gh api -X POST repos/$R/issues -f "title=Weekrapport <week>" -F body=@/tmp/rapport.md -f 'labels[]=marketing'`.
