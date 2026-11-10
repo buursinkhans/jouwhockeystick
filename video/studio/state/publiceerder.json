@@ -327,7 +327,7 @@
         "gestart": "2026-11-10T21:50:13Z",
         "klaar": "2026-11-10T21:51:59Z"
       },
-      "fout": null,
+      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt.",
       "media": {
         "reel": {
           "name": "20261101-zaal-carbon-reel.mp4",
@@ -359,9 +359,7 @@
           "moment": "2026-11-18T19:30:00",
           "op": "2026-11-10T21:55:43Z"
         },
-        "tiktok": {
-          "bezig": "2026-11-10T21:55:43Z"
-        }
+        "tiktok": {}
       }
     }
   },
@@ -371,7 +369,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "8e744d4e-7664-4f41-af54-cdd930faa7ab",
+  "wijziging": "6f67b909-b567-47fb-a951-54ff320ed6d8",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
