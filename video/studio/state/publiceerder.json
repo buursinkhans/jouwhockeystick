@@ -31,6 +31,12 @@
         }
       },
       "fout": null
+    },
+    "posts/20261110-schoenmaat-kind": {
+      "render": {
+        "gestart": "2026-11-10T14:06:04Z"
+      },
+      "fout": null
     }
   },
   "laatsteRun": "2026-11-10T13:31:29Z",
@@ -39,5 +45,5 @@
     "gebruikt": 1,
     "grens": 20
   },
-  "wijziging": "c13770ab-1574-40cc-a8e4-3e908051b330"
+  "wijziging": "b4061a85-2b28-43d4-8d1f-f36ca5b9ee17"
 }
