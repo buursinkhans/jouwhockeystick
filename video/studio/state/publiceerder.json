@@ -61,7 +61,12 @@
           }
         ]
       },
-      "fout": null
+      "fout": null,
+      "kanalen": {
+        "insta": {
+          "bezig": "2026-11-10T14:07:28Z"
+        }
+      }
     }
   },
   "laatsteRun": "2026-11-10T13:31:29Z",
@@ -70,5 +75,5 @@
     "gebruikt": 1,
     "grens": 20
   },
-  "wijziging": "b9feeab0-bede-4aeb-9633-127963fa8904"
+  "wijziging": "733a9ae3-5f83-45ce-af3b-a611ce7b3828"
 }
