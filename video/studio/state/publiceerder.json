@@ -96,16 +96,20 @@
       },
       "kanalen": {
         "reels": {
-          "bezig": "2026-11-10T15:21:59Z"
+          "id": 423296030,
+          "uuid": "1276885417256634051",
+          "moment": "2026-11-11T19:30:00",
+          "op": "2026-11-10T15:22:35Z"
         },
         "shorts": {
-          "bezig": "2026-11-10T15:21:59Z"
+          "id": 423296108,
+          "uuid": "3750979919208268563",
+          "moment": "2026-11-11T19:30:00",
+          "op": "2026-11-10T15:22:35Z"
         },
-        "tiktok": {
-          "bezig": "2026-11-10T15:21:59Z"
-        }
+        "tiktok": {}
       },
-      "fout": null
+      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt."
     },
     "posts/20261112-schoenen-ondergrond": {
       "render": {
@@ -149,13 +153,13 @@
       "fout": null
     }
   },
-  "laatsteRun": "2026-11-10T15:13:04Z",
+  "laatsteRun": "2026-11-10T15:22:35Z",
   "tegoed": {
     "maand": "2026-11",
-    "gebruikt": 2,
+    "gebruikt": 4,
     "grens": 20
   },
-  "wijziging": "4843f210-90e6-4b2c-b74a-93db06e4e96d",
+  "wijziging": "9a5ab10d-343f-4054-a2f8-e71f4f227755",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
