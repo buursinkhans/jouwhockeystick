@@ -145,6 +145,17 @@
           "name": "20261113-lengte-volwassenen-short-cover.png",
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261113-lengte-volwassenen-short-cover.png"
         }
+      },
+      "kanalen": {
+        "reels": {
+          "bezig": "2026-11-10T15:33:03Z"
+        },
+        "shorts": {
+          "bezig": "2026-11-10T15:33:03Z"
+        },
+        "tiktok": {
+          "bezig": "2026-11-10T15:33:03Z"
+        }
       }
     },
     "videos/20261120-stick-op-de-groei": {
@@ -212,7 +223,7 @@
     "gebruikt": 6,
     "grens": 20
   },
-  "wijziging": "00612dd8-afae-4d52-b3b1-8bf839c52bb9",
+  "wijziging": "760d488f-c340-4a9a-84d7-43ed11d25fae",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
