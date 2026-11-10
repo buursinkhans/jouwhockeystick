@@ -113,8 +113,18 @@
     },
     "posts/20261112-schoenen-ondergrond": {
       "render": {
-        "gestart": "2026-11-10T21:45:07Z"
-      }
+        "gestart": "2026-11-10T21:45:07Z",
+        "klaar": "2026-11-10T21:45:56Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "20261112-schoenen-ondergrond-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261112-schoenen-ondergrond-1.png"
+          }
+        ]
+      },
+      "fout": null
     },
     "posts/20261114-stickbegrippen": {
       "render": {
@@ -226,7 +236,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "e356be0b-7133-4fee-8007-949784fd437a",
+  "wijziging": "6aab67e3-3ef2-4f7f-9af4-3f05c24f4209",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
