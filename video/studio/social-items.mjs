@@ -6,10 +6,9 @@
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
 
-export const REPO = 'buursinkhans/jouwhockeystick';
-export const RELEASE_TAG = 'social-media';
-/** Test runs get this prefix, so they never touch the files of a real item. */
-export const TEST_PREFIX = 'test-';
+import { studioItem } from './social-names.mjs';
+
+export { REPO, RELEASE_TAG, TEST_PREFIX, fileNames, formatName, mediaFor, mediaUrls, releaseUrl, studioItem, videoFormats } from './social-names.mjs';
 
 const text = (max) => z.string().max(max);
 const id = z.string().regex(/^[a-z0-9-]{1,80}$/, 'id: alleen a-z, 0-9 en -, hooguit 80 tekens');
@@ -42,7 +41,6 @@ const post = z
 const scene = z
   .object({ soort: z.enum(['opening', 'tekst', 'lijst', 'tabel', 'item', 'slot']) })
   .loose();
-const VIDEO_CHANNELS = ['reels', 'shorts', 'tiktok', 'youtube'];
 const video = z
   .object({
     kind: z.literal('video'),
@@ -72,37 +70,6 @@ export function decodeItem(b64) {
   return parsed.data;
 }
 
-/** The video formats an item needs: reels → reel; shorts and tiktok → short; youtube → uitleg. A channel on "overslaan" is skipped. */
-export function videoFormats(item) {
-  const skip = new Set(Object.entries(item.kanalen ?? {}).filter(([, v]) => v === 'overslaan').map(([k]) => k));
-  const channels = VIDEO_CHANNELS.filter((c) => !skip.has(c));
-  const formats = [];
-  if (channels.includes('reels')) formats.push('reel');
-  if (channels.includes('shorts') || channels.includes('tiktok')) formats.push('short');
-  if (channels.includes('youtube')) formats.push('uitleg');
-  return formats;
-}
-
-/** The published name of a video format: uitleg is the YouTube video. */
-export const formatName = (format) => (format === 'uitleg' ? 'youtube' : format);
-
-/**
- * The files of an item, in a fixed order, with predictable names so the url is
- * known before the upload: <id>-<n>.png per slide; per video format
- * <id>-<format>.mp4 and <id>-<format>-cover.png.
- */
-export function fileNames(item, { test = false } = {}) {
-  const p = test ? TEST_PREFIX : '';
-  if (item.kind === 'post') return item.slides.map((_, i) => ({ name: `${p}${item.id}-${i + 1}.png`, slide: i }));
-  return videoFormats(item).flatMap((format) => [
-    { name: `${p}${item.id}-${formatName(format)}.mp4`, format, part: 'video' },
-    { name: `${p}${item.id}-${formatName(format)}-cover.png`, format, part: 'cover' },
-  ]);
-}
-
-/** The public url of a file in the release. */
-export const releaseUrl = (name) => `https://github.com/${REPO}/releases/download/${RELEASE_TAG}/${encodeURIComponent(name)}`;
-
 export const sha256 = (buffer) => createHash('sha256').update(buffer).digest('hex');
 
 /**
@@ -117,3 +84,6 @@ export function uploadAction(name, localSha, assets) {
   if (existing.digest && existing.digest === `sha256:${localSha}`) return { kind: 'skip' };
   return { kind: 'replace', assetId: existing.id };
 }
+
+/** The render item for a Social-studio document, checked like the workflow does (Zod). */
+export const itemFromStudio = (doc) => decodeItem(Buffer.from(JSON.stringify(studioItem(doc))).toString('base64'));

@@ -2,6 +2,8 @@
 
 Dit handboek geldt voor iedereen die content schrijft voor jouwhockeystick.nl: de content-agent in GitHub (`@claude`), Claude in een sessie en de redactie zelf. Het komt bovenop `CLAUDE.md` en `docs/source-policy.md`; bij twijfel gaan die voor.
 
+Lees ook [`docs/marketing/merkplatform.md`](marketing/merkplatform.md): voor wie we schrijven, de kernzin "Eerlijk, passend advies", de pijlers en de bewijszinnen. Een pagina die daar niet bij past, schrijven we niet.
+
 ## 1. Hoe een opdracht binnenkomt
 
 Een opdracht is een GitHub-issue met het label `content-brief` (sjabloon: _Content-brief_). Daarin staan:

@@ -1,0 +1,55 @@
+# Writes the Publiceerder's record (video/studio/state/publiceerder.json on the branch
+# social-state). The Publiceerder runs in a claude.ai cloud session, which may start a
+# workflow but may not write files through the GitHub API; so it sends each change here
+# as a patch (docs/marketing/publiceerder.md). One change at a time; nothing else is
+# touched. Only pushes to main start CI, and Netlify skips video/.
+name: Social stand
+
+on:
+  workflow_dispatch:
+    inputs:
+      wijziging:
+        description: 'De wijziging als JSON in base64: {id, items, laatsteRun?, tegoed?}'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  # Patches are applied in order, never two at once.
+  group: social-state
+  cancel-in-progress: false
+
+jobs:
+  write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Stand bijwerken
+        # The patch is data: it goes in through the environment, never into the shell.
+        env:
+          PATCH_B64: ${{ inputs.wijziging }}
+        run: |
+          cp video/studio/social-state.mjs "$RUNNER_TEMP/social-state.mjs"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch -q origin social-state; then git checkout -q -B social-state origin/social-state; else git checkout -q -b social-state; fi
+          mkdir -p video/studio/state
+          for attempt in 1 2 3; do
+            node "$RUNNER_TEMP/social-state.mjs" apply video/studio/state/publiceerder.json
+            git add video/studio/state/publiceerder.json
+            git diff --cached --quiet && { echo "Geen wijziging."; exit 0; }
+            git commit -q -m "Publiceerder: stand bijgewerkt"
+            git push -q origin social-state && exit 0
+            # Someone else pushed in between: start again from the newest record.
+            git fetch -q origin social-state && git reset -q --hard origin/social-state
+          done
+          echo "Schrijven lukte niet na 3 pogingen." >&2
+          exit 1

@@ -26,9 +26,31 @@ const LABELS = /(^|\n|[.?!]\s+)(Goed nieuws|Je zult zien|Tip|Let op|Spoiler|Het 
 /** "niet X, maar Y" and its variants (hard rule 1). */
 const CONTRAST = /\b(niet|geen)\b[^.?!\n]{1,80}?,?\s+maar\b/gi;
 
+/** Sales talk that does not fit the kernzin "Eerlijk, passend advies" (docs/marketing/merkplatform.md). */
+const SALES = /\b(koop|bestel|shop) (nu|snel|vandaag)\b|op=op|\bmis (het|dit|deze) niet\b|\blaatste kans\b|\bnu of nooit\b|\bscoor\b/i;
+
+/** Proof (building block 4): a number, or a named source such as the FIH rules or the length table. */
+const PROOF = /\d|\bbron\b|\bvolgens\b|\bFIH\b|lengtetabel|\btabel\b|specificatie|\bfabrikant\b|\bmerk\b/i;
+
 const words = (text: string) => text.split(/\s+/).filter(Boolean).length;
 
-export function checkItem(item: ContentItem): Finding[] {
+/**
+ * The checks a person (or the planner itself) does, because a pattern cannot:
+ * the idea test and the building blocks without a clear signal in the text
+ * (docs/marketing/merkplatform.md). The planner answers them before saving.
+ */
+export const MANUAL_CHECKS = [
+  'Helpt het de lezer: weet een ouder na de post iets wat helpt bij kiezen?',
+  'Herkenning: staat er een situatie in die de lezer kent?',
+  'Belofte: is duidelijk wat de lezer na de post weet of kan?',
+] as const;
+
+export type CheckOptions = {
+  /** Paths of the live pages (state/paginas in the studio, or the sitemap); without it the page check is skipped. */
+  livePages?: readonly string[];
+};
+
+export function checkItem(item: ContentItem, { livePages }: CheckOptions = {}): Finding[] {
   const findings: Finding[] = [];
   const all = [item.hook, item.tekst, ...item.onderdelen, item.cta].join('\n');
   const add = (level: Finding['level'], rule: string, detail: string) => findings.push({ level, rule, detail });
@@ -57,6 +79,15 @@ export function checkItem(item: ContentItem): Finding[] {
   for (const part of item.onderdelen) {
     if (words(part) > 40) add('P1', 'slide', `onderdeel van ${words(part)} woorden: "${part.slice(0, 40)}…"`);
   }
+
+  // The idea test and the five building blocks (docs/marketing/merkplatform.md), where a pattern can tell.
+  if (livePages && !livePages.includes(item.bronpagina)) add('P0', 'geen-live-pagina', `${item.bronpagina} staat niet live`);
+  const sales = SALES.exec(all);
+  if (sales) add('P1', 'verkooppraat', `"${sales[0]}" past niet bij de kernzin`);
+  const first = item.onderdelen[0] ?? '';
+  if (!isVideo && words(first) > 6) add('P1', 'eerste-beeld', `het eerste beeld heeft ${words(first)} woorden; hooguit 6`);
+  if (!PROOF.test(all)) add('P1', 'bewijs', 'geen feit met een getal of een bron gevonden');
+  if (words(item.cta) > 8) add('P1', 'vervolgstap', `de vervolgstap heeft ${words(item.cta)} woorden; één korte stap`);
   return findings;
 }
 
