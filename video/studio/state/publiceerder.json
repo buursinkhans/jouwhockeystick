@@ -277,9 +277,18 @@
     },
     "posts/20261119-nieuw-black-spark-wood": {
       "render": {
-        "gestart": "2026-11-10T21:49:15Z"
+        "gestart": "2026-11-10T21:49:15Z",
+        "klaar": "2026-11-10T21:49:58Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "slides": [
+          {
+            "name": "20261119-nieuw-black-spark-wood-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261119-nieuw-black-spark-wood-1.png"
+          }
+        ]
+      }
     },
     "videos/20261101-zaal-carbon": {
       "render": {
@@ -294,7 +303,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "d92e0937-1ebb-44c1-8076-f78d4e26f29c",
+  "wijziging": "7ba9f841-dc5e-44f0-bbea-159819ce977d",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
