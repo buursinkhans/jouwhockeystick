@@ -51,13 +51,14 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   {
     retailer: 'passasports',
     kind: 'black-friday',
-    status: 'niet-gecontroleerd',
-    categories: [],
-    startsAt: null,
+    // Checked by the owner in the browser on 2026-11-10 (the page blocks automated reads).
+    status: 'gecontroleerd',
+    categories: ['hockey'],
+    startsAt: '2026-11-20',
     endsAt: null,
-    verifiedAt: null,
-    summary: 'We konden de actiepagina van PassaHockey nog niet nalezen. Zodra dat lukt, staat hier wat de actie is en tot wanneer.',
-    conditions: null,
+    verifiedAt: '2026-11-10',
+    summary: 'PassaHockey kondigt Black Friday-aanbiedingen aan vanaf vrijdag 20 november. Welke producten meedoen en tot wanneer, staat er nog niet bij.',
+    conditions: 'Wie de nieuwsbrief van PassaSports heeft, krijgt de aanbiedingen volgens de winkel als eerste te zien.',
     sourceUrl: 'https://www.passasports.nl/hockey/Blackfriday',
     url: 'https://www.passasports.nl/hockey/Blackfriday',
   },
@@ -207,7 +208,7 @@ export const BLACK_FRIDAY = {
       },
       {
         question: 'Wanneer beginnen de Black Friday-aanbiedingen voor hockey?',
-        answer: 'Dat verschilt per winkel. bol.com had zijn Black Friday-pagina op 10 november al online, zonder begin- en einddatum. Bij de andere winkels noemen we een datum zodra de winkel die zelf vermeldt en we die hebben nagekeken.',
+        answer: 'Dat verschilt per winkel. PassaHockey kondigt zijn Black Friday-aanbiedingen aan vanaf vrijdag 20 november. bol.com had zijn Black Friday-pagina op 10 november al online, zonder begin- en einddatum. Bij de andere winkels noemen we een datum zodra de winkel die zelf vermeldt en we die hebben nagekeken.',
       },
       {
         question: 'Zijn hockeysticks tijdens Black Friday echt goedkoper?',
