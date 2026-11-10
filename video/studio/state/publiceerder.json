@@ -128,9 +128,38 @@
     },
     "posts/20261114-stickbegrippen": {
       "render": {
-        "gestart": "2026-11-10T21:47:42Z"
+        "gestart": "2026-11-10T21:47:42Z",
+        "klaar": "2026-11-10T21:48:58Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "slides": [
+          {
+            "name": "20261114-stickbegrippen-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261114-stickbegrippen-1.png"
+          },
+          {
+            "name": "20261114-stickbegrippen-2.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261114-stickbegrippen-2.png"
+          },
+          {
+            "name": "20261114-stickbegrippen-3.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261114-stickbegrippen-3.png"
+          },
+          {
+            "name": "20261114-stickbegrippen-4.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261114-stickbegrippen-4.png"
+          },
+          {
+            "name": "20261114-stickbegrippen-5.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261114-stickbegrippen-5.png"
+          },
+          {
+            "name": "20261114-stickbegrippen-6.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261114-stickbegrippen-6.png"
+          }
+        ]
+      }
     },
     "videos/20261113-lengte-volwassenen": {
       "render": {
@@ -265,7 +294,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "078cfe35-8c8a-4d2c-89f2-a3a49434dd72",
+  "wijziging": "3dcc1cc6-63f7-4c41-9080-313cec4732ac",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
