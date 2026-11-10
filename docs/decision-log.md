@@ -2867,3 +2867,16 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Vorm.** Donkere kaart (inkt) met lichte tekst en een witte knop "Bekijk de acties". Daaronder een tekstlink naar de stickwijzer en klein onderaan "Nagekeken op … bij de winkels zelf". De contrasten liggen boven WCAG AA. Op mobiel staan alleen de kop, één urgentieregel en de knop; de extra regels verschijnen vanaf tabletbreedte.
 - **/black-friday-hockey** toont per winkel dezelfde naam, voorwaarde en status ("Nu bezig, stopt over 5 dagen (t/m 15 november)", "Begint op 20 november", "Afgelopen").
 - **Geen kortingsclaims.** Er staan geen percentages, geen aftelklok en geen "beste".
+
+## 2026-11-10 — Social-machine 2.0, fase 0: renderen in GitHub Actions in plaats van de browser
+
+**Aanleiding:** goedkeuren in de Social-studio werkt niet. Renderen in de browser en opslaan via Google Drive faalt op de browser, de koppeling en de toestemmingen. Sinds 24 oktober is er niets geplaatst. Het plan staat in [bouwplan-2.0.md](marketing/bouwplan-2.0.md).
+
+**Besluiten:**
+- **De slide-renderer verhuist naar de repo** (`video/studio/slideart.js`), ongewijzigd uit de studio. De studio, en straks GitHub Actions, gebruiken dezelfde code. Zoals bij `videoart.js` gebruikt de headless render de lettertypes uit `assets/fonts`. Instrument Sans bestaat daar alleen als Regular, dus gewicht 500 en 600 wordt in de headless render nagebootst, net als bij de video's.
+- **Opslag in een GitHub Release** (`social-media`) in plaats van Google Drive. De repo is openbaar, dus de url's zijn openbaar, en kosten zijn er niet. De namen liggen vast (`<id>-<n>.png`, `<id>-reel.mp4`, enzovoort), zodat de Publiceerder de url kent zonder de run uit te lezen. Een testrun zet `test-` voor de naam.
+- **Idempotent.** De workflow vergelijkt de sha256 met de digest die GitHub per bestand geeft. Bij dezelfde inhoud doet hij niets, bij andere inhoud vervangt hij het bestand. Twee runs leveren nooit een tweede bestand op. `concurrency` zorgt dat er één upload tegelijk draait.
+- **Controle met Zod.** Een item komt binnen als base64 via de omgeving, nooit via de shell. Toegestaan zijn een post met 1 tot 10 slides van de bekende soorten, of een video met 1 tot 20 scènes. Een id bevat alleen a-z, 0-9 en -. Is het item groter dan 60.000 tekens, dan weigert de workflow het.
+- **Proef al vóór de merge.** Bij een pull request die de renderer raakt, rendert de workflow één testpost (`video/studio/fixtures/test-post.json`). Dat gebeurt alleen voor branches van deze repo, niet voor forks.
+- **`render.mjs`:** een Reel heet nu `<id>-reel.mp4` (die viel eerder onder de naam "youtube"), en de Reel-cover komt erbij. De namen van Short en YouTube-video blijven gelijk.
+- **Zod staat nu ook in de installatiestap van `video-publiceren.yml`**, omdat de tests in `video/studio` het nodig hebben.
