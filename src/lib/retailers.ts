@@ -10,7 +10,9 @@ export type RetailerPlacement =
   /** Hockey shoes (decision log 2026-11-01): model page, overview, shoe advice. */
   | 'schoenpagina'
   | 'schoenencatalogus'
-  | 'schoenwijzer';
+  | 'schoenwijzer'
+  /** The yearly Black Friday page /black-friday-hockey (decision log 2026-11-10). */
+  | 'blackfriday';
 
 /**
  * bol.com Partnerprogramma site ID of jouwhockeystick.nl. Not a secret — it is
@@ -240,6 +242,67 @@ export function dakaTrackingUrl(productUrl: string, placement: string): string |
     dl: target.pathname.slice(1),
   });
   return `https://partner.daka.nl/c/?${params.toString()}`;
+}
+
+/**
+ * A tracked link to a shop's own action or sale page (not a product), for the
+ * shop overview on /black-friday-hockey (decision log 2026-11-10). Same link
+ * formats and IDs as the product links above, only the page check is the
+ * shop's domain instead of a product page. Returns null for any other host,
+ * so a typo in the campaign config never becomes an untracked or foreign link.
+ */
+export function shopPageTrackingUrl(
+  retailer: RetailerId,
+  pageUrl: string,
+  placement: RetailerPlacement,
+): string | null {
+  let target: URL;
+  try {
+    target = new URL(pageUrl);
+  } catch {
+    return null;
+  }
+  if (target.protocol !== 'https:') return null;
+  const host = target.hostname;
+  switch (retailer) {
+    case 'bolcom':
+      return host === 'www.bol.com'
+        ? bolPartnerUrl(target.toString(), { subid: placement, name: 'Actiepagina' })
+        : null;
+    case 'passasports':
+      return passaSportsTrackingUrl(target.toString(), placement);
+    case 'plutosport': {
+      if (!/^(www\.)?plutosport\.nl$/i.test(host)) return null;
+      const params = new URLSearchParams({
+        awinmid: PLUTOSPORT_AWIN.advertiserId,
+        awinaffid: PLUTOSPORT_AWIN.publisherId,
+        clickref: placement,
+        ued: target.toString(),
+      });
+      return `https://www.awin1.com/cread.php?${params.toString()}`;
+    }
+    case 'hockeycity': {
+      if (host !== HOCKEYCITY_HOST) return null;
+      const { campaignId, materialId, affiliateSiteId } = HOCKEYCITY_TRADETRACKER;
+      const params = new URLSearchParams({
+        tt: [campaignId, materialId, affiliateSiteId, placement].join('_'),
+        r: target.toString(),
+      });
+      return `https://${HOCKEYCITY_HOST}/tracking/tradetracker/redirect/?${params.toString()}`;
+    }
+    case 'daka': {
+      if (host !== DAKA_HOST) return null;
+      const { programId, linkId, mediaId } = DAKA_DAISYCON;
+      const params = new URLSearchParams({
+        si: programId,
+        li: linkId,
+        wi: mediaId,
+        ws: placement,
+        dl: `${target.pathname.slice(1)}${target.search}`,
+      });
+      return `https://partner.daka.nl/c/?${params.toString()}`;
+    }
+  }
 }
 
 /**

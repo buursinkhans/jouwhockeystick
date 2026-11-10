@@ -8,6 +8,7 @@ import { ProductCard } from '@/components/catalog/ProductCard';
 import { IndoorFinder } from '@/components/zaal/IndoorFinder';
 import { FaqSection } from '@/components/article/FaqSection';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
+import { CampaignNote } from '@/components/campaign/CampaignNote';
 import { CheckIcon, InfoIcon } from '@/components/ui/icons';
 import { buttonBaseClasses, buttonVariantClasses } from '@/components/ui/Button';
 import { InlineText } from '@/components/article/InlineText';
@@ -107,6 +108,7 @@ export default function ZaalsticksPage() {
           Door {ZAAL.author} · gepubliceerd op <time dateTime={ZAAL.publishedAt}>{ZAAL.publishedAt}</time> · bijgewerkt op{' '}
           <time dateTime={ZAAL.updatedAt}>{ZAAL.updatedAt}</time>
         </p>
+        <CampaignNote page="zaalsticks" />
       </PageHeader>
 
       <PageBody>
