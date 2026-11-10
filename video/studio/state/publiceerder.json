@@ -348,7 +348,13 @@
       },
       "kanalen": {
         "reels": {
-          "bezig": "2026-11-10T21:54:57Z"
+          "id": 423735111,
+          "uuid": "4442223241926299202",
+          "moment": "2026-11-18T19:30:00",
+          "op": "2026-11-10T21:55:21Z"
+        },
+        "shorts": {
+          "bezig": "2026-11-10T21:55:21Z"
         }
       }
     }
@@ -359,7 +365,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "7f8f6e21-76c0-40d7-90a4-2cca8642174b",
+  "wijziging": "4f6c8b51-36f1-46ee-b6ba-59cf4c6d07ec",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
