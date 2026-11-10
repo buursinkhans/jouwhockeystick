@@ -34,7 +34,32 @@
     },
     "posts/20261110-schoenmaat-kind": {
       "render": {
-        "gestart": "2026-11-10T14:06:04Z"
+        "gestart": "2026-11-10T14:06:04Z",
+        "klaar": "2026-11-10T14:06:57Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "20261110-schoenmaat-kind-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261110-schoenmaat-kind-1.png"
+          },
+          {
+            "name": "20261110-schoenmaat-kind-2.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261110-schoenmaat-kind-2.png"
+          },
+          {
+            "name": "20261110-schoenmaat-kind-3.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261110-schoenmaat-kind-3.png"
+          },
+          {
+            "name": "20261110-schoenmaat-kind-4.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261110-schoenmaat-kind-4.png"
+          },
+          {
+            "name": "20261110-schoenmaat-kind-5.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261110-schoenmaat-kind-5.png"
+          }
+        ]
       },
       "fout": null
     }
@@ -45,5 +70,5 @@
     "gebruikt": 1,
     "grens": 20
   },
-  "wijziging": "b4061a85-2b28-43d4-8d1f-f36ca5b9ee17"
+  "wijziging": "b9feeab0-bede-4aeb-9633-127963fa8904"
 }
