@@ -124,7 +124,12 @@
           }
         ]
       },
-      "fout": null
+      "fout": null,
+      "kanalen": {
+        "insta": {
+          "bezig": "2026-11-10T21:52:50Z"
+        }
+      }
     },
     "posts/20261114-stickbegrippen": {
       "render": {
@@ -322,7 +327,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "d3f9add5-00ec-4016-a3f8-b33d32e63479",
+  "wijziging": "3475465f-17df-4400-a779-4cd3ec455c39",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
