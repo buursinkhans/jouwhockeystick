@@ -252,6 +252,9 @@
           "uuid": "2559234727153256569",
           "moment": "2026-11-20T19:30:00",
           "op": "2026-11-10T15:34:53Z"
+        },
+        "tiktok": {
+          "bezig": "2026-11-10T21:57:49Z"
         }
       },
       "fout": null
@@ -369,7 +372,7 @@
     "gebruikt": 14,
     "grens": 20
   },
-  "wijziging": "04379fe3-d7e4-43d1-a345-6c14e9bac15a",
+  "wijziging": "a2f8a660-d056-4572-a810-69047abf0374",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
