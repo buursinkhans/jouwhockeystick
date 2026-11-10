@@ -21,11 +21,23 @@
           }
         ]
       },
-      "kanalen": {},
+      "kanalen": {
+        "insta": {
+          "id": 423137853,
+          "uuid": "3225526408490271173",
+          "moment": "2026-11-28T19:30:00",
+          "op": "2026-11-10T13:31:29Z",
+          "test": true
+        }
+      },
       "fout": null
     }
   },
-  "laatsteRun": null,
-  "tegoed": null,
-  "wijziging": "ca80e461-4bf8-4933-8ae2-61a6a26a552c"
+  "laatsteRun": "2026-11-10T13:31:29Z",
+  "tegoed": {
+    "maand": "2026-11",
+    "gebruikt": 1,
+    "grens": 20
+  },
+  "wijziging": "c13770ab-1574-40cc-a8e4-3e908051b330"
 }
