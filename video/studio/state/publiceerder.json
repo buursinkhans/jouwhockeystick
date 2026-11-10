@@ -127,7 +127,10 @@
       "fout": null,
       "kanalen": {
         "insta": {
-          "bezig": "2026-11-10T21:52:50Z"
+          "id": 423733290,
+          "uuid": "7262225222097453236",
+          "moment": "2026-11-12T19:30:00",
+          "op": "2026-11-10T21:53:27Z"
         }
       }
     },
@@ -278,6 +281,11 @@
             "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261113-veld-of-zaalstick-6.png"
           }
         ]
+      },
+      "kanalen": {
+        "insta": {
+          "bezig": "2026-11-10T21:53:27Z"
+        }
       }
     },
     "posts/20261119-nieuw-black-spark-wood": {
@@ -327,7 +335,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "3475465f-17df-4400-a779-4cd3ec455c39",
+  "wijziging": "d4f0dc39-9a03-4017-b8ba-093b2f839fbf",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
