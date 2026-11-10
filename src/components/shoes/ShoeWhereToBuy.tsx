@@ -1,3 +1,4 @@
+import type { RetailerPlacement } from '@/lib/retailers';
 import { isPriceFresh } from '@/catalog/offers/sort';
 import { shoePath } from '@/catalog/shoes';
 import { getShoeOffers, sizesInStockByShop } from '@/catalog/shoes/offers';
@@ -69,12 +70,12 @@ export function ShoeWhereToBuy({ shoe }: { shoe: Shoe }) {
 }
 
 /** Under every shoe card: the same summary as a stick card (OfferCardSummary); shoes have no indicative price. */
-export function ShoeOfferSummary({ shoe }: { shoe: Shoe }) {
+export function ShoeOfferSummary({ shoe, placement = 'schoenencatalogus' }: { shoe: Shoe; placement?: RetailerPlacement }) {
   return (
     <OfferCardSummary
       brand={shoe.brand}
       productName={name(shoe)}
-      placement="schoenencatalogus"
+      placement={placement}
       offers={getShoeOffers(shoe)}
       compareHref={shoePath(shoe)}
     />

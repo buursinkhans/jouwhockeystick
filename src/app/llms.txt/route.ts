@@ -1,5 +1,6 @@
 import { getAllArticles } from '@/content';
 import { getAllBlogPosts } from '@/content/blog';
+import { BLACK_FRIDAY } from '@/content/blackFriday';
 import { HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
 import { METHODIEK } from '@/content/methodiek';
 import { ZAAL } from '@/content/zaal';
@@ -37,6 +38,7 @@ export function GET() {
     `- [Veldhockeysticks](${absoluteUrl('/sticks')}): specificaties met bron en controledatum per stick.`,
     `- [${ZAAL.title}](${absoluteUrl('/zaalsticks')}): ${ZAAL.metaDescription}`,
     `- [${HOCKEYSCHOENEN.title}](${absoluteUrl('/hockeyschoenen')}): ${HOCKEYSCHOENEN.metaDescription}`,
+    `- [${BLACK_FRIDAY.title}](${absoluteUrl(BLACK_FRIDAY.path)}): ${BLACK_FRIDAY.metaDescription}`,
     `- [Merken](${absoluteUrl('/merken')}): de merken in de catalogus.`,
     '',
   ];

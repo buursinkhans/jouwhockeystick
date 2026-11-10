@@ -1,3 +1,4 @@
+import type { RetailerPlacement } from '@/lib/retailers';
 import Link from 'next/link';
 import { shoePath } from '@/catalog/shoes';
 import type { Shoe } from '@/catalog/shoes/types';
@@ -8,7 +9,7 @@ import { ShoeStatus } from './ShoeStatus';
 import { ShoeOfferSummary } from './ShoeWhereToBuy';
 
 /** A shoe in the overview, like ProductCard: photo, name, kind, status and the cheapest shop. */
-export function ShoeCard({ shoe }: { shoe: Shoe }) {
+export function ShoeCard({ shoe, placement }: { shoe: Shoe; placement?: RetailerPlacement }) {
   return (
     // Same treatment as ProductCard (fase 7): the whole card opens the model page.
     <article className="card card-link group relative flex h-full flex-col p-5">
@@ -32,7 +33,7 @@ export function ShoeCard({ shoe }: { shoe: Shoe }) {
         <NonMarkingWarning shoe={shoe} compact />
       </div>
       <div className="relative z-10 mt-auto pt-5">
-        <ShoeOfferSummary shoe={shoe} />
+        <ShoeOfferSummary shoe={shoe} placement={placement} />
       </div>
     </article>
   );

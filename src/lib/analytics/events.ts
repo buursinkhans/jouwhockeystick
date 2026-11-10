@@ -45,8 +45,8 @@ export type AnalyticsEvent =
       brand: string;
       productName: string;
       placement: string;
-      /** Direct product page or a search; to compare their conversion. */
-      linkType: 'product' | 'search';
+      /** Direct product page or a search; 'actie' = a shop's action or sale page (/black-friday-hockey). */
+      linkType: 'product' | 'search' | 'actie';
       /** In "Waar te koop": place in the sorted list (1 = top), number of shops, and whether an amount was shown. */
       position?: number;
       offerCount?: number;
@@ -103,9 +103,10 @@ export type AnalyticsEvent =
       name: 'home_block_click';
       /**
        * 'hero' = the photo with the example reasons (2026-10-22); 'slot' = the closing call to the stickwijzer (fase 9);
-       * 'zoeken' = a category shortcut in the search block (2026-11-04).
+       * 'zoeken' = a category shortcut in the search block (2026-11-04);
+       * 'blackfriday' = the campaign band under the hero (2026-11-10; the search-block shortcut is 'zoeken').
        */
-      block: 'season' | 'buying' | 'hero' | 'slot' | 'zoeken';
+      block: 'season' | 'buying' | 'hero' | 'slot' | 'zoeken' | 'blackfriday';
       target: string;
     }
   | {
@@ -115,12 +116,12 @@ export type AnalyticsEvent =
        */
       name: 'catalog_block_click';
       /** 'stickpagina' = a stick's own page (fase 9: the link to the stickwijzer). */
-      page: 'sticks' | 'zaalsticks' | 'hockeyschoenen' | 'stickpagina';
+      page: 'sticks' | 'zaalsticks' | 'hockeyschoenen' | 'stickpagina' | 'black-friday';
       /**
        * 'aanbod' = the button that loads the imported PassaHockey sticks (target 'aanbod-laden');
        * 'filters', 'modellen', 'intenties' and 'pascontrole' are on /hockeyschoenen (decision log 2026-11-01).
        */
-      block: 'intro' | 'levels' | 'faq' | 'aanbod' | 'filters' | 'modellen' | 'intenties' | 'pascontrole' | 'stickwijzer';
+      block: 'intro' | 'levels' | 'faq' | 'aanbod' | 'filters' | 'modellen' | 'intenties' | 'pascontrole' | 'stickwijzer' | 'routes' | 'advies' | 'winkels' | 'seizoen';
       target: string;
     }
   | {
@@ -180,5 +181,11 @@ export type AnalyticsEvent =
       /** A shared advice link was opened; `changed` = sticks differ since sharing. */
       name: 'shared_advice_opened';
       changed: boolean;
+    }
+  | {
+      /** The campaign link in the thin bar above the header, on phones (Black Friday, 2026-11-10). */
+      name: 'campaign_link_click';
+      source: 'bovenbalk';
+      target: string;
     }
   | AdviceAnalyticsEvent;

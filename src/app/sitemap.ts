@@ -6,6 +6,7 @@ import { lastChecked } from '@/catalog/shoes/certainty';
 import type { Product } from '@/catalog/types';
 import { getAllArticles } from '@/content';
 import { getAllBlogPosts } from '@/content/blog';
+import { BLACK_FRIDAY } from '@/content/blackFriday';
 import { HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
 import { METHODIEK } from '@/content/methodiek';
 import { PRIVACY } from '@/content/privacy';
@@ -27,6 +28,7 @@ const STATIC_PATHS = [
   '/over-ons',
   '/clubs',
   '/privacy',
+  '/black-friday-hockey',
 ];
 
 const latest = (dates: readonly string[]) =>
@@ -45,6 +47,7 @@ function hubLastModified(): Record<string, string> {
     '/kennis': latest(getAllArticles().map((a) => a.updatedAt)),
     '/blog': latest(getAllBlogPosts().map((p) => p.updatedAt)),
     '/privacy': PRIVACY.updatedAt,
+    [BLACK_FRIDAY.path]: BLACK_FRIDAY.updatedAt,
   };
 }
 

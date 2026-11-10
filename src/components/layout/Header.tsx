@@ -4,6 +4,9 @@ import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import { getTrustFacts } from '@/catalog/trustFacts';
 import { MainNav, type NavLink } from './MainNav';
+import { CampaignBarLink } from '@/components/campaign/CampaignBarLink';
+import { BLACK_FRIDAY, BLACK_FRIDAY_EDITION } from '@/content/blackFriday';
+import { amsterdamDate, showCampaignNote } from '@/lib/campaign';
 
 const NAV_LINKS: NavLink[] = [
   // "Veldsticks" next to "Zaalsticks": "Sticks" read as if zaalsticks were something else (2026-11-04).
@@ -42,9 +45,16 @@ function IndependenceBar() {
             </li>
           ))}
         </ul>
-        <Link href="/methodiek" className="shrink-0 font-semibold text-white underline-offset-2 hover:underline">
-          Zo werkt ons advies
-        </Link>
+        {/* During the campaign the link points to /black-friday-hockey (2026-11-10); the methodology stays in the footer and the hero. */}
+        {showCampaignNote(BLACK_FRIDAY_EDITION, amsterdamDate(new Date())) ? (
+          <CampaignBarLink href={BLACK_FRIDAY.path} className="shrink-0 font-semibold text-white underline-offset-2 hover:underline">
+            {BLACK_FRIDAY.barLabel}
+          </CampaignBarLink>
+        ) : (
+          <Link href="/methodiek" className="shrink-0 font-semibold text-white underline-offset-2 hover:underline">
+            Zo werkt ons advies
+          </Link>
+        )}
       </div>
     </div>
   );

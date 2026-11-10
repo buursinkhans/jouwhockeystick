@@ -20,6 +20,7 @@ import { FaqSection } from '@/components/article/FaqSection';
 import { productPath } from '@/catalog/paths';
 import { itemListJsonLd, jsonLdHtml } from '@/lib/jsonLd';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
+import { CampaignNote } from '@/components/campaign/CampaignNote';
 import { VELD, veldFaq, veldMetaDescription } from '@/content/veld';
 import { splitListNote } from '@/content/catalogLists';
 
@@ -116,6 +117,7 @@ export default async function SticksPage({
         <div className="mt-8">
           <CatalogFilters action="/sticks" filters={filters} brands={brands} bows={bows} lengths={lengths} />
         </div>
+        <CampaignNote page="sticks" />
       </PageHeader>
 
       <PageBody>

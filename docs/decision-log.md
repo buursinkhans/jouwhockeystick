@@ -2807,3 +2807,45 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 **Voorwaarde in Netlify (eigenaar):** elk domein, met www, als domeinalias aan de site toevoegen; pas dan geeft Netlify een Let's Encrypt-certificaat uit en werken de regels. Deploy previews tonen deze regels niet, want die draaien op een netlify.app-adres.
 
 **Bewust niet:** geen wijziging aan DNS, nameservers, e-mailrecords, canonical-tags, sitemap, robots.txt of structured data. Die wijzen al naar jouwhockeystick.nl (`SITE_URL` in `src/lib/site.ts`).
+
+## 2026-11-10 — Black Friday-pagina /black-friday-hockey (jaarlijks)
+
+**Opdracht eigenaar:** een herbruikbare Black Friday-landingspagina voor hockeysticks en hockeyschoenen op een vaste URL, zonder verzonnen kortingen.
+
+**Gebouwd:**
+- **Pagina `/black-friday-hockey`**, met server-rendered HTML en een dagelijkse herbouw (`revalidate` 1 dag). De opbouw:
+  - een intro die per fase verandert (voor, tijdens en na het weekend van 27 tot en met 30 november);
+  - vier keuzeroutes;
+  - de acties per winkel;
+  - sticks (veld, junior, zaal) en schoenen met een actuele prijs;
+  - koopadvies met links naar de kennisartikelen;
+  - een FAQ en een blok over hoe de pagina werkt.
+- **Structured data:** `CollectionPage`, `ItemList` (links, geen `Product`), `BreadcrumbList` en `FAQPage`, alleen van zichtbare tekst.
+- **Configuratie** in `src/content/blackFriday.ts`: de datums van de editie en per winkel het soort actie, de status, de datums, de controledatum, een samenvatting, de voorwaarden, de bron en de link. De logica staat in `src/lib/campaign.ts` (tijdzone Europe/Amsterdam) en is getest.
+  - Een actie na haar einddatum, of zonder einddatum na het campagneweekend, staat er nooit als lopend.
+  - Een controle ouder dan 14 dagen telt als "nog niet nagekeken", net als bij prijzen.
+- **Winkelknoppen** naar actiepagina's via `shopPageTrackingUrl` in `src/lib/retailers.ts`. Die gebruikt dezelfde netwerkformaten en ID's als de productlinks, alleen gecontroleerd op het domein van de winkel. Er is een nieuwe plek `blackfriday` en een nieuw linktype `actie` in `retailer_click`.
+- **Meten:**
+  - `catalog_block_click` met `page: 'black-friday'` en blokken `routes`, `advies` en `faq`;
+  - `retailer_click` met plek `blackfriday`;
+  - bezoek via de gewone pageview;
+  - de seizoensregel op /sticks, /zaalsticks en /hockeyschoenen als blok `seizoen`.
+- **Interne links:** één rustige regel op /sticks, /zaalsticks en /hockeyschoenen, alleen van 10 tot en met 30 november. Verder sitemap en llms.txt.
+
+**Besluiten:**
+- **Geen kortingspercentages, ook niet als een winkel ze zelf noemt.** We hebben geen verifieerbare eerdere prijs (CLAUDE.md, Commerce). De pagina noemt het soort actie, de datums die de winkel vermeldt en de voorwaarden, en verwijst voor het bedrag naar de winkel.
+- **De sticks zijn een prijsvergelijking, geen kortingslijst.** Alleen met de hand nagekeken sticks met een actuele prijs bij minstens twee winkels, en per groep drie merken via `pickVaried`.
+- **Schoenen:** curated modellen met minstens één actuele winkelprijs, één per merk.
+- **Alle vijf partnerwinkels** staan erin, ook HockeyCity, die in de opdracht niet werd genoemd. Zo lijkt de pagina niet op een advertentie voor één winkel. De volgorde: eerst lopende acties, daarbinnen op naam; nooit op vergoeding.
+- **PassaSports:** de eigenaar las de actiepagina op 2026-11-10 in de browser: Black Friday-aanbiedingen vanaf vrijdag 20 november, zonder einddatum en zonder genoemde producten. Die staat nu als aangekondigd, met knop. Een jaartal staat niet op de pagina; voor 27 november opnieuw nakijken.
+- **Plutosport:** de eigenaar las www.plutosport.nl/black-friday op 2026-11-10: Black Friday Early Access met een persoonlijke code na aanmelding voor de nieuwsbrief, tot en met 15 november (nieuwsbriefleden kregen hem op 6 november). Het percentage nemen we niet over. Na 15 november staat de actie vanzelf op afgelopen.
+- **Niet nagekeken is geen claim.** PassaSports en Plutosport gaven op 2026-11-10 een 403, Daka een 429. We hebben de blokkade niet omzeild. Daka: de eigenaar keek op 2026-11-10 in de browser; er is nog geen Black Friday-aankondiging. Daka staat op "geen actie gevonden". De eigenaar controleert dagelijks.
+- **Wat wel is nagekeken (2026-11-10):**
+  - bol.com: de Black Friday-pagina staat online, zonder datums, en hockey wordt niet apart genoemd;
+  - HockeyCity: een sale-pagina, geen Black Friday-actie en geen einddatum.
+- **Homepage (zelfde PR, op verzoek van de eigenaar):**
+  - Van 10 tot en met 30 november staat er een band direct onder de hero (`CampaignBand`). Die vervangt in die periode de zaalseizoen-band, zodat er één band tegelijk staat. De band toont alleen feiten uit dezelfde config: hoeveel partnerwinkels een actie hebben, de bevestigde begin- of einddatums (hooguit twee) en de datum van controle. Als elke controle ouder is dan 14 dagen, noemt de band geen aantallen. Blauw, want oranje blijft van de stickwijzer. Geen percentage en geen aftelklok.
+  - Het zoekblok krijgt in dezelfde periode een snelkoppeling "Black Friday". In de bovenbalk op telefoons wijst de link rechts dan naar de actiepagina in plaats van naar /methodiek; de methodiek blijft bereikbaar via de hero en de footer.
+  - Meten: `home_block_click` met block `blackfriday` (band) of `zoeken` (snelkoppeling, target /black-friday-hockey), en `campaign_link_click` met source `bovenbalk`.
+  - Pagina's die niet dagelijks opnieuw worden gebouwd, kunnen de link in de bovenbalk tot de volgende build houden. Die link leidt dan naar de melding dat de editie is afgelopen.
+- **Attributie via actiepagina's** (deeplinks naar een categorie- of actiepagina) controleren we na de eerste klikken in de dashboards van de netwerken.

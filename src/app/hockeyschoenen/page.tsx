@@ -9,6 +9,7 @@ import { shoeArticleLink, shoeArticleLinks } from '@/content/shoeArticles';
 import { ImportedShoes } from '@/components/shoes/ImportedShoes';
 import { ShoeCard } from '@/components/shoes/ShoeCard';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
+import { CampaignNote } from '@/components/campaign/CampaignNote';
 import { ButtonLink } from '@/components/ui/Button';
 import { CERTAINTY_TEXT, HOCKEYSCHOENEN, intentFactLine, intentFacts } from '@/content/hockeyschoenen';
 import { pageMetadata } from '@/lib/site';
@@ -87,6 +88,7 @@ export default async function HockeyschoenenPage({
             {HOCKEYSCHOENEN.wizardButton}
           </ButtonLink>
         </TrackedBlock>
+        <CampaignNote page="hockeyschoenen" />
       </PageHeader>
 
       <PageBody>
