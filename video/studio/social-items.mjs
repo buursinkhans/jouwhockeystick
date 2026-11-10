@@ -117,3 +117,37 @@ export function uploadAction(name, localSha, assets) {
   if (existing.digest && existing.digest === `sha256:${localSha}`) return { kind: 'skip' };
   return { kind: 'replace', assetId: existing.id };
 }
+
+// Fields of a studio video that videoart.js and the YouTube texts read; the rest
+// of the document (status, kanalen states, Metricool ids) stays out of the render.
+const VIDEO_FIELDS = ['titel', 'datum', 'tijden', 'kanalen', 'scenes', 'short', 'youtube', 'reel', 'tiktok', 'thumbnail', 'soort', 'hook', 'pagina'];
+
+/** The render item for a Social-studio document ({collection: 'posts'|'videos', id, data}). Checked like the workflow does. */
+export function itemFromStudio({ collection, id, data }) {
+  const d = data && typeof data === 'object' ? data : {};
+  const raw =
+    collection === 'posts'
+      ? { kind: 'post', id, slides: d.slides }
+      : collection === 'videos'
+        ? { kind: 'video', id, ...Object.fromEntries(VIDEO_FIELDS.filter((k) => d[k] !== undefined).map((k) => [k, d[k]])) }
+        : null;
+  if (!raw) throw new Error(`Onbekende collectie: ${collection}`);
+  return decodeItem(Buffer.from(JSON.stringify(raw)).toString('base64'));
+}
+
+/**
+ * What the Publiceerder writes in metricoolAkkoord.media once every url answers:
+ * a post's slides in order; per video format the file and its cover
+ * (uitleg = the YouTube video). Same shape as before, now with release urls.
+ */
+export function mediaFor(item, { test = false } = {}) {
+  const files = fileNames(item, { test }).map((f) => ({ ...f, url: releaseUrl(f.name) }));
+  if (item.kind === 'post') return { slides: files.map(({ name, url }) => ({ name, url })) };
+  const media = {};
+  for (const f of files) media[f.part === 'cover' ? `${f.format}Cover` : f.format] = { name: f.name, url: f.url };
+  return media;
+}
+
+/** Every url in a media object, in order. */
+export const mediaUrls = (media) =>
+  Object.values(media).flatMap((v) => (Array.isArray(v) ? v.map((x) => x.url) : [v.url]));
