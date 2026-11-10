@@ -1,6 +1,31 @@
 {
   "versie": 1,
-  "items": {},
+  "items": {
+    "posts/20261128-proef-publiceerder": {
+      "render": {
+        "klaar": "2026-11-10T13:30:56Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "test-20261128-proef-publiceerder-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/test-20261128-proef-publiceerder-1.png"
+          },
+          {
+            "name": "test-20261128-proef-publiceerder-2.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/test-20261128-proef-publiceerder-2.png"
+          },
+          {
+            "name": "test-20261128-proef-publiceerder-3.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/test-20261128-proef-publiceerder-3.png"
+          }
+        ]
+      },
+      "kanalen": {},
+      "fout": null
+    }
+  },
   "laatsteRun": null,
-  "tegoed": null
+  "tegoed": null,
+  "wijziging": "ca80e461-4bf8-4933-8ae2-61a6a26a552c"
 }
