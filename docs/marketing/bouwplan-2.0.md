@@ -44,7 +44,7 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 | Fase | Inhoud | Status |
 |---|---|---|
 | 0 | Proef: SlideArt in de repo, `social-render.yml`, bewijs dat Metricool de bestanden ophaalt | Bewezen op 2026-11-10 (PR #200) |
-| 1 | Kern: Publiceerder, teller voor het Metricool-tegoed, merkplatform, uitgebreide redactiecontrole | Gebouwd (PR); open: toestemming om in de studio te schrijven |
+| 1 | Kern: Publiceerder, teller voor het Metricool-tegoed, merkplatform, uitgebreide redactiecontrole | Bewezen op 2026-11-10 (PR #201); Publiceerder staat aan |
 | 2 | Nieuwe studio in `social/studio/index.html`: één statusregel, kaarten met echte preview, Goedkeuren en Aanpassen | Nog niet gestart |
 | 3 | Onderzoeker, leren van resultaten, gepaarde tests, Pulse, Push en Peak in het kwartaalplan | Nog niet gestart |
 | 4 | Configuratie per site, woordenlijst BE, Weekrapport en KPI-definities | Nog niet gestart |
@@ -65,7 +65,9 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 - `src/marketing/metricoolBudget.ts` en `npm run marketing:budget`: de teller voor het Metricool-tegoed (grens 20).
 - [merkplatform.md](merkplatform.md) en de uitgebreide redactiecontrole in `editorCheck.ts`.
 - Studio versie 23: Goedkeuren schrijft alleen het akkoord (`v: 2`) en start de Publiceerder.
-- **Proef (2026-11-10):** het starten van de render en het maken van de beelden werkten vanuit de cloud. Het open punt: elke run vraagt één keer toestemming om in de studio te schrijven (zie de decision log).
+- **Proef (2026-11-10):** het starten van de render en het maken van de beelden werkten vanuit de cloud. Schrijven in de studio vroeg per run om toestemming; besluit eigenaar: de Publiceerder schrijft niet meer in de studio (optie 2). Zijn stand staat op de branch `social-state` en wordt geschreven door de workflow `social-state.yml`.
+- **Klaar (2026-11-10, na de merge):** een run vanaf `main` las het goedgekeurde proefitem, sloeg de beelden en de Metricool-gegevens op in de stand en koppelde de bestaande post in Metricool, zonder een tweede te maken en zonder één toestemmingsvraag. In Metricool staat één concept (Instagram en Facebook, 28 november 19:30, drie beelden); het tegoed staat op 1 van 20. De Publiceerder draait sindsdien elk uur.
+- **Nog niet in fase 1:** de studio laat de status uit de stand of uit Metricool nog niet zien (fase 2). De Social-planner schrijft zelf nog in de studio en vraagt daarvoor per run toestemming; dat lossen we op in fase 2 of 3.
 
 ### Fase 2 tot en met 4
 
