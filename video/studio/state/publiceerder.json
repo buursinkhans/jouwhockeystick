@@ -107,9 +107,7 @@
           "moment": "2026-11-11T19:30:00",
           "op": "2026-11-10T15:22:35Z"
         },
-        "tiktok": {
-          "bezig": "2026-11-10T15:24:24.318Z"
-        }
+        "tiktok": {}
       },
       "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt."
     },
@@ -155,13 +153,13 @@
       "fout": null
     }
   },
-  "laatsteRun": "2026-11-10T15:24:14Z",
+  "laatsteRun": "2026-11-10T15:24:59.582Z",
   "tegoed": {
     "maand": "2026-11",
     "gebruikt": 4,
     "grens": 20
   },
-  "wijziging": "e4090dfe-3035-448e-904f-5afc64610f59",
+  "wijziging": "15c95869-570e-426f-82b0-37c8fbf12140",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
