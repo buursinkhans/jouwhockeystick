@@ -78,13 +78,14 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   },
   {
     retailer: 'daka',
-    kind: 'sale',
-    status: 'niet-gecontroleerd',
+    kind: 'geen',
+    // Checked by the owner in the browser on 2026-11-10; the owner checks daily.
+    status: 'gecontroleerd',
     categories: [],
     startsAt: null,
     endsAt: null,
-    verifiedAt: null,
-    summary: 'We konden de hockeysale van Daka nog niet nalezen. Zodra dat lukt, staat hier wat de actie is en tot wanneer.',
+    verifiedAt: '2026-11-10',
+    summary: 'Daka heeft nog geen Black Friday-actie aangekondigd. Zodra dat verandert, staat het hier.',
     conditions: null,
     sourceUrl: 'https://www.daka.nl/sale/hockey',
     url: 'https://www.daka.nl/sale/hockey',

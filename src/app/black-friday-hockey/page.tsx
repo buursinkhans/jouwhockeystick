@@ -154,7 +154,7 @@ export default function BlackFridayPage() {
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                     <h3 className="text-lg font-bold">{label(promo.retailer)}</h3>
                     <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATE_CLASS[state]}`}>{BLACK_FRIDAY.shops.stateLabel[state]}</span>
-                    {showDetails && <span className="text-sm text-inkt/80">{BLACK_FRIDAY.shops.kindLabel[promo.kind]}</span>}
+                    {showDetails && state !== 'geen' && <span className="text-sm text-inkt/80">{BLACK_FRIDAY.shops.kindLabel[promo.kind]}</span>}
                   </div>
                   {state === 'afgelopen' ? null : <p className="mt-2 max-w-3xl text-inkt/80">{promo.summary}</p>}
                   {showDetails && (promo.startsAt || promo.endsAt) && (
