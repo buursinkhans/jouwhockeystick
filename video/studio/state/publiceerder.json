@@ -108,10 +108,13 @@
           "op": "2026-11-10T15:22:35Z"
         },
         "tiktok": {
-          "bezig": "2026-11-10T22:14:25Z"
+          "id": 423754336,
+          "uuid": "2936496184597364903",
+          "moment": "2026-11-11T19:30:00",
+          "op": "2026-11-10T22:15:00Z"
         }
       },
-      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt."
+      "fout": null
     },
     "posts/20261112-schoenen-ondergrond": {
       "render": {
@@ -202,7 +205,7 @@
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261113-lengte-volwassenen-short-cover.png"
         }
       },
-      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt.",
+      "fout": null,
       "kanalen": {
         "reels": {
           "id": 423309950,
@@ -217,7 +220,10 @@
           "op": "2026-11-10T15:33:37Z"
         },
         "tiktok": {
-          "bezig": "2026-11-10T22:14:25Z"
+          "id": 423754369,
+          "uuid": "-4145196506843362231",
+          "moment": "2026-11-13T19:30:00",
+          "op": "2026-11-10T22:15:00Z"
         }
       }
     },
@@ -258,10 +264,13 @@
           "op": "2026-11-10T15:34:53Z"
         },
         "tiktok": {
-          "bezig": "2026-11-10T22:14:25Z"
+          "id": 423754411,
+          "uuid": "7150096310724086510",
+          "moment": "2026-11-20T19:30:00",
+          "op": "2026-11-10T22:15:00Z"
         }
       },
-      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt."
+      "fout": null
     },
     "posts/20261113-veld-of-zaalstick": {
       "render": {
@@ -334,7 +343,7 @@
         "gestart": "2026-11-10T21:50:13Z",
         "klaar": "2026-11-10T21:51:59Z"
       },
-      "fout": "TikTok inplannen lukte niet: Metricool eist een TikTok-titel, die de Publiceerder nu niet meestuurt.",
+      "fout": null,
       "media": {
         "reel": {
           "name": "20261101-zaal-carbon-reel.mp4",
@@ -367,18 +376,21 @@
           "op": "2026-11-10T21:55:43Z"
         },
         "tiktok": {
-          "bezig": "2026-11-10T22:14:25Z"
+          "id": 423754453,
+          "uuid": "1384797643167059592",
+          "moment": "2026-11-18T19:30:00",
+          "op": "2026-11-10T22:15:00Z"
         }
       }
     }
   },
-  "laatsteRun": "2026-11-10T21:58:21Z",
+  "laatsteRun": "2026-11-10T22:15:00Z",
   "tegoed": {
     "maand": "2026-11",
-    "gebruikt": 14,
+    "gebruikt": 18,
     "grens": 20
   },
-  "wijziging": "8fac764b-1be3-4bcd-bdde-6f72639e69bd",
+  "wijziging": "c39fc8bf-ed00-4dbc-b63c-d1c37bc6bbbe",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
