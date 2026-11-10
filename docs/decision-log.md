@@ -2915,3 +2915,26 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Voorbeelden in de pagina zelf getekend.** Een artifact mag alleen eigen bestanden en `data:`-beelden laden, geen beelden van GitHub. De pagina tekent de voorbeelden met dezelfde `slideart.js` en `videoart.js` als `social-render.yml`, dus het beeld is hetzelfde.
 - **Status uit Metricool.** Een artifact kan de stand van de Publiceerder op GitHub niet lezen. De studio leest daarom zelf getScheduledPosts via de Metricool-koppeling van de eigenaar (alleen lezen). Een item telt als ingepland als elk kanaal een post heeft met dezelfde datum, hetzelfde netwerk en hetzelfde tekstbegin; dat is dezelfde regel als in de Publiceerder.
 - **Niet meer in de studio:** downloads, de oude YouTube-route via een GitHub-label, community, markt en kwartaalplan. De gegevens blijven in de database voor het Weekrapport en de Onderzoeker.
+
+## 2026-11-10 — Social-machine 2.0, fase 3: Onderzoeker, leren en gepaarde tests
+
+**Besluit eigenaar:** voorstellen en lessen via GitHub, niet in de studio. Een geplande taak die in de studio-database schrijft, vraagt per run om toestemming; dat geldt ook voor de Social-planner.
+- **Voorstellen.** De Onderzoeker (donderdag) zet tien voorstellen en hooguit drie lessen in een issue met het label `social-voorstellen`, als vinkjes met een verborgen markering. De eigenaar vinkt aan in de GitHub-app. De planner leest vrijdag de vinkjes (`marketing:research vinkjes`) en maakt die voorstellen eerst.
+- **Lessen.** Een aangevinkte les maakt de workflow `lessen.yml` (bij een bewerking van zo'n issue door de eigenaar) tot een PR naar `docs/marketing/merkplatform.md`, onder "Lessen uit de resultaten". Er zit geen taalmodel tussen; de tekst is die van het issue. Mergen is goedkeuren.
+
+**Gebouwd:**
+- **Pure functies met tests:**
+  - de seizoenskalender (`calendar.ts`): zaal en indoor van oktober t/m februari, de start van het veldseizoen, Black Friday, Sinterklaas (NL 5 december 's avonds, BE 6 december 's ochtends), kerst en de Push-blokken;
+  - het scoren (`research.ts`): vraag, past nu, pagina, vorm werkte eerder (vanaf 5 posts), en de pagina zes weken zonder post;
+  - het leren (`learning.ts`): na 7 dagen, een index tegenover de mediaan van 8 weken per kanaal, en een les vanaf 5 posts per variant en 20% verschil;
+  - de gepaarde tests (`abtest.ts`): zelfde onderwerp, weekdag en tijd, 7 tot 14 dagen uit elkaar, één ding anders, één vraag tegelijk, eerst het hooktype.
+- **Resultaten** worden bewaard in de stand op `social-state`, omdat het gratis plan van Metricool maar 30 dagen statistieken houdt. `social-state.mjs` kent daarvoor `resultaten` en `onderzoek`.
+- **Social-planner:**
+  - fase per week (pulse of push; peak alleen als de eigenaar het vastlegt) en één vervolgstap per Push-week;
+  - de aangevinkte voorstellen gaan eerst;
+  - een testvoorstel wordt twee items met `abtest: {vraag, paar, rol}`;
+  - het ritme van 2 posts (dinsdag en donderdag) en 2 video's (woensdag en vrijdag) per week, zoals de eigenaar op 10 november besloot.
+- **Routine Onderzoeker** (`trig_015NRQE52JXPQdFLV4WutNVE`, donderdag 08:30): alleen de Metricool- en vidIQ-koppeling. Hij staat uit tot de proefrun na de merge.
+- **Studio versie 26:** "Test A" of "Test B" op de kaart.
+
+**Let op:** met 2 posts en 2 video's per week, en video's op drie kanalen, komen er ongeveer 8 Metricool-posts per week. Dat is meer dan de 20 per maand van het gratis plan. De teller stopt bij 20, met een melding. Upgraden doet de eigenaar vlak voor de livegang.

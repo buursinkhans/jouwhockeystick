@@ -1,0 +1,54 @@
+# Turns the lessons the owner ticked in a proposals issue (label social-voorstellen,
+# docs/marketing/onderzoeker.md) into a small pull request to docs/marketing/merkplatform.md.
+# Merging it is the approval. Only ticks by the repository owner count; no language
+# model in between: the text is the lesson as the Onderzoeker wrote it.
+name: Lessen naar het merkplatform
+
+on:
+  issues:
+    types: [edited]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: lessen-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  pr:
+    if: contains(github.event.issue.labels.*.name, 'social-voorstellen') && github.event.sender.login == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Lessen toevoegen
+        id: add
+        # The issue body is data: it goes in through the environment, never into the shell.
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          n=$(node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/lessons-to-pr.ts)
+          echo "nieuw=$n" >> "$GITHUB_OUTPUT"
+      - name: Pull request
+        if: steps.add.outputs.nieuw != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          branch="lessen/issue-$ISSUE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -b "$branch"
+          git add docs/marketing/merkplatform.md
+          git commit -q -m "Merkplatform: lessen uit de resultaten (issue #$ISSUE)"
+          git push -q --force origin "$branch"
+          if ! gh pr view "$branch" --json number >/dev/null 2>&1; then
+            gh pr create --head "$branch" --base main \
+              --title "Merkplatform: lessen uit de resultaten (issue #$ISSUE)" \
+              --body "Lessen die de eigenaar aanvinkte in #$ISSUE. Alleen \`docs/marketing/merkplatform.md\` verandert. Mergen is goedkeuren; sluiten is afwijzen."
+          fi

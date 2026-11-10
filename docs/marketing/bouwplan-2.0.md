@@ -46,7 +46,7 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 | 0 | Proef: SlideArt in de repo, `social-render.yml`, bewijs dat Metricool de bestanden ophaalt | Bewezen op 2026-11-10 (PR #200) |
 | 1 | Kern: Publiceerder, teller voor het Metricool-tegoed, merkplatform, uitgebreide redactiecontrole | Bewezen op 2026-11-10 (PR #201); Publiceerder staat aan |
 | 2 | Nieuwe studio in `social/studio/index.html`: één statusregel, kaarten met echte preview, Goedkeuren en Aanpassen | Gebouwd en gepubliceerd (versie 25); de eigenaar test op de telefoon |
-| 3 | Onderzoeker, leren van resultaten, gepaarde tests, Pulse, Push en Peak in het kwartaalplan | Nog niet gestart |
+| 3 | Onderzoeker, leren van resultaten, gepaarde tests, Pulse, Push en Peak in het kwartaalplan | Gebouwd (PR); proefrun na de merge |
 | 4 | Configuratie per site, woordenlijst BE, Weekrapport en KPI-definities | Nog niet gestart |
 
 ### Fase 0: proef
@@ -78,7 +78,29 @@ Eén fase per pull request. Na elke fase stopt de bouw en staat hier wat de eige
 - **Vaste series in `slideart.js`.** Een eigen openingsslide per serie (achtergrond en motief, geen nieuwe kleuren). De planner geeft een post het veld `serie`.
 - **Vervallen in de studio:** downloads, de oude YouTube-route via GitHub, community, markt en kwartaalplan. Hun gegevens blijven in de database.
 
-### Fase 3 en 4
+### Fase 3: onderzoek, leren en testen
+
+- **Besluit eigenaar (2026-11-10): voorstellen en lessen via GitHub.** Een geplande taak die in de studio schrijft, vraagt per run om toestemming.
+  - Daarom zet de Onderzoeker zijn tien voorstellen en de lessen in een issue met het label `social-voorstellen`. De eigenaar vinkt aan in de GitHub-app.
+  - De Social-planner maakt de aangevinkte voorstellen eerst.
+  - Een aangevinkte les wordt een PR naar `merkplatform.md`, gemaakt door de workflow `lessen.yml`, zonder taalmodel ertussen. Mergen is goedkeuren.
+- **[onderzoeker.md](onderzoeker.md):** de opdracht van de Onderzoeker (routine `trig_015NRQE52JXPQdFLV4WutNVE`, donderdag 08:30, staat nog uit). Bronnen: de rapport-issues, de live pagina's, de studio (alleen lezen), de seizoenskalender, vidIQ (alleen lezen) en Metricool (alleen lezen).
+- **Pure functies met tests in `src/marketing/`:**
+  - `calendar.ts`: seizoenskalender voor NL en BE, de Push-blokken, en Black Friday berekend.
+  - `research.ts`: vijf criteria, één punt elk, met de reden.
+  - `learning.ts`: labels, een resultaat na 7 dagen, een index tegenover de mediaan van 8 weken per kanaal, en een les pas vanaf 5 posts per variant.
+  - `abtest.ts`: gepaarde tests, één vraag tegelijk, eerst het hooktype.
+  - `voorstellenIssue.ts`: het issue opbouwen, de vinkjes lezen en de lessen toevoegen.
+  - De scripts zijn `npm run marketing:research` en `scripts/lessons-to-pr.ts`.
+- **Stand:** de resultaten worden bewaard in de stand op `social-state` (`resultaten`, `onderzoek`), omdat Metricool in het gratis plan maar 30 dagen bewaart.
+- **Social-planner:**
+  - Elke week krijgt een fase (pulse, of push in een Push-blok; peak alleen als de eigenaar dat vastlegt).
+  - Een Push-week heeft één vervolgstap.
+  - Aangevinkte voorstellen gaan eerst, en een testvoorstel wordt twee items met `abtest`.
+  - Het ritme is 2 posts (di en do) en 2 video's (wo en vr) per week.
+- **Studio (versie 26):** een kaart in een test toont "Test A" of "Test B".
+
+### Fase 4
 
 Zoals in de opdracht van 10 november 2026. Per fase komt hier een korte samenvatting bij zodra die start.
 
