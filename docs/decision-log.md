@@ -2938,3 +2938,25 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Studio versie 26:** "Test A" of "Test B" op de kaart.
 
 **Let op:** met 2 posts en 2 video's per week, en video's op drie kanalen, komen er ongeveer 8 Metricool-posts per week. Dat is meer dan de 20 per maand van het gratis plan. De teller stopt bij 20, met een melding. Upgraden doet de eigenaar vlak voor de livegang.
+
+## 2026-11-10 — Social-machine 2.0, fase 4: motor met site-configuratie, Vlaanderen en Weekrapport
+
+**Gebouwd:**
+- **Configuratie per site** in `marketing/sites/jouwhockeystick.json`, met het Zod-schema in `src/marketing/siteConfigSchema.ts`. `marketing/sites/standaard.txt` (of `MARKETING_SITE`) kiest de site.
+  - De loader in `siteConfig.ts` gebruikt geen Zod, omdat de scripts ook in een cloudsessie draaien, waar npm niet bereikbaar is. De tests en CI controleren elke configuratie met het schema.
+- **Site-neutrale motor.** Kalender, scoren, leren, testen, tegoed, het voorstellen-issue, de KPI's en de redactiecontrole lezen alles over de site uit de configuratie. De verboden claims staan nu daar, niet meer in `editorCheck.ts`.
+  - `motor.test.ts` faalt als een van die bestanden stick, zaal, bow of hockey bevat.
+- **Woordenlijst BE:** zaal wordt indoor, contributie lidgeld, JO en MO worden U8 tot en met U19, en Sinterklaas valt op 6 december 's ochtends.
+  - `localize` vervangt hele woorden, de langste eerst, en houdt de hoofdletter. `foreignWords` vindt NL-woorden in een Vlaamse tekst.
+  - BE staat op `actief: false` tot de eigenaar bevestigt dat bol.com/be vergoedt.
+- **KPI's** (`src/marketing/kpi.ts`) en het Weekrapport ([weekrapport.md](marketing/weekrapport.md)):
+  - de noordster: stickwijzer-starts uit social;
+  - de trechter: bereik, bewaard en gedeeld per 1.000 bereik, sitebezoek via social, winkelkliks, en bestellingen als aantal;
+  - leren: kijkers die blijven per hooktype;
+  - gezondheid: gepland tegenover ritme, tegoed, fouten en tijd tot goedkeuring.
+  - NL en BE apart, vergeleken met het gemiddelde van 4 weken, zonder doelen vooraf.
+- **Conversie-rapport:** een nieuwe sectie "Stickwijzer-starts uit social", met `quiz_start` per bron uit de UTM van het bezoek (`session.$entry_utm_medium = 'social'`). Kan PostHog dat niet beantwoorden, dan zegt het rapport dat en loopt de rest door.
+
+**Besluiten:**
+- **Het Weekrapport is een GitHub-issue** met het label `marketing`, om dezelfde reden als de voorstellen: een geplande taak die in een claude.ai-pagina schrijft, vraagt per run om toestemming. De cijfers van elke week staan onderaan het issue als verborgen JSON. Het Weekrapport leest daarmee de vorige 4 weken, en het dashboard (Dashboard-type, gemaakt in een claude.ai-sessie) leest dezelfde issues.
+- **Onderzoeker:** vooraf toegestaan zijn alleen de leestools van Metricool (getAnalyticsAvailableMetrics, getAnalyticsDataByMetrics, getScheduledPosts) en van vidIQ (keyword_research). vidIQ kan tegoed bij vidIQ kosten; dat houdt de eigenaar in de gaten.

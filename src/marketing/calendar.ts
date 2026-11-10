@@ -1,75 +1,51 @@
 /**
- * Season calendar for social content (docs/marketing/bouwplan-2.0.md, fase 3),
- * for the Netherlands and Flanders. Only moments the handbook already uses
- * (docs/instagram.md §1 and §7) and the Push blocks the owner set on
- * 2026-11-10. Pure: dates in, moments out; no clock inside.
+ * Season calendar of the marketing engine (docs/marketing/bouwplan-2.0.md,
+ * fases 3 and 4). The moments and Push blocks of a market come from the site
+ * configuration (marketing/sites/<site>.json); this module only resolves them
+ * to dates. Pure: dates in, moments out; no clock inside.
  */
-export type Market = 'NL' | 'BE';
+import type { MarketConfig } from './siteConfig';
 
-export type Moment = {
-  id: string;
-  /** Name as the market says it (NL "zaal", BE "indoor"). */
-  naam: string;
-  /** Inclusive YYYY-MM-DD range. */
-  van: string;
-  tot: string;
-  /** Pillar of the brand platform it fits (docs/marketing/merkplatform.md). */
-  pijler: 'maat' | 'spel' | 'zaal' | 'vergelijken';
-};
-
-/** A Push block: 2 to 6 weeks with one next step (the owner's method). */
-export type PushBlock = { id: string; naam: string; van: string; tot: string; vervolgstap: string };
+export type Moment = MarketConfig['kalender'][number] & { van: string; tot: string };
+export type PushBlock = MarketConfig['push'][number] & { van: string; tot: string };
 
 const pad = (n: number) => String(n).padStart(2, '0');
-const ymd = (y: number, m: number, d: number) => `${y}-${pad(m)}-${pad(d)}`;
 
 /** Black Friday: the day after the fourth Thursday of November. */
 export function blackFriday(year: number): string {
   const first = new Date(Date.UTC(year, 10, 1)).getUTCDay(); // 0 = Sunday
   const firstThursday = 1 + ((4 - first + 7) % 7);
-  return ymd(year, 11, firstThursday + 21 + 1);
+  return `${year}-11-${pad(firstThursday + 22)}`;
 }
 
-/** The moments of one season year, which starts in August (field preparation) and ends in July. */
-export function seasonMoments(seasonStartYear: number, market: Market): Moment[] {
-  const y = seasonStartYear;
-  const indoor = market === 'BE' ? 'Indoor' : 'Zaal';
-  return [
-    { id: 'veld-start-najaar', naam: 'Start veldseizoen', van: ymd(y, 8, 15), tot: ymd(y, 9, 30), pijler: 'maat' },
-    // Through the last day of February: '02-29' compares right as text in every year.
-    { id: 'zaalseizoen', naam: `${indoor}seizoen`, van: ymd(y, 10, 1), tot: ymd(y + 1, 2, 29), pijler: 'zaal' },
-    { id: 'black-friday', naam: 'Black Friday', van: ymd(y, 11, 1), tot: ymd(y, 11, 30), pijler: 'vergelijken' },
-    market === 'BE'
-      // Flanders: Sinterklaas brings the presents on the morning of 6 December.
-      ? { id: 'sinterklaas', naam: 'Sinterklaas (6 december, ochtend)', van: ymd(y, 11, 15), tot: ymd(y, 12, 6), pijler: 'maat' }
-      : { id: 'sinterklaas', naam: 'Sinterklaas (pakjesavond 5 december)', van: ymd(y, 11, 15), tot: ymd(y, 12, 5), pijler: 'maat' },
-    { id: 'kerst', naam: 'Kerst', van: ymd(y, 12, 6), tot: ymd(y, 12, 24), pijler: 'maat' },
-    { id: 'veld-start-voorjaar', naam: 'Veldseizoen weer van start', van: ymd(y + 1, 2, 15), tot: ymd(y + 1, 3, 31), pijler: 'spel' },
-  ];
-}
-
-/** The Push blocks the owner set (bouwplan 2.0): indoor mid-November to mid-December, field mid-August to mid-September. */
-export function pushBlocks(seasonStartYear: number, market: Market): PushBlock[] {
-  const y = seasonStartYear;
-  const indoor = market === 'BE' ? 'Indoor' : 'Zaal';
-  return [
-    { id: 'veld-push', naam: 'Veldseizoen-Push', van: ymd(y, 8, 15), tot: ymd(y, 9, 15), vervolgstap: 'Doe de stickwijzer' },
-    { id: 'indoor-push', naam: 'Indoor-Push', van: ymd(y, 11, 15), tot: ymd(y, 12, 15), vervolgstap: `Kies je ${indoor.toLowerCase()}stick` },
-  ];
-}
-
-/** The season year a date belongs to (August starts a new one). */
-export const seasonYear = (date: string) => {
+/** The season year a date belongs to: a new one starts in `startMonth`. */
+export const seasonYear = (date: string, startMonth: number) => {
   const y = Number(date.slice(0, 4));
-  return Number(date.slice(5, 7)) >= 8 ? y : y - 1;
+  return Number(date.slice(5, 7)) >= startMonth ? y : y - 1;
 };
 
-/** Moments that run on a date, in the market. */
-export function momentsOn(date: string, market: Market): Moment[] {
-  return seasonMoments(seasonYear(date), market).filter((m) => date >= m.van && date <= m.tot);
+/** A MM-DD of the configuration as a date in the season that starts in `seasonStart`. */
+function inSeason(monthDay: string, seasonStart: number, startMonth: number): string {
+  const month = Number(monthDay.slice(0, 2));
+  return `${month >= startMonth ? seasonStart : seasonStart + 1}-${monthDay}`;
+}
+
+/**
+ * A moment or block resolved to dates. "02-29" compares right as text in
+ * every year, so "through the last day of February" needs no leap-year rule.
+ */
+function resolve<T extends { van: string; tot: string }>(x: T, seasonStart: number, startMonth: number): T {
+  return { ...x, van: inSeason(x.van, seasonStart, startMonth), tot: inSeason(x.tot, seasonStart, startMonth) };
+}
+
+/** The moments of a market that run on a date. */
+export function momentsOn(date: string, m: MarketConfig, startMonth: number): Moment[] {
+  const s = seasonYear(date, startMonth);
+  return m.kalender.map((x) => resolve(x, s, startMonth)).filter((x) => date >= x.van && date <= x.tot);
 }
 
 /** The Push block of a date, or null (then the week is Pulse; a Peak is only set by the owner). */
-export function pushOn(date: string, market: Market): PushBlock | null {
-  return pushBlocks(seasonYear(date), market).find((b) => date >= b.van && date <= b.tot) ?? null;
+export function pushOn(date: string, m: MarketConfig, startMonth: number): PushBlock | null {
+  const s = seasonYear(date, startMonth);
+  return m.push.map((x) => resolve(x, s, startMonth)).find((x) => date >= x.van && date <= x.tot) ?? null;
 }

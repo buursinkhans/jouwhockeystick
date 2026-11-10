@@ -267,6 +267,15 @@ async function main() {
       console.error(`AI-bezoeken overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
       return undefined;
     }),
+    // The north star of the marketing machine (docs/marketing/weekrapport.md): starts from social, by entry UTM.
+    socialStarts: await breakdown(
+      config,
+      'quiz_start',
+      `if(toString(session.$entry_utm_medium) = 'social', toString(session.$entry_utm_source), '')`,
+    ).catch((error: unknown) => {
+      console.error(`Starts uit social overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }),
     homeBlocks: await breakdown(
       config,
       'home_block_click',

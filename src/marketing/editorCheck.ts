@@ -1,4 +1,5 @@
 import type { ContentItem } from './content';
+import { claimPattern, loadSiteConfig } from './siteConfig';
 
 /**
  * The automatic part of the AI editor (docs/marketing/merkstem.md): checks a
@@ -9,9 +10,8 @@ import type { ContentItem } from './content';
  */
 export type Finding = { level: 'P0' | 'P1'; rule: string; detail: string };
 
-/** Claims the site never makes (CLAUDE.md, docs/instagram.md §2). */
-const CLAIMS =
-  /goedkoopst|beste prijs|scherpste prijs|laagste prijs|\bde beste\b|\bbeste (zaal)?stick\b|gegarandeerd|bewezen|\bkorting\b|\breview\b|voorkomt blessures|\baanrader\b/i;
+/** Claims the site never makes: `verbodenClaims` in the site configuration (CLAUDE.md, docs/instagram.md §2). */
+const CLAIMS = claimPattern(loadSiteConfig());
 
 /** AI words from docs/schrijfstijl.md ("Vermijden"). */
 const AI_WORDS =
