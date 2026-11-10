@@ -94,6 +94,17 @@
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261106-zaal-is-geen-veld-short-cover.png"
         }
       },
+      "kanalen": {
+        "reels": {
+          "bezig": "2026-11-10T15:21:59Z"
+        },
+        "shorts": {
+          "bezig": "2026-11-10T15:21:59Z"
+        },
+        "tiktok": {
+          "bezig": "2026-11-10T15:21:59Z"
+        }
+      },
       "fout": null
     },
     "posts/20261112-schoenen-ondergrond": {
@@ -120,7 +131,7 @@
     "gebruikt": 2,
     "grens": 20
   },
-  "wijziging": "5a4d8eb4-8231-404d-bb93-8ec1fbb8dd16",
+  "wijziging": "2f25a8b2-3cde-466f-b942-0a22dadadcf9",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
