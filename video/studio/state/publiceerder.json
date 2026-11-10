@@ -315,7 +315,10 @@
       },
       "kanalen": {
         "insta": {
-          "bezig": "2026-11-10T21:54:33Z"
+          "id": 423734726,
+          "uuid": "5172925245144910325",
+          "moment": "2026-11-19T19:30:00",
+          "op": "2026-11-10T21:54:57Z"
         }
       }
     },
@@ -342,6 +345,11 @@
           "name": "20261101-zaal-carbon-short-cover.png",
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261101-zaal-carbon-short-cover.png"
         }
+      },
+      "kanalen": {
+        "reels": {
+          "bezig": "2026-11-10T21:54:57Z"
+        }
       }
     }
   },
@@ -351,7 +359,7 @@
     "gebruikt": 8,
     "grens": 20
   },
-  "wijziging": "60950847-b790-42f7-8290-727fd2c499bb",
+  "wijziging": "7f8f6e21-76c0-40d7-90a4-2cca8642174b",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
