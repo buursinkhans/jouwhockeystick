@@ -124,9 +124,28 @@
     },
     "videos/20261113-lengte-volwassenen": {
       "render": {
-        "gestart": "2026-11-10T15:20:06Z"
+        "gestart": "2026-11-10T15:20:06Z",
+        "klaar": "2026-11-10T15:32:32Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "reel": {
+          "name": "20261113-lengte-volwassenen-reel.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261113-lengte-volwassenen-reel.mp4"
+        },
+        "reelCover": {
+          "name": "20261113-lengte-volwassenen-reel-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261113-lengte-volwassenen-reel-cover.png"
+        },
+        "short": {
+          "name": "20261113-lengte-volwassenen-short.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261113-lengte-volwassenen-short.mp4"
+        },
+        "shortCover": {
+          "name": "20261113-lengte-volwassenen-short-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261113-lengte-volwassenen-short-cover.png"
+        }
+      }
     },
     "videos/20261120-stick-op-de-groei": {
       "render": {
@@ -193,7 +212,7 @@
     "gebruikt": 6,
     "grens": 20
   },
-  "wijziging": "8f27c4b6-a958-4eb3-b01e-19992e064958",
+  "wijziging": "00612dd8-afae-4d52-b3b1-8bf839c52bb9",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
