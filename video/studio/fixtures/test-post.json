@@ -1,0 +1,45 @@
+{
+  "kind": "post",
+  "id": "20261113-veld-of-zaalstick",
+  "titel": "Moet je kind een aparte zaalstick hebben?",
+  "slides": [
+    {
+      "boven": "Zaalseizoen",
+      "kop": "Moet je kind een aparte zaalstick hebben?",
+      "soort": "opening",
+      "tekst": "Wat de regels zeggen, en wanneer het zinvol is."
+    },
+    {
+      "kop": "Spelregels",
+      "soort": "tekst",
+      "tekst": "Volgens de FIH gelden voor een veld- en een zaalstick dezelfde maximale eisen. Een aparte zaalstick is geen verplichting."
+    },
+    {
+      "kop": "Het verschil zit in het spel",
+      "soort": "tekst",
+      "tekst": "In de zaal sla je niet en blijft de bal laag. Je speelt met een push of een flick."
+    },
+    {
+      "kop": "Veldstick is genoeg als…",
+      "punten": [
+        "Het je eerste zaalseizoen is",
+        "Je maar een paar keer binnen speelt"
+      ],
+      "soort": "lijst"
+    },
+    {
+      "kop": "Zaalstick is logisch als…",
+      "punten": [
+        "Je vaak binnen speelt",
+        "Je het zaalspel serieus neemt"
+      ],
+      "soort": "lijst"
+    },
+    {
+      "knop": "Lees het op de site",
+      "kop": "Lees het verschil",
+      "soort": "slot",
+      "tekst": "Wanneer een zaalstick zinvol is, staat op de site."
+    }
+  ]
+}

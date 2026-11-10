@@ -129,7 +129,8 @@ export async function render(video, { formats = ['short'], outDir, log = () => {
         const p = path.join(SOUNDS, file);
         if (fs.existsSync(p)) soundFiles[name] = p;
       }
-      const mp4 = path.join(outDir, `${video.id || 'video'}-${fmt === 'short' ? 'short' : 'youtube'}.mp4`);
+      // short and reel keep their own name; uitleg is the YouTube video (names unchanged for short and uitleg).
+      const mp4 = path.join(outDir, `${video.id || 'video'}-${fmt === 'uitleg' ? 'youtube' : fmt}.mp4`);
       run(process.env.FFMPEG_PATH || 'ffmpeg', ffmpegArgs({ framesPattern: path.join(dir, 'f%05d.jpg'), fps: info.fps, total: info.total, cues: info.cues, volume: info.volume, soundFiles, out: mp4 }));
       result[fmt] = { mp4, seconds: info.total };
       fs.rmSync(dir, { recursive: true, force: true });
@@ -139,13 +140,16 @@ export async function render(video, { formats = ['short'], outDir, log = () => {
       const VA = window.VideoArt;
       const a = document.createElement('canvas'); VA.thumbnail(a, window.__v);
       const b = document.createElement('canvas'); VA.thumbnailShort(b, window.__v);
+      const c = document.createElement('canvas'); VA.thumbnailReel(c, window.__v);
       const strip = (u) => u.slice('data:image/png;base64,'.length);
-      return [strip(a.toDataURL('image/png')), strip(b.toDataURL('image/png'))];
+      return [strip(a.toDataURL('image/png')), strip(b.toDataURL('image/png')), strip(c.toDataURL('image/png'))];
     });
     result.thumbnail = path.join(outDir, `${video.id || 'video'}-thumbnail.png`);
     result.thumbnailShort = path.join(outDir, `${video.id || 'video'}-thumbnail-short.png`);
     fs.writeFileSync(result.thumbnail, Buffer.from(thumbs[0], 'base64'));
     fs.writeFileSync(result.thumbnailShort, Buffer.from(thumbs[1], 'base64'));
+    result.thumbnailReel = path.join(outDir, `${video.id || 'video'}-cover-reel.png`);
+    fs.writeFileSync(result.thumbnailReel, Buffer.from(thumbs[2], 'base64'));
   } finally {
     await browser.close();
     fs.rmSync(work, { recursive: true, force: true });

@@ -1,0 +1,89 @@
+# Renders one Social-studio item (a post's slides as PNG, a video's MP4s and covers)
+# headless, with the same drawing code as the studio (video/studio/slideart.js and
+# videoart.js), and puts the files in the GitHub Release "social-media". Their urls are
+# public and predictable, so Metricool can fetch them:
+#   https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/<file>
+# Started by the Publiceerder (docs/marketing/bouwplan-2.0.md); nothing is posted here.
+# A file that is already there with the same content is left alone.
+name: Social renderen
+
+on:
+  workflow_dispatch:
+    inputs:
+      item:
+        description: 'Het item als JSON, in base64 (post met slides, of video met scènes)'
+        required: true
+        type: string
+      test:
+        description: 'Testrun: bestandsnamen krijgen het voorvoegsel test-'
+        required: false
+        type: boolean
+        default: false
+  # The proof run of fase 0: renders the fixture post as a test, so the chain is shown
+  # before the merge. Only for changes to the renderer itself.
+  pull_request:
+    paths:
+      - 'video/studio/slideart.js'
+      - 'video/studio/social-*.mjs'
+      - 'video/studio/fixtures/test-post.json'
+      - '.github/workflows/social-render.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  # One upload at a time: two runs must not replace each other's files halfway.
+  group: social-render
+  cancel-in-progress: false
+
+jobs:
+  render:
+    # A pull request from a fork gets no write token; only this repo's own branches run.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Playwright, Chromium, ffmpeg en Zod
+        working-directory: video/studio
+        timeout-minutes: 10
+        # Same fixed versions as video-publiceren.yml; ffmpeg as a static build, not via apt.
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.48.2 ffmpeg-static@5.2.0 zod@4.6.7
+          npx playwright install --with-deps chromium
+          FF="$(node -e "console.log(require('ffmpeg-static'))")"
+          echo "FFMPEG_PATH=$FF" >> "$GITHUB_ENV"
+      - name: Tests
+        run: node --test video/studio/*.test.mjs
+      - name: Item kiezen
+        id: item
+        env:
+          INPUT_ITEM: ${{ inputs.item }}
+          INPUT_TEST: ${{ inputs.test }}
+        # The item is data: it goes in through the environment and a file, never into the shell.
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base64 -w0 video/studio/fixtures/test-post.json > "$RUNNER_TEMP/item.b64"
+            echo "test=true" >> "$GITHUB_OUTPUT"
+          else
+            printf '%s' "$INPUT_ITEM" > "$RUNNER_TEMP/item.b64"
+            echo "test=$INPUT_TEST" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Renderen en uploaden
+        timeout-minutes: 15
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEST: ${{ steps.item.outputs.test }}
+        run: |
+          export ITEM_B64="$(cat "$RUNNER_TEMP/item.b64")"
+          node video/studio/social-render.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: social-render-result
+          path: social-render-result.json
+          if-no-files-found: ignore
+          retention-days: 14
