@@ -295,6 +295,15 @@ Het merk moet de principes uit `docs/keuzehulp-spec.md` uitstralen.
 - **Resultaatrollen** (beste match / veilige keuze / ambitieuze keuze) onderscheiden met labels en tekst, niet alleen met kleur.
 - **Geen merk- of sponsorlogo's** groter of prominenter dan het eigen logo in adviesresultaten. Dat sluit aan op "marge en sponsoring zijn geen scorefactor".
 
+### 7.1 De Jouwhockeystick-methode
+
+- **Naam:** "Jouwhockeystick-methode", met hoofdletter J en koppelteken; in lopende tekst "de Jouwhockeystick-methode". Het bijschrift is "speler, stick, maat". Geen varianten zoals "onze unieke methode" of "het systeem".
+- **Geen ™ of ®.** Er is geen merkregistratie. `TODO(eigenaar):` merkencheck bij het BOIP voor de naam breed wordt ingezet.
+- **Eén bron:** de tekst staat in `src/content/methode.ts`. De kernzin staat letterlijk alleen op /methodiek (later ook op de veld-pillar). Elders gebruik je de korte versie of een eigen zin met een link naar /methodiek.
+- **Hooguit drie vermeldingen per pagina** buiten /methodiek, en niet in de koppen van kennisartikelen.
+- **Niet gebruiken bij de methode:** bewezen, gecertificeerd, keurmerk, gegarandeerd, objectief, onafhankelijk, beste, getest, en "wetenschappelijk" behalve in "niet wetenschappelijk getoetst". Geen verwijzing naar een beoordeling of test die er nog niet is. Niet "drie stappen", niet "protocol", niet "score".
+- **Beschrijving:** een redactionele werkwijze die uitlegt in welke volgorde we afwegen. Zie de decision log van 2026-11-11.
+
 ---
 
 ## 8. Open punten

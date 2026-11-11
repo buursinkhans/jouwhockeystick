@@ -2,6 +2,10 @@ import {
   BRAND_PREFERENCE_POINTS,
   LEVEL_ESTIMATE_DEDUCTION,
 } from '@/advice-engine/scoring';
+import {
+  ADVICE_VERSION,
+  RULE_SET_VERSION,
+} from '@/advice-engine/ruleSetVersion';
 
 /**
  * Public method page copy (implementation spec §14). The general scientific
@@ -97,6 +101,15 @@ export const METHODIEK = {
     'Een stickadvies blijft een hulpmiddel: de juiste maat, techniek, speelstijl en het gevoel in de hand bepalen samen wat voor jou de beste keuze is.',
   ],
 } as const;
+
+/**
+ * The version line under the method sentence on /methodiek. Built from the
+ * same constants the advice itself uses, never typed by hand, so the page
+ * cannot show a version the engine does not run.
+ */
+export function methodeVersionLine(): string {
+  return `${ADVICE_VERSION}, regelset ${RULE_SET_VERSION}, laatst gewijzigd op ${METHODIEK.updatedAt}`;
+}
 
 export const WEIGHT_LABELS = {
   experience: 'Ervaring / controle',

@@ -2,7 +2,7 @@ import { getAllArticles } from '@/content';
 import { getAllBlogPosts } from '@/content/blog';
 import { BLACK_FRIDAY } from '@/content/blackFriday';
 import { HOCKEYSCHOENEN } from '@/content/hockeyschoenen';
-import { METHODIEK } from '@/content/methodiek';
+import { METHODE } from '@/content/methode';
 import { ZAAL } from '@/content/zaal';
 import { DEFAULT_DESCRIPTION, SITE_NAME, absoluteUrl } from '@/lib/site';
 
@@ -22,7 +22,7 @@ export function GET() {
     '## Keuzehulp en methode',
     `- [Stickwijzer](${absoluteUrl('/stickwijzer')}): keuzehulp met drie routes (start, ontwikkel, prestatie).`,
     `- [Schoenenwijzer](${absoluteUrl('/hockeyschoenen/wijzer')}): pasadvies voor veld- en zaalhockeyschoenen, met wat je nog moet controleren.`,
-    `- [${METHODIEK.title}](${absoluteUrl('/methodiek')}): ${METHODIEK.metaDescription}`,
+    `- [${METHODE.h1}](${absoluteUrl('/methodiek')}): ${METHODE.kernzin}`,
     '',
     '## Kennis',
     ...getAllArticles().map(

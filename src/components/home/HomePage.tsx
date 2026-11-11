@@ -3,6 +3,7 @@ import { getCatalogStats } from '@/catalog/stats';
 import { isIndoorSeason, type HomeIntroVariant } from '@/content/home';
 import { Hero } from './Hero';
 import { StickwijzerExplainer } from './StickwijzerExplainer';
+import { MethodBand } from './MethodBand';
 import { FeaturedProducts } from './FeaturedProducts';
 import { SeasonBand } from './SeasonBand';
 import { CampaignBand } from './CampaignBand';
@@ -31,6 +32,7 @@ export function HomePage({ variant }: { variant: HomeIntroVariant }) {
       {!campaign && variant === 'season' && isIndoorSeason() && <SeasonBand />}
       {variant === 'buying' && <BuyingIntro />}
       <StickwijzerExplainer productCount={adviceCount} />
+      <MethodBand />
       <WhyUs />
       <FeaturedProducts products={products.slice(0, 3)} />
       <InstagramFeed />
