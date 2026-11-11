@@ -6,6 +6,8 @@ import { productPath } from '@/catalog/paths';
 import { ZAAL, ZAAL_SOURCES } from '@/content/zaal';
 import { ProductCard } from '@/components/catalog/ProductCard';
 import { IndoorFinder } from '@/components/zaal/IndoorFinder';
+import { IndoorCompareTable } from '@/components/zaal/IndoorCompareTable';
+import { TrackedBlock } from '@/components/catalog/TrackedBlock';
 import { FaqSection } from '@/components/article/FaqSection';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 import { CampaignNote } from '@/components/campaign/CampaignNote';
@@ -120,11 +122,17 @@ export default function ZaalsticksPage() {
           <div className="mt-4">
             <IndoorFinder items={items} checkedCards={checkedCards} importedCount={importedCount} />
           </div>
-          <p className="mt-6 flex max-w-3xl items-start gap-2 text-sm text-inkt/80">
-            <InfoIcon size={18} className="mt-0.5 shrink-0 text-veld" />
-            {ZAAL.stickwijzerNote}
-          </p>
+          <TrackedBlock page="zaalsticks" block="stickwijzer">
+            <p className="mt-6 flex max-w-3xl items-start gap-2 text-sm text-inkt/80">
+              <InfoIcon size={18} className="mt-0.5 shrink-0 text-veld" />
+              <span>
+                <InlineText text={ZAAL.stickwijzerNote} />
+              </span>
+            </p>
+          </TrackedBlock>
         </section>
+
+        <IndoorCompareTable products={checked} />
 
         <section className="mt-16" aria-labelledby="zaal-wie-heading">
           <h2 id="zaal-wie-heading" className="text-2xl font-bold">

@@ -38,10 +38,10 @@ export const ZAAL = {
    * would claim too much (decision log 2026-10-29).
    */
   metaDescription:
-    'Zaalhockeystick kiezen of kopen? Lengte, bow en budget uitgelegd, met alle zaalsticks uit onze catalogus naast elkaar en wekelijks bijgewerkte winkelprijzen.',
+    'Zaalhockeystick kiezen of kopen? Kies op lengte, bow en budget, voor kind of volwassene, en vergelijk alle zaalsticks met wekelijks bijgewerkte winkelprijzen.',
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-05',
-  updatedAt: '2026-11-09',
+  updatedAt: '2026-11-11',
   /** Answers the main question within the first 80 words. */
   intro:
     'Een zaalhockeystick kies je net als een veldstick op lengte, niveau en gevoel, maar met het zaalspel in gedachten. In de zaal mag je de bal niet slaan en alleen omhoog spelen bij een schot op doel. Zaalhockey draait daardoor om pushen, balcontrole en snelle acties in een kleine ruimte. Voor de stick zelf gelden volgens de spelregels dezelfde maximale eisen als op het veld; merken ontwerpen zaalsticks wel voor dat andere spel. Hieronder vergelijk je alle zaalhockeysticks uit onze catalogus op lengte, bow en prijs, met bij elke stick een link naar de partnerwinkels die hem verkopen.',
@@ -64,6 +64,15 @@ export const ZAAL = {
         source: 'FIH Rules of Indoor Hockey, terminologie en regel 7',
       },
     ],
+  },
+  /** The hand-checked sticks side by side (2026-11-11). Nothing here is a claim: the table holds catalog data. */
+  compare: {
+    heading: 'Zaalsticks naast elkaar',
+    caption: 'De met de hand nagekeken zaalsticks met lengtes, carbon, bow-profiel en richtprijs',
+    intro:
+      'De met de hand nagekeken zaalsticks op een rij, van laag naar hoog in richtprijs. Noemt het merk een gegeven niet, dan staat er "niet vermeld": we vullen niets aan.',
+    unknown: 'niet vermeld',
+    note: 'Richtprijzen en specificaties uit onze catalogus, met de bron per gegeven op de pagina van elke stick. Geen live winkelprijzen: die zie je op de stickpagina en in de lijst hierboven.',
   },
   stickRules: {
     heading: 'Gelden er andere eisen voor de stick?',
@@ -187,6 +196,16 @@ export const ZAAL = {
           'Ja, dat mag volgens de spelregels. Een aparte zaalstick is een keuze, geen verplichting. Wat je wint en wat je inlevert lees je in [kun je met een veldstick zaalhockeyen?](/kennis/veldstick-zaalhockey).',
       },
       {
+        question: 'Welke zaalhockeystick past bij een kind of beginner?',
+        answer:
+          'Er is geen beste zaalstick voor iedereen. Kies eerst de lengte uit de [lengtetabel](/kennis/hockeystick-lengte-tabel), dezelfde maat als op het veld. Daarna is een lichte stick met weinig of geen carbon en een rustig bow-profiel een logische richting, omdat balcontrole in de zaal zwaarder weegt dan slagkracht. Meer lees je in [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen).',
+      },
+      {
+        question: 'Hoeveel carbon heeft een zaalstick nodig?',
+        answer:
+          'Daar is geen vast antwoord op. Meer carbon maakt een stick stijver en directer. Dat kan passen bij een ervaren speler die hard en precies wil pushen; een kind of beginner merkt vooral dat zo’n stick minder vergeeft. Niet elk merk noemt het percentage: op de pagina van elke stick zie je of het van het merk komt of van een winkel. Meer in [is meer carbon altijd beter?](/kennis/meer-carbon-hockeystick-beter).',
+      },
+      {
         question: 'Waar kun je een zaalhockeystick kopen?',
         answer:
           'Waar je wilt: in een hockeywinkel, de clubshop of online. Wil je de stick eerst in je handen hebben, dan is een winkel in de buurt handig. Bestel je online, neem dan de modelnaam en de lengte mee, zodat je precies dezelfde stick krijgt. Op de pagina van elke stick zie je welke van onze partnerwinkels hem verkopen; dat zijn partnerlinks en de winkel is de verkoper. Hoe de winkels verschillen in verzendkosten, retourneren en bezorging, lees je in [waar koop je een hockeystick?](/kennis/waar-koop-je-een-hockeystick).',
@@ -200,5 +219,5 @@ export const ZAAL = {
     },
   },
   stickwijzerNote:
-    'De stickwijzer geeft op dit moment alleen advies voor veldsticks. Voor zaalsticks kies je hier zelf, met de drie vragen bovenaan.',
+    'De stickwijzer geeft op dit moment alleen advies voor veldsticks. Voor zaalsticks kies je hier zelf, met de drie vragen bovenaan. Speel je ook veldhockey? Dan helpt de [stickwijzer](/stickwijzer) je aan een advies voor een veldstick.',
 } as const;
