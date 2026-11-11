@@ -3048,3 +3048,13 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
   - **Kinderen en beginners:** de kop "De juiste lengte voor je kind" is "Welke maat hockeystick heeft je kind nodig?" (zoekwoord "hockeystick junior maat", positie 41,9) en de sectie linkt naar de filters. `updatedAt` 2026-11-11.
   - **Test:** de titel, intro, tabel en alle koppen van het lengtetabel-artikel zijn vastgezet, evenals de nieuwe links.
 - **Bewust niet:** de titel, intro, tabel en koppen van het lengtetabel-artikel (rankingsignalen); een leeftijdstabel (ouders zoeken op leeftijd, maar er is geen betrouwbare bron voor de gemiddelde lengte per leeftijd in de repo; de TNO-groeidiagrammen staan alleen als pdf en een tabel per leeftijd is niet gevonden, dus geen getallen verzonnen); FAQ-markup op artikelen (artikelen kennen die nog niet, en de winst is klein); wijzigingen aan de adviesregels.
+
+## 2026-11-11 — Beginnerssprint: welke merken, en de snelle route voor ouders
+
+- **Aanleiding:** Search Console (2026-10-10 t/m 2026-11-06) toont "hockey strick beginnen kind welke merken" op positie 5,2 met 45 vertoningen en 0 kliks, en het artikel over kinderen en beginners noemde nergens welke merken sticks voor beginners hebben. De snelle route (`/stickwijzer?snel`: leeftijd, lengte, ervaring en budget) bestond alleen als link op de homepage; de artikelen voor ouders linkten naar de keuze tussen snel en uitgebreid.
+- **Wat:**
+  - **Kinderen en beginners:** een sectie "Welke merken hebben sticks voor beginners?", gebouwd uit de catalogus (nu 13 merken), zonder rangorde en met een pointer naar `/merken`; een richtprijs voor beginnerssticks voor volwassenen; links naar het snelle advies in de maatsectie en onderaan, naast de gewone stickwijzer-link; meta-beschrijving met "merken".
+  - **Kinderzaalartikel en kinderschoenenartikel:** een link naar het snelle advies. In het kinderzaalartikel is "persoonlijk advies" voor de stickwijzer vervangen ("Snel een selectie of een advies voor het veld"), zoals besloten voor de uitslag (2026-11-11, "Onze keuze").
+  - **Fouten-blog:** een link naar het artikel voor kinderen en beginners bij "een kinderstick op de groei".
+  - `updatedAt` 2026-11-11 in de vier artikelen en de blog. Tests in `src/content/beginners.test.ts`.
+- **Bewust niet:** de titel, intro en bestaande koppen van het artikel (de pagina staat op positie 5,2); een merkenrangorde of "beste merk" (geen beste-claims); FAQ-markup op artikelen; een leeftijdstabel (geen bron, zie maatsprint); wijzigingen aan de stickwijzer zelf.

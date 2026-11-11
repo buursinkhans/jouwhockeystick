@@ -116,16 +116,16 @@ export const zaalstickVoorKinderen: Article = {
       ],
     },
     {
-      heading: 'Snel een selectie of persoonlijk advies',
+      heading: 'Snel een selectie of een advies voor het veld',
       level: 2,
       body: [
-        'Bij de [zaalsticks](/zaalsticks) maak je in drie vragen een selectie: voor wie, de lengte van je kind en je budget. Speelt je kind ook op het veld? Dan helpt de [stickwijzer](/stickwijzer) je aan persoonlijk advies voor een veldstick. Meer over een eerste veldstick lees je in [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
+        'Bij de [zaalsticks](/zaalsticks) maak je in drie vragen een selectie: voor wie, de lengte van je kind en je budget. Speelt je kind ook op het veld? Dan geeft de [stickwijzer](/stickwijzer) een advies voor een veldstick; het [snelle advies](/stickwijzer?snel) vraagt alleen naar leeftijd, lengte, ervaring en budget. Meer over een eerste veldstick lees je in [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-09',
-  updatedAt: '2026-10-12',
+  updatedAt: '2026-11-11',
   sources: [
     {
       label: ZAAL_SOURCES.indoorRules.label,

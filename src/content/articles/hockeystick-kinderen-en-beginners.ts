@@ -20,6 +20,21 @@ const juniorPriceRange =
     ? `tussen ${formatEuro(Math.min(...juniorPrices))} en ${formatEuro(Math.max(...juniorPrices))}`
     : 'nog niet bekend';
 
+const adultPrices = adultSticks.map((p) => p.priceIndicativeEur.value);
+const adultPriceRange =
+  adultPrices.length > 0
+    ? `tussen ${formatEuro(Math.min(...adultPrices))} en ${formatEuro(Math.max(...adultPrices))}`
+    : 'nog niet bekend';
+
+/** Brands with at least one beginner stick in the catalog, so the list never goes stale (2026-11-11). */
+const beginnerBrands = [...new Set(beginnerSticks.map((product) => product.brand))].sort((a, b) =>
+  a.localeCompare(b),
+);
+const beginnerBrandList =
+  beginnerBrands.length > 1
+    ? `${beginnerBrands.slice(0, -1).join(', ')} en ${beginnerBrands.at(-1)}`
+    : beginnerBrands.join('');
+
 export const hockeystickKinderenEnBeginners: Article = {
   slug: 'hockeystick-kinderen-en-beginners',
   title: 'Hockeystick voor kinderen en beginners: waar let je op?',
@@ -46,6 +61,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       level: 2,
       body: [
         'Bij kinderen is de lengte het allerbelangrijkst. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een goed startpunt is. Laat je kind de stick daarna even vasthouden in een normale hockeyhouding: lukt dribbelen ontspannen, en blijft de stick dicht bij het lichaam? Top.',
+        'Weet je de lengte al? Het [snelle advies](/stickwijzer?snel) vraagt alleen naar leeftijd, lengte, ervaring en budget en toont daarna sticks in de juiste maat.',
         'Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af. Op [alle veldsticks](/sticks) kies je in de filters de lengte van je kind.',
       ],
     },
@@ -55,6 +71,13 @@ export const hockeystickKinderenEnBeginners: Article = {
       body: [
         'Carbon maakt een stick stijver. Dat voelt directer, maar de bal springt ook sneller weg als je hem niet helemaal zuiver aanneemt. Juist voor beginners en voor controle is een soepele stick daarom zo fijn.',
         'Een lage kromming (low bow) helpt bij liften en 3D-acties, maar vraagt meer techniek bij het aannemen en vlak passen. Voor een beginner is dat zelden het eerste waar je aan werkt. Het verschil lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow).',
+      ],
+    },
+    {
+      heading: 'Welke merken hebben sticks voor beginners?',
+      level: 2,
+      body: [
+        `In onze catalogus hebben ${beginnerBrands.length} merken een stick voor beginners: ${beginnerBrandList}. Een merk zegt weinig over of een stick bij je kind past. Kijk eerst naar de lengte, een rustig profiel en weinig carbon, en pas daarna naar het merk. Wat elk merk maakt, lees je bij [merken](/merken).`,
       ],
     },
     {
@@ -76,7 +99,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Begin je als volwassene?',
       level: 2,
       body: [
-        'Ook als volwassene start je het makkelijkst met een rustige, soepele stick in 36,5 inch. Deze sticks uit onze catalogus zijn gemaakt voor beginners:',
+        `Ook als volwassene start je het makkelijkst met een rustige, soepele stick in 36,5 inch. In onze catalogus liggen de richtprijzen van beginnerssticks voor volwassenen ${adultPriceRange}. Deze sticks zijn gemaakt voor beginners:`,
         { type: 'list', items: adultSticks.map(stickListItem) },
       ],
     },
@@ -91,7 +114,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Een eerste stick kiezen in een paar minuten',
       level: 2,
       body: [
-        'De [stickwijzer](/stickwijzer) heeft een eigen route voor een eerste stick. Vul de lichaamslengte en een paar wensen in, en je krijgt sticks in de juiste maat, met de redenen erbij. Meer over de hele keuze lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
+        'Het [snelle advies](/stickwijzer?snel) is gemaakt voor ouders en beginners: leeftijd, lengte, ervaring en budget, en je krijgt sticks in de juiste maat, met de redenen erbij. Wil je meer wensen meegeven, dan heeft de [stickwijzer](/stickwijzer) ook een uitgebreide route voor een eerste stick. Meer over de hele keuze lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
       ],
     },
   ],
@@ -114,5 +137,5 @@ export const hockeystickKinderenEnBeginners: Article = {
     },
   ],
   metaDescription:
-    'Hockeystick voor een kind of beginner? Let op de lengte, een rustig profiel, weinig carbon en de prijs. Met een overzicht van junior- en beginnerssticks.',
+    'Hockeystick voor een kind of beginner? Let op lengte, een rustig profiel, weinig carbon en prijs. Met welke merken beginnerssticks hebben en een overzicht.',
 };
