@@ -75,7 +75,7 @@ export const hockeyschoenenKinderenMaat: Article = {
       body: [
         `In onze catalogus hebben we ${juniorCount} modellen met de hand nagelopen die voor junioren bedoeld zijn. Per model staat wat het merk of de winkel bevestigt, en wat nog onbekend is. Welke maten er zijn en wat een winkel op voorraad heeft, zie je op de modelpagina.`,
         'Bekijk alle modellen op [hockeyschoenen](/hockeyschoenen), of doe de [schoenenwijzer](/hockeyschoenen/wijzer): een paar vragen en je krijgt maximaal drie modellen, met de reden erbij. Past er geen enkel model, dan zeggen we dat eerlijk. Een maat vinden we daarmee nog niet voor je: dat doe je met passen.',
-        'Heeft je kind ook een stick nodig? De [stickwijzer](/stickwijzer) werkt op dezelfde manier.',
+        'Heeft je kind ook een stick nodig? Het [snelle advies](/stickwijzer?snel) vraagt alleen naar leeftijd, lengte, ervaring en budget; de [stickwijzer](/stickwijzer) werkt verder op dezelfde manier.',
       ],
     },
     {
@@ -91,7 +91,7 @@ export const hockeyschoenenKinderenMaat: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-11-03',
-  updatedAt: '2026-11-03',
+  updatedAt: '2026-11-11',
   sources: [
     {
       label: 'Redactioneel uitgangspunt jouwhockeystick.nl: keuzemodel hockeyschoenen (pascontrole, beginnend kind, EU-maat is geen volledige pasvorm)',

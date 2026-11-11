@@ -24,7 +24,7 @@ export const hockeystickKiezenPraktischeTips: Article = {
       level: 2,
       body: [
         'Een maat groter, dan doet je kind er langer mee. Klinkt zuinig, maar met een te lange stick worden balcontrole en techniek een stuk lastiger. En dan is het plezier snel weg.',
-        '**Slimmer:** kies de maat die nu past. Is die er niet, dan is één maatje korter prima. Per lichaamslengte zie je de juiste maat in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel).',
+        '**Slimmer:** kies de maat die nu past. Is die er niet, dan is één maatje korter prima. Per lichaamslengte zie je de juiste maat in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel). Meer over een eerste stick lees je in [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },
     {
@@ -69,7 +69,7 @@ export const hockeystickKiezenPraktischeTips: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-09-27',
-  updatedAt: '2026-10-12',
+  updatedAt: '2026-11-11',
   sources: [
     { label: 'FIH Rules of Hockey (technische grenzen aan lengte en gewicht)' },
     {
