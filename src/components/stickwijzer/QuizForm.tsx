@@ -30,6 +30,7 @@ import { trackEvent } from '@/lib/analytics/track';
 import { shareHref } from '@/lib/shareAdvice';
 import { remainingTimeText, routeStepRange } from '@/content/stickwijzer/progress';
 import { nextOpenQuestion } from '@/content/stickwijzer/flow';
+import { EXTRA_QUESTIONS_HEADING } from '@/content/stickwijzer/quick';
 import { Button } from '@/components/ui/Button';
 import { QuestionField, type AnswerValue } from './QuestionField';
 import { QuizResult } from './QuizResult';
@@ -596,7 +597,7 @@ export function QuizForm() {
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
               <span>
                 <span className="block font-semibold text-veld">
-                  Advies nog preciezer maken?
+                  {EXTRA_QUESTIONS_HEADING}
                 </span>
                 <span className="block text-sm text-lijngrijs">
                   {optionalIds.length === 1

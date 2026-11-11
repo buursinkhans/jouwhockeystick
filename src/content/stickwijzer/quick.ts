@@ -1,5 +1,8 @@
 import { routeStepRange } from './progress';
 
+/** Heading above the optional extra questions of the quick route. */
+export const EXTRA_QUESTIONS_HEADING = 'Wil je nog meer meegeven?';
+
 /** Texts of the two ways into the stickwijzer (UX phase 1, 2026-11-08). */
 export const ADVICE_MODE_TEXT = {
   question: 'Hoe wil je kiezen?',
