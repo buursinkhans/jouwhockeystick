@@ -1,0 +1,43 @@
+# One-off research run (Buyer Intelligence fase 1.5). Read-only towards
+# PostHog and Search Console: aggregated counts only. Runs on pushes to the
+# research branch and writes the result back to that branch as a Markdown
+# file. This branch is never merged; it does not touch the site.
+name: Buyer-validatie (onderzoek)
+
+on:
+  push:
+    branches: ['research/buyer-validatie']
+    paths: ['.github/research/**', '.github/workflows/buyer-validatie.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Tellingen ophalen
+        env:
+          POSTHOG_PERSONAL_API_KEY: ${{ secrets.POSTHOG_PERSONAL_API_KEY }}
+          POSTHOG_PROJECT_ID: ${{ vars.POSTHOG_PROJECT_ID }}
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+        run: |
+          mkdir -p docs/research
+          node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs \
+            .github/research/buyer-validation.ts > docs/research/buyer-validatie-data.md 2> error.log \
+            || { echo "## Script mislukt" >> docs/research/buyer-validatie-data.md; sed -e 's/^/    /' error.log | head -40 >> docs/research/buyer-validatie-data.md; }
+      - name: Resultaat terugzetten op de onderzoeksbranch
+        run: |
+          git config user.name "buyer-validatie[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/research/buyer-validatie-data.md
+          git commit -m "Onderzoeksdata buyer-validatie $(date -u +%F)" || exit 0
+          git push
