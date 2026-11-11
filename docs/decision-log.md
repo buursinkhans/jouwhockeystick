@@ -3021,3 +3021,11 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 **Ook:** de FAQ op `/sticks` geeft nu de getallen (uit dezelfde constanten); linkteksten naar het artikel aangepast in `veld.ts`, `landingFaqs.ts`, `FamilyTable` en Black Friday.
 
 **Bewust niet:** `/zaalsticks`, de adviesregels zelf, prijzen of productnamen in vaste tekst, eigen testclaims.
+
+## 2026-11-11 — Meetinfrastructuur: eigen verkeer, rol en plek bij winkelkliks
+
+- **Aanleiding:** de Buyer Intelligence-analyses hebben schone en vergelijkbare data nodig. Eigen bezoeken tellen mee, en een klik naar een winkel zegt niet welke adviesstick het was.
+- **Eigen verkeer:** `?intern=aan` op een eigen apparaat zet één sleutel (`jhs-intern`) in de lokale opslag; die browser stuurt dan geen PostHog- en funnel-events meer (`src/lib/analytics/internal.ts`). `?intern=uit` zet het terug. Gewone bezoekers merken niets. De privacyverklaring is niet aangepast; de gevolgen en een voorstel voor een zin staan in `docs/analytics.md`.
+- **Winkelkliks uit de stickwijzer:** `retailer_click` krijgt binnen een advies `adviceRole` (de rol-sleutel van het systeem), `adviceRank`, `adviceRoute`, `budgetBand` en `replacementReason`. `quiz_complete` krijgt dezelfde route, budgetband en reden. Alles optioneel, dus bestaande rapporten blijven werken; `position` blijft de plek van de winkel.
+- **Rapport:** het conversie-rapport toont "Per plek in het stickadvies" zodra klikken een rol hebben.
+- **Bewust niet:** lengte, leeftijd of vrije tekst in events; wijzigingen aan partnerlinks of sub-ID's; het verkooprapport (voorstel in `docs/analytics.md`: Plutosport en Daka toevoegen, en pas later de rol in de tracking-link); wijzigingen aan de privacyverklaring.

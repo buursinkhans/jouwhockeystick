@@ -372,6 +372,9 @@ export function QuizForm() {
       ruleSetVersion: result.advice.ruleSetVersion,
       hasRecommendation: result.advice.results.length > 0,
       isUncertain: result.advice.isUncertain,
+      route: result.advice.route,
+      ...(parsed.data.budget_band && { budgetBand: parsed.data.budget_band }),
+      ...(parsed.data.replacement_reason && { replacementReason: parsed.data.replacement_reason }),
     });
     track('advice_completed', sessionId, {
       answerKey: result.advice.noMatchReason ?? 'match',
@@ -402,6 +405,7 @@ export function QuizForm() {
           advice={advice}
           adviceGoal={answers.advice_goal}
           quick={quick}
+          trackingAnswers={{ budgetBand: answers.budget_band, replacementReason: answers.replacement_reason }}
           headingRef={headingRef}
           onEdit={() => setAdvice(null)}
           onRestart={handleRestart}

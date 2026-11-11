@@ -199,6 +199,16 @@ describe('formatReport', () => {
     expect(report).not.toContain('Kliks naar bol.com');
   });
 
+  it('shows clicks per role and place in the advice, and nothing while no click carries one', () => {
+    const none = formatReport(data({ clicksByAdviceRole: [c('', 8)] }), ORDER);
+    expect(none).not.toContain('Per plek in het stickadvies');
+    expect(formatReport(data({}), ORDER)).not.toContain('Per plek in het stickadvies');
+    const some = formatReport(data({ clicksByAdviceRole: [c('', 8), c('best_match · plek 1', 5), c('safe_choice · plek 2', 2)] }), ORDER);
+    expect(some).toContain('### Per plek in het stickadvies');
+    expect(some).toContain('| best_match · plek 1 | 5 |');
+    expect(some).not.toContain('(onbekend)');
+  });
+
   it('escapes pipes in table cells', () => {
     const report = formatReport(data({ clicksByProduct: [c('Grays | DB 5', 3)] }), ORDER);
     expect(report).toContain('Grays \\| DB 5');

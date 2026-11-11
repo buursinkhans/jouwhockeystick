@@ -3,6 +3,7 @@ import {
   POSTHOG_KEY,
   isTrackedHost,
 } from '@/lib/analytics/posthog';
+import { applyInternalParam, isInternalVisitor } from '@/lib/analytics/internal';
 import { expectPosthog, posthogUnavailable, setPosthog } from '@/lib/analytics/posthogClient';
 
 /**
@@ -15,7 +16,8 @@ import { expectPosthog, posthogUnavailable, setPosthog } from '@/lib/analytics/p
  * ready are queued in posthogClient.ts.
  */
 try {
-  if (POSTHOG_KEY && isTrackedHost(window.location.hostname)) {
+  applyInternalParam(window.location.search);
+  if (POSTHOG_KEY && isTrackedHost(window.location.hostname) && !isInternalVisitor()) {
     expectPosthog();
     import('posthog-js')
       .then(({ default: posthog }) => {

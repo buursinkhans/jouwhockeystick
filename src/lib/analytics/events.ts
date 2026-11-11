@@ -1,4 +1,5 @@
 import type { AdviceRoute } from '@/advice-engine/answers';
+import type { ResultRole } from '@/advice-engine/types';
 
 /**
  * Keuzehulp funnel events (implementation spec §10). The spec also lists
@@ -37,6 +38,10 @@ export type AnalyticsEvent =
       ruleSetVersion: string;
       hasRecommendation: boolean;
       isUncertain: boolean;
+      /** Stick advice only (2026-11-11): the route and the same two answers as on retailer_click. */
+      route?: AdviceRoute;
+      budgetBand?: string;
+      replacementReason?: string;
     }
   | { name: 'interest_submit'; source: string; hasProductSlug: boolean }
   | {
@@ -51,6 +56,17 @@ export type AnalyticsEvent =
       position?: number;
       offerCount?: number;
       priceShown?: boolean;
+      /**
+       * Only for a click inside a stickwijzer advice (2026-11-11): the role key
+       * and the place of the clicked stick in the advice, the route and two
+       * answers (budget band, reason for a new stick). Absent elsewhere, so
+       * older reports keep working. `position` stays the place of the shop.
+       */
+      adviceRole?: ResultRole;
+      adviceRank?: number;
+      adviceRoute?: AdviceRoute;
+      budgetBand?: string;
+      replacementReason?: string;
     }
   | {
       /** The "Waar te koop" block came into view (once per page view and placement). */

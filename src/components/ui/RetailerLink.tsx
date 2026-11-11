@@ -6,6 +6,7 @@ import {
   type RetailerId,
   type RetailerPlacement,
 } from '@/lib/retailers';
+import { useAdviceClick } from '@/lib/analytics/adviceContext';
 import { trackEvent } from '@/lib/analytics/track';
 import { buttonBaseClasses, buttonVariantClasses } from './Button';
 
@@ -38,6 +39,7 @@ export function RetailerLink({
   ariaLabel,
   children,
 }: Props) {
+  const advice = useAdviceClick();
   const url = RETAILERS[retailer].getUrl({
     productName,
     brand,
@@ -73,6 +75,7 @@ export function RetailerLink({
             offerCount: offer.offerCount,
             priceShown: offer.priceShown,
           }),
+          ...advice,
         })
       }
     >

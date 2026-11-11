@@ -43,6 +43,8 @@ export type ConversionData = {
   clicksByProduct: Count[];
   /** `retailer_click` per page path. */
   clicksByPage: Count[];
+  /** `retailer_click` inside a stickwijzer advice, per "role · plek N" (since 2026-11-11); clicks without a role have an empty key and are left out. */
+  clicksByAdviceRole?: Count[];
   pageviewsByPage: Count[];
   /** Visitors (per day) per "utm:<source>" or referring domain ("$direct" when none). */
   visitorsByReferrer: Count[];
@@ -281,6 +283,18 @@ function table(header: string[], rows: string[][]): string {
     `| ${header.map((_, index) => (index === 0 ? '---' : '---:')).join(' | ')} |`,
     ...rows.map((row) => `| ${row.map(cell).join(' | ')} |`),
   ].join('\n');
+}
+
+/** Clicks per advised stick role and place; nothing while no click carries a role yet. */
+function adviceRoleSection(counts: Count[] | undefined): string[] {
+  const rows = (counts ?? []).filter((c) => c.key !== '');
+  if (rows.length === 0) return [];
+  return [
+    '### Per plek in het stickadvies',
+    '',
+    table(['Rol · plek', 'Deze week', 'Vorige week', 'Verschil'], countRows(rows)),
+    '',
+  ];
 }
 
 function countRows(counts: Count[], label = (key: string) => key): string[][] {
@@ -525,6 +539,7 @@ export function formatReport(
     '',
     table(['Pagina', 'Deze week', 'Vorige week', 'Verschil'], countRows(data.clicksByPage)),
     '',
+    ...adviceRoleSection(data.clicksByAdviceRole),
     `Linktype: ${countOf(data.clicksByLinkType, 'product').now} naar een productpagina, ${countOf(data.clicksByLinkType, 'search').now} naar een zoekopdracht.`,
     '',
     '## Meest bekeken pagina\'s (top 10)',
