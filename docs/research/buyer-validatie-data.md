@@ -1,335 +1,335 @@
 # Buyer Intelligence fase 1.5: ruwe meetdata (alleen tellingen)
 
-Opgehaald op 2026-11-11T17:05 UTC. Periode vanaf 2026-08-01. Alleen live domein, bots eruit gefilterd. "Bezoekdag" = één bezoeker op één dag (PostHog draait cookieloos). "Winkelklik" bij een wijzersessie = een retailer_click van dezelfde bezoeker op dezelfde dag, na de start van de wijzer.
+Opgehaald op 2026-11-11T17:16 UTC. Periode vanaf 2026-08-01. Alleen live domein, bots eruit gefilterd. "Bezoekdag" = één bezoeker op één dag (PostHog draait cookieloos). "Winkelklik" bij een wijzersessie = een retailer_click van dezelfde bezoeker op dezelfde dag, na de start van de wijzer.
 
 ## PostHog: totalen per maand
 
 | maand | bezoekdagen | wijzer gestart | wijzer afgerond | winkelkliks | klikkers (bezoekdagen) | uitgang zaal | uitgang keeper | schoenwijzer start | interesseformulier | zaalfinder-keuzes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-10 | 225 | 0 | 0 | 22 | 15 | 0 | 0 | 0 | 0 | 6 |
-| 2026-11 | 146 | 0 | 0 | 19 | 12 | 3 | 0 | 0 | 0 | 28 |
+| 2026-10 | 225 | 32 | 26 | 22 | 15 | 0 | 0 | 0 | 0 | 6 |
+| 2026-11 | 146 | 14 | 13 | 19 | 12 | 3 | 0 | 0 | 0 | 28 |
 
-## PostHog: antwoordverdeling per vraag (unieke wijzersessies)
+## PostHog: antwoordverdeling per vraag (unieke wijzer-bezoekdagen)
 
-### advice_goal (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| self | 0 | n.v.t. |
-| child | 0 | n.v.t. |
-| other | 0 | n.v.t. |
-
-### age_band (n = 0)
+### advice_goal (n = 45)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| 18_plus | 0 | n.v.t. |
-| 11_12 | 0 | n.v.t. |
-| under_8 | 0 | n.v.t. |
-| 13_15 | 0 | n.v.t. |
-| 8_10 | 0 | n.v.t. |
-| 16_18 | 0 | n.v.t. |
+| self | 27 | 60% |
+| child | 17 | 38% |
+| other | 1 | 2% |
 
-### availability_preference (n = 0)
+### age_band (n = 43)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| only_direct | 0 | n.v.t. |
-| best_match_later | 0 | n.v.t. |
-| no_preference | 0 | n.v.t. |
+| 13_15 | 18 | 42% |
+| 16_18 | 9 | 21% |
+| 18_plus | 8 | 19% |
+| 8_10 | 5 | 12% |
+| under_8 | 2 | 5% |
+| 11_12 | 1 | 2% |
 
-### bow_experience (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| extreme_low | 0 | n.v.t. |
-| standard | 0 | n.v.t. |
-| pro_late | 0 | n.v.t. |
-| low | 0 | n.v.t. |
-
-### brand_loyalty (n = 0)
+### availability_preference (n = 10)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| same_brand | 0 | n.v.t. |
-| open | 0 | n.v.t. |
+| no_preference | 5 | 50% |
+| only_direct | 3 | 30% |
+| best_match_later | 2 | 20% |
 
-### budget_band (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| 175_250 | 0 | n.v.t. |
-| gt_250 | 0 | n.v.t. |
-| compare_first | 0 | n.v.t. |
-| lt_75 | 0 | n.v.t. |
-| 125_175 | 0 | n.v.t. |
-| 75_125 | 0 | n.v.t. |
-
-### core_skills_stage (n = 0)
+### bow_experience (n = 8)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| practicing_basics | 0 | n.v.t. |
-| refining_actions | 0 | n.v.t. |
-| basics_mostly_good | 0 | n.v.t. |
+| low | 4 | 50% |
+| standard | 2 | 25% |
+| extreme_low | 1 | 13% |
+| pro_late | 1 | 13% |
 
-### current_length_inch (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| unknown | 0 | n.v.t. |
-| 36.5 | 0 | n.v.t. |
-
-### current_stick_brand (n = 0)
+### brand_loyalty (n = 17)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| The Indian Maharadja | 0 | n.v.t. |
-| Y1 | 0 | n.v.t. |
-| Osaka | 0 | n.v.t. |
-| other | 0 | n.v.t. |
-| Princess | 0 | n.v.t. |
-| Stag | 0 | n.v.t. |
-| Grays | 0 | n.v.t. |
-| adidas | 0 | n.v.t. |
+| open | 11 | 65% |
+| same_brand | 6 | 35% |
 
-### current_stick_like (n = 0)
+### budget_band (n = 39)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| power | 0 | n.v.t. |
-| weight | 0 | n.v.t. |
-| control | 0 | n.v.t. |
-| dribbling | 0 | n.v.t. |
-| nothing_special | 0 | n.v.t. |
+| compare_first | 10 | 26% |
+| lt_75 | 9 | 23% |
+| 125_175 | 8 | 21% |
+| gt_250 | 6 | 15% |
+| 75_125 | 3 | 8% |
+| 175_250 | 3 | 8% |
 
-### current_stick_problem (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| too_short | 0 | n.v.t. |
-| unknown | 0 | n.v.t. |
-| outgrown | 0 | n.v.t. |
-| little_power | 0 | n.v.t. |
-| damaged | 0 | n.v.t. |
-
-### experience_seasons (n = 0)
+### core_skills_stage (n = 18)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| lt_1 | 0 | n.v.t. |
-| 1 | 0 | n.v.t. |
-| 2_3 | 0 | n.v.t. |
-| trial | 0 | n.v.t. |
-| 4_plus | 0 | n.v.t. |
+| practicing_basics | 9 | 50% |
+| refining_actions | 5 | 28% |
+| basics_mostly_good | 4 | 22% |
 
-### feel_preference (n = 0)
+### current_length_inch (n = 13)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| balanced | 0 | n.v.t. |
-| soft | 0 | n.v.t. |
-| unknown | 0 | n.v.t. |
-| direct | 0 | n.v.t. |
+| 36.5 | 10 | 77% |
+| unknown | 3 | 23% |
 
-### first_touch_confidence (n = 0)
+### current_stick_brand (n = 19)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| good_under_pressure | 0 | n.v.t. |
-| very_confident | 0 | n.v.t. |
-| mostly_good | 0 | n.v.t. |
+| Grays | 6 | 32% |
+| Osaka | 4 | 21% |
+| The Indian Maharadja | 2 | 11% |
+| adidas | 2 | 11% |
+| other | 2 | 11% |
+| Stag | 1 | 5% |
+| Princess | 1 | 5% |
+| Y1 | 1 | 5% |
 
-### fun_style (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| dribble_actions | 0 | n.v.t. |
-| build_pass | 0 | n.v.t. |
-| defend_intercept | 0 | n.v.t. |
-| join_everywhere | 0 | n.v.t. |
-| finishing | 0 | n.v.t. |
-
-### has_current_stick (n = 0)
+### current_stick_like (n = 10)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| yes | 0 | n.v.t. |
-| no | 0 | n.v.t. |
+| control | 5 | 50% |
+| dribbling | 4 | 40% |
+| weight | 4 | 40% |
+| nothing_special | 2 | 20% |
+| power | 2 | 20% |
 
-### height_cm (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| (leeg) | 0 | n.v.t. |
-
-### height_uncertain (n = 0)
+### current_stick_problem (n = 5)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| no | 0 | n.v.t. |
-| yes | 0 | n.v.t. |
+| unknown | 2 | 40% |
+| too_short | 1 | 20% |
+| outgrown | 1 | 20% |
+| little_power | 1 | 20% |
+| damaged | 1 | 20% |
 
-### junior_grip_needed (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| no | 0 | n.v.t. |
-| yes | 0 | n.v.t. |
-
-### left_handed_requirement (n = 0)
+### experience_seasons (n = 43)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| no | 0 | n.v.t. |
+| 4_plus | 24 | 56% |
+| 1 | 7 | 16% |
+| 2_3 | 5 | 12% |
+| lt_1 | 4 | 9% |
+| trial | 3 | 7% |
 
-### match_actions_frequency (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| hard_flats | 0 | n.v.t. |
-| three_d | 0 | n.v.t. |
-| tempo_passes | 0 | n.v.t. |
-| backhand | 0 | n.v.t. |
-| aerial | 0 | n.v.t. |
-| hit | 0 | n.v.t. |
-| lift | 0 | n.v.t. |
-| dragflick | 0 | n.v.t. |
-
-### playing_level (n = 0)
+### feel_preference (n = 24)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| top | 0 | n.v.t. |
-| senior_recreational | 0 | n.v.t. |
-| senior_competitive | 0 | n.v.t. |
-| selection | 0 | n.v.t. |
-| breedte | 0 | n.v.t. |
+| direct | 13 | 54% |
+| balanced | 5 | 21% |
+| unknown | 4 | 17% |
+| soft | 2 | 8% |
 
-### positions (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| defence | 0 | n.v.t. |
-| midfield | 0 | n.v.t. |
-| attack | 0 | n.v.t. |
-
-### primary_goals (n = 0)
+### first_touch_confidence (n = 27)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| dribble_3d | 0 | n.v.t. |
-| aerial | 0 | n.v.t. |
-| backhand | 0 | n.v.t. |
-| first_touch | 0 | n.v.t. |
-| passing | 0 | n.v.t. |
-| hit | 0 | n.v.t. |
-| dragflick | 0 | n.v.t. |
-| allround | 0 | n.v.t. |
+| very_confident | 20 | 74% |
+| good_under_pressure | 5 | 19% |
+| mostly_good | 2 | 7% |
 
-### purchase_timing (n = 0)
+### fun_style (n = 17)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| orienting | 0 | n.v.t. |
-| within_2_weeks | 0 | n.v.t. |
-| this_week | 0 | n.v.t. |
+| join_everywhere | 5 | 29% |
+| finishing | 5 | 29% |
+| dribble_actions | 4 | 24% |
+| build_pass | 2 | 12% |
+| defend_intercept | 1 | 6% |
 
-### replacement_reason (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| new_season | 0 | n.v.t. |
-| next_step | 0 | n.v.t. |
-| first_stick | 0 | n.v.t. |
-| other | 0 | n.v.t. |
-| outgrown | 0 | n.v.t. |
-| damaged | 0 | n.v.t. |
-
-### route_self_select (n = 0)
+### has_current_stick (n = 34)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| quick | 0 | n.v.t. |
-| advanced_compare | 0 | n.v.t. |
-| first_stick | 0 | n.v.t. |
-| next_stick | 0 | n.v.t. |
+| yes | 25 | 74% |
+| no | 9 | 26% |
 
-### skill_aerial (n = 0)
+### height_cm (n = 42)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| key_weapon | 0 | n.v.t. |
-| developing | 0 | n.v.t. |
-| regular | 0 | n.v.t. |
-| never | 0 | n.v.t. |
+| (leeg) | 42 | 100% |
 
-### skill_backhand (n = 0)
+### height_uncertain (n = 17)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| very_important | 0 | n.v.t. |
-| sometimes | 0 | n.v.t. |
-| regular | 0 | n.v.t. |
+| no | 12 | 71% |
+| yes | 5 | 29% |
 
-### skill_dragflick (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| practicing | 0 | n.v.t. |
-| specialist | 0 | n.v.t. |
-| none | 0 | n.v.t. |
-
-### skill_dribble_3d (n = 0)
+### junior_grip_needed (n = 9)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| 3 | 0 | n.v.t. |
-| 5 | 0 | n.v.t. |
-| 1 | 0 | n.v.t. |
-| 4 | 0 | n.v.t. |
+| no | 8 | 89% |
+| yes | 1 | 11% |
 
-### skill_flat_pass (n = 0)
+### left_handed_requirement (n = 4)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| 5 | 0 | n.v.t. |
-| 3 | 0 | n.v.t. |
-| 4 | 0 | n.v.t. |
+| no | 4 | 100% |
 
-### skill_hit (n = 0)
+### match_actions_frequency (n = 19)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| 4 | 0 | n.v.t. |
-| 5 | 0 | n.v.t. |
-| 2 | 0 | n.v.t. |
-| 3 | 0 | n.v.t. |
+| tempo_passes | 11 | 58% |
+| three_d | 10 | 53% |
+| hard_flats | 9 | 47% |
+| hit | 9 | 47% |
+| backhand | 6 | 32% |
+| lift | 4 | 21% |
+| aerial | 3 | 16% |
+| dragflick | 3 | 16% |
 
-### stick_weight_preference (n = 0)
-
-| antwoord | sessies | % van sessies met deze vraag |
-| --- | --- | --- |
-| balanced | 0 | n.v.t. |
-| unknown | 0 | n.v.t. |
-| light | 0 | n.v.t. |
-
-### training_frequency (n = 0)
+### playing_level (n = 16)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| 4_plus | 0 | n.v.t. |
-| 2 | 0 | n.v.t. |
-| 3 | 0 | n.v.t. |
-| 1 | 0 | n.v.t. |
+| selection | 9 | 56% |
+| senior_competitive | 3 | 19% |
+| breedte | 2 | 13% |
+| top | 1 | 6% |
+| senior_recreational | 1 | 6% |
 
-### vibration_sensitivity (n = 0)
+### positions (n = 15)
 
 | antwoord | sessies | % van sessies met deze vraag |
 | --- | --- | --- |
-| sometimes | 0 | n.v.t. |
-| unknown | 0 | n.v.t. |
-| no | 0 | n.v.t. |
+| attack | 7 | 47% |
+| midfield | 5 | 33% |
+| defence | 3 | 20% |
+
+### primary_goals (n = 25)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| allround | 9 | 36% |
+| dribble_3d | 8 | 32% |
+| hit | 7 | 28% |
+| aerial | 4 | 16% |
+| dragflick | 4 | 16% |
+| passing | 4 | 16% |
+| backhand | 3 | 12% |
+| first_touch | 2 | 8% |
+
+### purchase_timing (n = 9)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| orienting | 7 | 78% |
+| within_2_weeks | 1 | 11% |
+| this_week | 1 | 11% |
+
+### replacement_reason (n = 26)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| damaged | 9 | 35% |
+| next_step | 6 | 23% |
+| new_season | 5 | 19% |
+| other | 3 | 12% |
+| outgrown | 2 | 8% |
+| first_stick | 1 | 4% |
+
+### route_self_select (n = 47)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| advanced_compare | 18 | 38% |
+| first_stick | 13 | 28% |
+| next_stick | 12 | 26% |
+| quick | 4 | 9% |
+
+### skill_aerial (n = 19)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| developing | 6 | 32% |
+| regular | 5 | 26% |
+| never | 4 | 21% |
+| key_weapon | 4 | 21% |
+
+### skill_backhand (n = 19)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| regular | 10 | 53% |
+| very_important | 7 | 37% |
+| sometimes | 2 | 11% |
+
+### skill_dragflick (n = 19)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| none | 11 | 58% |
+| practicing | 5 | 26% |
+| specialist | 3 | 16% |
+
+### skill_dribble_3d (n = 20)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| 5 | 7 | 35% |
+| 4 | 7 | 35% |
+| 3 | 5 | 25% |
+| 1 | 1 | 5% |
+
+### skill_flat_pass (n = 19)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| 5 | 11 | 58% |
+| 4 | 6 | 32% |
+| 3 | 2 | 11% |
+
+### skill_hit (n = 19)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| 5 | 9 | 47% |
+| 4 | 5 | 26% |
+| 3 | 4 | 21% |
+| 2 | 1 | 5% |
+
+### stick_weight_preference (n = 8)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| balanced | 4 | 50% |
+| light | 2 | 25% |
+| unknown | 2 | 25% |
+
+### training_frequency (n = 14)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| 4_plus | 5 | 36% |
+| 3 | 5 | 36% |
+| 2 | 3 | 21% |
+| 1 | 1 | 7% |
+
+### vibration_sensitivity (n = 8)
+
+| antwoord | sessies | % van sessies met deze vraag |
+| --- | --- | --- |
+| no | 4 | 50% |
+| sometimes | 2 | 25% |
+| unknown | 2 | 25% |
 
 ## PostHog: afhaken per scherm (sessies die het scherm met Volgende verlieten)
 
@@ -337,43 +337,335 @@ Sessies per laatst bekende route (gestart / afgerond):
 
 | route | sessies | afgerond |
 | --- | --- | --- |
+| PRESTATIE | 23 | 20 |
+| ONTWIKKEL | 13 | 8 |
+| START | 12 | 11 |
+| (geen) | 2 | 0 |
 
 ### Route START
 
 | scherm | eerste vraag | sessies |
 | --- | --- | --- |
-| who | advice_goal | 0 |
-| age_experience | age_band | 0 |
-| current_stick | has_current_stick | 0 |
-| fun | fun_style | 0 |
-| budget | budget_band | 0 |
+| who | advice_goal | 17 |
+| age_experience | age_band | 11 |
+| current_stick | has_current_stick | 10 |
+| fun | fun_style | 10 |
+| budget | budget_band | 11 |
 
 ### Route ONTWIKKEL
 
 | scherm | eerste vraag | sessies |
 | --- | --- | --- |
-| who | advice_goal | 0 |
-| age_experience | age_band | 0 |
-| first_touch | first_touch_confidence | 0 |
-| goals | primary_goals | 0 |
-| current_stick | has_current_stick | 0 |
-| budget | budget_band | 0 |
+| who | advice_goal | 12 |
+| age_experience | age_band | 13 |
+| first_touch | first_touch_confidence | 8 |
+| goals | primary_goals | 7 |
+| current_stick | has_current_stick | 6 |
+| budget | budget_band | 9 |
 
 ### Route PRESTATIE
 
 | scherm | eerste vraag | sessies |
 | --- | --- | --- |
-| who | advice_goal | 0 |
-| age_experience | age_band | 0 |
-| goals | first_touch_confidence | 0 |
-| skills_ground | skill_flat_pass | 0 |
-| skills_special | skill_aerial | 0 |
-| current_stick | has_current_stick | 0 |
-| budget | budget_band | 0 |
+| who | advice_goal | 18 |
+| age_experience | age_band | 21 |
+| goals | first_touch_confidence | 19 |
+| skills_ground | skill_flat_pass | 19 |
+| skills_special | skill_aerial | 19 |
+| current_stick | has_current_stick | 19 |
+| budget | budget_band | 20 |
 
 ## PostHog: sessiekubus (voor kruistabellen)
 
-Wijzersessies in de kubus: 0.
+Wijzersessies in de kubus: 50.
+
+### Voor wie × afgerond
+
+| advice_goal \ completed | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| self | 27 | 21 (78%) | 6 (22%) |
+| child | 17 | 14 (82%) | 3 (18%) |
+| (geen) | 5 | 3 (60%) | 2 (40%) |
+| other | 1 | 1 (100%) | 0 (0%) |
+
+### Voor wie × winkelklik (zelfde bezoekdag, na start)
+
+| advice_goal \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| self | 27 | 5 (19%) | 22 (81%) |
+| child | 17 | 4 (24%) | 13 (76%) |
+| (geen) | 5 | 1 (20%) | 4 (80%) |
+| other | 1 | 1 (100%) | 0 (0%) |
+
+### Voor wie × leeftijd
+
+| advice_goal \ age_band | totaal | (geen) (n, % van rij) | 11_12 (n, % van rij) | 13_15 (n, % van rij) | 16_18 (n, % van rij) | 18_plus (n, % van rij) | 8_10 (n, % van rij) | under_8 (n, % van rij) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| self | 27 | 2 (7%) | 0 (0%) | 9 (33%) | 8 (30%) | 8 (30%) | 0 (0%) | 0 (0%) |
+| child | 17 | 0 (0%) | 1 (6%) | 8 (47%) | 1 (6%) | 0 (0%) | 5 (29%) | 2 (12%) |
+| (geen) | 5 | 5 (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+| other | 1 | 0 (0%) | 0 (0%) | 1 (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+
+### Voor wie × seizoenen
+
+| advice_goal \ experience_seasons | totaal | (geen) (n, % van rij) | 1 (n, % van rij) | 2_3 (n, % van rij) | 4_plus (n, % van rij) | lt_1 (n, % van rij) | trial (n, % van rij) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| self | 27 | 2 (7%) | 3 (11%) | 3 (11%) | 18 (67%) | 1 (4%) | 0 (0%) |
+| child | 17 | 0 (0%) | 4 (24%) | 2 (12%) | 5 (29%) | 3 (18%) | 3 (18%) |
+| (geen) | 5 | 5 (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+| other | 1 | 0 (0%) | 0 (0%) | 0 (0%) | 1 (100%) | 0 (0%) | 0 (0%) |
+
+### Voor wie × budget
+
+| advice_goal \ budget_band | totaal | (geen) (n, % van rij) | 125_175 (n, % van rij) | 175_250 (n, % van rij) | 75_125 (n, % van rij) | compare_first (n, % van rij) | gt_250 (n, % van rij) | lt_75 (n, % van rij) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| self | 27 | 6 (22%) | 6 (22%) | 2 (7%) | 0 (0%) | 10 (37%) | 2 (7%) | 1 (4%) |
+| child | 17 | 3 (18%) | 1 (6%) | 1 (6%) | 3 (18%) | 0 (0%) | 1 (6%) | 8 (47%) |
+| (geen) | 5 | 2 (40%) | 1 (20%) | 0 (0%) | 0 (0%) | 0 (0%) | 2 (40%) | 0 (0%) |
+| other | 1 | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 1 (100%) | 0 (0%) |
+
+### Voor wie × huidige stick
+
+| advice_goal \ has_current_stick | totaal | (geen) (n, % van rij) | no (n, % van rij) | yes (n, % van rij) |
+| --- | --- | --- | --- | --- |
+| self | 27 | 6 (22%) | 2 (7%) | 19 (70%) |
+| child | 17 | 6 (35%) | 7 (41%) | 4 (24%) |
+| (geen) | 5 | 4 (80%) | 0 (0%) | 1 (20%) |
+| other | 1 | 0 (0%) | 0 (0%) | 1 (100%) |
+
+### Voor wie × reden nieuwe stick
+
+| advice_goal \ replacement_reason | totaal | (geen) (n, % van rij) | damaged (n, % van rij) | first_stick (n, % van rij) | new_season (n, % van rij) | next_step (n, % van rij) | other (n, % van rij) | outgrown (n, % van rij) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| self | 27 | 8 (30%) | 6 (22%) | 0 (0%) | 4 (15%) | 4 (15%) | 3 (11%) | 2 (7%) |
+| child | 17 | 12 (71%) | 1 (6%) | 1 (6%) | 1 (6%) | 2 (12%) | 0 (0%) | 0 (0%) |
+| (geen) | 5 | 4 (80%) | 1 (20%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+| other | 1 | 0 (0%) | 1 (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+
+### Voor wie × route
+
+| advice_goal \ route_self_select | totaal | (geen) (n, % van rij) | advanced_compare (n, % van rij) | first_stick (n, % van rij) | next_stick (n, % van rij) | quick (n, % van rij) |
+| --- | --- | --- | --- | --- | --- | --- |
+| self | 27 | 0 (0%) | 14 (52%) | 5 (19%) | 7 (26%) | 1 (4%) |
+| child | 17 | 0 (0%) | 4 (24%) | 7 (41%) | 3 (18%) | 3 (18%) |
+| (geen) | 5 | 5 (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+| other | 1 | 0 (0%) | 0 (0%) | 0 (0%) | 1 (100%) | 0 (0%) |
+
+### Leeftijd × seizoenen
+
+| age_band \ experience_seasons | totaal | (geen) (n, % van rij) | 1 (n, % van rij) | 2_3 (n, % van rij) | 4_plus (n, % van rij) | lt_1 (n, % van rij) | trial (n, % van rij) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 13_15 | 18 | 0 (0%) | 3 (17%) | 1 (6%) | 13 (72%) | 0 (0%) | 1 (6%) |
+| 16_18 | 9 | 0 (0%) | 0 (0%) | 1 (11%) | 8 (89%) | 0 (0%) | 0 (0%) |
+| 18_plus | 8 | 0 (0%) | 2 (25%) | 2 (25%) | 3 (38%) | 1 (13%) | 0 (0%) |
+| (geen) | 7 | 7 (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+| 8_10 | 5 | 0 (0%) | 1 (20%) | 1 (20%) | 0 (0%) | 3 (60%) | 0 (0%) |
+| under_8 | 2 | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 2 (100%) |
+| 11_12 | 1 | 0 (0%) | 1 (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+
+### Leeftijd × budget
+
+| age_band \ budget_band | totaal | (geen) (n, % van rij) | 125_175 (n, % van rij) | 175_250 (n, % van rij) | 75_125 (n, % van rij) | compare_first (n, % van rij) | gt_250 (n, % van rij) | lt_75 (n, % van rij) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 13_15 | 18 | 5 (28%) | 2 (11%) | 1 (6%) | 2 (11%) | 4 (22%) | 2 (11%) | 2 (11%) |
+| 16_18 | 9 | 1 (11%) | 1 (11%) | 1 (11%) | 0 (0%) | 4 (44%) | 2 (22%) | 0 (0%) |
+| 18_plus | 8 | 0 (0%) | 4 (50%) | 1 (13%) | 0 (0%) | 2 (25%) | 0 (0%) | 1 (13%) |
+| (geen) | 7 | 4 (57%) | 1 (14%) | 0 (0%) | 0 (0%) | 0 (0%) | 2 (29%) | 0 (0%) |
+| 8_10 | 5 | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 5 (100%) |
+| under_8 | 2 | 0 (0%) | 0 (0%) | 0 (0%) | 1 (50%) | 0 (0%) | 0 (0%) | 1 (50%) |
+| 11_12 | 1 | 1 (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+
+### Leeftijd × reden nieuwe stick
+
+| age_band \ replacement_reason | totaal | (geen) (n, % van rij) | damaged (n, % van rij) | first_stick (n, % van rij) | new_season (n, % van rij) | next_step (n, % van rij) | other (n, % van rij) | outgrown (n, % van rij) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 13_15 | 18 | 8 (44%) | 3 (17%) | 0 (0%) | 3 (17%) | 3 (17%) | 0 (0%) | 1 (6%) |
+| 16_18 | 9 | 1 (11%) | 4 (44%) | 0 (0%) | 1 (11%) | 1 (11%) | 1 (11%) | 1 (11%) |
+| 18_plus | 8 | 3 (38%) | 1 (13%) | 0 (0%) | 1 (13%) | 1 (13%) | 2 (25%) | 0 (0%) |
+| (geen) | 7 | 6 (86%) | 1 (14%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+| 8_10 | 5 | 4 (80%) | 0 (0%) | 0 (0%) | 0 (0%) | 1 (20%) | 0 (0%) | 0 (0%) |
+| under_8 | 2 | 1 (50%) | 0 (0%) | 1 (50%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+| 11_12 | 1 | 1 (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) | 0 (0%) |
+
+### Leeftijd × huidige stick
+
+| age_band \ has_current_stick | totaal | (geen) (n, % van rij) | no (n, % van rij) | yes (n, % van rij) |
+| --- | --- | --- | --- | --- |
+| 13_15 | 18 | 7 (39%) | 1 (6%) | 10 (56%) |
+| 16_18 | 9 | 1 (11%) | 0 (0%) | 8 (89%) |
+| 18_plus | 8 | 1 (13%) | 2 (25%) | 5 (63%) |
+| (geen) | 7 | 6 (86%) | 0 (0%) | 1 (14%) |
+| 8_10 | 5 | 0 (0%) | 4 (80%) | 1 (20%) |
+| under_8 | 2 | 0 (0%) | 2 (100%) | 0 (0%) |
+| 11_12 | 1 | 1 (100%) | 0 (0%) | 0 (0%) |
+
+### Budget × winkelklik
+
+| budget_band \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| (geen) | 11 | 2 (18%) | 9 (82%) |
+| compare_first | 10 | 1 (10%) | 9 (90%) |
+| lt_75 | 9 | 2 (22%) | 7 (78%) |
+| 125_175 | 8 | 2 (25%) | 6 (75%) |
+| gt_250 | 6 | 2 (33%) | 4 (67%) |
+| 175_250 | 3 | 1 (33%) | 2 (67%) |
+| 75_125 | 3 | 1 (33%) | 2 (67%) |
+
+### Budget × winkelklik vanuit advies
+
+| budget_band \ clicked_advice | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| (geen) | 11 | 0 (0%) | 11 (100%) |
+| compare_first | 10 | 1 (10%) | 9 (90%) |
+| lt_75 | 9 | 2 (22%) | 7 (78%) |
+| 125_175 | 8 | 2 (25%) | 6 (75%) |
+| gt_250 | 6 | 2 (33%) | 4 (67%) |
+| 175_250 | 3 | 0 (0%) | 3 (100%) |
+| 75_125 | 3 | 0 (0%) | 3 (100%) |
+
+### Leeftijd × winkelklik
+
+| age_band \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| 13_15 | 18 | 5 (28%) | 13 (72%) |
+| 16_18 | 9 | 0 (0%) | 9 (100%) |
+| 18_plus | 8 | 2 (25%) | 6 (75%) |
+| (geen) | 7 | 2 (29%) | 5 (71%) |
+| 8_10 | 5 | 2 (40%) | 3 (60%) |
+| under_8 | 2 | 0 (0%) | 2 (100%) |
+| 11_12 | 1 | 0 (0%) | 1 (100%) |
+
+### Seizoenen × winkelklik
+
+| experience_seasons \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| 4_plus | 24 | 3 (13%) | 21 (88%) |
+| 1 | 7 | 4 (57%) | 3 (43%) |
+| (geen) | 7 | 2 (29%) | 5 (71%) |
+| 2_3 | 5 | 1 (20%) | 4 (80%) |
+| lt_1 | 4 | 1 (25%) | 3 (75%) |
+| trial | 3 | 0 (0%) | 3 (100%) |
+
+### Reden × winkelklik
+
+| replacement_reason \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| (geen) | 24 | 8 (33%) | 16 (67%) |
+| damaged | 9 | 1 (11%) | 8 (89%) |
+| next_step | 6 | 0 (0%) | 6 (100%) |
+| new_season | 5 | 0 (0%) | 5 (100%) |
+| other | 3 | 1 (33%) | 2 (67%) |
+| outgrown | 2 | 1 (50%) | 1 (50%) |
+| first_stick | 1 | 0 (0%) | 1 (100%) |
+
+### Huidige stick × winkelklik
+
+| has_current_stick \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| yes | 25 | 3 (12%) | 22 (88%) |
+| (geen) | 16 | 6 (38%) | 10 (63%) |
+| no | 9 | 2 (22%) | 7 (78%) |
+
+### Koopmoment (timing) × winkelklik
+
+| purchase_timing \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| (geen) | 41 | 11 (27%) | 30 (73%) |
+| orienting | 7 | 0 (0%) | 7 (100%) |
+| this_week | 1 | 0 (0%) | 1 (100%) |
+| within_2_weeks | 1 | 0 (0%) | 1 (100%) |
+
+### Route (keuze) × winkelklik
+
+| route_self_select \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| advanced_compare | 18 | 1 (6%) | 17 (94%) |
+| first_stick | 12 | 5 (42%) | 7 (58%) |
+| next_stick | 11 | 1 (9%) | 10 (91%) |
+| (geen) | 5 | 1 (20%) | 4 (80%) |
+| quick | 4 | 3 (75%) | 1 (25%) |
+
+### Afgerond × winkelklik
+
+| completed \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| ja | 39 | 9 (23%) | 30 (77%) |
+| nee | 11 | 2 (18%) | 9 (82%) |
+
+### Afgerond met match × winkelklik
+
+| matched \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| ja | 38 | 9 (24%) | 29 (76%) |
+| nee | 12 | 2 (17%) | 10 (83%) |
+
+### Apparaat × afgerond
+
+| device \ completed | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| Mobile | 27 | 24 (89%) | 3 (11%) |
+| Desktop | 22 | 15 (68%) | 7 (32%) |
+| Tablet | 1 | 0 (0%) | 1 (100%) |
+
+### Apparaat × winkelklik
+
+| device \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| Mobile | 27 | 4 (15%) | 23 (85%) |
+| Desktop | 22 | 7 (32%) | 15 (68%) |
+| Tablet | 1 | 0 (0%) | 1 (100%) |
+
+### Speelniveau × winkelklik
+
+| playing_level \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| (geen) | 34 | 10 (29%) | 24 (71%) |
+| selection | 9 | 1 (11%) | 8 (89%) |
+| senior_competitive | 3 | 0 (0%) | 3 (100%) |
+| breedte | 2 | 0 (0%) | 2 (100%) |
+| top | 1 | 0 (0%) | 1 (100%) |
+| senior_recreational | 1 | 0 (0%) | 1 (100%) |
+
+### Merktrouw × winkelklik
+
+| brand_loyalty \ clicked | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| (geen) | 33 | 10 (30%) | 23 (70%) |
+| open | 11 | 1 (9%) | 10 (91%) |
+| same_brand | 6 | 0 (0%) | 6 (100%) |
+
+### Leeftijd × afgerond
+
+| age_band \ completed | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| 13_15 | 18 | 13 (72%) | 5 (28%) |
+| 16_18 | 9 | 8 (89%) | 1 (11%) |
+| 18_plus | 8 | 8 (100%) | 0 (0%) |
+| (geen) | 7 | 3 (43%) | 4 (57%) |
+| 8_10 | 5 | 5 (100%) | 0 (0%) |
+| under_8 | 2 | 2 (100%) | 0 (0%) |
+| 11_12 | 1 | 0 (0%) | 1 (100%) |
+
+### Budget × afgerond
+
+| budget_band \ completed | totaal | ja (n, % van rij) | nee (n, % van rij) |
+| --- | --- | --- | --- |
+| (geen) | 11 | 0 (0%) | 11 (100%) |
+| compare_first | 10 | 10 (100%) | 0 (0%) |
+| lt_75 | 9 | 9 (100%) | 0 (0%) |
+| 125_175 | 8 | 8 (100%) | 0 (0%) |
+| gt_250 | 6 | 6 (100%) | 0 (0%) |
+| 175_250 | 3 | 3 (100%) | 0 (0%) |
+| 75_125 | 3 | 3 (100%) | 0 (0%) |
+
+### Leeftijd 18+ × seizoenen (volwassenen)
+
+| experience_seasons \ advice_goal | totaal | self (n, % van rij) |
+| --- | --- | --- |
+| 4_plus | 3 | 3 (100%) |
+| 1 | 2 | 2 (100%) |
+| 2_3 | 2 | 2 (100%) |
+| lt_1 | 1 | 1 (100%) |
 
 ## PostHog: uitkomst, rollen, feedback
 
@@ -573,8 +865,8 @@ Wijzersessies in de kubus: 0.
 | /sticks/scoop-indoor-mid-bow-20-carbon | 1 |
 | /aanbod/grays-jb6-xi-jumbow-27074 | 1 |
 | /kennis/zaalstick-budget | 1 |
-| /hockeyschoenen/osaka-kai-mk1-pro-tour | 1 |
 | /b61f69cb93609e8.html | 1 |
+| /hockeyschoenen/osaka-kai-mk1-pro-tour | 1 |
 | /aanbod/adidas-chaosfury-30-indoor-km1372 | 1 |
 | /sticks/grays-jb3xi-jumbow-indoor | 1 |
 | /sticks/indian-maharadja-red-junior | 1 |
