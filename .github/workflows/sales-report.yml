@@ -30,9 +30,7 @@ jobs:
           TRADETRACKER_CUSTOMER_ID: ${{ secrets.TRADETRACKER_CUSTOMER_ID }}
           TRADETRACKER_PASSPHRASE: ${{ secrets.TRADETRACKER_PASSPHRASE }}
           AWIN_API_TOKEN: ${{ secrets.AWIN_API_TOKEN }}
-          DAISYCON_CLIENT_ID: ${{ secrets.DAISYCON_CLIENT_ID }}
-          DAISYCON_REFRESH_TOKEN: ${{ secrets.DAISYCON_REFRESH_TOKEN }}
-          DAISYCON_CLIENT_SECRET: ${{ secrets.DAISYCON_CLIENT_SECRET }}
+          DAISYCON_EXPORT_URL: ${{ secrets.DAISYCON_EXPORT_URL }}
         run: npm run --silent sales:report > report.md
       - name: Rapport in issue zetten
         env:
