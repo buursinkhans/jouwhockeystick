@@ -2,7 +2,7 @@
  * Weekly sales report (counts only): clicks and orders per place on the site
  * and per stick, from the bol.com Affiliate Reporting API, the TradeTracker
  * reference report, the Awin transactions (Plutosport) and the Daisycon
- * statistics per sub id (Daka). The repository is public, so this report never contains
+ * transaction export (Daka). The repository is public, so this report never contains
  * revenue or commission (owner's choice, 2026-10-18). Pure functions; the
  * network calls live in scripts/sales-report.ts.
  */
@@ -43,7 +43,7 @@ export type SalesData = {
     previous: Source<PassaRow>;
     clicks: { current: Counted; previous: Counted };
   };
-  /** Daka via Daisycon (decision log 2026-11-11): clicks and orders per sub id (`ws`, the placement). */
+  /** Daka via Daisycon (decision log 2026-11-12): sales per sub id (`ws`, the placement) from the export; no clicks. */
   daka?: { current: Source<PassaRow>; previous: Source<PassaRow> };
 };
 
@@ -138,19 +138,49 @@ export function awinClicks(body: unknown, advertiserId: string): number | null {
   return row ? toNumber(row.clicks) : null;
 }
 
-/**
- * Reduces the Daisycon statistics per sub id (GET /publishers/{id}/statistics/subid) to
- * clicks (`click_raw`) and orders (open plus approved transactions, so not the
- * disapproved ones). Amounts are dropped here.
- */
-export function daisyconRows(body: unknown): PassaRow[] {
-  if (!Array.isArray(body)) return [];
-  return body.map((item: Record<string, unknown>) => ({
-    reference: typeof item.subid === 'string' ? item.subid : '',
-    clicks: toNumber(item.click_raw),
-    sales: toNumber(item.transaction_open) + toNumber(item.transaction_approved),
-  }));
+/** The list of transactions in an export: the body itself, or the first array in an object (`data`, `transactions`, ...). */
+function transactionList(body: unknown): unknown[] {
+  if (Array.isArray(body)) return body;
+  if (!body || typeof body !== 'object') return [];
+  const object = body as Record<string, unknown>;
+  for (const key of ['data', 'transactions', 'items', 'results']) {
+    if (Array.isArray(object[key])) return object[key] as unknown[];
+  }
+  return Object.values(object).find((value): value is unknown[] => Array.isArray(value)) ?? [];
 }
+
+/**
+ * Reduces the Daisycon transaction export (export.daisycon.com/publishers/{id}/transactions/json)
+ * to sales per sub id (`ws`, the placement): one sale per transaction that is not disapproved,
+ * only for the Daka programme when the transaction says which programme it is. The export is not
+ * documented, so both shapes of Daisycon's transactions are read: flat (`sub_id`, `status`) and
+ * with `parts` (`parts[].subid`, `parts[].status`). Clicks are not in the export: they come
+ * from PostHog. Amounts and commission are dropped here.
+ */
+export function daisyconSales(body: unknown, programId: string): PassaRow[] {
+  const list = transactionList(body);
+  const sales = new Map<string, number>();
+  for (const item of list) {
+    if (!item || typeof item !== 'object') continue;
+    const row = item as Record<string, unknown>;
+    if (row.program_id !== undefined && String(row.program_id) !== programId) continue;
+    const parts = Array.isArray(row.parts)
+      ? row.parts.filter((part): part is Record<string, unknown> => !!part && typeof part === 'object')
+      : [];
+    const statuses = (parts.length ? parts.map((part) => part.status) : [row.status]).map((status) =>
+      String(status ?? '').toLowerCase(),
+    );
+    // A transaction is a sale unless every part (or the transaction itself) is disapproved.
+    if (statuses.length > 0 && statuses.every((status) => status === 'disapproved')) continue;
+    const raw = parts.length ? (parts[0]!.subid ?? parts[0]!.sub_id) : (row.sub_id ?? row.subid);
+    const reference = typeof raw === 'string' ? raw : '';
+    sales.set(reference, (sales.get(reference) ?? 0) + 1);
+  }
+  return [...sales].map(([reference, count]) => ({ reference, clicks: 0, sales: count }));
+}
+
+/** Why the Daka clicks are not in the report. */
+export const DAKA_CLICKS_NOTE = 'de export geeft geen kliks, zie PostHog';
 
 type Totals = { clicks: number; orders: number };
 
@@ -253,7 +283,14 @@ export function formatSalesReport(data: SalesData): string {
           },
         ]
       : []),
-    ...(data.daka ? [tradeTracker('Daka', data.daka)] : []),
+    ...(data.daka
+      ? [
+          {
+            ...tradeTracker('Daka', data.daka),
+            totalClicks: { now: { error: DAKA_CLICKS_NOTE }, before: { error: DAKA_CLICKS_NOTE } },
+          },
+        ]
+      : []),
   ];
 
   lines.push('## Samenvatting', '');
@@ -336,7 +373,7 @@ export function formatSalesReport(data: SalesData): string {
   if (data.plutosport || data.daka) {
     lines.push(
       '',
-      '_Plutosport (Awin) geeft kliks alleen in totaal; de verkopen staan per plek, via de `clickref` van de link. Daka (Daisycon) telt kliks en verkopen per sub-ID, dat is de plek op de site. Verkopen zijn zonder afgewezen transacties._',
+      '_Plutosport (Awin) geeft kliks alleen in totaal; de verkopen staan per plek, via de `clickref` van de link. Daka (Daisycon) geeft de verkopen per sub-ID, dat is de plek op de site, maar geen kliks: die staan in PostHog. Verkopen zijn zonder afgewezen transacties._',
     );
   }
 

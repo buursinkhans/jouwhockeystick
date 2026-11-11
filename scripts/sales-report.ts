@@ -1,18 +1,18 @@
 // Weekly sales report (counts only; the repository is public). Fetches clicks
 // and orders per place on the site from the bol.com Affiliate Reporting API,
 // the TradeTracker reference report, the Awin transactions (Plutosport) and the
-// Daisycon statistics per sub id (Daka), for the last 7 full days and the 7
+// Daisycon transaction export (Daka), for the last 7 full days and the 7
 // before, and prints a Markdown report. Each source fails on its own; secrets
 // are never printed.
 // Needs (GitHub Secrets): BOL_AFFILIATE_CLIENT_ID, BOL_AFFILIATE_CLIENT_SECRET,
 // TRADETRACKER_CUSTOMER_ID, TRADETRACKER_PASSPHRASE, AWIN_API_TOKEN,
-// DAISYCON_CLIENT_ID, DAISYCON_REFRESH_TOKEN (and DAISYCON_CLIENT_SECRET if the app has one).
+// DAISYCON_EXPORT_URL (the export URL with token and user name, without dates).
 // Run with: npm run sales:report
 import {
   awinClicks,
   awinSales,
   bolRows,
-  daisyconRows,
+  daisyconSales,
   formatSalesReport,
   passaRows,
   type BolRow,
@@ -200,62 +200,35 @@ async function awinClicksReport(period: Period): Promise<number> {
   return clicks;
 }
 
-// --- Daisycon publisher API (OAuth refresh token, bearer JWT) ----------------
-
-const DAISYCON_API = 'https://services.daisycon.com';
-const DAISYCON_TOKEN_URL = 'https://login.daisycon.com/oauth/access-token';
+// --- Daisycon transaction export (a URL with a fixed export token) ----------
 
 /**
- * A short-lived access token from the stored refresh token (the API uses OAuth 2.1 with
- * PKCE; its documentation says nothing readable about refresh-token rotation). When
- * Daisycon answers with a different refresh token, the old one may stop working: the
- * report says so, because a workflow cannot store a new secret.
+ * Daka sales per sub id from the export. The URL (with token and user name) is the
+ * secret DAISYCON_EXPORT_URL, without dates; the dates are added here. It never goes
+ * into a message: errors name the HTTP status only. The API itself needs OAuth with a
+ * refresh token that works only once, which does not fit a weekly workflow.
  */
-async function daisyconToken(): Promise<{ token: string; rotated: boolean }> {
-  const clientId = process.env.DAISYCON_CLIENT_ID;
-  const refresh = process.env.DAISYCON_REFRESH_TOKEN;
-  if (!clientId || !refresh) throw new Error('sleutels ontbreken in GitHub Secrets');
-  const params = new URLSearchParams({
-    grant_type: 'refresh_token',
-    refresh_token: refresh.trim(),
-    client_id: clientId.trim(),
-  });
-  const secret = process.env.DAISYCON_CLIENT_SECRET;
-  if (secret) params.set('client_secret', secret.trim());
-  const response = await fetch(DAISYCON_TOKEN_URL, {
-    method: 'POST',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params,
-  });
-  if (!response.ok) throw new Error(`Daisycon inloggen gaf HTTP ${response.status}`);
-  const body = (await response.json()) as { access_token?: string; refresh_token?: string };
-  if (!body.access_token) throw new Error('Daisycon gaf geen token');
-  return { token: body.access_token, rotated: !!body.refresh_token && body.refresh_token !== refresh.trim() };
-}
-
-async function daisyconGet(token: string, path: string, params: Record<string, string> = {}): Promise<unknown> {
-  const url = new URL(path, DAISYCON_API);
-  for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
-  const response = await fetch(url, { headers: { Accept: 'application/json', Authorization: `Bearer ${token}` } });
-  if (!response.ok) throw new Error(`Daisycon ${path.replace(/\/\d+/g, '/<id>')} gaf HTTP ${response.status}`);
-  return response.json();
-}
-
-/** Daka clicks and orders per sub id (`ws`, the placement) from the statistics. */
-async function daisyconReport(token: string, period: Period): Promise<PassaRow[]> {
-  const publishers = await daisyconGet(token, '/publishers');
-  const publisherId = Array.isArray(publishers) ? (publishers[0] as { id?: number } | undefined)?.id : undefined;
-  if (!publisherId) throw new Error('Daisycon gaf geen uitgever');
-  return daisyconRows(
-    await daisyconGet(token, `/publishers/${publisherId}/statistics/subid`, {
-      start: period.from,
-      end: period.to,
-      currency_code: 'EUR',
-      media_id: DAKA_DAISYCON.mediaId,
-      program_id: DAKA_DAISYCON.programId,
-      per_page: '1000',
-    }),
-  );
+async function daisyconReport(period: Period): Promise<PassaRow[]> {
+  const base = process.env.DAISYCON_EXPORT_URL;
+  if (!base) throw new Error('export-url ontbreekt in GitHub Secrets');
+  let url: URL;
+  try {
+    url = new URL(base.trim());
+  } catch {
+    throw new Error('DAISYCON_EXPORT_URL is geen geldige url');
+  }
+  url.searchParams.set('start_date', period.from);
+  url.searchParams.set('end_date', period.to);
+  const response = await fetch(url, { headers: { Accept: 'application/json' } });
+  if (!response.ok) throw new Error(`Daisycon-export gaf HTTP ${response.status}`);
+  const text = await response.text();
+  let body: unknown;
+  try {
+    body = JSON.parse(text);
+  } catch {
+    throw new Error('Daisycon-export gaf geen JSON');
+  }
+  return daisyconSales(body, DAKA_DAISYCON.programId);
 }
 
 // --- run ------------------------------------------------------------------
@@ -294,13 +267,6 @@ const { current, previous } = periods(new Date());
 // One TradeTracker login for both campaigns.
 const tradeTracker = tradeTrackerSession();
 tradeTracker.catch(() => undefined);
-// One Daisycon login for both weeks.
-let daisyconNotice: string | null = null;
-const daisycon = daisyconToken().then((login) => {
-  if (login.rotated) daisyconNotice = 'Daisycon gaf een nieuw refresh-token; het opgeslagen token werkt daarna mogelijk niet meer.';
-  return login.token;
-});
-daisycon.catch(() => undefined);
 const [bol, passa, hockeyCity, plutosport, plutoClicks, daka] = await Promise.all([
   both(
     async () => {
@@ -330,14 +296,7 @@ const [bol, passa, hockeyCity, plutosport, plutoClicks, daka] = await Promise.al
   ),
   both(async () => awinSalesReport, current, previous),
   Promise.all([counted(() => awinClicksReport(current)), counted(() => awinClicksReport(previous))]),
-  both(
-    async () => {
-      const token = await daisycon;
-      return (period: Period) => daisyconReport(token, period);
-    },
-    current,
-    previous,
-  ),
+  both(async () => daisyconReport, current, previous),
 ]);
 
 process.stdout.write(
@@ -351,4 +310,3 @@ process.stdout.write(
     daka,
   }),
 );
-if (daisyconNotice) process.stdout.write(`\n_${daisyconNotice}_\n`);
