@@ -83,7 +83,7 @@ async function sessionCube(): Promise<Cube> {
         if(c.first_click IS NOT NULL AND c.last_click >= s.started, 'ja', 'nee') AS clicked,
         if(c.advice_clicks > 0 AND c.last_click >= s.started, 'ja', 'nee') AS clicked_advice
       FROM (
-        SELECT toString(properties.adviceSessionId) AS sid,
+        SELECT ${VD} AS sid,
           any(distinct_id) AS did,
           toDate(min(timestamp)) AS day,
           min(timestamp) AS started,
@@ -94,7 +94,7 @@ async function sessionCube(): Promise<Cube> {
           ${answerCols}
         FROM events
         WHERE event IN ('advice_started', 'question_answered', 'route_selected', 'advice_completed')
-          AND coalesce(toString(properties.adviceSessionId), '') != '' AND ${BASE}
+          AND ${BASE}
         GROUP BY sid
       ) AS s
       LEFT JOIN (
@@ -145,8 +145,8 @@ async function posthog() {
     const rows = await hogql(`
       SELECT toStartOfMonth(timestamp) AS m,
         uniqIf(${VD}, event = '$pageview') AS bezoekdagen,
-        uniqIf(properties.adviceSessionId, event = 'advice_started') AS wijzer_gestart,
-        uniqIf(properties.adviceSessionId, event = 'advice_completed') AS wijzer_afgerond,
+        uniqIf(${VD}, event = 'advice_started') AS wijzer_gestart,
+        uniqIf(${VD}, event = 'advice_completed') AS wijzer_afgerond,
         countIf(event = 'retailer_click') AS winkelkliks,
         uniqIf(${VD}, event = 'retailer_click') AS klikkers,
         countIf(event = 'stickwijzer_exit' AND properties.target = 'zaal') AS exit_zaal,
@@ -161,10 +161,10 @@ async function posthog() {
     );
   });
 
-  await section('PostHog: antwoordverdeling per vraag (unieke wijzersessies)', async () => {
+  await section('PostHog: antwoordverdeling per vraag (unieke wijzer-bezoekdagen)', async () => {
     const rows = await hogql(`
       SELECT toString(properties.questionId) AS q, toString(properties.answerKey) AS a,
-        uniq(properties.adviceSessionId) AS n
+        uniq(${VD}) AS n
       FROM events WHERE event = 'question_answered' AND ${BASE}
       GROUP BY q, a ORDER BY q, n DESC LIMIT 2000`);
     const byQ = new Map<string, [string, number][]>();
@@ -191,16 +191,15 @@ async function posthog() {
   await section('PostHog: afhaken per scherm (sessies die het scherm met Volgende verlieten)', async () => {
     const rows = await hogql(`
       SELECT coalesce(toString(properties.route), '(geen)') AS route, toString(properties.questionId) AS q,
-        uniq(properties.adviceSessionId) AS n
+        uniq(${VD}) AS n
       FROM events WHERE event = 'question_answered' AND ${BASE}
       GROUP BY route, q LIMIT 2000`);
     const started = await hogql(`
       SELECT r, count() AS n, countIf(done) AS afgerond
-      FROM (SELECT toString(properties.adviceSessionId) AS sid,
+      FROM (SELECT ${VD} AS sid,
               coalesce(nullIf(toString(argMax(properties.route, timestamp)), ''), '(geen)') AS r,
               countIf(event = 'advice_completed') > 0 AS done
             FROM events WHERE event IN ('advice_started','route_selected','question_answered','advice_completed') AND ${BASE}
-              AND coalesce(toString(properties.adviceSessionId), '') != ''
             GROUP BY sid)
       GROUP BY r ORDER BY n DESC`);
     p('Sessies per laatst bekende route (gestart / afgerond):');
