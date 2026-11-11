@@ -350,6 +350,33 @@ async function posthog() {
   });
 }
 
+
+async function perDay() {
+  await section('Controle op testverkeer: stickwijzer per dag', async () => {
+    const rows = await hogql(`
+      SELECT day, bron, device, count() AS bezoekdagen, sum(runs) AS wijzer_starts, countIf(done > 0) AS afgerond, countIf(k > 0) AS met_klik,
+        groupUniqArray(goal) AS voor_wie, groupUniqArray(route) AS routes
+      FROM (
+        SELECT distinct_id, toDate(timestamp) AS day,
+          argMinIf(multiIf(lower(coalesce(toString(properties.utm_source), '')) != '', concat('utm:', lower(toString(properties.utm_source))),
+            coalesce(toString(properties.$referring_domain), '') IN ('', '$direct'), 'direct', toString(properties.$referring_domain)), timestamp, event = '$pageview') AS bron,
+          coalesce(toString(any(properties.$device_type)), '?') AS device,
+          countIf(event = 'advice_started') AS runs, countIf(event = 'advice_completed') AS done, countIf(event = 'retailer_click') AS k,
+          coalesce(toString(argMaxIf(properties.answerKey, timestamp, event = 'question_answered' AND properties.questionId = 'advice_goal')), '') AS goal,
+          coalesce(toString(argMaxIf(properties.route, timestamp, event = 'route_selected')), '') AS route
+        FROM events WHERE ${BASE} GROUP BY distinct_id, day HAVING runs > 0
+      ) GROUP BY day, bron, device ORDER BY day`);
+    table(['dag', 'bron', 'apparaat', 'bezoekdagen', 'wijzer-starts', 'afgerond', 'met winkelklik', 'voor wie', 'routes'],
+      rows.map((r) => [String(r[0]), String(r[1]), String(r[2]), num(r[3]), num(r[4]), num(r[5]), num(r[6]), JSON.stringify(r[7]), JSON.stringify(r[8])]));
+    const clicks = await hogql(`
+      SELECT toDate(timestamp) AS day, coalesce(toString(properties.$device_type), '?') AS d, toString(properties.placement) AS pl, count() AS n
+      FROM events WHERE event = 'retailer_click' AND ${BASE} GROUP BY day, d, pl ORDER BY day`);
+    p('### Winkelkliks per dag');
+    p();
+    table(['dag', 'apparaat', 'plek', 'kliks'], clicks.map((r) => [String(r[0]), String(r[1]), String(r[2]), num(r[3])]));
+  });
+}
+
 // ---------- Search Console ----------
 async function gscToken(): Promise<string> {
   const raw = process.env.GSC_SERVICE_ACCOUNT_JSON;
@@ -427,6 +454,5 @@ p('# Buyer Intelligence fase 1.5: ruwe meetdata (alleen tellingen)');
 p();
 p(`Opgehaald op ${new Date().toISOString().slice(0, 16)} UTC. Periode vanaf ${START}. Alleen live domein, bots eruit gefilterd. "Bezoekdag" = één bezoeker op één dag (PostHog draait cookieloos). "Winkelklik" bij een wijzersessie = een retailer_click van dezelfde bezoeker op dezelfde dag, na de start van de wijzer.`);
 p();
-await posthog();
-await searchConsole();
+await perDay();
 console.log(out.join('\n'));
