@@ -72,6 +72,12 @@ function Block({ block }: { block: ArticleBlock }) {
           </table>
         </div>
       );
+    case 'callout':
+      return (
+        <p role="note" className="mt-4 rounded-2xl border border-rand bg-krijt p-4 text-sm leading-relaxed text-inkt">
+          <InlineText text={block.text} />
+        </p>
+      );
     case 'note':
       return (
         <p className="mt-6 border-t border-rand pt-4 text-sm leading-relaxed text-lijngrijs">
@@ -97,7 +103,9 @@ export function ArticleBody({ article }: { article: Article }) {
             : 'text-xl font-semibold mt-6';
         return (
           <div key={section.heading}>
-            <Heading className={headingClass}>{section.heading}</Heading>
+            <Heading id={section.id} className={section.id ? `${headingClass} scroll-mt-24` : headingClass}>
+              {section.heading}
+            </Heading>
             {section.body.map((block, index) => (
               <Block key={index} block={block} />
             ))}

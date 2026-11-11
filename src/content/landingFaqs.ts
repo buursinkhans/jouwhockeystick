@@ -20,7 +20,7 @@ export function stickwijzerFaq(): FaqItem[] {
     {
       question: 'Welke hockeystick past bij een kind van 12?',
       answer:
-        'Kijk eerst naar de lichaamslengte, niet naar de leeftijd: de [lengtetabel](/kennis/hockeystick-lengte-tabel) geeft de maat per lengte. Speelt het kind nog niet lang, dan werkt een eenvoudige stick meestal het best: een rustige mid bow en weinig of geen carbon. De stickwijzer vraagt daarnaast naar ervaring, speelwensen en budget, en toont maximaal drie sticks met de redenen erbij.',
+        'Kijk eerst naar de lichaamslengte, niet naar de leeftijd: de [lengtetabel](/kennis/hockeystick-lengte-tabel) geeft de maat per lengte. Een eerste [indicatie per leeftijd](/kennis/hockeystick-lengte-tabel#leeftijd) staat er ook, maar twee kinderen van dezelfde leeftijd kunnen een andere maat nodig hebben. Speelt het kind nog niet lang, dan werkt een eenvoudige stick meestal het best: een rustige mid bow en weinig of geen carbon. De stickwijzer vraagt daarnaast naar ervaring, speelwensen en budget, en toont maximaal drie sticks met de redenen erbij.',
     },
     {
       question: 'Maakt de positie uit, bijvoorbeeld voor een verdediger?',

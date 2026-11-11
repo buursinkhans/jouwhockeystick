@@ -94,12 +94,14 @@ describe('length table improvements (decision log 2026-10-29)', () => {
     expect(article.sections[0]?.body).toContain('1 inch = 2,54 cm.');
   });
 
-  it('adds the section on length versus age, without an age table', () => {
+  it('adds the section on length versus age; the age indication lives only in its own sourced section (decision log 2026-11-11)', () => {
     const section = article.sections.find((s) => s.heading === 'Lichaamslengte, niet leeftijd');
     expect(section?.body).toEqual([
       'De juiste sticklengte bepaal je op basis van lichaamslengte, niet op leeftijd. Twee kinderen van dezelfde leeftijd kunnen behoorlijk in lengte verschillen. Meet daarom de lichaamslengte zonder schoenen en gebruik de tabel om de passende stickmaat te vinden.',
     ]);
-    expect(JSON.stringify(article)).not.toMatch(/\bjaar\b.*inch|leeftijdstabel/i);
+    // Age appears only in the sourced section "En op leeftijd? Een indicatie" (childHeight.test.ts), nowhere else on the page.
+    const elsewhere = { ...article, sources: [], sections: article.sections.filter((s) => s.id !== 'leeftijd') };
+    expect(JSON.stringify(elsewhere)).not.toMatch(/\bjaar\b.*inch|leeftijdstabel/i);
   });
 
   it('keeps the SEO fields of the article', () => {
@@ -142,6 +144,7 @@ describe('size sprint (2026-11-11): from a size to the sticks, ranking signals k
       'Lichaamslengte, niet leeftijd',
       'Twijfel tussen twee maten',
       'Koop een kinderstick niet op de groei',
+      'En op leeftijd? Een indicatie',
       'Volwassenen: 36,5 inch of langer?',
       'Geldt dezelfde lengte in de zaal?',
       'Liever sticks in jouw maat zien?',

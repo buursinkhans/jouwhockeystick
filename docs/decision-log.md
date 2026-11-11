@@ -3058,3 +3058,15 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
   - **Fouten-blog:** een link naar het artikel voor kinderen en beginners bij "een kinderstick op de groei".
   - `updatedAt` 2026-11-11 in de vier artikelen en de blog. Tests in `src/content/beginners.test.ts`.
 - **Bewust niet:** de titel, intro en bestaande koppen van het artikel (de pagina staat op positie 5,2); een merkenrangorde of "beste merk" (geen beste-claims); FAQ-markup op artikelen; een leeftijdstabel (geen bron, zie maatsprint); wijzigingen aan de stickwijzer zelf.
+
+## 2026-11-11 — Leeftijdsindicatie in de lengtetabel (alleen als indicatie, lengte blijft leidend)
+
+- **Besluit eigenaar:** een leeftijdsindicatie is toegestaan als er brondata is. De lengtetabel van 2026-10-29 zonder leeftijdstabel gold omdat die bron er toen niet was; de bewaking in `lengthTable.test.ts` laat nu alleen de nieuwe, gebronde sectie toe.
+- **Bron:** JGZ-richtlijn Lengtegroei, Bijlage 1, tabel 3 (gemiddelde lengte en SD van Nederlandse meisjes en jongens per leeftijd), op basis van Schönbeck e.a. 2013 (Vijfde landelijke groeistudie, metingen 2008 en 2009). Gemiddelden, geen mediaan. De TNO-groeidiagrammen op tno.nl zijn lege diagrammen zonder cijfers en zijn niet gebruikt. Een KNHB-richtlijn is niet gevonden; de merkrichtlijnen (Grays, Osaka, Princess) werken alleen met lichaamslengte.
+- **Controle van de cijfers:** alle 44 waarden (gemiddelde en SD voor 11 leeftijden en 2 geslachten) zijn op coördinaten uit de pdf gelezen en vergeleken met `childHeight.ts`: 0 afwijkingen. De leeftijd 6,0 (jongens) en de eindlengtes (183,8 en 170,7 cm) komen ook voor in de rekenvoorbeelden en tabel 2 van hetzelfde document.
+- **Wat:**
+  - `src/content/childHeight.ts`: de brondata (leeftijd 5 tot en met 15), de bronvermelding en de berekening. De maat komt uit `LENGTH_GUIDE`, dus er is geen tweede maattabel: bij de gemiddelde lengte, en een bandbreedte van de kortste maat bij gemiddelde min 1 SD tot de langste maat bij gemiddelde plus 1 SD (ongeveer twee op de drie kinderen). Lengtes worden naar hele cm afgerond voor de band.
+  - Lengtetabel-artikel: sectie "En op leeftijd? Een indicatie" (anker `#leeftijd`) na "Koop een kinderstick niet op de groei" en voor "Volwassenen", met een waarschuwingskader, de tabel ("Op de verjaardag van": de cijfers gelden op de verjaardag zelf) en twee bronnen in de bronnenlijst. Titel, intro, hoofdtabel en bestaande koppen zijn ongewijzigd.
+  - Artikelschema: een optioneel `id` per sectie en een blok `callout` (alleen toevoegingen).
+  - Links naar `#leeftijd`: artikel voor kinderen en beginners, kinderzaalartikel en de stickwijzer-FAQ ("kind van 12").
+- **Bewust niet:** interpoleren tussen leeftijden, medianen, leeftijden onder 5 of boven 15, cijfers voor kinderen van een andere herkomst (de tekst verwijst naar de richtlijn), en wijzigingen aan de adviesregels of de stickwijzer.
