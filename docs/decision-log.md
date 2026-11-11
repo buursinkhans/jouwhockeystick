@@ -3039,3 +3039,12 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
   - **Stickwijzer:** de noot onder de keuzehulp verwijst naar de stickwijzer voor wie ook veldhockey speelt, gemeten als `catalog_block_click` (page `zaalsticks`, block `stickwijzer`). De noot zegt nog steeds dat de stickwijzer geen zaalsticks adviseert.
   - **Meta-beschrijving:** noemt kind of volwassene en "vergelijk"; 158 tekens. `updatedAt` 2026-11-11.
 - **Bewust niet:** de SEO-titel, de H1, de intro en de ankers (de pagina staat net onder pagina 1; een test bewaakt ze), de visuele opmaak, de adviesregels en de artikelen. Het zoekwoord "verschil veldhockey zaalhockey stick" rankt op het budgetartikel (positie 12) en niet op de pagina die erover gaat; dat laten we voor nu zo, want de artikelen zijn al aan elkaar gelinkt.
+
+## 2026-11-11 — Maatsprint: van de lengtetabel naar de sticks in jouw maat
+
+- **Aanleiding:** de lengtetabel (`/kennis/hockeystick-lengte-tabel`) is de plek waar de maatvraag wordt beantwoord, maar wie zijn maat kent, had geen directe weg naar sticks in die maat; alleen naar de stickwijzer. Op `/sticks` bestaat al een lengtefilter (`?lengte=`).
+- **Wat:**
+  - **Lengtetabel-artikel:** in "Liever sticks in jouw maat zien?" staat nu een link naar alle veldsticks (filter op lengte) en naar 36,5 inch, de meest gekozen maat voor volwassenen. De link naar de stickwijzer blijft.
+  - **Kinderen en beginners:** de kop "De juiste lengte voor je kind" is "Welke maat hockeystick heeft je kind nodig?" (zoekwoord "hockeystick junior maat", positie 41,9) en de sectie linkt naar de filters. `updatedAt` 2026-11-11.
+  - **Test:** de titel, intro, tabel en alle koppen van het lengtetabel-artikel zijn vastgezet, evenals de nieuwe links.
+- **Bewust niet:** de titel, intro, tabel en koppen van het lengtetabel-artikel (rankingsignalen); een leeftijdstabel (ouders zoeken op leeftijd, maar er is geen betrouwbare bron voor de gemiddelde lengte per leeftijd in de repo; de TNO-groeidiagrammen staan alleen als pdf en een tabel per leeftijd is niet gevonden, dus geen getallen verzonnen); FAQ-markup op artikelen (artikelen kennen die nog niet, en de winst is klein); wijzigingen aan de adviesregels.

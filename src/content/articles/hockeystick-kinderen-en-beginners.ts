@@ -42,11 +42,11 @@ export const hockeystickKinderenEnBeginners: Article = {
       ],
     },
     {
-      heading: 'De juiste lengte voor je kind',
+      heading: 'Welke maat hockeystick heeft je kind nodig?',
       level: 2,
       body: [
         'Bij kinderen is de lengte het allerbelangrijkst. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een goed startpunt is. Laat je kind de stick daarna even vasthouden in een normale hockeyhouding: lukt dribbelen ontspannen, en blijft de stick dicht bij het lichaam? Top.',
-        'Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af.',
+        'Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af. Op [alle veldsticks](/sticks) kies je in de filters de lengte van je kind.',
       ],
     },
     {
