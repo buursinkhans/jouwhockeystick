@@ -19,7 +19,7 @@ export const CLUBS_PAGE = {
     'Kopieer deze tekst en pas hem gerust aan. Je mag hem zonder bronvermelding gebruiken.',
   newsletterText: [
     'Nieuw bij de club en nog geen stick? Kies vooral een stick die past bij de lengte van je kind, niet een te lange om in te groeien: met een passende stick leert je kind de techniek makkelijker.',
-    'Twijfel je over de maat, of over zaal- en veldsticks? Op jouwhockeystick.nl/stickwijzer krijg je in een paar vragen een onafhankelijk stickadvies, met uitleg waarom een stick wel of niet past. De lengtetabel staat op jouwhockeystick.nl/kennis/hockeystick-lengte-tabel.',
+    'Twijfel je over de maat, of over zaal- en veldsticks? Op jouwhockeystick.nl/stickwijzer krijg je in een paar vragen een stickadvies, met uitleg waarom een stick wel of niet past. De lengtetabel staat op jouwhockeystick.nl/kennis/hockeystick-lengte-tabel.',
   ],
   tableHeading: 'Printbare lengtetabel',
   tableIntro:
@@ -28,7 +28,7 @@ export const CLUBS_PAGE = {
     'Dit is een redactionele richtlijn, geen norm van de KNHB of een fabrikant. Op de grens tussen twee maten noemen we beide.',
   honestyHeading: 'Wie zijn wij',
   honesty: [
-    'jouwhockeystick.nl is een onafhankelijke Nederlandse site die spelers en ouders helpt een passende stick te kiezen. We verkopen zelf niets. Bij de sticks linken we naar onze partnerwinkels bol.com, PassaHockey, Plutosport, HockeyCity en Daka; koopt iemand via zo\'n link, dan krijgen we een vergoeding van die winkel. Die vergoeding speelt geen rol in het advies.',
+    'jouwhockeystick.nl is een Nederlandse site die spelers en ouders helpt een passende stick te kiezen. We verkopen zelf niets. Bij de sticks linken we naar onze partnerwinkels bol.com, PassaHockey, Plutosport, HockeyCity en Daka; koopt iemand via zo\'n link, dan krijgen we een vergoeding van die winkel. Die vergoeding speelt geen rol in het advies.',
     'Liever iets anders voor je club, zoals een tabel in clubkleuren of een andere tekst? Mail ons gerust.',
   ],
 } as const;

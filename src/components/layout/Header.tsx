@@ -30,7 +30,7 @@ const NAV_LINKS: NavLink[] = [
 function IndependenceBar() {
   const { shops } = getTrustFacts();
   const points = [
-    'Onafhankelijke stickvergelijker',
+    'Stickvergelijker met bronvermelding',
     `Prijzen van ${shops} partnerwinkels`,
     'Vergoeding telt niet mee in het advies',
   ];

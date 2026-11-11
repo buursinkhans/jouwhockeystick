@@ -15,7 +15,7 @@ export function WhyUs() {
       <div className="mx-auto max-w-5xl px-4 py-20 sm:px-6 sm:py-28">
         <p className="eyebrow">Waarom jouwhockeystick.nl</p>
         <h2 id="waarom-heading" className="mt-3 max-w-3xl text-3xl text-inkt sm:text-[2.5rem]">
-          Onafhankelijk advies, met alles wat je nodig hebt om het te controleren
+          Advies waarin winkelvergoedingen niet meetellen, met alles om het te controleren
         </h2>
         <p className="mt-4 max-w-2xl text-lg text-inkt/80">{ORDER_PROMISE}</p>
 
