@@ -53,7 +53,7 @@ export function kennisFaq(): FaqItem[] {
     {
       question: 'Wat is het verschil tussen 30% en 70% carbon?',
       answer:
-        'Een stick met 70% carbon is meestal stijver en directer dan een stick met 30%. Een slag gaat er harder af, maar een bal die je net niet goed raakt, voel je meer. Met minder carbon is de stick vergevingsgezinder, wat helpt als je nog aan je basis werkt. Hoe stijf een stick echt is, hangt ook af van de opbouw, dus het percentage zegt niet alles. Meer lees je in [Is een hockeystick met meer carbon altijd beter?](/kennis/meer-carbon-hockeystick-beter)',
+        'Een stick met 70% carbon is meestal stijver en directer dan een stick met 30%. Een slag gaat er harder af, maar een bal die je net niet goed raakt, voel je meer. Met minder carbon is de stick vergevingsgezinder, wat helpt als je nog aan je basis werkt. Hoe stijf een stick echt is, hangt ook af van de opbouw, dus het percentage zegt niet alles. Meer lees je in [Hoeveel carbon heeft je hockeystick nodig?](/kennis/meer-carbon-hockeystick-beter)',
     },
     {
       question: 'Low bow of mid bow: wat past bij mij?',

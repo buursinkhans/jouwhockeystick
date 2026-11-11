@@ -1,3 +1,4 @@
+import { DIRECT_MIN_CARBON, SOFT_MAX_CARBON } from '@/advice-engine/carbon';
 import { isJuniorStick } from '@/catalog/similar';
 import type { ExperienceLevel, Product } from '@/catalog/types';
 import { MAX_DESCRIPTION_LENGTH } from '@/lib/site';
@@ -26,7 +27,7 @@ export const VELD = {
   updatedAt: '2026-10-30',
   /** Answers the main question within the first 80 words. */
   intro:
-    'Hier vind je alle veldhockeysticks uit onze catalogus, met per gegeven de bron. Een veldhockeystick vergelijk je op vier punten: de juiste lengte (zie de [lengtetabel](/kennis/hockeystick-lengte-tabel)), de kromming ([low bow of mid bow](/kennis/low-bow-vs-mid-bow)), het carbonpercentage ([meer carbon is niet altijd beter](/kennis/meer-carbon-hockeystick-beter)) en je niveau. Wil je advies dat bij jou past, doe dan de [stickwijzer](/stickwijzer). Waar je bij het kopen op let, lees je in [hockeystick kopen](/blog/hockeystick-kopen).',
+    'Hier vind je alle veldhockeysticks uit onze catalogus, met per gegeven de bron. Een veldhockeystick vergelijk je op vier punten: de juiste lengte (zie de [lengtetabel](/kennis/hockeystick-lengte-tabel)), de kromming ([low bow of mid bow](/kennis/low-bow-vs-mid-bow)), het carbonpercentage ([hoeveel carbon je nodig hebt](/kennis/meer-carbon-hockeystick-beter)) en je niveau. Wil je advies dat bij jou past, doe dan de [stickwijzer](/stickwijzer). Waar je bij het kopen op let, lees je in [hockeystick kopen](/blog/hockeystick-kopen).',
   levels: {
     heading: 'Veldsticks per niveau',
     intro:
@@ -54,10 +55,11 @@ export const VELD = {
       question: 'Hoeveel carbon heb je nodig in een veldhockeystick?',
       /**
        * No catalog range: it ran from wooden sticks (0%) to 100% and said
-       * little (decision log 2026-10-29). Same line as the carbon article.
+       * little (decision log 2026-10-29). Since 2026-11-11 it gives the
+       * engine's rule of thumb (SOFT_MAX_CARBON, DIRECT_MIN_CARBON), like
+       * the carbon article.
        */
-      answer:
-        'Minder dan je misschien denkt, en een vaste norm is er niet. Meer carbon maakt een stick stijver en directer, maar ook minder vergevingsgezind als je de bal net niet goed raakt. Werk je nog aan je basis, dan is een stick met minder carbon vaak een fijn startpunt. Wil je een directer gevoel, dan is meer carbon een logische volgende stap. Ook de kromming, het gewicht en de balans bepalen hoe een stick voelt. Het percentage staat bij elke stick, met de bron erbij. Meer lees je in [meer carbon is niet altijd beter](/kennis/meer-carbon-hockeystick-beter).',
+      answer: `Voor beginners is 0 tot ${SOFT_MAX_CARBON}% carbon meestal genoeg, en veel clubhockeyers zitten goed rond de 50%. Een stick met ${DIRECT_MIN_CARBON}% of meer is stijf en direct, en past vooral bij wie de bal al zuiver aanneemt en slaat. Een vaste norm is er niet: merken noemen voor hetzelfde niveau verschillende percentages. Ook de kromming, het gewicht en de balans bepalen hoe een stick voelt. Het percentage staat bij elke stick, met de bron erbij. Meer lees je in [hoeveel carbon heeft je hockeystick nodig?](/kennis/meer-carbon-hockeystick-beter)`,
     },
     price: {
       question: 'Wat kost een veldhockeystick?',

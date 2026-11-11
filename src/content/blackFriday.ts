@@ -177,7 +177,7 @@ export const BLACK_FRIDAY = {
         link: 'Lengtetabel',
       },
       {
-        title: 'Meer carbon is geen doel op zich',
+        title: 'Hoeveel carbon heb je nodig?',
         body: 'Carbon maakt een stick stijver en directer, maar ook minder vergevingsgezind. Werk je nog aan je basis, dan is een stick met minder carbon vaak een fijn startpunt.',
         href: '/kennis/meer-carbon-hockeystick-beter',
         link: 'Over carbon',

@@ -33,7 +33,7 @@ export function FamilyTable({
           href="/kennis/meer-carbon-hockeystick-beter"
           className="text-veld underline underline-offset-2"
         >
-          Lees waarom
+          Lees hoeveel carbon je nodig hebt
         </Link>
         .
       </p>
