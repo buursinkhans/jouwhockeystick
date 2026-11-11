@@ -23,21 +23,23 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Tellingen ophalen
+      - name: Verkoop over de hele looptijd (alleen aantallen)
         env:
-          POSTHOG_PERSONAL_API_KEY: ${{ secrets.POSTHOG_PERSONAL_API_KEY }}
-          POSTHOG_PROJECT_ID: ${{ vars.POSTHOG_PROJECT_ID }}
-          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
-          GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+          BOL_AFFILIATE_CLIENT_ID: ${{ secrets.BOL_AFFILIATE_CLIENT_ID }}
+          BOL_AFFILIATE_CLIENT_SECRET: ${{ secrets.BOL_AFFILIATE_CLIENT_SECRET }}
+          TRADETRACKER_CUSTOMER_ID: ${{ secrets.TRADETRACKER_CUSTOMER_ID }}
+          TRADETRACKER_PASSPHRASE: ${{ secrets.TRADETRACKER_PASSPHRASE }}
         run: |
           mkdir -p docs/research
-          node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs \
-            .github/research/buyer-validation.ts > docs/research/buyer-validatie-data.md 2> error.log \
-            || { echo "## Script mislukt" >> docs/research/buyer-validatie-data.md; sed -e 's/^/    /' error.log | head -40 >> docs/research/buyer-validatie-data.md; }
+          y=$(date -u -d yesterday +%F)
+          sed "s|^const { current, previous } = periods(new Date());|const current = { from: '2026-09-01', to: '$y' }; const previous = { from: '2026-08-01', to: '2026-08-31' };|" scripts/sales-report.ts > scripts/sales-report-all.ts
+          grep -q "from: '2026-09-01'" scripts/sales-report-all.ts || echo "PERIODE NIET VERVANGEN" > docs/research/verkoop-looptijd.md
+          node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/sales-report-all.ts >> docs/research/verkoop-looptijd.md 2> error.log \
+            || { echo "## Script mislukt" >> docs/research/verkoop-looptijd.md; head -20 error.log | sed -e 's/^/    /' >> docs/research/verkoop-looptijd.md; }
       - name: Resultaat terugzetten op de onderzoeksbranch
         run: |
           git config user.name "buyer-validatie[bot]"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/research/buyer-validatie-data.md
+          git add docs/research/verkoop-looptijd.md
           git commit -m "Onderzoeksdata buyer-validatie $(date -u +%F)" || exit 0
           git push
