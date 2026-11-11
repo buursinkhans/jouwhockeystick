@@ -1,7 +1,8 @@
 /**
  * Weekly sales report (counts only): clicks and orders per place on the site
- * and per stick, from the bol.com Affiliate Reporting API and the TradeTracker
- * reference report. The repository is public, so this report never contains
+ * and per stick, from the bol.com Affiliate Reporting API, the TradeTracker
+ * reference report, the Awin transactions (Plutosport) and the Daisycon
+ * statistics per sub id (Daka). The repository is public, so this report never contains
  * revenue or commission (owner's choice, 2026-10-18). Pure functions; the
  * network calls live in scripts/sales-report.ts.
  */
@@ -22,6 +23,9 @@ export type PassaRow = { reference: string; clicks: number; sales: number };
 
 export type Source<T> = { rows: T[] } | { error: string };
 
+/** A single number that may have failed to load, with the reason (never a key). */
+export type Counted = { value: number } | { error: string };
+
 export type SalesData = {
   current: Period;
   previous: Period;
@@ -29,6 +33,18 @@ export type SalesData = {
   passa: { current: Source<PassaRow>; previous: Source<PassaRow> };
   /** HockeyCity: the same TradeTracker reference report, campaign 27931 (decision log 2026-11-03). */
   hockeyCity?: { current: Source<PassaRow>; previous: Source<PassaRow> };
+  /**
+   * Plutosport via Awin (decision log 2026-11-11): sales per `clickref` (the placement)
+   * from the transactions; Awin gives clicks only per advertiser, so `clicks` is the total
+   * of all places. Rows carry `clicks: 0`: the per-place click cells stay "-".
+   */
+  plutosport?: {
+    current: Source<PassaRow>;
+    previous: Source<PassaRow>;
+    clicks: { current: Counted; previous: Counted };
+  };
+  /** Daka via Daisycon (decision log 2026-11-11): clicks and orders per sub id (`ws`, the placement). */
+  daka?: { current: Source<PassaRow>; previous: Source<PassaRow> };
 };
 
 const PLACEMENT_LABELS: Record<RetailerPlacement, string> = {
@@ -89,6 +105,53 @@ export function passaRows(xml: string): PassaRow[] {
     }));
 }
 
+/**
+ * Reduces the Awin transactions (GET /publishers/{id}/transactions/) to sales per
+ * click reference: one sale per transaction that is not declined or deleted. Amounts
+ * and commission are dropped here. The click reference is read from `clickRefs.clickRef`
+ * or a top-level `clickRef` (the docs list both as conditional fields).
+ */
+export function awinSales(body: unknown): PassaRow[] {
+  if (!Array.isArray(body)) return [];
+  const sales = new Map<string, number>();
+  for (const item of body) {
+    if (!item || typeof item !== 'object') continue;
+    const row = item as Record<string, unknown>;
+    const status = String(row.commissionStatus ?? row.status ?? '').toLowerCase();
+    if (status === 'declined' || status === 'deleted') continue;
+    const refs = row.clickRefs;
+    const nested =
+      refs && typeof refs === 'object' ? (refs as Record<string, unknown>).clickRef : undefined;
+    const raw = nested ?? row.clickRef;
+    const reference = typeof raw === 'string' ? raw : '';
+    sales.set(reference, (sales.get(reference) ?? 0) + 1);
+  }
+  return [...sales].map(([reference, count]) => ({ reference, clicks: 0, sales: count }));
+}
+
+/** The clicks of one advertiser in the Awin advertiser performance report, or null when it has no row. */
+export function awinClicks(body: unknown, advertiserId: string): number | null {
+  if (!Array.isArray(body)) return null;
+  const row = body.find(
+    (item) => item && typeof item === 'object' && String((item as Record<string, unknown>).advertiserId) === advertiserId,
+  ) as Record<string, unknown> | undefined;
+  return row ? toNumber(row.clicks) : null;
+}
+
+/**
+ * Reduces the Daisycon statistics per sub id (GET /publishers/{id}/statistics/subid) to
+ * clicks (`click_raw`) and orders (open plus approved transactions, so not the
+ * disapproved ones). Amounts are dropped here.
+ */
+export function daisyconRows(body: unknown): PassaRow[] {
+  if (!Array.isArray(body)) return [];
+  return body.map((item: Record<string, unknown>) => ({
+    reference: typeof item.subid === 'string' ? item.subid : '',
+    clicks: toNumber(item.click_raw),
+    sales: toNumber(item.transaction_open) + toNumber(item.transaction_approved),
+  }));
+}
+
 type Totals = { clicks: number; orders: number };
 
 function byPlacement<T>(
@@ -140,7 +203,7 @@ export function formatSalesReport(data: SalesData): string {
     '',
     `Week **${data.current.from} t/m ${data.current.to}**, vergeleken met ${data.previous.from} t/m ${data.previous.to}.`,
     '',
-    '_Alleen aantallen: de repository is openbaar. Omzet en commissie zie je in het bol.com Partnerprogramma en in TradeTracker._',
+    '_Alleen aantallen: de repository is openbaar. Omzet en commissie zie je in het bol.com Partnerprogramma, TradeTracker, Awin en Daisycon._',
     '',
   ];
 
@@ -165,6 +228,8 @@ export function formatSalesReport(data: SalesData): string {
     now: Map<string, Totals> | string;
     before: Map<string, Totals> | null;
     unit: string;
+    /** Shops that count clicks only in total (Awin): the per-place click cells stay "-". */
+    totalClicks?: { now: Counted; before: Counted };
   }[] = [
     {
       name: 'bol.com',
@@ -180,6 +245,15 @@ export function formatSalesReport(data: SalesData): string {
     },
     tradeTracker('PassaHockey', data.passa),
     ...(data.hockeyCity ? [tradeTracker('HockeyCity', data.hockeyCity)] : []),
+    ...(data.plutosport
+      ? [
+          {
+            ...tradeTracker('Plutosport', data.plutosport),
+            totalClicks: { now: data.plutosport.clicks.current, before: data.plutosport.clicks.previous },
+          },
+        ]
+      : []),
+    ...(data.daka ? [tradeTracker('Daka', data.daka)] : []),
   ];
 
   lines.push('## Samenvatting', '');
@@ -192,6 +266,18 @@ export function formatSalesReport(data: SalesData): string {
     }
     const now = total(shop.now);
     const before = shop.before ? total(shop.before) : null;
+    if (shop.totalClicks) {
+      // Awin: the clicks are one total for all places; the sales are per place.
+      const { now: clicksNow, before: clicksBefore } = shop.totalClicks;
+      const clicksText =
+        'error' in clicksNow
+          ? `kliks onbekend (${clicksNow.error})`
+          : `${clicksNow.value} kliks (alle plekken)${'value' in clicksBefore ? change(clicksNow.value, clicksBefore.value) : ''}`;
+      lines.push(
+        `- **${shop.name}:** ${clicksText}, ${now.orders} ${shop.unit}${before ? change(now.orders, before.orders) : ''}.`,
+      );
+      continue;
+    }
     lines.push(
       `- **${shop.name}:** ${now.clicks} kliks${before ? change(now.clicks, before.clicks) : ''}, ${now.orders} ${shop.unit}${before ? change(now.orders, before.orders) : ''}.`,
     );
@@ -211,7 +297,7 @@ export function formatSalesReport(data: SalesData): string {
       available ? String(v ?? 0) : '–';
     const cells = maps.map(
       (map, i) =>
-        `${cell(found[i]?.clicks, map !== null)} | ${cell(found[i]?.orders, map !== null)}`,
+        `${cell(found[i]?.clicks, map !== null && !shops[i]?.totalClicks)} | ${cell(found[i]?.orders, map !== null)}`,
     );
     lines.push(`| ${label} | ${cells.join(' | ')} |`);
   }
@@ -244,6 +330,13 @@ export function formatSalesReport(data: SalesData): string {
     lines.push(
       '',
       '_PassaHockey- en HockeyCity-links dragen alleen de plek mee, niet de stick; per stick zie je dat in TradeTracker._',
+    );
+  }
+
+  if (data.plutosport || data.daka) {
+    lines.push(
+      '',
+      '_Plutosport (Awin) geeft kliks alleen in totaal; de verkopen staan per plek, via de `clickref` van de link. Daka (Daisycon) telt kliks en verkopen per sub-ID, dat is de plek op de site. Verkopen zijn zonder afgewezen transacties._',
     );
   }
 
