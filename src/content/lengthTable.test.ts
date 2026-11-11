@@ -11,6 +11,7 @@ import { ProductDetail } from '@/components/catalog/ProductDetail';
 import { RecommendationCard } from '@/components/stickwijzer/RecommendationCard';
 import { LENGTH_TABLE_PATH } from '@/lib/site';
 import { LENGTH_ROWS, hockeystickLengteTabel as article } from './articles/hockeystick-lengte-tabel';
+import { hockeystickKinderenEnBeginners } from './articles/hockeystick-kinderen-en-beginners';
 import { QUESTIONS } from './stickwijzer/questions';
 
 const links = (html: string) => html.split(`href="${LENGTH_TABLE_PATH}"`).length - 1;
@@ -126,5 +127,40 @@ describe('length table improvements (decision log 2026-10-29)', () => {
     for (const file of ['src/components/stickwijzer/QuizForm.tsx', 'src/content/stickwijzer/questions.ts']) {
       expect(readFileSync(file, 'utf8'), file).not.toContain('hockeystick-lengte-tabel');
     }
+  });
+});
+
+describe('size sprint (2026-11-11): from a size to the sticks, ranking signals kept', () => {
+  const kids = hockeystickKinderenEnBeginners;
+
+  it('keeps the title, intro, table and every heading of the length table article', () => {
+    expect(article.title).toBe('Hockeystick lengte tabel: welke maat stick past bij jouw lengte?');
+    expect(article.intro.startsWith('Welke lengte stick heb je nodig?')).toBe(true);
+    expect(article.sections.map((s) => s.heading)).toEqual([
+      'De lengtetabel',
+      'Zo gebruik je de tabel',
+      'Lichaamslengte, niet leeftijd',
+      'Twijfel tussen twee maten',
+      'Koop een kinderstick niet op de groei',
+      'Volwassenen: 36,5 inch of langer?',
+      'Geldt dezelfde lengte in de zaal?',
+      'Liever sticks in jouw maat zien?',
+    ]);
+    expect(LENGTH_ROWS).toHaveLength(LENGTH_GUIDE.length);
+  });
+
+  it('sends the length table reader to the sticks in a size that exists, and still to the stickwijzer', () => {
+    const text = JSON.stringify(article.sections);
+    expect(text).toContain('](/sticks?lengte=36.5)');
+    expect(text).toContain('](/stickwijzer)');
+    const size = 36.5;
+    expect(LENGTH_GUIDE.some((band) => band.sizes.includes(size))).toBe(true);
+    expect(getAllProducts().some((p) => p.lengthsInches.value.includes(size))).toBe(true);
+  });
+
+  it('asks the parents question in the heading and links the kids article to the filtered list', () => {
+    expect(kids.sections.map((s) => s.heading)).toContain('Welke maat hockeystick heeft je kind nodig?');
+    expect(JSON.stringify(kids.sections)).toContain('](/sticks)');
+    expect(JSON.stringify(kids.sections)).toContain('](/kennis/hockeystick-lengte-tabel)');
   });
 });
