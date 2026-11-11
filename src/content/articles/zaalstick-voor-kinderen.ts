@@ -76,7 +76,7 @@ export const zaalstickVoorKinderen: Article = {
       heading: 'De juiste lengte',
       level: 2,
       body: [
-        'Voor een zaalstick gebruik je hetzelfde lengteadvies als voor een veldstick. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een goed startpunt is.',
+        'Voor een zaalstick gebruik je hetzelfde lengteadvies als voor een veldstick. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een goed startpunt is. Een eerste indicatie per leeftijd staat in de [leeftijdssectie](/kennis/hockeystick-lengte-tabel#leeftijd); de lichaamslengte blijft leidend.',
         'Koop niet extra groot ‘op de groei’: met een te lange stick wordt balcontrole lastiger, en juist die heb je in de zaal hard nodig. Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af.',
       ],
     },

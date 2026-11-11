@@ -1,6 +1,7 @@
 import { LENGTH_GUIDE, alsoFitsInch } from '@/advice-engine/sizeAdvice';
 import type { Article } from '../types';
 import { ZAAL_SOURCES } from '../zaal';
+import { AGE_TABLE_ROWS, CHILD_HEIGHT_SOURCE } from '../childHeight';
 
 const INTERSPORT_STICKS = 'https://intersport.nl/collections/hockeysticks';
 const INTERSPORT_GUIDE =
@@ -87,6 +88,30 @@ export const hockeystickLengteTabel: Article = {
       ],
     },
     {
+      id: 'leeftijd',
+      heading: 'En op leeftijd? Een indicatie',
+      level: 2,
+      body: [
+        {
+          type: 'callout',
+          text: 'Gebruik leeftijd alleen als eerste indicatie. Twee kinderen van dezelfde leeftijd kunnen een andere stickmaat nodig hebben. Gebruik altijd de lichaamslengte als uitgangspunt, of doe de [stickwijzer](/stickwijzer).',
+        },
+        'Veel ouders zoeken een maat op leeftijd. Hieronder staat de gemiddelde lengte van Nederlandse kinderen per leeftijd, met de maat die de lengtetabel hierboven bij die lengte geeft. De bandbreedte laat zien hoe ver kinderen van dezelfde leeftijd uit elkaar liggen.',
+        {
+          type: 'table',
+          columns: [
+            'Op de verjaardag van',
+            'Gemiddelde lengte in cm (meisjes / jongens)',
+            'Maat bij die lengte (meisjes / jongens)',
+            'Bandbreedte: gemiddelde ± 1 SD',
+          ],
+          rows: AGE_TABLE_ROWS,
+        },
+        'De cijfers gelden op de verjaardag zelf, dus op exact 8,0 jaar en niet voor elk kind van "8 jaar". De bandbreedte loopt van de kortste maat bij de gemiddelde lengte min één standaarddeviatie tot de langste maat bij de gemiddelde lengte plus één standaarddeviatie, en omvat ongeveer twee op de drie kinderen. Ook de herkomst van een kind speelt mee: de JGZ-richtlijn noemt aparte gemiddelden voor kinderen van Marokkaanse, Turkse en Hindoestaanse afkomst.',
+        'Meet daarom altijd de lichaamslengte en zoek die op in de tabel hierboven. De maten in deze tabel komen uit onze eigen lengtetabel; de gemiddelde lengtes uit de JGZ-richtlijn Lengtegroei, op basis van de Vijfde landelijke groeistudie (metingen in 2008 en 2009).',
+      ],
+    },
+    {
       heading: 'Volwassenen: 36,5 inch of langer?',
       level: 2,
       body: [
@@ -126,6 +151,8 @@ export const hockeystickLengteTabel: Article = {
     {
       label: 'Grays: maattabel hockeysticks (lichaamslengte en sticklengte)',
     },
+    { label: CHILD_HEIGHT_SOURCE.guidelineLabel, url: CHILD_HEIGHT_SOURCE.guidelineUrl },
+    { label: CHILD_HEIGHT_SOURCE.studyLabel, url: CHILD_HEIGHT_SOURCE.studyUrl },
     { label: ZAAL_SOURCES.fieldRules.label, url: ZAAL_SOURCES.fieldRules.url },
     {
       label:

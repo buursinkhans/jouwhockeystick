@@ -22,6 +22,11 @@ export const articleBlockSchema = z.union([
     text: z.string(),
   }),
   z.object({
+    /** A boxed remark the reader should not miss (e.g. "age is only an indication"). */
+    type: z.literal('callout'),
+    text: z.string(),
+  }),
+  z.object({
     /** An interactive explainer figure; see src/components/article. */
     type: z.literal('figure'),
     figure: z.literal('bow-profiles'),
@@ -30,6 +35,8 @@ export const articleBlockSchema = z.union([
 export type ArticleBlock = z.infer<typeof articleBlockSchema>;
 
 export const articleSectionSchema = z.object({
+  /** Optional anchor for links to this section, e.g. `#leeftijd`. */
+  id: z.string().regex(/^[a-z0-9-]+$/).optional(),
   heading: z.string(),
   level: z.union([z.literal(2), z.literal(3)]),
   /** A plain string is a paragraph. */
