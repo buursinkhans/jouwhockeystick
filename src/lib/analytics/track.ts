@@ -1,4 +1,5 @@
 import type { AnalyticsEvent } from './events';
+import { isInternalVisitor } from './internal';
 import { capture } from './posthogClient';
 
 type EventMetadata = Record<string, string | number | boolean>;
@@ -38,7 +39,7 @@ function toMetadata(event: AnalyticsEvent): EventMetadata {
  * rendering.
  */
 export function trackEvent(event: AnalyticsEvent): void {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || isInternalVisitor()) {
     return;
   }
 

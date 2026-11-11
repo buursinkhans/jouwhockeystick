@@ -10,6 +10,7 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | [`stickwijzer/vergelijking-v12-v13.md`](stickwijzer/vergelijking-v12-v13.md) | Vaste testprofielen, oude en nieuwe regels naast elkaar (`npm run stickwijzer:bench`). |
 | [`spec/hockeyschoenen-keuzemodel.md`](spec/hockeyschoenen-keuzemodel.md) | Het keuzemodel voor hockeyschoenen: vragen, beslisregels, productmodel, resultaatpagina en acceptatietests van de sectie `/hockeyschoenen` (issue #100). **Leidend**; afwijkingen leggen we vast in de decision log. |
 | [`spec/prijsvergelijking.md`](spec/prijsvergelijking.md) | Prijsvergelijking per stick: spelregels, gegevensmodel, koppelen tussen winkels en de architectuurkeuze. Besloten 2026-10-26, nog niet gebouwd. |
+| [`analytics.md`](analytics.md) | Meten: events, wat een shop-klik uit de stickwijzer vastlegt, eigen bezoeken uitsluiten (`?intern=aan`), en wat het verkooprapport mist | Wie metingen of rapporten wijzigt |
 | [`source-policy.md`](source-policy.md) | Bronbeleid: hoe we claims onderbouwen, bronnen vermelden en de catalogus elk kwartaal controleren. Bindend voor content, productdata en advies. |
 | [`schrijfstijl.md`](schrijfstijl.md) | Schrijfstijl zonder AI-patronen: harde regels en wat je vermijdt. Geldt voor alle Nederlandse tekst; komt uit de skill vermijd-ai-schrijfstijl. |
 | [`merkinstructie.md`](merkinstructie.md) | Logo, kleuren, typografie en tone of voice. `scripts/build-brand-assets.mjs` bouwt de logobestanden hieruit. |

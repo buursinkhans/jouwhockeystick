@@ -24,6 +24,7 @@ import {
 } from '@/content/stickwijzer/resultCopy';
 import { ROUTE_SHORT_LABELS } from '@/content/stickwijzer/questions';
 import { CheckIcon } from '@/components/ui/icons';
+import { AdviceClick, adviceClickContext, type AdviceClickAnswers } from '@/lib/analytics/adviceContext';
 import { trackEvent } from '@/lib/analytics/track';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { RecommendationCard } from './RecommendationCard';
@@ -69,6 +70,7 @@ export function QuizResult({
   shareHref,
   shared = false,
   quick = false,
+  trackingAnswers,
 }: {
   advice: AdviceResult;
   adviceGoal: AdviceAnswers['advice_goal'] | undefined;
@@ -82,6 +84,8 @@ export function QuizResult({
   shared?: boolean;
   /** Quick advice (UX phase 1): say what it is based on, and offer the full stickwijzer. */
   quick?: boolean;
+  /** Budget band and reason for a new stick, added to the shop clicks of this advice (not in a shared advice). */
+  trackingAnswers?: AdviceClickAnswers;
 }) {
   const copy = ROUTE_RESULT_COPY[advice.route];
   const hasResults = advice.results.length > 0;
@@ -186,12 +190,14 @@ export function QuizResult({
           )}
           <PartnerLinkNote />
           <div className="mt-3 space-y-4">
-            {advice.results.map((item) => (
+            {advice.results.map((item, index) => (
               <div key={item.product.slug} className="space-y-3">
                 {roleLead(item.role) && (
                   <p className="text-sm font-semibold text-inkt">{roleLead(item.role)}</p>
                 )}
-                <RecommendationCard item={item} route={advice.route} />
+                <AdviceClick.Provider value={adviceClickContext(item, index + 1, advice.route, trackingAnswers)}>
+                  <RecommendationCard item={item} route={advice.route} />
+                </AdviceClick.Provider>
               </div>
             ))}
           </div>
@@ -263,12 +269,13 @@ export function QuizResult({
                 korter dan het lengteadvies. We tonen bewust geen langere stick.
               </p>
               <div className="mt-3 space-y-4">
-                {advice.otherSizeOptions.map((item) => (
-                  <RecommendationCard
+                {advice.otherSizeOptions.map((item, index) => (
+                  <AdviceClick.Provider
                     key={item.product.slug}
-                    item={item}
-                    route={advice.route}
-                  />
+                    value={adviceClickContext(item, advice.results.length + index + 1, advice.route, trackingAnswers)}
+                  >
+                    <RecommendationCard item={item} route={advice.route} />
+                  </AdviceClick.Provider>
                 ))}
               </div>
             </div>
