@@ -19,6 +19,7 @@ import {
   adviceSteps,
   formatInch,
   levelLabel,
+  roleLead,
   sizeAdviceText,
 } from '@/content/stickwijzer/resultCopy';
 import { ROUTE_SHORT_LABELS } from '@/content/stickwijzer/questions';
@@ -186,11 +187,12 @@ export function QuizResult({
           <PartnerLinkNote />
           <div className="mt-3 space-y-4">
             {advice.results.map((item) => (
-              <RecommendationCard
-                key={item.product.slug}
-                item={item}
-                route={advice.route}
-              />
+              <div key={item.product.slug} className="space-y-3">
+                {roleLead(item.role) && (
+                  <p className="text-sm font-semibold text-inkt">{roleLead(item.role)}</p>
+                )}
+                <RecommendationCard item={item} route={advice.route} />
+              </div>
             ))}
           </div>
           {compare && (

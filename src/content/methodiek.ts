@@ -14,7 +14,7 @@ export const METHODIEK = {
     'Zo werkt de keuzehulp van jouwhockeystick.nl: eerst de stick die bij niveau en speelwensen past, daarna of hij er in de juiste maat is. Met bronlabels en zonder commerciële rangschikking.',
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-01',
-  updatedAt: '2026-11-08',
+  updatedAt: '2026-11-11',
   /** Answers the main question within the first 80 words. */
   intro: [
     'Wij kiezen eerst de stick die past bij de speler: het niveau, de speelwensen (zoals aannemen, passen, dribbelen, 3D, backhand of sleeppush), het stickgevoel en het budget. Daarna kijken we of die stick er in de juiste maat is. De maat is dus geen punt in de score, maar een harde voorwaarde: een stick die er niet in jouw maat is, adviseren we niet.',
@@ -49,8 +49,8 @@ export const METHODIEK = {
   ],
   roles: [
     {
-      name: 'Beste match',
-      body: 'De hoogste score, minimaal 70 van de 100 punten, en een stick op het niveau van de speler. Haalt de beste stick dat niet, dan heet hij "dichtstbijzijnde optie".',
+      name: 'Onze keuze',
+      body: 'De stick met de hoogste score, minimaal 70 van de 100 punten, en een stick op het niveau van de speler. Haalt de best scorende stick dat niet, dan heet hij "dichtstbijzijnde optie".',
     },
     {
       name: 'Veilige keuze',

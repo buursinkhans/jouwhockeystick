@@ -69,10 +69,11 @@ export default function OverOnsPage() {
 
         <h2 className="mt-10 text-2xl font-bold">Hoe we werken</h2>
         <p className="mt-3 leading-relaxed text-inkt/80">
-          De stickwijzer op deze site geeft je een persoonlijk advies met
-          zichtbare redenen. Je koopt bij een van onze partnerwinkels: bol.com,
-          PassaHockey, Plutosport, HockeyCity of Daka. Wij verkopen zelf niets, maar
-          zorgen dat je met een duidelijk advies bij de juiste stick uitkomt.
+          De stickwijzer op deze site geeft je een advies op basis van je
+          antwoorden, met zichtbare redenen. Je koopt bij een van onze
+          partnerwinkels: bol.com, PassaHockey, Plutosport, HockeyCity of Daka.
+          Wij verkopen zelf niets. We zorgen dat je met duidelijke redenen bij
+          een passende stick uitkomt.
         </p>
 
         <h2 className="mt-10 text-2xl font-bold">Zo verdienen we geld</h2>

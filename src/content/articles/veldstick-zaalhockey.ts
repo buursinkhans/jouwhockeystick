@@ -98,13 +98,13 @@ export const veldstickZaalhockey: Article = {
       heading: 'Hulp bij je keuze',
       level: 2,
       body: [
-        'Bij de [zaalsticks](/zaalsticks) maak je in drie vragen een eerste selectie. Voor persoonlijk advies over een veldstick gebruik je de [stickwijzer](/stickwijzer).',
+        'Bij de [zaalsticks](/zaalsticks) maak je in drie vragen een eerste selectie. Voor een advies over een veldstick gebruik je de [stickwijzer](/stickwijzer).',
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-11',
-  updatedAt: '2026-10-24',
+  updatedAt: '2026-11-11',
   sources: [
     {
       label: ZAAL_SOURCES.indoorRules.label,
