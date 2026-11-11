@@ -63,10 +63,10 @@ describe('/zaalsticks copy (SEO change of 2026-10-29)', () => {
   });
 
   it('shows the change date of this edit, also as dateModified', () => {
-    expect(ZAAL.updatedAt).toBe('2026-11-09');
+    expect(ZAAL.updatedAt).toBe('2026-11-11');
     const html = renderToStaticMarkup(ZaalsticksPage());
-    expect(html).toContain('"dateModified":"2026-11-09"');
-    expect(html).toContain('<time dateTime="2026-11-09">2026-11-09</time>');
+    expect(html).toContain('"dateModified":"2026-11-11"');
+    expect(html).toContain('<time dateTime="2026-11-11">2026-11-11</time>');
   });
 
   it('renders Article, breadcrumbs, the hand-checked sticks as ItemList and the visible FAQ as FAQPage (2026-11-09), with the same anchors', () => {
@@ -108,6 +108,59 @@ describe('/zaalsticks without JavaScript (redesign 2026-11-09)', () => {
     for (const text of texts) {
       expect(text).not.toMatch(OVERCLAIMS);
       // "Er is geen beste zaalstick voor iedereen" is allowed; a claim that one is best is not.
+      expect(text).not.toMatch(/(?<!geen )beste zaalstick|aanrader|!/i);
+      expect(text).not.toMatch(/ [–—] /);
+    }
+  });
+});
+
+describe('/zaalsticks SEO and conversion sprint (2026-11-11)', () => {
+  const html = renderToStaticMarkup(ZaalsticksPage());
+  const checked = getIndoorProducts(new Date(), { includeImported: true }).filter((p) => !isFeedImport(p));
+
+  it('compares every hand-checked stick in a table with a heading, caption and column headers', () => {
+    expect(html).toContain(`<h2 id="zaal-vergelijk-heading"`);
+    expect(html).toContain(ZAAL.compare.heading);
+    expect(html).toContain('<caption');
+    for (const column of ['Stick', 'Lengtes', 'Carbon', 'Bow-profiel', 'Richtprijs']) expect(html).toContain(`>${column}</th>`);
+    const table = html.slice(html.indexOf('zaal-vergelijk-heading'), html.indexOf('</table>'));
+    for (const product of checked) expect(table, product.slug).toContain(`href="${productPath(product)}"`);
+  });
+
+  it('marks a missing carbon percentage or bow profile as "niet vermeld" instead of filling it in', () => {
+    const missing = checked.filter((p) => !p.carbonPercentage || !p.bowProfile);
+    if (missing.length > 0) expect(html).toContain(`>${ZAAL.compare.unknown}</td>`);
+    expect(ZAAL.compare.note).toMatch(/Geen live winkelprijzen/);
+    expect(ZAAL.compare.note).not.toMatch(OVERCLAIMS);
+  });
+
+  it('keeps the protected search elements: title, H1, intro and anchors', () => {
+    expect(ZAAL.seoTitle).toBe('Zaalhockeystick kiezen en kopen: zaalsticks vergeleken');
+    expect(ZAAL.title).toBe('Zaalhockeystick kiezen: waar let je op in de zaal?');
+    expect(ZAAL.intro.startsWith('Een zaalhockeystick kies je net als een veldstick')).toBe(true);
+    expect(html).toContain('id="zaal-selector-heading"');
+    expect(html).toContain('id="alle-zaalsticks"');
+    expect((html.match(/<h1/g) ?? []).length).toBe(1);
+  });
+
+  it('answers the child, beginner and carbon questions in the visible FAQ and in its FAQPage markup', () => {
+    for (const question of ['Welke zaalhockeystick past bij een kind of beginner?', 'Hoeveel carbon heeft een zaalstick nodig?']) {
+      expect(ZAAL.faq.items.map((i) => i.question)).toContain(question);
+      expect(html).toContain(question);
+    }
+    const faqJson = html.match(/<script type="application\/ld\+json">([^<]*"FAQPage"[^<]*)<\/script>/)?.[1] ?? '';
+    expect(faqJson).toContain('Hoeveel carbon heeft een zaalstick nodig?');
+  });
+
+  it('links to the stickwijzer for a field stick, without claiming it advises indoor sticks', () => {
+    expect(ZAAL.stickwijzerNote).toMatch(/\]\(\/stickwijzer\)/);
+    expect(ZAAL.stickwijzerNote).toMatch(/alleen advies voor veldsticks/);
+    expect(html).toContain('href="/stickwijzer"');
+  });
+
+  it('keeps the new copy honest: no best stick, no overclaims, no exclamation mark', () => {
+    for (const text of [ZAAL.compare.intro, ZAAL.compare.note, ZAAL.metaDescription, ...ZAAL.faq.items.map((i) => i.answer)]) {
+      expect(text).not.toMatch(OVERCLAIMS);
       expect(text).not.toMatch(/(?<!geen )beste zaalstick|aanrader|!/i);
       expect(text).not.toMatch(/ [–—] /);
     }

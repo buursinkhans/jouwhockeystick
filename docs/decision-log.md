@@ -3029,3 +3029,13 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Winkelkliks uit de stickwijzer:** `retailer_click` krijgt binnen een advies `adviceRole` (de rol-sleutel van het systeem), `adviceRank`, `adviceRoute`, `budgetBand` en `replacementReason`. `quiz_complete` krijgt dezelfde route, budgetband en reden. Alles optioneel, dus bestaande rapporten blijven werken; `position` blijft de plek van de winkel.
 - **Rapport:** het conversie-rapport toont "Per plek in het stickadvies" zodra klikken een rol hebben.
 - **Bewust niet:** lengte, leeftijd of vrije tekst in events; wijzigingen aan partnerlinks of sub-ID's; het verkooprapport (voorstel in `docs/analytics.md`: Plutosport en Daka toevoegen, en pas later de rol in de tracking-link); wijzigingen aan de privacyverklaring.
+
+## 2026-11-11 — Zaalsprint: /zaalsticks krijgt een vergelijkingstabel, meer FAQ en een link naar de stickwijzer
+
+- **Aanleiding:** Search Console (2026-10-10 t/m 2026-11-06) toont zaalzoekwoorden op positie 10 tot 14 zonder klik (zaalhockeystick 106 vertoningen, zaalsticks, zaalstick hockey), en de zaalkeuze heeft in de week van 2 tot 8 november 2 kliks en 1 verkoop bij PassaHockey. De aantallen zijn klein: richting, geen conclusie.
+- **Wat:**
+  - **Tabel "Zaalsticks naast elkaar"** (`IndoorCompareTable`): de met de hand nagekeken zaalsticks met lengtes, carbon, bow-profiel en richtprijs, server-rendered, van laag naar hoog. Een ontbrekend gegeven staat als "niet vermeld". De titel belooft "vergeleken"; die vergelijking stond er nog niet in tabelvorm.
+  - **FAQ:** twee vragen erbij ("Welke zaalhockeystick past bij een kind of beginner?" en "Hoeveel carbon heeft een zaalstick nodig?"), met de FAQPage-markup uit dezelfde bron.
+  - **Stickwijzer:** de noot onder de keuzehulp verwijst naar de stickwijzer voor wie ook veldhockey speelt, gemeten als `catalog_block_click` (page `zaalsticks`, block `stickwijzer`). De noot zegt nog steeds dat de stickwijzer geen zaalsticks adviseert.
+  - **Meta-beschrijving:** noemt kind of volwassene en "vergelijk"; 158 tekens. `updatedAt` 2026-11-11.
+- **Bewust niet:** de SEO-titel, de H1, de intro en de ankers (de pagina staat net onder pagina 1; een test bewaakt ze), de visuele opmaak, de adviesregels en de artikelen. Het zoekwoord "verschil veldhockey zaalhockey stick" rankt op het budgetartikel (positie 12) en niet op de pagina die erover gaat; dat laten we voor nu zo, want de artikelen zijn al aan elkaar gelinkt.
