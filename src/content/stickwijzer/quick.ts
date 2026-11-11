@@ -12,7 +12,7 @@ export const ADVICE_MODE_TEXT = {
     {
       value: 'full',
       label: `Uitgebreid advies · ${routeStepRange()}`,
-      description: 'Met speelwensen, techniek en stickgevoel, voor een preciezer advies.',
+      description: 'Met speelwensen, techniek en stickgevoel: meer vragen, meer kenmerken in het advies.',
     },
   ] as const satisfies readonly { value: 'quick' | 'full'; label: string; description: string }[],
   /** Above a quick result: what it is based on, and the way to a more precise advice. */
