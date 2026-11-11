@@ -20,7 +20,7 @@ De club-outreach-agent helpt hockeyclubs aan gratis stickmateriaal voor nieuwe l
 - Nederlands, *jullie/je*, vriendelijk en zakelijk. Hooguit **150 woorden** in de tekst.
 - **Persoonlijk:** noem één concreet ding van de club zelf dat je op hun site zag (bijv. hun jongste jeugd, Funkey, zaalhockey, een open dag, een pagina voor nieuwe leden). Verzin niets; zie je niets bruikbaars, noem dan alleen de plaats en dat ze een jeugdafdeling hebben (als dat klopt).
 - **Aanbod:** de link `https://jouwhockeystick.nl/clubs`, gratis, zonder aanmelding of tegenprestatie. Geen bijlagen.
-- **Eerlijk:** zeg in één zin dat de site onafhankelijk advies geeft en bij sommige sticks naar bol.com linkt, waarvoor we een kleine vergoeding krijgen.
+- **Eerlijk:** zeg in één zin dat de winkelvergoeding niet meetelt in het advies en de site bij sommige sticks naar bol.com linkt, waarvoor we een kleine vergoeding krijgen.
 - **Geen** claims over samenwerking met de KNHB of de club, geen kortingen, geen druk ("alleen deze week").
 - **Afmelden:** eindig met: *Liever geen mail meer van ons? Laat het even weten, dan mailen we jullie niet meer.*
 - Onderwerpregel: kort en concreet, bijv. *Gratis stick-lengtetabel voor nieuwe leden van <club>*.

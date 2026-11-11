@@ -32,7 +32,7 @@ export function stickwijzerFaq(): FaqItem[] {
       answer: `${routeStepRange().replace(/^./, (c) => c.toUpperCase())}, afhankelijk van de route. Je hebt geen account nodig en we vragen geen naam of e-mailadres. Je antwoorden blijven in je browser.`,
     },
     {
-      question: 'Is het advies onafhankelijk?',
+      question: 'Telt de winkelvergoeding mee in het advies?',
       answer:
         'De score van een stick hangt af van je antwoorden en de gegevens van de stick. Welke winkel hem verkoopt en wat wij daaraan verdienen, telt niet mee. Klik je door naar een winkel, dan gaat dat via een partnerlink; hoe dat werkt, staat in de [methodiek](/methodiek#partnerlinks).',
     },

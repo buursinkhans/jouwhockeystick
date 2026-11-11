@@ -2996,3 +2996,18 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Afwijking van het plan:** de constante staat in een eigen bestand (`methode.ts`, zonder imports) en niet in `methodiek.ts`, zodat de tekst gewone content blijft en los te testen is. `methodiek.ts` levert alleen de versieregel.
 - **Herhaling:** de naam komt hooguit drie keer per pagina voor buiten /methodiek, niet in koppen van kennisartikelen, altijd als "Jouwhockeystick-methode".
 - **Open:** merkencheck bij het BOIP (eigenaar). Na de merge /methodiek laten indexeren in Search Console. De nulmeting na 2, 4 en 8 weken herhalen met dezelfde vragen, in een schone tijdelijke chat.
+
+## 2026-11-11 — "Onafhankelijk" en "objectief" van de site gehaald als claim
+
+**Aanleiding:** de AI-nulmeting van 11-11-2026: alle vier de platforms herhaalden "onafhankelijk" over de site. De site verdient aan partnerlinks, dus het woord is niet te onderbouwen en kan als misleidend worden gelezen. Dit draait de keuze van 2026-10-19 terug (eigenaar akkoord).
+
+**Wat:** vervangen door wat wel controleerbaar is: de winkelvergoeding telt niet mee in het advies.
+- Standaard-metabeschrijving (`src/lib/site.ts`, 154 tekens): "Advies voor een hockeystick die past bij lengte, ervaring, speelwensen en budget. Winkelvergoedingen tellen niet mee. Per stick zie je redenen en bronnen." Let op de klikratio in Search Console op pagina's met de standaardbeschrijving.
+- Homepage: vertrouwensregel "Winkelvergoedingen tellen niet mee" en kop "Advies waarin winkelvergoedingen niet meetellen, met alles om het te controleren".
+- Header (telefoon): "Stickvergelijker met bronvermelding".
+- FAQ: "Telt de winkelvergoeding mee in het advies?" (antwoord ongewijzigd).
+- Clubteksten (`clubs.ts`, `docs/club-outreach.md`): "onafhankelijk" geschrapt; de eigenaar verstuurt clubmails zelf.
+
+**Bewust gelaten:** "Onafhankelijke bron" als bronlabel (FIH, scripties) in `sources/` en op /zaalsticks (beschermd); "onafhankelijk bevestigd via hockey.nl" in `brands.ts`; de twee bronzinnen in `methodiek.ts`; de regex tegen "objectief beter" in `validation.ts`.
+
+**Test:** `src/content/claims.test.ts` bewaakt dat de zes bestanden het woord niet terugkrijgen.

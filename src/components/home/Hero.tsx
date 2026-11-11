@@ -45,16 +45,16 @@ function HeroVisual() {
 /** Homepage hero; the pay-off sits under the header logo (owner, 2026-11-04). */
 /**
  * Why the advice can be trusted, visible without scrolling. Every claim is
- * counted from the catalog or documented on /methodiek. "Onafhankelijk
- * advies" (owner's wording, 2026-10-19) holds because the score has no input
- * for fees, shop or brand; the partner links are disclosed at every shop
+ * counted from the catalog or documented on /methodiek. "Winkelvergoedingen
+ * tellen niet mee" (2026-11-11) holds
+ * because the score has no input for fees, shop or brand; the partner links are disclosed at every shop
  * button and explained on /methodiek.
  */
 function TrustLine() {
   // The catalog size is in the facts strip under the search block (2026-11-04), so not here as well.
   const items = [
     'Bron bij elk gegeven',
-    'Onafhankelijk advies',
+    'Winkelvergoedingen tellen niet mee',
   ];
   return (
     <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-inkt/80">
