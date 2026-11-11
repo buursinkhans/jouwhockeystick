@@ -3070,3 +3070,15 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
   - Artikelschema: een optioneel `id` per sectie en een blok `callout` (alleen toevoegingen).
   - Links naar `#leeftijd`: artikel voor kinderen en beginners, kinderzaalartikel en de stickwijzer-FAQ ("kind van 12").
 - **Bewust niet:** interpoleren tussen leeftijden, medianen, leeftijden onder 5 of boven 15, cijfers voor kinderen van een andere herkomst (de tekst verwijst naar de richtlijn), en wijzigingen aan de adviesregels of de stickwijzer.
+
+## 2026-11-11 — Verkooprapport: Plutosport (Awin) en Daka (Daisycon)
+
+- **Aanleiding:** het verkooprapport toonde bol.com, PassaHockey en HockeyCity, maar niet Plutosport en Daka, terwijl beide een knop hebben. Zonder die twee is niet te zien welke content, route of winkel omzet oplevert.
+- **Wat:**
+  - **Plutosport:** de verkopen per `clickref` uit de Awin-transacties (`GET /publishers/{id}/transactions/`, zonder afgewezen en verwijderde) en de kliks in totaal uit het Awin-rapport per adverteerder (regio NL). Awin geeft geen kliks per `clickref`, dus de kolom per plek is een streepje.
+  - **Daka:** kliks en verkopen per sub-ID (`ws`) uit `GET /publishers/{id}/statistics/subid` van Daisycon, gefilterd op programma 7290 en media 441384. Verkopen zijn open plus goedgekeurde transacties.
+  - **Zelfde conventies:** alleen aantallen (nooit bedragen), elke bron valt apart uit met de reden, geen pakketten (de workflow draait zonder `npm ci`), geheimen alleen uit GitHub-secrets en nooit in een melding.
+  - **Nieuwe secrets:** `AWIN_API_TOKEN`, `DAISYCON_CLIENT_ID`, `DAISYCON_REFRESH_TOKEN` en optioneel `DAISYCON_CLIENT_SECRET`. De stappen om ze te maken staan in `docs/analytics.md`.
+- **Gevonden:** de workflow leest `BOL_AFFILIATE_CLIENT_ID` en `BOL_AFFILIATE_CLIENT_SECRET`, maar de repo heeft die secrets niet (wel `BOL_CLIENT_ID`, `BOL_CLIENT_SECRET` en `BOL_CLIENT_ID_RAPPORT`). Daarom stond bol.com in het rapport van 9 november als "sleutels ontbreken". Niet aangepast: welke sleutel bij het Partnerprogramma hoort, bepaalt de eigenaar.
+- **Onzeker tot de eerste run met echte sleutels:** de Awin-documentatie beschrijft het antwoord van de transacties niet (de code leest `clickRefs.clickRef` en `clickRef`), en de Daisycon-documentatie zegt niets leesbaars over het vervallen van een refresh-token (OAuth 2.1 met PKCE). Het rapport meldt een nieuw refresh-token.
+- **Bewust niet:** bedragen, Jumbo Sports, wijzigingen aan partnerlinks of sub-ID's, en een koppeling van klikken aan personen. Het voorstel voor analyse van content, routes, winkels en stickadviezen staat in `docs/analytics.md` ("Van klik naar omzet").

@@ -48,7 +48,7 @@ Deze workflows lezen alleen en maken een rapport, meestal als issue. De orchestr
 | `security.yml` | Maandag: beveiliging van de live site, kwetsbaarheden en nieuwere versies van pakketten, sleutels in de code; opent een PR met veilige updates (zie [`beveiliging.md`](beveiliging.md)) |
 | `indexnow.yml` | Na elke deploy: meldt nieuwe en gewijzigde pagina's uit de sitemap bij Bing en andere IndexNow-zoekmachines. Met de hand: GitHub → Actions → *IndexNow* → *Run workflow*, kies `all` voor de hele sitemap of `changed` voor de laatste commit |
 | `technical-seo.yml` | Crawlt de live sitemap op technische SEO-problemen, en controleert of AI-crawlers (OAI-SearchBot, GPTBot, PerplexityBot, ClaudeBot) en Bingbot de site kunnen lezen |
-| `sales-report.yml` | Kliks en bestellingen per plek en per stick bij bol.com en PassaHockey (alleen aantallen, want de repo is openbaar) |
+| `sales-report.yml` | Kliks en bestellingen per plek (en bij bol.com per stick) bij bol.com, PassaHockey, HockeyCity, Plutosport (Awin) en Daka (Daisycon); alleen aantallen, want de repo is openbaar. Zie [`analytics.md`](analytics.md) |
 | `conversion-report.yml` | Stickwijzer-trechter, afhaken per vraag, winkelkliks en bezoekers uit AI-assistenten per pagina (PostHog) |
 | `marktverkenning.yml` | Nieuwe hockeypagina's bij concurrenten |
 | `passa-sync.yml` | Woensdag: importeert de PassaHockey-productfeed opnieuw (prijzen, voorraad, nieuwe en verdwenen sticks), werkt de Plutosport-koppelingen, de bol.com-prijzen, de hockeyschoenen uit beide feeds (`src/catalog/shoes/imported.ts`) de HockeyCity-koppelingen (`src/catalog/offers/hockeyCity.ts`) en de Daka-koppelingen (`src/catalog/offers/daka.ts`) bij en opent één PR |

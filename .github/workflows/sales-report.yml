@@ -1,5 +1,6 @@
 # Weekly sales report (read-only, counts only): clicks and orders per place
-# on the site from bol.com and PassaHockey (TradeTracker), written to one
+# on the site from bol.com, PassaHockey and HockeyCity (TradeTracker),
+# Plutosport (Awin) and Daka (Daisycon), written to one
 # GitHub issue with label `verkoop`. The repository is public, so the report
 # never contains revenue or commission. See scripts/sales-report.ts.
 name: Verkooprapport
@@ -28,6 +29,10 @@ jobs:
           BOL_AFFILIATE_CLIENT_SECRET: ${{ secrets.BOL_AFFILIATE_CLIENT_SECRET }}
           TRADETRACKER_CUSTOMER_ID: ${{ secrets.TRADETRACKER_CUSTOMER_ID }}
           TRADETRACKER_PASSPHRASE: ${{ secrets.TRADETRACKER_PASSPHRASE }}
+          AWIN_API_TOKEN: ${{ secrets.AWIN_API_TOKEN }}
+          DAISYCON_CLIENT_ID: ${{ secrets.DAISYCON_CLIENT_ID }}
+          DAISYCON_REFRESH_TOKEN: ${{ secrets.DAISYCON_REFRESH_TOKEN }}
+          DAISYCON_CLIENT_SECRET: ${{ secrets.DAISYCON_CLIENT_SECRET }}
         run: npm run --silent sales:report > report.md
       - name: Rapport in issue zetten
         env:
