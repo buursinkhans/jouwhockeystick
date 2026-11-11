@@ -94,9 +94,10 @@ describe('/sticks FAQ (decision log 2026-10-29)', () => {
 
   it('explains carbon instead of a 0–100% range, with the link to the carbon article', () => {
     const carbon = answer('Hoeveel carbon');
-    expect(carbon).not.toMatch(/\d+\s?%/);
+    expect(carbon).toContain('0 tot 30% carbon');
+    expect(carbon).toContain('70% of meer');
     expect(carbon).toContain('](/kennis/meer-carbon-hockeystick-beter)');
-    expect(carbon).toContain('een vaste norm is er niet');
+    expect(carbon).toContain('Een vaste norm is er niet');
   });
 
   it('keeps five questions, also in the FAQPage structured data', async () => {

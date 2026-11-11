@@ -3011,3 +3011,13 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 **Bewust gelaten:** "Onafhankelijke bron" als bronlabel (FIH, scripties) in `sources/` en op /zaalsticks (beschermd); "onafhankelijk bevestigd via hockey.nl" in `brands.ts`; de twee bronzinnen in `methodiek.ts`; de regex tegen "objectief beter" in `validation.ts`.
 
 **Test:** `src/content/claims.test.ts` bewaakt dat de zes bestanden het woord niet terugkrijgen.
+
+## 2026-11-11 — Carbonartikel herschreven op dezelfde URL (issue #216)
+
+**Wat:** `/kennis/meer-carbon-hockeystick-beter` herschreven tot "Hoeveel carbon heeft je hockeystick nodig?". Zelfde URL, geen redirect. De vuistregel uit de adviesengine (`SOFT_MAX_CARBON`, `DIRECT_MIN_CARBON`, `HIGH_CARBON`) vervangt "geen vaste percentages per niveau". Nieuw zijn een sectie voor ouders, een testrondje en een FAQ. De catalogustabel en de notitie "Wij testen sticks niet zelf" bleven. "Is meer carbon altijd beter?" staat als H2.
+
+**Waarom:** pillar-plan en SEO/GEO-diagnose van 10 november: de hoofdvraag van de zoeker is het percentage.
+
+**Ook:** de FAQ op `/sticks` geeft nu de getallen (uit dezelfde constanten); linkteksten naar het artikel aangepast in `veld.ts`, `landingFaqs.ts`, `FamilyTable` en Black Friday.
+
+**Bewust niet:** `/zaalsticks`, de adviesregels zelf, prijzen of productnamen in vaste tekst, eigen testclaims.
