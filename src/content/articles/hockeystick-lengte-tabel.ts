@@ -102,7 +102,7 @@ export const hockeystickLengteTabel: Article = {
       ],
     },
     {
-      heading: 'Liever een persoonlijk advies?',
+      heading: 'Liever sticks in jouw maat zien?',
       level: 2,
       body: [
         'Vul in de [stickwijzer](/stickwijzer) je lichaamslengte, ervaring en wensen in. Je krijgt dan niet alleen een maat, maar ook sticks die je in die maat kunt krijgen, met de redenen erbij. Wil je eerst meer weten over de rest van de keuze? Lees dan [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
@@ -112,7 +112,7 @@ export const hockeystickLengteTabel: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-29',
+  updatedAt: '2026-11-11',
   sources: [
     {
       label:

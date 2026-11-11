@@ -138,7 +138,7 @@ function ExampleAdvice() {
         <IconBadge icon={StickIcon} tone="orange" />
         <div>
           <p className="text-xs font-semibold tracking-wide text-veld uppercase">
-            Beste match
+            Onze keuze
           </p>
           <p className="font-bold">
             De stick die het best bij de antwoorden past

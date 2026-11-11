@@ -2977,3 +2977,11 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Groeien:** minstens 3 vertoningen en 50% meer dan de Bing-week ervoor; nieuw is zonder vertoningen de week ervoor. Ontbrekende data heet "ontbreekt", nooit nul.
 - **Citaties in Copilot:** het AI Performance-rapport is niet via de API te lezen. De methodenlijst van de API (IWebmasterApi, Microsoft Learn) heeft er geen methode voor. Dat staat in het issue, met de bron; geen verzonnen endpoint.
 - **Gebruik:** de Onderzoeker telt een groeiende Bing-zoekvraag als "er is vraag"; het Weekrapport noemt Bing als context. `kpi.ts` blijft ongewijzigd.
+
+## 2026-11-11 — Onze keuze in plaats van Beste match
+
+- **Reden:** "Beste match" botst met onze regel geen beste-stick-claims, en "persoonlijk advies" wekte de schijn van een mens die meekijkt. De stickwijzer is een regelgebaseerde keuzehulp.
+- **Besluiten:** de rol `best_match` heet in de tekst "Onze keuze" (`ROLE_LABELS`, de rollenlijst in `methodiek.ts`, het voorbeeld op de homepage). Boven die kaart staat één zin: "Op basis van jouw antwoorden zouden wij kiezen voor deze stick." (`roleLead` in `resultCopy.ts`). Alleen een stick met minstens 70 punten krijgt het label; `closest_option` blijft "Dichtstbijzijnde optie". "Persoonlijk advies" is nog alleen voor menselijk contact via /interesse. /over-ons, drie artikelkoppen of zinnen en `METHODIEK.updatedAt` zijn aangepast.
+- **Bewust niet aangepast:** de rol-sleutels (`best_match` blijft in de code en in analytics), adviesregels, scoring, `RULE_SET_VERSION`, `ADVICE_VERSION`, /zaalsticks en `zaal.ts`, `BRAND_PAYOFF` ("Eerlijk stickadvies op maat"), en de knop "Vraag persoonlijk advies".
+- **Keuze snel of uitgebreid:** de beschrijving van "Uitgebreid advies" in `quick.ts` is "Met speelwensen, techniek en stickgevoel: meer vragen, meer kenmerken in het advies." Meer vragen betekent meer kenmerken in de weging, niet bewezen een nauwkeuriger uitkomst. De labels en `resultNote` zijn ongewijzigd. De kop "Advies nog preciezer maken?" in `QuizForm.tsx` is "Wil je nog meer meegeven?" (constante `EXTRA_QUESTIONS_HEADING` in `quick.ts`). Een test houdt "preciezer" en "nauwkeuriger" uit de stickwijzer-teksten.
+- **Open:** het label "Beste start" op de route START en de woorden "beste match" in lopende tekst staan nog; zie de PR.

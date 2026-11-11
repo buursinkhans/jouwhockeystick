@@ -80,8 +80,8 @@ export const SELLER_NOTE =
 export const GROWTH_WARNING =
   'Koop niet extra groot ‘op de groei’; een te lange stick kan balcontrole en houding bemoeilijken.';
 
-const ROLE_LABELS: Record<ResultRole, string> = {
-  best_match: 'Beste match',
+export const ROLE_LABELS: Record<ResultRole, string> = {
+  best_match: 'Onze keuze',
   safe_choice: 'Veilige keuze',
   ambitious_choice: 'Ambitieuze keuze',
   closest_option: 'Dichtstbijzijnde optie',
@@ -94,6 +94,16 @@ const START_ROLE_LABELS: Partial<Record<ResultRole, string>> = {
   best_match: 'Beste start',
   ambitious_choice: 'Iets ambitieuzer',
 };
+
+/**
+ * One sentence above the card of the `best_match` role, and above no other:
+ * `closest_option` did not reach the threshold and gets no such lead.
+ */
+export const BEST_MATCH_LEAD = 'Op basis van jouw antwoorden zouden wij kiezen voor deze stick.';
+
+export function roleLead(role: ResultRole): string | null {
+  return role === 'best_match' ? BEST_MATCH_LEAD : null;
+}
 
 export function roleLabel(role: ResultRole, route: AdviceRoute): string {
   return (

@@ -88,7 +88,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       ],
     },
     {
-      heading: 'Persoonlijk advies in een paar minuten',
+      heading: 'Een eerste stick kiezen in een paar minuten',
       level: 2,
       body: [
         'De [stickwijzer](/stickwijzer) heeft een eigen route voor een eerste stick. Vul de lichaamslengte en een paar wensen in, en je krijgt sticks in de juiste maat, met de redenen erbij. Meer over de hele keuze lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
@@ -97,7 +97,7 @@ export const hockeystickKinderenEnBeginners: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-12',
+  updatedAt: '2026-11-11',
   sources: [
     {
       label:
