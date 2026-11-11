@@ -25,7 +25,7 @@ export function CampaignBand({ now = new Date() }: { now?: Date }) {
   return (
     <section aria-labelledby="blackfriday-heading" className="bg-white">
       <div className="mx-auto max-w-5xl px-4 pt-6 sm:px-6 sm:pt-8">
-        <div className="flex flex-col gap-5 rounded-3xl bg-inkt p-5 text-white sm:p-7 md:flex-row md:items-center md:justify-between md:gap-8">
+        <div className="flex flex-col gap-5 rounded-3xl bg-inkt p-5 text-white sm:p-7 md:flex-row md:items-stretch md:justify-between md:gap-8">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold tracking-[0.08em] text-bal uppercase">{text.eyebrow}</p>
             <h2 id="blackfriday-heading" className="mt-2 text-2xl leading-tight font-bold text-white sm:text-[1.75rem]">
@@ -39,18 +39,20 @@ export function CampaignBand({ now = new Date() }: { now?: Date }) {
             ))}
             {text.checked && <p className="mt-3 text-xs text-white/70">{text.checked}</p>}
           </div>
-          <div className="flex shrink-0 flex-col items-start gap-3">
+          {/* One clear action, a quiet second step under it, and a hairline that separates them from the facts. */}
+          <div className="flex shrink-0 flex-col gap-4 border-t border-white/15 pt-5 md:w-64 md:self-stretch md:justify-center md:border-t-0 md:border-l md:pt-0 md:pl-8">
             <HomeBlockLink
               block="blackfriday"
               href={BLACK_FRIDAY.path}
-              className={`${buttonBaseClasses} ${buttonVariantClasses.inverse} min-h-11`}
+              className={`${buttonBaseClasses} ${buttonVariantClasses.inverse} min-h-12 w-full justify-center`}
             >
               {band.cta}
               <span aria-hidden="true">→</span>
             </HomeBlockLink>
-            <p className="text-sm text-white/80">
-              {band.stickwijzer.prefix}{' '}
-              <HomeBlockLink block="blackfriday" href="/stickwijzer" className="font-semibold text-white underline underline-offset-2 hover:text-bal">
+            <p className="text-center text-sm leading-snug text-white/70">
+              {band.stickwijzer.prefix}
+              <br />
+              <HomeBlockLink block="blackfriday" href="/stickwijzer" className="mt-0.5 inline-block font-semibold text-white underline underline-offset-4 hover:text-bal">
                 {band.stickwijzer.label}
               </HomeBlockLink>
             </p>
