@@ -61,6 +61,9 @@ export function ProductDetail({ product }: { product: Product }) {
   // Offers only for prices visible in "Waar te koop" and at most 14 days old
   // (CLAUDE.md, Prijsvergelijking); the price is the shop's price, shipping
   // is shown apart. No Review or AggregateRating: we have not tested the sticks.
+  // Google's product snippets need one of offers, review or aggregateRating, so
+  // without a current price there is no Product block at all, instead of an
+  // item Search Console reports as invalid (decision log 2026-11-12).
   const fresh = offers.filter((o) => isPriceFresh(o, now) && o.priceEur !== null);
   const prices = fresh.map((o) => o.priceEur as number);
   const offersJsonLd =
@@ -81,7 +84,7 @@ export function ProductDetail({ product }: { product: Product }) {
             priceCurrency: 'EUR',
           }
         : null;
-  const jsonLd = {
+  const jsonLd = offersJsonLd && {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
@@ -90,15 +93,17 @@ export function ProductDetail({ product }: { product: Product }) {
     category: DISCIPLINE_LABELS[getDiscipline(product)],
     url: absoluteUrl(productPath(product)),
     ...(product.imageUrl && { image: product.imageUrl }),
-    ...(offersJsonLd && { offers: offersJsonLd }),
+    offers: offersJsonLd,
   };
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
-      />
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }}
+        />
+      )}
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
