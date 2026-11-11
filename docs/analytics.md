@@ -81,7 +81,9 @@ Het verkooprapport (`sales-report.yml`, maandag 05:41 UTC, issue met label `verk
 | bol.com | Affiliate Reporting API | `subid` (de plek) en `name` (de stick) | per plek en per stick | per plek en per stick |
 | PassaHockey, HockeyCity | TradeTracker, referentierapport | referentie (de plek) | per plek | per plek |
 | Plutosport | Awin, publisher-API | `clickref` (de plek) | alleen in totaal (rapport per adverteerder) | per plek (transacties) |
-| Daka | Daisycon, statistieken per sub-ID | `ws` (de plek) | per plek | per plek |
+| Daka | Daisycon, statistieken per sub-ID (zie "Daisycon" hieronder: werkt nog niet) | `ws` (de plek) | per plek | per plek |
+
+**Eerste echte run (2026-11-11, week 4 t/m 10 november):** bol.com, PassaHockey en HockeyCity werken (bol.com 11 kliks en 1 bestelling, PassaHockey 127 kliks en 2 verkopen). Plutosport: de Awin-token werkt, maar het rapport per adverteerder had geen rij voor adverteerder 8342, waarschijnlijk omdat er geen klik was (het conversie-rapport van PostHog toont ook geen Plutosport-klik). Daka: nog niet opgehaald.
 
 - **Plutosport:** de verkopen komen uit `GET /publishers/{id}/transactions/` (zonder afgewezen en verwijderde transacties), de kliks uit `GET /publishers/{id}/reports/advertiser` (regio NL). Awin geeft geen kliks per `clickref`, dus per plek staat daar een streepje.
 - **Daka:** `GET /publishers/{id}/statistics/subid`, gefilterd op programma 7290 en media 441384. Verkopen zijn open plus goedgekeurde transacties.
@@ -94,17 +96,28 @@ Het verkooprapport (`sales-report.yml`, maandag 05:41 UTC, issue met label `verk
 | `BOL_AFFILIATE_CLIENT_ID`, `BOL_AFFILIATE_CLIENT_SECRET` | bol.com | **Ontbreekt in de repo:** de lijst met secrets heeft `BOL_CLIENT_ID`, `BOL_CLIENT_SECRET` en `BOL_CLIENT_ID_RAPPORT`, maar niet deze namen. Daarom stond bol.com in het rapport van 9 november als "sleutels ontbreken". |
 | `TRADETRACKER_CUSTOMER_ID`, `TRADETRACKER_PASSPHRASE` | PassaHockey, HockeyCity | Staat er |
 | `AWIN_API_TOKEN` | Plutosport | Nieuw |
-| `DAISYCON_CLIENT_ID`, `DAISYCON_REFRESH_TOKEN` (en `DAISYCON_CLIENT_SECRET` als de app er een heeft) | Daka | Nieuw |
+| `BOL_AFFILIATE_CLIENT_ID`, `BOL_AFFILIATE_CLIENT_SECRET`, `AWIN_API_TOKEN` | bol.com, Plutosport | Staan er sinds 2026-11-11 |
+| `DAISYCON_CLIENT_ID`, `DAISYCON_REFRESH_TOKEN` (en `DAISYCON_CLIENT_SECRET`) | Daka | **Werkt niet zoals gebouwd**, zie "Daisycon" hieronder |
 
 **Hoe de eigenaar de nieuwe sleutels maakt**
 - **Awin:** ui.awin.com/awin-api (of "API Credentials" in het gebruikersmenu), wachtwoord invullen, "Show my API token". Het token hoort bij de eigen gebruiker en vraagt beheerrechten op het uitgeversaccount. De documentatie noemt geen verlooptijd. Zet het als `AWIN_API_TOKEN`.
-- **Daisycon:** de API gebruikt OAuth 2.1 met PKCE (autorisatiecode, geen vaste sleutel). Je maakt een app in Daisycon en doorloopt eenmalig de login om een refresh-token te krijgen. De uitleg staat in het artikel "API Authentication with OAuth" van de Daisycon-hulp (voor mij niet leesbaar). Zet `client_id` en refresh-token als secrets.
+- **Daisycon:** zie het kopje "Daisycon" hieronder.
 
 **Beperkingen en risico's (eerlijk)**
-- **Daisycon-token:** de documentatie zegt niets leesbaars over het vervallen van een refresh-token. Geeft Daisycon bij elke vernieuwing een nieuw token, dan werkt het opgeslagen token na de eerste run mogelijk niet meer, en een workflow kan geen nieuw secret opslaan. Het rapport meldt dat zodra Daisycon een ander token teruggeeft. Dit is alleen met echte sleutels te testen.
+- **Daisycon-token:** zie "Daisycon" hieronder. De OAuth-route past niet bij een wekelijkse workflow.
 - **Awin-velden:** de documentatie noemt `clickRef` en `clickRefs` als voorwaardelijke velden zonder de rest van het antwoord te beschrijven. De code leest beide vormen. Staan alle verkopen na de eerste run onder "Overig (andere of oude link)", dan heet het veld anders en pas ik de parser aan. Het token gaat in de `Authorization`-header; staat er toch HTTP 401, dan verwacht Awin het als queryparameter.
+- **Klikken van de netwerken zijn hoger dan die van PostHog.** In de eerste run telde PassaHockey 127 kliks (waarvan 71 op "Catalogus") en bol.com 11, terwijl PostHog in de week van 2 tot 8 november 5 en 1 klik op die winkels telde. De weken verschillen een paar dagen, maar dit verschil is te groot daarvoor. Waarschijnlijk volgen bots en crawlers de links (PostHog filtert bots eruit en mist adblock-gebruikers; de waarheid zit er waarschijnlijk tussenin). **Gebruik de verkopen van de netwerken, en reken de conversie (verkopen gedeeld door kliks) met de kliks van PostHog.** Met de kliks van het netwerk lijkt de conversie veel te laag.
 - **Cijfers uit de netwerken** komen per dag of per week en kunnen later nog veranderen (open naar goedgekeurd of afgewezen). Een week zegt weinig bij 1 of 2 verkopen per week: kijk naar een reeks weken.
 - **Nog niet gebouwd:** Jumbo Sports (Daisycon, aangevraagd) staat niet in het rapport.
+
+### Daisycon (Daka): wat Daisycon zelf zegt
+
+Bron: de hulppagina's van Daisycon voor uitgevers ("API Authentication with OAuth", "oAuth over CLI for server-to-server authentication", "Daisycon Exports for publishers") en de OpenAPI-specificatie op docs-publisher.daisycon.com.
+
+- **De API werkt alleen met OAuth 2.1 met PKCE.** Een toegangstoken verloopt na 30 minuten. Een refresh-token **kan maar één keer worden gebruikt**, geldt 30 dagen, en elke vernieuwing geeft een nieuw refresh-token dat je moet bewaren.
+- **Gevolg:** de code in `scripts/sales-report.ts` (één vast refresh-token in een secret) werkt maar één keer. Een workflow kan zelf geen nieuw secret opslaan zonder een tweede, zeer krachtig token met schrijfrechten op de secrets, en de repo is openbaar, dus het token kan niet in de repo staan. Die route is daarom niet geschikt voor een wekelijks rapport.
+- **Betere route: een export-URL met een vast token.** Daisycon biedt URL-exports (`export.daisycon.com/publishers/{id}/transactions/json?token=...&username=...&start_date=...&end_date=...`) zonder OAuth. Het token blijft geldig tot je alle export-tokens ongeldig maakt. De export geeft **verkopen per sub-ID** (transacties), geen kliks; voor kliks gebruiken we PostHog (zie hierboven). De velden van de export zijn niet gedocumenteerd, dus de eerste keer is een voorbeeld van de veldnamen nodig voordat de code ze leest.
+- **Nog te doen:** de code omzetten naar de export-URL (één secret `DAISYCON_EXPORT_URL`, naar het voorbeeld van `AWIN_PLUTOSPORT_FEED_URL`), zodra de eigenaar de URL en de veldnamen heeft aangeleverd.
 
 ## Van klik naar omzet: voorstel voor latere analyse (niet gebouwd)
 
