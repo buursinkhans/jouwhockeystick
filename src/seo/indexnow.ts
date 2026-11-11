@@ -18,6 +18,7 @@ const CONTENT_PAGES: Record<string, string> = {
   'src/content/veld.ts': '/sticks',
   'src/content/home.ts': '/',
   'src/content/methodiek.ts': '/methodiek',
+  'src/content/methode.ts': '/methodiek',
   'src/content/brands.ts': '/merken',
   'src/content/clubs.ts': '/clubs',
   'src/content/privacy.ts': '/privacy',

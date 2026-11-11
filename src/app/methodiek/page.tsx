@@ -7,15 +7,26 @@ import {
 } from '@/advice-engine/ruleSetVersion';
 import { ROUTE_WEIGHTS } from '@/advice-engine/scoring';
 import { LENGTH_GUIDE } from '@/advice-engine/sizeAdvice';
-import { METHODIEK, WEIGHT_LABELS } from '@/content/methodiek';
+import { METHODE } from '@/content/methode';
+import {
+  METHODIEK,
+  WEIGHT_LABELS,
+  methodeVersionLine,
+} from '@/content/methodiek';
+import { getAllArticles } from '@/content';
+import { jsonLdHtml } from '@/lib/jsonLd';
+import { methodeJsonLd } from '@/lib/methodeJsonLd';
 import { GROWTH_WARNING, formatInch } from '@/content/stickwijzer/resultCopy';
 import { ButtonLink } from '@/components/ui/Button';
 import { PromiseList } from '@/components/trust/PromiseList';
 import { PageBody, PageHeader } from '@/components/ui/PageHeader';
 
+// The method name leads the title (decision log 2026-11-11). The old question
+// "Hoe komt ons stickadvies tot stand?" stays on the page as an H2, so that
+// search intent is still answered here.
 export const metadata = pageMetadata({
-  title: METHODIEK.title,
-  description: METHODIEK.metaDescription,
+  title: METHODE.metaTitle,
+  description: METHODE.metaDescription,
   path: '/methodiek',
 });
 
@@ -24,25 +35,92 @@ const WEIGHT_KEYS = Object.keys(WEIGHT_LABELS) as Array<
 >;
 
 export default function MethodiekPage() {
+  const articles = getAllArticles();
   return (
     <>
-      <PageHeader width="lezen" eyebrow="Onze methode" title={METHODIEK.title}>
+      {/* Only what is visible below: the page, the method and its three parts. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(methodeJsonLd()) }}
+      />
+      <PageHeader width="lezen" eyebrow="Onze methode" title={METHODE.h1}>
         <p className="mt-2 text-sm text-lijngrijs">
           Door {METHODIEK.author} · gepubliceerd op{' '}
           <time dateTime={METHODIEK.publishedAt}>{METHODIEK.publishedAt}</time> ·
           laatst gewijzigd op{' '}
           <time dateTime={METHODIEK.updatedAt}>{METHODIEK.updatedAt}</time>
         </p>
-        <div className="max-w-2xl space-y-4 text-lg text-inkt/80">
-          {METHODIEK.intro.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
+        <div
+          id="methode"
+          className="mt-6 max-w-2xl scroll-mt-24 rounded-2xl border border-rand bg-white p-5 sm:p-6"
+        >
+          <p className="text-lg font-semibold text-inkt">{METHODE.kernzin}</p>
+          <p className="mt-3 text-sm text-lijngrijs">{methodeVersionLine()}</p>
+          <div className="mt-4">
+            <ButtonLink href="/stickwijzer">Doe de stickwijzer</ButtonLink>
+          </div>
         </div>
       </PageHeader>
 
       <PageBody width="lezen">
+        <h2 className="text-xl font-bold">{METHODE.oneMinuteHeading}</h2>
+        <p className="mt-3 text-inkt/80">{METHODE.l100}</p>
+
+        <h2 className="mt-10 text-xl font-bold">{METHODE.partsHeading}</h2>
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {METHODE.parts.map((part, index) => (
+            <section
+              key={part.id}
+              id={part.id}
+              aria-labelledby={`${part.id}-heading`}
+              className="card scroll-mt-24 p-5"
+            >
+              <p className="text-sm font-semibold text-veld">Stap {index + 1}</p>
+              <h3 id={`${part.id}-heading`} className="mt-1 text-lg font-bold">
+                {part.title}
+              </h3>
+              <p className="mt-2 text-inkt/80">{part.lead}</p>
+              <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-inkt/80">
+                {part.counts.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <p className="mt-3 text-sm text-lijngrijs">{part.origin}</p>
+              <ul className="mt-3 space-y-1 text-sm">
+                {part.articles.map((slug) => {
+                  const article = articles.find((a) => a.slug === slug);
+                  return article ? (
+                    <li key={slug}>
+                      <Link
+                        href={`/kennis/${slug}`}
+                        className="font-semibold text-veld hover:underline"
+                      >
+                        {article.title}
+                      </Link>
+                    </li>
+                  ) : null;
+                })}
+              </ul>
+            </section>
+          ))}
+        </div>
+
+        <h2 className="mt-10 text-xl font-bold">{METHODE.limitsHeading}</h2>
+        <ul className="mt-4 list-disc space-y-1 pl-5 text-inkt/80">
+          {METHODE.limits.map((limit) => (
+            <li key={limit}>{limit}</li>
+          ))}
+        </ul>
+
+        <h2 className="mt-10 text-xl font-bold">{METHODIEK.title}</h2>
+        <div className="mt-3 max-w-2xl space-y-4 text-inkt/80">
+          {METHODIEK.intro.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+
         {/* The promises the homepage links here for, in one place (redesign fase 4). */}
-        <section aria-labelledby="afspraken-heading" className="card p-5 sm:p-6">
+        <section aria-labelledby="afspraken-heading" className="card mt-10 p-5 sm:p-6">
           <h2 id="afspraken-heading" className="text-xl font-bold">Onze afspraken</h2>
           <div className="mt-4">
             <PromiseList currentPath="/methodiek" />

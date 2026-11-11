@@ -6,6 +6,10 @@ import { ADVICE_VERSION } from '@/advice-engine/ruleSetVersion';
 import { StickwijzerLoader } from '@/components/stickwijzer/StickwijzerLoader';
 import { QUESTIONS } from '@/content/stickwijzer/questions';
 import { CheckIcon } from '@/components/ui/icons';
+import { METHODE } from '@/content/methode';
+
+// The sentence with the method name, split so the name can be a link (it occurs exactly once; methodiek.test.ts).
+const [METHODE_BEFORE = '', METHODE_AFTER = ''] = METHODE.stickwijzer.split(METHODE.name);
 
 // The three routes; "Weet ik nog niet" is a choice on the first screen, not a route.
 const ROUTE_OPTIONS =
@@ -27,6 +31,16 @@ export default function StickwijzerPage() {
     // server-rendered HTML for search engines (2026-10-22).
     <div className="group/stickwijzer mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold">Stickwijzer</h1>
+      <p className="mt-2 text-lg text-inkt group-has-[[data-advice-result]]/stickwijzer:hidden">
+        {METHODE_BEFORE}
+        <Link
+          href="/methodiek#methode"
+          className="font-semibold text-veld hover:underline"
+        >
+          {METHODE.name}
+        </Link>
+        {METHODE_AFTER}
+      </p>
       <p className="mt-2 text-inkt/80 group-has-[[data-advice-result]]/stickwijzer:hidden">
         Beantwoord een paar vragen over lengte, ervaring, speelwensen en budget.
         Je krijgt maximaal drie sticks met per stick de redenen, de afweging en

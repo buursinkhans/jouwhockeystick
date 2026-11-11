@@ -3,6 +3,7 @@ import { getCatalogStats } from '@/catalog/stats';
 import { RETAILERS } from '@/lib/retailers';
 import type { FaqItem } from '@/lib/faqJsonLd';
 import { routeStepRange } from './stickwijzer/progress';
+import { METHODE } from './methode';
 
 /**
  * Questions as people ask them in a search engine or an AI assistant, on the
@@ -34,6 +35,10 @@ export function stickwijzerFaq(): FaqItem[] {
       question: 'Is het advies onafhankelijk?',
       answer:
         'De score van een stick hangt af van je antwoorden en de gegevens van de stick. Welke winkel hem verkoopt en wat wij daaraan verdienen, telt niet mee. Klik je door naar een winkel, dan gaat dat via een partnerlink; hoe dat werkt, staat in de [methodiek](/methodiek#partnerlinks).',
+    },
+    {
+      question: METHODE.faq.question,
+      answer: `${METHODE.m50} Meer lees je in de [methodiek](${METHODE.faq.link}).`,
     },
     {
       question: 'Wat als er geen stick past?',
