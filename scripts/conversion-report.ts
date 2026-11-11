@@ -247,6 +247,11 @@ async function main() {
     clicksByPlacement: await breakdown(config, 'retailer_click', 'properties.placement'),
     clicksByLinkType: await breakdown(config, 'retailer_click', 'properties.linkType'),
     clicksByRetailer: await breakdown(config, 'retailer_click', 'properties.retailer'),
+    clicksByAdviceRole: await breakdown(
+      config,
+      'retailer_click',
+      `if(coalesce(toString(properties.adviceRole), '') = '', '', concat(toString(properties.adviceRole), ' · plek ', toString(properties.adviceRank)))`,
+    ),
     clicksByProduct: await breakdown(
       config,
       'retailer_click',
