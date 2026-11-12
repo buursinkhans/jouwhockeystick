@@ -1,8 +1,12 @@
-# Social-studio
+# Marketingstudio (was Social-studio)
 
-De bron van de Social-studio, de claude.ai-pagina waarop de eigenaar goedkeurt: https://claude.ai/artifact/WWvotNj8EKx9GCbapJtUe2. Ontwerp en fasen: [docs/marketing/bouwplan-2.0.md](../../docs/marketing/bouwplan-2.0.md), fase 2.
+De bron van de Marketingstudio, het ene dashboard van de eigenaar: https://claude.ai/artifact/WWvotNj8EKx9GCbapJtUe2. Ontwerp en fasen: [docs/marketing/bouwplan-2.0.md](../../docs/marketing/bouwplan-2.0.md), fase 2.
 
 ## Wat de pagina doet
+
+Tabbladen bovenaan (sinds 2026-11-12, samengevoegd met Agent-orkest): **Vandaag** (dagcijfers, dagbericht en Vraag Noor, zie [dagbericht.md](../../docs/marketing/dagbericht.md)), **Social** (goedkeuren, hieronder), en **Stack**, **Eén post**, **Week** en **Ritme** (de agentstructuur, met Presenteer voor demo's). De CSS van Social staat met CSS nesting onder `#view-social`, zodat de weergaven elkaar niet raken.
+
+Social:
 
 - Bovenaan staat één statusregel: groen als alles loopt, oranje als iets wacht, met de knop die het oplost.
 - Daaronder staan de komende 14 dagen als kaarten. Elke kaart heeft een voorbeeld en de knoppen Goedkeuren en Aanpassen; na goedkeuren staat op dezelfde plek Intrekken.
@@ -18,5 +22,5 @@ Publiceer met de Artifact-tool naar de bestaande url, met:
 
 - `file_path`: `social/studio/index.html`;
 - `url`: `https://claude.ai/artifact/WWvotNj8EKx9GCbapJtUe2`;
-- `files`: `{"slideart.js": "video/studio/slideart.js", "videoart.js": "video/studio/videoart.js"}`;
-- de bestaande capabilities. Laat je `capabilities` weg, dan blijven ze staan. Geef je ze opnieuw, dan in deze vorm: de `db`-regels van de collecties (`commands`, `posts`, `videos`, `plan`, `markt`, `state`, `community` en `accounts`: lezen view, schrijven owner; `feedback`: alleen owner), `user`, en `mcp` met `Claude Code Remote` (`fire_trigger`) en `Metricool Social Media Management` (`getScheduledPosts`).
+- `files`: `{"slideart.js": "video/studio/slideart.js", "videoart.js": "video/studio/videoart.js"}` (alleen als die bestanden veranderd zijn; weglaten houdt de gepubliceerde versie);
+- de bestaande capabilities. Laat je `capabilities` weg, dan blijven ze staan. Geef je ze opnieuw, dan in deze vorm: de `db`-regels van de collecties (`commands`, `posts`, `videos`, `plan`, `markt`, `state`, `community` en `accounts`: lezen view, schrijven owner; `feedback`: alleen owner; `dagbericht` en `ideeen`: lezen admin, schrijven owner), `user`, `sample` (Vraag Noor), en `mcp` met `Claude Code Remote` (`fire_trigger`) en `Metricool Social Media Management` (`getScheduledPosts`).

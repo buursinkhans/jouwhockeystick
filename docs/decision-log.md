@@ -3120,3 +3120,10 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Waarom:** de wekelijkse rapporten blijven; de eigenaar wil dagelijks zien wat er gebeurt, met duiding in tekst.
 - **Afwegingen:** geen nieuwe secrets of database; alleen aantallen, geen bedragen. Uitschieters pas vanaf 10 en 50 procent tegen het 7-daags gemiddelde, met minstens 5 dagen geschiedenis, zodat kleine aantallen geen meldingen geven. De Search Console-login en de PostHog-query staan nu in `src/seo/googleAuth.ts` en `src/analytics-report/hogql.ts`, gedeeld met de weekrapporten.
 - **Later (fase 2):** in het tabblad met het virtuele marketingteam over de cijfers praten.
+
+## 2026-11-12 — Eén dashboard: Social-studio en Agent-orkest samen (Marketingstudio)
+
+- **Wat:** de Social-studio (zelfde url en database) heeft nu tabbladen Vandaag (dagcijfers, dagbericht, Vraag Noor), Social (goedkeuren, ongewijzigd) en Stack, Eén post, Week en Ritme (de agentstructuur, voorheen Agent-orkest). Bron: `social/studio/index.html`.
+- **Waarom:** besluit eigenaar: één pagina voor alles. Goedkeuren bleef in de studio, omdat de Publiceerder en de Planner in die database werken.
+- **Noor:** virtuele marketeer (fictief) via de `sample`-capability, met de vaste afspraken in haar opdracht. Antwoorden zijn advies; de eigenaar beslist.
+- **Dagbericht:** de geplande taak schrijft naar de collectie `dagbericht` van de studio. Agent-orkest blijft als losse demopagina bestaan, zonder nieuwe dagberichten.
