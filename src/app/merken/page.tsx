@@ -57,8 +57,8 @@ export default function MerkenPage() {
 
   return (
     <>
-      <PageHeader width="lezen" eyebrow="Achter de sticks" title="Merken">
-        <p className="max-w-2xl text-lg leading-relaxed text-inkt/80">
+      <PageHeader eyebrow="Achter de sticks" title="Merken">
+        <p className="lead">
           Op jouwhockeystick.nl vergelijken we sticks van {brandNames.length}{' '}
           merken: {joinDutch(brandNames)}. Hieronder staat per merk kort wat het
           kenmerkt, hoe het merk zelf over sticks denkt (als het dat op de eigen
@@ -83,7 +83,7 @@ export default function MerkenPage() {
           ),
         }}
       />
-      <PageBody width="lezen">
+      <PageBody>
         {/* Quick index (redesign fase 2): find a brand without scrolling 21 cards. */}
         <nav aria-label="Merken op deze pagina">
           <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">

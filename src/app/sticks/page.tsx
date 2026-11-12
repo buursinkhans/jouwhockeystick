@@ -109,7 +109,7 @@ export default async function SticksPage({
           </p>
         )}
         <TrackedBlock page="sticks" block="intro">
-          <p className="mt-5 max-w-3xl text-lg text-inkt/80">
+          <p className="mt-5 lead">
             <InlineText text={VELD.intro} />
           </p>
         </TrackedBlock>
@@ -126,7 +126,7 @@ export default async function SticksPage({
             <h2 id="veld-levels-heading" className="text-2xl font-bold">
               {VELD.levels.heading}
             </h2>
-            <p className="mt-2 max-w-3xl text-inkt/80">{VELD.levels.intro}</p>
+            <p className="mt-2 text-inkt/80">{VELD.levels.intro}</p>
             <TrackedBlock page="sticks" block="levels">
               {VELD.levels.groups.map((group) => {
                 const picks = pickVaried(
@@ -174,7 +174,7 @@ export default async function SticksPage({
         >
           Alle veldhockeysticks in onze catalogus
         </h2>
-        <p className="mt-2 max-w-2xl text-lijngrijs">
+        <p className="mt-2 text-lijngrijs">
           {!filtered && 'Filter op merk. '}Zoek je een stick voor de zaal? Bekijk dan de{' '}
           <Link
             href="/zaalsticks"
@@ -225,12 +225,12 @@ export default async function SticksPage({
           {!filtered && <span className="font-normal text-lijngrijs">({total})</span>}
         </h3>
         {importedCount > 0 && (
-          <p className="mt-2 max-w-3xl text-sm text-inkt/80">
+          <p className="mt-2 text-sm text-inkt/80">
             {splitListNote(products.length, importedCount)}
           </p>
         )}
         {filtered && matching.length === 0 && (
-          <p className="mt-3 max-w-2xl text-inkt/80">
+          <p className="mt-3 text-inkt/80">
             Geen stick past bij al deze filters tegelijk. Kies een ruimer budget
             of een andere lengte, of{' '}
             <Link href="/stickwijzer" className="font-semibold text-veld hover:underline">

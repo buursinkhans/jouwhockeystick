@@ -37,14 +37,19 @@ De site moet voelen als een deskundige vriend die hockey speelt: rustig, zeker v
 | 6 | `text-sm` / `text-xs` | Bijschriften, bronregels, labels in hoofdletters (`tracking-wide uppercase`) |
 
 - Bronregels zijn `text-xs text-lijngrijs` en staan direct onder de claim (spec §9.1). Nooit kleiner dan `text-xs`.
+- **Inleiding** onder een paginatitel: de utility `lead` (`text-lg`, ruime regelafstand, inkt op 80%), overal hetzelfde. Hij vult de kolom waarin hij staat; geef hem geen eigen `max-w-*` (eigenaar, 2026-11-12).
+- **Eén grijs voor lopende en kleine tekst** (`text-inkt/80`); `lijngrijs` alleen voor bijschriften, bronregels en datums.
+- **Eén linkstijl:** veldblauw, `font-semibold`, met een pijl als het een doorklik is. Een rij met vinkjes (`CheckIcon` 14 px) en een link eronder deelt één icoonkolom: de link krijgt een eigen icoon (`InfoIcon`), zodat alle tekst op dezelfde lijn begint.
 
 ## 4. Breedtes
 
 | Breedte | Tailwind | Voor |
 |---|---|---|
-| Lezen | `max-w-3xl` | Artikelen, Over ons, formulieren, het advies |
-| Product | `max-w-5xl` | Homepage, catalogus, stickpagina (twee kolommen vanaf `lg`), merken |
-| Tussen | `max-w-4xl` | Kennisbank-overzicht, vergelijken |
+| Product | `max-w-5xl` | Alle hoofdpagina's met een `PageHeader`: homepage, veldsticks, zaalsticks, hockeyschoenen, kennisbank, merken, vergelijken, Over ons, methodiek, Black Friday, zoeken; ook de stickpagina (twee kolommen vanaf `lg`) |
+| Lezen | `max-w-3xl` | Artikelen, blogs, formulieren, het advies |
+| Tussen | `max-w-4xl` | Niet meer in gebruik op hoofdpagina's |
+
+Sinds 2026-11-12 hebben alle hoofdpagina's dezelfde linker- en rechterrand (eigenaar: "de tekst kan veel breder"). Tekst en tekstsecties binnen zo'n pagina krijgen geen eigen `max-w-*`; alleen kaders, bannerblokken met een knop ernaast en koppen mogen smaller zijn.
 
 Zijmarge altijd `px-4 sm:px-6`; geen horizontaal scrollen op 360 px.
 

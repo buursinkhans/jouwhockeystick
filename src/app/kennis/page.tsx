@@ -26,7 +26,6 @@ export default function KennisIndexPage() {
   return (
     <>
       <PageHeader
-        width="tussen"
         eyebrow="Uitleg zonder vaktaal"
         title="Kennisbank"
         breadcrumbs={[
@@ -34,7 +33,7 @@ export default function KennisIndexPage() {
           { label: 'Kennisbank', href: '/kennis' },
         ]}
       >
-        <p className="max-w-2xl text-lg text-inkt/80">
+        <p className="lead">
           Uitleg over de keuzes achter een hockeystick. Wil je weten hoe je alles
           samen afweegt? Lees{' '}
           <Link
@@ -66,7 +65,7 @@ export default function KennisIndexPage() {
         </nav>
       </PageHeader>
 
-      <PageBody width="tussen">
+      <PageBody>
         {groups.map((group, index) => (
           <section
             key={group.id}
@@ -102,7 +101,7 @@ export default function KennisIndexPage() {
           heading="Veelgestelde vragen"
           items={kennisFaq()}
           url={absoluteUrl('/kennis')}
-          className="mt-14 max-w-3xl"
+          className="mt-14"
         />
       </PageBody>
     </>

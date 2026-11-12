@@ -20,7 +20,7 @@ export function MethodBand() {
       >
         {METHODE.home.heading}
       </h2>
-      <p className="mt-4 max-w-2xl text-lg leading-relaxed text-inkt/80">
+      <p className="mt-4 lead">
         {METHODE.home.body}
       </p>
       <ol className="mt-8 grid gap-4 sm:grid-cols-3">

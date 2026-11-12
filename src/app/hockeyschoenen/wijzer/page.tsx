@@ -35,7 +35,7 @@ export default function SchoenenwijzerPage() {
         ]}
       />
       <h1 className="text-3xl font-extrabold sm:text-4xl">Schoenenwijzer</h1>
-      <p className="mt-3 text-lg text-inkt/80">
+      <p className="lead mt-3">
         Welke hockeyschoenen passen bij jou? Eerst kijken we naar veld of zaal en je ondergrond, dan naar je pasvorm, je gebruik en je
         spel. Je krijgt maximaal drie modellen, met waarom ze in je selectie staan en wat je bij het passen nog moet controleren. Het
         is een pasadvies, geen garantie en geen medisch advies. Je beantwoordt maximaal acht vragen en kiest je maat; bij sommige

@@ -91,14 +91,14 @@ export default function ZaalsticksPage() {
           { label: ZAAL.navLabel, href: '/zaalsticks' },
         ]}
       >
-        <p className="max-w-3xl text-lg text-inkt/80">{ZAAL.intro}</p>
-        <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-inkt" aria-label="Op deze pagina">
+        <p className="lead">{ZAAL.intro}</p>
+        <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-inkt/80" aria-label="Op deze pagina">
           <li className="flex items-center gap-1.5">
-            <CheckIcon size={16} className="text-veld" />
+            <CheckIcon size={14} className="shrink-0 text-veld" />
             {allProducts.length} zaalsticks van {brands} merken
           </li>
           <li className="flex items-center gap-1.5">
-            <CheckIcon size={16} className="text-veld" />
+            <CheckIcon size={14} className="shrink-0 text-veld" />
             Winkelprijzen van {shops} partnerwinkels
           </li>
         </ul>
@@ -118,12 +118,12 @@ export default function ZaalsticksPage() {
           <h2 id="zaal-selector-heading" className="scroll-mt-24 text-2xl font-bold">
             {ZAAL.finder.heading}
           </h2>
-          <p className="mt-1 max-w-3xl text-inkt/80">{ZAAL.finder.intro}</p>
+          <p className="mt-1 text-inkt/80">{ZAAL.finder.intro}</p>
           <div className="mt-4">
             <IndoorFinder items={items} checkedCards={checkedCards} importedCount={importedCount} />
           </div>
           <TrackedBlock page="zaalsticks" block="stickwijzer">
-            <p className="mt-6 flex max-w-3xl items-start gap-2 text-sm text-inkt/80">
+            <p className="mt-6 flex items-start gap-2 text-sm text-inkt/80">
               <InfoIcon size={18} className="mt-0.5 shrink-0 text-veld" />
               <span>
                 <InlineText text={ZAAL.stickwijzerNote} />
@@ -169,7 +169,7 @@ export default function ZaalsticksPage() {
           </ul>
         </section>
 
-        <section className="mt-12 max-w-3xl">
+        <section className="mt-12">
           <h2 className="text-2xl font-bold">{ZAAL.stickRules.heading}</h2>
           <div className="mt-3 space-y-3 text-inkt/80">
             {ZAAL.stickRules.paragraphs.map((paragraph) => (
@@ -208,11 +208,11 @@ export default function ZaalsticksPage() {
         {/* Visible questions and their FAQPage markup from one source (FaqSection). */}
         <FaqSection id="zaal-faq-heading" heading={ZAAL.faq.heading} items={faq} url={absoluteUrl('/zaalsticks')} />
 
-        <p className="mt-10 max-w-3xl text-inkt/80">
+        <p className="mt-10 text-inkt/80">
           <InlineText text={ZAAL.shoesNote} />
         </p>
 
-        <section className="mt-12 max-w-3xl" aria-labelledby="zaal-werkwijze-heading">
+        <section className="mt-12" aria-labelledby="zaal-werkwijze-heading">
           <h2 id="zaal-werkwijze-heading" className="text-2xl font-bold">
             {ZAAL.howWeWork.heading}
           </h2>
@@ -228,7 +228,7 @@ export default function ZaalsticksPage() {
           </ul>
         </section>
 
-        <section className="mt-12 max-w-3xl border-t border-rand pt-8">
+        <section className="mt-12 border-t border-rand pt-8">
           <h2 className="text-xl font-bold">Bronnen</h2>
           <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-inkt/80">
             {Object.values(ZAAL_SOURCES).map((source) => (
