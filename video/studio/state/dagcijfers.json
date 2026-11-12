@@ -1,10 +1,360 @@
 {
  "versie": 1,
- "gemaakt": "2026-11-12T09:57:12.420Z",
+ "gemaakt": "2026-11-12T09:58:15.001Z",
  "site": "jouwhockeystick.nl",
  "posthog": {
-  "ok": false,
-  "reden": "PostHog: PostHog-query mislukt (HTTP 400): {\"type\":\"validation_error\",\"code\":\"hogql_query_error\",\"detail\":\"Function 'toDate' expects 1 argument, found 2\\nTables referenced: events\",\"attr\":null,\"extra\":{\"hogql_metadata\":{\"errors\":[{\"end\":53,\"message\":\"Function 'toDate' expects 1 argument, found 2\",\"start\":16}],\"isValid\":false,\"notices\":[{\"end"
+  "ok": true,
+  "value": {
+   "dagen": [
+    {
+     "date": "2026-10-08",
+     "bezoekers": 5,
+     "paginaweergaven": 10,
+     "wijzerStart": 2,
+     "wijzerKlaar": 1,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-09",
+     "bezoekers": 3,
+     "paginaweergaven": 4,
+     "wijzerStart": 0,
+     "wijzerKlaar": 1,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-10-10",
+     "bezoekers": 2,
+     "paginaweergaven": 5,
+     "wijzerStart": 1,
+     "wijzerKlaar": 0,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-11",
+     "bezoekers": 2,
+     "paginaweergaven": 7,
+     "wijzerStart": 0,
+     "wijzerKlaar": 0,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-12",
+     "bezoekers": 9,
+     "paginaweergaven": 42,
+     "wijzerStart": 3,
+     "wijzerKlaar": 1,
+     "winkelklikken": 5
+    },
+    {
+     "date": "2026-10-13",
+     "bezoekers": 8,
+     "paginaweergaven": 23,
+     "wijzerStart": 3,
+     "wijzerKlaar": 3,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-14",
+     "bezoekers": 8,
+     "paginaweergaven": 38,
+     "wijzerStart": 3,
+     "wijzerKlaar": 3,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-10-15",
+     "bezoekers": 7,
+     "paginaweergaven": 7,
+     "wijzerStart": 0,
+     "wijzerKlaar": 0,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-16",
+     "bezoekers": 2,
+     "paginaweergaven": 6,
+     "wijzerStart": 1,
+     "wijzerKlaar": 0,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-17",
+     "bezoekers": 8,
+     "paginaweergaven": 17,
+     "wijzerStart": 0,
+     "wijzerKlaar": 0,
+     "winkelklikken": 3
+    },
+    {
+     "date": "2026-10-18",
+     "bezoekers": 4,
+     "paginaweergaven": 9,
+     "wijzerStart": 0,
+     "wijzerKlaar": 0,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-10-19",
+     "bezoekers": 4,
+     "paginaweergaven": 15,
+     "wijzerStart": 2,
+     "wijzerKlaar": 2,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-20",
+     "bezoekers": 8,
+     "paginaweergaven": 12,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-10-21",
+     "bezoekers": 5,
+     "paginaweergaven": 5,
+     "wijzerStart": 0,
+     "wijzerKlaar": 0,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-22",
+     "bezoekers": 12,
+     "paginaweergaven": 19,
+     "wijzerStart": 0,
+     "wijzerKlaar": 0,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-23",
+     "bezoekers": 33,
+     "paginaweergaven": 51,
+     "wijzerStart": 2,
+     "wijzerKlaar": 2,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-10-24",
+     "bezoekers": 39,
+     "paginaweergaven": 52,
+     "wijzerStart": 4,
+     "wijzerKlaar": 2,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-10-25",
+     "bezoekers": 18,
+     "paginaweergaven": 46,
+     "wijzerStart": 3,
+     "wijzerKlaar": 3,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-10-26",
+     "bezoekers": 7,
+     "paginaweergaven": 10,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 2
+    },
+    {
+     "date": "2026-10-27",
+     "bezoekers": 0,
+     "paginaweergaven": 0,
+     "wijzerStart": 0,
+     "wijzerKlaar": 0,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-28",
+     "bezoekers": 2,
+     "paginaweergaven": 3,
+     "wijzerStart": 0,
+     "wijzerKlaar": 0,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-29",
+     "bezoekers": 6,
+     "paginaweergaven": 9,
+     "wijzerStart": 2,
+     "wijzerKlaar": 2,
+     "winkelklikken": 2
+    },
+    {
+     "date": "2026-10-30",
+     "bezoekers": 11,
+     "paginaweergaven": 21,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-10-31",
+     "bezoekers": 5,
+     "paginaweergaven": 6,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-11-01",
+     "bezoekers": 12,
+     "paginaweergaven": 35,
+     "wijzerStart": 2,
+     "wijzerKlaar": 2,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-11-02",
+     "bezoekers": 9,
+     "paginaweergaven": 9,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-11-03",
+     "bezoekers": 8,
+     "paginaweergaven": 15,
+     "wijzerStart": 2,
+     "wijzerKlaar": 2,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-11-04",
+     "bezoekers": 5,
+     "paginaweergaven": 17,
+     "wijzerStart": 2,
+     "wijzerKlaar": 2,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-11-05",
+     "bezoekers": 16,
+     "paginaweergaven": 44,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 5
+    },
+    {
+     "date": "2026-11-06",
+     "bezoekers": 9,
+     "paginaweergaven": 16,
+     "wijzerStart": 1,
+     "wijzerKlaar": 0,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-11-07",
+     "bezoekers": 4,
+     "paginaweergaven": 4,
+     "wijzerStart": 0,
+     "wijzerKlaar": 0,
+     "winkelklikken": 0
+    },
+    {
+     "date": "2026-11-08",
+     "bezoekers": 13,
+     "paginaweergaven": 38,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-11-09",
+     "bezoekers": 20,
+     "paginaweergaven": 51,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 6
+    },
+    {
+     "date": "2026-11-10",
+     "bezoekers": 16,
+     "paginaweergaven": 47,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 1
+    },
+    {
+     "date": "2026-11-11",
+     "bezoekers": 39,
+     "paginaweergaven": 65,
+     "wijzerStart": 2,
+     "wijzerKlaar": 2,
+     "winkelklikken": 3
+    }
+   ],
+   "vergelijking": [
+    {
+     "metriek": "bezoekers",
+     "dag": "2026-11-11",
+     "waarde": 39,
+     "gem7": 11.9,
+     "gem28": 10.4,
+     "verschil7Pct": 229,
+     "opvallend": "hoger"
+    },
+    {
+     "metriek": "paginaweergaven",
+     "dag": "2026-11-11",
+     "waarde": 65,
+     "gem7": 31,
+     "gem28": 21.5,
+     "verschil7Pct": 110,
+     "opvallend": "hoger"
+    },
+    {
+     "metriek": "wijzerStart",
+     "dag": "2026-11-11",
+     "waarde": 2,
+     "gem7": 1,
+     "gem28": 1.2,
+     "verschil7Pct": 100,
+     "opvallend": null
+    },
+    {
+     "metriek": "wijzerKlaar",
+     "dag": "2026-11-11",
+     "waarde": 2,
+     "gem7": 0.9,
+     "gem28": 1,
+     "verschil7Pct": 133,
+     "opvallend": null
+    },
+    {
+     "metriek": "winkelklikken",
+     "dag": "2026-11-11",
+     "waarde": 3,
+     "gem7": 2.1,
+     "gem28": 1,
+     "verschil7Pct": 40,
+     "opvallend": null
+    }
+   ],
+   "bronnen": [
+    {
+     "key": "Direct",
+     "bezoekers": 31
+    },
+    {
+     "key": "Andere zoekmachine",
+     "bezoekers": 6
+    },
+    {
+     "key": "Google",
+     "bezoekers": 2
+    }
+   ],
+   "landen": [
+    {
+     "key": "?",
+     "bezoekers": 39
+    }
+   ]
+  }
  },
  "google": {
   "ok": true,
