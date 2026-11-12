@@ -406,6 +406,11 @@
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261116-zaalsticks-zonder-carbon-short-cover.png"
         }
       },
+      "kanalen": {
+        "reels": {
+          "bezig": "2026-11-12T13:24:27Z"
+        }
+      },
       "fout": null
     }
   },
@@ -415,7 +420,7 @@
     "gebruikt": 18,
     "grens": 20
   },
-  "wijziging": "7080d708-dafc-481a-94ac-45725261630d",
+  "wijziging": "6d9e3a07-beb7-4dfa-b94c-6a8a24a8d6d9",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
