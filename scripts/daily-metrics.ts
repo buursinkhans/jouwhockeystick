@@ -54,7 +54,7 @@ async function posthog(yesterday: string): Promise<Dagcijfers['posthog']> {
     // Sequential on purpose: PostHog allows only a few concurrent queries.
     const days = await hogql(
       config,
-      `SELECT toString(toDate(timestamp, '${TZ}')) AS d,
+      `SELECT toString(toDate(toTimeZone(timestamp, '${TZ}'))) AS d,
          count(DISTINCT if(event = '$pageview', distinct_id, NULL)),
          countIf(event = '$pageview'),
          count(DISTINCT if(event = 'advice_started', distinct_id, NULL)),
