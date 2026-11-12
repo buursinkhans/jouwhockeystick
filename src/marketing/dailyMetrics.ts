@@ -71,6 +71,8 @@ export const Dagcijfers = z.object({
   posthog: part(
     z.object({
       dagen: z.array(PosthogDay),
+      /** Today so far, at `tot` (the afternoon run); not part of the series. */
+      vandaag: PosthogDay.extend({ tot: z.string() }).optional(),
       vergelijking: z.array(Comparison),
       /** Yesterday only. */
       bronnen: z.array(Count),

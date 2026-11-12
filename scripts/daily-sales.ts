@@ -1,4 +1,4 @@
-// Daily sales figures per partner (read-only), sealed. For yesterday, the
+// Daily sales figures per partner (read-only), sealed. For today so far, yesterday, the
 // last 7 days, the 7 before and this month: clicks, orders, order value and
 // commission per partner. The result is sealed with VERKOOP_SLEUTEL
 // (src/marketing/seal.ts) and written to the path in the first argument; the
@@ -26,13 +26,14 @@ const iso = (t: number) => new Date(t).toISOString().slice(0, 10);
 const why = (e: unknown) => (e instanceof Error ? e.message : 'onbekende fout');
 
 type Result = Money | { fout: string };
-type PeriodKey = 'gisteren' | 'week' | 'vorigeWeek' | 'maand';
+type PeriodKey = 'vandaag' | 'gisteren' | 'week' | 'vorigeWeek' | 'maand';
 
 function periods(now: Date): Record<PeriodKey, Period> {
   const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
   const y = today - DAY;
   const yd = new Date(y);
   return {
+    vandaag: { from: iso(today), to: iso(today) },
     gisteren: { from: iso(y), to: iso(y) },
     week: { from: iso(y - 6 * DAY), to: iso(y) },
     vorigeWeek: { from: iso(y - 13 * DAY), to: iso(y - 7 * DAY) },
