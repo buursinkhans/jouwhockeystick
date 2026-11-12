@@ -3134,3 +3134,8 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Besluit eigenaar:** bedragen wel in het eigen dashboard, maar nooit leesbaar in de openbare repo. Daarom versleuteld met `VERKOOP_SLEUTEL` (AES-256-GCM, sleutel via PBKDF2) voordat het bestand de runner verlaat; alleen de browser van de eigenaar ontsleutelt. Het besluit van 2026-10-18 (geen omzet of commissie in rapporten) blijft gelden voor issues en rapporten.
 - **Gedeelde code:** de netwerkaanroepen staan nu in `src/analytics-report/partnerApi.ts`, gebruikt door het wekelijkse Verkooprapport en de dagcijfers.
 - **Open:** of bol.com en TradeTracker een orderwaarde geven, blijkt bij de eerste run; zo niet, dan staat er "onbekend".
+
+## 2026-11-12 — Dagcijfers en verkoop twee keer per dag
+
+- **Wat:** de workflow Dagcijfers draait ook 's middags (14:31 en 15:31 UTC, zodat er in zomer- en wintertijd een run vóór 17:00 Amsterdam is). Nieuw: PostHog "vandaag tot nu" en in Verkoop de periode "Vandaag tot nu". De geplande taak Dagbericht draait om 07:03 en 17:03; de middagrun ververst alleen de cijfers en de verkoop, zonder nieuw bericht of melding.
+- **Waarom:** besluit eigenaar; nu weinig verkeer, maar op de middellange termijn nuttig. Vergelijkingen en uitschieters blijven op hele dagen.

@@ -1,5 +1,5 @@
 // Daily figures (read-only): PostHog (yesterday and the 34 days before, in
-// Amsterdam days), Search Console (daily totals plus the queries of the last
+// Amsterdam days, plus today so far), Search Console (daily totals plus the queries of the last
 // 7 available days) and Bing (daily totals). Writes one JSON file (path as
 // first argument, default dagcijfers.json) for the routine "Dagbericht"; see
 // docs/marketing/dagbericht.md. A source that fails gets {ok:false, reden}:
@@ -61,7 +61,7 @@ async function posthog(yesterday: string): Promise<Dagcijfers['posthog']> {
          count(DISTINCT if(event = 'advice_completed', distinct_id, NULL)),
          countIf(event = 'retailer_click')
        FROM events
-       WHERE timestamp >= ${at(first)} AND timestamp < ${at(shift(yesterday, 1))} AND ${live}
+       WHERE timestamp >= ${at(first)} AND timestamp < ${at(shift(yesterday, 2))} AND ${live}
          AND event IN ('$pageview', 'advice_started', 'advice_completed', 'retailer_click')
        GROUP BY d ORDER BY d`,
       'dagcijfers',
@@ -74,6 +74,10 @@ async function posthog(yesterday: string): Promise<Dagcijfers['posthog']> {
       wijzerKlaar: num(r[4]),
       winkelklikken: num(r[5]),
     }));
+    // Today so far (the afternoon run): shown apart, never in the series or the comparison.
+    const today = shift(yesterday, 1);
+    const todayRow = rows.find((r) => r.date === today);
+    const vandaag = { ...(todayRow ?? { date: today, bezoekers: 0, paginaweergaven: 0, wijzerStart: 0, wijzerKlaar: 0, winkelklikken: 0 }), tot: new Date().toISOString() };
     const dagen = fillDays(rows, dateRange(first, yesterday), (date) => ({
       date,
       bezoekers: 0,
@@ -113,6 +117,7 @@ async function posthog(yesterday: string): Promise<Dagcijfers['posthog']> {
       value: {
         dagen,
         vergelijking: compareAll(dagen, POSTHOG_METRICS),
+        vandaag,
         bronnen: top([...bySource].map(([key, bezoekers]) => ({ key, bezoekers })), 6),
         landen: top(countries.map((r) => ({ key: String(r[0] ?? '?'), bezoekers: num(r[1]) })), 5),
       },

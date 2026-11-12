@@ -8,7 +8,12 @@ name: Dagcijfers
 
 on:
   schedule:
-    - cron: '31 4 * * *' # daily 04:31 UTC (05:31 in winter, 06:31 in summer in Amsterdam)
+    # Twice a day (owner, 2026-11-12): the morning figures and an afternoon update.
+    # GitHub cron is UTC; the two afternoon times make sure a run of before 17:00
+    # Amsterdam exists in winter and in summer.
+    - cron: '31 4 * * *' # 05:31 winter, 06:31 summer
+    - cron: '31 14 * * *' # 15:31 winter, 16:31 summer
+    - cron: '31 15 * * *' # 16:31 winter, 17:31 summer
   workflow_dispatch:
 
 permissions:
