@@ -1,4 +1,5 @@
-# Daily figures (read-only): PostHog, Search Console and Bing, as one JSON file
+# Daily figures (read-only): PostHog, Search Console and Bing, as one JSON file,
+# plus the sales per partner, sealed (verkoop.json),
 # on the branch social-state (video/studio/state/dagcijfers.json). The routine
 # "Dagbericht" reads it and writes the daily note in Agent-orkest
 # (docs/marketing/dagbericht.md). Counts only. Netlify skips video/, and only
@@ -45,6 +46,23 @@ jobs:
           code=$?
           echo "code=$code" >> "$GITHUB_ENV"
           [ "$code" -eq 0 ] || [ "$code" -eq 2 ]
+      - name: Verkoop ophalen (versleuteld)
+        # Amounts per partner, sealed with VERKOOP_SLEUTEL before they leave this step
+        # (docs/marketing/dagbericht.md, Verkoop). Without the key: nothing is written.
+        env:
+          VERKOOP_SLEUTEL: ${{ secrets.VERKOOP_SLEUTEL }}
+          BOL_AFFILIATE_CLIENT_ID: ${{ secrets.BOL_AFFILIATE_CLIENT_ID }}
+          BOL_AFFILIATE_CLIENT_SECRET: ${{ secrets.BOL_AFFILIATE_CLIENT_SECRET }}
+          TRADETRACKER_CUSTOMER_ID: ${{ secrets.TRADETRACKER_CUSTOMER_ID }}
+          TRADETRACKER_PASSPHRASE: ${{ secrets.TRADETRACKER_PASSPHRASE }}
+          AWIN_API_TOKEN: ${{ secrets.AWIN_API_TOKEN }}
+          DAISYCON_EXPORT_URL: ${{ secrets.DAISYCON_EXPORT_URL }}
+        run: |
+          set +e
+          npm run --silent sales:daily -- "$RUNNER_TEMP/verkoop.json"
+          sales=$?
+          echo "sales=$sales" >> "$GITHUB_ENV"
+          [ "$sales" -eq 0 ] || [ "$sales" -eq 2 ] || [ "$sales" -eq 3 ]
       - name: Op social-state zetten
         run: |
           git config user.name "github-actions[bot]"
@@ -54,6 +72,10 @@ jobs:
           for attempt in 1 2 3; do
             cp "$RUNNER_TEMP/dagcijfers.json" video/studio/state/dagcijfers.json
             git add video/studio/state/dagcijfers.json
+            if [ -f "$RUNNER_TEMP/verkoop.json" ]; then
+              cp "$RUNNER_TEMP/verkoop.json" video/studio/state/verkoop.json
+              git add video/studio/state/verkoop.json
+            fi
             git diff --cached --quiet && { echo "Geen wijziging."; break; }
             git commit -q -m "Dagcijfers $(date -u +%F)"
             git push -q origin social-state && break
@@ -61,7 +83,7 @@ jobs:
             [ "$attempt" -eq 3 ] && { echo "Schrijven lukte niet na 3 pogingen." >&2; exit 1; }
           done
       - name: Bron mislukt?
-        if: env.code == '2'
+        if: env.code == '2' || env.sales == '2'
         run: |
           echo "Eén of meer bronnen gaven geen cijfers; zie de stap 'Cijfers ophalen'. Het bestand staat er wel." >&2
           exit 1

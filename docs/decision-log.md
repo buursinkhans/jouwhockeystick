@@ -3127,3 +3127,10 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Waarom:** besluit eigenaar: één pagina voor alles. Goedkeuren bleef in de studio, omdat de Publiceerder en de Planner in die database werken.
 - **Noor:** virtuele marketeer (fictief) via de `sample`-capability, met de vaste afspraken in haar opdracht. Antwoorden zijn advies; de eigenaar beslist.
 - **Dagbericht:** de geplande taak schrijft naar de collectie `dagbericht` van de studio. Agent-orkest blijft als losse demopagina bestaan, zonder nieuwe dagberichten.
+
+## 2026-11-12 — Verkoopcijfers met bedragen, versleuteld, in de Marketingstudio
+
+- **Wat:** tabblad Verkoop in de Marketingstudio met per partner kliks, orders, conversie, orderwaarde en commissie (gisteren, 7 dagen, deze maand). Dagelijks in de workflow Dagcijfers (`scripts/daily-sales.ts`).
+- **Besluit eigenaar:** bedragen wel in het eigen dashboard, maar nooit leesbaar in de openbare repo. Daarom versleuteld met `VERKOOP_SLEUTEL` (AES-256-GCM, sleutel via PBKDF2) voordat het bestand de runner verlaat; alleen de browser van de eigenaar ontsleutelt. Het besluit van 2026-10-18 (geen omzet of commissie in rapporten) blijft gelden voor issues en rapporten.
+- **Gedeelde code:** de netwerkaanroepen staan nu in `src/analytics-report/partnerApi.ts`, gebruikt door het wekelijkse Verkooprapport en de dagcijfers.
+- **Open:** of bol.com en TradeTracker een orderwaarde geven, blijkt bij de eerste run; zo niet, dan staat er "onbekend".

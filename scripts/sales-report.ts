@@ -27,6 +27,15 @@ import {
   PASSASPORTS_TRADETRACKER,
   PLUTOSPORT_AWIN,
 } from '../src/lib/retailers';
+import {
+  awinAdvertiserRaw,
+  awinTransactionsRaw,
+  bolRaw,
+  bolToken,
+  daisyconRaw,
+  tradeTrackerRaw,
+  tradeTrackerSession,
+} from '../src/analytics-report/partnerApi';
 
 const DAY = 86_400_000;
 const iso = (d: Date) => d.toISOString().slice(0, 10);
@@ -51,185 +60,22 @@ function message(error: unknown): string {
   return error instanceof Error ? error.message : 'onbekende fout';
 }
 
-// --- bol.com Affiliate Reporting API (OAuth client credentials) ----------
+// --- network calls (src/analytics-report/partnerApi.ts), parsed here ----
 
-async function bolToken(): Promise<string> {
-  const id = process.env.BOL_AFFILIATE_CLIENT_ID;
-  const secret = process.env.BOL_AFFILIATE_CLIENT_SECRET;
-  if (!id || !secret) throw new Error('sleutels ontbreken in GitHub Secrets');
-  const response = await fetch(
-    'https://login.bol.com/token?grant_type=client_credentials',
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`,
-      },
-    },
-  );
-  if (!response.ok) throw new Error(`inloggen gaf HTTP ${response.status}`);
-  const body = (await response.json()) as { access_token?: string };
-  if (!body.access_token) throw new Error('geen token ontvangen');
-  return body.access_token;
-}
-
-async function bolReport(token: string, period: Period): Promise<BolRow[]> {
-  const url = new URL(
-    'https://api.bol.com/marketing/affiliate/reports/v2/promotion-report',
-  );
-  url.searchParams.set('startDate', period.from);
-  url.searchParams.set('endDate', period.to);
-  const response = await fetch(url, {
-    headers: { Accept: 'application/json', Authorization: `Bearer ${token}` },
-  });
-  if (!response.ok) throw new Error(`rapport gaf HTTP ${response.status}`);
-  return bolRows(await response.json());
-}
-
-// --- TradeTracker affiliate web service (SOAP, session cookie) -----------
-
-const TT_ENDPOINT = 'https://ws.tradetracker.com/soap/affiliate';
-
-const xmlEscape = (value: string) =>
-  value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-
-async function soap(
-  operation: string,
-  body: string,
-  cookie?: string,
-): Promise<{ text: string; cookie?: string }> {
-  const envelope = `<?xml version="1.0" encoding="UTF-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://ws.tradetracker.com/soap/affiliate"><SOAP-ENV:Body><ns1:${operation}>${body}</ns1:${operation}></SOAP-ENV:Body></SOAP-ENV:Envelope>`;
-  const response = await fetch(TT_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'text/xml; charset=utf-8',
-      SOAPAction: `"http://ws.tradetracker.com/soap/affiliate/${operation}"`,
-      ...(cookie ? { Cookie: cookie } : {}),
-    },
-    body: envelope,
-  });
-  const text = await response.text();
-  if (!response.ok || text.includes('Fault>')) {
-    const fault = text.match(/<faultstring>([^<]*)<\/faultstring>/)?.[1];
-    throw new Error(
-      `${operation} gaf HTTP ${response.status}${fault ? `: ${fault}` : ''}`,
-    );
-  }
-  const setCookies = response.headers.getSetCookie();
-  return {
-    text,
-    cookie: setCookies.length
-      ? setCookies.map((c) => c.split(';')[0]).join('; ')
-      : undefined,
-  };
-}
-
-async function tradeTrackerSession(): Promise<string> {
-  const id = process.env.TRADETRACKER_CUSTOMER_ID;
-  const passphrase = process.env.TRADETRACKER_PASSPHRASE;
-  if (!id || !passphrase)
-    throw new Error('sleutels ontbreken in GitHub Secrets');
-  const { cookie } = await soap(
-    'authenticate',
-    `<customerID>${xmlEscape(id.trim())}</customerID><passphrase>${xmlEscape(passphrase.trim())}</passphrase><sandbox>false</sandbox><locale>nl_NL</locale><demo>false</demo>`,
-  );
-  if (!cookie) throw new Error('inloggen gaf geen sessie');
-  return cookie;
-}
-
-/** The reference report of one TradeTracker campaign: PassaHockey or HockeyCity. */
-async function tradeTrackerReport(
+const bolReport = async (token: string, period: Period): Promise<BolRow[]> => bolRows(await bolRaw(token, period));
+const tradeTrackerReport = async (
   session: string,
-  { campaignId, affiliateSiteId }: { campaignId: string; affiliateSiteId: string },
+  campaign: { campaignId: string; affiliateSiteId: string },
   period: Period,
-): Promise<PassaRow[]> {
-  const { text } = await soap(
-    'getReportReference',
-    `<affiliateSiteID>${affiliateSiteId}</affiliateSiteID><options><campaignID>${campaignId}</campaignID><dateFrom>${period.from}</dateFrom><dateTo>${period.to}</dateTo></options>`,
-    session,
-  );
-  return passaRows(text);
-}
-
-// --- Awin publisher API (a static bearer token of the owner's Awin user) ---
-
-const AWIN_API = 'https://api.awin.com';
-
-/** GET with the token in the header, never in the URL. Errors name the path and the HTTP status only. */
-async function awinGet(path: string, params: Record<string, string>): Promise<unknown> {
-  const token = process.env.AWIN_API_TOKEN;
-  if (!token) throw new Error('sleutel ontbreekt in GitHub Secrets');
-  const url = new URL(path, AWIN_API);
-  for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
-  const response = await fetch(url, {
-    headers: { Accept: 'application/json', Authorization: `Bearer ${token.trim()}` },
-  });
-  if (!response.ok) throw new Error(`Awin ${path} gaf HTTP ${response.status}`);
-  return response.json();
-}
-
-/** Plutosport sales per click reference (the placement) from the transactions. */
-async function awinSalesReport(period: Period): Promise<PassaRow[]> {
-  const { advertiserId, publisherId } = PLUTOSPORT_AWIN;
-  return awinSales(
-    await awinGet(`/publishers/${publisherId}/transactions/`, {
-      startDate: `${period.from}T00:00:00`,
-      endDate: `${period.to}T23:59:59`,
-      timezone: 'UTC',
-      advertiserId,
-    }),
-  );
-}
-
-/** Plutosport clicks in total: Awin reports clicks per advertiser, not per click reference. */
+): Promise<PassaRow[]> => passaRows(await tradeTrackerRaw(session, campaign, period));
+const awinSalesReport = async (period: Period): Promise<PassaRow[]> => awinSales(await awinTransactionsRaw(period));
 async function awinClicksReport(period: Period): Promise<number> {
-  const { advertiserId, publisherId } = PLUTOSPORT_AWIN;
-  const body = await awinGet(`/publishers/${publisherId}/reports/advertiser`, {
-    startDate: period.from,
-    endDate: period.to,
-    region: 'NL',
-    timezone: 'UTC',
-  });
-  const clicks = awinClicks(body, advertiserId);
-  if (clicks === null) throw new Error(`geen rij voor adverteerder ${advertiserId} in het Awin-rapport`);
+  const clicks = awinClicks(await awinAdvertiserRaw(period), PLUTOSPORT_AWIN.advertiserId);
+  if (clicks === null) throw new Error(`geen rij voor adverteerder ${PLUTOSPORT_AWIN.advertiserId} in het Awin-rapport`);
   return clicks;
 }
-
-// --- Daisycon transaction export (a URL with a fixed export token) ----------
-
-/**
- * Daka sales per sub id from the export. The URL (with token and user name) is the
- * secret DAISYCON_EXPORT_URL, without dates; the dates are added here. It never goes
- * into a message: errors name the HTTP status only. The API itself needs OAuth with a
- * refresh token that works only once, which does not fit a weekly workflow.
- */
-async function daisyconReport(period: Period): Promise<PassaRow[]> {
-  const base = process.env.DAISYCON_EXPORT_URL;
-  if (!base) throw new Error('export-url ontbreekt in GitHub Secrets');
-  let url: URL;
-  try {
-    url = new URL(base.trim());
-  } catch {
-    throw new Error('DAISYCON_EXPORT_URL is geen geldige url');
-  }
-  url.searchParams.set('start_date', period.from);
-  url.searchParams.set('end_date', period.to);
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
-  if (!response.ok) throw new Error(`Daisycon-export gaf HTTP ${response.status}`);
-  const text = await response.text();
-  let body: unknown;
-  try {
-    body = JSON.parse(text);
-  } catch {
-    throw new Error('Daisycon-export gaf geen JSON');
-  }
-  return daisyconSales(body, DAKA_DAISYCON.programId);
-}
+const daisyconReport = async (period: Period): Promise<PassaRow[]> =>
+  daisyconSales(await daisyconRaw(period), DAKA_DAISYCON.programId);
 
 // --- run ------------------------------------------------------------------
 
