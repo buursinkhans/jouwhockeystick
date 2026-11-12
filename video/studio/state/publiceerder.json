@@ -385,7 +385,26 @@
     },
     "videos/20261116-zaalsticks-zonder-carbon": {
       "render": {
-        "gestart": "2026-11-12T13:21:55Z"
+        "gestart": "2026-11-12T13:21:55Z",
+        "klaar": "2026-11-12T13:23:57Z"
+      },
+      "media": {
+        "reel": {
+          "name": "20261116-zaalsticks-zonder-carbon-reel.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261116-zaalsticks-zonder-carbon-reel.mp4"
+        },
+        "reelCover": {
+          "name": "20261116-zaalsticks-zonder-carbon-reel-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261116-zaalsticks-zonder-carbon-reel-cover.png"
+        },
+        "short": {
+          "name": "20261116-zaalsticks-zonder-carbon-short.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261116-zaalsticks-zonder-carbon-short.mp4"
+        },
+        "shortCover": {
+          "name": "20261116-zaalsticks-zonder-carbon-short-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261116-zaalsticks-zonder-carbon-short-cover.png"
+        }
       },
       "fout": null
     }
@@ -396,7 +415,7 @@
     "gebruikt": 18,
     "grens": 20
   },
-  "wijziging": "7ec92dac-3f85-4ae2-839e-8a7f68d86ada",
+  "wijziging": "7080d708-dafc-481a-94ac-45725261630d",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
