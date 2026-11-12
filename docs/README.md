@@ -36,6 +36,7 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | [`marketing/bouwplan-2.0.md`](marketing/bouwplan-2.0.md) | Bouwplan Social-machine 2.0: goedkeuren met één tik, renderen in GitHub Actions, fasen en status | De eigenaar en elke bouwsessie |
 | [`marketing/merkstem.md`](marketing/merkstem.md) | Merkstem per doelgroep en kanaal, en de redactiecontrole (`npm run marketing:check`) | Elke social- of campagnetekst |
 | [`marketing/pilot-zaalhockey.md`](marketing/pilot-zaalhockey.md) | Eerste campagne: tien zaalhockey-items, nog niet goedgekeurd | Goedkeuring door de eigenaar |
+| [`marketing/dagbericht.md`](marketing/dagbericht.md) | Dagcijfers (PostHog, Search Console, Bing) en het dagbericht in Agent-orkest | Geplande taak Dagbericht en de eigenaar |
 
 ## Rapporten zonder eigen handboek
 

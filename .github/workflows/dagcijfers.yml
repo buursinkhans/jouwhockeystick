@@ -1,0 +1,67 @@
+# Daily figures (read-only): PostHog, Search Console and Bing, as one JSON file
+# on the branch social-state (video/studio/state/dagcijfers.json). The routine
+# "Dagbericht" reads it and writes the daily note in Agent-orkest
+# (docs/marketing/dagbericht.md). Counts only. Netlify skips video/, and only
+# pushes to main start CI.
+name: Dagcijfers
+
+on:
+  schedule:
+    - cron: '31 4 * * *' # daily 04:31 UTC (05:31 in winter, 06:31 in summer in Amsterdam)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  # Shares the branch with the Publiceerder's record (social-state.yml).
+  group: social-state
+  cancel-in-progress: false
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Cijfers ophalen
+        env:
+          POSTHOG_PERSONAL_API_KEY: ${{ secrets.POSTHOG_PERSONAL_API_KEY }}
+          POSTHOG_PROJECT_ID: ${{ vars.POSTHOG_PROJECT_ID }}
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+        # Exit code 2 = written, but a source failed: save the file anyway, fail the run afterwards.
+        run: |
+          set +e
+          npm run --silent metrics:daily -- "$RUNNER_TEMP/dagcijfers.json"
+          code=$?
+          echo "code=$code" >> "$GITHUB_ENV"
+          [ "$code" -eq 0 ] || [ "$code" -eq 2 ]
+      - name: Op social-state zetten
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch -q origin social-state; then git checkout -q -B social-state origin/social-state; else git checkout -q -b social-state; fi
+          mkdir -p video/studio/state
+          for attempt in 1 2 3; do
+            cp "$RUNNER_TEMP/dagcijfers.json" video/studio/state/dagcijfers.json
+            git add video/studio/state/dagcijfers.json
+            git diff --cached --quiet && { echo "Geen wijziging."; break; }
+            git commit -q -m "Dagcijfers $(date -u +%F)"
+            git push -q origin social-state && break
+            git fetch -q origin social-state && git reset -q --hard origin/social-state
+            [ "$attempt" -eq 3 ] && { echo "Schrijven lukte niet na 3 pogingen." >&2; exit 1; }
+          done
+      - name: Bron mislukt?
+        if: env.code == '2'
+        run: |
+          echo "Eén of meer bronnen gaven geen cijfers; zie de stap 'Cijfers ophalen'. Het bestand staat er wel." >&2
+          exit 1
