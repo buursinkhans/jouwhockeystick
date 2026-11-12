@@ -43,7 +43,7 @@ export default function MethodiekPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdHtml(methodeJsonLd()) }}
       />
-      <PageHeader width="lezen" eyebrow="Onze methode" title={METHODE.h1}>
+      <PageHeader eyebrow="Onze methode" title={METHODE.h1}>
         <p className="mt-2 text-sm text-lijngrijs">
           Door {METHODIEK.author} · gepubliceerd op{' '}
           <time dateTime={METHODIEK.publishedAt}>{METHODIEK.publishedAt}</time> ·
@@ -62,7 +62,7 @@ export default function MethodiekPage() {
         </div>
       </PageHeader>
 
-      <PageBody width="lezen">
+      <PageBody>
         <h2 className="text-xl font-bold">{METHODE.oneMinuteHeading}</h2>
         <p className="mt-3 text-inkt/80">{METHODE.l100}</p>
 
@@ -113,7 +113,7 @@ export default function MethodiekPage() {
         </ul>
 
         <h2 className="mt-10 text-xl font-bold">{METHODIEK.title}</h2>
-        <div className="mt-3 max-w-2xl space-y-4 text-inkt/80">
+        <div className="mt-3 space-y-4 text-inkt/80">
           {METHODIEK.intro.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}

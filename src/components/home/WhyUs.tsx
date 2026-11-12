@@ -17,7 +17,7 @@ export function WhyUs() {
         <h2 id="waarom-heading" className="mt-3 max-w-3xl text-3xl text-inkt sm:text-[2.5rem]">
           Advies waarin winkelvergoedingen niet meetellen, met alles om het te controleren
         </h2>
-        <p className="mt-4 max-w-2xl text-lg text-inkt/80">{ORDER_PROMISE}</p>
+        <p className="mt-4 lead">{ORDER_PROMISE}</p>
 
         <div className="mt-10">
           <PromiseList />
@@ -25,7 +25,7 @@ export function WhyUs() {
 
         <div className="mt-14">
           <h3 className="text-2xl font-bold">{COMPARISON_HEADING}</h3>
-          <p className="mt-2 max-w-2xl text-inkt/80">{COMPARISON_INTRO}</p>
+          <p className="mt-2 text-inkt/80">{COMPARISON_INTRO}</p>
           <div className="mt-6 overflow-x-auto rounded-2xl border border-rand bg-white">
             <table className="w-full min-w-[34rem] border-collapse text-left text-sm">
               <caption className="sr-only">Eén webshop vergeleken met jouwhockeystick.nl</caption>

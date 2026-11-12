@@ -81,7 +81,7 @@ export default async function HockeyschoenenPage({
           <time dateTime={HOCKEYSCHOENEN.updatedAt}>{HOCKEYSCHOENEN.updatedAt}</time>
         </p>
         <TrackedBlock page="hockeyschoenen" block="intro">
-          <p className="mt-5 max-w-3xl text-lg text-inkt/80">
+          <p className="mt-5 lead">
             <InlineText text={HOCKEYSCHOENEN.intro} />
           </p>
           <ButtonLink href="/hockeyschoenen/wijzer" className="mt-5">
@@ -124,7 +124,7 @@ export default async function HockeyschoenenPage({
             <h2 id="gecontroleerd-kop" className="text-2xl font-bold">
               {HOCKEYSCHOENEN.checked.heading} <span className="font-normal text-lijngrijs">({checked.length})</span>
             </h2>
-            <p className="mt-2 max-w-3xl text-inkt/80">{HOCKEYSCHOENEN.checked.intro}</p>
+            <p className="mt-2 text-inkt/80">{HOCKEYSCHOENEN.checked.intro}</p>
             {checked.length === 0 ? (
               <p className="mt-4 text-inkt/80">{HOCKEYSCHOENEN.checked.none}</p>
             ) : (
@@ -142,7 +142,7 @@ export default async function HockeyschoenenPage({
             <h2 id="feed-kop" className="text-2xl font-bold">
               {HOCKEYSCHOENEN.feed.heading} <span className="font-normal text-lijngrijs">({feedCount})</span>
             </h2>
-            <p className="mt-2 max-w-3xl text-inkt/80">{HOCKEYSCHOENEN.feed.intro}</p>
+            <p className="mt-2 text-inkt/80">{HOCKEYSCHOENEN.feed.intro}</p>
             {feedCount === 0 ? (
               <p className="mt-4 text-inkt/80">{HOCKEYSCHOENEN.feed.none}</p>
             ) : (
@@ -153,7 +153,7 @@ export default async function HockeyschoenenPage({
         </TrackedBlock>
 
         <TrackedBlock page="hockeyschoenen" block="intenties">
-          <div className="mt-12 max-w-3xl space-y-10">
+          <div className="mt-12 space-y-10">
             {(['veld', 'zaal', 'kinderen'] as const).map((intent) => {
               const section = HOCKEYSCHOENEN.intents[intent];
               const article = shoeArticleLink(section.articleSlug);
@@ -185,7 +185,7 @@ export default async function HockeyschoenenPage({
           </div>
         </TrackedBlock>
 
-        <section aria-labelledby="status-kop" className="mt-12 max-w-3xl">
+        <section aria-labelledby="status-kop" className="mt-12">
           <h2 id="status-kop" className="text-2xl font-bold">
             {HOCKEYSCHOENEN.status.heading}
           </h2>
@@ -200,12 +200,12 @@ export default async function HockeyschoenenPage({
         </section>
 
         <TrackedBlock page="hockeyschoenen" block="pascontrole">
-          <div className="max-w-3xl">
+          <div>
             <FitCheck />
           </div>
         </TrackedBlock>
 
-        <div className="max-w-3xl">
+        <div>
           <ShoeArticleLinks links={shoeArticleLinks()} />
         </div>
       </PageBody>

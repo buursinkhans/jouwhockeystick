@@ -132,13 +132,13 @@ export default async function VergelijkPage({
 
   return (
     <>
-      <PageHeader width="tussen" eyebrow="Naast elkaar" title="Vergelijk hockeysticks">
-        <p className="max-w-2xl text-lg text-inkt/80">
+      <PageHeader eyebrow="Naast elkaar" title="Vergelijk hockeysticks">
+        <p className="lead">
           Kies twee of drie sticks om de specificaties naast elkaar te zien. Verschillen zijn gemarkeerd.
         </p>
       </PageHeader>
 
-      <PageBody width="tussen">
+      <PageBody>
         <form method="get" className="card grid grid-cols-1 gap-4 p-4 sm:grid-cols-3 sm:p-5">
           <StickSelect id="a" label="Stick 1" value={params.a} groups={groups} />
           <StickSelect id="b" label="Stick 2" value={params.b} groups={groups} />

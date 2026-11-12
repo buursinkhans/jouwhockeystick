@@ -92,7 +92,7 @@ function Block({ block }: { block: ArticleBlock }) {
 export function ArticleBody({ article }: { article: Article }) {
   return (
     <div className="max-w-none space-y-6">
-      <p className="text-lg leading-relaxed text-inkt">
+      <p className="lead">
         <InlineText text={article.intro} />
       </p>
       {article.sections.map((section) => {

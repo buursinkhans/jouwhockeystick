@@ -90,6 +90,17 @@
   }
 }
 
+/*
+ * The intro under a page title (owner, 2026-11-12): one size, one line height
+ * and one grey on every page. It fills the column it sits in, up to the same
+ * right edge as the content below (owner: the text may be much wider).
+ */
+@utility lead {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: color-mix(in oklab, var(--color-inkt) 80%, transparent);
+}
+
 /* The small uppercase label above a heading, with a short field-blue bar. */
 @utility eyebrow {
   display: inline-flex;

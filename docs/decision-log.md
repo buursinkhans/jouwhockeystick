@@ -3095,3 +3095,12 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Wat het rapport toont:** verkopen per sub-ID (de plek), zonder afgewezen transacties, voor programma 7290. Kliks staan niet in de export; in het rapport staat "kliks onbekend (de export geeft geen kliks, zie PostHog)".
 - **Onzeker:** het formaat van de export is niet gedocumenteerd. De export was bij het aanmaken een lege lijst (`[]`, nog geen transacties). De code leest de twee vormen van de Daisycon-API; de eerste verkoop laat zien of dat klopt.
 - **Beveiliging:** de URL bevat een token en een gebruikersnaam; hij staat alleen in het GitHub-secret en komt niet in code, logs of het issue. Foutmeldingen noemen alleen de HTTP-status.
+
+## 2026-11-12 — Opmaak in lijn: één tekststijl en één paginabreedte
+
+- **Aanleiding (eigenaar):** de homepage zag er rommelig uit met vier of vijf verschillende letterstijlen, en op veel pagina's kon de tekst veel breder. Alleen opmaak; geen tekst of inhoud gewijzigd.
+- **Hero op de homepage:** de pay-off gebruikt de gedeelde `eyebrow`; de tweede alinea heeft hetzelfde grijs en dezelfde regelafstand als de eerste; "Of kies snel advies" heeft de grootte van de knoptekst; het bijschrift onder de foto heeft de stijl van de vinkjesregel; "Zo werkt ons advies" staat op een eigen regel met een icoon in dezelfde kolom als de vinkjes.
+- **Inleidingen:** de nieuwe utility `lead` (`globals.css`) op alle paginakoppen, de homepage-secties, artikelen, de stickwijzer en de schoenenwijzer: één grootte, regelafstand en grijs.
+- **Breedte:** alle hoofdpagina's met een `PageHeader` staan op `max-w-5xl` (merken, methodiek en Over ons waren `max-w-3xl`, vergelijken en de kennisbank `max-w-4xl`). Ongeveer 30 tekstblokken en tekstsecties zonder eigen `max-w-*`, zodat alles één rechterrand heeft. Kaders, bannerblokken met een knop en koppen bleven zoals ze waren; artikelen, blogs en de stickwijzer houden hun leeskolom.
+- **Feitenregels** (zaalsticks, Black Friday): normaal gewicht, het grijs van de lopende tekst en vinkjes van 14 px, zoals op de homepage.
+- **Afweging:** op een groot scherm worden regels rond 110 tekens, langer dan de gebruikelijke 70; keuze eigenaar. `docs/designsysteem.md` is bijgewerkt.

@@ -1,7 +1,7 @@
 import { HeroPhotos } from './HeroPhotos';
 import { HomeBlockLink } from './HomeBlockLink';
 import { ButtonLink } from '@/components/ui/Button';
-import { CheckIcon } from '@/components/ui/icons';
+import { CheckIcon, InfoIcon } from '@/components/ui/icons';
 import Link from 'next/link';
 import { getTrustFacts } from '@/catalog/trustFacts';
 import { BRAND_PAYOFF } from '@/lib/site';
@@ -30,7 +30,7 @@ function HeroVisual() {
     >
       <HeroPhotos />
       {/* One quiet caption under the photo (owner, 2026-11-04): on the photo it covered the stick and ball. */}
-      <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[0.8125rem] font-semibold text-inkt">
+      <ul className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-inkt/80">
         {EXAMPLE_REASONS.map((reason) => (
           <li key={reason} className="flex items-center gap-1.5">
             <CheckIcon size={14} className="shrink-0 text-veld" />
@@ -56,23 +56,26 @@ function TrustLine() {
     'Bron bij elk gegeven',
     'Winkelvergoedingen tellen niet mee',
   ];
+  // Two fixed lines with one icon column (owner, 2026-11-12): the claims, then
+  // the link that backs them, its text starting where the claims start.
   return (
-    <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-inkt/80">
-      {items.map((item) => (
-        <li key={item} className="flex items-center gap-1.5">
-          <CheckIcon size={14} className="shrink-0 text-veld" />
-          {item}
-        </li>
-      ))}
-      <li>
-        <Link
-          href="/methodiek"
-          className="font-semibold text-veld hover:underline"
-        >
-          Zo werkt ons advies →
-        </Link>
-      </li>
-    </ul>
+    <div className="mt-5 space-y-2 text-sm">
+      <ul className="flex flex-wrap gap-x-5 gap-y-2 text-inkt/80">
+        {items.map((item) => (
+          <li key={item} className="flex items-center gap-1.5">
+            <CheckIcon size={14} className="shrink-0 text-veld" />
+            {item}
+          </li>
+        ))}
+      </ul>
+      <Link
+        href="/methodiek"
+        className="inline-flex min-h-6 items-center gap-1.5 font-semibold text-veld hover:underline"
+      >
+        <InfoIcon size={14} className="shrink-0" />
+        Zo werkt ons advies →
+      </Link>
+    </div>
   );
 }
 
@@ -85,16 +88,17 @@ export function Hero() {
     <section className="bg-gradient-to-b from-krijt to-white">
       <div className="mx-auto grid max-w-5xl items-center gap-10 px-4 pt-8 pb-12 sm:px-6 sm:pt-12 sm:pb-12 md:grid-cols-[1.2fr_0.8fr] md:gap-14">
         <div>
-          <p className="text-sm font-semibold text-veld sm:text-base">{BRAND_PAYOFF}</p>
-          <h1 className="mt-3 text-[2.6rem] text-inkt sm:text-6xl">
+          {/* One type scale (owner, 2026-11-12): the shared eyebrow, the title, the lead, one body grey and one link style. */}
+          <p className="eyebrow">{BRAND_PAYOFF}</p>
+          <h1 className="mt-4 text-[2.6rem] text-inkt sm:text-6xl">
             Vind de hockeystick die bij jou past
           </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-inkt/80 sm:text-xl">
+          <p className="mt-5 text-lg leading-relaxed text-inkt/80 sm:text-xl">
             Beantwoord een paar vragen over lengte, ervaring, speelwensen en
             budget. Je krijgt de juiste maat en maximaal drie sticks, elk met
             de redenen waarom hij past en eerlijk waar je op inlevert.
           </p>
-          <p className="mt-3 max-w-xl text-inkt/70">
+          <p className="mt-3 text-base leading-relaxed text-inkt/80">
             Per stick zie je bij welke van onze {shops} partnerwinkels hij te
             koop is, met de prijs incl. verzending.
           </p>
@@ -106,7 +110,7 @@ export function Hero() {
             <HomeBlockLink
               block="hero"
               href="/stickwijzer?snel"
-              className="mt-3 inline-flex min-h-11 items-center gap-1 font-semibold text-veld hover:underline sm:mt-0 sm:ml-5"
+              className="mt-3 inline-flex min-h-11 items-center gap-1 text-base font-semibold text-veld hover:underline sm:mt-0 sm:ml-6"
             >
               Of kies snel advies in 2 stappen →
             </HomeBlockLink>

@@ -31,7 +31,7 @@ export default function StickwijzerPage() {
     // server-rendered HTML for search engines (2026-10-22).
     <div className="group/stickwijzer mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold">Stickwijzer</h1>
-      <p className="mt-2 text-lg text-inkt group-has-[[data-advice-result]]/stickwijzer:hidden">
+      <p className="lead mt-2 group-has-[[data-advice-result]]/stickwijzer:hidden">
         {METHODE_BEFORE}
         <Link
           href="/methodiek#methode"

@@ -99,20 +99,20 @@ export default function BlackFridayPage() {
           { label: BLACK_FRIDAY.navLabel, href: BLACK_FRIDAY.path },
         ]}
       >
-        <p className="max-w-3xl text-lg text-inkt/80">{BLACK_FRIDAY.intro[phase]}</p>
-        <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-inkt" aria-label="Op deze pagina">
+        <p className="lead">{BLACK_FRIDAY.intro[phase]}</p>
+        <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-inkt/80" aria-label="Op deze pagina">
           <li className="flex items-center gap-1.5">
-            <CheckIcon size={16} className="text-veld" />
+            <CheckIcon size={14} className="shrink-0 text-veld" />
             {BLACK_FRIDAY.dateLine[phase]}
           </li>
           {lastCheck && phase !== 'afgelopen' && (
             <li className="flex items-center gap-1.5">
-              <CheckIcon size={16} className="text-veld" />
+              <CheckIcon size={14} className="shrink-0 text-veld" />
               Acties nagekeken op <time dateTime={lastCheck}>{formatNlDate(lastCheck)}</time>
             </li>
           )}
         </ul>
-        <p className="mt-5 max-w-3xl border-l-4 border-veld pl-4 font-semibold text-inkt">{BLACK_FRIDAY.promise}</p>
+        <p className="mt-5 border-l-4 border-veld pl-4 font-semibold text-inkt">{BLACK_FRIDAY.promise}</p>
         <p className="mt-5 text-sm text-lijngrijs">
           Door {BLACK_FRIDAY.author} · gepubliceerd op <time dateTime={BLACK_FRIDAY.publishedAt}>{BLACK_FRIDAY.publishedAt}</time> · bijgewerkt op{' '}
           <time dateTime={BLACK_FRIDAY.updatedAt}>{BLACK_FRIDAY.updatedAt}</time>
@@ -145,7 +145,7 @@ export default function BlackFridayPage() {
           <h2 id="bf-shops-heading" className="scroll-mt-24 text-2xl font-bold">
             {BLACK_FRIDAY.shops.heading}
           </h2>
-          <p className="mt-1 max-w-3xl text-inkt/80">{phase === 'afgelopen' ? BLACK_FRIDAY.shops.afgelopen : BLACK_FRIDAY.shops.intro}</p>
+          <p className="mt-1 text-inkt/80">{phase === 'afgelopen' ? BLACK_FRIDAY.shops.afgelopen : BLACK_FRIDAY.shops.intro}</p>
           <ul className="mt-5 grid gap-4">
             {rows.map(({ promo, state }) => {
               const showDetails = state !== 'afgelopen' && state !== 'onbekend';
@@ -168,7 +168,7 @@ export default function BlackFridayPage() {
                       ))}
                     </p>
                   )}
-                  {state === 'afgelopen' ? null : <p className="mt-2 max-w-3xl text-inkt/80">{promo.summary}</p>}
+                  {state === 'afgelopen' ? null : <p className="mt-2 text-inkt/80">{promo.summary}</p>}
                   {showDetails && (promo.startsAt || promo.endsAt) && (
                     <p className="mt-2 text-sm font-semibold text-inkt">
                       {promo.startsAt && <>Vanaf {formatNlDate(promo.startsAt)}</>}
@@ -176,7 +176,7 @@ export default function BlackFridayPage() {
                       {promo.endsAt && <>Tot en met {formatNlDate(promo.endsAt)}</>}
                     </p>
                   )}
-                  {showDetails && promo.conditions && <p className="mt-2 max-w-3xl text-sm text-inkt/80">{promo.conditions}</p>}
+                  {showDetails && promo.conditions && <p className="mt-2 text-sm text-inkt/80">{promo.conditions}</p>}
                   {(showDetails || promo.verifiedAt) && (
                   <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
                     {showDetails && (
@@ -195,7 +195,7 @@ export default function BlackFridayPage() {
               );
             })}
           </ul>
-          <p className="mt-3 max-w-3xl text-xs text-lijngrijs">{BLACK_FRIDAY.shops.order}</p>
+          <p className="mt-3 text-xs text-lijngrijs">{BLACK_FRIDAY.shops.order}</p>
           <PartnerLinkNote />
         </section>
 
@@ -204,7 +204,7 @@ export default function BlackFridayPage() {
             <h2 id={group.id} className="scroll-mt-24 text-2xl font-bold">
               {group.heading}
             </h2>
-            <p className="mt-1 max-w-3xl text-inkt/80">{BLACK_FRIDAY.products.intro}</p>
+            <p className="mt-1 text-inkt/80">{BLACK_FRIDAY.products.intro}</p>
             {group.products.length > 0 ? (
               <ul className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {group.products.map((product) => (
@@ -225,13 +225,13 @@ export default function BlackFridayPage() {
             </TrackedBlock>
           </section>
         ))}
-        <p className="mt-4 max-w-3xl text-xs text-lijngrijs">{BLACK_FRIDAY.products.selection}</p>
+        <p className="mt-4 text-xs text-lijngrijs">{BLACK_FRIDAY.products.selection}</p>
 
         <section className="mt-16" aria-labelledby="bf-schoenen">
           <h2 id="bf-schoenen" className="scroll-mt-24 text-2xl font-bold">
             {BLACK_FRIDAY.products.shoesHeading}
           </h2>
-          <p className="mt-1 max-w-3xl text-inkt/80">{BLACK_FRIDAY.products.shoesIntro}</p>
+          <p className="mt-1 text-inkt/80">{BLACK_FRIDAY.products.shoesIntro}</p>
           {shoes.length > 0 && (
             <ul className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {shoes.map((shoe) => (
@@ -254,7 +254,7 @@ export default function BlackFridayPage() {
           <h2 id="bf-advies-heading" className="text-2xl font-bold">
             {BLACK_FRIDAY.advice.heading}
           </h2>
-          <p className="mt-1 max-w-3xl text-inkt/80">{BLACK_FRIDAY.advice.intro}</p>
+          <p className="mt-1 text-inkt/80">{BLACK_FRIDAY.advice.intro}</p>
           <TrackedBlock page="black-friday" block="advies">
             <ul className="mt-5 grid gap-5 sm:grid-cols-2">
               {BLACK_FRIDAY.advice.items.map((item) => (
@@ -293,7 +293,7 @@ export default function BlackFridayPage() {
           )}
         />
 
-        <section className="mt-12 max-w-3xl" aria-labelledby="bf-transparantie-heading">
+        <section className="mt-12" aria-labelledby="bf-transparantie-heading">
           <h2 id="bf-transparantie-heading" className="text-xl font-bold">
             Hoe deze pagina werkt
           </h2>

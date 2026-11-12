@@ -99,12 +99,12 @@ function SectionHeading({
   children?: ReactNode;
 }) {
   return (
-    <div className="max-w-3xl">
+    <div>
       <p className="eyebrow">
         {eyebrow}
       </p>
       <h2 className="mt-3 max-w-3xl text-3xl text-inkt sm:text-[2.5rem]">{title}</h2>
-      {children && <div className="mt-4 max-w-2xl text-lg leading-relaxed text-inkt/80">{children}</div>}
+      {children && <div className="mt-4 lead">{children}</div>}
     </div>
   );
 }

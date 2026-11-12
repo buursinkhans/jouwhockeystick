@@ -14,8 +14,8 @@ export const metadata = pageMetadata({
 export default function OverOnsPage() {
   return (
     <>
-      <PageHeader width="lezen" eyebrow="Over ons" title="Over jouwhockeystick.nl">
-        <p className="text-lg leading-relaxed text-inkt">
+      <PageHeader eyebrow="Over ons" title="Over jouwhockeystick.nl">
+        <p className="lead">
           jouwhockeystick.nl helpt hockeyers en ouders een stick te kiezen die
           past bij niveau, speelstijl en budget, en legt bij elk advies uit
           waarom. We zijn deze site begonnen omdat die keuze vaak alleen op
@@ -24,7 +24,7 @@ export default function OverOnsPage() {
         </p>
       </PageHeader>
 
-      <PageBody width="lezen">
+      <PageBody>
         {/*
           The person behind the site (redesign fase 3): photo, name and
           background as the owner gave them on 2026-11-03; metadata stripped.
