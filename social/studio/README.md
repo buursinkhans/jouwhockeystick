@@ -4,7 +4,7 @@ De bron van de Marketingstudio, het ene dashboard van de eigenaar: https://claud
 
 ## Wat de pagina doet
 
-Tabbladen bovenaan (sinds 2026-11-12, samengevoegd met Agent-orkest): **Vandaag** (dagcijfers, dagbericht en Vraag Noor, zie [dagbericht.md](../../docs/marketing/dagbericht.md)), **Social** (goedkeuren, hieronder), en **Stack**, **Eén post**, **Week** en **Ritme** (de agentstructuur, met Presenteer voor demo's). De CSS van Social staat met CSS nesting onder `#view-social`, zodat de weergaven elkaar niet raken.
+Tabbladen bovenaan (sinds 2026-11-12, samengevoegd met Agent-orkest): **Vandaag** (dagcijfers, dagbericht en Vraag Noor, zie [dagbericht.md](../../docs/marketing/dagbericht.md)), **Verkoop** (per partner, versleuteld; zelfde document), **Social** (goedkeuren, hieronder), en **Stack**, **Eén post**, **Week** en **Ritme** (de agentstructuur, met Presenteer voor demo's). De CSS van Social staat met CSS nesting onder `#view-social`, zodat de weergaven elkaar niet raken.
 
 Social:
 
@@ -23,4 +23,4 @@ Publiceer met de Artifact-tool naar de bestaande url, met:
 - `file_path`: `social/studio/index.html`;
 - `url`: `https://claude.ai/artifact/WWvotNj8EKx9GCbapJtUe2`;
 - `files`: `{"slideart.js": "video/studio/slideart.js", "videoart.js": "video/studio/videoart.js"}` (alleen als die bestanden veranderd zijn; weglaten houdt de gepubliceerde versie);
-- de bestaande capabilities. Laat je `capabilities` weg, dan blijven ze staan. Geef je ze opnieuw, dan in deze vorm: de `db`-regels van de collecties (`commands`, `posts`, `videos`, `plan`, `markt`, `state`, `community` en `accounts`: lezen view, schrijven owner; `feedback`: alleen owner; `dagbericht` en `ideeen`: lezen admin, schrijven owner), `user`, `sample` (Vraag Noor), en `mcp` met `Claude Code Remote` (`fire_trigger`) en `Metricool Social Media Management` (`getScheduledPosts`).
+- de bestaande capabilities. Laat je `capabilities` weg, dan blijven ze staan. Geef je ze opnieuw, dan in deze vorm: de `db`-regels van de collecties (`commands`, `posts`, `videos`, `plan`, `markt`, `state`, `community` en `accounts`: lezen view, schrijven owner; `feedback`: alleen owner; `dagbericht`, `ideeen` en `verkoop`: lezen admin, schrijven owner), `user`, `sample` (Vraag Noor), en `mcp` met `Claude Code Remote` (`fire_trigger`) en `Metricool Social Media Management` (`getScheduledPosts`).
