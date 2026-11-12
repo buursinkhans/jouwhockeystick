@@ -6,7 +6,13 @@
 // Run with: npm run analytics:report
 import { QUESTION_META, type QuestionId } from '../src/advice-engine/answers';
 import { QUESTIONS, SCREENS } from '../src/content/stickwijzer/questions';
-import { POSTHOG_UI_HOST } from '../src/lib/analytics/posthog';
+import {
+  BOT_PATTERN,
+  hogql as runHogql,
+  LIVE_HOSTS,
+  readPosthogConfig as readConfig,
+  type PosthogConfig,
+} from '../src/analytics-report/hogql';
 import {
   AI_REFERRER_DOMAINS,
   AI_UTM_SOURCES,
@@ -18,18 +24,6 @@ import {
 } from '../src/analytics-report/conversion';
 
 const DAY = 86_400_000;
-const LIVE_HOSTS = ['jouwhockeystick.nl', 'www.jouwhockeystick.nl'];
-const BOT_PATTERN = '(?i)bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview';
-
-function readConfig(): { key: string; projectId: string } {
-  const key = process.env.POSTHOG_PERSONAL_API_KEY;
-  const projectId = process.env.POSTHOG_PROJECT_ID;
-  if (!key) throw new Error('POSTHOG_PERSONAL_API_KEY ontbreekt (GitHub Secrets).');
-  if (!projectId || !/^\d+$/.test(projectId)) {
-    throw new Error('POSTHOG_PROJECT_ID ontbreekt of is geen getal (GitHub-variabele).');
-  }
-  return { key, projectId };
-}
 
 const isoDate = (time: number) => new Date(time).toISOString().slice(0, 10);
 const literal = (time: number) =>
@@ -51,24 +45,7 @@ const BASE_FILTER = [
 ].join(' AND ');
 const IS_NOW = `timestamp >= ${literal(curStart)}`;
 
-async function hogql(config: { key: string; projectId: string }, query: string): Promise<unknown[][]> {
-  const response = await fetch(`${POSTHOG_UI_HOST}/api/projects/${config.projectId}/query/`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${config.key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query: { kind: 'HogQLQuery', query }, name: 'conversie-rapport' }),
-  });
-  if (!response.ok) {
-    const detail = (await response.text()).slice(0, 300);
-    if (response.status === 401 || response.status === 403) {
-      throw new Error(
-        `PostHog weigert de sleutel (HTTP ${response.status}). Controleer of de personal API key de rechten "Query Read" heeft en bij dit project hoort. ${detail}`,
-      );
-    }
-    throw new Error(`PostHog-query mislukt (HTTP ${response.status}): ${detail}`);
-  }
-  const body = (await response.json()) as { results?: unknown[][] };
-  return body.results ?? [];
-}
+const hogql = (config: PosthogConfig, query: string) => runHogql(config, query, 'conversie-rapport');
 
 const num = (value: unknown) => (typeof value === 'number' ? value : Number(value) || 0);
 

@@ -3113,3 +3113,10 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Breedte:** alle hoofdpagina's met een `PageHeader` staan op `max-w-5xl` (merken, methodiek en Over ons waren `max-w-3xl`, vergelijken en de kennisbank `max-w-4xl`). Ongeveer 30 tekstblokken en tekstsecties zonder eigen `max-w-*`, zodat alles één rechterrand heeft. Kaders, bannerblokken met een knop en koppen bleven zoals ze waren; artikelen, blogs en de stickwijzer houden hun leeskolom.
 - **Feitenregels** (zaalsticks, Black Friday): normaal gewicht, het grijs van de lopende tekst en vinkjes van 14 px, zoals op de homepage.
 - **Afweging:** op een groot scherm worden regels rond 110 tekens, langer dan de gebruikelijke 70; keuze eigenaar. `docs/designsysteem.md` is bijgewerkt.
+
+## 2026-11-12 — Dagcijfers en dagbericht (fase 1)
+
+- **Wat:** dagelijkse cijfers uit PostHog, Search Console en Bing (`scripts/daily-metrics.ts`, workflow `dagcijfers.yml`, 04:31 UTC) als JSON op de branch `social-state`, en een geplande claude.ai-taak die er een kort dagbericht bij schrijft in het tabblad "Vandaag" van Agent-orkest. Zie `docs/marketing/dagbericht.md`.
+- **Waarom:** de wekelijkse rapporten blijven; de eigenaar wil dagelijks zien wat er gebeurt, met duiding in tekst.
+- **Afwegingen:** geen nieuwe secrets of database; alleen aantallen, geen bedragen. Uitschieters pas vanaf 10 en 50 procent tegen het 7-daags gemiddelde, met minstens 5 dagen geschiedenis, zodat kleine aantallen geen meldingen geven. De Search Console-login en de PostHog-query staan nu in `src/seo/googleAuth.ts` en `src/analytics-report/hogql.ts`, gedeeld met de weekrapporten.
+- **Later (fase 2):** in het tabblad met het virtuele marketingteam over de cijfers praten.
