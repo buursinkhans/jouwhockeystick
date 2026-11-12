@@ -414,19 +414,22 @@
           "op": "2026-11-12T13:24:30Z"
         },
         "shorts": {
-          "bezig": "2026-11-12T13:24:58Z"
+          "id": 425684844,
+          "uuid": "8836199211605773539",
+          "moment": "2026-11-16T19:30:00",
+          "op": "2026-11-12T13:25:10Z"
         }
       },
-      "fout": null
+      "fout": "Het Metricool-tegoed voor november is op (20 van 20 posts). Niet ingepland; de eigenaar kiest: een andere maand of een groter plan."
     }
   },
-  "laatsteRun": "2026-11-12T13:12:21Z",
+  "laatsteRun": "2026-11-12T13:25:23Z",
   "tegoed": {
     "maand": "2026-11",
-    "gebruikt": 18,
+    "gebruikt": 20,
     "grens": 20
   },
-  "wijziging": "adc34902-190f-44a4-bf96-052475702f47",
+  "wijziging": "b891dfe4-41ba-44b9-b3d9-462485af0ae3",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
