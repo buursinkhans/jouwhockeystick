@@ -143,11 +143,12 @@ describe('shoe model page', () => {
     const html = await modelPage('grays-aerocage-x10');
     const product = jsonLd(html).find((d) => d['@type'] === 'Product')!;
     expect(JSON.stringify(product)).not.toMatch(/Review|AggregateRating|ratingValue/);
-    // More than 14 days after the feed was read the amounts disappear, and so do the offers.
+    expect(product.offers).toBeDefined();
+    // More than 14 days after the feed was read the amounts disappear, and so does the Product block:
+    // without offers (and without reviews) Google counts it as an invalid item (decision log 2026-11-12).
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2027-06-01'));
-    const later = jsonLd(await modelPage('grays-aerocage-x10')).find((d) => d['@type'] === 'Product')!;
-    expect(later.offers).toBeUndefined();
+    expect(jsonLd(await modelPage('grays-aerocage-x10')).find((d) => d['@type'] === 'Product')).toBeUndefined();
   });
 
   it('keeps feed models out of Google and checked models in', async () => {

@@ -56,6 +56,8 @@ export default async function ShoePage({ params }: { params: Promise<{ slug: str
 
   const now = new Date();
   // Offers only for prices shown in "Waar te koop" and at most 14 days old; no review or rating schema.
+  // Product snippets need one of offers, review or aggregateRating, so without a current price there
+  // is no Product block at all, instead of an item Search Console reports as invalid (decision log 2026-11-12).
   const fresh = getShoeOffers(shoe).filter((o) => isPriceFresh(o, now) && o.priceEur !== null);
   const prices = fresh.map((o) => o.priceEur as number);
   const offers =
@@ -77,7 +79,7 @@ export default async function ShoePage({ params }: { params: Promise<{ slug: str
           }
         : null;
   const image = shoeImageUrl(shoe);
-  const jsonLd = {
+  const jsonLd = offers && {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: `${shoe.brand} ${shoe.model}`,
@@ -85,14 +87,14 @@ export default async function ShoePage({ params }: { params: Promise<{ slug: str
     category: 'Hockeyschoenen',
     url: absoluteUrl(shoePath(shoe)),
     ...(image && { image }),
-    ...(offers && { offers }),
+    offers,
   };
   const checks = checksFor(shoe);
   const others = similar(shoe);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }} />
+      {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(jsonLd) }} />}
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
