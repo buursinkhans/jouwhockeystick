@@ -1,0 +1,499 @@
+{
+ "versie": 1,
+ "gemaakt": "2026-11-12T09:55:09.388Z",
+ "site": "jouwhockeystick.nl",
+ "posthog": {
+  "ok": false,
+  "reden": "PostHog: PostHog-query mislukt (HTTP 400): {\"type\":\"validation_error\",\"code\":\"hogql_query_error\",\"detail\":\"Function 'toDate' expects 1 argument, found 2\\nTables referenced: events\",\"attr\":null,\"extra\":{\"hogql_metadata\":{\"errors\":[{\"end\":53,\"message\":\"Function 'toDate' expects 1 argument, found 2\",\"start\":16}],\"isValid\":false,\"notices\":[{\"end"
+ },
+ "google": {
+  "ok": true,
+  "value": {
+   "dagen": [
+    {
+     "date": "2026-10-06",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-07",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-08",
+     "klikken": 0,
+     "vertoningen": 9
+    },
+    {
+     "date": "2026-10-09",
+     "klikken": 0,
+     "vertoningen": 4
+    },
+    {
+     "date": "2026-10-10",
+     "klikken": 0,
+     "vertoningen": 30
+    },
+    {
+     "date": "2026-10-11",
+     "klikken": 0,
+     "vertoningen": 33
+    },
+    {
+     "date": "2026-10-12",
+     "klikken": 0,
+     "vertoningen": 29
+    },
+    {
+     "date": "2026-10-13",
+     "klikken": 1,
+     "vertoningen": 50
+    },
+    {
+     "date": "2026-10-14",
+     "klikken": 0,
+     "vertoningen": 74
+    },
+    {
+     "date": "2026-10-15",
+     "klikken": 0,
+     "vertoningen": 72
+    },
+    {
+     "date": "2026-10-16",
+     "klikken": 1,
+     "vertoningen": 86
+    },
+    {
+     "date": "2026-10-17",
+     "klikken": 0,
+     "vertoningen": 72
+    },
+    {
+     "date": "2026-10-18",
+     "klikken": 0,
+     "vertoningen": 54
+    },
+    {
+     "date": "2026-10-19",
+     "klikken": 1,
+     "vertoningen": 52
+    },
+    {
+     "date": "2026-10-20",
+     "klikken": 1,
+     "vertoningen": 62
+    },
+    {
+     "date": "2026-10-21",
+     "klikken": 0,
+     "vertoningen": 78
+    },
+    {
+     "date": "2026-10-22",
+     "klikken": 0,
+     "vertoningen": 77
+    },
+    {
+     "date": "2026-10-23",
+     "klikken": 3,
+     "vertoningen": 84
+    },
+    {
+     "date": "2026-10-24",
+     "klikken": 1,
+     "vertoningen": 149
+    },
+    {
+     "date": "2026-10-25",
+     "klikken": 4,
+     "vertoningen": 156
+    },
+    {
+     "date": "2026-10-26",
+     "klikken": 0,
+     "vertoningen": 149
+    },
+    {
+     "date": "2026-10-27",
+     "klikken": 5,
+     "vertoningen": 103
+    },
+    {
+     "date": "2026-10-28",
+     "klikken": 1,
+     "vertoningen": 69
+    },
+    {
+     "date": "2026-10-29",
+     "klikken": 1,
+     "vertoningen": 49
+    },
+    {
+     "date": "2026-10-30",
+     "klikken": 0,
+     "vertoningen": 37
+    },
+    {
+     "date": "2026-10-31",
+     "klikken": 0,
+     "vertoningen": 47
+    },
+    {
+     "date": "2026-11-01",
+     "klikken": 2,
+     "vertoningen": 65
+    },
+    {
+     "date": "2026-11-02",
+     "klikken": 1,
+     "vertoningen": 41
+    },
+    {
+     "date": "2026-11-03",
+     "klikken": 1,
+     "vertoningen": 56
+    },
+    {
+     "date": "2026-11-04",
+     "klikken": 0,
+     "vertoningen": 56
+    },
+    {
+     "date": "2026-11-05",
+     "klikken": 2,
+     "vertoningen": 75
+    },
+    {
+     "date": "2026-11-06",
+     "klikken": 2,
+     "vertoningen": 51
+    },
+    {
+     "date": "2026-11-07",
+     "klikken": 0,
+     "vertoningen": 66
+    },
+    {
+     "date": "2026-11-08",
+     "klikken": 6,
+     "vertoningen": 400
+    },
+    {
+     "date": "2026-11-09",
+     "klikken": 7,
+     "vertoningen": 371
+    }
+   ],
+   "vergelijking": [
+    {
+     "metriek": "klikken",
+     "dag": "2026-11-09",
+     "waarde": 7,
+     "gem7": 1.7,
+     "gem28": 1.2,
+     "verschil7Pct": 308,
+     "opvallend": null
+    },
+    {
+     "metriek": "vertoningen",
+     "dag": "2026-11-09",
+     "waarde": 371,
+     "gem7": 106.4,
+     "gem28": 84.3,
+     "verschil7Pct": 249,
+     "opvallend": "hoger"
+    }
+   ],
+   "periode": {
+    "start": "2026-11-03",
+    "end": "2026-11-09"
+   },
+   "topZoektermen": [
+    {
+     "zoekterm": "zaalhockeystick",
+     "klikken": 0,
+     "vertoningen": 33,
+     "positie": 13.2
+    },
+    {
+     "zoekterm": "zaalhockeyschoenen",
+     "klikken": 0,
+     "vertoningen": 21,
+     "positie": 80
+    },
+    {
+     "zoekterm": "zaalstick",
+     "klikken": 0,
+     "vertoningen": 17,
+     "positie": 10.1
+    },
+    {
+     "zoekterm": "hockeystick carbon procent",
+     "klikken": 0,
+     "vertoningen": 14,
+     "positie": 40.6
+    },
+    {
+     "zoekterm": "verschil veldhockey zaalhockey stick",
+     "klikken": 0,
+     "vertoningen": 13,
+     "positie": 22.9
+    },
+    {
+     "zoekterm": "welke hockeystick kopen",
+     "klikken": 0,
+     "vertoningen": 13,
+     "positie": 57.8
+    },
+    {
+     "zoekterm": "hoe kies je een hockeystick",
+     "klikken": 0,
+     "vertoningen": 12,
+     "positie": 49.7
+    },
+    {
+     "zoekterm": "hockey strick beginnen kind welke merken",
+     "klikken": 0,
+     "vertoningen": 11,
+     "positie": 5.1
+    },
+    {
+     "zoekterm": "hockeystick maat",
+     "klikken": 0,
+     "vertoningen": 11,
+     "positie": 57.6
+    },
+    {
+     "zoekterm": "zaalsticks",
+     "klikken": 0,
+     "vertoningen": 10,
+     "positie": 13.4
+    }
+   ],
+   "stijgers": [
+    {
+     "zoekterm": "zaalhockeystick",
+     "nu": 33,
+     "ervoor": 4,
+     "nieuw": false
+    },
+    {
+     "zoekterm": "zaalhockeyschoenen",
+     "nu": 21,
+     "ervoor": 0,
+     "nieuw": true
+    },
+    {
+     "zoekterm": "zaalstick",
+     "nu": 17,
+     "ervoor": 2,
+     "nieuw": false
+    }
+   ]
+  }
+ },
+ "bing": {
+  "ok": true,
+  "value": {
+   "dagen": [
+    {
+     "date": "2026-10-05",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-06",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-07",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-08",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-09",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-10",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-11",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-12",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-13",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-14",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-15",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-16",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-17",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-18",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-19",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-20",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-21",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-22",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-23",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-24",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-25",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-26",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-27",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-28",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-29",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-30",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-10-31",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-11-01",
+     "klikken": 0,
+     "vertoningen": 1
+    },
+    {
+     "date": "2026-11-02",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-11-03",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-11-04",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-11-05",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-11-06",
+     "klikken": 0,
+     "vertoningen": 1
+    },
+    {
+     "date": "2026-11-07",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-11-08",
+     "klikken": 0,
+     "vertoningen": 1
+    }
+   ],
+   "vergelijking": [
+    {
+     "metriek": "klikken",
+     "dag": "2026-11-08",
+     "waarde": 0,
+     "gem7": 0,
+     "gem28": 0,
+     "verschil7Pct": null,
+     "opvallend": null
+    },
+    {
+     "metriek": "vertoningen",
+     "dag": "2026-11-08",
+     "waarde": 1,
+     "gem7": 0.3,
+     "gem28": 0.1,
+     "verschil7Pct": 250,
+     "opvallend": null
+    }
+   ]
+  }
+ }
+}
