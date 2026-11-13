@@ -3170,3 +3170,10 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Wat de bronnen zeggen:** bij 175 cm noemen alle drie de tabellen en onze richtlijn 36,5 inch; de verschillen zitten rond 152 tot 162 cm (Osaka 36,5, de andere 35) en vanaf 180 cm. De verwachting uit de brief dat de bronnen rond 175 cm uiteenlopen, zien wij in deze drie tabellen niet; de tekst zegt wat de tabellen tonen.
 - **Adviesengine:** niet gewijzigd. `getSizeAdvice` kijkt alleen naar de lichaamslengte (en noemt een verschil met de huidige stick); de tip over speelstijl staat er daarom als "onze tip", niet als werking van de stickwijzer.
 - **Bewust niet:** de bestaande tabel, de bandindeling in `sizeAdvice.ts`, de leeftijdsindicatie, de titel, intro en meta-beschrijving. `updatedAt` 2026-11-13.
+
+## 2026-11-13 — Beveiliging: dagcijfers versleuteld (review 3/3)
+
+- **Wat:** de zoektermen, stijgers, bronnen en landen uit de dagcijfers gaan versleuteld naar `video/studio/state/dagcijfers-detail.json` op `social-state`, met de code en het formaat van `verkoop.json` (`VERKOOP_SLEUTEL`). `dagcijfers.json` houdt alleen de dagtotalen en vergelijkingen (`versie: 2`, `splitDagcijfers` in `src/marketing/dailyMetrics.ts`). Nieuwe versleutelde bestanden gebruiken 600.000 PBKDF2-rondes; oude met 310.000 blijven leesbaar. Het tabblad Vandaag opent het detail met de sleutel van het tabblad Verkoop.
+- **Waarom:** beveiligingsreview van 2026-11-13: de branch `social-state` is openbaar, en wat mensen zoeken en waar bezoekers vandaan komen, hoort daar niet leesbaar te staan.
+- **Besluit eigenaar (optie A):** splitsen in plaats van alles versleutelen. De geplande taak Dagbericht kan de sleutel niet krijgen (dat zou een geheim in een prompt zijn), dus hij schrijft zijn bericht en pushmelding voortaan alleen uit de totalen en kopieert het versleutelde detail ongewijzigd naar de studio. Het bericht noemt geen zoektermen, bronnen of landen meer; die staan in het tabblad Vandaag en Noor kent ze.
+- **Niet gedaan:** de geschiedenis van `social-state` is niet herschreven en er is niet geforcepusht. Oude, leesbare versies staan daar nog; de eigenaar beslist of die weg moeten.
