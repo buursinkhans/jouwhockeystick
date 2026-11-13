@@ -4,6 +4,7 @@ import {
   POSTHOG_INGEST_ORIGIN,
   POSTHOG_PROXY_PATH,
 } from './src/lib/analytics/posthog';
+import { contentSecurityPolicy } from './src/security/csp';
 
 /**
  * Security headers for every page (security check 2026-10-21). Kept
@@ -11,9 +12,16 @@ import {
  * (the analytics scripts and Next.js inline scripts would need a nonce
  * setup), only the frame rule, which stops other sites from showing ours in
  * a frame (clickjacking). HSTS and nosniff are already set by Netlify.
+ *
+ * Next to it, a full policy in report-only mode (security review 2026-11-13,
+ * src/security/csp.ts): the browser only reports violations in the console.
  */
 const SECURITY_HEADERS = [
   { key: 'Content-Security-Policy', value: "frame-ancestors 'self'" },
+  {
+    key: 'Content-Security-Policy-Report-Only',
+    value: contentSecurityPolicy({ dev: process.env.NODE_ENV === 'development' }),
+  },
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   {

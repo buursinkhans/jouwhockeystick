@@ -1,0 +1,4 @@
+10038	IGNORE	(Content Security Policy (CSP) Header Not Set / Report-Only: geaccepteerd zolang de volledige CSP alleen meldt; zie next.config.ts en docs/beveiliging.md)
+10055	IGNORE	(CSP-instellingen zoals unsafe-inline: geaccepteerd zolang de CSP report-only is; Next.js zet inline scripts zonder nonce)
+10109	IGNORE	(Modern Web Application: alleen informatie, geen risico)
+10049	IGNORE	(Storable and Cacheable Content: alleen informatie; caching regelt Netlify)

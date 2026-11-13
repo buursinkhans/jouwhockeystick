@@ -10,6 +10,7 @@ Elke maandag om 05:29 UTC (vóór de Orchestrator) controleert de workflow `secu
 | Kwetsbaarheden | `npm audit` | Een bekende kwetsbaarheid in een pakket. Het rapport scheidt wat live draait van de ontwikkeltools |
 | Nieuwere versies | `npm outdated` | Ingedeeld in patch, minor en major |
 | Sleutels in de code | `git grep` op de vorm van echte sleutels (GitHub, Claude, Netlify, PostHog, Meta, Google, AWS, privésleutels) | Elke treffer. Het rapport noemt alleen het bestand, nooit de waarde |
+| Passieve scan (OWASP ZAP) | `zaproxy/action-baseline` bekijkt de live site zoals een bezoeker: pagina's opvragen en de antwoorden lezen, zonder aanvallen | Een melding met hoog risico komt in de Samenvatting. De scan laat de workflow nooit falen. Geaccepteerde meldingen staan met reden in `.zap/rules.tsv` |
 
 De logica staat in `src/security/securityReport.ts` (met tests), het ophalen in `scripts/security-check.ts`. Lokaal draaien: `npm run security:check`.
 
@@ -18,8 +19,17 @@ De logica staat in `src/security/securityReport.ts` (met tests), het ophalen in 
 1. **Rapport** in het open issue met label `beveiliging` (één issue dat elke week wordt bijgewerkt). De Orchestrator leest het mee en zet echte problemen onder *Voor jou* in de weekplanning.
 2. **Pull request** (branch `beveiliging/<datum>`) als er updates zijn binnen de versiegrenzen in `package.json`: `npm update` plus `npm audit fix`, nooit met `--force`. Alleen als lint, typecheck, tests en build slagen. Staat er nog een beveiligings-PR open, dan maakt hij geen nieuwe.
 
+## Actions vastgezet, Dependabot en CSP (2026-11-13)
+
+- **Vastgezet op commit.** Elke externe action in `.github/workflows/` staat op een volledige commit-SHA, met de versie als commentaar (`uses: actions/checkout@<sha> # v5.1.0`). Een gewijzigde tag kan zo geen andere code in onze workflows brengen.
+- **Dependabot** (`.github/dependabot.yml`) kijkt elke maandag of er nieuwe versies van die actions zijn en opent dan één PR, met label `beveiliging`. npm-pakketten blijven bij deze controle (`security.yml`).
+- **Content-Security-Policy-Report-Only** staat naast de bestaande `frame-ancestors`-regel (`src/security/csp.ts`, met tests). De browser blokkeert niets en meldt een overtreding alleen in de console. Er is geen report-uri. Zie je een week lang geen meldingen op de belangrijkste pagina's, dan kan de policy echt aan; dat is een aparte stap.
+
+**Hoe je de CSP-meldingen bekijkt:** open de site in Chrome, druk op F12, tab *Console*. Een overtreding begint met "[Report Only] Refused to …".
+
 ## Wat jij doet
 
+- **PR van Dependabot** (actions): mergen als de Kwaliteitscontrole groen is. Lees bij een grote versie (bijvoorbeeld v5 naar v6) eerst wat er verandert.
 - **PR mergen** als de Kwaliteitscontrole groen is. Daarmee gaan de updates live.
 - **Grote versies** (major) gaan nooit automatisch, omdat ze code kunnen breken. Vraag Claude om ze één voor één bij te werken als het rapport ze noemt.
 - **Mogelijke sleutel in de code:** vervang de sleutel direct bij de dienst zelf (ook als het een vergissing lijkt) en haal hem uit de code.

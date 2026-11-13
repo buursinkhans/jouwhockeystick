@@ -1,0 +1,20 @@
+# Updates for the GitHub Actions in .github/workflows, which are pinned to a
+# full commit SHA with the version as a comment (security review 2026-11-13).
+# Dependabot keeps both up to date and opens one PR per week. npm packages
+# are not here: security.yml handles those (docs/beveiliging.md).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '05:00'
+      timezone: Europe/Amsterdam
+    groups:
+      actions:
+        patterns: ['*']
+    commit-message:
+      prefix: 'Actions'
+    labels:
+      - beveiliging
