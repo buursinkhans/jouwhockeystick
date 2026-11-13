@@ -454,13 +454,13 @@
       "fout": "Het Metricool-tegoed voor november is op (20 van 20 posts). Niet ingepland; de eigenaar kiest: een andere maand of een groter plan."
     }
   },
-  "laatsteRun": "2026-11-13T21:09:50Z",
+  "laatsteRun": "2026-11-13T22:11:03Z",
   "tegoed": {
     "maand": "2026-11",
     "gebruikt": 20,
     "grens": 20
   },
-  "wijziging": "ca9d0558-ed76-4df6-893c-ceb10d75c8e3",
+  "wijziging": "207f7c51-6625-467f-b6e3-c7f55e595ffa",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
