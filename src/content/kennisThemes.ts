@@ -15,6 +15,7 @@ export const KENNIS_THEMES: ReadonlyArray<{ id: string; heading: string; intro: 
       'hoe-kies-je-de-juiste-hockeystick',
       'hockeystick-lengte-tabel',
       'hockeystick-kinderen-en-beginners',
+      'hockeystick-cadeau',
       'low-bow-vs-mid-bow',
       'meer-carbon-hockeystick-beter',
     ],
