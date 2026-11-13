@@ -4,7 +4,11 @@
 // first argument, default dagcijfers.json) for the routine "Dagbericht"; see
 // docs/marketing/dagbericht.md. A source that fails gets {ok:false, reden}:
 // the others still go through. Counts only, never persons or amounts.
-// Run with: npm run metrics:daily -- out.json
+// The search queries, sources and countries go sealed with VERKOOP_SLEUTEL
+// into a second file (second argument, default dagcijfers-detail.json;
+// security review 2026-11-13). Without the key that file is not written and
+// the run ends with code 2, like a failed source.
+// Run with: npm run metrics:daily -- out.json detail.json
 import { writeFileSync } from 'node:fs';
 import type { z } from 'zod';
 import { sourceLabel } from '../src/analytics-report/conversion';
@@ -13,6 +17,7 @@ import { dayRows, redact, registeredSite, SitesAnswer, TrafficAnswer } from '../
 import {
   compareAll,
   Dagcijfers,
+  splitDagcijfers,
   DAY_MS,
   dateRange,
   fillDays,
@@ -26,6 +31,7 @@ import {
   type QueryRow,
   type SearchDay,
 } from '../src/marketing/dailyMetrics';
+import { seal } from '../src/marketing/seal';
 import { loadSiteConfig } from '../src/marketing/siteConfig';
 import { getToken, readServiceAccount } from '../src/seo/googleAuth';
 
@@ -228,14 +234,21 @@ async function main() {
     bing: await bing(),
   };
   Dagcijfers.parse(out);
-  writeFileSync(process.argv[2] ?? 'dagcijfers.json', `${JSON.stringify(out, null, 1)}\n`);
+  const { publiek, detail } = splitDagcijfers(out);
+  writeFileSync(process.argv[2] ?? 'dagcijfers.json', `${JSON.stringify(publiek, null, 1)}\n`);
+  const passphrase = process.env.VERKOOP_SLEUTEL;
+  if (passphrase) {
+    writeFileSync(process.argv[3] ?? 'dagcijfers-detail.json', `${JSON.stringify(seal(detail, passphrase))}\n`);
+  } else {
+    process.stderr.write('VERKOOP_SLEUTEL ontbreekt (GitHub Secrets): zoektermen, bronnen en landen niet geschreven.\n');
+  }
   const failed = (['posthog', 'google', 'bing'] as const).filter((k) => !out[k].ok);
   for (const k of failed) {
     const p = out[k];
     if (!p.ok) process.stderr.write(`${p.reden}\n`);
   }
   // Exit code 2: written, but one or more sources failed (the workflow still saves the file).
-  if (failed.length) process.exitCode = 2;
+  if (failed.length || !passphrase) process.exitCode = 2;
 }
 
 main().catch((e: unknown) => {

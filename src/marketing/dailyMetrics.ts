@@ -92,6 +92,87 @@ export const Dagcijfers = z.object({
 });
 export type Dagcijfers = z.infer<typeof Dagcijfers>;
 
+/*
+ * The public and the sealed part (security review 2026-11-13, option A of the
+ * owner). The branch social-state is public, so what people searched for,
+ * where visitors came from and their countries travel sealed with
+ * VERKOOP_SLEUTEL (src/marketing/seal.ts), like the sales figures. The daily
+ * totals and comparisons stay readable: the routine Dagbericht writes its
+ * note and push message from those.
+ */
+const Detail = <T extends z.ZodType>(value: T) => z.union([value, z.object({ fout: z.string() })]);
+
+export const DagcijfersPubliek = z.object({
+  versie: z.literal(2),
+  gemaakt: z.string(),
+  site: z.string(),
+  /** Sealed file with the search queries, sources and countries. */
+  detail: z.literal('dagcijfers-detail.json'),
+  posthog: part(
+    z.object({
+      dagen: z.array(PosthogDay),
+      vandaag: PosthogDay.extend({ tot: z.string() }).optional(),
+      vergelijking: z.array(Comparison),
+    }),
+  ),
+  google: part(
+    z.object({
+      dagen: z.array(SearchDay),
+      vergelijking: z.array(Comparison),
+      periode: z.object({ start: z.string(), end: z.string() }),
+    }),
+  ),
+  bing: part(z.object({ dagen: z.array(SearchDay), vergelijking: z.array(Comparison) })),
+});
+export type DagcijfersPubliek = z.infer<typeof DagcijfersPubliek>;
+
+export const DagcijfersDetail = z.object({
+  versie: z.literal(1),
+  gemaakt: z.string(),
+  /** Sources and countries of yesterday only; { fout } when PostHog gave no figures. */
+  posthog: Detail(z.object({ bronnen: z.array(Count), landen: z.array(Count) })),
+  google: Detail(
+    z.object({
+      periode: z.object({ start: z.string(), end: z.string() }),
+      topZoektermen: z.array(QueryRow),
+      stijgers: z.array(Riser),
+    }),
+  ),
+});
+export type DagcijfersDetail = z.infer<typeof DagcijfersDetail>;
+
+/** Splits the full figures into the readable file and the part that is sealed. */
+export function splitDagcijfers(full: Dagcijfers): { publiek: DagcijfersPubliek; detail: DagcijfersDetail } {
+  const { posthog: ph, google: g } = full;
+  const publiek: DagcijfersPubliek = {
+    versie: 2,
+    gemaakt: full.gemaakt,
+    site: full.site,
+    detail: 'dagcijfers-detail.json',
+    posthog: ph.ok
+      ? {
+          ok: true,
+          value: {
+            dagen: ph.value.dagen,
+            ...(ph.value.vandaag ? { vandaag: ph.value.vandaag } : {}),
+            vergelijking: ph.value.vergelijking,
+          },
+        }
+      : ph,
+    google: g.ok ? { ok: true, value: { dagen: g.value.dagen, vergelijking: g.value.vergelijking, periode: g.value.periode } } : g,
+    bing: full.bing,
+  };
+  const detail: DagcijfersDetail = {
+    versie: 1,
+    gemaakt: full.gemaakt,
+    posthog: ph.ok ? { bronnen: ph.value.bronnen, landen: ph.value.landen } : { fout: ph.reden },
+    google: g.ok
+      ? { periode: g.value.periode, topZoektermen: g.value.topZoektermen, stijgers: g.value.stijgers }
+      : { fout: g.reden },
+  };
+  return { publiek: DagcijfersPubliek.parse(publiek), detail: DagcijfersDetail.parse(detail) };
+}
+
 export const isoDay = (time: number) => new Date(time).toISOString().slice(0, 10);
 
 /** All dates from `from` up to and including `to` (YYYY-MM-DD, UTC arithmetic). */

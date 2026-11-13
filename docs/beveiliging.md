@@ -18,6 +18,14 @@ De logica staat in `src/security/securityReport.ts` (met tests), het ophalen in 
 1. **Rapport** in het open issue met label `beveiliging` (één issue dat elke week wordt bijgewerkt). De Orchestrator leest het mee en zet echte problemen onder *Voor jou* in de weekplanning.
 2. **Pull request** (branch `beveiliging/<datum>`) als er updates zijn binnen de versiegrenzen in `package.json`: `npm update` plus `npm audit fix`, nooit met `--force`. Alleen als lint, typecheck, tests en build slagen. Staat er nog een beveiligings-PR open, dan maakt hij geen nieuwe.
 
+## Dagcijfers versleuteld (2026-11-13)
+
+De branch `social-state` is openbaar. Daarom staan daar de zoektermen, stijgers, bronnen en landen van de dagcijfers niet meer leesbaar. Ze gaan versleuteld met `VERKOOP_SLEUTEL` in `video/studio/state/dagcijfers-detail.json`, met dezelfde code en hetzelfde formaat als `verkoop.json` (`src/marketing/seal.ts`: AES-256-GCM, sleutel via PBKDF2-SHA256). De dagtotalen in `dagcijfers.json` blijven leesbaar, zodat de geplande taak Dagbericht er zijn bericht en melding van kan maken.
+
+- Nieuwe bestanden gebruiken 600.000 rondes (OWASP). Het aantal rondes staat in het bestand, dus oude bestanden met 310.000 rondes blijven leesbaar.
+- Het tabblad Vandaag in de Marketingstudio opent het detail met de sleutel die het tabblad Verkoop al bewaart. Zonder sleutel staat er dat het versleuteld is.
+- Oude, leesbare versies van `dagcijfers.json` staan nog in de geschiedenis van `social-state`. Die is niet herschreven; of dat moet, beslist de eigenaar.
+
 ## Wat jij doet
 
 - **PR mergen** als de Kwaliteitscontrole groen is. Daarmee gaan de updates live.

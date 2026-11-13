@@ -2,13 +2,17 @@
  * Seals a JSON object with a passphrase, so figures that may not be public
  * (amounts, commission) can travel through the public repository. PBKDF2-SHA256
  * derives an AES-256-GCM key; the browser opens it with WebCrypto using the same
- * parameters (Marketingstudio, tab Verkoop). The passphrase is a GitHub Secret
- * (VERKOOP_SLEUTEL) and is typed once by the owner in the studio; it never
- * appears in code, logs or the sealed file.
+ * parameters (Marketingstudio, tabs Verkoop and Vandaag). The passphrase is a GitHub
+ * Secret (VERKOOP_SLEUTEL) and is typed once by the owner in the studio; it
+ * never appears in code, logs or the sealed file.
+ *
+ * New files use 600,000 rounds (OWASP 2023 for PBKDF2-HMAC-SHA256; security
+ * review 2026-11-13). The number of rounds is stored in the file, so older
+ * files with 310,000 rounds still open, here and in the browser.
  */
 import { createCipheriv, createDecipheriv, pbkdf2Sync, randomBytes } from 'node:crypto';
 
-export const SEAL_ITERATIONS = 310_000;
+export const SEAL_ITERATIONS = 600_000;
 
 export type Sealed = {
   versie: 1;
@@ -25,16 +29,16 @@ export type Sealed = {
 
 const key = (passphrase: string, salt: Buffer, iter: number) => pbkdf2Sync(passphrase, salt, iter, 32, 'sha256');
 
-export function seal(value: unknown, passphrase: string, now = new Date()): Sealed {
+export function seal(value: unknown, passphrase: string, now = new Date(), iter = SEAL_ITERATIONS): Sealed {
   if (passphrase.length < 16) throw new Error('VERKOOP_SLEUTEL is te kort: gebruik minstens 16 tekens.');
   const salt = randomBytes(16);
   const iv = randomBytes(12);
-  const cipher = createCipheriv('aes-256-gcm', key(passphrase, salt, SEAL_ITERATIONS), iv);
+  const cipher = createCipheriv('aes-256-gcm', key(passphrase, salt, iter), iv);
   const body = Buffer.concat([cipher.update(JSON.stringify(value), 'utf8'), cipher.final(), cipher.getAuthTag()]);
   return {
     versie: 1,
     alg: 'PBKDF2-SHA256/AES-256-GCM',
-    iter: SEAL_ITERATIONS,
+    iter,
     salt: salt.toString('base64'),
     iv: iv.toString('base64'),
     data: body.toString('base64'),
