@@ -45,6 +45,8 @@ const AGENTS: Agent[] = [
   { id: 'links', naam: 'Interne links & CRO', rol: 'Content', soort: 'AI (Claude)', start: 'Tweewekelijks', workflow: null, status: 'Gepland' },
   // Runs as a scheduled Claude task, not a GitHub workflow, so there are no runs to read here.
   { id: 'distributie', naam: 'Instagram-planner (distributie)', rol: 'Marketing', soort: 'AI (Claude)', start: 'Elke vrijdag; nieuwe pagina\'s krijgen voorrang', workflow: null, status: 'Actief' },
+  // Scheduled Claude task (decision log 2026-11-13): push notification on new comments, no runs to read here.
+  { id: 'reacties', naam: 'Reactie-wachter', rol: 'Marketing', soort: 'AI (Claude)', start: 'Vier keer per dag', workflow: null, status: 'Actief' },
   { id: 'orchestrator', naam: 'Orchestrator', rol: 'Regie', soort: 'AI (Claude)', start: 'Elke maandag', workflow: 'orchestrator.yml' },
   { id: 'nieuwsbrief', naam: 'Nieuwsbrief (Brevo)', rol: 'Marketing', soort: 'AI (Claude)', start: 'Wekelijks, vanaf ±50 inschrijvers', workflow: null, status: 'Gepland' },
   { id: 'inbox', naam: 'Inbox (Brevo)', rol: 'Marketing', soort: 'AI (Claude)', start: 'Bij binnenkomende mail', workflow: null, status: 'Gepland' },
