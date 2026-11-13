@@ -1,11 +1,10 @@
 # Daily figures (read-only): PostHog, Search Console and Bing, as one JSON file
-# with the totals (dagcijfers.json) plus the search queries, sources and
-# countries, sealed (dagcijfers-detail.json; security review 2026-11-13), and
-# the sales per partner, sealed (verkoop.json),
-# on the branch social-state (video/studio/state/dagcijfers.json). The routine
-# "Dagbericht" reads it and writes the daily note in Agent-orkest
-# (docs/marketing/dagbericht.md). Counts only. Netlify skips video/, and only
-# pushes to main start CI.
+# (video/studio/state/dagcijfers.json) with metadata without any figure and all
+# figures sealed with VERKOOP_SLEUTEL (security review 2026-11-13), and the
+# sales per partner, sealed (verkoop.json), on the branch social-state. The
+# routine "Dagbericht" copies them unopened into the Marketingstudio, where the
+# owner's browser opens them (docs/marketing/dagbericht.md). Netlify skips
+# video/, and only pushes to main start CI.
 name: Dagcijfers
 
 on:
@@ -46,15 +45,26 @@ jobs:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
           GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
           BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
-          # Seals the search queries, sources and countries before they leave this step.
+          # Seals every figure before it leaves this step.
           VERKOOP_SLEUTEL: ${{ secrets.VERKOOP_SLEUTEL }}
-        # Exit code 2 = written, but a source failed (or the key is missing): save the file anyway, fail the run afterwards.
+        # Exit code 2 = written, but a source failed: save the file anyway, fail the run afterwards.
+        # Exit code 3 = the key is missing: nothing written, nothing saved, the run fails afterwards.
         run: |
           set +e
-          npm run --silent metrics:daily -- "$RUNNER_TEMP/dagcijfers.json" "$RUNNER_TEMP/dagcijfers-detail.json"
+          npm run --silent metrics:daily -- "$RUNNER_TEMP/dagcijfers.json"
           code=$?
           echo "code=$code" >> "$GITHUB_ENV"
-          [ "$code" -eq 0 ] || [ "$code" -eq 2 ]
+          [ "$code" -eq 0 ] || [ "$code" -eq 2 ] || [ "$code" -eq 3 ]
+      - name: Alleen versleuteld?
+        # Last check before the public branch: the file has a sealed part and no readable figures.
+        run: |
+          [ -f "$RUNNER_TEMP/dagcijfers.json" ] || exit 0
+          node -e '
+            const f = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+            const plain = ["posthog", "google", "bing", "detail"].filter((k) => k in f);
+            if (f.versie !== 3 || !f.versleuteld || f.versleuteld.alg !== "PBKDF2-SHA256/AES-256-GCM" || plain.length) {
+              console.error("dagcijfers.json is niet (alleen) versleuteld; niet opgeslagen."); process.exit(1);
+            }' "$RUNNER_TEMP/dagcijfers.json"
       - name: Verkoop ophalen (versleuteld)
         # Amounts per partner, sealed with VERKOOP_SLEUTEL before they leave this step
         # (docs/marketing/dagbericht.md, Verkoop). Without the key: nothing is written.
@@ -79,12 +89,12 @@ jobs:
           if git fetch -q origin social-state; then git checkout -q -B social-state origin/social-state; else git checkout -q -b social-state; fi
           mkdir -p video/studio/state
           for attempt in 1 2 3; do
-            cp "$RUNNER_TEMP/dagcijfers.json" video/studio/state/dagcijfers.json
-            git add video/studio/state/dagcijfers.json
-            if [ -f "$RUNNER_TEMP/dagcijfers-detail.json" ]; then
-              cp "$RUNNER_TEMP/dagcijfers-detail.json" video/studio/state/dagcijfers-detail.json
-              git add video/studio/state/dagcijfers-detail.json
+            if [ -f "$RUNNER_TEMP/dagcijfers.json" ]; then
+              cp "$RUNNER_TEMP/dagcijfers.json" video/studio/state/dagcijfers.json
+              git add video/studio/state/dagcijfers.json
             fi
+            # Since 2026-11-14 everything is in dagcijfers.json; the separate detail file goes.
+            if [ -f video/studio/state/dagcijfers-detail.json ]; then git rm -q video/studio/state/dagcijfers-detail.json; fi
             if [ -f "$RUNNER_TEMP/verkoop.json" ]; then
               cp "$RUNNER_TEMP/verkoop.json" video/studio/state/verkoop.json
               git add video/studio/state/verkoop.json
@@ -96,7 +106,8 @@ jobs:
             [ "$attempt" -eq 3 ] && { echo "Schrijven lukte niet na 3 pogingen." >&2; exit 1; }
           done
       - name: Bron mislukt?
-        if: env.code == '2' || env.sales == '2'
+        if: env.code == '2' || env.code == '3' || env.sales == '2'
         run: |
+          if [ "$code" = "3" ]; then echo "VERKOOP_SLEUTEL ontbreekt: geen dagcijfers geschreven." >&2; exit 1; fi
           echo "Eén of meer bronnen gaven geen cijfers; zie de stap 'Cijfers ophalen'. Het bestand staat er wel." >&2
           exit 1

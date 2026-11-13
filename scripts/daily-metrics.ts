@@ -1,14 +1,14 @@
 // Daily figures (read-only): PostHog (yesterday and the 34 days before, in
 // Amsterdam days, plus today so far), Search Console (daily totals plus the queries of the last
 // 7 available days) and Bing (daily totals). Writes one JSON file (path as
-// first argument, default dagcijfers.json) for the routine "Dagbericht"; see
-// docs/marketing/dagbericht.md. A source that fails gets {ok:false, reden}:
-// the others still go through. Counts only, never persons or amounts.
-// The search queries, sources and countries go sealed with VERKOOP_SLEUTEL
-// into a second file (second argument, default dagcijfers-detail.json;
-// security review 2026-11-13). Without the key that file is not written and
-// the run ends with code 2, like a failed source.
-// Run with: npm run metrics:daily -- out.json detail.json
+// first argument, default dagcijfers.json): metadata without any figure, plus
+// all figures sealed with VERKOOP_SLEUTEL (security review 2026-11-13; see
+// dagcijfersMeta in src/marketing/dailyMetrics.ts and docs/marketing/dagbericht.md).
+// A source that fails gets {ok:false, reden}: the others still go through.
+// Counts only, never persons or amounts. Exit code 2: written, but a source
+// failed. Exit code 3: VERKOOP_SLEUTEL is missing; nothing is written, so no
+// readable figure ever reaches the public branch.
+// Run with: npm run metrics:daily -- out.json
 import { writeFileSync } from 'node:fs';
 import type { z } from 'zod';
 import { sourceLabel } from '../src/analytics-report/conversion';
@@ -17,7 +17,7 @@ import { dayRows, redact, registeredSite, SitesAnswer, TrafficAnswer } from '../
 import {
   compareAll,
   Dagcijfers,
-  splitDagcijfers,
+  dagcijfersMeta,
   DAY_MS,
   dateRange,
   fillDays,
@@ -234,21 +234,21 @@ async function main() {
     bing: await bing(),
   };
   Dagcijfers.parse(out);
-  const { publiek, detail } = splitDagcijfers(out);
-  writeFileSync(process.argv[2] ?? 'dagcijfers.json', `${JSON.stringify(publiek, null, 1)}\n`);
   const passphrase = process.env.VERKOOP_SLEUTEL;
-  if (passphrase) {
-    writeFileSync(process.argv[3] ?? 'dagcijfers-detail.json', `${JSON.stringify(seal(detail, passphrase))}\n`);
-  } else {
-    process.stderr.write('VERKOOP_SLEUTEL ontbreekt (GitHub Secrets): zoektermen, bronnen en landen niet geschreven.\n');
+  if (!passphrase) {
+    process.stderr.write('VERKOOP_SLEUTEL ontbreekt (GitHub Secrets): geen dagcijfers geschreven.\n');
+    process.exitCode = 3;
+    return;
   }
+  const file = { ...dagcijfersMeta(out, shift(today, -1)), versleuteld: seal(out, passphrase) };
+  writeFileSync(process.argv[2] ?? 'dagcijfers.json', `${JSON.stringify(file)}\n`);
   const failed = (['posthog', 'google', 'bing'] as const).filter((k) => !out[k].ok);
   for (const k of failed) {
     const p = out[k];
     if (!p.ok) process.stderr.write(`${p.reden}\n`);
   }
   // Exit code 2: written, but one or more sources failed (the workflow still saves the file).
-  if (failed.length || !passphrase) process.exitCode = 2;
+  if (failed.length) process.exitCode = 2;
 }
 
 main().catch((e: unknown) => {
