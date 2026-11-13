@@ -5,6 +5,7 @@
 # solved safely, or small updates (patch/minor within the current version
 # ranges) are available, it opens one pull request, but only if lint,
 # typecheck, tests and build pass. Never merges; major updates stay manual.
+# Also runs a passive ZAP baseline scan of the live site (only looks).
 # See docs/beveiliging.md and scripts/security-check.ts.
 name: Beveiliging
 
@@ -28,16 +29,30 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 22
           cache: npm
       - run: npm ci
 
+      # Passive OWASP ZAP baseline scan of the live site (security review
+      # 2026-11-13): it only requests pages and reads the responses, no attacks.
+      # Never fails the workflow and writes no issue of its own; the result goes
+      # into the report below. Accepted alerts: .zap/rules.tsv.
+      - name: Passieve scan (ZAP)
+        continue-on-error: true
+        uses: zaproxy/action-baseline@de8ad967d3548d44ef623df22cf95c3b0baf8b25 # v0.15.0
+        with:
+          target: https://jouwhockeystick.nl
+          rules_file_name: .zap/rules.tsv
+          fail_action: false
+          allow_issue_writing: false
+          cmd_options: '-I'
+
       - name: Controle uitvoeren
         id: check
-        run: npm run --silent security:check -- "$RUNNER_TEMP/report.md"
+        run: npm run --silent security:check -- "$RUNNER_TEMP/report.md" report_json.json
 
       - name: Rapport in issue zetten
         env:

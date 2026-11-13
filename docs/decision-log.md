@@ -3179,6 +3179,13 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Afwegingen:** de agents kunnen hun eigen fouten niet meer testen, dus er komen vaker concept-PR's. De action kan reacties niet filteren op OWNER, MEMBER of COLLABORATOR; `claude.yml` filtert daarom op naam (`buursinkhans`, `claude[bot]`, `github-actions[bot]`). `claude.yml` houdt de Claude GitHub App (en `id-token`), omdat PR's met de token van de job CI en review niet starten. Na de agent draait in die job geen git meer: de wijzigingen gaan als tar van één map, en uitpakken weigert links, `..` en paden buiten die map.
 - **Na de merge:** de eigenaar start elke catalogusagent één keer met de hand om de nieuwe opzet te zien werken.
 
+## 2026-11-13 — Beveiliging: actions vastgezet, Dependabot, ZAP-scan en CSP report-only (review 2/3)
+
+- **Wat:** alle externe actions op een volledige commit-SHA met de versie als commentaar; `.github/dependabot.yml` voor github-actions (maandag); een passieve OWASP ZAP baseline-scan in `security.yml` met een kort blok onder Samenvatting in het rapport (`src/security/zapReport.ts`) en geaccepteerde meldingen in `.zap/rules.tsv`; een `Content-Security-Policy-Report-Only`-header naast de bestaande `frame-ancestors`-regel (`src/security/csp.ts`).
+- **Waarom:** beveiligingsreview van 2026-11-13. Een tag als `v1` kan verschuiven naar andere code; een SHA niet. De ZAP-scan en de CSP laten zien wat er aan de site te verbeteren is, zonder iets te breken.
+- **CSP-keuzes:** `'unsafe-inline'` voor scripts en stijlen, omdat Next.js inline scripts zet en een nonce elke pagina dynamisch maakt; afbeeldingen van elk https-adres, omdat productfoto's van veel winkels en merken komen; scripts alleen van de eigen site en Simple Analytics; verbindingen alleen naar de eigen site (PostHog via `/p8k`) en de Simple Analytics-queue. Geen report-uri: de eigenaar kijkt in de console.
+- **Grenzen:** de ZAP-scan kijkt alleen (geen actieve scan) en laat de workflow nooit falen. Het Docker-image van ZAP (`zaproxy:stable`) staat niet vast; dat bepaalt de action. `.zap/rules.tsv` kan na de eerste run nog een paar regels nodig hebben.
+
 ## 2026-11-13 — Beveiliging: dagcijfers versleuteld (review 3/3)
 
 - **Wat:** de zoektermen, stijgers, bronnen en landen uit de dagcijfers gaan versleuteld naar `video/studio/state/dagcijfers-detail.json` op `social-state`, met de code en het formaat van `verkoop.json` (`VERKOOP_SLEUTEL`). `dagcijfers.json` houdt alleen de dagtotalen en vergelijkingen (`versie: 2`, `splitDagcijfers` in `src/marketing/dailyMetrics.ts`). Nieuwe versleutelde bestanden gebruiken 600.000 PBKDF2-rondes; oude met 310.000 blijven leesbaar. Het tabblad Vandaag opent het detail met de sleutel van het tabblad Verkoop.
