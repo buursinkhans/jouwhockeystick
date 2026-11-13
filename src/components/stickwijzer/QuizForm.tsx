@@ -30,6 +30,7 @@ import { trackEvent } from '@/lib/analytics/track';
 import { shareHref } from '@/lib/shareAdvice';
 import { remainingTimeText, routeStepRange } from '@/content/stickwijzer/progress';
 import { nextOpenQuestion } from '@/content/stickwijzer/flow';
+import { answersFromSearch } from '@/content/stickwijzer/prefill';
 import { EXTRA_QUESTIONS_HEADING } from '@/content/stickwijzer/quick';
 import { Button } from '@/components/ui/Button';
 import { QuestionField, type AnswerValue } from './QuestionField';
@@ -252,11 +253,14 @@ export function QuizForm() {
     };
   }, [height_cm, height_uncertain, age_band, experience_seasons, first_touch_confidence, core_skills_stage, budget_band]);
 
-  // "/stickwijzer?snel" (the homepage link for parents) opens with quick advice chosen.
+  // "/stickwijzer?snel" (the homepage link for parents) opens with quick advice chosen;
+  // "&voor=kind" (the gift article) also answers "voor wie" with a child. Answers the
+  // visitor already gave stay as they are.
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).has('snel')) {
+    const prefill = answersFromSearch(window.location.search);
+    if (Object.keys(prefill).length > 0) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- the URL is only known in the browser.
-      setAnswers((current) => (current.route_self_select ? current : { ...current, route_self_select: 'quick' }));
+      setAnswers((current) => ({ ...prefill, ...current }));
     }
   }, []);
 

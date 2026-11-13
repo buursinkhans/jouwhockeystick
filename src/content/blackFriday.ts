@@ -195,6 +195,12 @@ export const BLACK_FRIDAY = {
         link: 'Sticks voor kinderen',
       },
       {
+        title: 'Een stick als cadeau',
+        body: 'Koop je een stick voor Sinterklaas of kerst zonder dat het kind erbij is? Vraag de lichaamslengte en of het veld of zaal speelt, en bewaar het bonnetje.',
+        href: '/kennis/hockeystick-cadeau',
+        link: 'Stick als cadeau',
+      },
+      {
         title: 'Veld of zaal',
         body: 'Een aparte zaalstick is niet verplicht: je veldstick is een prima start. Een zaalstick is vooral iets voor wie vaker de zaal in gaat.',
         href: '/kennis/veldstick-zaalhockey',
