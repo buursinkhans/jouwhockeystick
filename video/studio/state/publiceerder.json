@@ -424,7 +424,32 @@
     },
     "posts/20261117-low-of-mid-bow": {
       "render": {
-        "gestart": "2026-11-13T07:40:27Z"
+        "gestart": "2026-11-13T07:40:27Z",
+        "klaar": "2026-11-13T07:41:28Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "20261117-low-of-mid-bow-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261117-low-of-mid-bow-1.png"
+          },
+          {
+            "name": "20261117-low-of-mid-bow-2.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261117-low-of-mid-bow-2.png"
+          },
+          {
+            "name": "20261117-low-of-mid-bow-3.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261117-low-of-mid-bow-3.png"
+          },
+          {
+            "name": "20261117-low-of-mid-bow-4.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261117-low-of-mid-bow-4.png"
+          },
+          {
+            "name": "20261117-low-of-mid-bow-5.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261117-low-of-mid-bow-5.png"
+          }
+        ]
       },
       "fout": null
     }
@@ -435,7 +460,7 @@
     "gebruikt": 20,
     "grens": 20
   },
-  "wijziging": "40cc4d61-de0f-46b0-b894-2432762d7e97",
+  "wijziging": "6aaf0a97-a078-46d0-83e0-55b33914ac96",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
