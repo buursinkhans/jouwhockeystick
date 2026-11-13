@@ -81,6 +81,7 @@ import { grays200iUltrabowIndoor } from './products/grays-200i-ultrabow-indoor';
 import { graysDb2xiDynabowIndoor } from './products/grays-db2xi-dynabow-indoor';
 import { graysJb3xiJumbowIndoor } from './products/grays-jb3xi-jumbow-indoor';
 import { adidasEstro10JuniorIndoor } from './products/adidas-estro-10-junior-indoor';
+import { adidasEstro60Indoor } from './products/adidas-estro-60-indoor';
 import { indianMaharadjaSwiftJuniorIndoor } from './products/indian-maharadja-swift-junior-indoor';
 import { y1IndoorMidBowW1 } from './products/y1-indoor-mid-bow-w1';
 import { y1IndoorLowBowC50 } from './products/y1-indoor-low-bow-c50';
@@ -216,13 +217,14 @@ const ALL_PRODUCTS: Product[] = [
   braboOgeezPinkAquaJuniorIndoor,
   indianMaharadjaBlackSparkWoodIndoor,
   indianMaharadjaGravity00Midbow,
+  adidasEstro60Indoor,
 ];
 
 /**
  * Bump whenever product data changes. Stamped on every advice result so an
  * old result can be traced back to the catalog it was calculated from.
  */
-export const CATALOG_VERSION = '2026-10-20';
+export const CATALOG_VERSION = '2026-11-13';
 
 const VERIFICATION_FRESHNESS_MONTHS = 12;
 
