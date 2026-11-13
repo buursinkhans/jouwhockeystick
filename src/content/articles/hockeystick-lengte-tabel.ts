@@ -1,7 +1,16 @@
-import { LENGTH_GUIDE, alsoFitsInch } from '@/advice-engine/sizeAdvice';
+import { LENGTH_GUIDE, alsoFitsInch, getSizeAdvice } from '@/advice-engine/sizeAdvice';
 import type { Article } from '../types';
 import { ZAAL_SOURCES } from '../zaal';
 import { AGE_TABLE_ROWS, CHILD_HEIGHT_SOURCE } from '../childHeight';
+import { formatDutchDate } from '../schedule';
+import {
+  COMPARISON_COLUMNS,
+  COMPARISON_HEIGHTS,
+  COMPARISON_ROWS,
+  SIZE_CHARTS,
+  chartRow,
+  ourAdvice,
+} from '../sizeCharts';
 
 const INTERSPORT_STICKS = 'https://intersport.nl/collections/hockeysticks';
 const INTERSPORT_GUIDE =
@@ -38,6 +47,19 @@ export const LENGTH_ROWS = LENGTH_GUIDE.map((band, index) => {
     also.length > 0 ? also.map(formatInch).join(' of ') : '–',
   ];
 });
+
+/** The comparison heights where the charts name different sizes, and where they all agree with our first size. */
+const chartSizes = (height: number) => SIZE_CHARTS.map((chart) => chartRow(chart, height)?.sizes.join('/') ?? '');
+const ourFirst = (height: number) => ourAdvice(height).split(' ')[0]!.replace(',', '.');
+const AGREE = COMPARISON_HEIGHTS.filter((h) => chartSizes(h).every((sizes) => sizes === ourFirst(h)));
+const DIFFER = COMPARISON_HEIGHTS.filter((h) => new Set([...chartSizes(h), ourFirst(h)]).size > 1);
+const list = (values: readonly (number | string)[]) =>
+  values.length > 1 ? `${values.slice(0, -1).join(', ')} en ${values.at(-1)}` : values.join('');
+const CHARTS_READ_ON = formatDutchDate(SIZE_CHARTS.map((chart) => chart.readOn).sort().at(-1)!);
+
+/** The adult band around 175 cm and what the stickwijzer names there (from LENGTH_GUIDE and getSizeAdvice). */
+const BAND_175 = LENGTH_GUIDE.find((band) => 175 >= band.minCm && 175 <= band.maxCm)!;
+const ADVICE_175 = getSizeAdvice(175);
 
 export const hockeystickLengteTabel: Article = {
   slug: 'hockeystick-lengte-tabel',
@@ -120,10 +142,51 @@ export const hockeystickLengteTabel: Article = {
       ],
     },
     {
+      heading: 'Wat zeggen de maattabellen van merken?',
+      level: 2,
+      body: [
+        `Hieronder staan drie maattabellen van merken naast onze richtlijn, zoals ze op de eigen site van het merk staan (gelezen op ${CHARTS_READ_ON}). Bij "Onze richtlijn" staat de maat die de stickwijzer geeft, met tussen haakjes de maat die hij als alternatief noemt.`,
+        {
+          type: 'table',
+          columns: COMPARISON_COLUMNS,
+          rows: COMPARISON_ROWS,
+        },
+        `Alle maten in inch. Bij ${list(AGREE)} cm noemen alle tabellen dezelfde maat als wij. Bij ${list(DIFFER)} cm lopen ze uiteen. De bronnen staan onderaan dit artikel.`,
+      ],
+    },
+    {
+      heading: 'Waarom verschillen de tabellen?',
+      level: 3,
+      body: [
+        'Een maattabel is een richtlijn, en elk merk trekt de grenzen zelf. Ze maken ook niet dezelfde lengtes: Osaka noemt voor de langste spelers 38 inch, Grays en wij 38,5. Princess geeft tussen 1,60 en 1,70 meter en vanaf 1,80 meter twee maten.',
+        'Tussen 1,70 en 1,80 meter zijn de tabellen het eens. Daaronder noemt Princess ook 36 inch, en Osaka geeft al vanaf 1,52 meter 36,5 inch, waar de andere 35 noemen. Vanaf 1,80 meter lopen ze verder uiteen.',
+      ],
+    },
+    {
+      heading: 'Tussen twee maten: 36,5 of 37,5 inch?',
+      level: 3,
+      body: [
+        'De stickwijzer kijkt alleen naar de lichaamslengte. Zit je in de bovenste helft van een lengteband voor volwassenen, dan noemt hij de langere maat als alternatief; zit je in de onderste helft, dan de kortere. Bij kinderen is het alternatief altijd de kortere maat. Verschilt je huidige stick meer dan een inch van het advies, dan zegt hij dat erbij.',
+        'Onze tip als je tussen twee maten zit: een kortere stick houdt de bal dichter bij je lichaam, wat helpt bij aannemen en dribbelen. Een langere geeft meer bereik. Kies op wat je in een wedstrijd het meest doet, en laat je positie daarbij niet de doorslag geven. Kun je beide maten proberen, doe dan de houdingscheck van hierboven met allebei.',
+      ],
+    },
+    {
       heading: 'Geldt dezelfde lengte in de zaal?',
       level: 2,
       body: [
         'Ja, als startpunt wel. Onze [zaalkeuze](/zaalsticks) gebruikt voor kinderen dezelfde tabel. Volwassen zaalsticks vind je meestal in 36,5 en 37,5 inch.',
+      ],
+    },
+    {
+      heading: 'Veelgestelde vragen',
+      level: 2,
+      body: [],
+    },
+    {
+      heading: 'Ik ben 175 cm, welke sticklengte?',
+      level: 3,
+      body: [
+        `Bij 175 cm noemen onze richtlijn en de tabellen van ${list(SIZE_CHARTS.map((chart) => chart.name))} allemaal ${formatInch(ADVICE_175.primaryInch)} inch. Je zit wel in de bovenste helft van onze band van ${BAND_175.minCm} tot ${BAND_175.maxCm} cm. Daarom noemt de stickwijzer ${formatInch(ADVICE_175.alternativeInch ?? ADVICE_175.primaryInch)} inch als alternatief. Twijfel je, begin dan met ${formatInch(ADVICE_175.primaryInch)} inch en probeer de langere als je meer bereik wilt.`,
       ],
     },
     {
@@ -137,7 +200,7 @@ export const hockeystickLengteTabel: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-11-11',
+  updatedAt: '2026-11-13',
   sources: [
     {
       label:
@@ -153,6 +216,7 @@ export const hockeystickLengteTabel: Article = {
     },
     { label: CHILD_HEIGHT_SOURCE.guidelineLabel, url: CHILD_HEIGHT_SOURCE.guidelineUrl },
     { label: CHILD_HEIGHT_SOURCE.studyLabel, url: CHILD_HEIGHT_SOURCE.studyUrl },
+    ...SIZE_CHARTS.map((chart) => ({ label: `${chart.label}, gelezen op ${formatDutchDate(chart.readOn)}`, url: chart.url })),
     { label: ZAAL_SOURCES.fieldRules.label, url: ZAAL_SOURCES.fieldRules.url },
     {
       label:
