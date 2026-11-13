@@ -4,7 +4,7 @@ De bron van de Marketingstudio, het ene dashboard van de eigenaar: https://claud
 
 ## Wat de pagina doet
 
-Tabbladen bovenaan (sinds 2026-11-12, samengevoegd met Agent-orkest): **Vandaag** (dagcijfers, dagbericht en Vraag Noor, zie [dagbericht.md](../../docs/marketing/dagbericht.md); de zoektermen, bronnen en landen komen versleuteld binnen en openen met de sleutel van Verkoop, sinds 2026-11-13), **Verkoop** (per partner, versleuteld; zelfde document), **Social** (goedkeuren, hieronder), en **Stack**, **Eén post**, **Week** en **Ritme** (de agentstructuur, met Presenteer voor demo's). De CSS van Social staat met CSS nesting onder `#view-social`, zodat de weergaven elkaar niet raken.
+Tabbladen bovenaan (sinds 2026-11-12, samengevoegd met Agent-orkest): **Vandaag** (dagcijfers, dagbericht en Vraag Noor, zie [dagbericht.md](../../docs/marketing/dagbericht.md); alle dagcijfers komen versleuteld binnen en openen met de sleutel van Verkoop, sinds 2026-11-14; het dagbericht schrijft Noor bij het eerste openen van de dag), **Verkoop** (per partner, versleuteld; zelfde document), **Social** (goedkeuren, hieronder), en **Stack**, **Eén post**, **Week** en **Ritme** (de agentstructuur, met Presenteer voor demo's). De CSS van Social staat met CSS nesting onder `#view-social`, zodat de weergaven elkaar niet raken.
 
 Social:
 

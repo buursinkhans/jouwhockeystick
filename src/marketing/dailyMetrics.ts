@@ -93,84 +93,56 @@ export const Dagcijfers = z.object({
 export type Dagcijfers = z.infer<typeof Dagcijfers>;
 
 /*
- * The public and the sealed part (security review 2026-11-13, option A of the
- * owner). The branch social-state is public, so what people searched for,
- * where visitors came from and their countries travel sealed with
- * VERKOOP_SLEUTEL (src/marketing/seal.ts), like the sales figures. The daily
- * totals and comparisons stay readable: the routine Dagbericht writes its
- * note and push message from those.
+ * What goes on the public branch social-state (security review 2026-11-13,
+ * PR A; owner's choice: option 2 with flags). One file: metadata without any
+ * figure, plus all figures sealed with VERKOOP_SLEUTEL (src/marketing/seal.ts).
+ * The routine Dagbericht cannot open it: it copies the file unchanged into the
+ * Marketingstudio, where the owner's browser opens it and Noor writes the note.
+ * The flags in `opvallend` (direction only, never a number) let the routine
+ * still send a push message on an outlier.
  */
-const Detail = <T extends z.ZodType>(value: T) => z.union([value, z.object({ fout: z.string() })]);
+export const SEALED_HEADLINES = {
+  bezoekers: ['posthog', 'bezoekers'],
+  wijzerKlaar: ['posthog', 'wijzerKlaar'],
+  winkelklikken: ['posthog', 'winkelklikken'],
+  googleKlikken: ['google', 'klikken'],
+} as const;
 
-export const DagcijfersPubliek = z.object({
-  versie: z.literal(2),
+const Direction = z.enum(['hoger', 'lager']).nullable();
+
+export const DagcijfersMeta = z.object({
+  versie: z.literal(3),
   gemaakt: z.string(),
-  site: z.string(),
-  /** Sealed file with the search queries, sources and countries. */
-  detail: z.literal('dagcijfers-detail.json'),
-  posthog: part(
-    z.object({
-      dagen: z.array(PosthogDay),
-      vandaag: PosthogDay.extend({ tot: z.string() }).optional(),
-      vergelijking: z.array(Comparison),
-    }),
-  ),
-  google: part(
-    z.object({
-      dagen: z.array(SearchDay),
-      vergelijking: z.array(Comparison),
-      periode: z.object({ start: z.string(), end: z.string() }),
-    }),
-  ),
-  bing: part(z.object({ dagen: z.array(SearchDay), vergelijking: z.array(Comparison) })),
+  /** The day the site figures are about (yesterday, Amsterdam). */
+  dag: z.string(),
+  /** Per source whether it gave figures. */
+  bronnen: z.object({ posthog: z.boolean(), google: z.boolean(), bing: z.boolean() }),
+  /** Per headline metric only the direction of an outlier (ANOMALY), or null. */
+  opvallend: z.object({
+    bezoekers: Direction,
+    wijzerKlaar: Direction,
+    winkelklikken: Direction,
+    googleKlikken: Direction,
+  }),
 });
-export type DagcijfersPubliek = z.infer<typeof DagcijfersPubliek>;
+export type DagcijfersMeta = z.infer<typeof DagcijfersMeta>;
 
-export const DagcijfersDetail = z.object({
-  versie: z.literal(1),
-  gemaakt: z.string(),
-  /** Sources and countries of yesterday only; { fout } when PostHog gave no figures. */
-  posthog: Detail(z.object({ bronnen: z.array(Count), landen: z.array(Count) })),
-  google: Detail(
-    z.object({
-      periode: z.object({ start: z.string(), end: z.string() }),
-      topZoektermen: z.array(QueryRow),
-      stijgers: z.array(Riser),
-    }),
-  ),
-});
-export type DagcijfersDetail = z.infer<typeof DagcijfersDetail>;
-
-/** Splits the full figures into the readable file and the part that is sealed. */
-export function splitDagcijfers(full: Dagcijfers): { publiek: DagcijfersPubliek; detail: DagcijfersDetail } {
-  const { posthog: ph, google: g } = full;
-  const publiek: DagcijfersPubliek = {
-    versie: 2,
-    gemaakt: full.gemaakt,
-    site: full.site,
-    detail: 'dagcijfers-detail.json',
-    posthog: ph.ok
-      ? {
-          ok: true,
-          value: {
-            dagen: ph.value.dagen,
-            ...(ph.value.vandaag ? { vandaag: ph.value.vandaag } : {}),
-            vergelijking: ph.value.vergelijking,
-          },
-        }
-      : ph,
-    google: g.ok ? { ok: true, value: { dagen: g.value.dagen, vergelijking: g.value.vergelijking, periode: g.value.periode } } : g,
-    bing: full.bing,
+/** The metadata of the full figures: no counts, no queries, no sources, no countries. */
+export function dagcijfersMeta(full: Dagcijfers, dag: string): DagcijfersMeta {
+  const direction = (part: 'posthog' | 'google', metric: string) => {
+    const p = full[part];
+    return p.ok ? (p.value.vergelijking.find((c) => c.metriek === metric)?.opvallend ?? null) : null;
   };
-  const detail: DagcijfersDetail = {
-    versie: 1,
+  const opvallend = Object.fromEntries(
+    Object.entries(SEALED_HEADLINES).map(([key, [part, metric]]) => [key, direction(part, metric)]),
+  ) as DagcijfersMeta['opvallend'];
+  return DagcijfersMeta.parse({
+    versie: 3,
     gemaakt: full.gemaakt,
-    posthog: ph.ok ? { bronnen: ph.value.bronnen, landen: ph.value.landen } : { fout: ph.reden },
-    google: g.ok
-      ? { periode: g.value.periode, topZoektermen: g.value.topZoektermen, stijgers: g.value.stijgers }
-      : { fout: g.reden },
-  };
-  return { publiek: DagcijfersPubliek.parse(publiek), detail: DagcijfersDetail.parse(detail) };
+    dag,
+    bronnen: { posthog: full.posthog.ok, google: full.google.ok, bing: full.bing.ok },
+    opvallend,
+  });
 }
 
 export const isoDay = (time: number) => new Date(time).toISOString().slice(0, 10);

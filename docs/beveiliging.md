@@ -27,13 +27,14 @@ De logica staat in `src/security/securityReport.ts` (met tests), het ophalen in 
 
 **Hoe je de CSP-meldingen bekijkt:** open de site in Chrome, druk op F12, tab *Console*. Een overtreding begint met "[Report Only] Refused to …".
 
-## Dagcijfers versleuteld (2026-11-13)
+## Dagcijfers versleuteld (2026-11-13 en 2026-11-14)
 
-De branch `social-state` is openbaar. Daarom staan daar de zoektermen, stijgers, bronnen en landen van de dagcijfers niet meer leesbaar. Ze gaan versleuteld met `VERKOOP_SLEUTEL` in `video/studio/state/dagcijfers-detail.json`, met dezelfde code en hetzelfde formaat als `verkoop.json` (`src/marketing/seal.ts`: AES-256-GCM, sleutel via PBKDF2-SHA256). De dagtotalen in `dagcijfers.json` blijven leesbaar, zodat de geplande taak Dagbericht er zijn bericht en melding van kan maken.
+De branch `social-state` is openbaar. Daarom staat daar geen leesbaar dagcijfer meer. `video/studio/state/dagcijfers.json` bevat leesbaar alleen metadata: versie, tijdstip, de dag, welke bronnen gelukt zijn en per hoofdmetriek of die opvallend hoger of lager is, zonder getal. Alle cijfers (totalen, vergelijkingen, zoektermen, stijgers, bronnen en landen) staan in het veld `versleuteld`, met dezelfde code en hetzelfde formaat als `verkoop.json` (`src/marketing/seal.ts`: AES-256-GCM, sleutel via PBKDF2-SHA256, `VERKOOP_SLEUTEL`).
 
 - Nieuwe bestanden gebruiken 600.000 rondes (OWASP). Het aantal rondes staat in het bestand, dus oude bestanden met 310.000 rondes blijven leesbaar.
-- Het tabblad Vandaag in de Marketingstudio opent het detail met de sleutel die het tabblad Verkoop al bewaart. Zonder sleutel staat er dat het versleuteld is.
-- Oude, leesbare versies van `dagcijfers.json` staan nog in de geschiedenis van `social-state`. Die is niet herschreven; of dat moet, beslist de eigenaar.
+- Zonder sleutel schrijft de workflow geen dagcijfers, en een laatste controle in `dagcijfers.yml` weigert elk bestand met leesbare cijfers.
+- De geplande taak Dagbericht kan de cijfers niet lezen: hij kopieert het bestand ongewijzigd naar de studio en stuurt alleen een melding zonder getal. Het tabblad Vandaag in de Marketingstudio opent de cijfers met de sleutel die het tabblad Verkoop al bewaart, en Noor schrijft daar het dagbericht. Zonder sleutel staat er dat de cijfers versleuteld zijn.
+- Oude, leesbare versies staan nog in de geschiedenis van `social-state`. Die schoont een aparte stap op (decision log).
 
 ## Wat jij doet
 
