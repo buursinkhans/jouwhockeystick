@@ -1,5 +1,7 @@
-# Daily figures (read-only): PostHog, Search Console and Bing, as one JSON file,
-# plus the sales per partner, sealed (verkoop.json),
+# Daily figures (read-only): PostHog, Search Console and Bing, as one JSON file
+# with the totals (dagcijfers.json) plus the search queries, sources and
+# countries, sealed (dagcijfers-detail.json; security review 2026-11-13), and
+# the sales per partner, sealed (verkoop.json),
 # on the branch social-state (video/studio/state/dagcijfers.json). The routine
 # "Dagbericht" reads it and writes the daily note in Agent-orkest
 # (docs/marketing/dagbericht.md). Counts only. Netlify skips video/, and only
@@ -44,10 +46,12 @@ jobs:
           GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
           GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
           BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
-        # Exit code 2 = written, but a source failed: save the file anyway, fail the run afterwards.
+          # Seals the search queries, sources and countries before they leave this step.
+          VERKOOP_SLEUTEL: ${{ secrets.VERKOOP_SLEUTEL }}
+        # Exit code 2 = written, but a source failed (or the key is missing): save the file anyway, fail the run afterwards.
         run: |
           set +e
-          npm run --silent metrics:daily -- "$RUNNER_TEMP/dagcijfers.json"
+          npm run --silent metrics:daily -- "$RUNNER_TEMP/dagcijfers.json" "$RUNNER_TEMP/dagcijfers-detail.json"
           code=$?
           echo "code=$code" >> "$GITHUB_ENV"
           [ "$code" -eq 0 ] || [ "$code" -eq 2 ]
@@ -77,6 +81,10 @@ jobs:
           for attempt in 1 2 3; do
             cp "$RUNNER_TEMP/dagcijfers.json" video/studio/state/dagcijfers.json
             git add video/studio/state/dagcijfers.json
+            if [ -f "$RUNNER_TEMP/dagcijfers-detail.json" ]; then
+              cp "$RUNNER_TEMP/dagcijfers-detail.json" video/studio/state/dagcijfers-detail.json
+              git add video/studio/state/dagcijfers-detail.json
+            fi
             if [ -f "$RUNNER_TEMP/verkoop.json" ]; then
               cp "$RUNNER_TEMP/verkoop.json" video/studio/state/verkoop.json
               git add video/studio/state/verkoop.json
