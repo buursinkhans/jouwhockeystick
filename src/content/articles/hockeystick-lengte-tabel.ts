@@ -84,7 +84,7 @@ export const hockeystickLengteTabel: Article = {
       heading: 'Koop een kinderstick niet op de groei',
       level: 3,
       body: [
-        'Een maat groter, zodat de stick langer meegaat? Begrijpelijk, maar je kind moet er nú mee kunnen oefenen. Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af. Meer tips vind je bij [hockeysticks voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
+        'Een maat groter, zodat de stick langer meegaat? Begrijpelijk, maar je kind moet er nú mee kunnen oefenen. Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af. Meer tips vind je bij [hockeysticks voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners). Koop je de stick als cadeau, zonder dat het kind erbij is? Lees dan [hockeystick als cadeau](/kennis/hockeystick-cadeau).',
       ],
     },
     {
@@ -137,7 +137,7 @@ export const hockeystickLengteTabel: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-11-11',
+  updatedAt: '2026-11-13',
   sources: [
     {
       label:

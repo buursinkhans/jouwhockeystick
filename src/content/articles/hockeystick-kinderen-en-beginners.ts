@@ -62,7 +62,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       body: [
         'Bij kinderen is de lengte het allerbelangrijkst. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een goed startpunt is. Laat je kind de stick daarna even vasthouden in een normale hockeyhouding: lukt dribbelen ontspannen, en blijft de stick dicht bij het lichaam? Top.',
         'Weet je de lengte al? Het [snelle advies](/stickwijzer?snel) vraagt alleen naar leeftijd, lengte, ervaring en budget en toont daarna sticks in de juiste maat. Zoek je een eerste indicatie op leeftijd? Die staat in de [lengtetabel](/kennis/hockeystick-lengte-tabel#leeftijd), met de lichaamslengte als uitgangspunt.',
-        'Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af. Op [alle veldsticks](/sticks) kies je in de filters de lengte van je kind.',
+        'Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af. Op [alle veldsticks](/sticks) kies je in de filters de lengte van je kind. Geef je de stick cadeau en is je kind er niet bij, lees dan [hockeystick als cadeau](/kennis/hockeystick-cadeau).',
       ],
     },
     {
@@ -120,7 +120,7 @@ export const hockeystickKinderenEnBeginners: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-11-11',
+  updatedAt: '2026-11-13',
   sources: [
     {
       label:
