@@ -421,6 +421,12 @@
         }
       },
       "fout": "Het Metricool-tegoed voor november is op (20 van 20 posts). Niet ingepland; de eigenaar kiest: een andere maand of een groter plan."
+    },
+    "posts/20261117-low-of-mid-bow": {
+      "render": {
+        "gestart": "2026-11-13T07:40:27Z"
+      },
+      "fout": null
     }
   },
   "laatsteRun": "2026-11-13T07:10:32Z",
@@ -429,7 +435,7 @@
     "gebruikt": 20,
     "grens": 20
   },
-  "wijziging": "ce2e63b3-6fad-43b4-a12e-1359e8b1054c",
+  "wijziging": "40cc4d61-de0f-46b0-b894-2432762d7e97",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
