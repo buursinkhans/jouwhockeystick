@@ -4,9 +4,11 @@
 // Writes `fixable=<n>` to GITHUB_OUTPUT: production vulnerabilities that
 // `npm audit fix` solves without a major update, and `updates=<n>`: patch and
 // minor updates, so the workflow can open a PR.
-// Run with: npm run security:check [-- report.md]
+// The optional second argument is ZAP's JSON report (security.yml); a missing
+// or unreadable file gives "scan niet gelukt" in the report, never a failure.
+// Run with: npm run security:check [-- report.md [zap.json]]
 import { execSync } from 'node:child_process';
-import { appendFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { connect } from 'node:tls';
 import {
   formatSecurityReport,
@@ -18,6 +20,7 @@ import {
   type Severity,
   type Vulnerability,
 } from '../src/security/securityReport';
+import { parseZapReport, type ZapSummary } from '../src/security/zapReport';
 
 const HOST = 'jouwhockeystick.nl';
 const SITE = `https://${HOST}`;
@@ -185,6 +188,16 @@ function secrets(): SecretHit[] {
 const live = await liveCheck();
 const vulns = vulnerabilities();
 const updates = outdated();
+function zapScan(path: string | undefined): ZapSummary | undefined {
+  if (!path) return undefined;
+  if (!existsSync(path)) return { ok: false, reden: 'geen rapport (de scan draaide niet of brak af)' };
+  try {
+    return parseZapReport(JSON.parse(readFileSync(path, 'utf8')));
+  } catch {
+    return { ok: false, reden: 'rapport niet leesbaar' };
+  }
+}
+
 const report = formatSecurityReport({
   date: new Date().toISOString().slice(0, 10),
   site: SITE,
@@ -192,6 +205,7 @@ const report = formatSecurityReport({
   vulnerabilities: vulns,
   outdated: updates,
   secrets: secrets(),
+  zap: zapScan(process.argv[3]),
 });
 
 const out = process.argv[2];

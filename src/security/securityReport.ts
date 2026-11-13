@@ -37,6 +37,8 @@ export type Outdated = {
   production: boolean;
 };
 
+import { formatZapBlock, type ZapSummary } from './zapReport';
+
 export type SecretHit = { file: string; kind: string };
 
 export type SecurityData = {
@@ -46,6 +48,8 @@ export type SecurityData = {
   vulnerabilities: Vulnerability[];
   outdated: Outdated[];
   secrets: SecretHit[];
+  /** The passive ZAP scan; absent when it did not run (a local run). */
+  zap?: ZapSummary;
 };
 
 /** Headers the site must send (see next.config.ts and Netlify). */
@@ -181,6 +185,11 @@ export function formatSecurityReport(data: SecurityData): string {
     );
   if (failing.length)
     actions.push(`**Live site**: ${failing.map((c) => c.label).join('; ')}.`);
+  const zapHigh = data.zap?.ok ? data.zap.alerts.filter((a) => a.risk === 3) : [];
+  if (zapHigh.length)
+    actions.push(
+      `**Passieve scan**: ${zapHigh.length === 1 ? 'één melding' : `${zapHigh.length} meldingen`} met hoog risico (${zapHigh.map((a) => a.name).join(', ')}).`,
+    );
   if (safeFixes(data.vulnerabilities).length)
     actions.push(
       'Er staat (of komt) een pull request klaar met de veilige oplossing; mergen is genoeg.',
@@ -197,6 +206,7 @@ export function formatSecurityReport(data: SecurityData): string {
       ? actions.map((a) => `- ${a}`).join('\n')
       : '- Niets dat nu actie vraagt.',
     '',
+    ...(data.zap ? [...formatZapBlock(data.zap), ''] : []),
     '## Live site',
     '',
     ...live.map(

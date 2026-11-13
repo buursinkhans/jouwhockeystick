@@ -31,11 +31,11 @@ jobs:
     outputs:
       changed: ${{ steps.pack.outputs.changed }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
       # No npm cache: this job may hold files the agent wrote.
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 22
 
@@ -70,7 +70,7 @@ jobs:
 
       - name: Sticks hercontroleren (Claude)
         if: steps.batch.outputs.count != '' && steps.batch.outputs.count != '0'
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@f3b070c88125d33dbae5653df5f143101d4ea9dc # v1.0.276
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # The job token (read only) instead of the Claude GitHub App: no id-token needed.
@@ -96,7 +96,7 @@ jobs:
           bash .github/scripts/agent-bundle.sh pack src/catalog/products "$RUNNER_TEMP/voor" "$RUNNER_TEMP/bundel/wijzigingen.tgz" "$RUNNER_TEMP/bundel/buiten.md"
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: steps.pack.outputs.changed == 'true'
         with:
           name: agent-bundel
@@ -112,13 +112,13 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 22
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: agent-bundel
           path: ${{ runner.temp }}/bundel
@@ -129,7 +129,7 @@ jobs:
         run: bash .github/scripts/agent-checks.sh "$RUNNER_TEMP/bundel/controles.md"
       - name: Gecontroleerde bundel
         run: tar -czf "$RUNNER_TEMP/bundel/wijzigingen.tgz" src/catalog/products
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: gecontroleerd
           path: ${{ runner.temp }}/bundel
@@ -144,8 +144,8 @@ jobs:
       pull-requests: write
       actions: write # start ci.yml and review.yml on the new branch
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: gecontroleerd
           path: ${{ runner.temp }}/bundel
