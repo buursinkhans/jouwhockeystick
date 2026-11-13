@@ -17,6 +17,7 @@ Alle afspraken en handboeken op één plek. Begin bij `CLAUDE.md` in de root: da
 | [`designsysteem.md`](designsysteem.md) | Hoe pagina's eruitzien: kleurrollen, typeschaal, breedtes, kaarten, foto's en wat we bewust niet doen. Volgt de merkinstructie. |
 | [`business-model.md`](business-model.md) | Verdienmodel en strategie. De actuele situatie staat in sectie 5; de partnerprogramma's per winkel in sectie 5a; hockeyschoenen in sectie 5b. |
 | [`decision-log.md`](decision-log.md) | Elke wijziging aan adviesregels, catalogus of afspraken, met de reden. Nieuwste onderaan. |
+| [`beveiliging.md`](beveiliging.md) | Beveiliging: de wekelijkse controle en hoe agents met tekst van buiten omgaan. Met [`beveiliging/injectietest.md`](beveiliging/injectietest.md), een test die de eigenaar zelf uitvoert. |
 
 ## Handboeken per agent of taak
 

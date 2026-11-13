@@ -65,7 +65,7 @@ Vul `bowProfile`, `carbonPercentage` en `weightGrams` **alleen** in als een bron
 
 ## 6. Controle
 
-Draai `npm run lint`, `npx next typegen`, `npm run typecheck`, `npm test` en `npm run catalog:health`. Los fouten op. Lukt een stick niet foutloos, haal hem er dan weer uit.
+Je kunt zelf geen commando's draaien (beveiligingsreview 2026-11-13, `docs/beveiliging.md`). Na jou draait de workflow in een aparte job zonder geheimen `npm run lint`, `npx next typegen`, `npm run typecheck`, `npm test` en `npm run catalog:health`. Faalt er een, dan wordt de PR een concept met de fout bovenaan. Werk daarom zorgvuldig: neem de vorm over van een bestaand productbestand, registreer de stick in `src/catalog/index.ts` en controleer zelf dat elke slug uniek is. Twijfel je of een stick klopt, laat hem dan weg.
 
 ## 7. Afronden
 
