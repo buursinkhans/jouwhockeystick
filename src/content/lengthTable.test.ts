@@ -146,7 +146,12 @@ describe('size sprint (2026-11-11): from a size to the sticks, ranking signals k
       'Koop een kinderstick niet op de groei',
       'En op leeftijd? Een indicatie',
       'Volwassenen: 36,5 inch of langer?',
+      'Wat zeggen de maattabellen van merken?',
+      'Waarom verschillen de tabellen?',
+      'Tussen twee maten: 36,5 of 37,5 inch?',
       'Geldt dezelfde lengte in de zaal?',
+      'Veelgestelde vragen',
+      'Ik ben 175 cm, welke sticklengte?',
       'Liever sticks in jouw maat zien?',
     ]);
     expect(LENGTH_ROWS).toHaveLength(LENGTH_GUIDE.length);
