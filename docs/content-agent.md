@@ -60,6 +60,6 @@ De agent werkt de brief uit in één pull request en reageert in het issue met e
 
 ## 5. Controle vóór de PR
 
-Draai `npm run lint`, `npx next typegen`, `npm run typecheck` en `npm test`. Lees de tekst daarna nog één keer als ouder of speler: is de hoofdvraag beantwoord, staat er niets in wat we niet kunnen onderbouwen? En één keer op de harde regels uit `docs/schrijfstijl.md`.
+Zelf draai je geen npm-commando's (beveiligingsreview 2026-11-13, `docs/beveiliging.md`). Lint, typecheck, tests en build draaien in de Kwaliteitscontrole (`ci.yml`) op je PR; is die rood, dan vraagt de eigenaar je om een fix. Controleer daarom zelf de links, de imports en de registratie in `src/content/index.ts` en `src/content/kennisThemes.ts`. Lees de tekst daarna nog één keer als ouder of speler: is de hoofdvraag beantwoord, staat er niets in wat we niet kunnen onderbouwen? En één keer op de harde regels uit `docs/schrijfstijl.md`.
 
 Open de PR zelf met `gh pr create --base main` (titel `Content: <onderwerp> (#<issue>)`, met `Closes #<issue>` in de beschrijving). In de PR-beschrijving staan: de hoofdvraag, welke pagina's je op botsing hebt gecontroleerd, de bronnen, en wat je bewust hebt weggelaten.

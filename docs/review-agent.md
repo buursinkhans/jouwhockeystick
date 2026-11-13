@@ -36,7 +36,7 @@ De lint, typecheck, tests en build draaien al in de Kwaliteitscontrole. Herhaal 
 - **Prijs:** adviesprijs van het merk, of de bol.com-prijs op de controledatum met die uitleg. Geen "van"-prijzen of kortingen.
 - **Links en foto's:** `bolProductUrl` is een bol.com-productpagina; een foto alleen van de merkpagina, de gebruikte bol.com-listing of de PassaHockey-feed (`cdn.sportshop.com`), met `imageSourceUrl`.
 - **Teksten:** `summary`, `strengths` en `pointsOfAttention` zijn genuanceerd ("kan passen bij"), zonder prestatiebeloften.
-- Draai `npm run catalog:health` als je twijfelt over datums of verificatie.
+- De uitvoer van `npm run catalog:health` op deze PR staat in `catalog-health.txt`. Zelf draai je geen commando's met code uit de PR (beveiligingsreview 2026-11-13); de workflow draait de controle vooraf zonder geheimen.
 
 ### Andere wijzigingen in dezelfde PR
 

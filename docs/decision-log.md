@@ -3171,6 +3171,14 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Adviesengine:** niet gewijzigd. `getSizeAdvice` kijkt alleen naar de lichaamslengte (en noemt een verschil met de huidige stick); de tip over speelstijl staat er daarom als "onze tip", niet als werking van de stickwijzer.
 - **Bewust niet:** de bestaande tabel, de bandindeling in `sizeAdvice.ts`, de leeftijdsindicatie, de titel, intro en meta-beschrijving. `updatedAt` 2026-11-13.
 
+## 2026-11-13 — Beveiliging: agents met tekst van buiten draaien geen code meer (review 1/3)
+
+- **Wat:** de catalogus-aanvuller, -verrijker en -hercontroleur werken in drie jobs: Claude bewerkt bestanden zonder Bash, de controles (lint, typecheck, tests, catalog:health, bij de verrijker eerst passa:import) draaien daarna in een job zonder secrets, en een derde job opent de PR. Faalt een controle, dan wordt de PR een concept met een waarschuwing. De review-agent krijgt `catalog:health` als bestand uit een job zonder secrets; de content-agent draait geen npm meer. Rechten per job op het minimum; `id-token` alleen nog bij `claude.yml` en de review-agent. Vaste data-regel in elke prompt. Zie `docs/beveiliging.md` en `docs/beveiliging/injectietest.md`.
+- **Waarom:** beveiligingsreview van 2026-11-13. Een agent die webpagina's of issue-reacties leest én bestanden schrijft én code draait, kan via een verborgen opdracht code laten uitvoeren met de Claude-token in de omgeving.
+- **Besluit eigenaar:** bij mislukte controles toch een PR, als concept met melding, zodat het werk van die week niet verloren gaat.
+- **Afwegingen:** de agents kunnen hun eigen fouten niet meer testen, dus er komen vaker concept-PR's. De action kan reacties niet filteren op OWNER, MEMBER of COLLABORATOR; `claude.yml` filtert daarom op naam (`buursinkhans`, `claude[bot]`, `github-actions[bot]`). `claude.yml` houdt de Claude GitHub App (en `id-token`), omdat PR's met de token van de job CI en review niet starten. Na de agent draait in die job geen git meer: de wijzigingen gaan als tar van één map, en uitpakken weigert links, `..` en paden buiten die map.
+- **Na de merge:** de eigenaar start elke catalogusagent één keer met de hand om de nieuwe opzet te zien werken.
+
 ## 2026-11-13 — Beveiliging: dagcijfers versleuteld (review 3/3)
 
 - **Wat:** de zoektermen, stijgers, bronnen en landen uit de dagcijfers gaan versleuteld naar `video/studio/state/dagcijfers-detail.json` op `social-state`, met de code en het formaat van `verkoop.json` (`VERKOOP_SLEUTEL`). `dagcijfers.json` houdt alleen de dagtotalen en vergelijkingen (`versie: 2`, `splitDagcijfers` in `src/marketing/dailyMetrics.ts`). Nieuwe versleutelde bestanden gebruiken 600.000 PBKDF2-rondes; oude met 310.000 blijven leesbaar. Het tabblad Vandaag opent het detail met de sleutel van het tabblad Verkoop.
