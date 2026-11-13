@@ -1,19 +1,11 @@
 {
  "versie": 1,
- "gemaakt": "2026-11-12T12:17:15.758Z",
+ "gemaakt": "2026-11-13T12:27:46.362Z",
  "site": "jouwhockeystick.nl",
  "posthog": {
   "ok": true,
   "value": {
    "dagen": [
-    {
-     "date": "2026-10-08",
-     "bezoekers": 5,
-     "paginaweergaven": 10,
-     "wijzerStart": 2,
-     "wijzerKlaar": 1,
-     "winkelklikken": 0
-    },
     {
      "date": "2026-10-09",
      "bezoekers": 3,
@@ -285,73 +277,86 @@
      "wijzerStart": 2,
      "wijzerKlaar": 2,
      "winkelklikken": 3
+    },
+    {
+     "date": "2026-11-12",
+     "bezoekers": 11,
+     "paginaweergaven": 30,
+     "wijzerStart": 1,
+     "wijzerKlaar": 1,
+     "winkelklikken": 1
     }
    ],
    "vergelijking": [
     {
      "metriek": "bezoekers",
-     "dag": "2026-11-11",
-     "waarde": 39,
-     "gem7": 11.9,
-     "gem28": 10.4,
-     "verschil7Pct": 229,
-     "opvallend": "hoger"
+     "dag": "2026-11-12",
+     "waarde": 11,
+     "gem7": 16.7,
+     "gem28": 11.5,
+     "verschil7Pct": -34,
+     "opvallend": null
     },
     {
      "metriek": "paginaweergaven",
-     "dag": "2026-11-11",
-     "waarde": 65,
-     "gem7": 31,
-     "gem28": 21.5,
-     "verschil7Pct": 110,
-     "opvallend": "hoger"
+     "dag": "2026-11-12",
+     "waarde": 30,
+     "gem7": 37.9,
+     "gem28": 22.5,
+     "verschil7Pct": -21,
+     "opvallend": null
     },
     {
      "metriek": "wijzerStart",
-     "dag": "2026-11-11",
-     "waarde": 2,
+     "dag": "2026-11-12",
+     "waarde": 1,
      "gem7": 1,
-     "gem28": 1.2,
-     "verschil7Pct": 100,
+     "gem28": 1.1,
+     "verschil7Pct": 0,
      "opvallend": null
     },
     {
      "metriek": "wijzerKlaar",
-     "dag": "2026-11-11",
-     "waarde": 2,
+     "dag": "2026-11-12",
+     "waarde": 1,
      "gem7": 0.9,
      "gem28": 1,
-     "verschil7Pct": 133,
+     "verschil7Pct": 17,
      "opvallend": null
     },
     {
      "metriek": "winkelklikken",
-     "dag": "2026-11-11",
-     "waarde": 3,
-     "gem7": 2.1,
-     "gem28": 1,
-     "verschil7Pct": 40,
+     "dag": "2026-11-12",
+     "waarde": 1,
+     "gem7": 2.4,
+     "gem28": 1.1,
+     "verschil7Pct": -59,
      "opvallend": null
     }
    ],
+   "vandaag": {
+    "date": "2026-11-13",
+    "bezoekers": 28,
+    "paginaweergaven": 36,
+    "wijzerStart": 0,
+    "wijzerKlaar": 0,
+    "winkelklikken": 0,
+    "tot": "2026-11-13T12:27:47.292Z"
+   },
    "bronnen": [
     {
      "key": "Direct",
-     "bezoekers": 31
-    },
-    {
-     "key": "Andere zoekmachine",
-     "bezoekers": 6
+     "bezoekers": 7
     },
     {
      "key": "Google",
-     "bezoekers": 2
+     "bezoekers": 4
     }
    ],
    "landen": [
     {
      "key": "?",
-     "bezoekers": 39
+     "bezoekers": 11
     }
    ]
   }
@@ -360,11 +365,6 @@
   "ok": true,
   "value": {
    "dagen": [
-    {
-     "date": "2026-10-06",
-     "klikken": 0,
-     "vertoningen": 0
-    },
     {
      "date": "2026-10-07",
      "klikken": 0,
@@ -534,38 +534,49 @@
      "date": "2026-11-09",
      "klikken": 7,
      "vertoningen": 371
+    },
+    {
+     "date": "2026-11-10",
+     "klikken": 9,
+     "vertoningen": 377
     }
    ],
    "vergelijking": [
     {
      "metriek": "klikken",
-     "dag": "2026-11-09",
-     "waarde": 7,
-     "gem7": 1.7,
-     "gem28": 1.2,
-     "verschil7Pct": 308,
+     "dag": "2026-11-10",
+     "waarde": 9,
+     "gem7": 2.6,
+     "gem28": 1.4,
+     "verschil7Pct": 250,
      "opvallend": null
     },
     {
      "metriek": "vertoningen",
-     "dag": "2026-11-09",
-     "waarde": 371,
-     "gem7": 106.4,
-     "gem28": 84.3,
-     "verschil7Pct": 249,
+     "dag": "2026-11-10",
+     "waarde": 377,
+     "gem7": 153.6,
+     "gem28": 96.5,
+     "verschil7Pct": 145,
      "opvallend": "hoger"
     }
    ],
    "periode": {
-    "start": "2026-11-03",
-    "end": "2026-11-09"
+    "start": "2026-11-04",
+    "end": "2026-11-10"
    },
    "topZoektermen": [
     {
      "zoekterm": "zaalhockeystick",
      "klikken": 0,
-     "vertoningen": 33,
-     "positie": 13.2
+     "vertoningen": 52,
+     "positie": 13.5
+    },
+    {
+     "zoekterm": "zaalstick",
+     "klikken": 0,
+     "vertoningen": 23,
+     "positie": 10.4
     },
     {
      "zoekterm": "zaalhockeyschoenen",
@@ -574,34 +585,28 @@
      "positie": 80
     },
     {
-     "zoekterm": "zaalstick",
-     "klikken": 0,
-     "vertoningen": 17,
-     "positie": 10.1
-    },
-    {
      "zoekterm": "hockeystick carbon procent",
      "klikken": 0,
-     "vertoningen": 14,
-     "positie": 40.6
-    },
-    {
-     "zoekterm": "verschil veldhockey zaalhockey stick",
-     "klikken": 0,
      "vertoningen": 13,
-     "positie": 22.9
-    },
-    {
-     "zoekterm": "welke hockeystick kopen",
-     "klikken": 0,
-     "vertoningen": 13,
-     "positie": 57.8
+     "positie": 41.1
     },
     {
      "zoekterm": "hoe kies je een hockeystick",
      "klikken": 0,
+     "vertoningen": 13,
+     "positie": 40.9
+    },
+    {
+     "zoekterm": "verschil veldhockey zaalhockey stick",
+     "klikken": 0,
      "vertoningen": 12,
-     "positie": 49.7
+     "positie": 20.8
+    },
+    {
+     "zoekterm": "welke hockeystick kopen",
+     "klikken": 0,
+     "vertoningen": 12,
+     "positie": 56.8
     },
     {
      "zoekterm": "hockey strick beginnen kind welke merken",
@@ -613,20 +618,26 @@
      "zoekterm": "hockeystick maat",
      "klikken": 0,
      "vertoningen": 11,
-     "positie": 57.6
+     "positie": 46.7
     },
     {
      "zoekterm": "zaalsticks",
      "klikken": 0,
-     "vertoningen": 10,
-     "positie": 13.4
+     "vertoningen": 11,
+     "positie": 12.5
     }
    ],
    "stijgers": [
     {
      "zoekterm": "zaalhockeystick",
-     "nu": 33,
+     "nu": 52,
      "ervoor": 4,
+     "nieuw": false
+    },
+    {
+     "zoekterm": "zaalstick",
+     "nu": 23,
+     "ervoor": 1,
      "nieuw": false
     },
     {
@@ -634,12 +645,6 @@
      "nu": 21,
      "ervoor": 0,
      "nieuw": true
-    },
-    {
-     "zoekterm": "zaalstick",
-     "nu": 17,
-     "ervoor": 2,
-     "nieuw": false
     }
    ]
   }
@@ -648,16 +653,6 @@
   "ok": true,
   "value": {
    "dagen": [
-    {
-     "date": "2026-10-05",
-     "klikken": 0,
-     "vertoningen": 0
-    },
-    {
-     "date": "2026-10-06",
-     "klikken": 0,
-     "vertoningen": 0
-    },
     {
      "date": "2026-10-07",
      "klikken": 0,
@@ -822,12 +817,22 @@
      "date": "2026-11-08",
      "klikken": 0,
      "vertoningen": 1
+    },
+    {
+     "date": "2026-11-09",
+     "klikken": 0,
+     "vertoningen": 0
+    },
+    {
+     "date": "2026-11-10",
+     "klikken": 0,
+     "vertoningen": 0
     }
    ],
    "vergelijking": [
     {
      "metriek": "klikken",
-     "dag": "2026-11-08",
+     "dag": "2026-11-10",
      "waarde": 0,
      "gem7": 0,
      "gem28": 0,
@@ -836,11 +841,11 @@
     },
     {
      "metriek": "vertoningen",
-     "dag": "2026-11-08",
-     "waarde": 1,
+     "dag": "2026-11-10",
+     "waarde": 0,
      "gem7": 0.3,
      "gem28": 0.1,
-     "verschil7Pct": 250,
+     "verschil7Pct": -100,
      "opvallend": null
     }
    ]
