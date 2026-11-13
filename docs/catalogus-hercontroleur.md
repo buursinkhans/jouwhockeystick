@@ -34,7 +34,7 @@ Gebruikt het bestand een constante `CHECKED`, werk die bij; staan de datums per 
 
 ## 4. Controle
 
-Draai `npm run lint`, `npx next typegen`, `npm run typecheck`, `npm test` en `npm run catalog:health`. Lukt een stick niet foutloos, zet zijn bestand dan terug (`git checkout -- <bestand>`) en noem hem onder **Voor jou**.
+Je kunt zelf geen commando's draaien (beveiligingsreview 2026-11-13, `docs/beveiliging.md`). Na jou draait de workflow in een aparte job zonder geheimen `npm run lint`, `npx next typegen`, `npm run typecheck`, `npm test` en `npm run catalog:health`. Faalt er een, dan wordt de PR een concept met de fout bovenaan. Verander daarom alleen waarden, niet de vorm van een bestand. Twijfel je over een stick, verander hem dan niet en noem hem onder **Voor jou**.
 
 ## 5. Afronden
 
