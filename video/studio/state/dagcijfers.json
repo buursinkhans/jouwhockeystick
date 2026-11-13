@@ -1,6 +1,6 @@
 {
  "versie": 1,
- "gemaakt": "2026-11-13T20:58:06.888Z",
+ "gemaakt": "2026-11-13T21:32:13.063Z",
  "site": "jouwhockeystick.nl",
  "posthog": {
   "ok": true,
@@ -341,7 +341,7 @@
     "wijzerStart": 0,
     "wijzerKlaar": 0,
     "winkelklikken": 5,
-    "tot": "2026-11-13T20:58:08.188Z"
+    "tot": "2026-11-13T21:32:13.558Z"
    },
    "bronnen": [
     {
