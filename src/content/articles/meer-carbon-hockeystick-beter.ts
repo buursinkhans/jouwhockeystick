@@ -183,7 +183,7 @@ export const meerCarbonHockeystickBeter: Article = {
       level: 2,
       body: [
         'Nee. Meer carbon maakt een stick stijver en directer, en daarmee ook minder vergevingsgezind als je de bal net niet goed raakt. Of dat een voordeel is, hangt af van je techniek.',
-        'Een hoger percentage is ook niet vanzelf een betere koop. De prijs hangt mede af van merk, productiemethode, afwerking en ontwerp. Een stick van 50% die prettig in je handen ligt, is een betere aankoop dan een dure 90%-stick die je niet onder controle krijgt. Meer keuzefouten lees je in [zes veelgemaakte fouten bij het kiezen van een hockeystick](/blog/hockeystick-kiezen-praktische-tips).',
+        'Een hoger percentage is ook niet vanzelf een betere koop. De prijs hangt mede af van merk, productiemethode, afwerking en ontwerp. Een stick van 50% die prettig in je handen ligt, is een betere aankoop dan een dure 90%-stick die je niet onder controle krijgt. Wat sticks per prijsklasse kosten, lees je in [wat kost een hockeystick?](/kennis/wat-kost-een-hockeystick). Meer keuzefouten lees je in [zes veelgemaakte fouten bij het kiezen van een hockeystick](/blog/hockeystick-kiezen-praktische-tips).',
       ],
     },
     {
@@ -281,7 +281,7 @@ export const meerCarbonHockeystickBeter: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-19',
-  updatedAt: '2026-11-11',
+  updatedAt: '2026-11-13',
   sources: [
     {
       label:

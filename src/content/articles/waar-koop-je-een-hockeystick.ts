@@ -146,13 +146,13 @@ export const waarKoopJeEenHockeystick: Article = {
       heading: 'Eerst weten welke stick bij je past?',
       level: 2,
       body: [
-        'Begin dan met de [stickwijzer](/stickwijzer). In een paar minuten krijg je een stick die past bij je lengte, je ervaring en hoe je speelt, met de redenen erbij. Twijfel je vooral over de maat? Kijk dan in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel).',
+        'Begin dan met de [stickwijzer](/stickwijzer). In een paar minuten krijg je een stick die past bij je lengte, je ervaring en hoe je speelt, met de redenen erbij. Twijfel je vooral over de maat? Kijk dan in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel). Wil je eerst weten wat een stick kost, lees dan [wat kost een hockeystick?](/kennis/wat-kost-een-hockeystick).',
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-16',
-  updatedAt: '2026-11-04',
+  updatedAt: '2026-11-13',
   sources: [
     { label: 'bol.com: Retourvoorwaarden', url: BOL_RETURNS },
     { label: 'bol.com: Bezorgen en ontvangen', url: BOL_DELIVERY },
