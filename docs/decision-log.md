@@ -3139,3 +3139,12 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 
 - **Wat:** de workflow Dagcijfers draait ook 's middags (14:31 en 15:31 UTC, zodat er in zomer- en wintertijd een run vóór 17:00 Amsterdam is). Nieuw: PostHog "vandaag tot nu" en in Verkoop de periode "Vandaag tot nu". De geplande taak Dagbericht draait om 07:03 en 17:03; de middagrun ververst alleen de cijfers en de verkoop, zonder nieuw bericht of melding.
 - **Waarom:** besluit eigenaar; nu weinig verkeer, maar op de middellange termijn nuttig. Vergelijkingen en uitschieters blijven op hele dagen.
+
+## 2026-11-13 — Reacties op social: melding en tab Reacties in de Marketingstudio
+
+- **Wat:** in de Marketingstudio, tab Social, een vierde tab **Reacties**. Daar staan de posts en video's met nieuwe reacties, elk met een knop die de post opent in de app van het kanaal (Instagram, Facebook, TikTok, YouTube) en een knop **Gedaan**. Daaronder links naar de inbox van Meta Business Suite, TikTok en YouTube Studio, en per post de likes, reacties, opslagen en delen van de laatste 30 dagen. Staan er reacties open, dan zegt de statusregel bovenaan dat eerst.
+- **Melding:** de geplande taak **Reactie-wachter** (claude.ai, 08:12, 12:12, 17:12 en 21:12 Amsterdam) leest het aantal reacties per post in Metricool en stuurt bij nieuwe reacties één pushmelding met per post de directe link. Hij onthoudt de aantallen in `reacties/stand` in de database van de studio; `reacties/afgehandeld` schrijft alleen de knop Gedaan.
+- **Waarom:** besluit eigenaar: reageren blijft mensenwerk in de app van het kanaal (afspraak "reageer binnen een dag", `docs/instagram.md` §8), maar hij wil een seintje en zo min mogelijk zoeken.
+- **Grenzen:** alleen aantallen uit Metricool (`getAnalyticsDataByMetrics`, alleen lezen); geen tekst van reacties, geen namen of accounts. Geen agent reageert of liket zelf. Facebook-reels en YouTube geven via Metricool geen of nog geen aantal reacties; die staan als onbekend en geven geen melding. TikTok is een persoonlijk account: de Metricool-inbox werkt daar niet, de link opent de video.
+- **Capabilities studio:** `mcp` Metricool kreeg `getAnalyticsDataByMetrics` erbij; `db` kreeg de regel `reacties` (lezen en schrijven alleen eigenaar).
+
