@@ -35,8 +35,8 @@ export const KENNIS_THEMES: ReadonlyArray<{ id: string; heading: string; intro: 
   {
     id: 'kopen',
     heading: 'Kopen',
-    intro: 'Waar je koopt en waar de winkels in verschillen.',
-    slugs: ['waar-koop-je-een-hockeystick'],
+    intro: 'Wat een stick kost, waar je koopt en waar de winkels in verschillen.',
+    slugs: ['wat-kost-een-hockeystick', 'waar-koop-je-een-hockeystick'],
   },
 ];
 

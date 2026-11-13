@@ -9,6 +9,7 @@ import { zaalstickVoorKinderen } from './articles/zaalstick-voor-kinderen';
 import { veldstickZaalhockey } from './articles/veldstick-zaalhockey';
 import { zaalstickBudget } from './articles/zaalstick-budget';
 import { meerCarbonHockeystickBeter } from './articles/meer-carbon-hockeystick-beter';
+import { watKostEenHockeystick } from './articles/wat-kost-een-hockeystick';
 import { waarKoopJeEenHockeystick } from './articles/waar-koop-je-een-hockeystick';
 import { welkeHockeyschoenenHebJeNodig } from './articles/welke-hockeyschoenen-heb-je-nodig';
 import { hockeyschoenenWaterveldZandveld } from './articles/hockeyschoenen-waterveld-zandveld';
@@ -25,6 +26,7 @@ const ALL_ARTICLES: Article[] = [
   lowBowVsMidBow,
   hoeKiesJeDeJuisteHockeystick,
   meerCarbonHockeystickBeter,
+  watKostEenHockeystick,
   waarKoopJeEenHockeystick,
   welkeHockeyschoenenHebJeNodig,
   hockeyschoenenWaterveldZandveld,

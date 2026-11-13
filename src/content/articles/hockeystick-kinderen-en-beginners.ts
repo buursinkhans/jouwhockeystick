@@ -84,7 +84,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Wat kost een eerste stick?',
       level: 2,
       body: [
-        `In onze catalogus liggen de richtprijzen van juniorsticks voor beginners ${juniorPriceRange}. Duurder is voor een kind niet vanzelf beter. Geef pas meer uit als je weet wat je daarvoor terugkrijgt.`,
+        `In onze catalogus liggen de richtprijzen van juniorsticks voor beginners ${juniorPriceRange}. Duurder is voor een kind niet vanzelf beter. Geef pas meer uit als je weet wat je daarvoor terugkrijgt. Wat sticks voor andere niveaus kosten, zie je in [wat kost een hockeystick?](/kennis/wat-kost-een-hockeystick).`,
       ],
     },
     {
