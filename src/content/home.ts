@@ -32,7 +32,7 @@ export const SEASON_BAND = {
 export const BUYING_INTRO = {
   heading: 'Een goede stick begint bij jouw spel',
   paragraphs: [
-    'Een goede hockeystick hoeft niet de duurste te zijn. Begin bij de juiste lengte, je ervaring en de acties die je het meest maakt. Carbon en kromming verfijnen daarna de keuze, niet andersom.',
+    'Een goede hockeystick hoeft niet de duurste te zijn. Begin bij de speler: je ervaring, de acties die je het meest maakt en je budget. Kijk daarna naar kromming en stickgevoel, en controleer als laatste de lengte.',
   ],
   readMore: {
     label: 'Welke hockeystick kopen? Kies in drie stappen',

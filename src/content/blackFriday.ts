@@ -139,7 +139,7 @@ export const BLACK_FRIDAY = {
     heading: 'Waar ben je naar op zoek?',
     items: [
       { title: 'Hockeysticks', body: 'Veldsticks voor volwassenen, met prijzen bij meerdere winkels.', href: '#bf-sticks' },
-      { title: 'Junior hockeysticks', body: 'Kortere sticks voor kinderen. Kies eerst de lengte.', href: '#bf-junior' },
+      { title: 'Junior hockeysticks', body: 'Kortere sticks voor kinderen, in de maat die nu past.', href: '#bf-junior' },
       { title: 'Zaalhockeysticks', body: 'Sticks voor de zaal, met een keuzehulp op lengte en budget.', href: '#bf-zaal' },
       { title: 'Hockeyschoenen', body: 'Schoenen voor veld en zaal, met de prijs per winkel.', href: '#bf-schoenen' },
     ],

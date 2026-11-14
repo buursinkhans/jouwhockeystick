@@ -152,7 +152,7 @@ export const watKostEenHockeystick: Article = {
       level: 2,
       body: [
         'Een dure stick in de verkeerde lengte speelt slechter dan een goedkope in de juiste. Met een te lange stick worden dribbelen en aannemen lastiger. Koop een kinderstick daarom niet extra lang om in te groeien.',
-        'Kies eerst de lengte en kijk daarna naar de prijs. Per lichaamslengte zie je de maat in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel).',
+        'Laat een lage prijs dus nooit voor de maat gaan: is een stick er niet in de juiste lengte, dan valt hij af. Per lichaamslengte zie je de maat in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel).',
       ],
     },
     {
@@ -210,7 +210,7 @@ export const watKostEenHockeystick: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-11-13',
-  updatedAt: '2026-11-13',
+  updatedAt: '2026-11-14',
   sources: [
     {
       label: `Richtprijzen, carbonpercentage, bow-profiel en niveau: de productpagina's op deze site (${facts.count} veldhockeysticks), met bron en datum per gegeven; ${peildatum}`,

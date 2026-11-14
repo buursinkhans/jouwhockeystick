@@ -7,6 +7,8 @@ import { plainText } from '@/components/article/inlineMarkup';
 import { BUDGET_BANDS, budgetRows, hoeKiesJeDeJuisteHockeystick as article } from './articles/hoe-kies-je-de-juiste-hockeystick';
 import { METHODE } from './methode';
 import { QUESTIONS } from './stickwijzer/questions';
+import { hockeystickKopen as blogPost } from './blogPosts/hockeystick-kopen';
+import { BUYING_INTRO } from './home';
 import { VELD, veldFaq } from './veld';
 
 /** Owner's brief 2026-11-14: one page per search intent (decision log). */
@@ -125,5 +127,30 @@ describe('/sticks as the comparison page for veldhockeysticks (2026-11-14)', () 
     expect(noShop.length).toBeGreaterThan(0);
     const html = renderToStaticMarkup(await SticksPage({ searchParams: Promise.resolve({}) }));
     for (const product of noShop) expect(html, product.slug).toContain(`/sticks/${product.slug}`);
+  });
+});
+
+describe('No second page for "welke hockeystick kopen" (2026-11-14)', () => {
+  it('turns /blog/hockeystick-kopen into trying a stick out, linking the guide for choosing', () => {
+    expect(blogPost.slug).toBe('hockeystick-kopen');
+    const head = [blogPost.title, blogPost.seoTitle, blogPost.metaDescription].join(' ').toLowerCase();
+    expect(head).not.toMatch(/welke hockeystick|kiezen|kies je/);
+    expect(head).toContain('uitproberen');
+    expect(blogPost.seoTitle!.length).toBeLessThanOrEqual(60);
+    expect(blogPost.metaDescription.length).toBeLessThanOrEqual(155);
+    const text = JSON.stringify(blogPost.sections);
+    expect(text).toContain('](/kennis/hoe-kies-je-de-juiste-hockeystick)');
+    expect(text).toContain('](/stickwijzer)');
+    // The choosing sections went to the guide.
+    for (const gone of ['Carbon en kromming', 'Wat betekent bow', 'Begin bij jouw spel']) {
+      expect(blogPost.sections.map((s) => s.heading).join(' ')).not.toContain(gone);
+    }
+  });
+
+  it('gives the homepage the same order as the method: speler, stick, maat', () => {
+    const text = BUYING_INTRO.paragraphs.join(' ');
+    expect(text.indexOf('speler')).toBeLessThan(text.indexOf('kromming'));
+    expect(text.indexOf('kromming')).toBeLessThan(text.indexOf('lengte'));
+    expect(BUYING_INTRO.readMore.href).toBe('/kennis/hoe-kies-je-de-juiste-hockeystick');
   });
 });
