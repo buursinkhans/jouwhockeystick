@@ -21,7 +21,7 @@ describe('/sticks meta description (decision log 2026-10-29)', () => {
     const metadata = generateMetadata();
     const description = metadata.description!;
     expect(description).toBe(
-      `Vergelijk ${stats.fieldSticks} veldhockeysticks van ${stats.fieldBrands.length} merken op lengte, bow, carbon en niveau, met de bron bij elk gegeven. Plus een eerste keuze per niveau.`,
+      `Vergelijk ${stats.fieldSticks} veldhockeysticks van ${stats.fieldBrands.length} merken op lengte, bow, carbon en niveau, voor junior en senior, met winkelprijzen van partnerwinkels.`,
     );
     expect(description.length).toBeLessThanOrEqual(MAX_DESCRIPTION_LENGTH);
     expect(description).not.toContain('…');
@@ -31,7 +31,9 @@ describe('/sticks meta description (decision log 2026-10-29)', () => {
   it('keeps the SEO title, H1, canonical and Open Graph URL', () => {
     const metadata = generateMetadata();
     expect(VELD.title).toBe('Veldhockeysticks vergelijken');
-    expect(VELD.seoTitle).toBe('Veldhockeysticks vergelijken: lengte, bow, carbon en niveau');
+    // 2026-11-14: aimed at "veldhockeysticks", "veldsticks" and comparing (owner's keyword table).
+    expect(VELD.seoTitle).toBe('Veldhockeysticks vergelijken: alle veldsticks naast elkaar');
+    expect(VELD.seoTitle.length).toBeLessThanOrEqual(60);
     expect(JSON.stringify(metadata.title)).toContain(VELD.seoTitle);
     expect(metadata.alternates?.canonical).toBe('/sticks');
     expect(metadata.openGraph?.url).toBe('/sticks');
@@ -100,8 +102,9 @@ describe('/sticks FAQ (decision log 2026-10-29)', () => {
     expect(carbon).toContain('Een vaste norm is er niet');
   });
 
-  it('keeps five questions, also in the FAQPage structured data', async () => {
-    expect(faq).toHaveLength(5);
+  it('keeps seven questions, also in the FAQPage structured data', async () => {
+    // Five since 2026-10-29; 2026-11-14 added how to find a fitting stick and where the shop prices come from.
+    expect(faq).toHaveLength(7);
     const html = await render();
     const blocks = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/g)].map(
       (m) => JSON.parse(m[1]!) as { '@type'?: string; mainEntity?: { name: string; acceptedAnswer: { text: string } }[] },

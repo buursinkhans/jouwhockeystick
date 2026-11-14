@@ -63,7 +63,7 @@ export const hockeystickKiezenPraktischeTips: Article = {
       heading: 'Kort samengevat',
       level: 2,
       body: [
-        'Kijk eerst naar je lengte, je ervaring en wat je op het veld belangrijk vindt. Laat carbon en kromming daarna de keuze verfijnen, niet andersom. De hele aanpak, van je spel tot het testen van een stick, lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Liever meteen een persoonlijk advies? Doe de [stickwijzer](/stickwijzer).',
+        'Kijk eerst naar je lengte, je ervaring en wat je op het veld belangrijk vindt. Laat carbon en kromming daarna de keuze verfijnen, niet andersom. Hoe je in drie stappen kiest, lees je in [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick). Liever meteen een persoonlijk advies? Doe de [stickwijzer](/stickwijzer).',
       ],
     },
   ],

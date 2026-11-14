@@ -124,7 +124,7 @@ export const lowBowVsMidBow: Article = {
       body: [
         'Veldsticks voor volwassenen, op volgorde van richtprijs:',
         { type: 'list', items: adultFieldSticksWith('lowbow') },
-        'Twijfel je nog? De [stickwijzer](/stickwijzer) vraagt naar je spelacties en ervaring en laat zien welk profiel bij je past, met de redenen erbij. Meer over de hele keuze lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
+        'Twijfel je nog? De [stickwijzer](/stickwijzer) vraagt naar je spelacties en ervaring en laat zien welk profiel bij je past, met de redenen erbij. Hoe je in drie stappen kiest, lees je in [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick).',
       ],
     },
   ],

@@ -193,7 +193,7 @@ export const hockeystickLengteTabel: Article = {
       heading: 'Liever sticks in jouw maat zien?',
       level: 2,
       body: [
-        'Weet je je maat al? Op [alle veldsticks](/sticks) kies je in de filters je lengte; voor volwassenen is dat meestal [36,5 inch](/sticks?lengte=36.5). Vul je liever je lichaamslengte, ervaring en wensen in, doe dan de [stickwijzer](/stickwijzer). Je krijgt dan niet alleen een maat, maar ook sticks die je in die maat kunt krijgen, met de redenen erbij. Wil je eerst meer weten over de rest van de keuze? Lees dan [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
+        'Weet je je maat al? Op [alle veldsticks](/sticks) kies je in de filters je lengte; voor volwassenen is dat meestal [36,5 inch](/sticks?lengte=36.5). Vul je liever je lichaamslengte, ervaring en wensen in, doe dan de [stickwijzer](/stickwijzer). Je krijgt dan niet alleen een maat, maar ook sticks die je in die maat kunt krijgen, met de redenen erbij. Wil je eerst meer weten over de rest van de keuze? Lees dan [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick).',
         'Ook nieuwe schoenen nodig? Bij de [hockeyschoenen](/hockeyschoenen) zie je per model of hij past bij je veld of de zaal.',
       ],
     },

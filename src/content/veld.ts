@@ -5,29 +5,30 @@ import { MAX_DESCRIPTION_LENGTH } from '@/lib/site';
 import { formatEuro } from './catalogLinks';
 
 /**
- * Copy for the /sticks page, the landing page for "veldhockeystick(s)"
- * (decision log 2026-10-23). Same layout as zaal.ts. Deliberately not about
- * "kiezen" or "kopen": /blog/hockeystick-kopen owns those searches
- * (decision log 2026-10-08). Numbers (counts, prices) are computed from the
- * catalog on the page, never written here.
+ * Copy for the /sticks page, the landing page for "veldhockeysticks" and
+ * "hockeysticks vergelijken" (decision log 2026-10-23 and 2026-11-14). Same
+ * layout as zaal.ts. Deliberately not about "kiezen" or "kopen": "welke
+ * hockeystick kopen" belongs to /kennis/hoe-kies-je-de-juiste-hockeystick
+ * (owner's keyword table, 2026-11-14). Numbers (counts, prices) are computed
+ * from the catalog on the page, never written here.
  */
 export const VELD = {
   /** H1 on the page. */
   title: 'Veldhockeysticks vergelijken',
   /** <title> in search results. */
-  seoTitle: 'Veldhockeysticks vergelijken: lengte, bow, carbon en niveau',
+  seoTitle: 'Veldhockeysticks vergelijken: alle veldsticks naast elkaar',
   /** Fallback when the counts are unknown; see veldMetaDescription. */
   metaDescription:
-    'Alle veldhockeysticks uit onze catalogus naast elkaar: lengte, bow, carbon en niveau per stick, met de bron erbij. Plus een eerste keuze per niveau.',
+    'Vergelijk veldhockeysticks op lengte, bow, carbon en niveau, voor junior en senior, met de bron bij elk gegeven en winkelprijzen van partnerwinkels.',
   /** Meta description with the stick and brand counts from getCatalogStats. */
   metaDescriptionWithCounts: (sticks: number, brands: number) =>
-    `Vergelijk ${sticks} veldhockeysticks van ${brands} merken op lengte, bow, carbon en niveau, met de bron bij elk gegeven. Plus een eerste keuze per niveau.`,
+    `Vergelijk ${sticks} veldhockeysticks van ${brands} merken op lengte, bow, carbon en niveau, voor junior en senior, met winkelprijzen van partnerwinkels.`,
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-23',
-  updatedAt: '2026-10-30',
+  updatedAt: '2026-11-14',
   /** Answers the main question within the first 80 words. */
   intro:
-    'Hier vind je alle veldhockeysticks uit onze catalogus, met per gegeven de bron. Een veldhockeystick vergelijk je op vier punten: de juiste lengte (zie de [lengtetabel](/kennis/hockeystick-lengte-tabel)), de kromming ([low bow of mid bow](/kennis/low-bow-vs-mid-bow)), het carbonpercentage ([hoeveel carbon je nodig hebt](/kennis/meer-carbon-hockeystick-beter)) en je niveau. Wil je advies dat bij jou past, doe dan de [stickwijzer](/stickwijzer). Waar je bij het kopen op let, lees je in [hockeystick kopen](/blog/hockeystick-kopen).',
+    'Alle veldhockeysticks uit onze catalogus, voor junioren en volwassenen. Je vergelijkt ze op lengte, kromming (bow), carbon en niveau, en bij elk gegeven staat de bron. Met de filters zie je alleen veldsticks in jouw maat en budget. Twijfel je wat bij je past? De [stickwijzer](/stickwijzer) kiest mee, of lees eerst [welke hockeystick je koopt](/kennis/hoe-kies-je-de-juiste-hockeystick).',
   levels: {
     heading: 'Veldsticks per niveau',
     intro:
@@ -66,6 +67,16 @@ export const VELD = {
       /** Counts and price ranges computed from the catalog on the page. */
       answer: (count: number, all: string, byAge: string, perLevel: string) =>
         `In onze catalogus staan ${count} veldsticks, juniorsticks en sticks voor volwassenen samen, met een richtprijs van ${all}. ${byAge}Per niveau, junior en volwassen samen: ${perLevel}. Dit zijn richtprijzen; de actuele prijs zie je bij de winkel.`,
+    },
+    fit: {
+      question: 'Hoe vind je een veldhockeystick die bij je past?',
+      answer:
+        'Filter eerst op niveau en op je lengte (die vind je in de [lengtetabel](/kennis/hockeystick-lengte-tabel)), en daarna op budget en kromming. Leg dan sticks van hetzelfde niveau naast elkaar. Liever hulp? De [stickwijzer](/stickwijzer) vraagt naar je niveau, speelstijl en budget en geeft maximaal drie sticks, met de redenen erbij. Hoe je in drie stappen kiest, lees je in [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick)',
+    },
+    prices: {
+      question: 'Waar komen de winkelprijzen vandaan?',
+      answer:
+        `Uit de productfeeds van onze partnerwinkels: bol.com, PassaHockey, Plutosport, HockeyCity en Daka. We lezen ze elke week en zetten de datum erbij; bovenaan deze pagina zie je wanneer. Prijzen kunnen bij de winkel intussen veranderd zijn, dus de prijs op de winkelsite geldt. Is een prijs ouder dan 14 dagen, dan tonen we hem niet meer. Heeft een stick geen actuele winkelprijs, dan zie je de richtprijs, met bron en datum. De knoppen naar de winkels zijn partnerlinks: koop je via zo'n knop, dan krijgen wij een kleine vergoeding van de winkel. Die vergoeding bepaalt niet welke sticks hier staan of in welke volgorde, en sticks die geen partnerwinkel verkoopt, staan er ook gewoon tussen.`,
     },
     indoor: {
       question: 'Wat is het verschil tussen een veldstick en een zaalstick?',
@@ -116,6 +127,7 @@ function priceRange(products: readonly Product[]): string | undefined {
 export function veldFaq(products: readonly Product[]): FaqItem[] {
   const { faq } = VELD;
   const items: FaqItem[] = [
+    faq.fit,
     faq.length,
     faq.bow,
     { question: faq.carbon.question, answer: faq.carbon.answer },
@@ -148,6 +160,6 @@ export function veldFaq(products: readonly Product[]): FaqItem[] {
       ),
     });
   }
-  items.push(faq.indoor);
+  items.push(faq.prices, faq.indoor);
   return items;
 }
