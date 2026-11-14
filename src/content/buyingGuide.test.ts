@@ -51,11 +51,27 @@ describe('"Welke hockeystick kopen" guide on /kennis/hoe-kies-je-de-juiste-hocke
   it('builds the budget table from the catalog, in the budget steps of the stickwijzer', () => {
     const curated = getFieldProducts();
     const rows = budgetRows(curated);
-    expect(rows.reduce((sum, row) => sum + Number(row[1]), 0)).toBe(curated.length);
-    for (const row of rows) expect(Number(row[3]) + Number(row[4]) + Number(row[5])).toBe(Number(row[1]));
+    // Columns: band, beginner, gevorderd, ervaren, of which junior.
+    const total = (row: string[]) => Number(row[1]) + Number(row[2]) + Number(row[3]);
+    expect(rows.reduce((sum, row) => sum + total(row), 0)).toBe(curated.length);
+    for (const row of rows) expect(Number(row[4])).toBeLessThanOrEqual(total(row));
+    // Same boundary as the engine's hard filter: exactly the maximum is still in the band.
+    const at75 = { ...curated[0]!, priceIndicativeEur: { ...curated[0]!.priceIndicativeEur, value: 75 } };
+    expect(budgetRows([at75])[0]!.slice(1, 4).map(Number).reduce((a, b) => a + b)).toBe(1);
     const options = QUESTIONS.budget_band.input.kind === 'single' ? QUESTIONS.budget_band.input.options.map((o) => o.value) : [];
     expect(options.slice(0, 5)).toEqual(['lt_75', '75_125', '125_175', '175_250', 'gt_250']);
     expect(BUDGET_BANDS.map((b) => b.max)).toEqual([75, 125, 175, 250, Infinity]);
+    expect(BUDGET_BANDS.map((b) => b.label)).toEqual(['Tot €75', '€76 tot €125', '€126 tot €175', '€176 tot €250', 'Meer dan €250']);
+  });
+
+  it('still shows the pattern the text describes: beginner and junior sticks low, the most expensive for ervaren spelers', () => {
+    const rows = budgetRows(getFieldProducts());
+    const low = (col: number) => Number(rows[0]![col]) + Number(rows[1]![col]);
+    const all = (col: number) => rows.reduce((sum, row) => sum + Number(row[col]), 0);
+    expect(low(1) / all(1)).toBeGreaterThan(0.5); // beginner
+    expect(low(4) / all(4)).toBeGreaterThan(0.5); // junior
+    const top = rows.at(-1)!;
+    expect(Number(top[3])).toBeGreaterThan(Number(top[1]) + Number(top[2]));
   });
 
   it('says price, carbon and brand do not make a stick better, links /sticks and the stickwijzer, and does not target comparing', () => {

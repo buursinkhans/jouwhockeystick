@@ -9,7 +9,7 @@ import { kennisFaq } from '@/content/landingFaqs';
 export const metadata = pageMetadata({
   title: 'Kennisbank',
   description:
-    'Uitleg over hockeysticks: de lengte tabel, low bow of mid bow, sticks voor kinderen en beginners, en alle begrippen kort uitgelegd.',
+    'Uitleg over hockeysticks: welke hockeystick je koopt, de lengte tabel, low bow of mid bow, en sticks voor kinderen en beginners.',
   path: '/kennis',
 });
 
@@ -37,10 +37,10 @@ export default function KennisIndexPage() {
           Uitleg over de keuzes achter een hockeystick. Wil je weten hoe je alles
           samen afweegt? Lees{' '}
           <Link
-            href="/blog/hockeystick-kopen"
+            href="/kennis/hoe-kies-je-de-juiste-hockeystick"
             className="text-veld underline underline-offset-2"
           >
-            hockeystick kopen: zo kies je een stick die bij je past
+            welke hockeystick kopen?
           </Link>{' '}
           of doe de{' '}
           <Link

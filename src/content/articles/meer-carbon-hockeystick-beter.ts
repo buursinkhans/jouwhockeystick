@@ -224,7 +224,7 @@ export const meerCarbonHockeystickBeter: Article = {
       heading: 'Wat als het percentage er niet bij staat?',
       level: 2,
       body: [
-        'Niet elk merk noemt het carbonpercentage. Staat het er niet bij, dan zie je bij ons "niet vermeld". Dat betekent niet dat er geen carbon in zit, en we gaan nooit gokken. Kijk dan naar wat het merk wel zegt, zoals het niveau en het bow-profiel. Hoe je bow-profiel, carbon en niveau samen weegt, lees je in [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick).',
+        'Niet elk merk noemt het carbonpercentage. Staat het er niet bij, dan zie je bij ons "niet vermeld". Dat betekent niet dat er geen carbon in zit, en we gaan nooit gokken. Kijk dan naar wat het merk wel zegt, zoals het niveau en het bow-profiel. Hoe je bow-profiel, carbon en niveau samen weegt, lees je in [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick)',
       ],
     },
     {

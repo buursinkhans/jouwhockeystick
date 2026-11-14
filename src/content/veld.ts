@@ -28,7 +28,7 @@ export const VELD = {
   updatedAt: '2026-11-14',
   /** Answers the main question within the first 80 words. */
   intro:
-    'Alle veldhockeysticks uit onze catalogus, voor junioren en volwassenen. Je vergelijkt ze op lengte, kromming (bow), carbon en niveau, en bij elk gegeven staat de bron. Met de filters zie je alleen veldsticks in jouw maat en budget. Twijfel je wat bij je past? De [stickwijzer](/stickwijzer) kiest mee, of lees eerst [welke hockeystick je koopt](/kennis/hoe-kies-je-de-juiste-hockeystick).',
+    'Alle veldhockeysticks uit onze catalogus, voor junioren en senioren. Je vergelijkt ze op lengte, kromming (bow), carbon en niveau, met de bron bij elk gegeven. Met de filters zie je alleen veldsticks in jouw maat en budget. Winkelprijzen komen van onze partnerwinkels en kunnen veranderen; de knoppen zijn partnerlinks. Twijfel je? De [stickwijzer](/stickwijzer) kiest mee, of lees eerst [welke hockeystick je koopt](/kennis/hoe-kies-je-de-juiste-hockeystick).',
   levels: {
     heading: 'Veldsticks per niveau',
     intro:
@@ -76,7 +76,7 @@ export const VELD = {
     prices: {
       question: 'Waar komen de winkelprijzen vandaan?',
       answer:
-        `Uit de productfeeds van onze partnerwinkels: bol.com, PassaHockey, Plutosport, HockeyCity en Daka. We lezen ze elke week en zetten de datum erbij; bovenaan deze pagina zie je wanneer. Prijzen kunnen bij de winkel intussen veranderd zijn, dus de prijs op de winkelsite geldt. Is een prijs ouder dan 14 dagen, dan tonen we hem niet meer. Heeft een stick geen actuele winkelprijs, dan zie je de richtprijs, met bron en datum. De knoppen naar de winkels zijn partnerlinks: koop je via zo'n knop, dan krijgen wij een kleine vergoeding van de winkel. Die vergoeding bepaalt niet welke sticks hier staan of in welke volgorde, en sticks die geen partnerwinkel verkoopt, staan er ook gewoon tussen.`,
+        `Uit de productfeeds van onze partnerwinkels: bol.com, PassaHockey, Plutosport, HockeyCity en Daka. We lezen ze elke week en zetten de datum erbij, bovenaan de pagina. Prijzen kunnen bij de winkel intussen veranderd zijn, dus de prijs op de winkelsite geldt. Is een prijs ouder dan 14 dagen, dan tonen we hem niet meer. Heeft een stick geen actuele winkelprijs, dan zie je de richtprijs, met bron en datum. De knoppen naar de winkels zijn partnerlinks: koop je via zo'n knop, dan krijgen wij een kleine vergoeding van de winkel. Die vergoeding bepaalt niet de volgorde, en sticks die geen partnerwinkel verkoopt, staan er ook tussen.`,
     },
     indoor: {
       question: 'Wat is het verschil tussen een veldstick en een zaalstick?',
