@@ -22,6 +22,7 @@ import {
   dateRange,
   fillDays,
   isoDay,
+  lastReportedDay,
   POSTHOG_METRICS,
   risers,
   SEARCH_METRICS,
@@ -38,6 +39,7 @@ import { getToken, readServiceAccount } from '../src/seo/googleAuth';
 const TZ = 'Europe/Amsterdam';
 const GSC_API = 'https://searchconsole.googleapis.com/webmasters/v3/sites';
 const GSC_LAG_DAYS = 3;
+const GSC_EXTRA_DAYS = 4;
 const GSC_SITES = ['sc-domain:jouwhockeystick.nl', 'https://jouwhockeystick.nl/'];
 const BING_API = 'https://ssl.bing.com/webmaster/api.svc/json';
 
@@ -148,14 +150,15 @@ async function gscQuery(token: string, site: string, start: string, end: string,
 async function google(today: string): Promise<Dagcijfers['google']> {
   try {
     const token = await getToken(readServiceAccount());
-    const last = shift(today, -GSC_LAG_DAYS);
-    const first = shift(last, -(SERIES_DAYS - 1));
+    const latest = shift(today, -GSC_LAG_DAYS);
+    // A few extra days back, so the series stays SERIES_DAYS long when the newest days are not processed yet.
+    const first = shift(latest, -(SERIES_DAYS - 1 + GSC_EXTRA_DAYS));
     const candidates = process.env.GSC_SITE_URL ? [process.env.GSC_SITE_URL] : GSC_SITES;
     const failures: string[] = [];
     for (const site of candidates) {
       let byDate: GscRow[];
       try {
-        byDate = await gscQuery(token, site, first, last, 'date');
+        byDate = await gscQuery(token, site, first, latest, 'date');
       } catch (e) {
         failures.push(why(e));
         continue;
@@ -166,11 +169,13 @@ async function google(today: string): Promise<Dagcijfers['google']> {
         vertoningen: r.impressions,
         positie: r.position,
       });
+      const rows: SearchDay[] = byDate.map((r) => ({ date: r.keys[0] ?? '', klikken: r.clicks, vertoningen: r.impressions }));
+      // End at the last day Search Console reported: an unprocessed day is unknown, not zero.
+      const last = lastReportedDay(rows, latest) ?? latest;
       const periode = { start: shift(last, -6), end: last };
       const now = (await gscQuery(token, site, periode.start, periode.end, 'query')).map(toQuery);
       const before = (await gscQuery(token, site, shift(last, -13), shift(last, -7), 'query')).map(toQuery);
-      const rows: SearchDay[] = byDate.map((r) => ({ date: r.keys[0] ?? '', klikken: r.clicks, vertoningen: r.impressions }));
-      const dagen = fillDays(rows, dateRange(first, last), (date) => ({ date, klikken: 0, vertoningen: 0 }));
+      const dagen = fillDays(rows, dateRange(shift(last, -(SERIES_DAYS - 1)), last), (date) => ({ date, klikken: 0, vertoningen: 0 }));
       return {
         ok: true,
         value: {

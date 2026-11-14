@@ -13,7 +13,7 @@ Elke ochtend de cijfers van gisteren met een korte duiding, en om 17:00 een upda
 Bronnen en vertraging:
 
 - **PostHog**: gisteren, in Amsterdamse dagen. Bezoekers (unieke bezoekers met een pageview), paginaweergaven, stickwijzer gestart en afgerond (unieke bezoekers), winkelklikken. Bronnen en landen alleen van gisteren. Alleen de live site, zonder bots.
-- **Google Search Console**: loopt ongeveer drie dagen achter. Dagtotalen tot en met vandaag min drie; zoektermen over de laatste zeven beschikbare dagen, stijgers tegen de zeven daarvoor.
+- **Google Search Console**: loopt ongeveer drie dagen achter. Dagtotalen tot en met de laatste dag waarvoor Search Console al cijfers heeft, hooguit vandaag min drie (een dag die Google nog niet verwerkt heeft telt niet als nul); zoektermen over de laatste zeven beschikbare dagen, stijgers tegen de zeven daarvoor.
 - **Bing**: dagtotalen tot de laatste dag die Bing geeft.
 
 Elke reeks heeft 35 dagen. `vergelijking` zet de laatste dag tegen het gemiddelde van de 7 en 28 dagen ervoor. `opvallend` is alleen gezet bij minstens 5 dagen geschiedenis, een verschil van minstens 10 en minstens 50 procent (`ANOMALY` in `src/marketing/dailyMetrics.ts`). Valt een bron uit, dan staat er `{ok: false, reden}` en gaan de andere door.
