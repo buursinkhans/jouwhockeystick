@@ -4,6 +4,7 @@ import {
   Dagcijfers,
   dateRange,
   fillDays,
+  lastReportedDay,
   risers,
   topQueries,
   type QueryRow,
@@ -20,6 +21,24 @@ describe('dateRange and fillDays', () => {
     expect(dates).toEqual(['2026-10-30', '2026-10-31', '2026-11-01', '2026-11-02']);
     const filled = fillDays([day('2026-10-31', 4)], dates, (d) => day(d, 0));
     expect(filled.map((r) => r.klikken)).toEqual([0, 4, 0, 0]);
+  });
+});
+
+describe('lastReportedDay', () => {
+  it('ends at the last day Search Console reported, not at a day it has not processed yet', () => {
+    const rows = [day('2026-11-08', 6), day('2026-11-09', 7), day('2026-11-10', 9)];
+    expect(lastReportedDay(rows, '2026-11-11')).toBe('2026-11-10');
+  });
+
+  it('ignores rows after the latest day and returns null without rows', () => {
+    expect(lastReportedDay([day('2026-11-09', 1), day('2026-11-12', 1)], '2026-11-11')).toBe('2026-11-09');
+    expect(lastReportedDay([], '2026-11-11')).toBeNull();
+  });
+
+  it('keeps a reported zero inside the series as a real zero', () => {
+    const rows = [day('2026-11-09', 3), day('2026-11-11', 2)];
+    const last = lastReportedDay(rows, '2026-11-11') ?? '2026-11-11';
+    expect(fillDays(rows, dateRange('2026-11-09', last), (d) => day(d, 0)).map((r) => r.klikken)).toEqual([3, 0, 2]);
   });
 });
 

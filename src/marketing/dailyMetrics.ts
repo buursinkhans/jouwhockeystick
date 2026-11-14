@@ -160,6 +160,19 @@ export function fillDays<T extends { date: string }>(rows: readonly T[], dates: 
   return dates.map((d) => byDate.get(d) ?? empty(d));
 }
 
+/**
+ * The last day a search source actually reported, at most `latest`. Search
+ * Console returns no row for a day it has not processed yet, so a fixed
+ * "today minus 3" end date can land on a day without data; filling that day
+ * with zeros would show a false drop (2026-11-14: 0 impressions on 11 Nov,
+ * against 199 a day before). Null when no row falls on or before `latest`.
+ */
+export function lastReportedDay(rows: readonly { date: string }[], latest: string): string | null {
+  let last: string | null = null;
+  for (const r of rows) if (r.date <= latest && (last === null || r.date > last)) last = r.date;
+  return last;
+}
+
 const round = (n: number, digits = 1) => Math.round(n * 10 ** digits) / 10 ** digits;
 const mean = (xs: readonly number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null);
 
