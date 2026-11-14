@@ -17,9 +17,9 @@ describe('/sticks landing copy', () => {
     expect(VELD.title.toLowerCase()).not.toMatch(/kiezen|kopen/);
   });
 
-  it('has five FAQ answers with numbers from the catalog', () => {
+  it('has seven FAQ answers with numbers from the catalog', () => {
     const faq = veldFaq(getFieldProducts(now, { includeImported: true }));
-    expect(faq).toHaveLength(5);
+    expect(faq).toHaveLength(7);
     expect(faq.map((item) => item.answer).join(' ')).not.toContain('undefined');
   });
 });

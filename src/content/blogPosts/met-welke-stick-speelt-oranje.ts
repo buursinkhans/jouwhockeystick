@@ -161,7 +161,7 @@ export const metWelkeStickSpeeltOranje: Article = {
       body: [
         'Met hetzelfde merk spelen als je favoriete international kan leuk zijn, maar de merknaam vertelt nog niet welk model bij jou past. En het exacte wedstrijdmodel van je idool is meestal niet eens bekend.',
         'Laat je dus gerust inspireren, maar kies het model op je eigen lengte, ervaring, voorkeuren en budget.',
-        'Benieuwd welke stick bij jou past? Doe de [stickwijzer](/stickwijzer) of lees [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen). Het verschil in kromming lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow), en voor kinderen is er [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
+        'Benieuwd welke stick bij jou past? Doe de [stickwijzer](/stickwijzer) of lees [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick) Het verschil in kromming lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow), en voor kinderen is er [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },
     {

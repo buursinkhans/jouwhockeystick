@@ -35,8 +35,8 @@ export const BUYING_INTRO = {
     'Een goede hockeystick hoeft niet de duurste te zijn. Begin bij de juiste lengte, je ervaring en de acties die je het meest maakt. Carbon en kromming verfijnen daarna de keuze, niet andersom.',
   ],
   readMore: {
-    label: 'Zo kies je een stick die bij je past',
-    href: '/blog/hockeystick-kopen',
+    label: 'Welke hockeystick kopen? Kies in drie stappen',
+    href: '/kennis/hoe-kies-je-de-juiste-hockeystick',
   },
   special: {
     heading: 'Een bijzondere stick: de zaalstick',

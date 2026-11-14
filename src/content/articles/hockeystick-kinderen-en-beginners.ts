@@ -114,7 +114,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Een eerste stick kiezen in een paar minuten',
       level: 2,
       body: [
-        'Het [snelle advies](/stickwijzer?snel) is gemaakt voor ouders en beginners: leeftijd, lengte, ervaring en budget, en je krijgt sticks in de juiste maat, met de redenen erbij. Wil je meer wensen meegeven, dan heeft de [stickwijzer](/stickwijzer) ook een uitgebreide route voor een eerste stick. Meer over de hele keuze lees je in [hockeystick kopen: zo kies je een stick die bij je past](/blog/hockeystick-kopen).',
+        'Het [snelle advies](/stickwijzer?snel) is gemaakt voor ouders en beginners: leeftijd, lengte, ervaring en budget, en je krijgt sticks in de juiste maat, met de redenen erbij. Wil je meer wensen meegeven, dan heeft de [stickwijzer](/stickwijzer) ook een uitgebreide route voor een eerste stick. Hoe je in drie stappen kiest, lees je in [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick)',
       ],
     },
   ],
