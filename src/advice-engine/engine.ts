@@ -10,10 +10,9 @@ import {
   passesNonLengthFilters,
 } from './hardFilters';
 import { buildPlayerContext } from './playerContext';
-import { deriveAdviceRules } from './productRules';
+import { BAND_ORDER, HIGH_CARBON, deriveAdviceRules } from './productRules';
 import { ADVICE_VERSION, METHOD_URL, RULE_SET_VERSION } from './ruleSetVersion';
-import {
-  brandVerifiedCount, scoreProduct, type SizeBasis } from './scoring';
+import { scoreProduct, type SizeBasis } from './scoring';
 import { findShorterSize, isAdultHeight, matchSize } from './sizeAdvice';
 import type {
   AdviceResult,
@@ -42,8 +41,6 @@ type Candidate = Omit<AdviceResultItem, 'role' | 'cautions'> & {
   tooSimple: boolean;
   /** 0 = advised size, 1 = second size, 2 = another size. */
   sizeRank: number;
-  /** Key specs that come from the brand itself (0–4). */
-  brandVerified: number;
 };
 
 const SIZE_RANK: Record<SizeBasis, number> = {
@@ -78,7 +75,6 @@ function toCandidate(
     rankScore,
     tooSimple,
     sizeRank: SIZE_RANK[sizeBasis],
-    brandVerified: brandVerifiedCount(product),
   };
 }
 
@@ -86,15 +82,15 @@ function toCandidate(
  * The advised size first (owner, 2026-11-15): a stick in the other size the
  * advice names only comes after every stick in the advised size, however it
  * scores, so a small score difference never puts a player in another size.
- * Within a size: highest score first. Ties go to the stick with more specs
- * verified by its brand (decision log 2026-10-19), then the simpler, then the
- * cheaper stick — never to a commercial factor.
+ * Within a size: highest score first. Ties go to the simpler and then the
+ * cheaper stick, never to a commercial factor. Until 2026-11-15 the stick
+ * with more brand-verified specs went first; that decided most advice and
+ * put the same few well-documented sticks on top (owner, engine review).
  */
 function byScore(a: Candidate, b: Candidate): number {
   return (
     a.sizeRank - b.sizeRank ||
     b.rankScore - a.rankScore ||
-    b.brandVerified - a.brandVerified ||
     a.complexity - b.complexity ||
     a.product.priceIndicativeEur.value - b.product.priceIndicativeEur.value ||
     a.product.slug.localeCompare(b.product.slug)
@@ -117,17 +113,40 @@ function withRole(
   };
 }
 
-/** One responsible step up, and a smaller one while the basics are still forming. */
+const isLowBow = (candidate: Candidate) =>
+  candidate.product.bowProfile?.value === 'lowbow' ||
+  candidate.product.bowProfile?.value === 'extreme_lowbow';
+
+/**
+ * A low bow comes too early for a starter and for a player who is still
+ * learning the first touch or the basics (owner, 2026-11-15): never the first
+ * choice, on any route. It may still be the ambitious choice.
+ */
+const lowBowTooEarly = (candidate: Candidate, ctx: PlayerContext) =>
+  isLowBow(candidate) && (ctx.band === 'starter' || ctx.learningControl);
+
+const levelIndex = (candidate: Candidate) =>
+  BAND_ORDER.indexOf(deriveAdviceRules(candidate.product).homeBand);
+
+/**
+ * One responsible step up, and a smaller one while the basics are still
+ * forming. A step up is never a stick for a lower level than the first
+ * choice, and never a very stiff stick for a player who is sensitive to
+ * vibrations (owner, 2026-11-15).
+ */
 function stepUps(
   candidates: Candidate[],
   best: Candidate,
   ctx: PlayerContext,
 ): Candidate[] {
   const maxStep = ctx.learningControl ? 1 : 2;
+  const vibration = ctx.answers.vibration_sensitivity === 'yes';
   return candidates.filter(
     (candidate) =>
       candidate.complexity > best.complexity &&
-      candidate.complexity <= best.complexity + maxStep,
+      candidate.complexity <= best.complexity + maxStep &&
+      levelIndex(candidate) >= levelIndex(best) &&
+      !(vibration && (candidate.product.carbonPercentage?.value ?? 0) >= HIGH_CARBON),
   );
 }
 
@@ -159,8 +178,12 @@ function assignRoles(
   const best =
     ranked.find(
       (candidate) =>
-        !candidate.tooSimple && candidate.score >= BEST_MATCH_MIN_SCORE,
-    ) ?? ranked[0];
+        !candidate.tooSimple &&
+        candidate.score >= BEST_MATCH_MIN_SCORE &&
+        !lowBowTooEarly(candidate, ctx),
+    ) ??
+    ranked.find((candidate) => !lowBowTooEarly(candidate, ctx)) ??
+    ranked[0];
   if (!best) {
     return [];
   }
@@ -172,7 +195,7 @@ function assignRoles(
   const results: AdviceResultItem[] = [
     withRole(
       best,
-      best.score >= BEST_MATCH_MIN_SCORE && !best.tooSimple && best.sizeRank === 0
+      best.score >= BEST_MATCH_MIN_SCORE && !best.tooSimple && best.sizeRank === 0 && !lowBowTooEarly(best, ctx)
         ? 'best_match'
         : 'closest_option',
       ctx,
@@ -180,7 +203,8 @@ function assignRoles(
   ];
 
   const safe = rest.find(
-    (candidate) => candidate.complexity <= best.complexity,
+    (candidate) =>
+      candidate.complexity <= best.complexity && !lowBowTooEarly(candidate, ctx),
   );
   if (safe) {
     results.push(withRole(safe, 'safe_choice', ctx));
@@ -217,8 +241,13 @@ function brandFirstResults(
   // simple; both passed every hard filter.
   const own =
     ranked.find(
+      (candidate) =>
+        candidate.product.brand === brand && !candidate.tooSimple && !lowBowTooEarly(candidate, ctx),
+    ) ??
+    ranked.find(
       (candidate) => candidate.product.brand === brand && !candidate.tooSimple,
-    ) ?? ranked.find((candidate) => candidate.product.brand === brand);
+    ) ??
+    ranked.find((candidate) => candidate.product.brand === brand);
   if (!own) {
     return null;
   }

@@ -26,10 +26,10 @@ export const princessCompetitionJr10StarIndoor: Product = {
   passaSportsProductUrl:
     'https://www.passasports.nl/princess-competition-10-star-lowbow-indoor-junior-33066060000',
   experienceLevel: {
-    value: 'beginner',
+    value: 'gevorderd',
     source: 'editorial-estimate',
     sourceLabel:
-      'Princess noemt geen niveau, wel een stick "voor spelers die op zoek zijn naar controle en speelcomfort". Met 15% carbon ingeschat als instap voor jeugdspelers. Princess vermeldt geen modeljaar.',
+      'Princess noemt geen niveau, wel een stick "voor spelers die op zoek zijn naar controle en speelcomfort". Eigen inschatting: door de low bow geen beginnersstick, ook al heeft hij maar 15% carbon. Princess vermeldt geen modeljaar.',
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },

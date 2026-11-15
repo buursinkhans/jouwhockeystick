@@ -3227,3 +3227,16 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Gevolgen:** de lengtetabel op `/kennis/hockeystick-lengte-tabel` krijgt een rij erbij (159–162 cm: 36 inch) en bij 163–184 cm staat als "kan ook" alleen 37,5. Titel, intro en koppen zijn ongewijzigd. De zaalkeuze gebruikt dezelfde maatregels. Opgeslagen adviezen met regels v13 blijven geldig; nieuwe krijgen v14.
 - **Tests:** `src/advice-engine/sizeFirst.test.ts` draait de echte catalogus over alle lengtes van 95 tot 210 cm op drie routes.
 - **Nog te doen (PR 2):** de tiebreak "meeste merkgegevens", low bow bij beginners, de ambitieuze keuze en trillingsgevoeligheid.
+
+## 2026-11-15 — Adviesengine: rangschikking en niveau (review, PR 2 van 2; regels v15)
+
+- **Wat (besluiten eigenaar na de review):**
+  - **Tiebreak:** bij een gelijke score gaat de eenvoudigere stick voor en daarna de goedkopere. "Meeste gegevens van het merk" vervalt als tiebreak (besluit van 2026-10-19 op dit punt teruggedraaid). De aftrek van 3 punten voor een stick waarvan het niveau alleen geschat is en niets van het merk komt, blijft.
+  - **Low bow hoort bij gevorderd:** een stick met low bow of extreme low bow waarvan wij het niveau schatten, schatten we niet meer als beginnersstick in. Dat geldt in het advies (`adviceLevel`) en in de import (`estimateLevel`, vanaf de eerstvolgende wekelijkse sync ook in de catalogus). Een niveau dat een merk of winkel noemt, blijft staan.
+  - **Low bow te vroeg:** een speler op niveau starter, of een speler die de aanname of de basis nog leert, krijgt op geen enkele route een low bow als eerste of veilige keuze. Als ambitieuze keuze mag hij wel.
+  - **Ambitieuze keuze:** nooit een stick voor een lager niveau dan de eerste keuze, en bij trillingsgevoeligheid geen stick met 85% carbon of meer.
+  - **Beginnersstick met veel carbon:** geblokkeerd vanaf 70% carbon (was 85%).
+  - **Bewust niet:** 70, 80 en 100% carbon blijven gelijkwaardig voor wie "direct" wil.
+- **Met de hand:** `princess-competition-jr-10-star-indoor` (eigen schatting, low bow) staat nu op gevorderd. `y1-glg-30` en `grays-jb3xi-jumbow-indoor` houden "beginner", omdat de winkel dat niveau noemt; de eigenaar beslist.
+- **Wat dit niet oplost:** gevorderde senioren krijgen nog steeds vaak dezelfde sticks. De oorzaak is de aftrek van 3 punten samen met veel gelijke scores: de nagekeken sticks met merkgegevens scoren daardoor net hoger dan de importsticks. De tiebreak speelt daarin nauwelijks nog een rol.
+- **Tests:** `src/advice-engine/rankingRules.test.ts`, met de echte catalogus.
