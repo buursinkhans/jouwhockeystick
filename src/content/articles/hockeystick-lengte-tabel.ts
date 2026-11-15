@@ -77,7 +77,7 @@ export const hockeystickLengteTabel: Article = {
           rows: LENGTH_ROWS,
         },
         '1 inch = 2,54 cm.',
-        'Deze tabel is onze eigen richtlijn, geen officiële norm. En eerlijk is eerlijk: de maattabellen van merken lopen flink uiteen. Bij kinderen scheelt het al snel 2 inch, en de ene tabel adviseert een maat langer dan de andere. Daarom staat er per rij ook een maat die kan passen. Bij kinderen is dat altijd de kortere maat, bij volwassenen de maat erboven of eronder.',
+        'Deze tabel is onze eigen richtlijn, geen officiële norm. En eerlijk is eerlijk: de maattabellen van merken lopen flink uiteen. Bij kinderen scheelt het al snel 2 inch, en de ene tabel adviseert een maat langer dan de andere. Daarom staat er per rij ook een maat die kan passen. Bij kinderen is dat altijd de kortere maat, bij volwassenen een volwassen maat erboven of eronder.',
         'Kijk bij een specifiek model ook even naar de maattabel van het merk. De [stickwijzer](/stickwijzer) werkt met precies deze tabel en kijkt daarnaast naar je huidige stick.',
       ],
     },
@@ -166,7 +166,7 @@ export const hockeystickLengteTabel: Article = {
       heading: 'Tussen twee maten: 36,5 of 37,5 inch?',
       level: 3,
       body: [
-        'De stickwijzer kijkt alleen naar de lichaamslengte. Zit je in de bovenste helft van een lengteband voor volwassenen, dan noemt hij de langere maat als alternatief; zit je in de onderste helft, dan de kortere. Bij kinderen is het alternatief altijd de kortere maat. Verschilt je huidige stick meer dan een inch van het advies, dan zegt hij dat erbij.',
+        'De stickwijzer kijkt alleen naar de lichaamslengte. Zit je in de bovenste helft van een lengteband voor volwassenen, dan noemt hij de langere maat als alternatief; zit je in de onderste helft, dan de kortere. Onder 36,5 inch gaat hij bij volwassenen niet: kortere maten zijn juniormaten. Bij kinderen is het alternatief altijd de kortere maat. Verschilt je huidige stick meer dan een inch van het advies, dan zegt hij dat erbij.',
         'Onze tip als je tussen twee maten zit: een kortere stick houdt de bal dichter bij je lichaam, wat helpt bij aannemen en dribbelen. Een langere geeft meer bereik. Kies op wat je in een wedstrijd het meest doet, en laat je positie daarbij niet de doorslag geven. Kun je beide maten proberen, doe dan de houdingscheck van hierboven met allebei.',
       ],
     },
@@ -200,7 +200,7 @@ export const hockeystickLengteTabel: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-11-13',
+  updatedAt: '2026-11-15',
   sources: [
     {
       label:

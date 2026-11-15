@@ -236,7 +236,10 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
           '33',
           '34',
           '35',
+          '36',
           '36.5',
+          '37.5',
+          '38.5',
         ].map((value) => ({
           value,
           label: `${value.replace('.', ',')}"`,

@@ -6,17 +6,26 @@ type LengthBand = {
   sizes: readonly [number, ...number[]];
 };
 
-const ADULT_MIN_CM = 163;
+/** From this height a player gets an adult size (36.5 inch or longer), never a junior size or a junior model. */
+export const ADULT_MIN_CM = 163;
+
+export const isAdultHeight = (heightCm: number) => heightCm >= ADULT_MIN_CM;
 
 const LAST_BAND: LengthBand = { minCm: 193, maxCm: 210, sizes: [38.5] };
 
 /**
  * Indicative height-to-stick-length mapping (spec §3B). Not a medical or
  * federation standard. Brand size charts differ by up to 2–3 inch (Grays
- * advises longer for children, other charts shorter), so every single-size
- * band also names a neighbouring size as a fit. For children that is always
- * the shorter one (never buy "op de groei"); from adult height the nearer
- * one. See decision log 2026-10-13.
+ * advises longer for children, other charts shorter), so a band can also
+ * name a neighbouring size as a fit. See decision log 2026-10-13.
+ *
+ * Owner's rules of 2026-11-15 (engine review):
+ * - Children: the other size is always the shorter one, never a longer one
+ *   (never buy "op de groei"), also inside a band with two sizes.
+ * - Adults (from 163 cm): never a junior size, so 36.5 has no shorter
+ *   neighbour; the other size is the nearer adult size.
+ * - 36 inch is the largest junior size (159–162 cm): in the catalog only
+ *   junior models come in 36.
  */
 export const LENGTH_GUIDE: readonly LengthBand[] = [
   { minCm: 95, maxCm: 107, sizes: [22, 24] },
@@ -28,7 +37,8 @@ export const LENGTH_GUIDE: readonly LengthBand[] = [
   { minCm: 138, maxCm: 142, sizes: [32] },
   { minCm: 143, maxCm: 147, sizes: [33] },
   { minCm: 148, maxCm: 154, sizes: [34] },
-  { minCm: 155, maxCm: 162, sizes: [35] },
+  { minCm: 155, maxCm: 158, sizes: [35] },
+  { minCm: 159, maxCm: 162, sizes: [36] },
   { minCm: 163, maxCm: 184, sizes: [36.5] },
   { minCm: 185, maxCm: 192, sizes: [37.5] },
   LAST_BAND,
@@ -41,10 +51,18 @@ export const LENGTH_GUIDE: readonly LengthBand[] = [
 export function alsoFitsInch(band: LengthBand): number[] {
   if (band.sizes.length > 1) return [];
   const index = LENGTH_GUIDE.indexOf(band);
-  const shorter = LENGTH_GUIDE[index - 1]?.sizes.at(-1);
-  const longer =
-    band.minCm >= ADULT_MIN_CM ? LENGTH_GUIDE[index + 1]?.sizes[0] : undefined;
+  const adult = band.minCm >= ADULT_MIN_CM;
+  const previous = LENGTH_GUIDE[index - 1];
+  // Adults never get a junior size: the shorter neighbour must be an adult band too.
+  const shorter = previous && (!adult || previous.minCm >= ADULT_MIN_CM) ? previous.sizes.at(-1) : undefined;
+  const longer = adult ? LENGTH_GUIDE[index + 1]?.sizes[0] : undefined;
   return [shorter, longer].filter((inch) => inch !== undefined);
+}
+
+/** The largest size in the guide below `inch`, for a child's shorter option. */
+function shorterGuideSize(inch: number): number | undefined {
+  const sizes = LENGTH_GUIDE.flatMap((band) => band.sizes).filter((size) => size < inch);
+  return sizes.length > 0 ? Math.max(...sizes) : undefined;
 }
 
 export type SizeAdvice = {
@@ -66,26 +84,27 @@ export function getSizeAdvice(
   // Heights are validated to 95–210 cm, so a band always matches; the last band is only a type-safe fallback.
   const bandIndex = LENGTH_GUIDE.findIndex((band) => heightCm <= band.maxCm);
   const band = LENGTH_GUIDE[bandIndex] ?? LAST_BAND;
-  const previous = LENGTH_GUIDE[bandIndex - 1];
-  const next = LENGTH_GUIDE[bandIndex + 1];
   const [firstSize, secondSize] = band.sizes;
+  const adult = isAdultHeight(heightCm);
+  const upperHalf = heightCm > (band.minCm + band.maxCm) / 2;
 
   let primaryInch = firstSize;
   let alternativeInch: number | undefined;
   let basis: SizeAdvice['basis'] = 'single';
 
   if (secondSize !== undefined) {
-    const upperHalf = heightCm > (band.minCm + band.maxCm) / 2;
+    // Two sizes in the band (children only). The other size is never longer
+    // than the advised one: in the lower half that is the size below the band.
     primaryInch = upperHalf ? secondSize : firstSize;
-    alternativeInch = upperHalf ? firstSize : secondSize;
-    basis = 'two_sizes';
+    alternativeInch = upperHalf ? firstSize : shorterGuideSize(firstSize);
+    basis = alternativeInch === undefined ? 'single' : 'two_sizes';
   } else {
-    // A neighbouring size also fits: for children only the shorter one.
-    const upperHalf =
-      band.minCm >= ADULT_MIN_CM && heightCm > (band.minCm + band.maxCm) / 2;
-    const neighbour =
-      (upperHalf ? next?.sizes[0] : previous?.sizes.at(-1)) ??
-      previous?.sizes.at(-1);
+    // A neighbouring size also fits: for children only the shorter one, for
+    // adults the nearer adult size (never a junior size).
+    const [shorter, longer] = adult
+      ? [alsoFitsInch(band).find((inch) => inch < firstSize), alsoFitsInch(band).find((inch) => inch > firstSize)]
+      : [shorterGuideSize(firstSize), undefined];
+    const neighbour = adult ? (upperHalf ? (longer ?? shorter) : (shorter ?? undefined)) : shorter;
     if (neighbour !== undefined) {
       alternativeInch = neighbour;
       basis = heightCm <= band.minCm ? 'borderline' : 'neighbour';

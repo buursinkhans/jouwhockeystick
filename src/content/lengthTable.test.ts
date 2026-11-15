@@ -65,7 +65,8 @@ describe('length table improvements (decision log 2026-10-29)', () => {
       [138, 142, [32]],
       [143, 147, [33]],
       [148, 154, [34]],
-      [155, 162, [35]],
+      [155, 158, [35]],
+      [159, 162, [36]],
       [163, 184, [36.5]],
       [185, 192, [37.5]],
       [193, 210, [38.5]],
@@ -90,7 +91,9 @@ describe('length table improvements (decision log 2026-10-29)', () => {
       const alternatives = alsoFitsInch(band).map((s) => String(s).replace('.', ','));
       expect(also).toBe(alternatives.length ? alternatives.join(' of ') : '–');
     });
-    expect(LENGTH_ROWS[10]).toEqual(['163–184 cm', { text: '36,5', note: 'ca. 93 cm' }, '35 of 37,5']);
+    // 2026-11-15: 36 inch is the largest junior size, and an adult gets no junior size as the other one.
+    expect(LENGTH_ROWS[10]).toEqual(['159–162 cm', { text: '36', note: 'ca. 91 cm' }, '35']);
+    expect(LENGTH_ROWS[11]).toEqual(['163–184 cm', { text: '36,5', note: 'ca. 93 cm' }, '37,5']);
     expect(article.sections[0]?.body).toContain('1 inch = 2,54 cm.');
   });
 
