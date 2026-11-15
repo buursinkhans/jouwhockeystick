@@ -34,7 +34,31 @@ De branch `social-state` is openbaar. Daarom staat daar geen leesbaar dagcijfer 
 - Nieuwe bestanden gebruiken 600.000 rondes (OWASP). Het aantal rondes staat in het bestand, dus oude bestanden met 310.000 rondes blijven leesbaar.
 - Zonder sleutel schrijft de workflow geen dagcijfers, en een laatste controle in `dagcijfers.yml` weigert elk bestand met leesbare cijfers.
 - De geplande taak Dagbericht kan de cijfers niet lezen: hij kopieert het bestand ongewijzigd naar de studio en stuurt alleen een melding zonder getal. Het tabblad Vandaag in de Marketingstudio opent de cijfers met de sleutel die het tabblad Verkoop al bewaart, en Noor schrijft daar het dagbericht. Zonder sleutel staat er dat de cijfers versleuteld zijn.
-- Oude, leesbare versies staan nog in de geschiedenis van `social-state`. Die schoont een aparte stap op (decision log).
+- Oude, leesbare versies stonden in de geschiedenis van `social-state`. Die verwijdert de workflow **Social-state opschonen** (`.github/workflows/social-state-opschonen.yml`), zie hieronder.
+
+### Geschiedenis van social-state opschonen
+
+De workflow vervangt `social-state` door één commit zonder voorgeschiedenis, met precies dezelfde bestanden. Hij draait alleen met de hand en na het woord OPSCHONEN. Daarbij:
+
+1. zet hij de twee workflows die naar `social-state` schrijven (`dagcijfers.yml` en `social-state.yml`) tijdelijk uit en wacht hij tot er geen run van die twee meer loopt;
+2. controleert hij dat de dagcijfers en de verkoop op de branch versleuteld zijn (`.github/scripts/social-state-check.mjs`); zo niet, dan verandert hij niets;
+3. force-pusht hij alleen `refs/heads/social-state`, met `--force-with-lease`, zodat een push die er net tussen komt niet verloren gaat;
+4. zet hij de twee workflows altijd weer aan, ook als een stap mislukt;
+5. zet hij in de samenvatting van de run hoeveel commits er waren, de oude laatste commit en de nieuwe commit;
+6. zet hij zichzelf uit na een geslaagde run.
+
+Niets gebruikt de geschiedenis van de branch: de Publiceerder, de Onderzoeker en de Planner lezen de bestanden via de contents-API (`social-state.mjs get`), en die blijven hetzelfde.
+
+**Wat dit niet doet.** Oude commits blijven bij GitHub nog een tijd bereikbaar via hun directe adres (de SHA), tot GitHub ze opruimt. Wie de repo eerder heeft gekloond, houdt de oude data. Er zijn geen forks (gecontroleerd op 2026-11-15).
+
+**Helemaal verwijderen via GitHub Support.**
+
+1. Ga naar support.github.com en kies "Contact us".
+2. Kies het account `buursinkhans` en de repository `buursinkhans/jouwhockeystick`.
+3. Schrijf in het Engels dat je gevoelige gegevens hebt verwijderd uit de branch `social-state` door die te herschrijven, en vraag ze om de oude commits te laten opruimen ("dereference and garbage collect") en eventuele gecachte weergaven te verwijderen.
+4. Geef de oude laatste commit uit de samenvatting van de run. Alle commits die daarvan bereikbaar zijn, zijn de oude versies. Vermeld dat er geen pull requests of forks naar die commits verwijzen.
+
+GitHub doet dit meestal binnen een paar dagen. Het is niet verplicht: de oude bestanden bevatten zoektermen, bronnen, landen en bezoekersaantallen, geen persoonsgegevens en geen bedragen.
 
 ## Wat jij doet
 

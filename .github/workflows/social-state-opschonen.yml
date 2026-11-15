@@ -1,0 +1,138 @@
+# One-off: removes the history of the public branch social-state, which held
+# readable daily figures (search queries, sources, countries, totals) until
+# 2026-11-14 (security review, decision log 2026-11-15). Replaces the branch
+# with one commit without history, holding exactly the current files.
+#
+# Only by hand (Actions -> "Social-state opschonen" -> Run workflow), with the
+# word OPSCHONEN typed in. Only ever force-pushes refs/heads/social-state.
+# Pauses the two workflows that write to the branch while it runs and always
+# turns them back on. Turns itself off after a successful run.
+#
+# Nothing reads the history of social-state: the Publiceerder, Onderzoeker and
+# Planner read the files through the contents API (social-state.mjs get, by
+# blob sha, which stays the same), and dagcijfers.yml and social-state.yml
+# fetch the branch and push on top of it, with a retry that starts again from
+# the newest branch. See docs/beveiliging.md.
+name: Social-state opschonen
+
+on:
+  workflow_dispatch:
+    inputs:
+      bevestig:
+        description: 'Typ OPSCHONEN om de geschiedenis van social-state te verwijderen'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  # The same group as the two writers, so none of them runs at the same time.
+  group: social-state
+  cancel-in-progress: false
+
+env:
+  WRITERS: dagcijfers.yml social-state.yml
+  TARGET: refs/heads/social-state
+
+jobs:
+  opschonen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Bevestiging controleren
+        env:
+          BEVESTIG: ${{ inputs.bevestig }}
+        run: |
+          if [ "$BEVESTIG" != "OPSCHONEN" ]; then
+            echo "::error::Typ precies OPSCHONEN (hoofdletters) om door te gaan. Er is niets veranderd."
+            exit 1
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Schrijvers tijdelijk uitzetten
+        id: pause
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          paused=""
+          for wf in $WRITERS; do
+            state=$(gh workflow view "$wf" --json state --jq .state)
+            if [ "$state" = "active" ]; then
+              gh workflow disable "$wf"
+              paused="$paused $wf"
+            fi
+          done
+          echo "paused=$paused" >> "$GITHUB_OUTPUT"
+          echo "Uitgezet:${paused:- (geen, stonden al uit)}"
+          # Wait until no run of a writer is still going (at most 10 minutes).
+          for attempt in $(seq 1 60); do
+            busy=0
+            for wf in $WRITERS; do
+              n=$(gh run list --workflow "$wf" --json status --jq '[.[] | select(.status != "completed")] | length')
+              busy=$((busy + n))
+            done
+            [ "$busy" -eq 0 ] && { echo "Geen schrijvende run meer bezig."; exit 0; }
+            echo "Nog $busy run(s) bezig; even wachten."
+            sleep 10
+          done
+          echo "::error::Na 10 minuten liep er nog een run die naar social-state schrijft. Er is niets veranderd."
+          exit 1
+
+      - name: Is alles op social-state versleuteld?
+        run: |
+          git fetch -q origin social-state
+          rm -rf "$RUNNER_TEMP/state" && mkdir -p "$RUNNER_TEMP/state"
+          for f in dagcijfers.json dagcijfers-detail.json verkoop.json; do
+            git show "origin/social-state:video/studio/state/$f" > "$RUNNER_TEMP/state/$f" 2>/dev/null || rm -f "$RUNNER_TEMP/state/$f"
+          done
+          node .github/scripts/social-state-check.mjs "$RUNNER_TEMP/state"
+
+      - name: Nieuwe branch zonder geschiedenis
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          old=$(git rev-parse origin/social-state)
+          before=$(git rev-list --count "$old")
+          tree=$(git rev-parse "$old^{tree}")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          new=$(git commit-tree "$tree" -m "Social-state zonder geschiedenis ($(date -u +%F)); oude versies met leesbare dagcijfers verwijderd")
+          # Only this branch, and only if nobody changed it since we read it.
+          [ "$TARGET" = "refs/heads/social-state" ] || { echo "::error::Verkeerd doel: $TARGET"; exit 1; }
+          git push --force-with-lease="$TARGET:$old" origin "$new:$TARGET"
+          git fetch -q origin social-state
+          [ "$(git rev-parse origin/social-state)" = "$new" ] || { echo "::error::De branch wijst niet naar de nieuwe commit."; exit 1; }
+          [ "$(git rev-parse origin/social-state^{tree})" = "$tree" ] || { echo "::error::De inhoud is veranderd."; exit 1; }
+          after=$(git rev-list --count origin/social-state)
+          {
+            echo "## Social-state opgeschoond"
+            echo
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Commits vóór | $before |"
+            echo "| Commits na | $after |"
+            echo "| Oude laatste commit | \`$old\` |"
+            echo "| Nieuwe commit | \`$new\` |"
+            echo "| Inhoud | ongewijzigd (zelfde tree \`$tree\`) |"
+            echo
+            echo "Bewaar de oude laatste commit als je GitHub Support vraagt de oude versies helemaal te verwijderen (docs/beveiliging.md)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Schrijvers weer aanzetten
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PAUSED: ${{ steps.pause.outputs.paused }}
+        run: |
+          for wf in $PAUSED; do gh workflow enable "$wf" && echo "Weer aan: $wf"; done
+
+      - name: Deze workflow uitzetten
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow disable social-state-opschonen.yml

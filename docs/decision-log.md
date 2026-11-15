@@ -3285,6 +3285,14 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 
 **Betrokken bestanden:** `.github/workflows/catalogus-aanvuller.yml`, `catalogus-verrijker.yml`, `catalogus-hercontrole.yml`, `review.yml`, `orchestrator.yml`, `marktverkenning.yml`.
 
+## 2026-11-15 — Beveiliging: geschiedenis van social-state opschonen (PR B)
+
+- **Wat:** eenmalige workflow `.github/workflows/social-state-opschonen.yml`, alleen met de hand en na het woord OPSCHONEN. Hij zet `dagcijfers.yml` en `social-state.yml` tijdelijk uit, controleert dat de dagcijfers en de verkoop op `social-state` versleuteld zijn, vervangt de branch door één commit zonder voorgeschiedenis met precies dezelfde bestanden (force-push met lease, alleen `refs/heads/social-state`), zet de twee workflows altijd weer aan en zichzelf na een geslaagde run uit.
+- **Waarom:** opdracht eigenaar. Tot 2026-11-14 stonden zoektermen, bronnen, landen en dagtotalen leesbaar op deze openbare branch; de geschiedenis had 666 commits met die oude versies.
+- **Wat nodig was:** niets leest de geschiedenis van de branch. De Publiceerder, Onderzoeker en Planner lezen de bestanden via de contents-API; de vergelijkingen in de dagcijfers komen uit de API's van PostHog, Search Console en Bing.
+- **Grenzen:** oude commits blijven via hun SHA bereikbaar tot GitHub ze opruimt; volledig verwijderen kan via GitHub Support (`docs/beveiliging.md`). Er zijn geen forks. Wie de repo eerder kloonde, houdt de oude data.
+- **Bewust zo:** de workflow zet zichzelf uit in plaats van een vervolg-PR die hem verwijdert; het bestand blijft als documentatie.
+
 ## 2026-11-15 — Twee nagekeken sticks met low bow naar gevorderd
 
 - **Wat:** `y1-glg-30` en `grays-jb3xi-jumbow-indoor` staan nu op "gevorderd" (was "beginner"). De winkel noemt "beginner"; de bron is nu onze eigen inschatting, met die vermelding en de reden in het bronlabel.
