@@ -32,12 +32,20 @@ describe('getSizeAdvice', () => {
     });
   });
 
-  it('picks within a two-size band by height and keeps the other as alternative', () => {
+  it('picks within a two-size band by height; the other size is never the longer one (owner, 2026-11-15)', () => {
     expect(getSizeAdvice(110)).toMatchObject({
       primaryInch: 24,
-      alternativeInch: 26,
+      alternativeInch: 22,
       basis: 'two_sizes',
     });
+    expect(getSizeAdvice(117)).toMatchObject({ primaryInch: 27, alternativeInch: 26 });
+    // The smallest size has nothing shorter: no other size at all.
+    expect(getSizeAdvice(100)).toEqual({ primaryInch: 22, confidence: 'high', basis: 'single' });
+    // No child height ever gets a longer other size.
+    for (let cm = 95; cm < 163; cm++) {
+      const advice = getSizeAdvice(cm);
+      if (advice.alternativeInch !== undefined) expect(advice.alternativeInch, `${cm} cm`).toBeLessThan(advice.primaryInch);
+    }
     expect(getSizeAdvice(114)).toMatchObject({
       primaryInch: 26,
       alternativeInch: 24,
@@ -45,10 +53,18 @@ describe('getSizeAdvice', () => {
   });
 
   it('advises 36.5 inch from 163 cm, 37.5 from 185 cm and 38.5 from 193 cm', () => {
-    expect(getSizeAdvice(168)).toMatchObject({
-      primaryInch: 36.5,
-      alternativeInch: 35,
-    });
+    // An adult never gets a junior size: below 36.5 there is no other size (owner, 2026-11-15).
+    expect(getSizeAdvice(168)).toEqual({ primaryInch: 36.5, confidence: 'high', basis: 'single' });
+    expect(getSizeAdvice(163).alternativeInch).toBeUndefined();
+    for (let cm = 163; cm <= 210; cm++) {
+      const advice = getSizeAdvice(cm);
+      expect(advice.primaryInch, `${cm} cm`).toBeGreaterThanOrEqual(36.5);
+      if (advice.alternativeInch !== undefined) expect(advice.alternativeInch, `${cm} cm`).toBeGreaterThanOrEqual(36.5);
+    }
+    // 36 inch is the largest junior size, for 159 to 162 cm.
+    expect(getSizeAdvice(158)).toMatchObject({ primaryInch: 35, alternativeInch: 34 });
+    expect(getSizeAdvice(159)).toMatchObject({ primaryInch: 36, alternativeInch: 35 });
+    expect(getSizeAdvice(162)).toMatchObject({ primaryInch: 36, alternativeInch: 35 });
     // Adults may get the longer neighbour too.
     expect(getSizeAdvice(180)).toMatchObject({
       primaryInch: 36.5,
@@ -81,7 +97,8 @@ describe('getSizeAdvice', () => {
       [32],
       [33],
       [34],
-      [35, 37.5],
+      [35],
+      [37.5],
       [36.5, 38.5],
       [37.5],
     ]);

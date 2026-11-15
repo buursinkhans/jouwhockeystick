@@ -3,7 +3,8 @@ import type { Product } from '@/catalog/types';
 import type { AdviceAnswers } from './answers';
 import { BUDGET_RANGE, derivePlayerBand } from './playerContext';
 import { BAND_ORDER, deriveAdviceRules, getAdviceBlockers } from './productRules';
-import { getSizeAdvice, matchSize } from './sizeAdvice';
+import { isJuniorModel } from './hardFilters';
+import { getSizeAdvice, isAdultHeight, matchSize } from './sizeAdvice';
 
 /**
  * "Nog X veldsticks passen" while the stickwijzer is being filled in (UX
@@ -25,7 +26,7 @@ export function countFittingSticks(answers: Partial<AdviceAnswers>, products: re
     (product) =>
       getDiscipline(product) === 'veld' &&
       getAdviceBlockers(product, now).length === 0 &&
-      (!size || matchSize(product, size) !== 'none') &&
+      (!size || (matchSize(product, size) !== 'none' && !(isAdultHeight(answers.height_cm ?? 0) && isJuniorModel(product)))) &&
       (!budget || product.priceIndicativeEur.value <= budget.maxEur) &&
       (!band || BAND_ORDER.indexOf(band) >= BAND_ORDER.indexOf(deriveAdviceRules(product).minBand)),
   ).length;

@@ -1,4 +1,6 @@
 import { getDiscipline } from '@/catalog';
+import { isJunior } from '@/catalog/passaFeed';
+import { isJuniorStick } from '@/catalog/similar';
 import type { Product } from '@/catalog/types';
 import {
   BAND_ORDER,
@@ -6,7 +8,7 @@ import {
   deriveAdviceRules,
   getAdviceBlockers,
 } from './productRules';
-import { matchSize } from './sizeAdvice';
+import { isAdultHeight, matchSize } from './sizeAdvice';
 import type { NoMatchReason, PlayerContext } from './types';
 
 type Stage = Exclude<NoMatchReason, 'length'>;
@@ -71,6 +73,23 @@ function passesAvailability(product: Product, ctx: PlayerContext): boolean {
   return product.stock.value !== 'unavailable';
 }
 
+/** A model made for juniors: junior sizes only, or "junior" in its name (a feed can list 36.5 by mistake). */
+export function isJuniorModel(product: Product): boolean {
+  return isJuniorStick(product) || isJunior(product.name);
+}
+
+/**
+ * The size check, the last hard filter: the stick exists in the advised size
+ * (or the other size the advice names). An adult never gets a junior model
+ * (owner, 2026-11-15), whatever lengths its data lists.
+ */
+export function fitsSize(product: Product, ctx: PlayerContext): boolean {
+  return (
+    matchSize(product, ctx.sizeAdvice) !== 'none' &&
+    !(isAdultHeight(ctx.answers.height_cm) && isJuniorModel(product))
+  );
+}
+
 const NON_LENGTH_STAGES: ReadonlyArray<
   [Stage, (product: Product, ctx: PlayerContext) => boolean]
 > = [
@@ -107,7 +126,7 @@ export function firstFailingStage(
       return stage;
     }
   }
-  return matchSize(product, ctx.sizeAdvice) === 'none' ? 'length' : null;
+  return fitsSize(product, ctx) ? null : 'length';
 }
 
 /**
@@ -145,9 +164,7 @@ export function applyHardFilters(
     }
   }
 
-  candidates = candidates.filter(
-    (product) => matchSize(product, ctx.sizeAdvice) !== 'none',
-  );
+  candidates = candidates.filter((product) => fitsSize(product, ctx));
   if (candidates.length === 0) {
     return noMatch('length');
   }

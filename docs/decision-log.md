@@ -3213,6 +3213,34 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Waarom:** opdracht eigenaar: de oude blog mag niet met de gids concurreren (kannibalisatie). In de nulmeting toonde Google de blog voor "welke hockeystick kopen" (positie 58,5) en "beste hockeystick voor beginners" (53,2). Eén pagina per zoekvraag; de blog krijgt een eigen vraag die nog geen pagina had.
 - **Bewust niet:** `/zaalsticks` zegt nog "Kies eerst de lengte" bij de zaalstick; die pagina is beschermd tot 2026-11-20. Daar gaat het om dezelfde maat als op het veld, dus het botst minder; na die datum gelijktrekken.
 
+## 2026-11-15 — Adviesengine: de geadviseerde maat gaat voor (review, PR 1 van 2; regels v14)
+
+- **Aanleiding:** review van de adviesengine met 47 profielen en een sweep over alle lengtes. De maat telde alleen mee bij een gelijke score, waardoor een stick in de andere maat al bij 3 punten verschil eerste keuze werd: een volwassen beginner van 163 tot 173 cm kreeg een juniorstick van 35 inch, kinderen van 108 tot 111 cm kregen 26 inch waar 24 geadviseerd was, en 1 cm verschil (173 en 174 cm) gaf 2,5 inch verschil.
+- **Wat (besluiten eigenaar):**
+  - De engine kiest eerst uit de sticks in de geadviseerde maat. Een stick in de andere maat uit het lengteadvies komt pas daarna, heet dan "dichtstbijzijnde optie" (nooit "Onze keuze") en het advies zegt dat erbij.
+  - Een volwassene (vanaf 163 cm) krijgt nooit een juniormaat of een juniormodel, ook niet als "beste model in een andere maat" of als kortere maat. 35 inch vervalt als alternatief bij 36,5.
+  - Bij kinderen is de andere maat altijd de kortere, nooit de langere, ook binnen een band met twee maten.
+  - Onder 102 cm is de geadviseerde maat 22 inch. Is er geen adviseerbare stick in die maat, dan zegt het advies dat eerlijk en toont het geen langere stick.
+  - 36 inch staat in de lengtetabel als grootste juniormaat, voor 159 tot 162 cm (was 35). In de catalogus hebben alleen juniormodellen maat 36.
+  - De merkbonus telt niet meer mee bij "beste model in een andere maat".
+  - De huidige sticklengte kan nu ook 36, 37,5 en 38,5 inch zijn.
+- **Gevolgen:** de lengtetabel op `/kennis/hockeystick-lengte-tabel` krijgt een rij erbij (159–162 cm: 36 inch) en bij 163–184 cm staat als "kan ook" alleen 37,5. Titel, intro en koppen zijn ongewijzigd. De zaalkeuze gebruikt dezelfde maatregels. Opgeslagen adviezen met regels v13 blijven geldig; nieuwe krijgen v14.
+- **Tests:** `src/advice-engine/sizeFirst.test.ts` draait de echte catalogus over alle lengtes van 95 tot 210 cm op drie routes.
+- **Nog te doen (PR 2):** de tiebreak "meeste merkgegevens", low bow bij beginners, de ambitieuze keuze en trillingsgevoeligheid.
+
+## 2026-11-15 — Adviesengine: rangschikking en niveau (review, PR 2 van 2; regels v15)
+
+- **Wat (besluiten eigenaar na de review):**
+  - **Tiebreak:** bij een gelijke score gaat de eenvoudigere stick voor en daarna de goedkopere. "Meeste gegevens van het merk" vervalt als tiebreak (besluit van 2026-10-19 op dit punt teruggedraaid). De aftrek van 3 punten voor een stick waarvan het niveau alleen geschat is en niets van het merk komt, blijft.
+  - **Low bow hoort bij gevorderd:** een stick met low bow of extreme low bow waarvan wij het niveau schatten, schatten we niet meer als beginnersstick in. Dat geldt in het advies (`adviceLevel`) en in de import (`estimateLevel`, vanaf de eerstvolgende wekelijkse sync ook in de catalogus). Een niveau dat een merk of winkel noemt, blijft staan.
+  - **Low bow te vroeg:** een speler op niveau starter, of een speler die de aanname of de basis nog leert, krijgt op geen enkele route een low bow als eerste of veilige keuze. Als ambitieuze keuze mag hij wel.
+  - **Ambitieuze keuze:** nooit een stick voor een lager niveau dan de eerste keuze, en bij trillingsgevoeligheid geen stick met 85% carbon of meer.
+  - **Beginnersstick met veel carbon:** geblokkeerd vanaf 70% carbon (was 85%).
+  - **Bewust niet:** 70, 80 en 100% carbon blijven gelijkwaardig voor wie "direct" wil.
+- **Met de hand:** `princess-competition-jr-10-star-indoor` (eigen schatting, low bow) staat nu op gevorderd. `y1-glg-30` en `grays-jb3xi-jumbow-indoor` houden "beginner", omdat de winkel dat niveau noemt; de eigenaar beslist.
+- **Wat dit niet oplost:** gevorderde senioren krijgen nog steeds vaak dezelfde sticks. De oorzaak is de aftrek van 3 punten samen met veel gelijke scores: de nagekeken sticks met merkgegevens scoren daardoor net hoger dan de importsticks. De tiebreak speelt daarin nauwelijks nog een rol.
+- **Tests:** `src/advice-engine/rankingRules.test.ts`, met de echte catalogus.
+
 ## 2026-11-15 — Contentlijn "Welke hockeystick kopen?" in de bestaande marketingmachine
 
 **Opdracht eigenaar:** het terugkerende thema "Welke hockeystick kopen?" wordt een vast onderdeel van de planning, zonder tweede kalender of nieuwe publicatiemachine. Uitleg en planning staan in [contentlijn-welke-hockeystick-kopen.md](marketing/contentlijn-welke-hockeystick-kopen.md).
