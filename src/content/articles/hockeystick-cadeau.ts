@@ -44,6 +44,8 @@ const eight = ageIndication(CHILD_HEIGHT_BY_AGE.find((row) => row.age === 8)!);
 export const hockeystickCadeau: Article = {
   slug: 'hockeystick-cadeau',
   title: 'Hockeystick als cadeau: zo kies je de juiste voor een kind',
+  /** Search-result title: aimed at the December searches (owner, 2026-11-15). */
+  seoTitle: 'Hockeystick als cadeau voor Sinterklaas of kerst',
   intro: `Een hockeystick als cadeau kies je op drie dingen: de lichaamslengte van het kind, of het op het veld of in de zaal speelt, en hoe lang het al hockeyt. De lengte bepaalt de maat; is het kind er niet bij, dan geeft de leeftijd een eerste indicatie. Voor een kind dat net begint, is een eenvoudige stick genoeg: de meeste kindersticks in onze catalogus kosten minder dan €100, de middelste prijs is ${formatEuro(facts.median)}.`,
   sections: [
     {
@@ -87,6 +89,16 @@ export const hockeystickCadeau: Article = {
       ],
     },
     {
+      id: 'sinterklaas-kerst',
+      heading: 'Voor Sinterklaas of kerst',
+      level: 2,
+      body: [
+        'Pakjesavond is in Nederland op 5 december; in Vlaanderen komt de Sint op 6 december. Daarna volgt kerst. In december is het druk bij webwinkels en bezorgers, en hoe snel een winkel levert, verschilt. Kijk daarom bij de winkel naar de bezorgtijd voordat je bestelt. Wij tonen geen levertijden, omdat de productfeeds van de winkels die niet betrouwbaar geven.',
+        'Twijfel je over de maat, bestel dan zo vroeg dat ruilen voor het feest nog kan. Vraag bij het kopen ook of de winkel rond de feestdagen langer ruilen toestaat. Blijkt de stick bij het uitpakken te lang, ruil hem dan voor de kortere maat in plaats van te wachten tot het kind erin groeit.',
+        'Wat een stick per niveau kost, lees je in [wat kost een hockeystick?](/kennis/wat-kost-een-hockeystick)',
+      ],
+    },
+    {
       heading: 'Bestaat er een linkshandige hockeystick?',
       level: 2,
       body: [
@@ -122,6 +134,13 @@ export const hockeystickCadeau: Article = {
       ],
     },
     {
+      heading: 'Wanneer bestel ik een hockeystick voor Sinterklaas of kerst?',
+      level: 3,
+      body: [
+        'Liefst een paar weken van tevoren. Dan heb je tijd voor de bezorging, die in december langer kan duren, en voor ruilen als de maat niet past. Kijk bij de winkel naar de bezorgtijd voordat je bestelt.',
+      ],
+    },
+    {
       heading: 'Kan ik een hockeystick ruilen als hij niet past?',
       level: 3,
       body: [
@@ -149,7 +168,7 @@ export const hockeystickCadeau: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-11-13',
-  updatedAt: '2026-11-13',
+  updatedAt: '2026-11-15',
   sources: [
     { label: CHILD_HEIGHT_SOURCE.guidelineLabel, url: CHILD_HEIGHT_SOURCE.guidelineUrl },
     { label: CHILD_HEIGHT_SOURCE.studyLabel, url: CHILD_HEIGHT_SOURCE.studyUrl },
@@ -166,5 +185,5 @@ export const hockeystickCadeau: Article = {
     },
   ],
   metaDescription:
-    'Een hockeystick cadeau geven aan een kind? Zo kies je de maat zonder dat het kind erbij is, veld of zaal, het budget, en wat je meegeeft met het cadeau.',
+    'Een hockeystick cadeau voor Sinterklaas of kerst? Zo kies je de maat zonder dat het kind erbij is, veld of zaal, het budget en wanneer je bestelt.',
 };

@@ -3270,3 +3270,9 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Geen nieuwe concepten voor de eerste twee weken.** Die plekken waren al gevuld met passende items; die worden gelabeld. Voor week 3 en 4 staan briefs klaar, en de planner maakt daar vrijdag de concepten van.
 
 **Niet gedaan:** niets in de studio-database of in Metricool geschreven, niets gepubliceerd. De tests draaien in CI; lokaal kon npm niet installeren, zie de PR.
+
+## 2026-11-15 — Cadeau-artikel: Sinterklaas en kerst
+
+- **Wat:** `/kennis/hockeystick-cadeau` kreeg een sectie "Voor Sinterklaas of kerst" (pakjesavond 5 december in Nederland, 6 december in Vlaanderen; op tijd bestellen; ruilen voor het feest), een vierde veelgestelde vraag ("Wanneer bestel ik een hockeystick voor Sinterklaas of kerst?"), een zoektitel "Hockeystick als cadeau voor Sinterklaas of kerst" en een nieuwe meta description. De H1 en de URL blijven.
+- **Waarom:** besluit eigenaar: geen aparte pagina's per feestdag (die zouden grotendeels hetzelfde zeggen en zijn na januari waardeloos), wel het cadeau-artikel laten vinden op de decemberzoekvragen.
+- **Grenzen:** geen levertijden of leverbeloftes (de feeds geven die niet betrouwbaar), geen ruiltermijnen van winkels, geen kortingsclaims.
