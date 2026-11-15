@@ -3304,3 +3304,13 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Wat:** `/kennis/hockeystick-cadeau` kreeg een sectie "Voor Sinterklaas of kerst" (pakjesavond 5 december in Nederland, 6 december in Vlaanderen; op tijd bestellen; ruilen voor het feest), een vierde veelgestelde vraag ("Wanneer bestel ik een hockeystick voor Sinterklaas of kerst?"), een zoektitel "Hockeystick als cadeau voor Sinterklaas of kerst" en een nieuwe meta description. De H1 en de URL blijven.
 - **Waarom:** besluit eigenaar: geen aparte pagina's per feestdag (die zouden grotendeels hetzelfde zeggen en zijn na januari waardeloos), wel het cadeau-artikel laten vinden op de decemberzoekvragen.
 - **Grenzen:** geen levertijden of leverbeloftes (de feeds geven die niet betrouwbaar), geen ruiltermijnen van winkels, geen kortingsclaims.
+
+## 2026-11-15 — Metricool Starter 5: vangnet van 100 posts per maand
+
+**Wat:** De eigenaar zette Metricool om van het gratis plan naar Starter 5. Het gratis plan stond hooguit 20 ingeplande posts per maand toe; Starter heeft geen vaste grens, alleen het fair-use-beleid van Metricool (prijspagina en helpartikel "main differences between free and paid plans", gelezen 2026-11-15). `METRICOOL_MONTHLY_LIMIT` gaat van 20 naar 100.
+
+**Reden:** In november stonden 20 van 20 posts vast, en de Publiceerder liet twee goedgekeurde kanalen liggen: TikTok van "zaalsticks zonder carbon" (16 november) en Instagram van "low of mid bow" (17 november). Na de merge plant de eerstvolgende uurrun die in.
+
+**Besluit eigenaar:** een eigen vangnet van 100 per maand in plaats van geen grens. Dat is ruim boven het ritme van nu, en houdt een run die doorslaat tegen.
+
+**Betrokken bestanden:** `src/marketing/metricoolBudget.ts` en de test, `docs/marketing/README.md`.

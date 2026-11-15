@@ -19,16 +19,22 @@ describe('usedInMonth', () => {
 
 describe('budgetFor', () => {
   it('allows posts below the limit and says how many are left', () => {
-    expect(budgetFor('2026-11', 18)).toEqual({ ok: true, used: 18, limit: METRICOOL_MONTHLY_LIMIT, left: 2 });
+    expect(budgetFor('2026-11', 18)).toEqual({ ok: true, used: 18, limit: METRICOOL_MONTHLY_LIMIT, left: METRICOOL_MONTHLY_LIMIT - 18 });
+  });
+
+  it('uses the Starter safety limit of 100 posts per month', () => {
+    expect(METRICOOL_MONTHLY_LIMIT).toBe(100);
+    expect(budgetFor('2026-11', 20).ok).toBe(true);
+    expect(budgetFor('2026-11', 100).ok).toBe(false);
   });
 
   it('stops at the limit with a clear Dutch message', () => {
-    const d = budgetFor('2026-11', 20);
+    const d = budgetFor('2026-11', 20, 20);
     expect(d.ok).toBe(false);
     if (!d.ok) expect(d.message).toBe('Het Metricool-tegoed voor november is op (20 van 20 posts). Niet ingepland; de eigenaar kiest: een andere maand of een groter plan.');
   });
 
   it('takes another limit for another plan', () => {
-    expect(budgetFor('2026-11', 20, 100).ok).toBe(true);
+    expect(budgetFor('2026-11', 20, 30).ok).toBe(true);
   });
 });

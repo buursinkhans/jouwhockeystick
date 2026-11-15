@@ -14,7 +14,7 @@ Uitgangspunten: bestaande systemen eerst, geen tweede planner of database, niets
 | Metricool-MCP lokaal (Claude Code) | Bewezen werkend | Inloggen, kanalen, geplande posts, concept aanmaken (`draft: true`, `autoPublish: false`), statistiekvelden. |
 | Metricool vanuit de cloud (claude.ai-connector) | Bewezen werkend | Proefroutine van 2026-11-09 las `getBrandSettings` zonder laptop. |
 | Kanalen in Metricool | Bewezen | Instagram, Facebook, YouTube en TikTok. |
-| Metricool-statistieken | Aanwezig, nog leeg | Verzamelen begon op 2026-11-09; gratis plan bewaart 30 dagen. |
+| Metricool-statistieken | Aanwezig, nog leeg | Verzamelen begon op 2026-11-09. Sinds 2026-11-15 het Starter-plan: geschiedenis zonder vaste termijn (X/Twitter 30 dagen). |
 | Social-studio vanuit een cloudroutine | Bewezen werkend | Met de routinetags `cowork-remote` en `product:cowork-remote` is de ArtifactData-tool er (tweede proefrun, 2026-11-09). Zonder die tags niet. Zie §3. |
 | GitHub vanuit de cloud | Technisch beperkt | `gh api` geeft 403 zonder gekoppelde repo; `git clone` werkt, want de repo is openbaar. |
 | PostHog | Bewezen werkend | Cookieloos. Wekelijks Conversie-rapport (issue met label `conversie`) met bron per bezoek, ook AI-assistenten (`AI_REFERRER_DOMAINS`). |
@@ -70,7 +70,7 @@ De opdracht van de Social-planner staat sinds 2026-11-09 in de repo: [social-pla
 3. Een item op "naar-metricool" zonder ID en zonder gevonden post wordt "onzeker". Een ontbrekend ID leidt nooit vanzelf tot een tweede post.
 4. De Metricool-MCP kan niets verwijderen en een wijziging overschrijft direct. De planner wijzigt alleen posts die hij zelf voor een studio-item aanmaakte, en alleen om ze bij intrekken op concept te zetten of na opnieuw goedkeuren terug te zetten.
 
-**Beperkingen van het gratis plan:** hooguit 20 ingeplande posts per maand en 30 dagen statistieken. Goedkeuren met reviewers (`createScheduledPostForReview`) vraagt een plan met teambeheer; de route hierboven werkt zonder. Of één post op Instagram en Facebook als één of twee telt, meten we bij de eerste maand. Een betaald plan alleen na overleg.
+**Plan:** sinds 2026-11-15 Starter 5 (tot 5 merken). Geen vaste grens op ingeplande posts, alleen het fair-use-beleid van Metricool; de Publiceerder houdt zelf een vangnet van 100 per maand aan (`METRICOOL_MONTHLY_LIMIT`). Tot die datum het gratis plan: hooguit 20 per maand en 30 dagen statistieken. Goedkeuren met reviewers (`createScheduledPostForReview`) vraagt een plan met teambeheer; de route hierboven werkt zonder. Of één post op Instagram en Facebook als één of twee telt, meten we bij de eerste maand. Een betaald plan alleen na overleg.
 
 ## 5. Meten
 
@@ -112,7 +112,7 @@ Eén issue per week (label `marketing`), maandag, na de bestaande rapporten. De 
 | P1 | Weekrapport en GEO-meting | Weekrapport gebouwd in Social-machine 2.0, fase 4 ([weekrapport.md](weekrapport.md)); GEO-meting nog niet |
 | P2 | E-mail met expliciete opt-in, video op schaal, campagne-orkestratie | Later; geen leverancier gekozen |
 
-Kosten nu: geen nieuwe. Metricool gratis plan, PostHog en Search Console zoals nu, routines binnen het bestaande Claude-abonnement.
+Kosten nu: Metricool Starter 5 (betaald sinds 2026-11-15), PostHog en Search Console zoals nu, routines binnen het bestaande Claude-abonnement.
 
 ## 9. Wat nodig is om de eerste cyclus te starten
 
