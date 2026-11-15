@@ -3271,6 +3271,20 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 
 **Niet gedaan:** niets in de studio-database of in Metricool geschreven, niets gepubliceerd. De tests draaien in CI; lokaal kon npm niet installeren, zie de PR.
 
+## 2026-11-15 — agents: model per agent, minder verbruik van het abonnement
+
+**Wat:** De zeven agents die Claude gebruiken draaien op het abonnement van de eigenaar (`CLAUDE_CODE_OAUTH_TOKEN`). Tot nu toe was in geen ervan een model ingesteld, dus elke run gebruikte het standaardmodel van het abonnement. Nu staat het model vast per agent:
+- `--model sonnet`: Catalogus-aanvuller, Catalogus-verrijker, Catalogus-hercontrole, Review-agent, Orchestrator.
+- `--model haiku`: Marktverkenner (alleen samenvatten van een meting).
+- Content-agent (`claude.yml`): ongewijzigd, voor de schrijfkwaliteit.
+- Catalogus-hercontrole: `--max-turns` van 120 naar 60.
+
+**Reden:** Het tokenverbruik van de eigenaar was hoog; de agents delen de limiet met de chats. Routinewerk (specs ophalen en vergelijken, plannen, beoordelen) heeft het zwaarste model niet nodig.
+
+**Evaluatie:** Na twee weken (rond 2026-11-29) kijken naar het verbruik en naar de kwaliteit van de catalogus-PR's en reviews. Valt de kwaliteit tegen, dan per agent terug naar een zwaarder model. Haalt de hercontrole zijn weekbatch niet binnen 60 stappen, dan de batch verkleinen in plaats van de stappen verhogen.
+
+**Betrokken bestanden:** `.github/workflows/catalogus-aanvuller.yml`, `catalogus-verrijker.yml`, `catalogus-hercontrole.yml`, `review.yml`, `orchestrator.yml`, `marktverkenning.yml`.
+
 ## 2026-11-15 — Cadeau-artikel: Sinterklaas en kerst
 
 - **Wat:** `/kennis/hockeystick-cadeau` kreeg een sectie "Voor Sinterklaas of kerst" (pakjesavond 5 december in Nederland, 6 december in Vlaanderen; op tijd bestellen; ruilen voor het feest), een vierde veelgestelde vraag ("Wanneer bestel ik een hockeystick voor Sinterklaas of kerst?"), een zoektitel "Hockeystick als cadeau voor Sinterklaas of kerst" en een nieuwe meta description. De H1 en de URL blijven.

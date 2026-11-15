@@ -74,6 +74,7 @@ jobs:
             Noem bij elk punt de bron uit het rapport. Alleen feiten uit report.md en de repo; verzin niets.
             Wijzig geen bestanden en zet geen "@claude" in je reactie.
           claude_args: |
+            --model haiku
             --max-turns 20
             --allowedTools "Read,Glob,Grep,Bash(gh issue comment:*)"
       - name: Meting bewaren voor volgende week
