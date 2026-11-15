@@ -158,3 +158,16 @@ describe('Social-studio labels', () => {
     }
   });
 });
+
+describe('validation and wording fields on an item', () => {
+  it('accept the three levels and the wording variants, and refuse anything else', async () => {
+    const { contentItemSchema } = await import('./content');
+    const { ZAALHOCKEY_PILOT } = await import('./pilot/zaalhockey2026');
+    const base = ZAALHOCKEY_PILOT[0]!;
+    expect(contentItemSchema.safeParse(base).success).toBe(true);
+    for (const validatie of ['bewezen', 'aannemelijk', 'experimenteel'])
+      expect(contentItemSchema.safeParse({ ...base, validatie, formulering: 'dochter' }).success, validatie).toBe(true);
+    expect(contentItemSchema.safeParse({ ...base, validatie: 'zeker' }).success).toBe(false);
+    expect(contentItemSchema.safeParse({ ...base, formulering: 'meisje' }).success).toBe(false);
+  });
+});

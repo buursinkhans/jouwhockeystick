@@ -40,6 +40,14 @@ export const contentItemSchema = z.object({
   /** Campaign id, also utm_campaign, e.g. zaalhockey-2026 or pulse-2026. */
   campagne: slug,
   doelgroep: z.enum(['ouders', 'spelers', 'trainers']),
+  /**
+   * How well the angle of this item is backed by data (docs/marketing/contentlijn-*.md,
+   * "Validatie"): proven = visible in a named source, plausible = a logical extension of
+   * a proven pattern, experiment = no direct data. Empty = not classified yet.
+   */
+  validatie: z.enum(['bewezen', 'aannemelijk', 'experimenteel']).optional(),
+  /** Wording variant for a controlled test: neutraal, ouder, dochter, zoon or situatie. */
+  formulering: z.enum(['neutraal', 'ouder', 'dochter', 'zoon', 'situatie']).optional(),
   onderwerp: z.string().min(5),
   /** A live page on the site; the post makes curious, the page answers (docs/instagram.md §1). */
   bronpagina: z.string().regex(/^\/[a-z0-9/-]*$/),

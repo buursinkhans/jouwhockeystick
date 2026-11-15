@@ -3270,3 +3270,11 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Geen nieuwe concepten voor de eerste twee weken.** Die plekken waren al gevuld met passende items; die worden gelabeld. Voor week 3 en 4 staan briefs klaar, en de planner maakt daar vrijdag de concepten van.
 
 **Niet gedaan:** niets in de studio-database of in Metricool geschreven, niets gepubliceerd. De tests draaien in CI; lokaal kon npm niet installeren, zie de PR.
+
+## 2026-11-15 — Validatieprincipe voor oudergerichte invalshoeken in de contentlijn
+
+- **Besluit eigenaar:** een oudergerichte formulering is een hypothese. Elk voorstel krijgt een niveau (bewezen, aannemelijk, experimenteel) met de bron, en zonder bron is het experimenteel. Zie "Validatie" in [contentlijn-welke-hockeystick-kopen.md](marketing/contentlijn-welke-hockeystick-kopen.md).
+- **Gebouwd:** twee optionele velden op een item (`validatie`, `formulering`), regels in de Social-planner (stap 4b), de Onderzoeker (stap 5b) en het Weekrapport, en een testmatrix met vijf formuleringen (neutraal, ouder, dochter, zoon, situatie).
+- **Bronnen op 15-11:** Search Console en PostHog zijn beschikbaar; interne zoekopdrachten niet (de getypte tekst blijft bewust buiten analytics); AI-verwijzingen zijn er één per week en de AI-nulmeting liet voor de kindvraag geen citatie zien.
+- **Gevolg voor de planning:** brief C (di 8 december, cadeau voor een kind) is experimenteel: er is geen zoekwoord over cadeau in de data. De plek blijft, het item wordt als experiment gemeten.
+- **Bewust niet:** de formuleringstest gebruikt niet het testlabel van `abtest.ts` (hook, vorm, serie, tijd). Die tests lopen één vraag tegelijk; de formuleringstest start pas als de hooktest is beslist of niet loopt.

@@ -65,6 +65,8 @@ Een idee gaat alleen door als het op alle drie ja scoort:
 
 ## Contentlijnen
 
+Oudergerichte formuleringen zijn hypothesen. Elk item van een lijn heeft `validatie` (bewezen, aannemelijk, experimenteel) met de bron erbij; zie "Validatie" in [contentlijn-welke-hockeystick-kopen.md](contentlijn-welke-hockeystick-kopen.md).
+
 Een contentlijn is een koopvraag die het hele jaar terugkomt. Ze staat boven de pijlers, en elk subthema hangt aan één pijler, zodat niets dubbel wordt ingedeeld. Een lijn vult vaste plekken in het bestaande ritme. Ze voegt geen posts toe en heeft geen eigen kalender. De gegevens staan in `marketing/sites/jouwhockeystick.json` (`contentlijnen`), de keuze per plek in `src/marketing/contentlijn.ts`. Uitleg en meetroutine: [contentlijn-welke-hockeystick-kopen.md](contentlijn-welke-hockeystick-kopen.md).
 
 ### Welke hockeystick kopen?
