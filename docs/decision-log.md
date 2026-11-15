@@ -3212,3 +3212,18 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Wat:** de blog `/blog/hockeystick-kopen` (URL ongewijzigd) gaat nu over een stick uitproberen en controleren voor je koopt: de test in vijf stappen, de maat checken, online kopen zonder testen en een checklist voor het afrekenen. De delen over kiezen (spel, lengte, carbon, kromming) zijn eruit en staan al in de gids `/kennis/hoe-kies-je-de-juiste-hockeystick`; de blog linkt daarheen. Nieuwe title "Hockeystick uitproberen voor je koopt: test in 5 stappen", H1 "Een hockeystick uitproberen voor je koopt: de test in vijf stappen". De homepage ("Een goede stick begint bij jouw spel"), `wat-kost-een-hockeystick` en de Black Friday-tegel "Junior hockeysticks" zeggen niet meer "begin bij de lengte".
 - **Waarom:** opdracht eigenaar: de oude blog mag niet met de gids concurreren (kannibalisatie). In de nulmeting toonde Google de blog voor "welke hockeystick kopen" (positie 58,5) en "beste hockeystick voor beginners" (53,2). Eén pagina per zoekvraag; de blog krijgt een eigen vraag die nog geen pagina had.
 - **Bewust niet:** `/zaalsticks` zegt nog "Kies eerst de lengte" bij de zaalstick; die pagina is beschermd tot 2026-11-20. Daar gaat het om dezelfde maat als op het veld, dus het botst minder; na die datum gelijktrekken.
+
+## 2026-11-15 — Adviesengine: de geadviseerde maat gaat voor (review, PR 1 van 2; regels v14)
+
+- **Aanleiding:** review van de adviesengine met 47 profielen en een sweep over alle lengtes. De maat telde alleen mee bij een gelijke score, waardoor een stick in de andere maat al bij 3 punten verschil eerste keuze werd: een volwassen beginner van 163 tot 173 cm kreeg een juniorstick van 35 inch, kinderen van 108 tot 111 cm kregen 26 inch waar 24 geadviseerd was, en 1 cm verschil (173 en 174 cm) gaf 2,5 inch verschil.
+- **Wat (besluiten eigenaar):**
+  - De engine kiest eerst uit de sticks in de geadviseerde maat. Een stick in de andere maat uit het lengteadvies komt pas daarna, heet dan "dichtstbijzijnde optie" (nooit "Onze keuze") en het advies zegt dat erbij.
+  - Een volwassene (vanaf 163 cm) krijgt nooit een juniormaat of een juniormodel, ook niet als "beste model in een andere maat" of als kortere maat. 35 inch vervalt als alternatief bij 36,5.
+  - Bij kinderen is de andere maat altijd de kortere, nooit de langere, ook binnen een band met twee maten.
+  - Onder 102 cm is de geadviseerde maat 22 inch. Is er geen adviseerbare stick in die maat, dan zegt het advies dat eerlijk en toont het geen langere stick.
+  - 36 inch staat in de lengtetabel als grootste juniormaat, voor 159 tot 162 cm (was 35). In de catalogus hebben alleen juniormodellen maat 36.
+  - De merkbonus telt niet meer mee bij "beste model in een andere maat".
+  - De huidige sticklengte kan nu ook 36, 37,5 en 38,5 inch zijn.
+- **Gevolgen:** de lengtetabel op `/kennis/hockeystick-lengte-tabel` krijgt een rij erbij (159–162 cm: 36 inch) en bij 163–184 cm staat als "kan ook" alleen 37,5. Titel, intro en koppen zijn ongewijzigd. De zaalkeuze gebruikt dezelfde maatregels. Opgeslagen adviezen met regels v13 blijven geldig; nieuwe krijgen v14.
+- **Tests:** `src/advice-engine/sizeFirst.test.ts` draait de echte catalogus over alle lengtes van 95 tot 210 cm op drie routes.
+- **Nog te doen (PR 2):** de tiebreak "meeste merkgegevens", low bow bij beginners, de ambitieuze keuze en trillingsgevoeligheid.

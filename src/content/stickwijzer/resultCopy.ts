@@ -141,6 +141,11 @@ export function roleIntro(item: AdviceResultItem): string {
   if (item.role === 'other_brand') {
     return `Het alternatief van ${brand}: van alle andere merken past deze stick het best bij je antwoorden.`;
   }
+  // The closest option because no fitting stick exists in the advised size (owner, 2026-11-15).
+  const otherSize = item.reasons.find((reason) => reason.code === 'SIZE_ALTERNATIVE');
+  if (item.role === 'closest_option' && otherSize) {
+    return `In de geadviseerde maat vonden we geen passende stick. Deze is er in ${formatInch(otherSize.inch ?? item.sizeInch)}, de andere maat uit het lengteadvies. Pas hem als het kan eerst in de hand.`;
+  }
   return ROLE_INTRO[item.role];
 }
 
