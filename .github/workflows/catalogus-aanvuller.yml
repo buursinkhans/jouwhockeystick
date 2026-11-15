@@ -110,6 +110,7 @@ jobs:
             Je kunt geen commando's draaien: lint, typecheck, tests en catalog:health draaien na jou in een aparte stap. Werk daarom zorgvuldig volgens de voorbeelden in de bestaande productbestanden.
             Commit en push niet; open geen PR. Wijzig niets buiten src/catalog/ en .catalogus-pr.md.
           claude_args: |
+            --model sonnet
             --max-turns 80
             --allowedTools "Read,Write,Edit,Glob,Grep,WebFetch"
 
