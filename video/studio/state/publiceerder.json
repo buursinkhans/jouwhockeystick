@@ -420,10 +420,13 @@
           "op": "2026-11-12T13:25:10Z"
         },
         "tiktok": {
-          "bezig": "2026-11-15T18:08:53Z"
+          "id": 429128970,
+          "uuid": "-6833373053095100125",
+          "moment": "2026-11-16T19:30:00",
+          "op": "2026-11-15T18:09:24Z"
         }
       },
-      "fout": "Het Metricool-tegoed voor november is op (20 van 20 posts). Niet ingepland; de eigenaar kiest: een andere maand of een groter plan."
+      "fout": null
     },
     "posts/20261117-low-of-mid-bow": {
       "render": {
@@ -454,21 +457,24 @@
           }
         ]
       },
-      "fout": "Het Metricool-tegoed voor november is op (20 van 20 posts). Niet ingepland; de eigenaar kiest: een andere maand of een groter plan.",
+      "fout": null,
       "kanalen": {
         "insta": {
-          "bezig": "2026-11-15T18:08:53Z"
+          "id": 429129134,
+          "uuid": "4059740146155407167",
+          "moment": "2026-11-17T19:30:00",
+          "op": "2026-11-15T18:09:24Z"
         }
       }
     }
   },
-  "laatsteRun": "2026-11-15T17:09:24Z",
+  "laatsteRun": "2026-11-15T18:09:24Z",
   "tegoed": {
     "maand": "2026-11",
-    "gebruikt": 20,
-    "grens": 20
+    "gebruikt": 22,
+    "grens": 100
   },
-  "wijziging": "e6ab3df4-9738-4626-8550-8fda9ac6105f",
+  "wijziging": "5fe70a6d-0d59-485b-a6a4-0483f66a614f",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
