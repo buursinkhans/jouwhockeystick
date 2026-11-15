@@ -70,9 +70,7 @@ export function seasonOn(line: ContentLine, date: string): Season {
 /** Share per setting over the last WINDOW items before `date`. */
 export function sharesBefore(line: ContentLine, history: readonly LineItem[], date: string): Record<string, number> {
   const recent = [...history].filter((h) => h.datum < date && line.omgevingen.includes(h.omgeving)).sort((a, b) => a.datum.localeCompare(b.datum)).slice(-WINDOW);
-  const out: Record<string, number> = Object.fromEntries(line.omgevingen.map((o) => [o, 0]));
-  for (const h of recent) if (h.omgeving in out) out[h.omgeving]! += 1 / recent.length;
-  return out;
+  return Object.fromEntries(line.omgevingen.map((o) => [o, recent.length ? recent.filter((h) => h.omgeving === o).length / recent.length : 0]));
 }
 
 /**
