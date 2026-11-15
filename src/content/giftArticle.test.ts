@@ -100,3 +100,17 @@ describe('Hockeystick als cadeau (decision log 2026-11-13)', () => {
     expect(BLACK_FRIDAY.advice.items.map((item) => item.href)).toContain(PATH);
   });
 });
+
+describe('Sinterklaas and Christmas (owner, 2026-11-15)', () => {
+  it('names both holidays in the search title, the meta and a section, without delivery promises', () => {
+    expect(article.seoTitle).toBe('Hockeystick als cadeau voor Sinterklaas of kerst');
+    expect(article.seoTitle!.length).toBeLessThanOrEqual(60);
+    expect(article.metaDescription).toMatch(/Sinterklaas of kerst/);
+    expect(article.metaDescription.length).toBeLessThanOrEqual(155);
+    const section = JSON.stringify(article.sections.find((s) => s.id === 'sinterklaas-kerst'));
+    expect(section).toContain('5 december');
+    expect(section).toContain('6 december');
+    expect(section).toContain('geen levertijden');
+    expect(section).not.toMatch(/morgen in huis|vandaag besteld|gegarandeerd|op tijd binnen/i);
+  });
+});
