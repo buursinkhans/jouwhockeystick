@@ -27,10 +27,10 @@ export const graysJb3xiJumbowIndoor: Product = {
   // Also sold at PassaSports (checked 2026-10-16): second shop button.
   passaSportsProductUrl: 'https://www.passasports.nl/grays-jb3-xi-jumbow-27077',
   experienceLevel: {
-    value: 'beginner',
-    source: 'partner-shop',
+    value: 'gevorderd',
+    source: 'editorial-estimate',
     sourceLabel:
-      'De listing vermeldt "Niveau: Beginner" en "Doelgroep: Volwassenen".',
+      'De listing vermeldt "Niveau: Beginner" en "Doelgroep: Volwassenen". Wij delen hem in als gevorderd: een low bow (Jumbow) is gemaakt voor liften en 3D, en daar is een beginner nog niet mee bezig (besluit 2026-11-15).',
     sourceUrl: SOURCE,
     lastVerifiedAt: CHECKED,
   },

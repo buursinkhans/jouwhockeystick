@@ -3292,3 +3292,9 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Wat nodig was:** niets leest de geschiedenis van de branch. De Publiceerder, Onderzoeker en Planner lezen de bestanden via de contents-API; de vergelijkingen in de dagcijfers komen uit de API's van PostHog, Search Console en Bing.
 - **Grenzen:** oude commits blijven via hun SHA bereikbaar tot GitHub ze opruimt; volledig verwijderen kan via GitHub Support (`docs/beveiliging.md`). Er zijn geen forks. Wie de repo eerder kloonde, houdt de oude data.
 - **Bewust zo:** de workflow zet zichzelf uit in plaats van een vervolg-PR die hem verwijdert; het bestand blijft als documentatie.
+
+## 2026-11-15 — Twee nagekeken sticks met low bow naar gevorderd
+
+- **Wat:** `y1-glg-30` en `grays-jb3xi-jumbow-indoor` staan nu op "gevorderd" (was "beginner"). De winkel noemt "beginner"; de bron is nu onze eigen inschatting, met die vermelding en de reden in het bronlabel.
+- **Waarom:** besluit eigenaar na de review van de adviesengine: een stick met low bow hoort bij gevorderd (zie "Adviesengine: rangschikking en niveau"). In PR 2 bleven deze twee staan omdat de winkel het niveau noemde; de eigenaar besliste ze ook te veranderen.
+- **Test:** `rankingRules.test.ts` controleert nu ook dat geen nagekeken stick met een low bow op "beginner" staat.
