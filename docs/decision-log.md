@@ -3293,6 +3293,18 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Grenzen:** oude commits blijven via hun SHA bereikbaar tot GitHub ze opruimt; volledig verwijderen kan via GitHub Support (`docs/beveiliging.md`). Er zijn geen forks. Wie de repo eerder kloonde, houdt de oude data.
 - **Bewust zo:** de workflow zet zichzelf uit in plaats van een vervolg-PR die hem verwijdert; het bestand blijft als documentatie.
 
+## 2026-11-15 — Twee nagekeken sticks met low bow naar gevorderd
+
+- **Wat:** `y1-glg-30` en `grays-jb3xi-jumbow-indoor` staan nu op "gevorderd" (was "beginner"). De winkel noemt "beginner"; de bron is nu onze eigen inschatting, met die vermelding en de reden in het bronlabel.
+- **Waarom:** besluit eigenaar na de review van de adviesengine: een stick met low bow hoort bij gevorderd (zie "Adviesengine: rangschikking en niveau"). In PR 2 bleven deze twee staan omdat de winkel het niveau noemde; de eigenaar besliste ze ook te veranderen.
+- **Test:** `rankingRules.test.ts` controleert nu ook dat geen nagekeken stick met een low bow op "beginner" staat.
+
+## 2026-11-15 — Cadeau-artikel: Sinterklaas en kerst
+
+- **Wat:** `/kennis/hockeystick-cadeau` kreeg een sectie "Voor Sinterklaas of kerst" (pakjesavond 5 december in Nederland, 6 december in Vlaanderen; op tijd bestellen; ruilen voor het feest), een vierde veelgestelde vraag ("Wanneer bestel ik een hockeystick voor Sinterklaas of kerst?"), een zoektitel "Hockeystick als cadeau voor Sinterklaas of kerst" en een nieuwe meta description. De H1 en de URL blijven.
+- **Waarom:** besluit eigenaar: geen aparte pagina's per feestdag (die zouden grotendeels hetzelfde zeggen en zijn na januari waardeloos), wel het cadeau-artikel laten vinden op de decemberzoekvragen.
+- **Grenzen:** geen levertijden of leverbeloftes (de feeds geven die niet betrouwbaar), geen ruiltermijnen van winkels, geen kortingsclaims.
+
 ## 2026-11-15 — Metricool Starter 5: vangnet van 100 posts per maand
 
 **Wat:** De eigenaar zette Metricool om van het gratis plan naar Starter 5. Het gratis plan stond hooguit 20 ingeplande posts per maand toe; Starter heeft geen vaste grens, alleen het fair-use-beleid van Metricool (prijspagina en helpartikel "main differences between free and paid plans", gelezen 2026-11-15). `METRICOOL_MONTHLY_LIMIT` gaat van 20 naar 100.

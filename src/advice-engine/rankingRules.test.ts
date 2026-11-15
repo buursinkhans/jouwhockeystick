@@ -78,6 +78,10 @@ describe('ranking and level rules (review findings 5 to 8, 11, 12, 14)', () => {
     const estimated = pool.filter((p) => p.feedImport && p.experienceLevel.source === 'editorial-estimate' && lowBow(p.bowProfile?.value));
     expect(estimated.length).toBeGreaterThan(0);
     for (const product of estimated) expect(adviceLevel(product), product.slug).not.toBe('beginner');
+    // And no hand-checked stick with a low bow is a beginner stick either (owner, 2026-11-15).
+    for (const product of pool.filter((p) => !p.feedImport && lowBow(p.bowProfile?.value))) {
+      expect(product.experienceLevel.value, product.slug).not.toBe('beginner');
+    }
   });
 
   it('blocks a beginner stick with 70% carbon or more', () => {
