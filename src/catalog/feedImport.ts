@@ -124,10 +124,19 @@ const isJunior = (model: PassaStickModel) =>
  * (owner, 2026-11-08): a higher price is never a higher level. A junior stick
  * is for youth players: never estimated as "ervaren".
  */
-export function levelFromCarbon(carbon: number, junior = false): ExperienceLevel {
+export function levelFromCarbon(carbon: number, junior = false, bow: BowProfile | null = null): ExperienceLevel {
   if (carbon >= 70) return junior ? 'gevorderd' : 'ervaren';
   if (carbon >= 30) return 'gevorderd';
-  return 'beginner';
+  return lowBowLevel('beginner', bow);
+}
+
+/**
+ * A stick with a low bow is never estimated as a beginner stick (owner,
+ * 2026-11-15): the curve is made for lifting and 3D, which a beginner is not
+ * yet working on. Only for our own estimate; a level a brand or shop states stays.
+ */
+export function lowBowLevel(level: ExperienceLevel, bow: BowProfile | null | undefined): ExperienceLevel {
+  return level === 'beginner' && (bow === 'lowbow' || bow === 'extreme_lowbow') ? 'gevorderd' : level;
 }
 
 /**
@@ -135,19 +144,22 @@ export function levelFromCarbon(carbon: number, junior = false): ExperienceLevel
  * only signal: the label says so, and the stickwijzer does not use such a level
  * (adviceLevel in src/advice-engine/productRules.ts).
  */
-export function estimateLevel(carbon: number | null, price: number, junior = false): ExperienceLevel {
-  if (carbon !== null) return levelFromCarbon(carbon, junior);
+export function estimateLevel(carbon: number | null, price: number, junior = false, bow: BowProfile | null = null): ExperienceLevel {
+  if (carbon !== null) return levelFromCarbon(carbon, junior, bow);
   if (price >= 200) return junior ? 'gevorderd' : 'ervaren';
-  return price >= 80 ? 'gevorderd' : 'beginner';
+  return lowBowLevel(price >= 80 ? 'gevorderd' : 'beginner', bow);
 }
 
 /** "Eigen inschatting op basis van …" for an estimated feed level. */
-export function levelEstimateLabel(shop: string, carbon: number | null, price: number, junior: boolean): string {
+export function levelEstimateLabel(shop: string, carbon: number | null, price: number, junior: boolean, bow: BowProfile | null = null): string {
+  // The low bow lifted the estimate from beginner to gevorderd: say so.
+  const lifted = estimateLevel(carbon, price, junior, bow) !== estimateLevel(carbon, price, junior);
+  const bowNote = lifted ? ' Door de low bow schatten we de stick niet als beginnersstick in.' : '';
   const basis =
     carbon !== null
       ? `het carbonpercentage (${carbon}%)`
       : `de prijs (${euro(price)}), omdat het carbonpercentage onbekend is; de stickwijzer gebruikt deze schatting niet`;
-  return `${shop} noemt geen niveau. Eigen inschatting op basis van ${basis}${junior ? '; een juniorstick schatten we nooit als "ervaren" in' : ''}.`;
+  return `${shop} noemt geen niveau. Eigen inschatting op basis van ${basis}${junior ? '; een juniorstick schatten we nooit als "ervaren" in' : ''}.${bowNote}`;
 }
 
 export function estimatePositions(bow: BowProfile | null): Position[] {
@@ -263,8 +275,8 @@ export function toImportedProduct(
       ...fact(`PassaHockey plaatst deze stick bij ${model.discipline === 'zaal' ? 'zaalhockey' : 'de veldhockeysticks'}.`),
     },
     experienceLevel: {
-      value: estimateLevel(carbon, price, junior),
-      ...estimate(levelEstimateLabel('PassaHockey', carbon, price, junior)),
+      value: estimateLevel(carbon, price, junior, bow),
+      ...estimate(levelEstimateLabel('PassaHockey', carbon, price, junior, bow)),
       ...year,
     },
     recommendedPositions: {

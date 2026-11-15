@@ -199,8 +199,8 @@ export function toFeedProduct(
       ...fact(`${label} plaatst deze stick bij ${model.discipline === 'zaal' ? 'de zaalhockeysticks' : 'de veldhockeysticks'}.`),
     },
     experienceLevel: {
-      value: estimateLevel(carbon, price, junior),
-      ...estimate(levelEstimateLabel(label, carbon, price, junior)),
+      value: estimateLevel(carbon, price, junior, bow),
+      ...estimate(levelEstimateLabel(label, carbon, price, junior, bow)),
       ...year,
     },
     recommendedPositions: {

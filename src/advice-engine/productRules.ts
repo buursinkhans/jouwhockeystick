@@ -3,7 +3,7 @@ import { levelFromCarbon } from '@/catalog/feedImport';
 import { isJunior } from '@/catalog/passaFeed';
 import { isJuniorStick } from '@/catalog/similar';
 import type { BowProfile, ExperienceLevel, Product } from '@/catalog/types';
-import { HIGH_CARBON, SOFT_MAX_CARBON, feelFromCarbon } from './carbon';
+import { DIRECT_MIN_CARBON, HIGH_CARBON, SOFT_MAX_CARBON, feelFromCarbon } from './carbon';
 import type { ExperienceBand, StickFeel } from './types';
 
 export { HIGH_CARBON, SOFT_MAX_CARBON };
@@ -87,7 +87,10 @@ export function adviceLevel(product: Product): ExperienceLevel | null {
     return product.experienceLevel.value;
   }
   const carbon = product.carbonPercentage?.value;
-  return carbon === undefined ? null : levelFromCarbon(carbon, isJunior(product.name) || isJuniorStick(product));
+  // With the bow: a low bow is never estimated as a beginner stick (owner, 2026-11-15).
+  return carbon === undefined
+    ? null
+    : levelFromCarbon(carbon, isJunior(product.name) || isJuniorStick(product), product.bowProfile?.value ?? null);
 }
 
 export function deriveAdviceRules(product: Product): ProductAdviceRules {
@@ -96,7 +99,8 @@ export function deriveAdviceRules(product: Product): ProductAdviceRules {
   const bow = product.bowProfile?.value;
   const carbon = product.carbonPercentage?.value;
   const bands = BANDS_BY_LEVEL[level];
-  const highCarbon = carbon !== undefined && carbon >= HIGH_CARBON;
+  // A stiff, direct stick is no starter stick, whatever level its data states (2026-11-15: from 70%, was 85%).
+  const highCarbon = carbon !== undefined && carbon >= DIRECT_MIN_CARBON;
 
   return {
     homeBand: bands.home,
@@ -201,7 +205,7 @@ export function getAdviceBlockers(
   if (
     level === 'beginner' &&
     (product.bowProfile?.value === 'extreme_lowbow' ||
-      (carbon !== undefined && carbon >= HIGH_CARBON))
+      (carbon !== undefined && carbon >= DIRECT_MIN_CARBON))
   ) {
     blockers.push('illogical_starter_flag');
   }
