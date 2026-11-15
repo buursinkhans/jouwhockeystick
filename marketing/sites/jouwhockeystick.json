@@ -37,6 +37,53 @@
     "gegarandeerd", "bewezen", "\\bkorting\\b", "\\breview\\b", "voorkomt blessures", "\\baanrader\\b"
   ],
   "seizoenStart": 8,
+  "contentlijnen": [
+    {
+      "id": "welke-hockeystick-kopen",
+      "naam": "Welke hockeystick kopen?",
+      "label": "Kopen",
+      "utmCampagne": "welke-hockeystick-kopen",
+      "hub": "/kennis/hoe-kies-je-de-juiste-hockeystick",
+      "slots": { "post": "di", "video": "wo" },
+      "rustDagen": { "pagina": 42, "subthema": 14 },
+      "omgevingen": ["zaal", "veld", "algemeen"],
+      "methode": [
+        { "id": "speler", "naam": "Speler: niveau, speelwensen en budget" },
+        { "id": "stick", "naam": "Stick: bow-profiel en stickgevoel" },
+        { "id": "maat", "naam": "Maat: de lengte als harde voorwaarde" }
+      ],
+      "subthemas": [
+        { "id": "lengte", "naam": "Sticklengte", "vraag": "Welke maat hockeystick heb ik nodig?", "pijler": "maat", "methode": "maat",
+          "paginas": [{ "pad": "/kennis/hockeystick-lengte-tabel", "omgeving": "algemeen" }, { "pad": "/stickwijzer", "omgeving": "algemeen" }] },
+        { "id": "beginners", "naam": "Beginners", "vraag": "Welke hockeystick is geschikt voor een beginner?", "pijler": "spel", "methode": "speler",
+          "paginas": [{ "pad": "/kennis/hockeystick-kinderen-en-beginners", "omgeving": "veld" }, { "pad": "/blog/hockeystick-kiezen-praktische-tips", "omgeving": "algemeen" }] },
+        { "id": "kinderen", "naam": "Kinderen", "vraag": "Welke hockeystick koop ik voor mijn kind?", "pijler": "maat", "methode": "speler",
+          "paginas": [{ "pad": "/kennis/zaalstick-voor-kinderen", "omgeving": "zaal" }, { "pad": "/kennis/hockeystick-kinderen-en-beginners", "omgeving": "veld" }, { "pad": "/kennis/hockeystick-cadeau", "omgeving": "algemeen" }] },
+        { "id": "carbon", "naam": "Carbon", "vraag": "Hoeveel procent carbon heb ik nodig?", "pijler": "spel", "methode": "stick",
+          "paginas": [{ "pad": "/kennis/meer-carbon-hockeystick-beter", "omgeving": "veld" }] },
+        { "id": "kromming", "naam": "Kromming", "vraag": "Low bow of mid bow?", "pijler": "spel", "methode": "stick",
+          "paginas": [{ "pad": "/kennis/low-bow-vs-mid-bow", "omgeving": "veld" }] },
+        { "id": "speelstijl", "naam": "Speelstijl", "vraag": "Welke stick past bij mijn manier van hockeyen?", "pijler": "spel", "methode": "speler",
+          "paginas": [{ "pad": "/kennis/hoe-kies-je-de-juiste-hockeystick", "omgeving": "algemeen" }, { "pad": "/methodiek", "omgeving": "algemeen" }] },
+        { "id": "budget", "naam": "Budget", "vraag": "Hoeveel kost een goede hockeystick?", "pijler": "vergelijken", "methode": "speler",
+          "paginas": [{ "pad": "/kennis/zaalstick-budget", "omgeving": "zaal" }, { "pad": "/kennis/wat-kost-een-hockeystick", "omgeving": "veld" }] },
+        { "id": "vergelijken", "naam": "Vergelijken", "vraag": "Hoe vergelijk ik geschikte hockeysticks?", "pijler": "vergelijken", "methode": "stick",
+          "paginas": [{ "pad": "/zaalsticks", "omgeving": "zaal" }, { "pad": "/sticks", "omgeving": "veld" }, { "pad": "/kennis/waar-koop-je-een-hockeystick", "omgeving": "algemeen" }, { "pad": "/blog/hockeystick-kopen", "omgeving": "algemeen" }] },
+        { "id": "veld-zaal", "naam": "Veld versus zaal", "vraag": "Welke stick heb ik nodig voor mijn speelomgeving?", "pijler": "zaal", "methode": "speler",
+          "paginas": [{ "pad": "/kennis/veldstick-zaalhockey", "omgeving": "zaal" }] }
+      ],
+      "seizoenen": [
+        { "id": "winter", "naam": "November t/m januari", "van": "11-01", "tot": "01-31",
+          "aandeel": { "zaal": 0.7, "veld": 0.15, "algemeen": 0.15 }, "nadruk": ["veld-zaal", "kinderen", "budget", "vergelijken"] },
+        { "id": "voorjaar", "naam": "Februari t/m april", "van": "02-01", "tot": "04-30",
+          "aandeel": { "zaal": 0.1, "veld": 0.6, "algemeen": 0.3 }, "nadruk": ["vergelijken", "carbon", "kromming", "speelstijl"] },
+        { "id": "zomer", "naam": "Mei t/m augustus", "van": "05-01", "tot": "08-31",
+          "aandeel": { "zaal": 0, "veld": 0.4, "algemeen": 0.6 }, "nadruk": ["kinderen", "lengte", "beginners"] },
+        { "id": "najaar", "naam": "September en oktober", "van": "09-01", "tot": "10-31",
+          "aandeel": { "zaal": 0.3, "veld": 0.4, "algemeen": 0.3 }, "nadruk": ["beginners", "kinderen", "vergelijken", "veld-zaal"] }
+      ]
+    }
+  ],
   "markten": [
     {
       "id": "NL",

@@ -3240,3 +3240,33 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Met de hand:** `princess-competition-jr-10-star-indoor` (eigen schatting, low bow) staat nu op gevorderd. `y1-glg-30` en `grays-jb3xi-jumbow-indoor` houden "beginner", omdat de winkel dat niveau noemt; de eigenaar beslist.
 - **Wat dit niet oplost:** gevorderde senioren krijgen nog steeds vaak dezelfde sticks. De oorzaak is de aftrek van 3 punten samen met veel gelijke scores: de nagekeken sticks met merkgegevens scoren daardoor net hoger dan de importsticks. De tiebreak speelt daarin nauwelijks nog een rol.
 - **Tests:** `src/advice-engine/rankingRules.test.ts`, met de echte catalogus.
+
+## 2026-11-15 — Contentlijn "Welke hockeystick kopen?" in de bestaande marketingmachine
+
+**Opdracht eigenaar:** het terugkerende thema "Welke hockeystick kopen?" wordt een vast onderdeel van de planning, zonder tweede kalender of nieuwe publicatiemachine. Uitleg en planning staan in [contentlijn-welke-hockeystick-kopen.md](marketing/contentlijn-welke-hockeystick-kopen.md).
+
+**Besluiten eigenaar (15 november):**
+- **Binnen het ritme:** de lijn neemt de dinsdagpost en de woensdagvideo, dus 1 post en 1 video per week binnen 2 posts en 2 video's. Er komen geen extra Metricool-posts bij.
+- **Contentlijn boven de pijlers:** de lijn wordt geen vijfde pijler. Elk van de negen subthema's hangt aan één bestaande pijler.
+- **UTM:** `utm_campaign=welke-hockeystick-kopen` met koppeltekens, zoals de bestaande standaard; `utm_content` blijft het content-ID.
+
+**Gebouwd:**
+- **Configuratie:** `contentlijnen` in `marketing/sites/jouwhockeystick.json`, met het Zod-schema in `siteConfigSchema.ts`. Het schema controleert: plekken binnen het ritme, bekende pijlers, methodestappen en omgevingen, en een aandeel per seizoen dat optelt tot 1.
+- **`src/marketing/contentlijn.ts`** (site-neutraal, staat in de lijst van `motor.test.ts`). De keuze per plek gaat zo: eerst de omgeving die het verst achterloopt op haar seizoensaandeel (over de laatste 8 items), dan een subthema met voorrang in het seizoen of het langst niet gebruikt, en dan een live pagina die is uitgerust. Een subthema rust 14 dagen, een pagina 6 weken. Items buiten de lijn tellen mee voor de rust van een pagina. Een bezette plek blijft staan.
+- **CLI:** `npm run marketing:research -- lijn <lijn-id> <van> <weken> <geschiedenis.json> <paginas.json>`.
+- **Conversie-rapport:** nieuwe tabel "Bezoeken uit social per campagne" (bezoeken, stickwijzer-starts, bezoeken aan /sticks of /zaalsticks, winkelkliks), op de `utm_campaign` van het eerste bezoek. Campagnes die gelijk zijn aan een content-ID staan samen als "Losse posts".
+- **Opdrachten:**
+  - Social-planner STAP 2c2: eenmalig de vier bestaande items labelen, daarna de plekken van de lijn vullen.
+  - Onderzoeker STAP 5b: minstens twee voorstellen per week voor de lijn, en hooguit één les over het aandeel per seizoen.
+  - Weekrapport: een sectie Contentlijnen, met de Search Console-regel apart en zonder toeschrijving aan social.
+- **Studio:** label "Kopen · <subthema>" op de kaart en in de kalender. De kalender toont nu vier weken in plaats van twee, met daaronder per lijn de items van de komende vier weken. De studio moet na de merge opnieuw worden gepubliceerd (`social/studio/README.md`).
+- **`docs/instagram.md` §7:** het ritme is gelijkgetrokken met het besluit van 2026-11-10 (2 posts en 2 video's). Er stond nog 3 posts plus 1 video.
+
+**Bewust anders dan de masterprompt:**
+- **De methode volgt de site:** speler, stick, maat (`src/content/methode.ts`, besluit 2026-11-11), niet de vijf stappen uit de opdracht. Die vijf vallen onder de drie delen.
+- **Geen "onafhankelijk"-claim:** `methode.ts` sluit dat woord bewust uit. De kernzin "Eerlijk, passend advies" blijft staan.
+- **Geen aanbiedingen in een Push:** dat botst met de regel tegen kortingsclaims.
+- **De statussen in de data blijven ongewijzigd.** Anders loopt de koppeling met de Publiceerder en Metricool risico. De studio blijft haar eigen labels tonen.
+- **Geen nieuwe concepten voor de eerste twee weken.** Die plekken waren al gevuld met passende items; die worden gelabeld. Voor week 3 en 4 staan briefs klaar, en de planner maakt daar vrijdag de concepten van.
+
+**Niet gedaan:** niets in de studio-database of in Metricool geschreven, niets gepubliceerd. De tests draaien in CI; lokaal kon npm niet installeren, zie de PR.

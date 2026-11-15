@@ -47,7 +47,8 @@ Feedback van de eigenaar volg je binnen deze regels. Feedback die ertegen ingaat
 
 ## 7. Planning
 
-- **Ritme:** drie posts per week, rond 19:30, plus op **woensdag een video** (Short, Reel, TikTok en YouTube; zie `docs/video.md` §7). **Dinsdag = Kiezen** (lengte, bow, budget, beginners; leidt naar de stickwijzer). **Donderdag = Zaal** van oktober t/m februari, daarbuiten **Veld**. **Zaterdag = Bewaren** (tabel, checklist, veelgemaakte fouten: posts die mensen opslaan en delen).
+- **Ritme:** 2 posts en 2 video's per week, rond 19:30 (besluit eigenaar 2026-11-10; `ritme` in `marketing/sites/jouwhockeystick.json`). **Dinsdag = Kiezen of Bewaren**, om en om (lengte, bow, budget, beginners; of een tabel, checklist of veelgemaakte fouten: posts die mensen opslaan en delen). **Donderdag = Zaal** van oktober t/m februari, daarbuiten **Veld**. Video's op **woensdag** (kennis) en **vrijdag** (lijstje of algemene hockey); zie `docs/video.md` §7.
+- **Contentlijn "Welke hockeystick kopen?":** de dinsdagpost en de woensdagvideo horen bij deze lijn, met een subthema per week (`docs/marketing/merkplatform.md`, "Contentlijnen"). De lijn telt binnen het ritme, niet erbovenop.
 - **Twee weken vooruit:** elke vrijdag vult de Social-planner de lege dagen van de komende 14 dagen, posts en video's. Bestaande posts blijven staan.
 - **Kwartaalplan:** de planner houdt een plan van 3 maanden bij, per week een thema en focus, afgestemd op het seizoen (zaal vóór december, Sinterklaas en kerst als cadeaumoment, start veldseizoen in maart). Ontbreekt een pagina voor een thema, dan staat dat in het plan als idee voor een content-brief; er komt dan geen post over.
 - **Afwisseling:** dezelfde pagina niet vaker dan eens per 6 weken; wissel carrousel en één beeld af (ongeveer 2 op 1).

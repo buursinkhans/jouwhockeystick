@@ -63,6 +63,21 @@ Een idee gaat alleen door als het op alle drie ja scoort:
 4. **Bewijs:** een feit met bron, een bewijszin of de regel uit de lengtetabel.
 5. **Vervolgstap:** één stap, meestal de stickwijzer of de pagina.
 
+## Contentlijnen
+
+Een contentlijn is een koopvraag die het hele jaar terugkomt. Ze staat boven de pijlers, en elk subthema hangt aan één pijler, zodat niets dubbel wordt ingedeeld. Een lijn vult vaste plekken in het bestaande ritme. Ze voegt geen posts toe en heeft geen eigen kalender. De gegevens staan in `marketing/sites/jouwhockeystick.json` (`contentlijnen`), de keuze per plek in `src/marketing/contentlijn.ts`. Uitleg en meetroutine: [contentlijn-welke-hockeystick-kopen.md](contentlijn-welke-hockeystick-kopen.md).
+
+### Welke hockeystick kopen?
+
+- **Plek in het ritme:** de post van dinsdag en de video van woensdag (1 post en 1 video per week, binnen 2 posts en 2 video's; besluit eigenaar 2026-11-15). De donderdag blijft vrij voor een ondersteunende post als er een eigen invalshoek is.
+- **Methode:** de Jouwhockeystick-methode, in haar eigen volgorde: speler (niveau, speelwensen en budget), stick (bow-profiel en stickgevoel), maat (de lengte als harde voorwaarde). Elk subthema noemt de stap waar het bij hoort.
+- **Vaste boodschap:** duurder, meer carbon of een bekend merk is niet vanzelf een betere keuze. De stick moet passen bij de speler.
+- **Subthema's:** sticklengte, beginners, kinderen, carbon, kromming, speelstijl, budget, vergelijken, veld versus zaal. Elk heeft een centrale vraag en een of meer live pagina's.
+- **Seizoen:** van november tot en met januari ongeveer 70% zaal. Van februari tot en met april vooral veld, vergelijken, carbon, kromming en speelstijl. Van mei tot en met augustus jeugd, lengte en beginners. In september en oktober beginners, ouders, vergelijken en de aanloop naar de zaal. Dit zijn startwaarden. Een les van de Onderzoeker kan ze bijstellen, met een vinkje van de eigenaar.
+- **Herhaling:** hetzelfde subthema komt pas na 14 dagen terug en dezelfde pagina pas na 6 weken. Zo komt een subthema alleen met een nieuwe invalshoek terug.
+- **Pulse en Push:** de lijn hoort bij Pulse. In een Push-blok eindigen haar items met de vervolgstap van dat blok. Een eigen campagne of een Peak maakt de lijn niet. Aanbiedingen noemen we nooit, ook niet in een Push.
+- **Meten:** `utm_campaign=welke-hockeystick-kopen`, `utm_content` = het content-ID. Niet elk item hoeft een klik te vragen. Een uitleg-item mag vooral bereik en vertrouwen opleveren.
+
 ## Pulse-inhoudslijnen
 
 De vaste stroom tussen campagnes door:

@@ -9,9 +9,12 @@
  *   issue <week> <voorstellen.json> <lessen.json>  the body of the proposals issue
  *   vinkjes <body.md>                 the ticked proposals and lessons
  *   kpi <weken.json>                  per market: the KPIs of the last week and the comparison with the 4 weeks before
+ *   lijn <lijn-id> <van> <weken> <geschiedenis.json> <paginas.json>
+ *                                     a content line: per slot the sub-theme, page and reasons; existing items stay (contentlijn.ts)
  */
 import { readFileSync } from 'node:fs';
 import { pairProblem } from '../src/marketing/abtest';
+import { contentLine, lineUtm, planLine, type LineItem } from '../src/marketing/contentlijn';
 import { momentsOn, pushOn } from '../src/marketing/calendar';
 import { loadSiteConfig, market } from '../src/marketing/siteConfig';
 import { kpis, weekComparison, type WeekNumbers } from '../src/marketing/kpi';
@@ -64,8 +67,14 @@ try {
     console.log(JSON.stringify(out, null, 2));
   } else if (cmd === 'vinkjes') {
     console.log(JSON.stringify(parseTicks(readFileSync(a ?? '', 'utf8'))));
+  } else if (cmd === 'lijn') {
+    const [, , , , , weken, hist, pages] = process.argv;
+    if (!a || !day.test(b ?? '') || !/^\d{1,2}$/.test(weken ?? '') || !hist || !pages) throw new Error('Gebruik: lijn <lijn-id> <JJJJ-MM-DD> <weken> <geschiedenis.json> <paginas.json>');
+    const line = contentLine(config, a);
+    const plan = planLine(line, b!, Number(weken), json(hist) as LineItem[], json(pages) as string[]);
+    console.log(JSON.stringify({ lijn: line.id, utm_campaign: lineUtm(line, 'x').utm_campaign, plan }, null, 2));
   } else {
-    throw new Error('Gebruik: kalender | score | lessen | paar | issue | vinkjes | kpi');
+    throw new Error('Gebruik: kalender | score | lessen | paar | issue | vinkjes | kpi | lijn');
   }
 } catch (e) {
   console.error(e instanceof Error ? e.message : String(e));
