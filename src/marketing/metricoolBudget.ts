@@ -1,11 +1,13 @@
 /**
- * The Metricool allowance (docs/marketing/publiceerder.md): the free plan allows
- * a fixed number of planned posts per month. The Publiceerder counts before every
- * create and stops at the limit with a clear message; it never deletes a post
- * to make room. Change the limit here when the plan changes (decision log
- * 2026-11-10); nothing else needs to change.
+ * The Metricool allowance (docs/marketing/publiceerder.md). The free plan allowed
+ * 20 planned posts per month; the paid Starter plan (since 2026-11-15) has no
+ * fixed cap, only Metricool's fair-use policy. We keep our own safety limit so a
+ * run that misbehaves cannot flood the planner. The Publiceerder counts before
+ * every create and stops at the limit with a clear message; it never deletes a
+ * post to make room. Change the limit here when the plan changes (decision log
+ * 2026-11-10 and 2026-11-15); nothing else needs to change.
  */
-export const METRICOOL_MONTHLY_LIMIT = 20;
+export const METRICOOL_MONTHLY_LIMIT = 100;
 
 /** One Metricool post: its uuid and its publication moment (YYYY-MM-DDTHH:mm…, brand timezone). */
 export type PlannedPost = { uuid: string; moment: string };

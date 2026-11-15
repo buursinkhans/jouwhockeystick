@@ -3284,3 +3284,13 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 **Evaluatie:** Na twee weken (rond 2026-11-29) kijken naar het verbruik en naar de kwaliteit van de catalogus-PR's en reviews. Valt de kwaliteit tegen, dan per agent terug naar een zwaarder model. Haalt de hercontrole zijn weekbatch niet binnen 60 stappen, dan de batch verkleinen in plaats van de stappen verhogen.
 
 **Betrokken bestanden:** `.github/workflows/catalogus-aanvuller.yml`, `catalogus-verrijker.yml`, `catalogus-hercontrole.yml`, `review.yml`, `orchestrator.yml`, `marktverkenning.yml`.
+
+## 2026-11-15 — Metricool Starter 5: vangnet van 100 posts per maand
+
+**Wat:** De eigenaar zette Metricool om van het gratis plan naar Starter 5. Het gratis plan stond hooguit 20 ingeplande posts per maand toe; Starter heeft geen vaste grens, alleen het fair-use-beleid van Metricool (prijspagina en helpartikel "main differences between free and paid plans", gelezen 2026-11-15). `METRICOOL_MONTHLY_LIMIT` gaat van 20 naar 100.
+
+**Reden:** In november stonden 20 van 20 posts vast, en de Publiceerder liet twee goedgekeurde kanalen liggen: TikTok van "zaalsticks zonder carbon" (16 november) en Instagram van "low of mid bow" (17 november). Na de merge plant de eerstvolgende uurrun die in.
+
+**Besluit eigenaar:** een eigen vangnet van 100 per maand in plaats van geen grens. Dat is ruim boven het ritme van nu, en houdt een run die doorslaat tegen.
+
+**Betrokken bestanden:** `src/marketing/metricoolBudget.ts` en de test, `docs/marketing/README.md`.
