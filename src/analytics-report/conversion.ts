@@ -60,6 +60,13 @@ export type ConversionData = {
    * (docs/marketing/weekrapport.md). Undefined when PostHog could not answer.
    */
   socialStarts?: Count[];
+  /**
+   * Per social campaign (the session's entry utm_campaign, utm_medium=social):
+   * visits (visitor-days), stickwijzer starts, visits to a comparison page and
+   * shop clicks. Feeds the content-line section of the Weekrapport
+   * (docs/marketing/weekrapport.md). Undefined when PostHog could not answer.
+   */
+  socialCampaigns?: { visits: Count[]; starts: Count[]; compare: Count[]; clicks: Count[] };
   /** `home_block_click` per "block → target". */
   homeBlocks: Count[];
   deadClicksByPage: Count[];
@@ -203,6 +210,36 @@ export function socialSection(starts: readonly Count[] | undefined): string[] {
     table(['Bron', 'Deze week', 'Vorige week', 'Verschil'], countRows([...rows, total])),
     '',
     '_Per start van de stickwijzer, toegekend aan de bron waarmee het bezoek binnenkwam (utm_medium=social). Dit is de noordster van de marketingmachine._',
+  ];
+}
+
+/** Items whose campaign is their own id (YYYYMMDD-…) are grouped as one row: they have no campaign. */
+const OWN_ID = /^\d{8}-/;
+
+/** One row per social campaign; per-item ids together as "Losse posts". The empty key is "not from social". */
+export function campaignSection(data: { visits: Count[]; starts: Count[]; compare: Count[]; clicks: Count[] } | undefined): string[] {
+  if (!data) return ['_PostHog kon dit deze week niet beantwoorden._'];
+  const label = (key: string) => (OWN_ID.test(key) ? 'Losse posts' : key);
+  const rows = new Map<string, { visits: Count; starts: Count; compare: Count; clicks: Count }>();
+  const zero = (key: string): Count => ({ key, now: 0, before: 0 });
+  for (const kind of ['visits', 'starts', 'compare', 'clicks'] as const) {
+    for (const c of data[kind]) {
+      if (!c.key) continue;
+      const key = label(c.key);
+      const row = rows.get(key) ?? { visits: zero(key), starts: zero(key), compare: zero(key), clicks: zero(key) };
+      row[kind] = { key, now: row[kind].now + c.now, before: row[kind].before + c.before };
+      rows.set(key, row);
+    }
+  }
+  if (!rows.size) return ['_Geen bezoeken uit social met een campagne deze week of vorige week._'];
+  const both = (c: Count) => `${c.now} (${c.before})`;
+  return [
+    table(
+      ['Campagne', 'Bezoeken', 'Stickwijzer-starts', 'Vergelijker', 'Winkelkliks'],
+      [...rows.entries()].sort((a, b) => b[1].visits.now - a[1].visits.now).map(([key, r]) => [key, both(r.visits), both(r.starts), both(r.compare), both(r.clicks)]),
+    ),
+    '',
+    '_Deze week, met vorige week tussen haakjes. Toegekend aan de campagne waarmee het bezoek binnenkwam (utm_medium=social). Vergelijker = bezoeken aan /sticks of /zaalsticks. Organische zoekcijfers staan in het Search Console-rapport en worden niet aan social toegeschreven._',
   ];
 }
 
@@ -555,6 +592,10 @@ export function formatReport(
     '### Stickwijzer-starts uit social',
     '',
     ...socialSection(data.socialStarts),
+    '',
+    '### Bezoeken uit social per campagne',
+    '',
+    ...campaignSection(data.socialCampaigns),
     '',
     '### Bezoeken uit AI-assistenten, per landingspagina',
     '',

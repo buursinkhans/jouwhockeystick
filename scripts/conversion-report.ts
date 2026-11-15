@@ -74,6 +74,18 @@ async function breakdown(
   }));
 }
 
+/** Social visits, starts, comparison visits and shop clicks per entry campaign. */
+async function socialCampaigns(config: { key: string; projectId: string }) {
+  const campaign = `if(toString(session.$entry_utm_medium) = 'social', toString(session.$entry_utm_campaign), '')`;
+  const compare = `if(toString(properties.$pathname) IN ('/sticks', '/zaalsticks'), ${campaign}, '')`;
+  return {
+    visits: await breakdown(config, '$pageview', campaign, 'visitors'),
+    starts: await breakdown(config, 'quiz_start', campaign),
+    compare: await breakdown(config, '$pageview', compare, 'visitors'),
+    clicks: await breakdown(config, 'retailer_click', campaign),
+  };
+}
+
 async function funnel(config: { key: string; projectId: string }): Promise<Count[]> {
   const steps = ['visitors', 'started', 'route', 'completed', 'clicked', 'clickers'];
   const conditions = [
@@ -256,6 +268,11 @@ async function main() {
       `if(toString(session.$entry_utm_medium) = 'social', toString(session.$entry_utm_source), '')`,
     ).catch((error: unknown) => {
       console.error(`Starts uit social overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }),
+    // Per social campaign, for the content lines in the Weekrapport (docs/marketing/weekrapport.md).
+    socialCampaigns: await socialCampaigns(config).catch((error: unknown) => {
+      console.error(`Campagnes uit social overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
       return undefined;
     }),
     homeBlocks: await breakdown(
