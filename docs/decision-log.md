@@ -3270,3 +3270,9 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Geen nieuwe concepten voor de eerste twee weken.** Die plekken waren al gevuld met passende items; die worden gelabeld. Voor week 3 en 4 staan briefs klaar, en de planner maakt daar vrijdag de concepten van.
 
 **Niet gedaan:** niets in de studio-database of in Metricool geschreven, niets gepubliceerd. De tests draaien in CI; lokaal kon npm niet installeren, zie de PR.
+
+## 2026-11-15 — Twee nagekeken sticks met low bow naar gevorderd
+
+- **Wat:** `y1-glg-30` en `grays-jb3xi-jumbow-indoor` staan nu op "gevorderd" (was "beginner"). De winkel noemt "beginner"; de bron is nu onze eigen inschatting, met die vermelding en de reden in het bronlabel.
+- **Waarom:** besluit eigenaar na de review van de adviesengine: een stick met low bow hoort bij gevorderd (zie "Adviesengine: rangschikking en niveau"). In PR 2 bleven deze twee staan omdat de winkel het niveau noemde; de eigenaar besliste ze ook te veranderen.
+- **Test:** `rankingRules.test.ts` controleert nu ook dat geen nagekeken stick met een low bow op "beginner" staat.

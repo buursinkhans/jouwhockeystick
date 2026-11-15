@@ -26,10 +26,10 @@ export const y1Glg30: Product = {
     lastVerifiedAt: CHECKED,
   },
   experienceLevel: {
-    value: 'beginner',
-    source: 'partner-shop',
+    value: 'gevorderd',
+    source: 'editorial-estimate',
     sourceLabel:
-      'De listing vermeldt "Niveau: Beginner". PassaSports noemt de stijfheid "Allround".',
+      'De listing vermeldt "Niveau: Beginner". Wij delen hem in als gevorderd: een low bow is gemaakt voor liften en 3D, en daar is een beginner nog niet mee bezig (besluit 2026-11-15). PassaSports noemt de stijfheid "Allround".',
     sourceUrl: SOURCE,
     modelYear: 2026,
     lastVerifiedAt: CHECKED,
