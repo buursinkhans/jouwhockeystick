@@ -561,7 +561,10 @@
       },
       "kanalen": {
         "insta": {
-          "bezig": "2026-11-16T17:21:52Z"
+          "id": 430407642,
+          "uuid": "3773287104304267464",
+          "moment": "2026-11-25T19:30:00",
+          "op": "2026-11-16T17:29:00Z"
         }
       }
     },
@@ -766,7 +769,7 @@
     "gebruikt": 32,
     "grens": 100
   },
-  "wijziging": "9974bee4-bfde-4663-bfdd-b9097fd70c7c",
+  "wijziging": "ab15db7c-dfbc-4d0d-8e9f-efcfc3a11cb4",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
