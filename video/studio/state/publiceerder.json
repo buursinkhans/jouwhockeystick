@@ -472,6 +472,12 @@
         "gestart": "2026-11-16T17:12:18Z"
       },
       "fout": null
+    },
+    "posts/20261124-checklist-stick-kopen": {
+      "render": {
+        "gestart": "2026-11-16T17:13:13Z"
+      },
+      "fout": null
     }
   },
   "laatsteRun": "2026-11-16T17:10:03Z",
@@ -480,7 +486,7 @@
     "gebruikt": 22,
     "grens": 100
   },
-  "wijziging": "ab7b2e59-979c-41b1-989c-c3f619cc63eb",
+  "wijziging": "e11812d3-6633-4435-ada1-e83f6996e85b",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
