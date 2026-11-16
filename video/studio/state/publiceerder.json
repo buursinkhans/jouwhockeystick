@@ -662,6 +662,11 @@
             "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261121-zes-keuzefouten-5.png"
           }
         ]
+      },
+      "kanalen": {
+        "insta": {
+          "bezig": "2026-11-16T18:20:15Z"
+        }
       }
     },
     "videos/20261123-vind-je-zaalstick": {
@@ -722,7 +727,7 @@
     "gebruikt": 32,
     "grens": 100
   },
-  "wijziging": "29ca2766-58a0-4096-88dc-1a7dc314d8db",
+  "wijziging": "37f27c5d-b09f-4fb8-9d7a-b031d3faeaa4",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
