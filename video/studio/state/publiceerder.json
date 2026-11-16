@@ -535,6 +535,11 @@
           }
         ]
       },
+      "kanalen": {
+        "insta": {
+          "bezig": "2026-11-16T17:15:17Z"
+        }
+      },
       "fout": null
     }
   },
@@ -544,7 +549,7 @@
     "gebruikt": 23,
     "grens": 100
   },
-  "wijziging": "1fbe070f-58f3-436d-ac17-8af504655cb6",
+  "wijziging": "a4f6dc27-95a1-4c03-89d5-d084df59e5eb",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
