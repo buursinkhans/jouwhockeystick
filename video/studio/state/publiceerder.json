@@ -505,7 +505,32 @@
     },
     "posts/20261124-checklist-stick-kopen": {
       "render": {
-        "gestart": "2026-11-16T17:13:13Z"
+        "gestart": "2026-11-16T17:13:13Z",
+        "klaar": "2026-11-16T17:14:33Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "20261124-checklist-stick-kopen-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261124-checklist-stick-kopen-1.png"
+          },
+          {
+            "name": "20261124-checklist-stick-kopen-2.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261124-checklist-stick-kopen-2.png"
+          },
+          {
+            "name": "20261124-checklist-stick-kopen-3.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261124-checklist-stick-kopen-3.png"
+          },
+          {
+            "name": "20261124-checklist-stick-kopen-4.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261124-checklist-stick-kopen-4.png"
+          },
+          {
+            "name": "20261124-checklist-stick-kopen-5.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261124-checklist-stick-kopen-5.png"
+          }
+        ]
       },
       "fout": null
     }
@@ -516,7 +541,7 @@
     "gebruikt": 22,
     "grens": 100
   },
-  "wijziging": "d3ab6163-d993-4f14-a116-a3dd3c0ea34a",
+  "wijziging": "04366bce-736a-467e-a785-17e838f4c2b3",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
