@@ -568,9 +568,36 @@
     },
     "videos/20261125-bow-profielen": {
       "render": {
-        "gestart": "2026-11-16T17:15:32Z"
+        "gestart": "2026-11-16T17:15:32Z",
+        "klaar": "2026-11-16T17:20:51Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "reel": {
+          "name": "20261125-bow-profielen-reel.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261125-bow-profielen-reel.mp4"
+        },
+        "reelCover": {
+          "name": "20261125-bow-profielen-reel-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261125-bow-profielen-reel-cover.png"
+        },
+        "short": {
+          "name": "20261125-bow-profielen-short.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261125-bow-profielen-short.mp4"
+        },
+        "shortCover": {
+          "name": "20261125-bow-profielen-short-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261125-bow-profielen-short-cover.png"
+        },
+        "uitleg": {
+          "name": "20261125-bow-profielen-youtube.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261125-bow-profielen-youtube.mp4"
+        },
+        "uitlegCover": {
+          "name": "20261125-bow-profielen-youtube-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261125-bow-profielen-youtube-cover.png"
+        }
+      }
     },
     "posts/20261121-zes-keuzefouten": {
       "render": {
@@ -616,7 +643,7 @@
     "gebruikt": 24,
     "grens": 100
   },
-  "wijziging": "db521549-2d38-4692-b314-806d67d3bb4f",
+  "wijziging": "7090de03-35f1-4e35-afd4-6c14b1d4b0cd",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
