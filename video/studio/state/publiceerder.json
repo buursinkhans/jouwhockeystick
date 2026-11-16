@@ -648,6 +648,17 @@
           "name": "20261030-stickregels-fih-short-cover.png",
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261030-stickregels-fih-short-cover.png"
         }
+      },
+      "kanalen": {
+        "reels": {
+          "bezig": "2026-11-16T17:21:52Z"
+        },
+        "shorts": {
+          "bezig": "2026-11-16T17:21:52Z"
+        },
+        "tiktok": {
+          "bezig": "2026-11-16T17:21:52Z"
+        }
       }
     }
   },
@@ -657,7 +668,7 @@
     "gebruikt": 24,
     "grens": 100
   },
-  "wijziging": "58c682a1-1b69-4870-9623-5c4025fd3b2d",
+  "wijziging": "86fd8e29-048e-4908-80b6-52df9696fcdc",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
