@@ -577,9 +577,28 @@
     },
     "videos/20261030-stickregels-fih": {
       "render": {
-        "gestart": "2026-11-16T17:16:26Z"
+        "gestart": "2026-11-16T17:16:26Z",
+        "klaar": "2026-11-16T17:20:06Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "reel": {
+          "name": "20261030-stickregels-fih-reel.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261030-stickregels-fih-reel.mp4"
+        },
+        "reelCover": {
+          "name": "20261030-stickregels-fih-reel-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261030-stickregels-fih-reel-cover.png"
+        },
+        "short": {
+          "name": "20261030-stickregels-fih-short.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261030-stickregels-fih-short.mp4"
+        },
+        "shortCover": {
+          "name": "20261030-stickregels-fih-short-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261030-stickregels-fih-short-cover.png"
+        }
+      }
     }
   },
   "laatsteRun": "2026-11-16T17:16:37Z",
@@ -588,7 +607,7 @@
     "gebruikt": 24,
     "grens": 100
   },
-  "wijziging": "e27e8210-d5d2-4d59-8500-acf4a4801744",
+  "wijziging": "828c5bf4-c06b-4998-994c-1b5edd87894f",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
