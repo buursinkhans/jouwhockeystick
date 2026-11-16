@@ -469,7 +469,32 @@
     },
     "posts/20261029-zaalstick-budget": {
       "render": {
-        "gestart": "2026-11-16T17:12:18Z"
+        "gestart": "2026-11-16T17:12:18Z",
+        "klaar": "2026-11-16T17:13:39Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "20261029-zaalstick-budget-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261029-zaalstick-budget-1.png"
+          },
+          {
+            "name": "20261029-zaalstick-budget-2.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261029-zaalstick-budget-2.png"
+          },
+          {
+            "name": "20261029-zaalstick-budget-3.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261029-zaalstick-budget-3.png"
+          },
+          {
+            "name": "20261029-zaalstick-budget-4.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261029-zaalstick-budget-4.png"
+          },
+          {
+            "name": "20261029-zaalstick-budget-5.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261029-zaalstick-budget-5.png"
+          }
+        ]
       },
       "fout": null
     },
@@ -486,7 +511,7 @@
     "gebruikt": 22,
     "grens": 100
   },
-  "wijziging": "e11812d3-6633-4435-ada1-e83f6996e85b",
+  "wijziging": "7765db02-57e4-4bf8-9b61-eecae245e14b",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
