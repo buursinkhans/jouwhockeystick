@@ -570,9 +570,34 @@
     },
     "posts/20261126-zaalstick-kind-letten": {
       "render": {
-        "gestart": "2026-11-16T19:09:26Z"
+        "gestart": "2026-11-16T19:09:26Z",
+        "klaar": "2026-11-16T19:10:25Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "slides": [
+          {
+            "name": "20261126-zaalstick-kind-letten-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261126-zaalstick-kind-letten-1.png"
+          },
+          {
+            "name": "20261126-zaalstick-kind-letten-2.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261126-zaalstick-kind-letten-2.png"
+          },
+          {
+            "name": "20261126-zaalstick-kind-letten-3.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261126-zaalstick-kind-letten-3.png"
+          },
+          {
+            "name": "20261126-zaalstick-kind-letten-4.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261126-zaalstick-kind-letten-4.png"
+          },
+          {
+            "name": "20261126-zaalstick-kind-letten-5.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261126-zaalstick-kind-letten-5.png"
+          }
+        ]
+      }
     },
     "videos/20261125-bow-profielen": {
       "render": {
@@ -769,7 +794,7 @@
     "gebruikt": 32,
     "grens": 100
   },
-  "wijziging": "ab15db7c-dfbc-4d0d-8e9f-efcfc3a11cb4",
+  "wijziging": "733e50b4-92e7-45ce-b6f5-eaa6dfe91ffa",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
