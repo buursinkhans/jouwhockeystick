@@ -466,6 +466,12 @@
           "op": "2026-11-15T18:09:24Z"
         }
       }
+    },
+    "posts/20261029-zaalstick-budget": {
+      "render": {
+        "gestart": "2026-11-16T17:12:18Z"
+      },
+      "fout": null
     }
   },
   "laatsteRun": "2026-11-16T17:10:03Z",
@@ -474,7 +480,7 @@
     "gebruikt": 22,
     "grens": 100
   },
-  "wijziging": "a62d890d-9ea8-42eb-a935-12be9dab4a67",
+  "wijziging": "ab7b2e59-979c-41b1-989c-c3f619cc63eb",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
