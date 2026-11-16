@@ -674,9 +674,28 @@
     },
     "videos/20261123-vind-je-zaalstick": {
       "render": {
-        "gestart": "2026-11-16T18:19:34Z"
+        "gestart": "2026-11-16T18:19:34Z",
+        "klaar": "2026-11-16T18:21:01Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "reel": {
+          "name": "20261123-vind-je-zaalstick-reel.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261123-vind-je-zaalstick-reel.mp4"
+        },
+        "reelCover": {
+          "name": "20261123-vind-je-zaalstick-reel-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261123-vind-je-zaalstick-reel-cover.png"
+        },
+        "short": {
+          "name": "20261123-vind-je-zaalstick-short.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261123-vind-je-zaalstick-short.mp4"
+        },
+        "shortCover": {
+          "name": "20261123-vind-je-zaalstick-short-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261123-vind-je-zaalstick-short-cover.png"
+        }
+      }
     },
     "videos/20261030-stickregels-fih": {
       "render": {
@@ -730,7 +749,7 @@
     "gebruikt": 32,
     "grens": 100
   },
-  "wijziging": "c5852706-5e32-44b6-8fb0-45c629cab662",
+  "wijziging": "5c6e867e-cf8c-4833-9864-8ae0ff9de065",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
