@@ -496,6 +496,11 @@
           }
         ]
       },
+      "kanalen": {
+        "insta": {
+          "bezig": "2026-11-16T17:14:13Z"
+        }
+      },
       "fout": null
     },
     "posts/20261124-checklist-stick-kopen": {
@@ -511,7 +516,7 @@
     "gebruikt": 22,
     "grens": 100
   },
-  "wijziging": "7765db02-57e4-4bf8-9b61-eecae245e14b",
+  "wijziging": "d3ab6163-d993-4f14-a116-a3dd3c0ea34a",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
