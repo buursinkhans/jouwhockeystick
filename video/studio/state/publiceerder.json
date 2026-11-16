@@ -547,9 +547,18 @@
     },
     "posts/20261125-zaalstick-maat-kind": {
       "render": {
-        "gestart": "2026-11-16T17:15:32Z"
+        "gestart": "2026-11-16T17:15:32Z",
+        "klaar": "2026-11-16T17:20:38Z"
       },
-      "fout": null
+      "fout": null,
+      "media": {
+        "slides": [
+          {
+            "name": "20261125-zaalstick-maat-kind-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261125-zaalstick-maat-kind-1.png"
+          }
+        ]
+      }
     },
     "posts/20261126-zaalstick-kind-letten": {
       "render": {
@@ -607,7 +616,7 @@
     "gebruikt": 24,
     "grens": 100
   },
-  "wijziging": "828c5bf4-c06b-4998-994c-1b5edd87894f",
+  "wijziging": "db521549-2d38-4692-b314-806d67d3bb4f",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
