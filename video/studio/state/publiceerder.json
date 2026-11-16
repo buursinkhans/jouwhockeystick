@@ -541,6 +541,24 @@
         }
       },
       "fout": null
+    },
+    "posts/20261125-zaalstick-maat-kind": {
+      "render": {
+        "gestart": "2026-11-16T17:15:19Z"
+      },
+      "fout": null
+    },
+    "posts/20261126-zaalstick-kind-letten": {
+      "render": {
+        "gestart": "2026-11-16T17:15:19Z"
+      },
+      "fout": null
+    },
+    "videos/20261125-bow-profielen": {
+      "render": {
+        "gestart": "2026-11-16T17:15:19Z"
+      },
+      "fout": null
     }
   },
   "laatsteRun": "2026-11-16T17:14:42Z",
@@ -549,7 +567,7 @@
     "gebruikt": 23,
     "grens": 100
   },
-  "wijziging": "a4f6dc27-95a1-4c03-89d5-d084df59e5eb",
+  "wijziging": "bc3055e6-1a8c-4c63-b3e8-04b7532c468a",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
