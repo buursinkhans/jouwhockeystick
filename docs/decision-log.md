@@ -3314,3 +3314,11 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 **Besluit eigenaar:** een eigen vangnet van 100 per maand in plaats van geen grens. Dat is ruim boven het ritme van nu, en houdt een run die doorslaat tegen.
 
 **Betrokken bestanden:** `src/marketing/metricoolBudget.ts` en de test, `docs/marketing/README.md`.
+
+## 2026-11-17 — Blog: "Van hout tot carbon: hoe de hockeystick zijn vorm kreeg"
+
+- **Wat:** een blogpost van de eigenaar over de geschiedenis van de hockeystick op `/blog/geschiedenis-van-de-hockeystick`, onder zijn eigen naam (Hans Buursink) en direct live (publicatiedatum 2026-11-17). De tekst staat zoals hij die schreef; toegevoegd zijn drie links (low bow of mid bow, hoeveel carbon, stickwijzer), een bronnenlijst en de metadata. Hij staat bovenaan de blog.
+- **Waarom blog en geen kennisartikel:** het is een verhaal, geen antwoord op een koopvraag, en er is op de site geen andere pagina over de geschiedenis. Hij concurreert dus nergens mee.
+- **Auteur in de structured data:** een met naam genoemde auteur is een Person met een link naar `/over-ons` (`authorJsonLd` in `src/lib/jsonLd.ts`); "Redactie jouwhockeystick.nl" blijft een Organization. Geldt voor blog en kennisartikelen.
+- **Bronnen:** de regels over de kromming (25 mm, 200 mm; FIH regel 4.6 en 2.15) en over spelen met de achterkant (regel 9.5) zijn nagelezen in de regels van maart 2026, de jaartallen 1871, 1876, 1892, 1898, 1926/27 en 1976 bij de Wikipedia-artikelen die in de lijst staan (achtergrond, geen primaire bron). Zonder eigen bron blijven: de Indiase sticktraditie, de houtsoorten, de gelamineerde constructies, de jaren negentig als begin van composiete sticks, "touw en canvas" en de stick met twee platte kanten. Dat staat zo onder de tekst.
+- **Open punten (aan de eigenaar):** FIH regel 9.6 verbiedt de bal hard te slaan met de rand van de stick aan de forehandkant, terwijl de tekst zegt dat "de randen" zijn toegestaan; volgens een bron is de korte kop pas met kunstgras gekomen, terwijl de tekst die ontwikkeling bij het houten tijdperk plaatst; en vezelversterkte materialen zouden al in de vroege jaren zeventig op houten kernen zijn toegepast. Er is niets aan de tekst veranderd.

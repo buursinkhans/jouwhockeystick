@@ -7,7 +7,7 @@ import { ArticleMeta } from '@/components/article/ArticleMeta';
 import { SourceList } from '@/components/article/SourceList';
 import { ScheduledNotice } from '@/components/article/ScheduledNotice';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { jsonLdHtml } from '@/lib/jsonLd';
+import { authorJsonLd, jsonLdHtml } from '@/lib/jsonLd';
 
 export function generateStaticParams() {
   return getAllBlogPosts().map((post) => ({ slug: post.slug }));
@@ -46,7 +46,7 @@ export default async function BlogPostPage({
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
-    author: { '@type': 'Organization', name: post.author },
+    author: authorJsonLd(post.author),
     publisher: { '@type': 'Organization', name: SITE_NAME },
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,

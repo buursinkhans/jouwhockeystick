@@ -7,7 +7,7 @@ import { ArticleMeta } from '@/components/article/ArticleMeta';
 import { SourceList } from '@/components/article/SourceList';
 import { ScheduledNotice } from '@/components/article/ScheduledNotice';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
-import { jsonLdHtml } from '@/lib/jsonLd';
+import { authorJsonLd, jsonLdHtml } from '@/lib/jsonLd';
 
 export function generateStaticParams() {
   return getAllArticles().map((article) => ({ slug: article.slug }));
@@ -46,7 +46,7 @@ export default async function ArticlePage({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: article.title,
-    author: { '@type': 'Organization', name: article.author },
+    author: authorJsonLd(article.author),
     publisher: { '@type': 'Organization', name: SITE_NAME },
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,

@@ -11,6 +11,20 @@ export function jsonLdHtml(data: unknown): string {
     .replace(/&/g, '\\u0026');
 }
 
+/** The byline of the editorial team: marked up as an organisation. Any other name is a person. */
+export const EDITORIAL_AUTHOR = 'Redactie jouwhockeystick.nl';
+
+/**
+ * The author in Article and BlogPosting markup. The editorial team is an
+ * Organization; a named author (the owner, 2026-11-17) is a Person with a link
+ * to /over-ons, where the name and portrait are shown.
+ */
+export function authorJsonLd(name: string) {
+  return name === EDITORIAL_AUTHOR
+    ? { '@type': 'Organization', name }
+    : { '@type': 'Person', name, url: 'https://jouwhockeystick.nl/over-ons' };
+}
+
 /**
  * ItemList for an overview page (decision log 2026-11-08): the items it links
  * to, in the visible order. Google wants Product markup only on the page of

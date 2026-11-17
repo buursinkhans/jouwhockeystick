@@ -1,11 +1,13 @@
 import type { Article } from './types';
 import { visibleItems } from './schedule';
+import { geschiedenisVanDeHockeystick } from './blogPosts/geschiedenis-van-de-hockeystick';
 import { hockeystickKiezenPraktischeTips } from './blogPosts/hockeystick-kiezen-praktische-tips';
 import { hockeystickKopen } from './blogPosts/hockeystick-kopen';
 import { metWelkeStickSpeeltOranje } from './blogPosts/met-welke-stick-speelt-oranje';
 
 /** Listed on /blog in this order, as chosen by the editors. */
 const ALL_BLOG_POSTS: Article[] = [
+  geschiedenisVanDeHockeystick,
   hockeystickKiezenPraktischeTips,
   hockeystickKopen,
   metWelkeStickSpeeltOranje,
