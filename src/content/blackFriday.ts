@@ -75,20 +75,21 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   {
     retailer: 'plutosport',
     kind: 'black-friday',
-    // The shop's own name for it and the code, from the banner on its site (the owner, 2026-11-17).
+    // The shop's own name for it, from the banner on its site (the owner, 2026-11-17).
     // The Early Access (newsletter code, 6 to 15 November) is over; this replaces it.
+    // For now only that the action runs: no code, no percentage (owner, 2026-11-17).
     name: 'Black Week',
-    audience: 'met de code BF10 op een selectie',
+    audience: null,
     // Read by the owner on the shop's site on 2026-11-17 (the site blocks automated reads).
     status: 'gecontroleerd',
-    // The shop names no product group for the code, only "deze selectie": claim nothing.
+    // The banner names no product group: claim nothing.
     categories: [],
     // The banner states no dates.
     startsAt: null,
     endsAt: null,
     verifiedAt: '2026-11-17',
-    summary: 'Plutosport heeft een Black Week. Volgens de winkel is het assortiment in die week scherp geprijsd, en geldt op een selectie met de code BF10 nog extra korting. Welke producten bij de selectie horen, staat op de pagina van Plutosport.',
-    conditions: 'De code geldt volgens de winkel alleen op de selectie, niet op alles. Begin- en einddatum en de voorwaarden staan op de pagina van Plutosport. Het kortingspercentage noemen wij niet: dat staat bij de winkel.',
+    summary: 'Plutosport heeft een Black Week-actie. Welke producten meedoen en tot wanneer, staat op de pagina van de winkel.',
+    conditions: null,
     sourceUrl: 'https://www.plutosport.nl/black-friday',
     url: 'https://www.plutosport.nl/black-friday',
   },
@@ -226,7 +227,7 @@ export const BLACK_FRIDAY = {
       },
       {
         question: 'Wanneer beginnen de Black Friday-aanbiedingen voor hockey?',
-        answer: 'Dat verschilt per winkel. Plutosport heeft sinds kort een Black Week, met een kortingscode voor een selectie. PassaHockey kondigt zijn Black Friday-aanbiedingen aan vanaf vrijdag 20 november. bol.com had zijn Black Friday-pagina op 10 november al online, zonder begin- en einddatum. Bij de andere winkels noemen we een datum zodra de winkel die zelf vermeldt en we die hebben nagekeken.',
+        answer: 'Dat verschilt per winkel. Plutosport heeft sinds kort een Black Week-actie. PassaHockey kondigt zijn Black Friday-aanbiedingen aan vanaf vrijdag 20 november. bol.com had zijn Black Friday-pagina op 10 november al online, zonder begin- en einddatum. Bij de andere winkels noemen we een datum zodra de winkel die zelf vermeldt en we die hebben nagekeken.',
       },
       {
         question: 'Zijn hockeysticks tijdens Black Friday echt goedkoper?',

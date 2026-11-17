@@ -59,21 +59,21 @@ describe('homepage Black Friday card, with the data as checked (10 November, Plu
 describe('Plutosport Black Week (2026-11-17)', () => {
   const promo = BLACK_FRIDAY_PROMOS.find((p) => p.retailer === 'plutosport')!;
 
-  it('names the shop’s own action and the code, and claims no percentage, price or product group', () => {
+  it('only says that the shop’s own action runs: no code, percentage, price or product group (owner, 2026-11-17)', () => {
     expect(promo.name).toBe('Black Week');
-    expect(promo.audience).toBe('met de code BF10 op een selectie');
+    expect(promo.kind).toBe('black-friday');
+    expect(promo.audience).toBeNull();
     expect(promo.categories).toEqual([]);
     expect(promo.verifiedAt).toBe('2026-11-17');
     const text = JSON.stringify(promo);
-    expect(text).not.toMatch(/\d+\s*%|procent|10%/);
+    expect(text).not.toMatch(/BF10|code|\d+\s*%|procent|korting/i);
     expect(text).not.toMatch(/goedkoopst|beste prijs|van-prijs|voorheen/i);
-    expect(promo.conditions).toContain('Het kortingspercentage noemen wij niet');
   });
 
   it('is not Early Access any more, and the FAQ no longer mentions an ended action', () => {
     expect(JSON.stringify(BLACK_FRIDAY_PROMOS)).not.toContain('Early Access');
     expect(JSON.stringify(BLACK_FRIDAY.faq)).not.toContain('Early Access');
-    expect(JSON.stringify(BLACK_FRIDAY.faq)).toContain('Plutosport heeft sinds kort een Black Week');
+    expect(JSON.stringify(BLACK_FRIDAY.faq)).toContain('Plutosport heeft sinds kort een Black Week-actie');
   });
 });
 
