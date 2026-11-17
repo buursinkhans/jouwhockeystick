@@ -14,8 +14,6 @@ export const indianMaharadjaSwiftJuniorIndoor: Product = {
   dataStatus: 'verified',
   bolProductUrl:
     'https://www.bol.com/nl/nl/p/indian-maharadja-swift-junior-indoor-hockeystick/9300000399903068/',
-  passaSportsProductUrl:
-    'https://www.passasports.nl/indian-maharadja-swift-indoor-junior-10261082',
   imageAlt: 'The Indian Maharadja Swift Junior Indoor hockeystick',
   imageUrl: 'https://media.s-bol.com/A3ov8y5pOnRz/16BjLjZ/264x840.jpg',
   imageSourceUrl: SOURCE,
