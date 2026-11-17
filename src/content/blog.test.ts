@@ -4,6 +4,7 @@ import { getAllBlogPosts, getBlogPostBySlug, getBlogPostsIncludingScheduled } fr
 describe('blog posts', () => {
   it('keeps the editorial order', () => {
     expect(getBlogPostsIncludingScheduled().map((post) => post.slug)).toEqual([
+      'geschiedenis-van-de-hockeystick',
       'hockeystick-kiezen-praktische-tips',
       'hockeystick-kopen',
       'met-welke-stick-speelt-oranje',
