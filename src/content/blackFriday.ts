@@ -75,18 +75,20 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
   {
     retailer: 'plutosport',
     kind: 'black-friday',
-    // The page's own name and the code it needs (www.plutosport.nl/black-friday).
-    name: 'Black Friday Early Access',
-    audience: 'met een code via de nieuwsbrief',
-    // Checked by the owner in the browser on 2026-11-10 (the page blocks automated reads).
+    // The shop's own name for it and the code, from the banner on its site (the owner, 2026-11-17).
+    // The Early Access (newsletter code, 6 to 15 November) is over; this replaces it.
+    name: 'Black Week',
+    audience: 'met de code BF10 op een selectie',
+    // Read by the owner on the shop's site on 2026-11-17 (the site blocks automated reads).
     status: 'gecontroleerd',
-    // "op alles", in the shop's words.
-    categories: ['alles'],
-    startsAt: '2026-11-06',
-    endsAt: '2026-11-15',
-    verifiedAt: '2026-11-10',
-    summary: 'Plutosport heeft een Black Friday Early Access: wie zich aanmeldt voor de nieuwsbrief, krijgt een persoonlijke kortingscode. Volgens de winkel geldt die op het hele assortiment.',
-    conditions: 'Alleen met de persoonlijke code, die je per mail krijgt na aanmelding. Nieuwsbriefleden kregen hem op 6 november. Uitzonderingen staan in de actievoorwaarden van Plutosport.',
+    // The shop names no product group for the code, only "deze selectie": claim nothing.
+    categories: [],
+    // The banner states no dates.
+    startsAt: null,
+    endsAt: null,
+    verifiedAt: '2026-11-17',
+    summary: 'Plutosport heeft een Black Week. Volgens de winkel is het assortiment in die week scherp geprijsd, en geldt op een selectie met de code BF10 nog extra korting. Welke producten bij de selectie horen, staat op de pagina van Plutosport.',
+    conditions: 'De code geldt volgens de winkel alleen op de selectie, niet op alles. Begin- en einddatum en de voorwaarden staan op de pagina van Plutosport. Het kortingspercentage noemen wij niet: dat staat bij de winkel.',
     sourceUrl: 'https://www.plutosport.nl/black-friday',
     url: 'https://www.plutosport.nl/black-friday',
   },
@@ -224,7 +226,7 @@ export const BLACK_FRIDAY = {
       },
       {
         question: 'Wanneer beginnen de Black Friday-aanbiedingen voor hockey?',
-        answer: 'Dat verschilt per winkel. Plutosport had al een Early Access met een persoonlijke code, tot en met 15 november. PassaHockey kondigt zijn Black Friday-aanbiedingen aan vanaf vrijdag 20 november. bol.com had zijn Black Friday-pagina op 10 november al online, zonder begin- en einddatum. Bij de andere winkels noemen we een datum zodra de winkel die zelf vermeldt en we die hebben nagekeken.',
+        answer: 'Dat verschilt per winkel. Plutosport heeft sinds kort een Black Week, met een kortingscode voor een selectie. PassaHockey kondigt zijn Black Friday-aanbiedingen aan vanaf vrijdag 20 november. bol.com had zijn Black Friday-pagina op 10 november al online, zonder begin- en einddatum. Bij de andere winkels noemen we een datum zodra de winkel die zelf vermeldt en we die hebben nagekeken.',
       },
       {
         question: 'Zijn hockeysticks tijdens Black Friday echt goedkoper?',
@@ -274,7 +276,21 @@ const MONTHS_SHORT = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 's
 const shortDate = (date: string) => `${Number(date.slice(8, 10))} ${MONTHS_SHORT[Number(date.slice(5, 7)) - 1]}`;
 const dayMonth = (date: string) => nlDate(date).replace(/ \d{4}$/, '');
 
-/** "Plutosport Black Friday Early Access", or the shop alone without a name of its own. */
+/**
+ * "Nagekeken op 10 november", or "Nagekeken tussen 10 en 17 november" when the
+ * shops were checked on different days: a newer check of one shop must not make
+ * the others look as fresh (2026-11-17).
+ */
+export function checkedPhrase(first: string, last: string): { lead: 'op' | 'tussen'; text: string } {
+  if (first === last) return { lead: 'op', text: nlDate(first) };
+  const sameMonth = first.slice(0, 7) === last.slice(0, 7);
+  return {
+    lead: 'tussen',
+    text: sameMonth ? `${Number(first.slice(8, 10))} en ${nlDate(last)}` : `${dayMonth(first)} en ${nlDate(last)}`,
+  };
+}
+
+/** "Plutosport Black Week", or the shop alone without a name of its own. */
 export const actionName = (promo: ShopPromo, shop: string) => (promo.name ? `${shop} ${promo.name}` : shop);
 
 const CATEGORY_TEXT: Record<ShopPromo['categories'][number], string> = {
@@ -333,11 +349,12 @@ export function cardText(card: CampaignCard, label: (retailer: RetailerId) => st
     return `${who}${sep}${cardTimingText(timing)}${promo.audience ? `, ${promo.audience}` : ''}`;
   });
   const shopLine = `${card.running > 0 ? 'Nu bezig bij' : 'Bij'} ${joinNl(card.shops.map(label))}.`;
+  const checked = checkedPhrase(card.firstCheck ?? card.lastCheck, card.lastCheck);
   return {
     eyebrow: card.running > 0 ? band.eyebrow.bezig : band.eyebrow.datum,
     heading,
     lines: urgent.length ? [urgent[0] ?? '', ...urgent.slice(1, 2), shopLine] : [shopLine],
-    checked: `Nagekeken op ${dayMonth(card.lastCheck)} bij de winkels zelf.`,
+    checked: `Nagekeken ${checked.lead} ${checked.text.replace(/ \d{4}$/, '')} bij de winkels zelf.`,
   };
 }
 

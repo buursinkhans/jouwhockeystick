@@ -6,7 +6,7 @@ import { getCuratedShoes, shoePath } from '@/catalog/shoes';
 import { isJuniorStick } from '@/catalog/similar';
 import type { Product } from '@/catalog/types';
 import type { Shoe } from '@/catalog/shoes/types';
-import { BLACK_FRIDAY, BLACK_FRIDAY_EDITION, BLACK_FRIDAY_PROMOS, categoryText, formatNlDate, pageTimingText } from '@/content/blackFriday';
+import { BLACK_FRIDAY, BLACK_FRIDAY_EDITION, BLACK_FRIDAY_PROMOS, categoryText, checkedPhrase, formatNlDate, pageTimingText } from '@/content/blackFriday';
 import { FaqSection } from '@/components/article/FaqSection';
 import { ShopPromoLink } from '@/components/campaign/ShopPromoLink';
 import { ProductCard } from '@/components/catalog/ProductCard';
@@ -63,6 +63,7 @@ export default function BlackFridayPage() {
   const rows = sortShopPromos(BLACK_FRIDAY_PROMOS, today, phase, label);
   const checkedDates = BLACK_FRIDAY_PROMOS.map((p) => p.verifiedAt).filter((d): d is string => d !== null);
   const lastCheck = checkedDates.length ? checkedDates.reduce((a, b) => (b > a ? b : a)) : null;
+  const firstCheck = checkedDates.length ? checkedDates.reduce((a, b) => (b < a ? b : a)) : null;
 
   // Describes only what is on the page: the collection, its author and dates.
   const jsonLd = {
@@ -108,7 +109,8 @@ export default function BlackFridayPage() {
           {lastCheck && phase !== 'afgelopen' && (
             <li className="flex items-center gap-1.5">
               <CheckIcon size={14} className="shrink-0 text-veld" />
-              Acties nagekeken op <time dateTime={lastCheck}>{formatNlDate(lastCheck)}</time>
+              Acties nagekeken {checkedPhrase(firstCheck ?? lastCheck, lastCheck).lead}{' '}
+              <time dateTime={lastCheck}>{checkedPhrase(firstCheck ?? lastCheck, lastCheck).text}</time>
             </li>
           )}
         </ul>

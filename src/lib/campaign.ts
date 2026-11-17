@@ -161,6 +161,8 @@ export type CampaignCard = {
   urgent: { promo: ShopPromo; timing: Extract<PromoTiming, { kind: 'laatste-dag' | 'stopt' | 'begint' }> }[];
   /** Latest check within 14 days, else null. */
   lastCheck: string | null;
+  /** Earliest check of the shops shown, else null: the oldest date any shown shop was last read. */
+  firstCheck: string | null;
 };
 
 /**
@@ -192,5 +194,6 @@ export function campaignCard(
     shops: rows.map((r) => r.promo.retailer),
     urgent: [...ending.sort((a, b) => at(a).localeCompare(at(b))), ...starting.sort((a, b) => at(a).localeCompare(at(b)))],
     lastCheck: fresh.length ? fresh.reduce((a, b) => (b > a ? b : a)) : null,
+    firstCheck: fresh.length ? fresh.reduce((a, b) => (b < a ? b : a)) : null,
   };
 }
