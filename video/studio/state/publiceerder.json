@@ -830,6 +830,12 @@
           "bezig": "2026-11-18T21:15:33.028Z"
         }
       }
+    },
+    "posts/20261130-eerste-zaalseizoen": {
+      "render": {
+        "gestart": "2026-11-18T21:15:58Z"
+      },
+      "fout": null
     }
   },
   "laatsteRun": "2026-11-18T21:09:09Z",
@@ -838,7 +844,7 @@
     "gebruikt": 37,
     "grens": 100
   },
-  "wijziging": "ac4385f7-ba06-421e-ba1e-4d0ad4953969",
+  "wijziging": "8b0f15db-cfbf-4858-891c-40adeac8f03a",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
