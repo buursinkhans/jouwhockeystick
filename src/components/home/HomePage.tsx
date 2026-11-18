@@ -25,11 +25,16 @@ export function HomePage({ variant }: { variant: HomeIntroVariant }) {
   return (
     <>
       <Hero />
-      {/* Directly under the hero during the campaign (2026-11-10); it takes the season band's place, so one band at a time. */}
+      {/*
+        Under the hero, in this order (owner, 2026-11-18): the compact indoor
+        block, then the Black Friday card. The indoor block no longer depends on
+        the campaign (since #198 the card took its place); it follows the
+        season and the homepage variant.
+      */}
+      {variant === 'season' && isIndoorSeason() && <SeasonBand />}
       {campaign && <CampaignBand />}
       <QuickFind />
       <ProofStrip />
-      {!campaign && variant === 'season' && isIndoorSeason() && <SeasonBand />}
       {variant === 'buying' && <BuyingIntro />}
       <StickwijzerExplainer productCount={adviceCount} />
       <MethodBand />
