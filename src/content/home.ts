@@ -17,14 +17,17 @@ export function isIndoorSeason(date: Date = new Date()): boolean {
   return INDOOR_SEASON_MONTHS.includes(date.getMonth() + 1);
 }
 
+/**
+ * The compact indoor block under the hero (owner, 2026-11-18): the direct way
+ * to /zaalsticks and to the advice for parents. Independent of the Black
+ * Friday campaign: the campaign card sits below it.
+ */
 export const SEASON_BAND = {
-  eyebrow: 'Zaalseizoen',
-  heading: 'Zaalhockeystick kiezen voor het zaalseizoen',
-  body: 'Een zaalhockeystick is gemaakt voor pushen en balcontrole in een kleine ruimte, en de stickwijzer adviseert alleen veldsticks. Kies daarom in 3 vragen een zaalstick in de juiste maat.',
-  cta: { label: 'Zaalhockeystick kiezen', href: '/zaalsticks' },
+  heading: 'Een zaalhockeystick kiezen',
+  body: 'Vind zaalsticks in de juiste maat en binnen je budget.',
+  cta: { label: 'Vergelijk zaalhockeysticks', href: '/zaalsticks' },
   readMore: {
-    prefix: 'Of lees eerst:',
-    label: 'Zaalstick voor kinderen: waar let je op?',
+    label: 'Zaalstick voor je kind kiezen',
     href: '/kennis/zaalstick-voor-kinderen',
   },
 } as const;

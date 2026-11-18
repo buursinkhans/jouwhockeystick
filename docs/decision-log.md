@@ -3330,3 +3330,11 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Geen datums, geen productgroep:** de banner noemt geen begin- of einddatum; `startsAt`, `endsAt` en `categories` zijn leeg. Na Cyber Monday (30 november) staat de actie vanzelf als afgelopen.
 - **Nagekeken-datum:** de kaart op de homepage en de pagina zeiden "nagekeken op" met de nieuwste datum van alle winkels. Dat liet bol.com en PassaHockey (10 november) even vers lijken als Plutosport (17 november). Nu staat er een bereik ("tussen 10 en 17 november") als de datums verschillen (`checkedPhrase`, `firstCheck` in `campaignCard`).
 - **Tests:** `blackFriday.test.ts` rekent nu met de data van 17 november en controleert dat de Plutosport-regel geen code, percentage of productgroep noemt, en het bereik.
+
+## 2026-11-18 — Homepage: het zaalblok staat weer onder de intro, boven de Black Friday-kaart
+
+- **Wat was er mis:** sinds #198 nam de Black Friday-kaart de plek van het zaalblok in (`{!campaign && ... <SeasonBand />}`). Tijdens de campagne verdwenen daardoor de knop naar `/zaalsticks` en de link naar het advies voor ouders van de homepage.
+- **Besluit eigenaar:** beide links direct onder de intro terug, boven de kaart. Volgorde als beide actief zijn: hero, compact zaalblok, Black Friday-kaart, zoekblok.
+- **Wijziging:** `SeasonBand` hangt niet meer van de campagne af. Hij volgt alleen het seizoen (`isIndoorSeason`) en de homepagevariant (`season`). Tekst in `SEASON_BAND`: kop "Een zaalhockeystick kiezen", tekst "Vind zaalsticks in de juiste maat en binnen je budget.", knop "Vergelijk zaalhockeysticks" naar `/zaalsticks`, tekstlink "Zaalstick voor je kind kiezen" naar `/kennis/zaalstick-voor-kinderen`. De eyebrow is weggehaald om het blok compact te houden. Op een telefoon is de knop even breed als het blok; vanaf tablet staat hij rechts van de tekst. Beide links staan in de eerste HTML en gebruiken `HomeBlockLink` met `block="season"`, dus de bestaande `home_block_click`-meting blijft gelden.
+- **Niet aangeraakt:** `CampaignBand`, `zaal.ts` en de pagina `/zaalsticks`.
+- **Tests:** `HomePage.zaalblok.test.ts` controleert de teksten en links, de volgorde tijdens de campagne, de homepage zonder campagne en buiten het zaalseizoen, en de variant `buying`.
