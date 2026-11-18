@@ -797,7 +797,32 @@
     },
     "posts/20261201-geschiedenis-tijdlijn": {
       "render": {
-        "gestart": "2026-11-18T21:13:49Z"
+        "gestart": "2026-11-18T21:13:49Z",
+        "klaar": "2026-11-18T21:14:40Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "20261201-geschiedenis-tijdlijn-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261201-geschiedenis-tijdlijn-1.png"
+          },
+          {
+            "name": "20261201-geschiedenis-tijdlijn-2.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261201-geschiedenis-tijdlijn-2.png"
+          },
+          {
+            "name": "20261201-geschiedenis-tijdlijn-3.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261201-geschiedenis-tijdlijn-3.png"
+          },
+          {
+            "name": "20261201-geschiedenis-tijdlijn-4.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261201-geschiedenis-tijdlijn-4.png"
+          },
+          {
+            "name": "20261201-geschiedenis-tijdlijn-5.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261201-geschiedenis-tijdlijn-5.png"
+          }
+        ]
       },
       "fout": null
     }
@@ -808,7 +833,7 @@
     "gebruikt": 37,
     "grens": 100
   },
-  "wijziging": "c000a8d6-1881-4e93-8c76-127ef6007cdb",
+  "wijziging": "4e6bab02-2df8-4ceb-a5f1-e24a7d264437",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
