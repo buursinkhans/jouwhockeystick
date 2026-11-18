@@ -836,7 +836,16 @@
     },
     "posts/20261130-eerste-zaalseizoen": {
       "render": {
-        "gestart": "2026-11-18T21:15:58Z"
+        "gestart": "2026-11-18T21:15:58Z",
+        "klaar": "2026-11-18T21:16:48Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "20261130-eerste-zaalseizoen-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261130-eerste-zaalseizoen-1.png"
+          }
+        ]
       },
       "fout": null
     }
@@ -847,7 +856,7 @@
     "gebruikt": 37,
     "grens": 100
   },
-  "wijziging": "967f9f66-60fa-4062-b846-f819dc349f4f",
+  "wijziging": "828a0211-26b4-4fb6-990a-80a583b7c6eb",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
