@@ -835,36 +835,16 @@
       }
     },
     "posts/20261130-eerste-zaalseizoen": {
-      "render": {
-        "gestart": "2026-11-18T21:15:58Z",
-        "klaar": "2026-11-18T21:16:48Z"
-      },
-      "media": {
-        "slides": [
-          {
-            "name": "20261130-eerste-zaalseizoen-1.png",
-            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261130-eerste-zaalseizoen-1.png"
-          }
-        ]
-      },
-      "fout": null,
-      "kanalen": {
-        "insta": {
-          "id": 433430094,
-          "uuid": "1191844933249027604",
-          "moment": "2026-11-30T19:30:00",
-          "op": "2026-11-18T21:18:20Z"
-        }
-      }
+      "fout": "Facebook-linkpost: de Publiceerder plant alleen Instagram voor posts, dus dit item is niet ingepland. Zet het kanaal in de studio na."
     }
   },
-  "laatsteRun": "2026-11-21T11:08:53Z",
+  "laatsteRun": "2026-11-21T12:10:00Z",
   "tegoed": {
     "maand": "2026-11",
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "6614d8fe-d8d6-4e9f-89da-1f6310b61a36",
+  "wijziging": "9634f564-2c78-473c-a184-ca539ac814b7",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
