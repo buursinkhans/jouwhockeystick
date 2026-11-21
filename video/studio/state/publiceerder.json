@@ -869,10 +869,11 @@
       "fout": null,
       "kanalen": {
         "insta": {
-          "id": 436744126,
+          "id": 436753000,
           "uuid": "-2361942060607586168",
           "moment": "2026-12-08T19:30:00",
-          "op": "2026-11-21T14:58:29Z"
+          "op": "2026-11-21T14:58:29Z",
+          "concept": true
         }
       }
     },
@@ -892,10 +893,11 @@
       "fout": null,
       "kanalen": {
         "insta": {
-          "id": 436744394,
+          "id": 436753021,
           "uuid": "8494852462337740520",
           "moment": "2026-12-15T19:30:00",
-          "op": "2026-11-21T14:58:50Z"
+          "op": "2026-11-21T14:58:50Z",
+          "concept": true
         }
       }
     },
@@ -906,13 +908,13 @@
       "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
     }
   },
-  "laatsteRun": "2026-11-21T14:59:08Z",
+  "laatsteRun": "2026-11-21T15:09:46Z",
   "tegoed": {
-    "maand": "2026-12",
-    "gebruikt": 3,
+    "maand": "2026-11",
+    "gebruikt": 37,
     "grens": 100
   },
-  "wijziging": "1db05f78-94c5-42c1-be47-3aa357f9218a",
+  "wijziging": "524c5caa-8c92-469e-9507-0d4c7784e49a",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
