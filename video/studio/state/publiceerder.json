@@ -836,6 +836,24 @@
     },
     "posts/20261130-eerste-zaalseizoen": {
       "fout": "Facebook-linkpost: de Publiceerder plant alleen Instagram voor posts, dus dit item is niet ingepland. Zet het kanaal in de studio na."
+    },
+    "posts/20261208-geschiedenis-bow-regels": {
+      "render": {
+        "gestart": "2026-11-21T14:55:59Z"
+      },
+      "fout": null
+    },
+    "posts/20261215-geschiedenis-kunstgras-1976": {
+      "render": {
+        "gestart": "2026-11-21T14:55:59Z"
+      },
+      "fout": null
+    },
+    "posts/20261203-geschiedenis-platte-kanten": {
+      "fout": "Facebook-linkpost: de Publiceerder plant alleen Instagram voor posts, dus dit item is niet ingepland. Zet het kanaal in de studio na."
+    },
+    "posts/20261210-geschiedenis-winkeltermen": {
+      "fout": "Facebook-linkpost: de Publiceerder plant alleen Instagram voor posts, dus dit item is niet ingepland. Zet het kanaal in de studio na."
     }
   },
   "laatsteRun": "2026-11-21T12:10:00Z",
@@ -844,7 +862,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "9634f564-2c78-473c-a184-ca539ac814b7",
+  "wijziging": "4c3661bf-7953-4596-bc67-88d76b159416",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
