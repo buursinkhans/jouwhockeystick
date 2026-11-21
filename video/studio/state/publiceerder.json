@@ -835,7 +835,19 @@
       }
     },
     "posts/20261130-eerste-zaalseizoen": {
-      "fout": "Facebook-linkpost: de Publiceerder plant alleen Instagram voor posts, dus dit item is niet ingepland. Zet het kanaal in de studio na."
+      "media": {
+        "slides": [
+          {
+            "name": "20261130-eerste-zaalseizoen-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261130-eerste-zaalseizoen-1.png"
+          }
+        ]
+      },
+      "render": {
+        "klaar": "2026-11-21T21:09:08Z"
+      },
+      "kanalen": {},
+      "fout": null
     },
     "posts/20261208-geschiedenis-bow-regels": {
       "render": {
@@ -914,7 +926,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "7bc8629b-96b2-4605-950d-2de2cc0d6512",
+  "wijziging": "c2828299-3508-4f07-acc4-3b0d12c4a242",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
