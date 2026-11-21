@@ -844,9 +844,16 @@
         ]
       },
       "render": {
-        "klaar": "2026-11-21T21:09:08Z"
+        "klaar": "2026-11-21T21:09:54Z"
       },
-      "kanalen": {},
+      "kanalen": {
+        "insta": {
+          "id": 433430094,
+          "uuid": "1191844933249027604",
+          "moment": "2026-11-30T19:30:00",
+          "op": "2026-11-21T21:09:54Z"
+        }
+      },
       "fout": null
     },
     "posts/20261208-geschiedenis-bow-regels": {
@@ -920,13 +927,13 @@
       "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
     }
   },
-  "laatsteRun": "2026-11-21T19:09:40Z",
+  "laatsteRun": "2026-11-21T21:09:54Z",
   "tegoed": {
     "maand": "2026-11",
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "c2828299-3508-4f07-acc4-3b0d12c4a242",
+  "wijziging": "1f33774d-c2c0-43bf-93e3-1b9e81d7c900",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
