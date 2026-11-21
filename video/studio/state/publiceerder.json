@@ -900,19 +900,19 @@
       }
     },
     "posts/20261203-geschiedenis-platte-kanten": {
-      "fout": "Facebook-linkpost: de Publiceerder plant alleen Instagram voor posts, dus dit item is niet ingepland. Zet het kanaal in de studio na."
+      "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
     },
     "posts/20261210-geschiedenis-winkeltermen": {
-      "fout": "Facebook-linkpost: de Publiceerder plant alleen Instagram voor posts, dus dit item is niet ingepland. Zet het kanaal in de studio na."
+      "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
     }
   },
-  "laatsteRun": "2026-11-21T12:10:00Z",
+  "laatsteRun": "2026-11-21T14:59:08Z",
   "tegoed": {
-    "maand": "2026-11",
-    "gebruikt": 38,
+    "maand": "2026-12",
+    "gebruikt": 3,
     "grens": 100
   },
-  "wijziging": "644a5e5a-b40d-49a4-89f4-291eecd119d6",
+  "wijziging": "1db05f78-94c5-42c1-be47-3aa357f9218a",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
