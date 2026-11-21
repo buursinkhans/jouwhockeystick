@@ -839,8 +839,8 @@
     },
     "posts/20261208-geschiedenis-bow-regels": {
       "render": {
-        "gestart": "2026-11-21T14:58:00Z",
-        "klaar": "2026-11-21T14:58:00Z"
+        "gestart": "2026-11-21T14:58:29Z",
+        "klaar": "2026-11-21T14:58:29Z"
       },
       "media": {
         "slides": [
@@ -869,7 +869,10 @@
       "fout": null,
       "kanalen": {
         "insta": {
-          "bezig": "2026-11-21T14:58:00Z"
+          "id": 436744126,
+          "uuid": "-2361942060607586168",
+          "moment": "2026-12-08T19:30:00",
+          "op": "2026-11-21T14:58:29Z"
         }
       }
     },
@@ -906,7 +909,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "a4d0528b-0f8d-4ab4-a12e-8d93bbd752f0",
+  "wijziging": "587c96c0-e7e5-4a43-a53e-2a2a59402c6b",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
