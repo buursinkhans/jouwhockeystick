@@ -839,13 +839,47 @@
     },
     "posts/20261208-geschiedenis-bow-regels": {
       "render": {
-        "gestart": "2026-11-21T14:55:59Z"
+        "gestart": "2026-11-21T14:57:26Z",
+        "klaar": "2026-11-21T14:57:26Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "20261208-geschiedenis-bow-regels-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261208-geschiedenis-bow-regels-1.png"
+          },
+          {
+            "name": "20261208-geschiedenis-bow-regels-2.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261208-geschiedenis-bow-regels-2.png"
+          },
+          {
+            "name": "20261208-geschiedenis-bow-regels-3.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261208-geschiedenis-bow-regels-3.png"
+          },
+          {
+            "name": "20261208-geschiedenis-bow-regels-4.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261208-geschiedenis-bow-regels-4.png"
+          },
+          {
+            "name": "20261208-geschiedenis-bow-regels-5.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261208-geschiedenis-bow-regels-5.png"
+          }
+        ]
       },
       "fout": null
     },
     "posts/20261215-geschiedenis-kunstgras-1976": {
       "render": {
-        "gestart": "2026-11-21T14:55:59Z"
+        "gestart": "2026-11-21T14:57:26Z",
+        "klaar": "2026-11-21T14:57:26Z"
+      },
+      "media": {
+        "slides": [
+          {
+            "name": "20261215-geschiedenis-kunstgras-1976-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261215-geschiedenis-kunstgras-1976-1.png"
+          }
+        ]
       },
       "fout": null
     },
@@ -862,7 +896,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "4c3661bf-7953-4596-bc67-88d76b159416",
+  "wijziging": "3344761c-0c79-402e-9d1a-c8585729c041",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
