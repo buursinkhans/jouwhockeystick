@@ -3338,3 +3338,9 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Wijziging:** `SeasonBand` hangt niet meer van de campagne af. Hij volgt alleen het seizoen (`isIndoorSeason`) en de homepagevariant (`season`). Tekst in `SEASON_BAND`: kop "Een zaalhockeystick kiezen", tekst "Vind zaalsticks in de juiste maat en binnen je budget.", knop "Vergelijk zaalhockeysticks" naar `/zaalsticks`, tekstlink "Zaalstick voor je kind kiezen" naar `/kennis/zaalstick-voor-kinderen`. De eyebrow is weggehaald om het blok compact te houden. Op een telefoon is de knop even breed als het blok; vanaf tablet staat hij rechts van de tekst. Beide links staan in de eerste HTML en gebruiken `HomeBlockLink` met `block="season"`, dus de bestaande `home_block_click`-meting blijft gelden.
 - **Niet aangeraakt:** `CampaignBand`, `zaal.ts` en de pagina `/zaalsticks`.
 - **Tests:** `HomePage.zaalblok.test.ts` controleert de teksten en links, de volgorde tijdens de campagne, de homepage zonder campagne en buiten het zaalseizoen, en de variant `buying`.
+
+## 2026-11-21 — Catalogus-hercontrole en catalogus-verrijker draaien op Haiku
+
+- **Wat:** catalogus-hercontrole en catalogus-verrijker draaien op Haiku in plaats van Sonnet (`--model haiku` in `.github/workflows/`), om het verbruik van het Claude-abonnement te verlagen.
+- **Risico:** beide agents schrijven productgegevens (specs, prijs, bow-profiel, modeljaar) uit bronnen naar `src/catalog`. Een fout komt via de PR op de site terecht.
+- **Controle:** kijk de eerste twee PR's (hercontrole vrijdag, verrijker donderdag) extra kritisch na op afwijkingen in specs en bronnen. Bij fouten terugzetten naar `--model sonnet`.
