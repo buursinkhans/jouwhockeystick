@@ -839,8 +839,8 @@
     },
     "posts/20261208-geschiedenis-bow-regels": {
       "render": {
-        "gestart": "2026-11-21T14:57:26Z",
-        "klaar": "2026-11-21T14:57:26Z"
+        "gestart": "2026-11-21T14:58:00Z",
+        "klaar": "2026-11-21T14:58:00Z"
       },
       "media": {
         "slides": [
@@ -866,12 +866,17 @@
           }
         ]
       },
-      "fout": null
+      "fout": null,
+      "kanalen": {
+        "insta": {
+          "bezig": "2026-11-21T14:58:00Z"
+        }
+      }
     },
     "posts/20261215-geschiedenis-kunstgras-1976": {
       "render": {
-        "gestart": "2026-11-21T14:57:26Z",
-        "klaar": "2026-11-21T14:57:26Z"
+        "gestart": "2026-11-21T14:58:00Z",
+        "klaar": "2026-11-21T14:58:00Z"
       },
       "media": {
         "slides": [
@@ -881,7 +886,12 @@
           }
         ]
       },
-      "fout": null
+      "fout": null,
+      "kanalen": {
+        "insta": {
+          "bezig": "2026-11-21T14:58:00Z"
+        }
+      }
     },
     "posts/20261203-geschiedenis-platte-kanten": {
       "fout": "Facebook-linkpost: de Publiceerder plant alleen Instagram voor posts, dus dit item is niet ingepland. Zet het kanaal in de studio na."
@@ -896,7 +906,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "3344761c-0c79-402e-9d1a-c8585729c041",
+  "wijziging": "a4d0528b-0f8d-4ab4-a12e-8d93bbd752f0",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
