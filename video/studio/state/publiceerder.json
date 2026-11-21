@@ -878,8 +878,8 @@
     },
     "posts/20261215-geschiedenis-kunstgras-1976": {
       "render": {
-        "gestart": "2026-11-21T14:58:00Z",
-        "klaar": "2026-11-21T14:58:00Z"
+        "gestart": "2026-11-21T14:58:50Z",
+        "klaar": "2026-11-21T14:58:50Z"
       },
       "media": {
         "slides": [
@@ -892,7 +892,10 @@
       "fout": null,
       "kanalen": {
         "insta": {
-          "bezig": "2026-11-21T14:58:00Z"
+          "id": 436744394,
+          "uuid": "8494852462337740520",
+          "moment": "2026-12-15T19:30:00",
+          "op": "2026-11-21T14:58:50Z"
         }
       }
     },
@@ -909,7 +912,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "587c96c0-e7e5-4a43-a53e-2a2a59402c6b",
+  "wijziging": "644a5e5a-b40d-49a4-89f4-291eecd119d6",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
