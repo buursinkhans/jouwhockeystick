@@ -24,6 +24,9 @@ import { graysAuraGtJunior } from './products/grays-aura-gt-junior';
 import { jdhJuniorMidBow } from './products/jdh-junior-mid-bow';
 import { jdhX60Lowbow } from './products/jdh-x60-lowbow-x60lbgn';
 import { jdhX79LowbowHook } from './products/jdh-x79-lowbow-hook-x79lbhgn';
+import { osakaMidbow10 } from './products/osaka-midbow-10-stk00262-retroblue-s';
+import { osakaFuturelab40Probow } from './products/osaka-futurelab-40-probow-stk00239';
+import { osakaFuturelab70Lowbow } from './products/osaka-futurelab-70-lowbow-stk00400-greenash';
 import { braboGforceEliteXOneLbJr } from './products/brabo-gforce-elite-x-one-lb-jr';
 import { princessCompetitionJr3k10Star } from './products/princess-competition-jr-3k-10-star';
 import { princessPremiumJr4k10Star } from './products/princess-premium-jr-4k-10-star';
@@ -226,6 +229,9 @@ const ALL_PRODUCTS: Product[] = [
   indianMaharadjaFlowJuniorIndoor,
   jdhX60Lowbow,
   jdhX79LowbowHook,
+  osakaMidbow10,
+  osakaFuturelab40Probow,
+  osakaFuturelab70Lowbow,
 ];
 
 /**
