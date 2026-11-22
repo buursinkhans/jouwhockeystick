@@ -13,6 +13,8 @@ export const indianMaharadjaBlackSparkWoodIndoor: Product = {
   name: 'The Indian Maharadja Black Spark Wood Zaalhockeystick',
   dataStatus: 'verified',
   bolProductUrl: SOURCE,
+  passaSportsProductUrl:
+    'https://www.passasports.nl/indian-maharadja-black-spark-hout-indoor-10251073',
   imageAlt: 'The Indian Maharadja Black Spark Wood Zaalhockeystick',
   imageUrl: 'https://media.s-bol.com/8VX8Jpk4KA7L/nZ0grLW/250x200.jpg',
   imageSourceUrl: SOURCE,
