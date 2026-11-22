@@ -22,8 +22,9 @@ describe('productMetaDescription', () => {
 
   it('describes the Grays JB 10 from its specs', () => {
     const jb10 = getProductBySlug('grays-jb10-composite')!;
+    // With its own closing sentence (seoOverrides.ts, wave 0): that sentence replaces the lengths.
     expect(productMetaDescription(jb10)).toBe(
-      'Veldstick Grays JB 10 Composite met low bow en 95% carbon, voor ervaren spelers. In 36,5, 37,5 en 38,5 inch.',
+      'Veldstick Grays JB 10 Composite met low bow en 95% carbon, voor ervaren spelers. Zie specs, prijzen en het verschil met JB6, JB8 en JB12+.',
     );
   });
 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { productPath } from '@/catalog/paths';
 import { productMetaDescription } from '@/catalog/metaDescription';
+import { STICK_SEO_OVERRIDES } from '@/catalog/seoOverrides';
 import type { Product } from '@/catalog/types';
 import { isPassaSportsOnly, isSoldAtBol } from '@/catalog/shop';
 import { getOffers, isPriceFresh, lowestTotal } from '@/catalog/offers';
@@ -39,7 +40,7 @@ export function productPageMetadata(product: Product): Metadata {
   // A long name keeps the title within 60 characters by dropping the addition (Technical SEO, 2026-11-08).
   const full = `${product.name}: specs en advies`;
   return pageMetadata({
-    title: full.length > 60 ? product.name : full,
+    title: STICK_SEO_OVERRIDES[product.slug]?.title ?? (full.length > 60 ? product.name : full),
     // Built from catalog data, not the summary (decision log 2026-10-23).
     description: productMetaDescription(product),
     path: productPath(product),

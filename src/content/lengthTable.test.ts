@@ -110,10 +110,13 @@ describe('length table improvements (decision log 2026-10-29)', () => {
   it('keeps the SEO fields of the article', () => {
     expect(article.slug).toBe('hockeystick-lengte-tabel');
     expect(article.title).toBe('Hockeystick lengte tabel: welke maat stick past bij jouw lengte?');
-    expect(article.seoTitle).toBeUndefined();
+    // Wave 0 (2026-11-22): the search-result title was 64 characters; the meta description gives the answer.
+    expect(article.seoTitle).toBe('Hockeystick lengte tabel: welke maat past bij jouw lengte?');
+    expect(article.seoTitle!.length).toBeLessThanOrEqual(60);
     expect(article.metaDescription).toBe(
-      'Hockeystick lengte tabel: zie per lichaamslengte welke sticklengte in inch past, voor kinderen en volwassenen. Plus tips bij twijfel tussen twee maten.',
+      'Rond 1,40 m is 32 inch een richtmaat, vanaf 1,63 m meestal 36,5 inch. Zie de tabel voor kinderen en volwassenen en wat je doet bij twijfel tussen twee maten.',
     );
+    expect(article.metaDescription.length).toBeLessThanOrEqual(158);
   });
 
   it('links a stick page to the length table once, at the available lengths', () => {
@@ -140,7 +143,7 @@ describe('size sprint (2026-11-11): from a size to the sticks, ranking signals k
 
   it('keeps the title, intro, table and every heading of the length table article', () => {
     expect(article.title).toBe('Hockeystick lengte tabel: welke maat stick past bij jouw lengte?');
-    expect(article.intro.startsWith('Welke lengte stick heb je nodig?')).toBe(true);
+    expect(article.intro.startsWith('Meet je lichaamslengte zonder schoenen')).toBe(true);
     expect(article.sections.map((s) => s.heading)).toEqual([
       'De lengtetabel',
       'Zo gebruik je de tabel',

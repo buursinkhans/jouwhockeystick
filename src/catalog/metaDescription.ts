@@ -1,5 +1,6 @@
 import { MAX_DESCRIPTION_LENGTH } from '@/lib/site';
 import { getDiscipline } from './discipline';
+import { STICK_SEO_OVERRIDES } from './seoOverrides';
 import { BOW_LABELS } from './labels';
 import type { ExperienceLevel, Product } from './types';
 
@@ -64,15 +65,22 @@ export function productMetaDescription(product: Product): string {
   const model = product.name.replace(/\s*hockey\s*stick\s*$/i, '');
   const named = model.toLowerCase().startsWith(product.brand.toLowerCase()) ? model : `${product.brand} ${model}`;
   const first = `${kind} ${named}${detail}, ${level}.`;
+  const override = STICK_SEO_OVERRIDES[product.slug];
+  const closing = override?.closing ?? CLOSING;
   const parts = [
     first,
     lengthsText(product.lengthsInches.value),
-    CLOSING,
+    closing,
   ].filter((part): part is string => part !== null);
 
   // Drop the closing sentence first (the lengths say more), then the lengths, before cutting words.
+  // A page with its own closing sentence keeps it and drops the lengths instead.
   const lengths = lengthsText(product.lengthsInches.value);
-  for (const candidate of [parts, lengths ? [first, lengths] : [first], [first, CLOSING], [first]]) {
+  const withLengths = lengths ? [first, lengths] : [first];
+  const candidates = override
+    ? [parts, [first, closing], withLengths, [first]]
+    : [parts, withLengths, [first, closing], [first]];
+  for (const candidate of candidates) {
     const text = candidate.join(' ');
     if (text.length <= MAX_DESCRIPTION_LENGTH) return text;
   }

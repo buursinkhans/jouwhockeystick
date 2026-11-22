@@ -61,24 +61,30 @@ const CHARTS_READ_ON = formatDutchDate(SIZE_CHARTS.map((chart) => chart.readOn).
 const BAND_175 = LENGTH_GUIDE.find((band) => 175 >= band.minCm && 175 <= band.maxCm)!;
 const ADVICE_175 = getSizeAdvice(175);
 
+/** The bands behind the answer in the intro and the meta description: around 1,40 m and from 1,63 m. */
+const BAND_140 = LENGTH_GUIDE.find((band) => 140 >= band.minCm && 140 <= band.maxCm)!;
+const BAND_163 = LENGTH_GUIDE.find((band) => band.minCm === 163)!;
+
 export const hockeystickLengteTabel: Article = {
   slug: 'hockeystick-lengte-tabel',
   title: 'Hockeystick lengte tabel: welke maat stick past bij jouw lengte?',
+  // 64 characters was too long for a search result title (wave 0, 2026-11-22).
+  seoTitle: 'Hockeystick lengte tabel: welke maat past bij jouw lengte?',
   intro:
-    'Welke lengte stick heb je nodig? Een handig richtsnoer: kinderen tot ongeveer 1,10 meter spelen meestal met 22 tot 24 inch, kinderen rond 1,40 meter met 32 inch, en vanaf zo’n 1,63 meter is 36,5 inch de gangbare maat. Ben je 1,85 meter of langer, dan past 37,5 of 38,5 inch vaak beter. In de tabel hieronder vind je jouw maat in een paar seconden. Twijfel je bij een kind? Kies dan niet de langere om in te groeien.',
+    'Meet je lichaamslengte zonder schoenen en zoek die op in de tabel. Rond 1,40 meter is 32 inch onze richtmaat, vanaf 1,63 meter meestal 36,5 inch. Twijfel je bij een kind tussen twee maten? Laat het met de kortere dribbelen en kijk of het ontspannen kan bewegen en de bal dicht bij zich houdt. Krijg je ergens anders een andere maat? Bekijk de [vergelijking met drie merktabellen](/kennis/hockeystick-lengte-tabel#maattabellen-vergeleken).',
   sections: [
     {
       heading: 'De lengtetabel',
       level: 2,
       body: [
+        'Dit is de redactionele richtlijn die ook de [stickwijzer](/stickwijzer) gebruikt. De eerste maat hoort bij je lichaamslengte. Staat er een alternatief, probeer dan beide maten met een paar aannames en dribbels. Bij twijfel is de kortere maat de eerste keuze voor een kind. Volwassenen kunnen de langere proberen als ze meer bereik willen en de bal ook dicht bij hun lichaam goed onder controle houden.',
         {
           type: 'table',
           columns: ['Lichaamslengte', 'Stick (inch)', 'Kan ook (inch)'],
           rows: LENGTH_ROWS,
         },
         '1 inch = 2,54 cm.',
-        'Deze tabel is onze eigen richtlijn, geen officiële norm. En eerlijk is eerlijk: de maattabellen van merken lopen flink uiteen. Bij kinderen scheelt het al snel 2 inch, en de ene tabel adviseert een maat langer dan de andere. Daarom staat er per rij ook een maat die kan passen. Bij kinderen is dat altijd de kortere maat, bij volwassenen een volwassen maat erboven of eronder.',
-        'Kijk bij een specifiek model ook even naar de maattabel van het merk. De [stickwijzer](/stickwijzer) werkt met precies deze tabel en kijkt daarnaast naar je huidige stick.',
+        'Merken hanteren eigen lengtegrenzen en bieden verschillende stickmaten aan. Kijk bij een specifiek model ook naar de maattabel van het merk.',
       ],
     },
     {
@@ -142,6 +148,7 @@ export const hockeystickLengteTabel: Article = {
       ],
     },
     {
+      id: 'maattabellen-vergeleken',
       heading: 'Wat zeggen de maattabellen van merken?',
       level: 2,
       body: [
@@ -159,7 +166,7 @@ export const hockeystickLengteTabel: Article = {
       level: 3,
       body: [
         'Een maattabel is een richtlijn, en elk merk trekt de grenzen zelf. Ze maken ook niet dezelfde lengtes: Osaka noemt voor de langste spelers 38 inch, Grays en wij 38,5. Princess geeft tussen 1,60 en 1,70 meter en vanaf 1,80 meter twee maten.',
-        'Tussen 1,70 en 1,80 meter zijn de tabellen het eens. Daaronder noemt Princess ook 36 inch, en Osaka geeft al vanaf 1,52 meter 36,5 inch, waar de andere 35 noemen. Vanaf 1,80 meter lopen ze verder uiteen.',
+        `Osaka geeft al vanaf 1,52 meter 36,5 inch. Bij 1,55 meter noemen Grays en Princess Zuid-Afrika 35 inch. Onze richtlijn geeft daar ${ourAdvice(155)} inch. Bij 1,75 meter komen onze eerste maat en die van de drie merken uit op 36,5 inch.`,
       ],
     },
     {
@@ -200,7 +207,7 @@ export const hockeystickLengteTabel: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-11-15',
+  updatedAt: '2026-11-18',
   sources: [
     {
       label:
@@ -223,6 +230,6 @@ export const hockeystickLengteTabel: Article = {
         'Lengtetabel: redactionele richtlijn van jouwhockeystick.nl, dezelfde als in de stickwijzer (geen officiële norm)',
     },
   ],
-  metaDescription:
-    'Hockeystick lengte tabel: zie per lichaamslengte welke sticklengte in inch past, voor kinderen en volwassenen. Plus tips bij twijfel tussen twee maten.',
+  // The answer to the search question, from the same LENGTH_GUIDE as the table (wave 0, 2026-11-22).
+  metaDescription: `Rond 1,40 m is ${formatInch(BAND_140.sizes[0] ?? 0)} inch een richtmaat, vanaf 1,63 m meestal ${formatInch(BAND_163.sizes[0] ?? 0)} inch. Zie de tabel voor kinderen en volwassenen en wat je doet bij twijfel tussen twee maten.`,
 };
