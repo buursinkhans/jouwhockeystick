@@ -7,6 +7,7 @@ import {
   type RetailerPlacement,
 } from '@/lib/retailers';
 import { useAdviceClick } from '@/lib/analytics/adviceContext';
+import { useVersusReeks } from '@/lib/analytics/versusContext';
 import { trackEvent } from '@/lib/analytics/track';
 import { buttonBaseClasses, buttonVariantClasses } from './Button';
 
@@ -40,6 +41,7 @@ export function RetailerLink({
   children,
 }: Props) {
   const advice = useAdviceClick();
+  const versusReeks = useVersusReeks();
   const url = RETAILERS[retailer].getUrl({
     productName,
     brand,
@@ -62,7 +64,11 @@ export function RetailerLink({
       rel="noopener noreferrer sponsored"
       aria-label={ariaLabel}
       className={`${variantClass} ${className}`.trim()}
-      onClick={() =>
+      onClick={() => {
+        // On a series comparison the click is also counted with its series (2026-11-22).
+        if (versusReeks) {
+          trackEvent({ name: 'versus_retailer_click', page: 'versus', reeks: versusReeks, retailer });
+        }
         trackEvent({
           name: 'retailer_click',
           retailer,
@@ -76,8 +82,8 @@ export function RetailerLink({
             priceShown: offer.priceShown,
           }),
           ...advice,
-        })
-      }
+        });
+      }}
     >
       {children}
     </a>

@@ -1,4 +1,5 @@
 import { STICK_SEO_OVERRIDES } from '../catalog/seoOverrides';
+import { SERIES, seriesPath } from '../catalog/seriesDefinitions';
 
 /**
  * IndexNow (decision log 2026-10-24): after a production deploy we tell Bing
@@ -31,8 +32,13 @@ const CONTENT_PAGES: Record<string, string> = {
  * file changes, every page it covers is reported (wave 0, 2026-11-22). Without
  * this, a changed search-result title in a shared file would not be sent.
  */
+const seriesPaths = () => SERIES.map((series) => seriesPath(series.slug));
 const COVERED_PAGES: Record<string, () => string[]> = {
   'src/catalog/seoOverrides.ts': () => Object.keys(STICK_SEO_OVERRIDES).map((slug) => `/sticks/${slug}`),
+  // The series comparisons under /vergelijk/<reeks> (wave 1): their members, gate and text.
+  'src/catalog/seriesDefinitions.ts': seriesPaths,
+  'src/catalog/series.ts': seriesPaths,
+  'src/content/series.ts': seriesPaths,
 };
 
 /**

@@ -84,3 +84,55 @@ export function disciplineDifferences(
 
   return items;
 }
+
+const median = (values: readonly number[]): number => {
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 1 ? (sorted[middle] ?? 0) : ((sorted[middle - 1] ?? 0) + (sorted[middle] ?? 0)) / 2;
+};
+const euro = (value: number) => `€${value.toFixed(2).replace('.', ',')}`;
+
+/**
+ * The same differences as a table for the article (wave 1, 2026-11-22):
+ * field sticks against indoor sticks, only the rows where both sides have at
+ * least MIN_STICKS_PER_SIDE values. The indicative price is the median of the
+ * catalog's indicative prices, not a shop price; null when no row remains.
+ */
+export function disciplineTable(
+  field: readonly Product[],
+  indoor: readonly Product[],
+): { columns: string[]; rows: string[][] } | null {
+  const rows: string[][] = [];
+  const span = (r: [number, number] | null, unit: string) =>
+    r ? `${inch(r[0])} tot ${inch(r[1])}${unit}` : null;
+
+  const lengths = [range(field.flatMap((p) => p.lengthsInches.value)), range(indoor.flatMap((p) => p.lengthsInches.value))] as const;
+  if (lengths[0] && lengths[1]) rows.push(['Lengte', span(lengths[0], ' inch')!, span(lengths[1], ' inch')!]);
+
+  const weight = (ps: readonly Product[]) => ps.map((p) => p.weightGrams?.value).filter((g): g is number => g !== undefined);
+  const weights = [range(weight(field)), range(weight(indoor))] as const;
+  if (weights[0] && weights[1]) rows.push(['Gewicht (waar het merk het noemt)', span(weights[0], ' gram')!, span(weights[1], ' gram')!]);
+
+  const bows = [mostCommonBow(field), mostCommonBow(indoor)] as const;
+  if (bows[0] && bows[1]) {
+    rows.push([
+      'Kromming die het vaakst voorkomt',
+      `${bowName(bows[0].bow)} (${bows[0].count} van ${bows[0].total})`,
+      `${bowName(bows[1].bow)} (${bows[1].count} van ${bows[1].total})`,
+    ]);
+  }
+
+  const carbon = (ps: readonly Product[]) => ps.map((p) => p.carbonPercentage?.value).filter((c): c is number => c !== undefined);
+  const carbons = [range(carbon(field)), range(carbon(indoor))] as const;
+  if (carbons[0] && carbons[1]) rows.push(['Carbon', `${carbons[0][0]}% tot ${carbons[0][1]}%`, `${carbons[1][0]}% tot ${carbons[1][1]}%`]);
+
+  if (field.length >= MIN_STICKS_PER_SIDE && indoor.length >= MIN_STICKS_PER_SIDE) {
+    rows.push([
+      'Richtprijs (mediaan, geen winkelprijs)',
+      euro(median(field.map((p) => p.priceIndicativeEur.value))),
+      euro(median(indoor.map((p) => p.priceIndicativeEur.value))),
+    ]);
+  }
+
+  return rows.length > 0 ? { columns: ['In onze catalogus', 'Veldsticks', 'Zaalsticks'], rows } : null;
+}

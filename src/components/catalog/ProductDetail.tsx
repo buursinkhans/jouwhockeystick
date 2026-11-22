@@ -22,6 +22,7 @@ import { SimilarSticks } from '@/components/catalog/SimilarSticks';
 import { getSimilarSticks } from '@/catalog/similar';
 import { getProductFamily } from '@/catalog/family';
 import { FamilyTable } from '@/components/catalog/FamilyTable';
+import { SeriesLinks } from '@/components/catalog/SeriesLinks';
 import { DISCIPLINE_LABELS } from '@/catalog/labels';
 import { getModelYear } from '@/catalog/modelYear';
 import { evidenceGaps, sourceMixText } from '@/content/evidence';
@@ -228,6 +229,8 @@ export function ProductDetail({ product }: { product: Product }) {
           <ProductFitAndSources product={product} />
 
           {family && <FamilyTable current={product} family={family} />}
+
+          <SeriesLinks product={product} />
 
           <SimilarSticks
             current={product}
