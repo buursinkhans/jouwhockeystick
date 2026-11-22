@@ -86,6 +86,28 @@ describe('inSitemap', () => {
   });
 });
 
+describe('urlsForFiles: shared files that cover pages', () => {
+  it('reports the stick pages with their own search-result text when seoOverrides.ts changes', () => {
+    expect(urlsForFiles(['src/catalog/seoOverrides.ts'])).toContain(
+      'https://jouwhockeystick.nl/sticks/grays-jb10-composite',
+    );
+  });
+
+  it('reports the three wave 0 pages when their files change, and only those that are in the sitemap', () => {
+    const urls = urlsForFiles([
+      'src/content/articles/low-bow-vs-mid-bow.ts',
+      'src/content/articles/hockeystick-lengte-tabel.ts',
+      'src/catalog/seoOverrides.ts',
+    ]);
+    const sitemapUrls = sitemap().map((entry) => entry.url);
+    expect(inSitemap(urls, sitemapUrls).sort()).toEqual([
+      'https://jouwhockeystick.nl/kennis/hockeystick-lengte-tabel',
+      'https://jouwhockeystick.nl/kennis/low-bow-vs-mid-bow',
+      'https://jouwhockeystick.nl/sticks/grays-jb10-composite',
+    ]);
+  });
+});
+
 describe('key', () => {
   it('is published at keyLocation with the key as its content', () => {
     expect(INDEXNOW_KEY).toMatch(/^[0-9a-f]{32}$/);

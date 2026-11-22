@@ -124,7 +124,7 @@ describe('age indication: the section on the length table page', () => {
 
   it('keeps the title, the intro and the main length table of the page', () => {
     expect(article.title).toBe('Hockeystick lengte tabel: welke maat stick past bij jouw lengte?');
-    expect(article.intro.startsWith('Welke lengte stick heb je nodig?')).toBe(true);
+    expect(article.intro.startsWith('Meet je lichaamslengte zonder schoenen')).toBe(true);
     expect(article.sections[0]?.heading).toBe('De lengtetabel');
   });
 

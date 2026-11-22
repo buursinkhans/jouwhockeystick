@@ -1,3 +1,5 @@
+import { STICK_SEO_OVERRIDES } from '../catalog/seoOverrides';
+
 /**
  * IndexNow (decision log 2026-10-24): after a production deploy we tell Bing
  * and the other IndexNow search engines which pages changed, so nobody has to
@@ -22,6 +24,15 @@ const CONTENT_PAGES: Record<string, string> = {
   'src/content/brands.ts': '/merken',
   'src/content/clubs.ts': '/clubs',
   'src/content/privacy.ts': '/privacy',
+};
+
+/**
+ * Shared data files that decide the text of a known set of pages: when such a
+ * file changes, every page it covers is reported (wave 0, 2026-11-22). Without
+ * this, a changed search-result title in a shared file would not be sent.
+ */
+const COVERED_PAGES: Record<string, () => string[]> = {
+  'src/catalog/seoOverrides.ts': () => Object.keys(STICK_SEO_OVERRIDES).map((slug) => `/sticks/${slug}`),
 };
 
 /**
@@ -52,9 +63,10 @@ export function absolute(path: string): string {
 
 /** Unique absolute URLs for the changed files, before the sitemap filter. */
 export function urlsForFiles(files: readonly string[]): string[] {
-  const paths = files
-    .map(pathForFile)
-    .filter((path): path is string => path !== null);
+  const paths = [
+    ...files.map(pathForFile).filter((path): path is string => path !== null),
+    ...files.flatMap((file) => COVERED_PAGES[file]?.() ?? []),
+  ];
   return [...new Set(paths.map(absolute))];
 }
 

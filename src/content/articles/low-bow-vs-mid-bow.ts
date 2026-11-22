@@ -21,6 +21,7 @@ function adultFieldSticksWith(bow: BowProfile): string[] {
 export const lowBowVsMidBow: Article = {
   slug: 'low-bow-vs-mid-bow',
   title: 'Low bow of mid bow: welke kromming past bij jou?',
+  seoTitle: 'Low bow of mid bow: verschil en welke past bij jou?',
   intro:
     'Bij een mid bow zit de kromming ongeveer halverwege de stick. Rustig en voorspelbaar: fijn voor aannemen, vlak passen en pushen, en daarom een mooi startpunt voor beginners en allround spelers. Bij een low bow zit de kromming lager, dichter bij de krul. Daarmee kom je makkelijker onder de bal voor lifts, 3D-acties en aerial/scoopen, maar de aanname vraagt meer techniek. Kies dus op de acties die jij het meest maakt.',
   sections: [
@@ -145,5 +146,5 @@ export const lowBowVsMidBow: Article = {
     },
   ],
   metaDescription:
-    'Low bow of mid bow? Lees wat het verschil in kromming betekent voor aannemen, passen en liften, voor wie welk profiel past, en welke sticks je kunt vergelijken.',
+    'Mid bow: kromming halverwege, rustig voor aannemen en pushen. Low bow: kromming lager, makkelijker voor lifts, maar de aanname vraagt meer techniek.',
 };
