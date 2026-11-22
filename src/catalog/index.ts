@@ -22,6 +22,8 @@ import { princessCompetition1StarProbow } from './products/princess-competition-
 import { princessPremium4k10StarSg9Lb } from './products/princess-premium-4k-10-star-sg9-lb';
 import { graysAuraGtJunior } from './products/grays-aura-gt-junior';
 import { jdhJuniorMidBow } from './products/jdh-junior-mid-bow';
+import { jdhX60Lowbow } from './products/jdh-x60-lowbow-x60lbgn';
+import { jdhX79LowbowHook } from './products/jdh-x79-lowbow-hook-x79lbhgn';
 import { braboGforceEliteXOneLbJr } from './products/brabo-gforce-elite-x-one-lb-jr';
 import { princessCompetitionJr3k10Star } from './products/princess-competition-jr-3k-10-star';
 import { princessPremiumJr4k10Star } from './products/princess-premium-jr-4k-10-star';
@@ -222,6 +224,8 @@ const ALL_PRODUCTS: Product[] = [
   adidasEstro60Indoor,
   indianMaharadjaIronBlueIndoor,
   indianMaharadjaFlowJuniorIndoor,
+  jdhX60Lowbow,
+  jdhX79LowbowHook,
 ];
 
 /**
