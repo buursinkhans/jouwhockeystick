@@ -204,4 +204,21 @@ export type AnalyticsEvent =
       source: 'bovenbalk';
       target: string;
     }
+  | {
+      /** A series comparison under /vergelijk/<reeks> was opened (wave 1, 2026-11-22). */
+      name: 'versus_view';
+      page: 'versus';
+      reeks: string;
+    }
+  | {
+      /**
+       * A shop button on a series comparison (2026-11-22). Counted next to
+       * retailer_click with placement 'versus', which carries the price and the
+       * place in the list; this one adds the series. The partner link is not in it.
+       */
+      name: 'versus_retailer_click';
+      page: 'versus';
+      reeks: string;
+      retailer: string;
+    }
   | AdviceAnalyticsEvent;

@@ -125,13 +125,14 @@ export const lowBowVsMidBow: Article = {
       body: [
         'Veldsticks voor volwassenen, op volgorde van richtprijs:',
         { type: 'list', items: adultFieldSticksWith('lowbow') },
+        'Wil je zien hoe één merk een reeks met low bow opbouwt? Bekijk de [Grays JB-serie naast elkaar](/vergelijk/grays-jb-serie), met de verschillen in carbon, niveau en prijs.',
         'Twijfel je nog? De [stickwijzer](/stickwijzer) vraagt naar je spelacties en ervaring en laat zien welk profiel bij je past, met de redenen erbij. Hoe je in drie stappen kiest, lees je in [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick)',
       ],
     },
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-08',
-  updatedAt: '2026-10-13',
+  updatedAt: '2026-11-22',
   sources: [
     { label: ZAAL_SOURCES.fieldRules.label, url: ZAAL_SOURCES.fieldRules.url },
     { label: 'PassaHockey: Zaalhockeyadvies', url: PASSAHOCKEY_INDOOR },

@@ -12,7 +12,11 @@ export type RetailerPlacement =
   | 'schoenencatalogus'
   | 'schoenwijzer'
   /** The yearly Black Friday page /black-friday-hockey (decision log 2026-11-10). */
-  | 'blackfriday';
+  | 'blackfriday'
+  /** A series comparison under /vergelijk/<reeks> (decision log 2026-11-22). */
+  | 'versus'
+  /** The shop prices in a knowledge article (decision log 2026-11-22). */
+  | 'artikel';
 
 /**
  * bol.com Partnerprogramma site ID of jouwhockeystick.nl. Not a secret — it is

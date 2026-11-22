@@ -191,6 +191,7 @@ export const meerCarbonHockeystickBeter: Article = {
       level: 2,
       body: [
         'Carbon is maar één van de specificaties. De kromming telt ook mee: een mid bow is veelzijdig en makkelijk in gebruik, een low bow helpt bij liften en 3D-skills (trucs waarbij je de bal van de grond haalt). Het verschil lees je in [low bow of mid bow](/kennis/low-bow-vs-mid-bow).',
+        'Hoe het carbonpercentage binnen één merk oploopt, zie je in de [Grays JB-serie naast elkaar](/vergelijk/grays-jb-serie).',
         'Een verkeerde lengte beïnvloedt je houding en techniek. Bij het gewicht gaat het vooral om de balans: waar het gewicht zit, merk je meer dan hoe zwaar de stick in totaal is. Daardoor kan een 70%-stick met een andere kromming en balans prettiger spelen dan een 50%-model, of juist andersom.',
       ],
     },
@@ -281,7 +282,7 @@ export const meerCarbonHockeystickBeter: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-19',
-  updatedAt: '2026-11-13',
+  updatedAt: '2026-11-22',
   sources: [
     {
       label:

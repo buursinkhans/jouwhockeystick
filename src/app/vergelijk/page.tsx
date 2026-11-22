@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { getAllProducts, getCatalogProducts, getProductBySlug } from '@/catalog';
 import { buildCompareTable } from '@/catalog/compare';
 import { getSimilarSticks } from '@/catalog/similar';
+import { indexableSeries, seriesPath } from '@/catalog/series';
+import { seriesTitle } from '@/content/series';
 import type { Product } from '@/catalog/types';
 import { ProductImage } from '@/components/catalog/ProductImage';
 import { OfferSummary } from '@/components/offers/WhereToBuy';
@@ -216,6 +218,25 @@ export default async function VergelijkPage({
             title={productA ? `Vergelijk ${productA.name} met` : 'Of begin met een van deze vergelijkingen'}
             pairs={suggestions}
           />
+        )}
+
+        {/* Whole series side by side, as plain text links (wave 1, 2026-11-22); only series that pass the gate. */}
+        {indexableSeries(now).length > 0 && (
+          <section className="mt-12" aria-labelledby="series-heading">
+            <h2 id="series-heading" className="text-lg font-bold">
+              Vergelijkingen om mee te beginnen
+            </h2>
+            <p className="mt-1 text-sm text-inkt/80">Een hele reeks sticks naast elkaar, met de prijs bij partnerwinkels.</p>
+            <ul className="mt-3 space-y-2">
+              {indexableSeries(now).map((evaluation) => (
+                <li key={evaluation.series.slug}>
+                  <Link href={seriesPath(evaluation.series.slug)} className="font-semibold text-veld hover:underline">
+                    {seriesTitle(evaluation)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
       </PageBody>
     </>

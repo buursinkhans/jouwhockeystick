@@ -27,6 +27,14 @@ export const articleBlockSchema = z.union([
     text: z.string(),
   }),
   z.object({
+    /**
+     * Two example sticks with their current shop prices, one field and one indoor
+     * stick (wave 1, 2026-11-22): chosen at render time from the sticks with
+     * a current price at two or more shops, never by fee. See StickPriceExamples.
+     */
+    type: z.literal('stickPrices'),
+  }),
+  z.object({
     /** An interactive explainer figure; see src/components/article. */
     type: z.literal('figure'),
     figure: z.literal('bow-profiles'),

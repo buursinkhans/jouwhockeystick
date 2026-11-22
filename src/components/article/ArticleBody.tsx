@@ -1,5 +1,6 @@
 import type { Article, ArticleBlock } from '@/content/types';
 import { BowProfileFigure } from './BowProfileFigure';
+import { StickPriceExamples } from './StickPriceExamples';
 import { InlineText } from './InlineText';
 
 function Block({ block }: { block: ArticleBlock }) {
@@ -86,6 +87,8 @@ function Block({ block }: { block: ArticleBlock }) {
       );
     case 'figure':
       return <BowProfileFigure />;
+    case 'stickPrices':
+      return <StickPriceExamples />;
   }
 }
 
