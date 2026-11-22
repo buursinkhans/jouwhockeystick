@@ -291,7 +291,7 @@ export function QuizResult({
         <p className="mt-2 text-sm">{playerLevelText(advice.playerLevel)}</p>
         {hasResults && adviceGoal === 'child' && (
           <p className="mt-2 text-sm text-lijngrijs">
-            Laat je kind de stick zo mogelijk even vasthouden: gevoel en plezier
+            Laat je dochter of zoon de stick zo mogelijk even vasthouden: gevoel en plezier
             tellen mee.
           </p>
         )}

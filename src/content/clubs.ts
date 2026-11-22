@@ -18,7 +18,7 @@ export const CLUBS_PAGE = {
   newsletterIntro:
     'Kopieer deze tekst en pas hem gerust aan. Je mag hem zonder bronvermelding gebruiken.',
   newsletterText: [
-    'Nieuw bij de club en nog geen stick? Kies vooral een stick die past bij de lengte van je kind, niet een te lange om in te groeien: met een passende stick leert je kind de techniek makkelijker.',
+    'Nieuw bij de club en nog geen stick? Kies vooral een stick die past bij de lengte van je dochter of zoon, niet een te lange om in te groeien: met een passende stick leert je kind de techniek makkelijker.',
     'Twijfel je over de maat, of over zaal- en veldsticks? Op jouwhockeystick.nl/stickwijzer krijg je in een paar vragen een stickadvies, met uitleg waarom een stick wel of niet past. De lengtetabel staat op jouwhockeystick.nl/kennis/hockeystick-lengte-tabel.',
   ],
   tableHeading: 'Printbare lengtetabel',

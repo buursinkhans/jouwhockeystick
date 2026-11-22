@@ -22,7 +22,7 @@ export const hockeyschoenenKinderenMaat: Article = {
       heading: 'Hoe pas je hockeyschoenen bij een kind?',
       level: 2,
       body: [
-        'Pas aan het eind van de dag of na het sporten: voeten zijn dan wat voller. Neem de hockeysokken mee die je kind echt draagt, dikker of dunner kan al verschil maken. Check dan dit:',
+        'Pas aan het eind van de dag of na het sporten: voeten zijn dan wat voller. Neem de hockeysokken mee die je dochter of zoon echt draagt, dikker of dunner kan al verschil maken. Check dan dit:',
         {
           type: 'list',
           items: [
@@ -50,7 +50,7 @@ export const hockeyschoenenKinderenMaat: Article = {
       heading: 'Veld of zaal, en welke ondergrond?',
       level: 2,
       body: [
-        'Eerst bepaal je waar je kind speelt. Een veldschoen is voor kunstgras, een zaalschoen heeft een vlakkere zool die geen strepen op de vloer achterlaat. Speelt je kind allebei, dan zijn dat twee paar.',
+        'Eerst bepaal je waar je dochter of zoon speelt. Een veldschoen is voor kunstgras, een zaalschoen heeft een vlakkere zool die geen strepen op de vloer achterlaat. Speelt je kind allebei, dan zijn dat twee paar.',
         'Op het veld maakt het uit of het water-, zand- of semi-waterveld is. Vraag het aan de trainer, ook voor uitwedstrijden. Een schoen die volgens het merk voor allebei bedoeld is, kan handig zijn als je kind op verschillende velden speelt. Wat een merk over één model zegt, geldt niet automatisch voor een ander model.',
       ],
     },
@@ -58,7 +58,7 @@ export const hockeyschoenenKinderenMaat: Article = {
       heading: 'Een beginnend kind: begin met een passend basispaar',
       level: 2,
       body: [
-        'Voor een kind dat net begint, hoeft het niet ingewikkeld. Een passend basispaar voor de ondergrond waar het speelt is een fijn startpunt. Let op teenruimte, hielvastheid en hoe de schoen aansluit als je kind opzij beweegt.',
+        'Voor een kind dat net begint, hoeft het niet ingewikkeld. Een passend basispaar voor de ondergrond waar het speelt is een fijn startpunt. Let op teenruimte, hielvastheid en hoe de schoen aansluit als je dochter of zoon opzij beweegt.',
         'Een duurdere schoen is niet vanzelf beter, en leeftijd zegt niets over de prijsklasse. Specialisatie naar een positie is voor een beginner niet nodig: kinderen wisselen vaak van plek en weten nog niet wat bij hen past.',
       ],
     },
@@ -66,7 +66,7 @@ export const hockeyschoenenKinderenMaat: Article = {
       heading: 'Pijn, blaren of een blessure',
       level: 2,
       body: [
-        'Schuift de voet, ontstaan er blaren of drukplekken? Dat is een aanwijzing voor het passen, maar zeker weten waar het door komt doen we niet. Heeft je kind terugkerende pijn of een recente blessure? Dan kunnen wij geen schoen "bij de klacht" kiezen. Laat je daarvoor individueel beoordelen, bijvoorbeeld door een huisarts of fysiotherapeut. Gebruikt je kind eigen inlegzolen? Neem die mee bij het passen.',
+        'Schuift de voet, ontstaan er blaren of drukplekken? Dat is een aanwijzing voor het passen, maar zeker weten waar het door komt doen we niet. Heeft je dochter of zoon terugkerende pijn of een recente blessure? Dan kunnen wij geen schoen "bij de klacht" kiezen. Laat je daarvoor individueel beoordelen, bijvoorbeeld door een huisarts of fysiotherapeut. Gebruikt je kind eigen inlegzolen? Neem die mee bij het passen.',
       ],
     },
     {
@@ -75,7 +75,7 @@ export const hockeyschoenenKinderenMaat: Article = {
       body: [
         `In onze catalogus hebben we ${juniorCount} modellen met de hand nagelopen die voor junioren bedoeld zijn. Per model staat wat het merk of de winkel bevestigt, en wat nog onbekend is. Welke maten er zijn en wat een winkel op voorraad heeft, zie je op de modelpagina.`,
         'Bekijk alle modellen op [hockeyschoenen](/hockeyschoenen), of doe de [schoenenwijzer](/hockeyschoenen/wijzer): een paar vragen en je krijgt maximaal drie modellen, met de reden erbij. Past er geen enkel model, dan zeggen we dat eerlijk. Een maat vinden we daarmee nog niet voor je: dat doe je met passen.',
-        'Heeft je kind ook een stick nodig? Het [snelle advies](/stickwijzer?snel) vraagt alleen naar leeftijd, lengte, ervaring en budget; de [stickwijzer](/stickwijzer) werkt verder op dezelfde manier.',
+        'Heeft je dochter of zoon ook een stick nodig? Het [snelle advies](/stickwijzer?snel) vraagt alleen naar leeftijd, lengte, ervaring en budget; de [stickwijzer](/stickwijzer) werkt verder op dezelfde manier.',
       ],
     },
     {

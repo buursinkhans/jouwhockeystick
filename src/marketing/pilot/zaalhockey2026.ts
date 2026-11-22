@@ -168,7 +168,7 @@ ${PARTNER}`,
     vorm: 'reel',
     datum: '2026-12-01',
     hook: 'Zaalstick zoeken? Drie vragen',
-    tekst: `Zaalstick zoeken voor je kind? Op jouwhockeystick.nl beantwoord je drie vragen. Voor wie is de stick. Welke lengte. En wat wil je uitgeven. Weet je de maat niet, vul dan de lichaamslengte in, zonder schoenen. De lijst past zich meteen aan, van laag naar hoog in prijs. Per stick zie je de bron van elk gegeven en de prijzen per winkel.`,
+    tekst: `Zaalstick zoeken voor je dochter of zoon? Op jouwhockeystick.nl beantwoord je drie vragen. Voor wie is de stick. Welke lengte. En wat wil je uitgeven. Weet je de maat niet, vul dan de lichaamslengte in, zonder schoenen. De lijst past zich meteen aan, van laag naar hoog in prijs. Per stick zie je de bron van elk gegeven en de prijzen per winkel.`,
     onderdelen: [
       'Hook: Zaalstick zoeken? Drie vragen',
       'Vraag 1: voor wie (kind of volwassene)',
@@ -194,7 +194,7 @@ ${PARTNER}`,
     hook: 'Welke maat zaalstick voor je kind?',
     tekst: `Welke maat zaalstick heeft je kind nodig?
 
-Dezelfde maat als op het veld. De lengtetabel geeft per lichaamslengte een stickmaat in inch. Meet je kind zonder schoenen.
+Dezelfde maat als op het veld. De lengtetabel geeft per lichaamslengte een stickmaat in inch. Meet je dochter of zoon zonder schoenen.
 
 Koop de stick niet extra groot op de groei. Een te lange stick maakt de bal dicht bij je lichaam lastiger te controleren, en in de zaal draait alles om controle.
 

@@ -60,7 +60,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Welke maat hockeystick heeft je kind nodig?',
       level: 2,
       body: [
-        'Bij kinderen is de lengte het allerbelangrijkst. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een goed startpunt is. Laat je kind de stick daarna even vasthouden in een normale hockeyhouding: lukt dribbelen ontspannen, en blijft de stick dicht bij het lichaam? Top.',
+        'Bij kinderen is de lengte het allerbelangrijkst. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een goed startpunt is. Laat je dochter of zoon de stick daarna even vasthouden in een normale hockeyhouding: lukt dribbelen ontspannen, en blijft de stick dicht bij het lichaam? Top.',
         'Weet je de lengte al? Het [snelle advies](/stickwijzer?snel) vraagt alleen naar leeftijd, lengte, ervaring en budget en toont daarna sticks in de juiste maat. Zoek je een eerste indicatie op leeftijd? Die staat in de [lengtetabel](/kennis/hockeystick-lengte-tabel#leeftijd), met de lichaamslengte als uitgangspunt.',
         'Is de juiste maat niet te krijgen, dan is één maatje korter prima. Een maat langer raden we af. Op [alle veldsticks](/sticks) kies je in de filters de lengte van je kind. Geef je de stick cadeau en is je kind er niet bij, lees dan [hockeystick als cadeau](/kennis/hockeystick-cadeau).',
       ],
@@ -77,7 +77,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Welke merken hebben sticks voor beginners?',
       level: 2,
       body: [
-        `In onze catalogus hebben ${beginnerBrands.length} merken een stick voor beginners: ${beginnerBrandList}. Een merk zegt weinig over of een stick bij je kind past. Kijk eerst naar de lengte, een rustig profiel en weinig carbon, en pas daarna naar het merk. Wat elk merk maakt, lees je bij [merken](/merken).`,
+        `In onze catalogus hebben ${beginnerBrands.length} merken een stick voor beginners: ${beginnerBrandList}. Een merk zegt weinig over of een stick bij je dochter of zoon past. Kijk eerst naar de lengte, een rustig profiel en weinig carbon, en pas daarna naar het merk. Wat elk merk maakt, lees je bij [merken](/merken).`,
       ],
     },
     {
@@ -107,7 +107,7 @@ export const hockeystickKinderenEnBeginners: Article = {
       heading: 'Zaalhockey',
       level: 3,
       body: [
-        'Gaat je kind ook de zaal in? Een aparte zaalstick is volgens de spelregels niet verplicht. Wil je er toch een, dan lees je waar je op let in [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen). Bij de [zaalsticks](/zaalsticks) maak je in drie vragen een eerste selectie.',
+        'Gaat je dochter of zoon ook de zaal in? Een aparte zaalstick is volgens de spelregels niet verplicht. Wil je er toch een, dan lees je waar je op let in [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen). Bij de [zaalsticks](/zaalsticks) maak je in drie vragen een eerste selectie.',
       ],
     },
     {

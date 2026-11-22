@@ -105,7 +105,7 @@ export const veldstickZaalhockey: Article = {
       level: 2,
       body: [
         'Gebruik hetzelfde lengteadvies als voor een veldstick. In de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel) zie je per lichaamslengte welke maat een goed startpunt is. En koop voor een kind niet extra groot ‘op de groei’.',
-        'Omdat je in de zaal niet slaat, telt balcontrole meestal meer dan slagkracht. Zoek je voor je kind? Dan staat alles op een rij in [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen).',
+        'Omdat je in de zaal niet slaat, telt balcontrole meestal meer dan slagkracht. Zoek je voor je dochter of zoon? Dan staat alles op een rij in [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen).',
         priceSentence,
       ],
     },

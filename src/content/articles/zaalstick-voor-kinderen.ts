@@ -62,7 +62,7 @@ export const zaalstickVoorKinderen: Article = {
       level: 2,
       body: [
         'Nee, dat hoeft niet. Voor zaal én veld gelden dezelfde maximale eisen: de stick moet door een ring van 51 mm passen, de kromming mag maximaal 25 mm zijn, en de stick mag niet zwaarder zijn dan 737 gram en niet langer dan 105 cm.',
-        'Een zaalstick is dus een keuze, geen must. Merken maken zaalsticks wel speciaal voor het spel binnen. Gaat je kind voor het eerst de zaal in? Dan kan een eerste seizoen met de veldstick een prima manier zijn om te ontdekken of het bevalt. Twijfel je? Vraag even bij je club of er voor de jeugd extra afspraken zijn.',
+        'Een zaalstick is dus een keuze, geen must. Merken maken zaalsticks wel speciaal voor het spel binnen. Gaat je dochter of zoon voor het eerst de zaal in? Dan kan een eerste seizoen met de veldstick een prima manier zijn om te ontdekken of het bevalt. Twijfel je? Vraag even bij je club of er voor de jeugd extra afspraken zijn.',
       ],
     },
     {
@@ -111,7 +111,7 @@ export const zaalstickVoorKinderen: Article = {
         { type: 'list', items: juniorIndoorSticks.map(juniorListItem) },
         {
           type: 'note',
-          text: 'Is je kind kleiner dan de maten hierboven? Dan is de veldstick in de juiste lengte voorlopig de logische keuze, ook voor de zaal.',
+          text: 'Is je dochter of zoon kleiner dan de maten hierboven? Dan is de veldstick in de juiste lengte voorlopig de logische keuze, ook voor de zaal.',
         },
       ],
     },
@@ -119,7 +119,7 @@ export const zaalstickVoorKinderen: Article = {
       heading: 'Snel een selectie of een advies voor het veld',
       level: 2,
       body: [
-        'Bij de [zaalsticks](/zaalsticks) maak je in drie vragen een selectie: voor wie, de lengte van je kind en je budget. Speelt je kind ook op het veld? Dan geeft de [stickwijzer](/stickwijzer) een advies voor een veldstick; het [snelle advies](/stickwijzer?snel) vraagt alleen naar leeftijd, lengte, ervaring en budget. Meer over een eerste veldstick lees je in [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
+        'Bij de [zaalsticks](/zaalsticks) maak je in drie vragen een selectie: voor wie, de lengte van je dochter of zoon en je budget. Speelt je kind ook op het veld? Dan geeft de [stickwijzer](/stickwijzer) een advies voor een veldstick; het [snelle advies](/stickwijzer?snel) vraagt alleen naar leeftijd, lengte, ervaring en budget. Meer over een eerste veldstick lees je in [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },
   ],
