@@ -1,6 +1,7 @@
 import { productPath } from '@/catalog/paths';
 import type { MetadataRoute } from 'next';
 import { getAllProducts } from '@/catalog';
+import { indexableSeries, seriesPath } from '@/catalog/series';
 import { getCuratedShoes, shoePath } from '@/catalog/shoes';
 import { lastChecked } from '@/catalog/shoes/certainty';
 import type { Product } from '@/catalog/types';
@@ -70,6 +71,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...getAllProducts().map((product) => ({
       url: absoluteUrl(productPath(product)),
       lastModified: lastVerified(product),
+    })),
+    // Series comparisons that pass the gate against thin pages (src/catalog/series.ts, decision log 2026-11-22).
+    ...indexableSeries().map((evaluation) => ({
+      url: absoluteUrl(seriesPath(evaluation.series.slug)),
+      lastModified: latest(evaluation.members.map((m) => lastVerified(m.product))),
     })),
     // Only checked shoe models: feed models are noindex (decision log 2026-11-01).
     ...getCuratedShoes().map((shoe) => {

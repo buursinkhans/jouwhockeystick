@@ -1,5 +1,5 @@
 import { getFieldProducts, getIndoorProducts } from '@/catalog';
-import { disciplineDifferences } from '../disciplineCompare';
+import { disciplineDifferences, disciplineTable } from '../disciplineCompare';
 import type { Article } from '../types';
 import { ZAAL_SOURCES } from '../zaal';
 import { byPrice, stickListItem } from '../catalogLinks';
@@ -14,6 +14,8 @@ const differences = disciplineDifferences(
   getFieldProducts(),
   getIndoorProducts(),
 );
+
+const table = disciplineTable(getFieldProducts(), getIndoorProducts());
 
 const priceSentence = cheapest
   ? `Een zaalstick met een lage richtprijs uit onze catalogus die bij bol.com te koop is: ${stickListItem(cheapest)}. Controleer de actuele prijs en de leverbare maat bij de winkel.`
@@ -55,12 +57,24 @@ export const veldstickZaalhockey: Article = {
       body: differences.length
         ? [
             'We vergelijken hier alleen de sticks die we met de hand hebben gecontroleerd. De getallen worden uit onze catalogus berekend en veranderen mee als die verandert.',
-            { type: 'list', items: differences },
+            // The same numbers as a table (wave 1, 2026-11-22); the list stays as the fallback.
+            ...(table
+              ? [{ type: 'table' as const, columns: table.columns, rows: table.rows }]
+              : [{ type: 'list' as const, items: differences }]),
             'Onze lezing: omdat de spelregels voor beide gelijk zijn, komt een verschil in de catalogus voort uit de keuzes van merken, niet uit de regels. Grays beschrijft zijn zaalsticks bijvoorbeeld met een kleinere kop voor snelle acties in een kleine ruimte (zie de bronnen onderaan).',
           ]
         : [
             'Onze lezing: omdat de spelregels voor beide gelijk zijn, is een verschil tussen sticks een keuze van het merk, niet een eis van de regels. Grays beschrijft zijn zaalsticks bijvoorbeeld met een kleinere kop voor snelle acties in een kleine ruimte (zie de bronnen onderaan).',
           ],
+    },
+    {
+      heading: 'Prijscheck: wat kosten ze nu?',
+      level: 3,
+      body: [
+        'Een veldstick en een zaalstick uit onze catalogus, met de prijs die partnerwinkels nu noemen. Het zijn voorbeelden en geen advies: bekijk bij de stick zelf alle winkels, de maten en wat er op voorraad is.',
+        { type: 'stickPrices' },
+        'De prijs is het laagste totaal inclusief verzending bij onze partnerwinkels, met de datum waarop we hem lazen. De winkel is de verkoper. Wij krijgen een vergoeding als je via een link koopt; dat verandert niets aan de volgorde of aan wat we zeggen.',
+      ],
     },
     {
       heading: 'Wanneer is je veldstick genoeg?',
@@ -82,6 +96,7 @@ export const veldstickZaalhockey: Article = {
       level: 2,
       body: [
         'Merken ontwerpen zaalsticks speciaal voor het spel binnen. [Grays](/merken#merk-grays) geeft zijn zaalsticks bijvoorbeeld een kleinere kop, gemaakt voor snelle acties in een kleine ruimte.',
+        'Zaalsticks van één merk op een rij, met de prijs per stick, zie je bij [Grays zaalsticks naast elkaar](/vergelijk/grays-zaalsticks).',
         'Speel je vaak in de zaal, of neem je het zaalspel serieus? Dan kan een zaalstick een mooie stap zijn. Het blijft een voorkeur, geen must. Wij testen sticks niet zelf, dus wat een zaalstick in jouw spel oplevert, kunnen we niet voor je meten.',
       ],
     },
@@ -104,7 +119,7 @@ export const veldstickZaalhockey: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-11',
-  updatedAt: '2026-11-11',
+  updatedAt: '2026-11-22',
   sources: [
     {
       label: ZAAL_SOURCES.indoorRules.label,
@@ -125,5 +140,5 @@ export const veldstickZaalhockey: Article = {
     },
   ],
   metaDescription:
-    'Het verschil tussen een veld- en zaalstick: dezelfde spelregels, een ander spel. Mag je met je veldstick zaalhockeyen, en wanneer is een zaalstick een logische keuze?',
+    'Ja, met een veldstick kun je zaalhockeyen: de spelregels zijn gelijk, het spel en het ontwerp verschillen. Zie de tabel en wanneer een zaalstick past.',
 };

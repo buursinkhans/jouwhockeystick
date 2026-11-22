@@ -83,12 +83,23 @@ export function WhereToBuy({
   placement,
   variant,
   size = null,
+  idPrefix = OFFER_ANCHOR,
+  heading = OFFER_TEXT.heading,
+  headingLevel = 2,
 }: {
   product: Product;
   placement: RetailerPlacement;
   variant: 'full' | 'compact';
   /** The advised length; the compact version sorts on it. */
   size?: number | null;
+  /**
+   * Only the full version, for a page with several blocks (a series comparison,
+   * 2026-11-22): its own anchor id, heading text and heading level, so ids and
+   * headings stay unique. The defaults are the stick page's.
+   */
+  idPrefix?: string;
+  heading?: string;
+  headingLevel?: 2 | 3;
 }) {
   const now = new Date();
   const offers = getOffers(product);
@@ -144,13 +155,14 @@ export function WhereToBuy({
     );
   }
 
+  const Heading = `h${headingLevel}` as 'h2' | 'h3';
   return (
-    <section id={OFFER_ANCHOR} aria-labelledby="waar-te-koop-kop" className="mt-8 scroll-mt-24 card p-4 sm:p-5">
+    <section id={idPrefix} aria-labelledby={`${idPrefix}-kop`} className="mt-8 scroll-mt-24 card p-4 sm:p-5">
       <OfferBlockView placement={placement} offerCount={offers.length} pricedCount={pricedCount}>
         <div className="flex items-baseline justify-between gap-3">
-          <h2 id="waar-te-koop-kop" className="text-xl font-bold">
-            {OFFER_TEXT.heading}
-          </h2>
+          <Heading id={`${idPrefix}-kop`} className={headingLevel === 2 ? 'text-xl font-bold' : 'text-lg font-bold'}>
+            {heading}
+          </Heading>
           {offers.length > 1 && <span className="text-xs text-inkt/70">{offers.length} winkels</span>}
         </div>
         {offers.length === 0 ? (
