@@ -8,6 +8,7 @@ import {
 } from '@/lib/retailers';
 import { useAdviceClick } from '@/lib/analytics/adviceContext';
 import { useVersusReeks } from '@/lib/analytics/versusContext';
+import { isFromSearch } from '@/lib/analytics/searchContext';
 import { trackEvent } from '@/lib/analytics/track';
 import { buttonBaseClasses, buttonVariantClasses } from './Button';
 
@@ -82,6 +83,7 @@ export function RetailerLink({
             priceShown: offer.priceShown,
           }),
           ...advice,
+          ...(isFromSearch() && { fromSearch: true }),
         });
       }}
     >

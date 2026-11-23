@@ -4,6 +4,7 @@ import { ButtonLink } from '@/components/ui/Button';
 import { CheckIcon } from '@/components/ui/icons';
 import { getTrustFacts } from '@/catalog/trustFacts';
 import { MainNav, type NavLink } from './MainNav';
+import { SiteSearch } from '@/components/search/SiteSearch';
 import { CampaignBarLink } from '@/components/campaign/CampaignBarLink';
 import { BLACK_FRIDAY, BLACK_FRIDAY_EDITION } from '@/content/blackFriday';
 import { amsterdamDate, showCampaignNote } from '@/lib/campaign';
@@ -88,6 +89,7 @@ export function Header() {
             <span aria-hidden="true">Stickadvies</span>
           </Link>
           <MainNav links={NAV_LINKS} />
+          <SiteSearch />
           {/* The stickwijzer is the main action, so it is a button, not a nav link. */}
           <ButtonLink
             href="/stickwijzer"

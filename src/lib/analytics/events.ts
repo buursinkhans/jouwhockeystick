@@ -63,6 +63,12 @@ export type AnalyticsEvent =
        * older reports keep working. `position` stays the place of the shop.
        */
       adviceRole?: ResultRole;
+      /**
+       * True when this stick page was opened from a result of the search in the
+       * header earlier in the same visit (2026-11-24, see searchContext.ts).
+       * Absent elsewhere. Says nothing about what was typed.
+       */
+      fromSearch?: boolean;
       adviceRank?: number;
       adviceRoute?: AdviceRoute;
       budgetBand?: string;
@@ -237,5 +243,30 @@ export type AnalyticsEvent =
       page: 'versus';
       reeks: string;
       retailer: string;
+    }
+  | {
+      /**
+       * The search in the header (2026-11-24), after the visitor stopped typing
+       * for 800 ms. The typed text never goes to analytics, only its length and
+       * the number of results (owner decision 2026-11-24, same rule as search_results).
+       */
+      name: 'search';
+      queryLength: number;
+      resultsCount: number;
+    }
+  | {
+      /** The same search found nothing; the visitor sees the stickwijzer as the way on. */
+      name: 'search_no_results';
+      queryLength: number;
+    }
+  | {
+      /**
+       * A click on a result or on a suggestion. `itemName` is the public name
+       * of the stick, brand or article (or the label of the suggestion), never
+       * what was typed.
+       */
+      name: 'select_search_result';
+      resultType: 'stick' | 'merk' | 'kennisbank' | 'stickwijzer' | 'popular_suggestion';
+      itemName: string;
     }
   | AdviceAnalyticsEvent;
