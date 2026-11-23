@@ -1,22 +1,26 @@
 export type RetailerId = 'bolcom' | 'passasports' | 'plutosport' | 'hockeycity' | 'daka';
 
-/** Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert. */
-export type RetailerPlacement =
-  | 'stickwijzer'
-  | 'productpagina'
-  | 'catalogus'
-  | 'vergelijk'
-  | 'zaalkeuze'
-  /** Hockey shoes (decision log 2026-11-01): model page, overview, shoe advice. */
-  | 'schoenpagina'
-  | 'schoenencatalogus'
-  | 'schoenwijzer'
-  /** The yearly Black Friday page /black-friday-hockey (decision log 2026-11-10). */
-  | 'blackfriday'
-  /** A series comparison under /vergelijk/<reeks> (decision log 2026-11-22). */
-  | 'versus'
-  /** The shop prices in a knowledge article (decision log 2026-11-22). */
-  | 'artikel';
+/**
+ * Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert.
+ * A list, not only a type, because the redirect /go/<shop>/<placement> checks it at run time
+ * (decision log 2026-11-24). Newer places: shoes (2026-11-01: model page, overview, advice),
+ * 'blackfriday' (the yearly page /black-friday-hockey, 2026-11-10), 'versus' (a series
+ * comparison, 2026-11-22) and 'artikel' (shop prices in a knowledge article, 2026-11-22).
+ */
+export const RETAILER_PLACEMENTS = [
+  'stickwijzer',
+  'productpagina',
+  'catalogus',
+  'vergelijk',
+  'zaalkeuze',
+  'schoenpagina',
+  'schoenencatalogus',
+  'schoenwijzer',
+  'blackfriday',
+  'versus',
+  'artikel',
+] as const;
+export type RetailerPlacement = (typeof RETAILER_PLACEMENTS)[number];
 
 /**
  * bol.com Partnerprogramma site ID of jouwhockeystick.nl. Not a secret — it is

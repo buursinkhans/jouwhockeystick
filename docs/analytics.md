@@ -70,6 +70,19 @@ Drie nieuwe delen in het wekelijkse Conversie-rapport, elk met "deze week", "vor
 - **Omzet via zoeken:** het rapport telt winkelkliks (`fromSearch`), geen bestellingen. De netwerken geven aantallen per sub-ID (de plek, hier `productpagina`), niet per bron. Bestellingen via zoeken zijn dus niet los te zien; zie "Van klik naar omzet".
 - **Ontbrekende data:** kan PostHog een van de drie delen niet beantwoorden, dan staat er "PostHog kon dit deze week niet beantwoorden" en gaat de rest van het rapport door.
 
+## Bots uit de affiliatekliks: de route /go/ (2026-11-24)
+
+Elke winkelknop (product en actiepagina) linkt naar `/go/<winkel>/<plek>?r=<pad>` in plaats van rechtstreeks naar het partnernetwerk. De route (`src/app/go/[retailer]/[placement]/route.ts`) stuurt een browser met een 302 door naar de partnerlink en weigert bots met een 403 zonder `Location`, zodat bots geen affiliatekliks maken.
+
+- **Dezelfde partnerlink:** de route roept dezelfde functies aan als voorheen (`RETAILERS[x].getUrl`, `shopPageTrackingUrl`). Een test vergelijkt voor elke aanbieding in de catalogus, stick en schoen, dat de link na het doorsturen gelijk is aan de oude directe link.
+- **Geen open redirect:** de host staat per winkel vast in `GO_SHOP_HOSTS`. De URL bevat alleen een pad op die host. Een onbekende winkel, plek, soort of pad, en een zoekpagina of niet-productpagina bij de winkels die dat weigeren, geven 404.
+- **Bots:** `src/lib/botDetect.ts` herkent op user-agent: een lege of te korte user-agent, zoekmachines (ook Googlebot en bingbot), SEO-tools, AI-crawlers, linkpreview-bots, headless browsers en gewone scripts. Echte browsers, ook de in-app browsers van Instagram, Facebook, TikTok, Pinterest en LinkedIn, gaan door (test). Een HEAD-verzoek krijgt een 405. Bewust geen `Sec-Fetch-Site`-controle (besluit eigenaar): dat zou ook oudere echte browsers kunnen weigeren.
+- **Alleen /go/:** niets anders op de site kijkt naar de user-agent. Googlebot en andere zoekbots zien alle pagina's als altijd; `robots.txt` sluit `/go/` naast `/aanbod/`.
+- **Geen cache en geen index:** elk antwoord heeft `Cache-Control: no-store` en `X-Robots-Tag: noindex, nofollow`; de route is `force-dynamic`. Zonder dat kan een CDN een 403 of 302 per URL bewaren en aan de volgende bezoeker geven.
+- **Wat het niet doet:** een bot die zich als gewone Chrome voordoet, komt erdoor. Het aantal geblokkeerde verzoeken is zonder nieuwe gegevensstroom niet te tellen (Netlify's functielogs zijn niet via een API te lezen); een server-event naar PostHog zou dat tellen maar is een nieuwe gegevensstroom met privacyimpact en staat als vervolgstap in de decision log.
+- **Meten:** `retailer_click` blijft zoals het was (het event komt uit de browser, bij de klik). Of er minder bots meetellen, zie je in de cijfers van de netwerken van de eerste weken, niet in PostHog.
+- **Kosten:** de route draait als Netlify-function: elke klik is één aanroep. Met `Disallow: /go/` bellen nette bots de route niet aan.
+
 ## Eigen verkeer uitsluiten
 
 Open de site eenmaal op elk eigen apparaat met `?intern=aan`, bijvoorbeeld `https://jouwhockeystick.nl/?intern=aan`. Vanaf dan stuurt die browser geen PostHog-metingen en geen funnel-events meer. `?intern=uit` zet het weer terug. Code: `src/lib/analytics/internal.ts`.

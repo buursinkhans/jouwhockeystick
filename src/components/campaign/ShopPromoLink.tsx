@@ -2,7 +2,8 @@
 
 import type { ReactNode } from 'react';
 import { trackEvent } from '@/lib/analytics/track';
-import { RETAILERS, shopPageTrackingUrl, type RetailerId, type RetailerPlacement } from '@/lib/retailers';
+import { RETAILERS, type RetailerId, type RetailerPlacement } from '@/lib/retailers';
+import { promoHref } from '@/lib/goLink';
 import { buttonBaseClasses, buttonVariantClasses } from '@/components/ui/Button';
 
 /**
@@ -21,7 +22,8 @@ export function ShopPromoLink({
   placement: RetailerPlacement;
   children: ReactNode;
 }) {
-  const href = shopPageTrackingUrl(retailer, url, placement);
+  // Through /go/ like the product buttons: bots do not click action pages either (decision log 2026-11-24).
+  const href = promoHref(retailer, url, placement);
   if (!href) return null;
   return (
     <a

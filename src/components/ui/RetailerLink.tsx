@@ -1,11 +1,8 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import {
-  RETAILERS,
-  type RetailerId,
-  type RetailerPlacement,
-} from '@/lib/retailers';
+import type { RetailerId, RetailerPlacement } from '@/lib/retailers';
+import { retailerHref } from '@/lib/goLink';
 import { useAdviceClick } from '@/lib/analytics/adviceContext';
 import { useVersusReeks } from '@/lib/analytics/versusContext';
 import { isFromSearch } from '@/lib/analytics/searchContext';
@@ -43,12 +40,8 @@ export function RetailerLink({
 }: Props) {
   const advice = useAdviceClick();
   const versusReeks = useVersusReeks();
-  const url = RETAILERS[retailer].getUrl({
-    productName,
-    brand,
-    placement,
-    productUrl,
-  });
+  // The button links to our own /go/ route, which sends a browser on to the partner link and refuses bots (decision log 2026-11-24).
+  const url = retailerHref({ retailer, brand, productName, placement, productUrl });
 
   if (!url) {
     return null;

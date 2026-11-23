@@ -7,7 +7,9 @@ export default function robots(): MetadataRoute.Robots {
     // itself; blocking it here would stop crawlers from ever seeing that tag.
     // /aanbod holds the feed-imported sticks (noindex): closed to crawlers so
     // Google does not spend its crawl budget on them (decision log 2026-10-23).
-    rules: { userAgent: '*', allow: '/', disallow: '/aanbod/' },
+    // /go/ is the redirect behind every shop button (decision log 2026-11-24): bots get a 403 there,
+    // and well-behaved crawlers are asked not to come at all.
+    rules: { userAgent: '*', allow: '/', disallow: ['/aanbod/', '/go/'] },
     sitemap: absoluteUrl('/sitemap.xml'),
   };
 }
