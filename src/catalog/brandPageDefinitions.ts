@@ -5,7 +5,7 @@
  * (src/seo/indexnow.ts).
  *
  * Batch 1, chosen by the owner on 2026-11-22: Grays, Brabo, Princess, JDH and
- * Osaka. JDH and Osaka follow in a second PR.
+ * Osaka. Grays, Brabo and Princess came first; JDH and Osaka followed in a second PR.
  */
 export type BrandPageDefinition = {
   /** The URL: /merken/<slug>. */
@@ -18,6 +18,8 @@ export const BRAND_PAGES: readonly BrandPageDefinition[] = [
   { slug: 'grays', brand: 'Grays' },
   { slug: 'brabo', brand: 'Brabo' },
   { slug: 'princess', brand: 'Princess' },
+  { slug: 'jdh', brand: 'JDH' },
+  { slug: 'osaka', brand: 'Osaka' },
 ];
 
 export const brandPagePath = (slug: string) => `/merken/${slug}`;

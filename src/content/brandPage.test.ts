@@ -136,14 +136,16 @@ describe('sitemap, IndexNow and links (brand pages)', () => {
   it('/merken links to a brand page next to each profile that has one', async () => {
     const html = renderToStaticMarkup(createElement(MerkenPage));
     for (const b of BRAND_PAGES) expect(html).toContain(`href="${brandPagePath(b.slug)}"`);
-    expect(html).not.toContain('href="/merken/jdh"');
+    expect(html).not.toContain('href="/merken/adidas"');
   });
 
   it('a stick page links its brand label to the brand page; a brand without a page has no link', () => {
     const jb10 = renderToStaticMarkup(createElement(ProductDetail, { product: getProductBySlug('grays-jb10-composite')! }));
     expect(jb10).toContain('href="/merken/grays"');
     const jdh = renderToStaticMarkup(createElement(ProductDetail, { product: getProductBySlug('jdh-x93-pro-bow')! }));
-    expect(jdh).not.toContain('href="/merken/jdh"');
+    expect(jdh).toContain('href="/merken/jdh"');
+    const adidas = renderToStaticMarkup(createElement(ProductDetail, { product: getProductBySlug('adidas-estro-4')! }));
+    expect(adidas).not.toContain('href="/merken/adidas"');
   });
 
   it('the Grays series pages link to the Grays brand page', async () => {
