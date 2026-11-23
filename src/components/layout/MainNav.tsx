@@ -61,7 +61,7 @@ export function MainNav({ links }: { links: NavLink[] }) {
                   href={link.href}
                   aria-current={active ? 'page' : undefined}
                   onClick={() => setOpen(false)}
-                  className={`flex min-h-11 items-center rounded-lg px-3 text-base font-semibold transition-colors lg:px-2.5 lg:text-sm ${
+                  className={`flex min-h-11 items-center rounded-lg px-3 text-base font-semibold transition-colors lg:px-2 lg:text-sm ${
                     // Fase 7: quiet links, the current page in field blue with a mist fill.
                     active
                       ? 'bg-mist text-veld'

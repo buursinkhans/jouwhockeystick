@@ -226,7 +226,7 @@ export function SiteSearch() {
         aria-label="Zoeken (Ctrl of Cmd + K)"
         aria-haspopup="dialog"
         title="Zoeken (Ctrl + K)"
-        className="order-1 inline-flex h-11 w-10 shrink-0 items-center justify-center rounded-full border border-rand text-inkt hover:bg-krijt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-veld sm:w-11 lg:order-9"
+        className="order-1 inline-flex h-11 w-10 shrink-0 items-center justify-center rounded-full border border-rand text-inkt hover:bg-krijt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-veld sm:w-11 lg:order-9 lg:w-10"
       >
         <SearchIcon />
       </button>
@@ -243,7 +243,7 @@ export function SiteSearch() {
           // A click on the dim background (the dialog element itself, outside the panel) closes it.
           if (event.target === dialogRef.current) close();
         }}
-        className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none bg-white p-0 text-inkt backdrop:bg-black/40 sm:inset-x-0 sm:top-[8vh] sm:mx-auto sm:h-auto sm:max-h-[80vh] sm:max-w-2xl sm:rounded-2xl sm:shadow-xl"
+        className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none bg-white p-0 text-inkt backdrop:bg-black/40 sm:inset-x-0 sm:bottom-auto sm:top-[8vh] sm:mx-auto sm:h-auto sm:max-h-[80vh] sm:max-w-2xl sm:rounded-2xl sm:shadow-xl"
       >
         {(
           <div className="flex h-dvh flex-col sm:h-auto sm:max-h-[80vh]">

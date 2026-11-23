@@ -67,26 +67,33 @@ export function Header() {
       <IndependenceBar />
       {/* Sticky with a light blur, so the main action stays one tap away while scrolling. */}
       <header className="sticky top-0 z-40 border-b border-rand/70 bg-white/90 shadow-header backdrop-blur-md supports-[backdrop-filter]:bg-white/80 print:static print:hidden">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-1.5 gap-y-2 px-4 py-2.5 sm:gap-x-4 sm:px-6 lg:py-3">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-1.5 gap-y-2 px-4 py-2.5 sm:gap-x-4 sm:px-6 lg:gap-x-2 lg:py-3">
           {/*
-           * Lockup: 40 px icon on desktop. On mobile 26 px instead of the 32 px
-           * from merkinstructie §6, so logo, Stickwijzer button and menu button
-           * fit on one row down to 360 px; the wordmark stays above the 140 px
-           * minimum (§4.1). Below 360 px only icon + "Stickadvies".
+           * Lockup: 40 px icon on a tablet. From the full menu width (lg) 36 px,
+           * because the search button joined the row and the Stickwijzer button
+           * dropped to a second row on a 1024 px window with a scrollbar
+           * (measured 2026-11-24). On mobile 26 px instead of the 32 px from
+           * merkinstructie §6; the wordmark stays above the 140 px minimum
+           * (§4.1). Below 420 px icon + "Stickadvies" (from 370 px, in a smaller
+           * size), below 370 px only the icon: with the search button the row
+           * needs 340 px at 375 px and would wrap on 360 px.
            */}
-          <span className="mr-auto hidden sm:inline-flex">
+          <span className="mr-auto hidden sm:inline-flex lg:hidden">
             <Logo variant="lockup" size={40} />
           </span>
-          <span className="mr-auto hidden min-[360px]:inline-flex sm:hidden">
+          <span className="mr-auto hidden lg:inline-flex">
+            <Logo variant="lockup" size={36} />
+          </span>
+          <span className="mr-auto hidden min-[420px]:inline-flex sm:hidden">
             <Logo variant="lockup" size={26} />
           </span>
           <Link
             href="/"
             aria-label="jouwhockeystick.nl – naar home"
-            className="jhs-wordmark mr-auto flex items-center gap-2 text-xl min-[360px]:hidden"
+            className="jhs-wordmark mr-auto flex items-center gap-2 text-lg min-[420px]:hidden"
           >
             <LogoIcon size={32} />
-            <span aria-hidden="true">Stickadvies</span>
+            <span aria-hidden="true" className="hidden min-[370px]:inline">Stickadvies</span>
           </Link>
           <MainNav links={NAV_LINKS} />
           <SiteSearch />
