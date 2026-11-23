@@ -9,10 +9,20 @@
  * visitor who comes back on three days counts three times.
  */
 
-export type Period = { start: string; end: string };
+import { change, countOf, countRows, percent, rate, sum, table, type Count } from './counts';
+import {
+  brandPagesSection,
+  siteSearchSection,
+  siteSearchSignals,
+  versusSection,
+  type BrandPagesData,
+  type SiteSearchData,
+  type VersusData,
+} from './siteSections';
 
-/** One breakdown value with its count this week and the week before. */
-export type Count = { key: string; now: number; before: number };
+export { countOf, rate, sum, type Count };
+
+export type Period = { start: string; end: string };
 
 export type ConversionData = {
   current: Period;
@@ -67,6 +77,12 @@ export type ConversionData = {
    * (docs/marketing/weekrapport.md). Undefined when PostHog could not answer.
    */
   socialCampaigns?: { visits: Count[]; starts: Count[]; compare: Count[]; clicks: Count[] };
+  /** The search in the header (2026-11-24). Undefined when PostHog could not answer. */
+  siteSearch?: SiteSearchData;
+  /** The brand pages under /merken/<merk> (2026-11-23). Undefined when PostHog could not answer. */
+  brandPages?: BrandPagesData;
+  /** The series comparison pages under /vergelijk/<reeks> (2026-11-22). Undefined when PostHog could not answer. */
+  versus?: VersusData;
   /** `home_block_click` per "block → target". */
   homeBlocks: Count[];
   deadClicksByPage: Count[];
@@ -94,8 +110,6 @@ export const THRESHOLDS = {
   /** Stick pages with at least this many views and no click to a shop. */
   stickPageViews: 30,
 };
-
-const LIST_LIMIT = 10;
 
 /**
  * Short utm_source values the apps add themselves (Instagram tags its bio
@@ -283,45 +297,6 @@ const NO_MATCH_LABELS: Record<string, string> = {
   budget: 'Geen match: budget',
 };
 
-export function countOf(counts: Count[], key: string): Count {
-  return counts.find((count) => count.key === key) ?? { key, now: 0, before: 0 };
-}
-
-export function sum(counts: Count[]): { now: number; before: number } {
-  return counts.reduce(
-    (total, count) => ({ now: total.now + count.now, before: total.before + count.before }),
-    { now: 0, before: 0 },
-  );
-}
-
-export function rate(part: number, whole: number): number | null {
-  return whole > 0 ? part / whole : null;
-}
-
-function percent(value: number | null): string {
-  return value === null ? '–' : `${Math.round(value * 100)}%`;
-}
-
-function change(now: number, before: number): string {
-  if (before === 0) return now === 0 ? '–' : 'nieuw';
-  const delta = (now - before) / before;
-  const rounded = Math.round(delta * 100);
-  return `${rounded > 0 ? '+' : ''}${rounded}%`;
-}
-
-function cell(value: string): string {
-  return value.replace(/\|/g, '\\|').replace(/\n/g, ' ');
-}
-
-function table(header: string[], rows: string[][]): string {
-  if (rows.length === 0) return '_Geen data._';
-  return [
-    `| ${header.join(' | ')} |`,
-    `| ${header.map((_, index) => (index === 0 ? '---' : '---:')).join(' | ')} |`,
-    ...rows.map((row) => `| ${row.map(cell).join(' | ')} |`),
-  ].join('\n');
-}
-
 /** Clicks per advised stick role and place; nothing while no click carries a role yet. */
 function adviceRoleSection(counts: Count[] | undefined): string[] {
   const rows = (counts ?? []).filter((c) => c.key !== '');
@@ -332,13 +307,6 @@ function adviceRoleSection(counts: Count[] | undefined): string[] {
     table(['Rol · plek', 'Deze week', 'Vorige week', 'Verschil'], countRows(rows)),
     '',
   ];
-}
-
-function countRows(counts: Count[], label = (key: string) => key): string[][] {
-  return [...counts]
-    .sort((a, b) => b.now - a.now || b.before - a.before)
-    .slice(0, LIST_LIMIT)
-    .map((count) => [label(count.key || '(onbekend)'), String(count.now), String(count.before), change(count.now, count.before)]);
 }
 
 /**
@@ -416,6 +384,8 @@ export function signals(data: ConversionData, stepOrder: string[]): string[] {
   if (helpful + notHelpful >= THRESHOLDS.minFeedback && notHelpful > helpful) {
     found.push(`**Meer "niet nuttig" dan "nuttig"** bij het advies: ${notHelpful} tegen ${helpful}.`);
   }
+
+  found.push(...siteSearchSignals(data.siteSearch));
 
   const search = countOf(data.clicksByLinkType, 'search').now;
   if (search > 0) {
@@ -578,6 +548,18 @@ export function formatReport(
     '',
     ...adviceRoleSection(data.clicksByAdviceRole),
     `Linktype: ${countOf(data.clicksByLinkType, 'product').now} naar een productpagina, ${countOf(data.clicksByLinkType, 'search').now} naar een zoekopdracht.`,
+    '',
+    '## Zoeken in de header',
+    '',
+    ...siteSearchSection(data.siteSearch, clicks),
+    '',
+    "## Merkpagina's",
+    '',
+    ...brandPagesSection(data.brandPages),
+    '',
+    "## Reekspagina's (vergelijken)",
+    '',
+    ...versusSection(data.versus),
     '',
     '## Meest bekeken pagina\'s (top 10)',
     '',
