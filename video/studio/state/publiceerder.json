@@ -929,7 +929,7 @@
     "videos/20261108-zaalstick-3-dingen": {
       "render": {
         "gestart": "2026-11-23T23:11:03Z",
-        "klaar": "2026-11-23T23:12:55Z"
+        "klaar": "2026-11-23T23:13:22Z"
       },
       "media": {
         "reel": {
@@ -949,7 +949,18 @@
           "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261108-zaalstick-3-dingen-short-cover.png"
         }
       },
-      "fout": null
+      "fout": null,
+      "kanalen": {
+        "reels": {
+          "bezig": "2026-11-23T23:13:22Z"
+        },
+        "shorts": {
+          "bezig": "2026-11-23T23:13:22Z"
+        },
+        "tiktok": {
+          "bezig": "2026-11-23T23:13:22Z"
+        }
+      }
     }
   },
   "laatsteRun": "2026-11-23T23:10:17Z",
@@ -958,7 +969,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "bd1365ae-a660-4749-825a-be9e52bf0db5",
+  "wijziging": "b5babfe1-c51e-40db-a68a-26f5bae1a414",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
