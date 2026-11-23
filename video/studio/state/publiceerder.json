@@ -925,6 +925,12 @@
     },
     "posts/20261210-geschiedenis-winkeltermen": {
       "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
+    },
+    "videos/20261108-zaalstick-3-dingen": {
+      "render": {
+        "gestart": "2026-11-23T23:11:03Z"
+      },
+      "fout": null
     }
   },
   "laatsteRun": "2026-11-23T23:10:17Z",
@@ -933,7 +939,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "7f803527-4189-45ba-b152-6fab46963785",
+  "wijziging": "fee0a38a-4e6b-4166-a1a2-9496bc7ffb44",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
