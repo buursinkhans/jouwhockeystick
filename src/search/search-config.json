@@ -1,0 +1,19 @@
+{
+  "_uitleg": "Beheer van de zoekfunctie in de header. Zie docs/spec/zoeken.md voor de handleiding. Alleen kleine letters en geen leestekens in de woorden hieronder. Na een wijziging draait de test (npm test) en controleert die of alles nog klopt.",
+  "popular": [
+    { "label": "Grays JB10", "query": "grays jb10" },
+    { "label": "Osaka Futurelab", "query": "osaka futurelab" },
+    { "label": "Indian Maharadja", "query": "maharadja" },
+    { "label": "JDH X93", "query": "jdh x93" },
+    { "label": "Carbon in een hockeystick", "query": "carbon" }
+  ],
+  "synonyms": [
+    { "terms": ["maharadja", "maharaja"] },
+    { "terms": ["junior", "kinderen", "jeugd"] },
+    { "terms": ["indoor", "zaalhockey"] }
+  ],
+  "corrections": {
+    "maharaja": "maharadja",
+    "maharadia": "maharadja"
+  }
+}
