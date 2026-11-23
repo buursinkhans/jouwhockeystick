@@ -3419,3 +3419,13 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Risico's:** het profiel staat dubbel (op `/merken` en op de merkpagina); concurrentie met de stickpagina's en de reekspagina's op dezelfde merktermen; Princess is vooral een juniorpagina.
 - **Bewust niet:** geen nieuwe merkfeiten, geen ranking van sticks, geen winkelknoppen op de merkpagina, geen feedsticks in de tabellen, geen homepageblok of menuwijziging.
 - **Betrokken bestanden:** `src/catalog/{brandPageDefinitions,brandPages}.ts`, `src/content/brandPage.ts`, `src/app/merken/[merk]/page.tsx`, `src/components/brand/{BrandStickTable,BrandProfile,BrandTracking}.tsx`, `src/app/merken/page.tsx`, `src/components/catalog/ProductDetail.tsx`, `src/content/series.ts`, `src/app/sitemap.ts`, `src/seo/indexnow.ts`, `src/lib/analytics/events.ts`, `src/content/articles/veldstick-zaalhockey.ts` en de tests.
+
+## 2026-11-23 — Merkpagina's: tweede deel (JDH en Osaka)
+
+- **Wat:** `/merken/jdh` en `/merken/osaka`, met dezelfde opbouw, poort en teksten als Grays, Brabo en Princess (decision log hierboven). Alleen de twee regels in `src/catalog/brandPageDefinitions.ts` zijn nieuw; sitemap, IndexNow, merklabel op de stickpagina en de link op `/merken` volgen vanzelf uit de lijst.
+- **Bij de huidige catalogus:** JDH 5 sticks in één tabel (4 veld volwassenen, 1 junior onder "Overige modellen"), 3 niveaus en 3 bows. Osaka 5 sticks (4 veld volwassenen in de tabel, 1 junior zaalstick onder "Overige modellen"), 3 niveaus en 3 bows, en drie sticks onder "Nog niet in de tabel" met de reden per stick.
+- **Osaka, besluit eigenaar:** de pagina gaat live met de bron "Partnerwinkel" zichtbaar in de tabel. Drie van de vijf Osaka-sticks (Midbow 10, Futurelab 40 Probow, Futurelab 70 Lowbow) hebben specs uit de productomschrijving van PassaHockey, niet van de merksite (osakaworld.com gaf bij elke poging HTTP 429). Controle van osakaworld.com rond 2027-01-23 (twee maanden); dan gaan de bronnen waar mogelijk naar `brand-website`. Herinnering staat als issue met het label `herinnering`.
+- **JDH:** twee sticks hebben een actuele winkelprijs; de rest toont de richtprijs met bron, zoals bij elke merkpagina.
+- **Test:** de lijst met vijf merken, JDH en Osaka in één veldgroep, de bron "Partnerwinkel" bij de drie Osaka-sticks uit de feed, en het merklabel op de stickpagina van JDH (wel link) en adidas (geen link, geen pagina).
+- **Bewust niet:** geen nieuwe merkfeiten, geen Stag (niet betrouwbaar uit te breiden, besluit 2026-11-22), geen aanpassing van poort of tekst.
+- **Betrokken bestanden:** `src/catalog/brandPageDefinitions.ts` en de tests `src/catalog/brandPages.test.ts` en `src/content/brandPage.test.ts`.

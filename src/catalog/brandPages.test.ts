@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getProductBySlug } from '@/catalog';
+import { specSource } from '@/components/brand/BrandStickTable';
 import {
   BRAND_PAGES,
   MIN_GROUP,
@@ -99,14 +100,16 @@ describe('the gate against thin brand pages', () => {
 });
 
 describe('the brand pages in the catalog today', () => {
-  it('has the three brands of the first PR, all indexable', () => {
-    expect(BRAND_PAGES.map((b) => b.slug)).toEqual(['grays', 'brabo', 'princess']);
-    expect(indexableBrandPages().map((e) => e.definition.slug)).toEqual(['grays', 'brabo', 'princess']);
+  it('has the five brands of batch 1, all indexable', () => {
+    expect(BRAND_PAGES.map((b) => b.slug)).toEqual(['grays', 'brabo', 'princess', 'jdh', 'osaka']);
+    expect(indexableBrandPages().map((e) => e.definition.slug)).toEqual(['grays', 'brabo', 'princess', 'jdh', 'osaka']);
   });
 
-  it('has no page for a brand that is not in the list (JDH and Osaka follow in the second PR)', () => {
-    expect(brandPageOf('JDH')).toBeUndefined();
-    expect(brandPageOf('Osaka')).toBeUndefined();
+  it('has no page for a brand that is not in the list, and one for JDH and Osaka', () => {
+    expect(brandPageOf('Stag')).toBeUndefined();
+    expect(brandPageOf('adidas')).toBeUndefined();
+    expect(brandPageOf('JDH')?.definition.slug).toBe('jdh');
+    expect(brandPageOf('Osaka')?.definition.slug).toBe('osaka');
   });
 
   it('puts Grays in three groups, Brabo in one and Princess mostly junior', () => {
@@ -115,6 +118,21 @@ describe('the brand pages in the catalog today', () => {
     expect(byBrand['brabo']!.groups.map((g) => g.key)).toEqual(['veld-senior']);
     expect(byBrand['princess']!.groups.map((g) => g.key)).toEqual(['veld-junior']);
     expect(byBrand['princess']!.others.length).toBeGreaterThan(0);
+  });
+
+  it('puts JDH and Osaka in one senior field group each, with the junior sticks under the others', () => {
+    for (const slug of ['jdh', 'osaka']) {
+      const e = evaluateBrandPage(BRAND_PAGES.find((b) => b.slug === slug)!);
+      expect(e.groups.map((g) => g.key)).toEqual(['veld-senior']);
+      expect(e.others.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('shows the partner shop as the source of the three Osaka sticks that came from the feed, until osakaworld.com has been checked (about 2027-01-23)', () => {
+    const e = evaluateBrandPage(BRAND_PAGES.find((b) => b.slug === 'osaka')!);
+    const fromFeed = e.sticks.filter((s) => /stk00(262|239|400)/.test(s.slug));
+    expect(fromFeed).toHaveLength(3);
+    for (const p of fromFeed) expect(specSource(p)).toBe('Partnerwinkel');
   });
 
   it('lists the sticks with a gap with the reason, and never has a feed stick in a table', () => {
