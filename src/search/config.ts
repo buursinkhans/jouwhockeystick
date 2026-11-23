@@ -27,6 +27,20 @@ const searchConfigSchema = z.object({
   synonyms: z.array(z.object({ terms: z.array(word).min(2) })),
   /** A usual misspelling or spelling variant, replaced by the spelling the catalog uses. */
   corrections: z.record(z.string(), z.string()),
+  /**
+   * A short answer above the results for a knowledge question (carbon, beginner,
+   * length, size, low bow). Shown when the search holds one of the `terms` and no
+   * stick matches by name; `article` is the slug of the knowledge article the link goes to.
+   */
+  answers: z.array(
+    z.object({
+      terms: z.array(word).min(1),
+      text: z.string().min(40).max(320),
+      article: z.string().regex(/^[a-z0-9-]+$/),
+    }),
+  ),
+  /** General words for which the search gently points at the stickwijzer (kind, junior, beginner, advice, size). */
+  stickwijzer: z.object({ terms: z.array(word).min(1) }),
 });
 
 export type SearchConfig = z.infer<typeof searchConfigSchema>;

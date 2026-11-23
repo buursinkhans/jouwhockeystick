@@ -33,6 +33,7 @@ import { nextOpenQuestion } from '@/content/stickwijzer/flow';
 import { answersFromSearch } from '@/content/stickwijzer/prefill';
 import { EXTRA_QUESTIONS_HEADING } from '@/content/stickwijzer/quick';
 import { Button } from '@/components/ui/Button';
+import { clearStickwijzerFromSearch, stickwijzerFromSearch } from '@/lib/analytics/searchContext';
 import { QuestionField, type AnswerValue } from './QuestionField';
 import { QuizResult } from './QuizResult';
 import { ROUTE_OPTION_ICONS, SCREEN_ICONS } from './stickwijzerIcons';
@@ -299,7 +300,7 @@ export function QuizForm() {
     if (!activeSessionId) {
       activeSessionId = newSessionId();
       setSessionId(activeSessionId);
-      trackEvent({ name: 'quiz_start', quiz: 'stick' });
+      trackEvent({ name: 'quiz_start', quiz: 'stick', ...(stickwijzerFromSearch() && { source: 'search' as const }) });
       track('advice_started', activeSessionId);
     }
     if (
@@ -370,9 +371,12 @@ export function QuizForm() {
         result.advice.results.map((item) => item.product.slug),
       ),
     );
+    const fromSearch = stickwijzerFromSearch();
+    clearStickwijzerFromSearch();
     trackEvent({
       name: 'quiz_complete',
       quiz: 'stick',
+      ...(fromSearch && { source: 'search' as const }),
       ruleSetVersion: result.advice.ruleSetVersion,
       hasRecommendation: result.advice.results.length > 0,
       isUncertain: result.advice.isUncertain,

@@ -15,5 +15,35 @@
   "corrections": {
     "maharaja": "maharadja",
     "maharadia": "maharadja"
+  },
+  "answers": [
+    {
+      "terms": ["carbon"],
+      "text": "Voor beginners en jonge kinderen is 0 tot 30% carbon meestal genoeg, veel clubhockeyers zitten rond de 50%. Meer carbon maakt een stick stijver; of dat bij je past, hangt af van je techniek en wat je prettig vindt.",
+      "article": "meer-carbon-hockeystick-beter"
+    },
+    {
+      "terms": ["beginner", "beginners"],
+      "text": "Voor een kind of beginner werkt een eenvoudige stick meestal het best: de juiste lengte, een rustig profiel zoals een standaard- of mid bow en weinig of geen carbon.",
+      "article": "hockeystick-kinderen-en-beginners"
+    },
+    {
+      "terms": ["lengte"],
+      "text": "Meet je lichaamslengte zonder schoenen en zoek die op in de tabel. Twijfel je tussen twee maten, dan helpt de uitleg in het artikel.",
+      "article": "hockeystick-lengte-tabel"
+    },
+    {
+      "terms": ["maat"],
+      "text": "De maat van een hockeystick kies je op je lichaamslengte, zonder schoenen gemeten. De tabel geeft per lengte een richtmaat in inches.",
+      "article": "hockeystick-lengte-tabel"
+    },
+    {
+      "terms": ["lowbow"],
+      "text": "Bij een low bow zit de kromming lager, dichter bij de krul. Daarmee kom je makkelijker onder de bal voor lifts en 3D-acties, maar de aanname vraagt meer techniek. Een mid bow is rustiger.",
+      "article": "low-bow-vs-mid-bow"
+    }
+  ],
+  "stickwijzer": {
+    "terms": ["kind", "kinderen", "junior", "beginner", "beginners", "advies", "maat", "eerste"]
   }
 }
