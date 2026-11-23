@@ -12,6 +12,7 @@
 import { writeFileSync } from 'node:fs';
 import type { z } from 'zod';
 import { sourceLabel } from '../src/analytics-report/conversion';
+import { collectBrandPages, collectSiteSearch, collectVersus, total, type QueryContext } from '../src/analytics-report/siteSections';
 import { BOT_PATTERN, hogql, LIVE_HOSTS, readPosthogConfig } from '../src/analytics-report/hogql';
 import { dayRows, redact, registeredSite, SitesAnswer, TrafficAnswer } from '../src/marketing/bingReport';
 import {
@@ -47,6 +48,52 @@ const amsterdamToday = () => new Date().toLocaleDateString('sv-SE', { timeZone: 
 const shift = (date: string, days: number) => isoDay(Date.parse(`${date}T00:00:00Z`) + days * DAY_MS);
 const num = (v: unknown) => (typeof v === 'number' ? v : Number(v) || 0);
 const why = (e: unknown) => (e instanceof Error ? e.message : 'onbekende fout');
+
+/** Events from the live site only, no bots (the same filter as the weekly report). */
+const LIVE_FILTER = [
+  `properties.$host IN (${LIVE_HOSTS.map((h) => `'${h}'`).join(', ')})`,
+  `NOT match(coalesce(toString(properties.$raw_user_agent), ''), '${BOT_PATTERN}')`,
+].join(' AND ');
+
+/**
+ * The tab "Conversie": the last 7 Amsterdam days (ending yesterday) against the 7
+ * before, with the same queries as the weekly Conversie-rapport
+ * (src/analytics-report/siteSections.ts). Its own source: when it fails the
+ * other figures still go through.
+ */
+async function conversie(yesterday: string): Promise<Dagcijfers['conversie']> {
+  try {
+    const config = readPosthogConfig();
+    const at = (date: string) => `toDateTime('${date} 00:00:00', '${TZ}')`;
+    const nowStart = shift(yesterday, -6);
+    const beforeStart = shift(yesterday, -13);
+    const ctx: QueryContext = {
+      run: (query) => hogql(config, query, 'dagcijfers-conversie'),
+      baseFilter: `timestamp >= ${at(beforeStart)} AND timestamp < ${at(shift(yesterday, 1))} AND ${LIVE_FILTER}`,
+      isNow: `timestamp >= ${at(nowStart)}`,
+    };
+    // Sequential on purpose: PostHog allows only a few concurrent queries.
+    const stand = {
+      bezoekers: await total(ctx, '$pageview', 'visitors'),
+      wijzerStart: await total(ctx, 'advice_started', 'visitors'),
+      klikkers: await total(ctx, 'retailer_click', 'visitors'),
+      winkelklikken: await total(ctx, 'retailer_click'),
+    };
+    return {
+      ok: true,
+      value: {
+        periode: { start: nowStart, end: yesterday },
+        vorige: { start: beforeStart, end: shift(nowStart, -1) },
+        stand,
+        zoeken: await collectSiteSearch(ctx),
+        merken: await collectBrandPages(ctx),
+        reeksen: await collectVersus(ctx),
+      },
+    };
+  } catch (e) {
+    return { ok: false, reden: `Conversie: ${why(e)}` };
+  }
+}
 
 async function posthog(yesterday: string): Promise<Dagcijfers['posthog']> {
   try {
@@ -237,6 +284,7 @@ async function main() {
     posthog: await posthog(shift(today, -1)),
     google: await google(today),
     bing: await bing(),
+    conversie: await conversie(shift(today, -1)),
   };
   Dagcijfers.parse(out);
   const passphrase = process.env.VERKOOP_SLEUTEL;
@@ -247,10 +295,10 @@ async function main() {
   }
   const file = { ...dagcijfersMeta(out, shift(today, -1)), versleuteld: seal(out, passphrase) };
   writeFileSync(process.argv[2] ?? 'dagcijfers.json', `${JSON.stringify(file)}\n`);
-  const failed = (['posthog', 'google', 'bing'] as const).filter((k) => !out[k].ok);
+  const failed = (['posthog', 'google', 'bing', 'conversie'] as const).filter((k) => out[k] && !out[k].ok);
   for (const k of failed) {
     const p = out[k];
-    if (!p.ok) process.stderr.write(`${p.reden}\n`);
+    if (p && !p.ok) process.stderr.write(`${p.reden}\n`);
   }
   // Exit code 2: written, but one or more sources failed (the workflow still saves the file).
   if (failed.length) process.exitCode = 2;

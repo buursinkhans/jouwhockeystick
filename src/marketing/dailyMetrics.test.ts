@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   compareLastDay,
   Dagcijfers,
+  dagcijfersMeta,
   dateRange,
   fillDays,
   lastReportedDay,
@@ -96,5 +97,61 @@ describe('Dagcijfers schema', () => {
       bing: { ok: true, value: { dagen: [], vergelijking: [] } },
     });
     expect(parsed.success).toBe(true);
+  });
+});
+
+describe('Dagcijfers: the tab Conversie', () => {
+  const w = (key: string, now: number, before = 0) => ({ key, now, before });
+  const base = {
+    versie: 1,
+    gemaakt: '2026-11-25T05:31:00Z',
+    site: 'jouwhockeystick.nl',
+    posthog: { ok: false, reden: 'x' },
+    google: { ok: false, reden: 'x' },
+    bing: { ok: false, reden: 'x' },
+  };
+  const conversie = {
+    periode: { start: '2026-11-18', end: '2026-11-24' },
+    vorige: { start: '2026-11-11', end: '2026-11-17' },
+    stand: { bezoekers: w('b', 900, 700), wijzerStart: w('w', 120, 90), klikkers: w('k', 40, 30), winkelklikken: w('c', 61, 44) },
+    zoeken: {
+      searches: w('search', 80, 0),
+      searchers: w('search', 60, 0),
+      noResults: w('search_no_results', 7, 0),
+      selections: [w('stick', 30)],
+      selectedItems: [w('stick · Grays JB 10', 9)],
+      searchersWhoClicked: w('x', 12),
+      clicksFromSearch: w('retailer_click', 14),
+      clicksFromSearchByProduct: [w('Grays JB 10', 6)],
+      wijzerStarts: w('quiz_start', 4),
+      wijzerCompletes: w('quiz_complete', 2),
+    },
+    merken: { views: [w('Grays', 25, 3)], clicks: [w('Grays', 8, 1)] },
+    reeksen: { views: [w('grays-jb-serie', 18)], clicks: [w('grays-jb-serie', 4)], clicksByRetailer: [w('grays-jb-serie · bol.com', 3)] },
+  };
+
+  it('accepts a file without it (files from before 2026-11-24) and one with it', () => {
+    expect(Dagcijfers.safeParse(base).success).toBe(true);
+    expect(Dagcijfers.safeParse({ ...base, conversie: { ok: true, value: conversie } }).success).toBe(true);
+  });
+
+  it('accepts a failed Conversie part next to working sources', () => {
+    expect(Dagcijfers.safeParse({ ...base, conversie: { ok: false, reden: 'Conversie: PostHog-query mislukt' } }).success).toBe(true);
+  });
+
+  it('rejects a malformed one: a missing period or a count without both weeks', () => {
+    const withoutPeriod: Record<string, unknown> = { ...conversie };
+    delete withoutPeriod.periode;
+    expect(Dagcijfers.safeParse({ ...base, conversie: { ok: true, value: withoutPeriod } }).success).toBe(false);
+    const broken = { ...conversie, stand: { ...conversie.stand, bezoekers: { key: 'b', now: 1 } } };
+    expect(Dagcijfers.safeParse({ ...base, conversie: { ok: true, value: broken } }).success).toBe(false);
+  });
+
+  it('keeps every figure out of the readable metadata: only the sealed part holds them', () => {
+    const full = Dagcijfers.parse({ ...base, conversie: { ok: true, value: conversie } });
+    const meta = JSON.stringify(dagcijfersMeta(full, '2026-11-24'));
+    expect(meta).not.toContain('conversie');
+    expect(meta).not.toContain('Grays');
+    expect(meta).not.toContain('900');
   });
 });

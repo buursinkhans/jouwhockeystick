@@ -41,7 +41,7 @@ export async function countBreakdown(
 }
 
 /** One count for an event (all rows added up). */
-async function total(ctx: QueryContext, event: string, unit: 'events' | 'visitors' = 'events', where?: string): Promise<Count> {
+export async function total(ctx: QueryContext, event: string, unit: 'events' | 'visitors' = 'events', where?: string): Promise<Count> {
   const rows = await countBreakdown(ctx, event, `'${event}'`, unit, where);
   return rows[0] ?? { key: event, now: 0, before: 0 };
 }
