@@ -55,7 +55,7 @@ export const HOCKEYSCHOENEN = {
       heading: 'Hockeyschoenen voor kinderen',
       question: 'Welke hockeyschoen past bij een kind dat nog groeit?',
       answer:
-        'Een passend basispaar voor het veld of de zaal waar je kind speelt. Laat de maat de keuze bepalen, niet de leeftijd, en pas met de hockeysokken die je kind echt draagt: de tenen liggen ontspannen en de hiel blijft goed zitten. Een duurder model is voor een beginnend kind niet nodig.',
+        'Een passend basispaar voor het veld of de zaal waar je dochter of zoon speelt. Laat de maat de keuze bepalen, niet de leeftijd, en pas met de hockeysokken die je kind echt draagt: de tenen liggen ontspannen en de hiel blijft goed zitten. Een duurder model is voor een beginnend kind niet nodig.',
       filterLabel: 'Bekijk de hockeyschoenen voor kinderen',
       filterHref: '/hockeyschoenen?leeftijd=junior',
       articleSlug: 'hockeyschoenen-kinderen-maat',

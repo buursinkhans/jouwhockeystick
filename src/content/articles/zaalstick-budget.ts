@@ -144,7 +144,7 @@ export const zaalstickBudget: Article = {
       level: 2,
       body: [
         'Zaalsticks van één merk op een rij, met de prijs per stick, zie je bij [Grays zaalsticks naast elkaar](/vergelijk/grays-zaalsticks).',
-        'Over de spelregels en de lengte lees je meer in [zaalhockeystick kiezen](/zaalsticks), en daar maak je ook in drie vragen een selectie op budget. Zoek je voor je kind? Lees dan [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen). Of je veldstick in de zaal volstaat, lees je in [kun je met een veldstick zaalhockeyen?](/kennis/veldstick-zaalhockey). En speel je ook op het veld, dan geeft de [stickwijzer](/stickwijzer) je persoonlijk advies, met de redenen erbij.',
+        'Over de spelregels en de lengte lees je meer in [zaalhockeystick kiezen](/zaalsticks), en daar maak je ook in drie vragen een selectie op budget. Zoek je voor je dochter of zoon? Lees dan [zaalstick voor kinderen](/kennis/zaalstick-voor-kinderen). Of je veldstick in de zaal volstaat, lees je in [kun je met een veldstick zaalhockeyen?](/kennis/veldstick-zaalhockey). En speel je ook op het veld, dan geeft de [stickwijzer](/stickwijzer) je persoonlijk advies, met de redenen erbij.',
       ],
     },
   ],

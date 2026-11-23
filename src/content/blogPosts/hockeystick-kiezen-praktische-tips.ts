@@ -23,7 +23,7 @@ export const hockeystickKiezenPraktischeTips: Article = {
       heading: '2. Een kinderstick op de groei kopen',
       level: 2,
       body: [
-        'Een maat groter, dan doet je kind er langer mee. Klinkt zuinig, maar met een te lange stick worden balcontrole en techniek een stuk lastiger. En dan is het plezier snel weg.',
+        'Een maat groter, dan doet je dochter of zoon er langer mee. Klinkt zuinig, maar met een te lange stick worden balcontrole en techniek een stuk lastiger. En dan is het plezier snel weg.',
         '**Slimmer:** kies de maat die nu past. Is die er niet, dan is één maatje korter prima. Per lichaamslengte zie je de juiste maat in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel). Meer over een eerste stick lees je in [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
       ],
     },

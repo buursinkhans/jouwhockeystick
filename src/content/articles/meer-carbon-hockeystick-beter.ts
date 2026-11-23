@@ -164,7 +164,7 @@ export const meerCarbonHockeystickBeter: Article = {
       level: 2,
       body: [
         'Een kind dat nog leert hockeyen, heeft weinig aan een stijve stick. Een model met weinig of geen carbon werkt meestal beter. Voor technisch sterke jeugdspelers worden sticks met 30 tot 50% carbon interessant, en een ervaren jeugdspeler kan ook met 70% goed uit de voeten.',
-        'Selectieniveau is op zich geen reden voor meer carbon. Speelt je kind goed met een stick van 40%, dan hoeft het niet over naar 70% omdat teamgenoten dat doen. Lengte, gewicht en hanteerbaarheid zijn bij kinderen belangrijker dan het percentage.',
+        'Selectieniveau is op zich geen reden voor meer carbon. Speelt je dochter of zoon goed met een stick van 40%, dan is een overstap naar 70% niet nodig omdat teamgenoten dat doen. Lengte, gewicht en hanteerbaarheid zijn bij kinderen belangrijker dan het percentage.',
         'Let bij het kopen op deze punten:',
         {
           type: 'list',

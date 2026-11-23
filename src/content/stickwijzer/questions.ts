@@ -73,7 +73,7 @@ export const QUESTIONS: Record<QuestionId, QuestionDef> = {
       kind: 'single',
       options: [
         { value: 'self', label: 'Voor mezelf' },
-        { value: 'child', label: 'Voor mijn kind' },
+        { value: 'child', label: 'Voor mijn dochter of zoon' },
         { value: 'other', label: 'Voor iemand anders' },
       ],
     },
