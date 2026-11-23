@@ -5,6 +5,7 @@ import type { ExperienceLevel, Product } from '@/catalog/types';
 import { RETAILERS } from '@/lib/retailers';
 import type { FaqItem } from '@/lib/faqJsonLd';
 import { euro } from './offers';
+import { brandPageOf, brandPagePath } from '@/catalog/brandPages';
 
 /**
  * The text of a series comparison (/vergelijk/<reeks>, wave 1, decision log
@@ -175,10 +176,16 @@ export function seriesReadMore(evaluation: SeriesEvaluation): { href: string; la
     { href: '/kennis/meer-carbon-hockeystick-beter', label: 'Hoeveel carbon heeft je hockeystick nodig?' },
     { href: '/kennis/hockeystick-lengte-tabel', label: 'Hockeystick lengte tabel: welke maat stick past bij jouw lengte?' },
   ];
+  // The brand page, when the brand has one that passes the gate (decision log 2026-11-23).
+  const brandPage = brandPageOf(evaluation.series.brand);
+  const brand = brandPage
+    ? [{ href: brandPagePath(brandPage.definition.slug), label: `Alle ${evaluation.series.brand}-sticks per niveau vergeleken` }]
+    : [];
   return evaluation.series.discipline === 'veld'
-    ? [{ href: '/stickwijzer', label: 'Doe de stickwijzer voor een advies op jouw spel' }, ...base]
+    ? [{ href: '/stickwijzer', label: 'Doe de stickwijzer voor een advies op jouw spel' }, ...brand, ...base]
     : [
         { href: '/zaalsticks', label: 'Zaalsticks: kies in drie vragen' },
+        ...brand,
         { href: '/kennis/veldstick-zaalhockey', label: 'Kun je met een veldstick zaalhockeyen?' },
         ...base,
       ];

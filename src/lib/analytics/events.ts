@@ -205,6 +205,23 @@ export type AnalyticsEvent =
       target: string;
     }
   | {
+      /** A brand page under /merken/<merk> was opened (decision log 2026-11-23). */
+      name: 'brand_view';
+      page: 'merk';
+      merk: string;
+    }
+  | {
+      /**
+       * A click on a stick on a brand page (2026-11-23): the path of the stick
+       * page is the target. There is no shop button on a brand page; the shop
+       * clicks happen on the stick page and count there as retailer_click.
+       */
+      name: 'brand_stick_click';
+      page: 'merk';
+      merk: string;
+      target: string;
+    }
+  | {
       /** A series comparison under /vergelijk/<reeks> was opened (wave 1, 2026-11-22). */
       name: 'versus_view';
       page: 'versus';
