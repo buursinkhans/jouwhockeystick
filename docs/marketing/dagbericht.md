@@ -48,6 +48,17 @@ Per partner (bol.com, PassaHockey, HockeyCity, Plutosport, Daka): kliks, orders,
 - Orders die de partner nog moet goedkeuren tellen mee, afgewezen orders niet. Een veld dat een netwerk niet geeft (bijvoorbeeld de orderwaarde bij bol.com of de kliks bij Daka) staat als "onbekend", nooit als 0.
 - Een andere sleutel kiezen: pas het secret aan en typ de nieuwe sleutel op het tabblad (knop "Andere sleutel").
 
+## Conversie (tabblad in de Marketingstudio, sinds 2026-11-24)
+
+Het tabblad **Conversie** toont de laatste 7 dagen (Amsterdamse dagen, tot en met gisteren) tegen de 7 dagen ervoor, voor het zoeken in de header, de merkpagina's en de reekspagina's, plus een korte stand (bezoekers per dag geteld, Stickwijzer gestart, bezoekers met een winkelklik, winkelkliks en de doorklikratio). Dezelfde cijfers staan wekelijks in het Conversie-rapport (`docs/analytics.md`, "Zoeken, merkpagina's en reekspagina's in het Conversie-rapport").
+
+- **Bron:** `scripts/daily-metrics.ts` (functie `conversie`) voegt een deel `conversie` toe aan dezelfde versleutelde `dagcijfers.json`, met de zoekopdrachten van `src/analytics-report/siteSections.ts`. Het is een eigen bron: mislukt het, dan staat het in de log (exitcode 2) en gaan de andere cijfers door. Het deel is optioneel in het schema (`Conversie` in `src/marketing/dailyMetrics.ts`): oudere bestanden hebben het niet en het tabblad zegt dat.
+- **Niets nieuws voor de geplande taak:** de routine kopieert het bestand nog steeds ongewijzigd. Er is geen nieuwe collectie en geen nieuwe databaseregel nodig. De leesbare metadata (`dagcijfersMeta`) bevat geen enkel Conversie-cijfer; een test bewaakt dat.
+- **In de browser:** het tabblad Vandaag opent de cijfers met de bewaarde sleutel (zie Verkoop) en deelt ze met het tabblad Conversie (`window.jhsCijfers`, gebeurtenis `jhs-cijfers`). Het tabblad Conversie ontsleutelt niets zelf en schrijft niets. Is er geen sleutel, dan staat er dat de cijfers versleuteld zijn; staat het deel er niet in, dan wacht het op de volgende run.
+- **Vraag Noor** kent de Conversie-cijfers ook (alleen in het gesprek, niet in het dagbericht zelf).
+- **Wat het niet laat zien:** welke zoekopdrachten niets opleveren (de getypte tekst wordt niet vastgelegd) en bestellingen via zoeken (de netwerken splitsen per plek, niet per bron).
+- **Zichtbaar na de eerstvolgende run** van Dagcijfers (05:31 Amsterdam, winter). Eerder staat er "Nog geen conversiecijfers".
+
 ## Beheer
 
 - Drempels aanpassen: `ANOMALY` en `RISER` in `src/marketing/dailyMetrics.ts`, met tests.

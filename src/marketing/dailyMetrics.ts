@@ -58,6 +58,38 @@ export type Riser = z.infer<typeof Riser>;
 
 const Count = z.object({ key: z.string(), bezoekers: z.number() });
 
+/** A count in the last 7 days and in the 7 days before (the shape of src/analytics-report/counts.ts). */
+const Weeks = z.object({ key: z.string(), now: z.number(), before: z.number() });
+const Period = z.object({ start: z.string(), end: z.string() });
+
+/**
+ * The tab "Conversie" of the Marketingstudio (decision log 2026-11-24): the
+ * last 7 Amsterdam days against the 7 before, for the site search, the brand
+ * pages and the series pages. The nested names follow src/analytics-report/siteSections.ts.
+ * Counts only: the typed search text is not in analytics, so it is not here.
+ */
+export const Conversie = z.object({
+  periode: Period,
+  vorige: Period,
+  /** Visitor-days (a visitor on a day), and shop clicks. */
+  stand: z.object({ bezoekers: Weeks, wijzerStart: Weeks, klikkers: Weeks, winkelklikken: Weeks }),
+  zoeken: z.object({
+    searches: Weeks,
+    searchers: Weeks,
+    noResults: Weeks,
+    selections: z.array(Weeks),
+    selectedItems: z.array(Weeks),
+    searchersWhoClicked: Weeks,
+    clicksFromSearch: Weeks,
+    clicksFromSearchByProduct: z.array(Weeks),
+    wijzerStarts: Weeks,
+    wijzerCompletes: Weeks,
+  }),
+  merken: z.object({ views: z.array(Weeks), clicks: z.array(Weeks) }),
+  reeksen: z.object({ views: z.array(Weeks), clicks: z.array(Weeks), clicksByRetailer: z.array(Weeks) }),
+});
+export type Conversie = z.infer<typeof Conversie>;
+
 const part = <T extends z.ZodType>(value: T) =>
   z.discriminatedUnion('ok', [
     z.object({ ok: z.literal(true), value }),
@@ -89,6 +121,8 @@ export const Dagcijfers = z.object({
     }),
   ),
   bing: part(z.object({ dagen: z.array(SearchDay), vergelijking: z.array(Comparison) })),
+  /** Optional: files from before 2026-11-24 have none, and the studio shows what is there. */
+  conversie: part(Conversie).optional(),
 });
 export type Dagcijfers = z.infer<typeof Dagcijfers>;
 
