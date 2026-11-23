@@ -31,10 +31,14 @@ export type AnalyticsEvent =
       name: 'quiz_start';
       /** Absent on stickwijzer events from before 2026-11-01: those are 'stick'. No answers, ever. */
       quiz?: 'stick' | 'schoen';
+      /** 'search' when the stickwijzer was opened from the search in the header (2026-11-24, searchContext.ts); absent otherwise. */
+      source?: 'search';
     }
   | {
       name: 'quiz_complete';
       quiz?: 'stick' | 'schoen';
+      /** The same as on quiz_start. */
+      source?: 'search';
       ruleSetVersion: string;
       hasRecommendation: boolean;
       isUncertain: boolean;

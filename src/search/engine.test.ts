@@ -10,6 +10,12 @@ const config: SearchConfig = {
     { terms: ['junior', 'kinderen'] },
   ],
   corrections: { maharaja: 'maharadja' },
+  answers: [
+    { terms: ['carbon'], text: 'Meer carbon maakt een stick stijver; of dat bij je past, hangt af van je techniek.', article: 'carbon' },
+    { terms: ['lowbow'], text: 'Bij een low bow zit de kromming lager, dichter bij de krul en vraagt de aanname meer techniek.', article: 'low-bow-vs-mid-bow' },
+    { terms: ['maat'], text: 'De maat van een hockeystick kies je op je lichaamslengte, zonder schoenen gemeten.', article: 'bestaat-niet' },
+  ],
+  stickwijzer: { terms: ['kind', 'junior', 'beginner', 'advies'] },
 };
 const limits = { sticks: 4, brands: 2, articles: 3 };
 
@@ -25,6 +31,7 @@ const index: SearchIndex = {
     stick('mid500', 'Osaka', 'Midbow 500'),
     stick('maha', 'The Indian Maharadja', 'Gold Pro 10'),
     stick('kind', 'Ravi', 'Junior Mid Bow'),
+    stick('rc', 'Ravi', 'Carbon 70'),
     { type: 'brand', id: 'Grays', title: 'Grays', path: '/merken/grays', hasPage: true, stickCount: 3 },
     { type: 'article', id: '/kennis/low-bow-vs-mid-bow', title: 'Low bow of mid bow', path: '/kennis/low-bow-vs-mid-bow', keywords: 'Welke kromming past bij jou', category: 'Kennisbank', summary: 'x' },
     { type: 'article', id: '/kennis/carbon', title: 'Is meer carbon beter?', path: '/kennis/carbon', keywords: 'Carbonpercentage', category: 'Kennisbank', summary: 'x' },
@@ -34,6 +41,51 @@ const index: SearchIndex = {
 const prepared = prepareIndex(index);
 const find = (q: string) => search(prepared, q, config, limits);
 const ids = (entries: { item: SearchItem }[]) => entries.map((e) => e.item.id);
+
+describe('answers, the stickwijzer pointer and knowledge questions', () => {
+  it('answers a knowledge question above the results, with the article it comes from', () => {
+    const result = find('carbon');
+    expect(result.answer).toEqual({ text: expect.stringContaining('stijver'), path: '/kennis/carbon', title: 'Is meer carbon beter?' });
+    expect(find('low bow').answer?.path).toBe('/kennis/low-bow-vs-mid-bow');
+    expect(find('lowbow').answer?.path).toBe('/kennis/low-bow-vs-mid-bow');
+  });
+
+  it('does not call a generic description a model: "low bow" is a question, not a model', () => {
+    expect(find('low bow').sticks.some((entry) => entry.exact)).toBe(false);
+    expect(find('mid bow').sticks.some((entry) => entry.exact)).toBe(false);
+  });
+
+  it('gives no answer when a stick matches by name: an exact model match is never below an article', () => {
+    const result = find('ravi carbon 70');
+    expect(result.sticks[0]?.exact).toBe(true);
+    expect(result.answer).toBeNull();
+    expect(result.knowledgeFirst).toBe(false);
+    expect(find('grays jb10').answer).toBeNull();
+  });
+
+  it('drops an answer whose article is not in the index', () => {
+    expect(find('maat').answer).toBeNull();
+  });
+
+  it('lists the articles first for a knowledge question, and only then', () => {
+    expect(find('carbon').knowledgeFirst).toBe(true);
+    expect(find('grays').knowledgeFirst).toBe(false);
+    expect(find('composite').knowledgeFirst).toBe(false);
+  });
+
+  it('points at the stickwijzer for general words, also by synonym, and not for a model', () => {
+    expect(find('kind').wijzerHint).toBe(true);
+    expect(find('kinderen').wijzerHint).toBe(true);
+    expect(find('junior').wijzerHint).toBe(true);
+    expect(find('junior mid bow').wijzerHint).toBe(false);
+    expect(find('grays jb10').wijzerHint).toBe(false);
+    expect(find('x60').wijzerHint).toBe(false);
+  });
+
+  it('keeps a long query a model search: no answer from the fourth word on', () => {
+    expect(find('welke carbon stick voor een kind').answer).toBeNull();
+  });
+});
 
 describe('search engine', () => {
   it('puts an exact model match at the top of the sticks', () => {

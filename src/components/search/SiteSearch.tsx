@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useEffect, useId, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type FormEvent, type KeyboardEvent, type ReactNode } from 'react';
 import { freshnessNow } from '@/catalog/offers/sort';
-import { markSearchSelection } from '@/lib/analytics/searchContext';
+import { markSearchSelection, markStickwijzerFromSearch } from '@/lib/analytics/searchContext';
 import { trackEvent } from '@/lib/analytics/track';
 import { SEARCH_CONFIG } from '@/search/config';
 import { prepareIndex, search, type PreparedIndex, type Scored, type SearchIndex, type SearchLimits } from '@/search/engine';
@@ -46,6 +46,7 @@ function loadIndex(): Promise<PreparedIndex> {
 type Option =
   | { kind: 'result'; id: string; href: string; resultType: 'stick' | 'merk' | 'kennisbank'; itemName: string; entry: Scored }
   | { kind: 'popular'; id: string; label: string; query: string }
+  | { kind: 'answer'; id: string; href: string; text: string; title: string }
   | { kind: 'all'; id: string; href: string };
 
 function SearchIcon({ size = 20 }: { size?: number }) {
@@ -135,14 +136,26 @@ export function SiteSearch() {
       return SEARCH_CONFIG.popular.map((entry, i) => ({ kind: 'popular', id: `${listId}-p${i}`, label: entry.label, query: entry.query }));
     }
     const list: Option[] = [];
-    outcome.sticks.forEach((entry) => list.push({ kind: 'result', id: `${listId}-s${list.length}`, href: entry.item.path, resultType: 'stick', itemName: entry.item.title, entry }));
-    outcome.brands.forEach((entry) => list.push({ kind: 'result', id: `${listId}-s${list.length}`, href: entry.item.path, resultType: 'merk', itemName: entry.item.title, entry }));
-    outcome.articles.forEach((entry) => list.push({ kind: 'result', id: `${listId}-s${list.length}`, href: entry.item.path, resultType: 'kennisbank', itemName: entry.item.title, entry }));
+    if (outcome.answer) {
+      list.push({ kind: 'answer', id: `${listId}-a`, href: outcome.answer.path, text: outcome.answer.text, title: outcome.answer.title });
+    }
+    const add = (entries: Scored[], resultType: 'stick' | 'merk' | 'kennisbank') =>
+      entries.forEach((entry) => list.push({ kind: 'result', id: `${listId}-s${list.length}`, href: entry.item.path, resultType, itemName: entry.item.title, entry }));
+    // A knowledge question lists the articles first and one stick fewer, so an article stays in view.
+    if (outcome.knowledgeFirst) {
+      add(outcome.articles, 'kennisbank');
+      add(outcome.sticks.slice(0, wide ? 3 : 2), 'stick');
+      add(outcome.brands, 'merk');
+    } else {
+      add(outcome.sticks, 'stick');
+      add(outcome.brands, 'merk');
+      add(outcome.articles, 'kennisbank');
+    }
     if (outcome.total > 0) {
       list.push({ kind: 'all', id: `${listId}-all`, href: `/zoeken?q=${encodeURIComponent(outcome.query)}` });
     }
     return list;
-  }, [outcome, query, listId]);
+  }, [outcome, query, listId, wide]);
 
   // Counts only, never the text (owner decision 2026-11-24). One report per pause and query.
   useEffect(() => {
@@ -162,6 +175,9 @@ export function SiteSearch() {
       if (option.kind === 'result') {
         trackEvent({ name: 'select_search_result', resultType: option.resultType, itemName: option.itemName });
         if (option.resultType === 'stick') markSearchSelection(option.href);
+      }
+      if (option.kind === 'answer') {
+        trackEvent({ name: 'select_search_result', resultType: 'kennisbank', itemName: option.title });
       }
       close();
     },
@@ -306,13 +322,7 @@ export function SiteSearch() {
               {state === 'error' && (
                 <div className="space-y-3 px-1 py-2">
                   <p>Zoeken is momenteel niet beschikbaar. Gebruik de Stickwijzer om een passende hockeystick te vinden.</p>
-                  <Link
-                    href="/stickwijzer"
-                    onClick={close}
-                    className="inline-flex min-h-11 items-center rounded-full bg-bal px-5 py-2.5 font-semibold text-inkt hover:bg-bal-donker focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-veld"
-                  >
-                    Start de Stickwijzer
-                  </Link>
+                  <WijzerButton itemName="Stickwijzer (zoeken niet beschikbaar)" onNavigate={close} />
                 </div>
               )}
 
@@ -332,6 +342,19 @@ export function SiteSearch() {
                           <button type="button" tabIndex={-1} onClick={() => select(option)} className={`${rowClass} w-full text-left`}>
                             {option.label}
                           </button>
+                        </li>
+                      );
+                    }
+                    if (option.kind === 'answer') {
+                      return (
+                        <li key={option.id} id={option.id} role="option" aria-selected={isActive} onMouseMove={() => setActive(i)}>
+                          <div className={`rounded-xl border border-rand bg-mist px-3 py-3 ${isActive ? 'outline outline-2 outline-veld' : ''}`}>
+                            {/* Two lines on a phone (owner brief); the whole text on a larger screen. */}
+                            <p className="line-clamp-2 text-sm text-inkt sm:line-clamp-none">{option.text}</p>
+                            <Link href={option.href} tabIndex={-1} onClick={() => choose(option)} className="mt-1.5 inline-block text-sm font-semibold text-veld hover:underline">
+                              Lees volledig artikel
+                            </Link>
+                          </div>
                         </li>
                       );
                     }
@@ -396,14 +419,58 @@ export function SiteSearch() {
                 </ul>
               )}
 
+              {/* Never an empty search: no match leads to the stickwijzer. */}
               {showEmpty && state === 'ready' && !hasResults && (
-                <p className="px-1 py-2 text-sm text-lijngrijs">Geen exacte match gevonden.</p>
+                <div className="space-y-3 px-1 py-2">
+                  <p>Geen exacte match gevonden. Laat onze Stickwijzer binnen 1 minuut de juiste stick voor je kiezen.</p>
+                  <WijzerButton itemName="Stickwijzer (geen resultaat)" onNavigate={close} />
+                </div>
+              )}
+
+              {/* A general word (kind, junior, beginner, advice, size): a quiet pointer under the results. */}
+              {outcome?.wijzerHint && hasResults && (
+                <p className="px-1 pt-3 text-sm text-lijngrijs">
+                  Weet je nog niet welke stick bij je past?{' '}
+                  <WijzerLink itemName="Stickwijzer (algemene zoekterm)" onNavigate={close} className="font-semibold text-veld hover:underline">
+                    Laat de Stickwijzer kiezen
+                  </WijzerLink>
+                  .
+                </p>
               )}
             </div>
           </div>
         )}
       </dialog>
     </>
+  );
+}
+
+/** A link to the stickwijzer from the search: counted, and remembered so the quiz events say `source: search`. */
+function WijzerLink({ itemName, onNavigate, className, children }: { itemName: string; onNavigate: () => void; className: string; children: ReactNode }) {
+  return (
+    <Link
+      href="/stickwijzer"
+      className={className}
+      onClick={() => {
+        trackEvent({ name: 'select_search_result', resultType: 'stickwijzer', itemName });
+        markStickwijzerFromSearch();
+        onNavigate();
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function WijzerButton({ itemName, onNavigate }: { itemName: string; onNavigate: () => void }) {
+  return (
+    <WijzerLink
+      itemName={itemName}
+      onNavigate={onNavigate}
+      className="inline-flex min-h-11 items-center rounded-full bg-bal px-5 py-2.5 font-semibold text-inkt hover:bg-bal-donker focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-veld"
+    >
+      Start de Stickwijzer
+    </WijzerLink>
   );
 }
 

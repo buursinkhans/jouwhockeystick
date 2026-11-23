@@ -4,6 +4,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { GET } from '@/app/data/zoekindex.json/route';
 import { Header } from '@/components/layout/Header';
 import { getAllProducts, isFeedImport } from '@/catalog';
+import { getAllArticles } from '@/content';
+import { clearStickwijzerFromSearch, isFromSearch, markSearchSelection, markStickwijzerFromSearch, stickwijzerFromSearch } from '@/lib/analytics/searchContext';
 import { SEARCH_CONFIG } from './config';
 import { buildSearchIndex } from './buildIndex';
 import { priceLine, stickFacts } from './display';
@@ -107,5 +109,111 @@ describe('the search in the header', () => {
     expect(html).toContain('role="combobox"');
     expect(html).toContain('aria-controls=');
     expect(html).toContain('Zoek op merk, model of onderwerp...');
+  });
+});
+
+describe('the answers and the stickwijzer pointer in search-config.json', () => {
+  const articles = new Map(getAllArticles().map((article) => [article.slug, article]));
+
+  it('covers the five knowledge questions of the brief, each with its article', () => {
+    for (const query of ['carbon', 'beginner', 'lengte', 'maat', 'low bow']) {
+      const result = search(prepared, query, SEARCH_CONFIG, limits);
+      expect(result.answer, query).not.toBeNull();
+      expect(result.answer?.path, query).toMatch(/^\/kennis\/[a-z0-9-]+$/);
+      expect(result.knowledgeFirst, query).toBe(true);
+    }
+  });
+
+  it.each(SEARCH_CONFIG.answers.map((answer) => [answer.article, answer] as const))('the answer for %s comes from a published article and claims nothing the article does not say', (slug, answer) => {
+    const article = articles.get(slug);
+    expect(article, `no published article ${slug}`).toBeDefined();
+    // Every number in the answer is in the article: nothing invented.
+    const articleText = JSON.stringify(article);
+    for (const number of answer.text.match(/\d+(?:[.,]\d+)?/g) ?? []) expect(articleText, number).toContain(number);
+    expect(answer.text).not.toMatch(/altijd|nooit|gegarandeerd|garantie|zeker weten|de beste|beste stick|voorkomt/i);
+    expect(answer.text).not.toMatch(/[!]|—/);
+  });
+
+  it('points at the stickwijzer for every general word, and never for a model', () => {
+    for (const term of SEARCH_CONFIG.stickwijzer.terms) {
+      expect(search(prepared, term, SEARCH_CONFIG, limits).wijzerHint, term).toBe(true);
+    }
+    expect(search(prepared, 'grays jb10', SEARCH_CONFIG, limits).wijzerHint).toBe(false);
+  });
+
+  it('lists an article before the sticks for a knowledge question', () => {
+    const result = search(prepared, 'carbon', SEARCH_CONFIG, limits);
+    expect(result.articles.length).toBeGreaterThan(0);
+    expect(result.knowledgeFirst).toBe(true);
+  });
+});
+
+describe('the stickwijzer from the search (source: search)', () => {
+  function withStorage(run: () => void) {
+    const store = new Map<string, string>();
+    const original = Object.getOwnPropertyDescriptor(globalThis, 'window');
+    Object.defineProperty(globalThis, 'window', {
+      configurable: true,
+      value: { sessionStorage: { getItem: (k: string) => store.get(k) ?? null, setItem: (k: string, v: string) => void store.set(k, v), removeItem: (k: string) => void store.delete(k) }, location: { pathname: '/sticks/x' } },
+    });
+    try {
+      run();
+    } finally {
+      if (original) Object.defineProperty(globalThis, 'window', original);
+      else delete (globalThis as { window?: unknown }).window;
+    }
+  }
+
+  it('is remembered after a click from the search and cleared when the quiz is done', () => {
+    withStorage(() => {
+      expect(stickwijzerFromSearch()).toBe(false);
+      markStickwijzerFromSearch();
+      expect(stickwijzerFromSearch()).toBe(true);
+      clearStickwijzerFromSearch();
+      expect(stickwijzerFromSearch()).toBe(false);
+    });
+  });
+
+  it('expires after 30 minutes', () => {
+    withStorage(() => {
+      const now = Date.now();
+      const spy = vi.spyOn(Date, 'now');
+      spy.mockReturnValue(now);
+      markStickwijzerFromSearch();
+      spy.mockReturnValue(now + 31 * 60 * 1000);
+      expect(stickwijzerFromSearch()).toBe(false);
+      spy.mockRestore();
+    });
+  });
+
+  it('remembers the stick page that was opened from a result, only for that page', () => {
+    withStorage(() => {
+      expect(isFromSearch()).toBe(false);
+      markSearchSelection('/sticks/x');
+      expect(isFromSearch()).toBe(true);
+      markSearchSelection('/sticks/other');
+      expect(isFromSearch()).toBe(false);
+    });
+  });
+
+  it('does not break when storage is blocked', () => {
+    const original = Object.getOwnPropertyDescriptor(globalThis, 'window');
+    Object.defineProperty(globalThis, 'window', {
+      configurable: true,
+      value: {
+        get sessionStorage(): never {
+          throw new Error('blocked');
+        },
+        location: { pathname: '/' },
+      },
+    });
+    try {
+      expect(() => markStickwijzerFromSearch()).not.toThrow();
+      expect(stickwijzerFromSearch()).toBe(false);
+      expect(isFromSearch()).toBe(false);
+    } finally {
+      if (original) Object.defineProperty(globalThis, 'window', original);
+      else delete (globalThis as { window?: unknown }).window;
+    }
   });
 });

@@ -106,6 +106,22 @@ function readings(tokens: readonly string[]): string[][] {
   return all;
 }
 
+/** Every typed word with its synonyms and corrections, plus each two neighbours joined ("low" + "bow" = "lowbow"). */
+function knownWords(tokens: readonly string[], config: SearchConfig): Set<string> {
+  const words = new Set<string>();
+  for (const reading of readings(tokens)) for (const token of reading) for (const option of alternatives(token, config)) words.add(option);
+  return words;
+}
+
+/**
+ * Words that describe a stick but do not name a model ("low bow", "carbon", "junior"):
+ * a search made of these alone is a question about a kind of stick, never an exact model match.
+ */
+const GENERIC = new Set([
+  'low', 'mid', 'pro', 'bow', 'lowbow', 'midbow', 'probow', 'dynabow', 'ultrabow', 'jumbow',
+  'carbon', 'junior', 'senior', 'indoor', 'outdoor', 'stick', 'hockey', 'composite', 'kinderen',
+]);
+
 export type Scored = { item: SearchItem; score: number; exact: boolean };
 
 /** 70% relevance, 20% exact match, 10% for a title that starts with the first word. No popularity part in version 1. */
@@ -127,6 +143,7 @@ function scoreItem(prepared: PreparedItem, query: readonly string[], config: Sea
     const exact =
       prepared.item.type !== 'article' &&
       reading.length >= 2 &&
+      reading.some((token) => !GENERIC.has(token)) &&
       reading.every((token, i) => optionsPerToken[i]!.some((option) => prepared.titleSet.has(option)) && matchedTitle[i]);
     const startsWith = optionsPerToken[0]!.some((option) => prepared.titleTokens[0]?.startsWith(option));
     const score = WEIGHT_RELEVANCE * relevance + WEIGHT_EXACT * (exact ? 1 : 0) + WEIGHT_START * (startsWith ? 1 : 0);
@@ -137,6 +154,9 @@ function scoreItem(prepared: PreparedItem, query: readonly string[], config: Sea
 
 export type SearchLimits = { sticks: number; brands: number; articles: number };
 
+/** A short answer above the results, with the knowledge article it comes from. */
+export type SearchAnswer = { text: string; path: string; title: string };
+
 export type SearchOutcome = {
   /** The query as it was read: trimmed and cut to the maximum length. */
   query: string;
@@ -145,6 +165,15 @@ export type SearchOutcome = {
   articles: Scored[];
   /** Everything found, before the limits per group. */
   total: number;
+  /** A knowledge question with a prepared answer (carbon, beginner, length, size, low bow), when no stick matches by name. */
+  answer: SearchAnswer | null;
+  /** A general word (kind, junior, beginner, advice, size, first): the search points at the stickwijzer. */
+  wijzerHint: boolean;
+  /**
+   * A knowledge question: the articles are listed before the sticks, so at least one stays in view.
+   * Never when a stick matches by name (an exact model match is never below an article).
+   */
+  knowledgeFirst: boolean;
 };
 
 const byScore = (a: Scored, b: Scored) => b.score - a.score || a.item.title.localeCompare(b.item.title, 'nl');
@@ -152,7 +181,7 @@ const byScore = (a: Scored, b: Scored) => b.score - a.score || a.item.title.loca
 export function search(index: PreparedIndex, raw: string, config: SearchConfig, limits: SearchLimits): SearchOutcome {
   const query = raw.trim().slice(0, MAX_QUERY_LENGTH);
   const tokens = searchTokens(query);
-  const empty: SearchOutcome = { query, sticks: [], brands: [], articles: [], total: 0 };
+  const empty: SearchOutcome = { query, sticks: [], brands: [], articles: [], total: 0, answer: null, wijzerHint: false, knowledgeFirst: false };
   // From two characters (owner brief); a single digit or letter finds too much.
   if (tokens.length === 0 || query.length < 2) return empty;
 
@@ -166,11 +195,23 @@ export function search(index: PreparedIndex, raw: string, config: SearchConfig, 
   const sticks = ofType('stick');
   const brands = ofType('brand');
   const articles = ofType('article');
+
+  // Knowledge questions are short ("carbon", "low bow", "maat"); a longer query names a model.
+  const named = sticks.some((entry) => entry.exact);
+  const words = tokens.length <= 3 ? knownWords(tokens, config) : new Set<string>();
+  const rule = named ? undefined : config.answers.find((entry) => entry.terms.some((term) => words.has(term)));
+  const target = rule ? index.items.find((prepared) => prepared.item.id === `/kennis/${rule.article}`) : undefined;
+  const answer = rule && target ? { text: rule.text, path: target.item.path, title: target.item.title } : null;
+  const wijzerHint = !named && config.stickwijzer.terms.some((term) => words.has(term));
+
   return {
     query,
     sticks: sticks.slice(0, limits.sticks),
     brands: brands.slice(0, limits.brands),
     articles: articles.slice(0, limits.articles),
     total: found.length,
+    answer,
+    wijzerHint,
+    knowledgeFirst: (answer !== null || wijzerHint) && articles.length > 0,
   };
 }
