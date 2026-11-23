@@ -1,4 +1,5 @@
 import { STICK_SEO_OVERRIDES } from '../catalog/seoOverrides';
+import { BRAND_PAGES, brandPagePath } from '../catalog/brandPageDefinitions';
 import { SERIES, seriesPath } from '../catalog/seriesDefinitions';
 
 /**
@@ -33,12 +34,18 @@ const CONTENT_PAGES: Record<string, string> = {
  * this, a changed search-result title in a shared file would not be sent.
  */
 const seriesPaths = () => SERIES.map((series) => seriesPath(series.slug));
+const brandPaths = () => BRAND_PAGES.map((brand) => brandPagePath(brand.slug));
 const COVERED_PAGES: Record<string, () => string[]> = {
   'src/catalog/seoOverrides.ts': () => Object.keys(STICK_SEO_OVERRIDES).map((slug) => `/sticks/${slug}`),
   // The series comparisons under /vergelijk/<reeks> (wave 1): their members, gate and text.
   'src/catalog/seriesDefinitions.ts': seriesPaths,
   'src/catalog/series.ts': seriesPaths,
   'src/content/series.ts': seriesPaths,
+  // The brand pages under /merken/<merk> (decision log 2026-11-23): their brands, gate, text and the profiles they show.
+  'src/catalog/brandPageDefinitions.ts': brandPaths,
+  'src/catalog/brandPages.ts': brandPaths,
+  'src/content/brandPage.ts': brandPaths,
+  'src/content/brands.ts': brandPaths,
 };
 
 /**

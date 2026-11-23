@@ -2,6 +2,7 @@ import { absoluteUrl, pageMetadata } from '@/lib/site';
 import { itemListJsonLd, jsonLdHtml } from '@/lib/jsonLd';
 import Link from 'next/link';
 import { getCatalogStats } from '@/catalog/stats';
+import { brandPageOf, brandPagePath } from '@/catalog/brandPages';
 import { BRAND_PROFILES, brandAnchor } from '@/content/brands';
 import { merkenFaq } from '@/content/landingFaqs';
 import { FaqSection } from '@/components/article/FaqSection';
@@ -218,6 +219,17 @@ export default function MerkenPage() {
                     ))}
                   </p>
                 </section>
+              )}
+
+              {brandPageOf(brand.brand) && (
+                <p className="mt-4 text-sm">
+                  <Link
+                    href={brandPagePath(brandPageOf(brand.brand)!.definition.slug)}
+                    className="font-semibold text-veld hover:underline"
+                  >
+                    Alle {brand.brand}-sticks per niveau vergeleken
+                  </Link>
+                </p>
               )}
 
               <p className="mt-4 text-sm">

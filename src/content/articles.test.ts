@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { getAllProducts } from '@/catalog';
+import { indexableBrandPages } from '@/catalog/brandPages';
 import { indexableSeries } from '@/catalog/series';
 import { getShoes } from '@/catalog/shoes';
 import { getArticlesIncludingScheduled } from './index';
@@ -50,6 +51,8 @@ function internalPathExists(path: string, liveFrom: string): boolean {
     return getBlogPostsIncludingScheduled().some(liveInTime);
   if (section === 'sticks')
     return getAllProducts().some((p) => p.slug === slug);
+  // The brand pages (decision log 2026-11-23): an article may only link to one that is indexed.
+  if (section === 'merken') return indexableBrandPages().some((e) => e.definition.slug === slug);
   // The series comparisons (wave 1, 2026-11-22): an article may only link to one that is indexed.
   if (section === 'vergelijk') return indexableSeries().some((e) => e.series.slug === slug);
   // The shoe section (#100): the schoenenwijzer and every shoe model page.

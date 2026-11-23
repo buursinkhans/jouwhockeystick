@@ -23,6 +23,7 @@ import { getSimilarSticks } from '@/catalog/similar';
 import { getProductFamily } from '@/catalog/family';
 import { FamilyTable } from '@/components/catalog/FamilyTable';
 import { SeriesLinks } from '@/components/catalog/SeriesLinks';
+import { brandPageOf, brandPagePath } from '@/catalog/brandPages';
 import { DISCIPLINE_LABELS } from '@/catalog/labels';
 import { getModelYear } from '@/catalog/modelYear';
 import { evidenceGaps, sourceMixText } from '@/content/evidence';
@@ -142,7 +143,13 @@ export function ProductDetail({ product }: { product: Product }) {
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-veld">
-              {product.brand}
+              {brandPageOf(product.brand) ? (
+                <Link href={brandPagePath(brandPageOf(product.brand)!.definition.slug)} className="hover:underline">
+                  {product.brand}
+                </Link>
+              ) : (
+                product.brand
+              )}
             </p>
             <h1 className="mt-1 text-2xl font-bold sm:text-3xl">{product.name}</h1>
           </div>
