@@ -928,7 +928,26 @@
     },
     "videos/20261108-zaalstick-3-dingen": {
       "render": {
-        "gestart": "2026-11-23T23:11:03Z"
+        "gestart": "2026-11-23T23:11:03Z",
+        "klaar": "2026-11-23T23:12:55Z"
+      },
+      "media": {
+        "reel": {
+          "name": "20261108-zaalstick-3-dingen-reel.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261108-zaalstick-3-dingen-reel.mp4"
+        },
+        "reelCover": {
+          "name": "20261108-zaalstick-3-dingen-reel-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261108-zaalstick-3-dingen-reel-cover.png"
+        },
+        "short": {
+          "name": "20261108-zaalstick-3-dingen-short.mp4",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261108-zaalstick-3-dingen-short.mp4"
+        },
+        "shortCover": {
+          "name": "20261108-zaalstick-3-dingen-short-cover.png",
+          "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261108-zaalstick-3-dingen-short-cover.png"
+        }
       },
       "fout": null
     }
@@ -939,7 +958,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "fee0a38a-4e6b-4166-a1a2-9496bc7ffb44",
+  "wijziging": "bd1365ae-a660-4749-825a-be9e52bf0db5",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
