@@ -13,6 +13,7 @@ import {
   readPosthogConfig as readConfig,
   type PosthogConfig,
 } from '../src/analytics-report/hogql';
+import { collectBrandPages, collectSiteSearch, collectVersus, countBreakdown, type QueryContext } from '../src/analytics-report/siteSections';
 import {
   AI_REFERRER_DOMAINS,
   AI_UTM_SOURCES,
@@ -49,6 +50,12 @@ const hogql = (config: PosthogConfig, query: string) => runHogql(config, query, 
 
 const num = (value: unknown) => (typeof value === 'number' ? value : Number(value) || 0);
 
+const queryContext = (config: PosthogConfig): QueryContext => ({
+  run: (query) => hogql(config, query),
+  baseFilter: BASE_FILTER,
+  isNow: IS_NOW,
+});
+
 /** Counts per breakdown value; `visitors` counts visitor-days instead of events. */
 async function breakdown(
   config: { key: string; projectId: string },
@@ -56,22 +63,7 @@ async function breakdown(
   keyExpression: string,
   unit: 'events' | 'visitors' = 'events',
 ): Promise<Count[]> {
-  const visitorDay = `concat(distinct_id, '|', toString(toDate(timestamp)))`;
-  const [nowExpr, beforeExpr] =
-    unit === 'events'
-      ? [`countIf(${IS_NOW})`, `countIf(NOT (${IS_NOW}))`]
-      : [`uniqIf(${visitorDay}, ${IS_NOW})`, `uniqIf(${visitorDay}, NOT (${IS_NOW}))`];
-  const rows = await hogql(
-    config,
-    `SELECT toString(${keyExpression}) AS k, ${nowExpr} AS now, ${beforeExpr} AS before
-     FROM events WHERE event = '${event}' AND ${BASE_FILTER}
-     GROUP BY k ORDER BY now DESC LIMIT 100`,
-  );
-  return rows.map(([key, now, before]) => ({
-    key: typeof key === 'string' ? key : '',
-    now: num(now),
-    before: num(before),
-  }));
+  return countBreakdown(queryContext(config), event, keyExpression, unit);
 }
 
 /** Social visits, starts, comparison visits and shop clicks per entry campaign. */
@@ -273,6 +265,19 @@ async function main() {
     // Per social campaign, for the content lines in the Weekrapport (docs/marketing/weekrapport.md).
     socialCampaigns: await socialCampaigns(config).catch((error: unknown) => {
       console.error(`Campagnes uit social overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }),
+    // The search in the header, the brand pages and the series pages (decision log 2026-11-24): optional, like the social sections.
+    siteSearch: await collectSiteSearch(queryContext(config)).catch((error: unknown) => {
+      console.error(`Zoeken in de header overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }),
+    brandPages: await collectBrandPages(queryContext(config)).catch((error: unknown) => {
+      console.error(`Merkpagina's overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
+      return undefined;
+    }),
+    versus: await collectVersus(queryContext(config)).catch((error: unknown) => {
+      console.error(`Reekspagina's overgeslagen: ${error instanceof Error ? error.message : String(error)}`);
       return undefined;
     }),
     homeBlocks: await breakdown(

@@ -10,7 +10,7 @@ Hoe de site meet, wat een shop-klik uit de stickwijzer vastlegt, hoe je je eigen
 | Simple Analytics | `src/app/layout.tsx` | Pagina's en dezelfde funnel-events. |
 | Funnel-events | `src/lib/analytics/events.ts`, `track.ts` | `trackEvent` stuurt elk event naar beide diensten. Sessie-id en tijdstip blijven in de browser. |
 | `retailer_click` | `src/components/ui/RetailerLink.tsx` | Eén event per klik op een winkelknop: winkel, merk, stick, plek op de site (`placement`), linktype en, in "Waar te koop", de plek van de winkel in de lijst (`position`). |
-| Conversie-rapport | `conversion-report.yml`, `src/analytics-report/conversion.ts` | Maandag 05:53 UTC: de trechter, afhaken per vraag en kliks per winkel, plek, stick en pagina, uit PostHog. |
+| Conversie-rapport | `conversion-report.yml`, `src/analytics-report/conversion.ts` | Maandag 05:53 UTC: de trechter, afhaken per vraag en kliks per winkel, plek, stick en pagina, uit PostHog. Sinds 2026-11-24 ook het zoeken in de header, de merkpagina's en de reekspagina's (zie "Zoeken, merkpagina's en reekspagina's in het Conversie-rapport"). |
 | Verkooprapport | `sales-report.yml`, `src/analytics-report/sales.ts` | Aantallen kliks en bestellingen per plek: bol.com en PassaHockey, en sinds 2026-11-03 HockeyCity. |
 
 ## Wat een klik uit de stickwijzer nu vastlegt (2026-11-11)
@@ -55,6 +55,20 @@ Voorbeeld van wat PostHog ontvangt:
 Het conversie-rapport toont onder "Kliks naar de winkels" de tabel "Per plek in het stickadvies" (rol en plek), zodra een klik een rol heeft.
 
 Niet toegevoegd: lengte, leeftijd, speelwensen en alles wat een vrije tekst of een persoon kan herkennen. Leeftijd en lengte zijn bewust niet nodig om te zien welke stick wordt aangeklikt.
+
+## Zoeken, merkpagina's en reekspagina's in het Conversie-rapport (2026-11-24)
+
+Drie nieuwe delen in het wekelijkse Conversie-rapport, elk met "deze week", "vorige week" en het verschil. De zoekopdrachten staan in `src/analytics-report/siteSections.ts` en worden ook gebruikt voor het tabblad Conversie van de Marketingstudio (`docs/marketing/dagbericht.md`).
+
+| Deel | Events | Wat het laat zien |
+|---|---|---|
+| Zoeken in de header | `search`, `search_no_results`, `select_search_result`, `retailer_click` met `fromSearch`, `quiz_start` en `quiz_complete` met `source = search` | Zoekacties, bezoekers die zochten en die dag naar een winkel klikten, aandeel zonder resultaat, gekozen resultaat per type en per naam, winkelkliks via een zoekresultaat (aantal, aandeel en per stick), Stickwijzer-starts en -afrondingen vanuit zoeken |
+| Merkpagina's | `brand_view`, `brand_stick_click` | Per merk: weergaven, kliks op een stick en de doorklik |
+| Reekspagina's | `versus_view`, `versus_retailer_click` | Per reeks: weergaven, winkelkliks, klikratio, en de kliks per winkel |
+
+- **Geen zoektekst:** wat een bezoeker typt wordt niet vastgelegd (besluit 2026-11-24). Het rapport kan dus niet laten zien wélke zoekopdrachten geen resultaat geven, alleen hoeveel. Het signaal "Veel zoekacties zonder resultaat" staat in de lijst met signalen vanaf 20 zoekacties en 30% zonder resultaat (`SITE_THRESHOLDS`).
+- **Omzet via zoeken:** het rapport telt winkelkliks (`fromSearch`), geen bestellingen. De netwerken geven aantallen per sub-ID (de plek, hier `productpagina`), niet per bron. Bestellingen via zoeken zijn dus niet los te zien; zie "Van klik naar omzet".
+- **Ontbrekende data:** kan PostHog een van de drie delen niet beantwoorden, dan staat er "PostHog kon dit deze week niet beantwoorden" en gaat de rest van het rapport door.
 
 ## Eigen verkeer uitsluiten
 
