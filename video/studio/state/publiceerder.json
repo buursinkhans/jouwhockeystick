@@ -992,13 +992,13 @@
       }
     }
   },
-  "laatsteRun": "2026-11-24T00:10:45Z",
+  "laatsteRun": "2026-11-24T01:08:57Z",
   "tegoed": {
-    "maand": "2026-12",
-    "gebruikt": 7,
+    "maand": "2026-11",
+    "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "a671c723-b298-49ee-aa5b-d9aefe977bb5",
+  "wijziging": "38c8ac7a-da13-4177-a151-aae489b187e4",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
