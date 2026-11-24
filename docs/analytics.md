@@ -82,6 +82,8 @@ Elke winkelknop (product en actiepagina) linkt naar `/go/<winkel>/<plek>?r=<pad>
 - **Wat het niet doet:** een bot die zich als gewone Chrome voordoet, komt erdoor. Het aantal geblokkeerde verzoeken is zonder nieuwe gegevensstroom niet te tellen (Netlify's functielogs zijn niet via een API te lezen); een server-event naar PostHog zou dat tellen maar is een nieuwe gegevensstroom met privacyimpact en staat als vervolgstap in de decision log.
 - **Meten:** `retailer_click` blijft zoals het was (het event komt uit de browser, bij de klik). Of er minder bots meetellen, zie je in de cijfers van de netwerken van de eerste weken, niet in PostHog.
 - **Kosten:** de route draait als Netlify-function: elke klik is één aanroep. Met `Disallow: /go/` bellen nette bots de route niet aan.
+- **Schakelaar:** de build-instelling `NEXT_PUBLIC_GO_LINKS=off` (Netlify, Site configuration → Environment variables, daarna één deploy) laat alle knoppen weer rechtstreeks naar de partner linken. Niet gezet houdt de route aan.
+- **Meetpunt vooraf (week 2026-11-16 t/m 22):** de netwerken telden 142 kliks, PostHog 2 `retailer_click` (de week ervoor ongeveer 200 tegen 17). Vergelijk na de invoering elke week dezelfde twee cijfers: de netwerken horen naar de orde van grootte van PostHog te zakken, terwijl PostHog gelijk blijft. Zakt PostHog mee, dan worden echte bezoekers geblokkeerd. Zie de decision log van 2026-11-25.
 
 ## Eigen verkeer uitsluiten
 

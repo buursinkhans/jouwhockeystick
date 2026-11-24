@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { getAllProducts } from '@/catalog';
 import { getOffers } from '@/catalog/offers';
 import { getShoeOffers } from '@/catalog/shoes/offers';
 import { getShoes } from '@/catalog/shoes';
-import { GO_SHOP_HOSTS, goUrl, isPlacement, isRetailerId, promoHref, resolveGo, retailerHref, shopPath } from './goLink';
+import { GO_SHOP_HOSTS, goLinksEnabled, goUrl, isPlacement, isRetailerId, promoHref, resolveGo, retailerHref, shopPath } from './goLink';
 import { RETAILERS, RETAILER_PLACEMENTS, shopPageTrackingUrl, type RetailerId } from './retailers';
 
 /** The same reading of a /go/ URL that the route does. */
@@ -85,6 +85,30 @@ describe('resolving a /go/ link', () => {
     expect(promoHref('hockeycity', page, 'blackfriday')).toBe('/go/hockeycity/blackfriday?r=%2Fblack-friday.html&k=actie');
     expect(follow(promoHref('hockeycity', page, 'blackfriday')!)).toBe(shopPageTrackingUrl('hockeycity', page, 'blackfriday'));
     expect(promoHref('hockeycity', 'https://evil.example/x', 'blackfriday')).toBeNull();
+  });
+});
+
+describe('the switch NEXT_PUBLIC_GO_LINKS', () => {
+  afterEach(() => vi.unstubAllEnvs());
+  const product = { retailer: 'daka', brand: 'Grays', productName: 'Grays JB 10', placement: 'productpagina', productUrl: 'https://www.daka.nl/p/grays-jb10' } as const;
+  const page = 'https://www.hockeycity.nl/black-friday.html';
+
+  it('keeps the redirect on when it is not set, or set to anything but "off"', () => {
+    expect(goLinksEnabled()).toBe(true);
+    vi.stubEnv('NEXT_PUBLIC_GO_LINKS', 'on');
+    expect(goLinksEnabled()).toBe(true);
+    expect(retailerHref(product)?.startsWith('/go/daka/productpagina?')).toBe(true);
+    expect(promoHref('hockeycity', page, 'blackfriday')?.startsWith('/go/hockeycity/blackfriday?')).toBe(true);
+  });
+
+  it('links straight to the partner again when it is "off", exactly as before the redirect', () => {
+    vi.stubEnv('NEXT_PUBLIC_GO_LINKS', 'off');
+    expect(goLinksEnabled()).toBe(false);
+    expect(retailerHref(product)).toBe(RETAILERS.daka.getUrl(product));
+    expect(retailerHref(product)).toContain('partner.daka.nl');
+    expect(promoHref('hockeycity', page, 'blackfriday')).toBe(shopPageTrackingUrl('hockeycity', page, 'blackfriday'));
+    // A shop without a verified link still has no button.
+    expect(retailerHref({ ...product, retailer: 'passasports', productUrl: undefined })).toBeNull();
   });
 });
 

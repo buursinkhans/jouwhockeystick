@@ -31,6 +31,16 @@ export const GO_SHOP_HOSTS: Readonly<Record<RetailerId, string>> = {
 
 export const GO_PATH_PREFIX = '/go';
 
+/**
+ * The switch (decision log 2026-11-24): with the build setting
+ * `NEXT_PUBLIC_GO_LINKS=off` every button links straight to the partner again,
+ * as before this redirect existed. Rolling back is then one setting and one
+ * deploy instead of a code change. Read when a link is built, so tests can set
+ * it; Next inlines it at build time in the browser code. Anything but "off"
+ * (including not set) keeps the redirect on.
+ */
+export const goLinksEnabled = (): boolean => process.env.NEXT_PUBLIC_GO_LINKS !== 'off';
+
 /** A path (with query) on the shop's host; long enough for every shop page we know, short enough to refuse abuse. */
 export const GO_MAX_PATH_LENGTH = 1500;
 export const GO_MAX_NAME_LENGTH = 200;
@@ -87,7 +97,7 @@ export function retailerHref(params: {
   productUrl?: string;
 }): string | null {
   const direct = RETAILERS[params.retailer].getUrl(params);
-  if (!direct || !params.productUrl) return direct;
+  if (!direct || !params.productUrl || !goLinksEnabled()) return direct;
   // A product page on another host than the shop's own never goes through /go/: it keeps working as before.
   return (
     goUrl({
@@ -102,7 +112,7 @@ export function retailerHref(params: {
 /** The href of a button to a shop's action page; null when the page is not on the shop's domain. */
 export function promoHref(retailer: RetailerId, pageUrl: string, placement: RetailerPlacement): string | null {
   const direct = shopPageTrackingUrl(retailer, pageUrl, placement);
-  if (!direct) return null;
+  if (!direct || !goLinksEnabled()) return direct;
   return goUrl({ retailer, placement, pageUrl, kind: 'actie' }) ?? direct;
 }
 
