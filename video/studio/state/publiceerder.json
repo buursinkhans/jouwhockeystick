@@ -921,10 +921,19 @@
       }
     },
     "posts/20261203-geschiedenis-platte-kanten": {
-      "render": {
-        "gestart": "2026-11-24T00:08:54Z"
+      "media": {
+        "slides": [
+          {
+            "name": "20261203-geschiedenis-platte-kanten-1.png",
+            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261203-geschiedenis-platte-kanten-1.png"
+          }
+        ]
       },
-      "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
+      "render": {
+        "gestart": "2026-11-24T00:08:54Z",
+        "klaar": "2026-11-24T00:20:00Z"
+      },
+      "fout": null
     },
     "posts/20261210-geschiedenis-winkeltermen": {
       "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
@@ -981,7 +990,7 @@
     "gebruikt": 3,
     "grens": 100
   },
-  "wijziging": "63e15b0e-9a48-42d2-99da-03265dc127b0",
+  "wijziging": "af22501b-ab5a-4475-bdcd-cda9f2e37747",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
