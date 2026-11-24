@@ -85,6 +85,8 @@ import { reeceInAlphaJr } from './products/reece-in-alpha-jr';
 import { grays200iUltrabowIndoor } from './products/grays-200i-ultrabow-indoor';
 import { graysDb2xiDynabowIndoor } from './products/grays-db2xi-dynabow-indoor';
 import { graysJb3xiJumbowIndoor } from './products/grays-jb3xi-jumbow-indoor';
+import { adidasEstro10Indoor } from './products/adidas-estro-10-indoor';
+import { indianMaharadjaBlackMonoIndoor } from './products/indian-maharadja-black-mono-indoor';
 import { adidasEstro10JuniorIndoor } from './products/adidas-estro-10-junior-indoor';
 import { adidasEstro60Indoor } from './products/adidas-estro-60-indoor';
 import { indianMaharadjaSwiftJuniorIndoor } from './products/indian-maharadja-swift-junior-indoor';
@@ -189,6 +191,8 @@ const ALL_PRODUCTS: Product[] = [
   graysDb2xiDynabowIndoor,
   graysJb3xiJumbowIndoor,
   adidasEstro10JuniorIndoor,
+  adidasEstro10Indoor,
+  indianMaharadjaBlackMonoIndoor,
   indianMaharadjaSwiftJuniorIndoor,
   y1IndoorMidBowW1,
   y1IndoorLowBowC50,
