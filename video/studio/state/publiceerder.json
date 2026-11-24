@@ -933,6 +933,11 @@
         "gestart": "2026-11-24T00:08:54Z",
         "klaar": "2026-11-24T00:20:00Z"
       },
+      "kanalen": {
+        "insta": {
+          "bezig": "2026-11-24T00:10:15Z"
+        }
+      },
       "fout": null
     },
     "posts/20261210-geschiedenis-winkeltermen": {
@@ -990,7 +995,7 @@
     "gebruikt": 3,
     "grens": 100
   },
-  "wijziging": "af22501b-ab5a-4475-bdcd-cda9f2e37747",
+  "wijziging": "72ac62b8-e9f1-4bd4-82ab-4c74f56b979f",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
