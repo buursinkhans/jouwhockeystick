@@ -921,6 +921,9 @@
       }
     },
     "posts/20261203-geschiedenis-platte-kanten": {
+      "render": {
+        "gestart": "2026-11-24T00:08:54Z"
+      },
       "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
     },
     "posts/20261210-geschiedenis-winkeltermen": {
@@ -978,7 +981,7 @@
     "gebruikt": 3,
     "grens": 100
   },
-  "wijziging": "6049cb98-92d5-45c1-a14e-566b1cc36450",
+  "wijziging": "63e15b0e-9a48-42d2-99da-03265dc127b0",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
