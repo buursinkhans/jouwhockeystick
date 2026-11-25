@@ -52,7 +52,11 @@ De gegevens staan in `data/trends/` (één JSON-bestand per export) en worden me
 - **Verwacht seizoenseffect:** het gemiddelde jaarpatroon van `hockeystick` voor de laatste 28 dagen gedeeld door dat van de 28 daarvoor. Dat is een verwachting uit eerdere jaren, zonder de groei van de site of van de markt.
 - **Werkelijk en zonder seizoen:** de echte verandering in niet-merkvertoningen, en die gedeeld door de verwachte verandering. Dit is een richting. De positie blijft de hoofdmaat.
 - **Volgende golf:** de eerstvolgende maand waarin een gemiddeld jaar minstens 15 indexpunten stijgt, met een voorbereidingsvenster van 8 tot 4 weken eerder. **Dat venster is een hypothese**; na een jaar eigen data toetsen we of eerder beginnen loont.
-- **Thema's:** per thema de piekmaanden en de betrouwbaarheid (`goed` vanaf een gemiddelde index van 20 zonder nullen, `richting` vanaf 5, anders `te klein`). Een kleine term lees je als richting over het hele jaar, nooit per maand.
+- **Thema's, per term:** de piekmaanden (maanden die minstens 10 procent boven het jaargemiddelde liggen, hooguit vier) en de betrouwbaarheid. Een thema wordt nooit opgeteld, omdat de som bij zaal het speelseizoen met het koopseizoen zou mengen.
+  - **Gelijkenis tussen jaren:** de gemiddelde correlatie van de twaalf maanden van de volledige jaren. Een echt seizoen herhaalt zich (0,6 of hoger; in de eerste exports 0,65 tot 0,99), losse pieken niet (rond 0).
+  - `goed`: gelijkenis minstens 0,6, gemiddelde index minstens 20 en hooguit 10 procent nullen. Te lezen per maand.
+  - `richting`: gelijkenis minstens 0,6 en een waarde in minstens 8 maanden, maar klein of met stille maanden. Alleen te lezen als patroon over het jaar.
+  - `te klein`: het patroon herhaalt zich niet of er is te weinig. Zo'n term krijgt geen piekmaanden en telt niet mee.
 - **Verouderd:** een export van meer dan 100 dagen oud wordt als verouderd gemeld. Maak dan een nieuwe.
 
 ## Beperkingen
@@ -64,4 +68,4 @@ De gegevens staan in `data/trends/` (één JSON-bestand per export) en worden me
 
 ## Beheer
 
-De drempels staan bovenin `src/seo/trends.ts` (`RELIABLE_MEAN`, `DIRECTION_MEAN`, `WAVE_STEP`, `PREPARE_WEEKS`, `STALE_DAYS`, `ANCHOR_TERM`), met tests in `src/seo/trends.test.ts`.
+De drempels staan bovenin `src/seo/trends.ts` (`RELIABLE_MEAN`, `RELIABLE_MAX_ZEROS`, `CONSISTENT`, `MIN_NONZERO_MONTHS`, `PEAK_INDEX`, `WAVE_STEP`, `PREPARE_WEEKS`, `STALE_DAYS`, `ANCHOR_TERM`), met tests in `src/seo/trends.test.ts`.

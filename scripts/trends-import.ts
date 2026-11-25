@@ -17,9 +17,8 @@ import {
   importVerdict,
   parseTrendsCsv,
   peakMonths,
-  reliabilityOf,
   seasonProfile,
-  themeSeries,
+  termOf,
   TrendExport,
 } from '../src/seo/trends';
 import { readTrendExports, writeTrendExport } from '../src/seo/trendsFiles';
@@ -90,11 +89,15 @@ function main() {
   say('Termen:');
   for (const t of parsed.termen) {
     const values = t.punten.map(([, v]) => v);
-    say(`  ${t.term}: gemiddeld ${(values.reduce((a, b) => a + b, 0) / values.length).toFixed(1)}, hoogste ${Math.max(...values)}, betrouwbaarheid ${reliabilityOf(values)}`);
+    const seen = termOf(t, geexporteerd.slice(0, 7));
+    const peaks = seen.piekmaanden.length ? `, piek in ${seen.piekmaanden.map((m) => MONTHS[m - 1]).join(' ')}` : '';
+    say(`  ${t.term}: gemiddeld ${(values.reduce((a, b) => a + b, 0) / values.length).toFixed(1)}, hoogste ${Math.max(...values)}, gelijkenis tussen jaren ${seen.gelijkenis ?? '–'}, betrouwbaarheid ${seen.betrouwbaarheid}${peaks}`);
   }
   for (const g of parsed.genegeerd) say(`  Weggelaten: ${g.term} (${g.reden})`);
-  const profile = seasonProfile(rol === 'referentie' ? (parsed.termen.find((t) => t.term.toLowerCase() === ANCHOR_TERM)?.punten ?? []) : themeSeries(parsed.termen), geexporteerd.slice(0, 7));
-  say(profile ? `Piekmaanden: ${peakMonths(profile).map((m) => MONTHS[m - 1]).join(', ')} (patroon uit ${profile.jaren.length} volledige jaren)` : 'Nog geen jaarpatroon: er zijn minder dan twee volledige jaren.');
+  if (rol === 'referentie') {
+    const profile = seasonProfile(parsed.termen.find((t) => t.term === ANCHOR_TERM)?.punten ?? [], geexporteerd.slice(0, 7));
+    say(profile ? `Jaarpatroon van ${ANCHOR_TERM}: piekmaanden ${peakMonths(profile).map((m) => MONTHS[m - 1]).join(', ')} (uit ${profile.jaren.length} volledige jaren)` : 'Nog geen jaarpatroon: er zijn minder dan twee volledige jaren.');
+  }
   say(`Sleutel: ${exportKey(incoming)}`);
   say(`Uitkomst: ${verdict.action}. ${verdict.reden}`);
 

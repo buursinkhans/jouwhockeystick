@@ -19,9 +19,19 @@ import { z } from 'zod';
 export const ANCHOR_TERM = 'hockeystick';
 
 export const MIN_COMPLETE_YEARS = 2;
-/** A series with a mean index from this on is read per month; below it only as a direction. */
+/** A series with a mean index from this on and no gaps is read per month. */
 export const RELIABLE_MEAN = 20;
-export const DIRECTION_MEAN = 5;
+export const RELIABLE_MAX_ZEROS = 0.1;
+/**
+ * A pattern counts as a real season when it repeats from year to year: the mean correlation between
+ * the complete years is at least this. Tested on the first five exports (2026-11-25): real seasonal
+ * terms score 0.65 to 0.99, scattered single spikes (hockeystick kopen, sale) score about 0.
+ */
+export const CONSISTENT = 0.6;
+/** ...and the term shows up in at least this many months, so a pattern is not read from two points. */
+export const MIN_NONZERO_MONTHS = 8;
+/** A calendar month with an index of at least this (mean of the year = 100) counts as a peak month. */
+export const PEAK_INDEX = 110;
 /** Months in which an average year rises at least this many index points (mean = 100) count as the start of a wave. */
 export const WAVE_STEP = 15;
 /** Preparing starts this many weeks before a wave (a hypothesis of the plan, tested after a year of data). */
@@ -179,14 +189,44 @@ export function importVerdict(incoming: TrendExport, existing: readonly TrendExp
 
 export type Reliability = 'goed' | 'richting' | 'te klein';
 
-/** "goed": read per month. "richting": only the pattern over the whole period. "te klein": do not use. */
-export function reliabilityOf(values: readonly number[]): Reliability {
-  if (values.length === 0) return 'te klein';
+/**
+ * "goed": a large term without gaps whose pattern repeats; read per month. "richting": the pattern
+ * repeats from year to year but the term is small or has quiet months; read only as a pattern over the
+ * year. "te klein": the pattern does not repeat (single spikes) or there is too little: do not use.
+ */
+export function reliabilityOf(values: readonly number[], consistency: number | null): Reliability {
+  if (values.length === 0 || consistency === null || consistency < CONSISTENT) return 'te klein';
   const mean = values.reduce((a, b) => a + b, 0) / values.length;
   const zeros = values.filter((v) => v === 0).length / values.length;
-  if (mean >= RELIABLE_MEAN && zeros === 0) return 'goed';
-  if (mean >= DIRECTION_MEAN && zeros <= 0.2) return 'richting';
-  return 'te klein';
+  if (mean >= RELIABLE_MEAN && zeros <= RELIABLE_MAX_ZEROS) return 'goed';
+  return values.filter((v) => v > 0).length >= MIN_NONZERO_MONTHS ? 'richting' : 'te klein';
+}
+
+const correlation = (a: readonly number[], b: readonly number[]): number => {
+  const meanA = a.reduce((x, y) => x + y, 0) / a.length;
+  const meanB = b.reduce((x, y) => x + y, 0) / b.length;
+  let cross = 0;
+  let varA = 0;
+  let varB = 0;
+  for (let i = 0; i < a.length; i += 1) {
+    cross += ((a[i] as number) - meanA) * ((b[i] as number) - meanB);
+    varA += ((a[i] as number) - meanA) ** 2;
+    varB += ((b[i] as number) - meanB) ** 2;
+  }
+  return varA === 0 || varB === 0 ? 0 : cross / Math.sqrt(varA * varB);
+};
+
+/** How much the complete years look alike: the mean correlation of their twelve months, or null with fewer than two years. */
+export function yearConsistency(points: readonly (readonly [string, number])[], runningMonth: string): number | null {
+  const months = monthlyMeans(points);
+  const years = [...new Set([...months.keys()].map((k) => Number(k.slice(0, 4))))].filter((year) =>
+    Array.from({ length: 12 }, (_, m) => `${year}-${String(m + 1).padStart(2, '0')}`).every((k) => months.has(k) && k < runningMonth),
+  );
+  if (years.length < MIN_COMPLETE_YEARS) return null;
+  const vectors = years.map((year) => Array.from({ length: 12 }, (_, m) => months.get(`${year}-${String(m + 1).padStart(2, '0')}`) as number));
+  const scores: number[] = [];
+  for (let i = 0; i < vectors.length; i += 1) for (let j = i + 1; j < vectors.length; j += 1) scores.push(correlation(vectors[i] as number[], vectors[j] as number[]));
+  return scores.reduce((a, b) => a + b, 0) / scores.length;
 }
 
 /** Monthly means of a series (weekly and daily points are averaged); months are keyed YYYY-MM. */
@@ -236,11 +276,13 @@ export function themeSeries(terms: readonly TrendTerm[]): [string, number][] {
   return [...sums].sort(([a], [b]) => a.localeCompare(b));
 }
 
-export function peakMonths(profile: Profile, n = 3): number[] {
+/** The months well above the yearly mean (PEAK_INDEX), the highest four at most, in calendar order. */
+export function peakMonths(profile: Profile, max = 4): number[] {
   return profile.index
     .map((value, i) => ({ value, month: i + 1 }))
+    .filter((x) => x.value >= PEAK_INDEX)
     .sort((a, b) => b.value - a.value || a.month - b.month)
-    .slice(0, n)
+    .slice(0, max)
     .map((x) => x.month)
     .sort((a, b) => a - b);
 }
@@ -292,13 +334,21 @@ export const isStale = (exported: string, today: string) => (Date.parse(`${today
 
 // ---------------------------------------------------------------- Report part
 
+export const SeasonTerm = z.object({
+  term: z.string(),
+  betrouwbaarheid: z.enum(['goed', 'richting', 'te klein']),
+  /** Empty for a term that is "te klein": a pattern that does not repeat is not read. */
+  piekmaanden: z.array(z.number()),
+  /** How much the complete years look alike (0 to 1). */
+  gelijkenis: z.number().nullable(),
+});
+export type SeasonTerm = z.infer<typeof SeasonTerm>;
+
+/** A theme is read per term, never as a sum: the sum of "zaalhockey" (playing) and "zaalhockeystick" (buying) would mix two seasons. */
 export const SeasonTheme = z.object({
   thema: z.string(),
-  termen: z.number(),
-  betrouwbaarheid: z.enum(['goed', 'richting', 'te klein']),
-  piekmaanden: z.array(z.number()),
-  profiel: z.array(z.number()).length(12),
   geexporteerd: z.string(),
+  termen: z.array(SeasonTerm),
 });
 export type SeasonTheme = z.infer<typeof SeasonTheme>;
 
@@ -326,6 +376,21 @@ export type SeasonInput = {
   themas: SeasonTheme[];
 };
 
+const RANK: Record<Reliability, number> = { goed: 0, richting: 1, 'te klein': 2 };
+
+/** One term of an export: how reliable it is and, when its pattern repeats, its peak months. */
+export function termOf(t: TrendTerm, runningMonth: string): SeasonTerm {
+  const consistency = yearConsistency(t.punten, runningMonth);
+  const reliability = reliabilityOf(t.punten.map(([, v]) => v), consistency);
+  const profile = reliability === 'te klein' ? null : seasonProfile(t.punten, runningMonth);
+  return {
+    term: t.term,
+    betrouwbaarheid: reliability,
+    piekmaanden: profile ? peakMonths(profile) : [],
+    gelijkenis: consistency === null ? null : Math.round(consistency * 100) / 100,
+  };
+}
+
 /** The profile of every usable export: the reference term and, per theme, the sum of its terms. */
 export function seasonFromExports(exports: readonly TrendExport[]): SeasonInput | null {
   const reference = [...exports].filter((e) => e.rol === 'referentie').sort((a, b) => b.geexporteerd.localeCompare(a.geexporteerd))[0];
@@ -342,17 +407,8 @@ export function seasonFromExports(exports: readonly TrendExport[]): SeasonInput 
     if (!seen || e.geexporteerd > seen.geexporteerd) latestPerTheme.set(e.thema, e);
   }
   for (const e of latestPerTheme.values()) {
-    const series = themeSeries(e.termen);
-    const themeProfile = seasonProfile(series, e.geexporteerd.slice(0, 7));
-    if (!themeProfile) continue;
-    themas.push({
-      thema: e.thema,
-      termen: e.termen.length,
-      betrouwbaarheid: reliabilityOf(series.map(([, v]) => v)),
-      piekmaanden: peakMonths(themeProfile),
-      profiel: themeProfile.index,
-      geexporteerd: e.geexporteerd,
-    });
+    const termen = e.termen.map((t) => termOf(t, e.geexporteerd.slice(0, 7))).sort((a, b) => RANK[a.betrouwbaarheid] - RANK[b.betrouwbaarheid] || a.term.localeCompare(b.term));
+    themas.push({ thema: e.thema, geexporteerd: e.geexporteerd, termen });
   }
   return { profile, geexporteerd: reference.geexporteerd, themas: themas.sort((a, b) => a.thema.localeCompare(b.thema)) };
 }

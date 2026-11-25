@@ -73,9 +73,10 @@ describe('Marketingstudio: seizoenskaart in het tabblad SEO (Fase 2)', () => {
     expect(tab).toContain('hypothese');
     expect(tab).toContain('ouder dan 100 dagen');
     expect(tab).toContain('nooit per maand');
+    expect(tab).toContain('nooit opgeteld');
   });
   it('escapet alles wat uit de gegevens komt', () => {
-    for (const field of ['z.geexporteerd', 'z.volgendeGolf.wekenTot', 'z.verwachteVerandering', 't.thema', 't.betrouwbaarheid']) {
+    for (const field of ['z.geexporteerd', 'z.volgendeGolf.wekenTot', 'z.verwachteVerandering', 't.thema', 'x.term', 'x.betrouwbaarheid']) {
       const escaped = field.replace(/\./g, String.raw`\.`);
       expect(tab, field).toMatch(new RegExp(String.raw`esc\((change\(|dayName\()?` + escaped));
     }

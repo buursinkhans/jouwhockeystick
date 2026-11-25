@@ -11,6 +11,8 @@ import {
   peakMonths,
   reliabilityOf,
   seasonFromExports,
+  termOf,
+  yearConsistency,
   seasonLevel,
   seasonProfile,
   themeSeries,
@@ -139,13 +141,36 @@ describe('seizoenspatroon', () => {
   });
 });
 
-describe('betrouwbaarheid van een kleine term', () => {
-  it('goed vanaf een gemiddelde index van 20 zonder nullen, richting vanaf 5, anders te klein', () => {
-    expect(reliabilityOf(Array(12).fill(30))).toBe('goed');
-    expect(reliabilityOf([30, 0, 30, 30])).toBe('te klein'); // a quarter of the months is 0
-    expect(reliabilityOf([6, 5, 7, 6, 5, 6, 7, 5, 6, 5])).toBe('richting');
-    expect(reliabilityOf([3, 0, 4, 0, 2, 0, 3, 0, 2, 0])).toBe('te klein');
-    expect(reliabilityOf([])).toBe('te klein');
+describe('betrouwbaarheid van een term', () => {
+  it('goed: groot, zonder gaten en een patroon dat zich herhaalt', () => {
+    expect(reliabilityOf(Array(24).fill(30), 0.9)).toBe('goed');
+  });
+  it('richting: het patroon herhaalt zich, maar de term is klein of heeft stille maanden', () => {
+    expect(reliabilityOf([30, 0, 30, 30, 20, 25, 0, 30, 30, 25, 20, 30], 0.8)).toBe('richting'); // big, but a few quiet months
+    expect(reliabilityOf([3, 0, 4, 0, 2, 0, 3, 0, 2, 0, 3, 4, 0, 0, 5, 0], 0.9)).toBe('richting'); // small, but it repeats
+  });
+  it('te klein: een patroon dat zich niet herhaalt (losse pieken), of te weinig maanden met een waarde', () => {
+    expect(reliabilityOf([85, 0, 0, 65, 0, 0, 76, 0, 0, 0], 0.05)).toBe('te klein');
+    expect(reliabilityOf([5, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0], 0.95)).toBe('te klein'); // two months with a value
+    expect(reliabilityOf([50, 50, 50], null)).toBe('te klein');
+    expect(reliabilityOf([], 0.9)).toBe('te klein');
+  });
+  it('de gelijkenis tussen jaren is hoog voor een seizoen en rond 0 voor losse pieken', () => {
+    expect(yearConsistency(series(2021, 2025), '2026-01') as number).toBeGreaterThan(0.95);
+    const spikes: [string, number][] = [];
+    for (let year = 2022; year <= 2025; year += 1) for (let m = 1; m <= 12; m += 1) spikes.push([monthKey(year, m), (year * 7 + m * 13) % 11 === 0 ? 80 : 0]);
+    expect(Math.abs(yearConsistency(spikes, '2026-01') as number)).toBeLessThan(0.4);
+    expect(yearConsistency(series(2025, 2025), '2026-01')).toBeNull();
+  });
+  it('een term krijgt alleen piekmaanden als zijn patroon zich herhaalt, en alleen maanden boven het jaargemiddelde', () => {
+    const real = termOf({ term: 'x', punten: series(2021, 2025, 0.1) }, '2026-01');
+    expect(real.betrouwbaarheid).toBe('richting');
+    expect(real.piekmaanden).toEqual([8, 9, 11]);
+    const noise: [string, number][] = [];
+    for (let year = 2022; year <= 2025; year += 1) for (let m = 1; m <= 12; m += 1) noise.push([monthKey(year, m), (year * 7 + m * 13) % 11 === 0 ? 80 : 0]);
+    const spiky = termOf({ term: 'y', punten: noise }, '2026-01');
+    expect(spiky.betrouwbaarheid).toBe('te klein');
+    expect(spiky.piekmaanden).toEqual([]);
   });
   it('een thema telt de termen op: dezelfde schaal, dus dat mag', () => {
     const sum = themeSeries([
@@ -196,15 +221,16 @@ describe('seasonFromExports en buildSeason', () => {
     rol: 'thema',
     termen: [
       { term: 'hockeystick maat', punten: series(2021, 2025, 0.1) },
-      { term: 'hockeystick lengte', punten: series(2021, 2025, 0.08) },
+      { term: 'hockeystick lengte', punten: series(2021, 2025, 0.1) },
     ],
   });
   it('maakt het referentiepatroon en een patroon per thema', () => {
     const input = seasonFromExports([reference, theme]);
     expect(input?.profile.index).toHaveLength(12);
     expect(input?.themas.map((t) => t.thema)).toEqual(['maat']);
-    expect(input?.themas[0]?.piekmaanden).toEqual([8, 9, 11]);
-    expect(input?.themas[0]?.betrouwbaarheid).toBe('richting');
+    const terms = input?.themas[0]?.termen ?? [];
+    expect(terms.map((t) => t.term).sort()).toEqual(['hockeystick lengte', 'hockeystick maat']);
+    expect(terms.every((t) => t.betrouwbaarheid === 'richting' && t.piekmaanden.join() === '8,9,11')).toBe(true);
   });
   it('heeft een referentie-export met de ankerterm nodig', () => {
     expect(seasonFromExports([theme])).toBeNull();
