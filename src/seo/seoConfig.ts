@@ -121,5 +121,9 @@ export const THRESHOLDS = {
  * November and December; Google Trends, exported 2026-11-25). Until Phase 2 adds the
  * Trends index, position is the main measure and impressions are never judged alone.
  */
+/** The note when a Google Trends export is available: the season effect is shown next to the real change. */
+export const SEASON_NOTE_TRENDS =
+  'Vertoningen volgen het seizoen. Het seizoenseffect in de kaart Seizoen komt uit Google Trends (een relatieve index, geen zoekaantallen) en is een verwachting uit eerdere jaren. De positie blijft de hoofdmaat: lees de gecorrigeerde verandering als richting.';
+
 export const SEASON_NOTE =
   'Vertoningen volgen het seizoen. Tot de Trends-index is toegevoegd, is de positie de hoofdmaat en worden vertoningen niet los beoordeeld.';

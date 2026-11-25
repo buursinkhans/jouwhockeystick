@@ -62,3 +62,23 @@ describe('Marketingstudio: tab SEO', () => {
     expect(tab).not.toMatch(/[A-Za-z.]!(?=['" <])/);
   });
 });
+
+describe('Marketingstudio: seizoenskaart in het tabblad SEO (Fase 2)', () => {
+  it('toont het seizoen, de volgende golf en de thema\'s, en zegt wat er nog ontbreekt', () => {
+    for (const text of ['Seizoen (Google Trends)', 'Verwacht door alleen het seizoen', 'Zonder het seizoen', 'Volgende stijging', 'geen zoekaantallen', 'Nog geen Google Trends-gegevens']) {
+      expect(tab, text).toContain(text);
+    }
+  });
+  it('zegt dat het venster van 8 tot 4 weken een hypothese is en dat een oude export vervangen moet worden', () => {
+    expect(tab).toContain('hypothese');
+    expect(tab).toContain('ouder dan 100 dagen');
+    expect(tab).toContain('nooit per maand');
+    expect(tab).toContain('nooit opgeteld');
+  });
+  it('escapet alles wat uit de gegevens komt', () => {
+    for (const field of ['z.geexporteerd', 'z.volgendeGolf.wekenTot', 'z.verwachteVerandering', 't.thema', 'x.term', 'x.betrouwbaarheid']) {
+      const escaped = field.replace(/\./g, String.raw`\.`);
+      expect(tab, field).toMatch(new RegExp(String.raw`esc\((change\(|dayName\()?` + escaped));
+    }
+  });
+});

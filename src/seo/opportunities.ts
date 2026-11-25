@@ -10,7 +10,8 @@
  */
 import { z } from 'zod';
 import { LOW_CTR, NEAR_PAGE_ONE, type Period, type SearchRow } from './searchConsole';
-import { INTENT_WORDS, SEASON_NOTE, SEO_BRAND_TERMS, THRESHOLDS, type BrandTerms } from './seoConfig';
+import { INTENT_WORDS, SEASON_NOTE, SEASON_NOTE_TRENDS, SEO_BRAND_TERMS, THRESHOLDS, type BrandTerms } from './seoConfig';
+import { buildSeason, Season, type SeasonInput } from './trends';
 
 export const SEO_RULESET_VERSION = 'seo-kansen-v1';
 
@@ -103,6 +104,8 @@ export const SeoReport = z.object({
   bewustNiet: z.array(Skipped).max(THRESHOLDS.maxSkipped),
   merkwoorden: z.array(BrandWord),
   seizoenNotitie: z.string(),
+  /** The season effect from the Google Trends exports; absent until an export is imported (Phase 2). */
+  seizoen: Season.optional(),
   historie: z.array(HistoryMonth),
 });
 export type SeoReport = z.infer<typeof SeoReport>;
@@ -362,6 +365,8 @@ export type AnalysisInput = {
   offerOf: (query: string) => OfferMatch;
   history?: readonly HistoryMonth[];
   terms?: BrandTerms;
+  /** The patterns of the imported Google Trends exports, when there are any. */
+  season?: SeasonInput | null;
 };
 
 const CODE_ORDER: Record<ActionCode, number> = { A: 0, B: 1, D: 2, C: 3, E: 4, F: 5 };
@@ -457,6 +462,20 @@ export function analyse(input: AnalysisInput): SeoReport {
       vorigeVertoningen: before.get(stat.query)?.impressions ?? 0,
     }));
 
+  // The season: what it alone is expected to do to non-brand impressions, next to what they really did.
+  const impressionsBefore = [...before.values()]
+    .filter((stat) => classifyBrand(stat.query, terms) === 'niet-merk')
+    .reduce((sum, stat) => sum + stat.impressions, 0);
+  const seizoen = input.season
+    ? buildSeason(input.season, {
+        period: input.period,
+        previousPeriod: input.previousPeriod,
+        impressionsNow: totalsOf(nonBrand).vertoningen,
+        impressionsBefore,
+        today: input.now.toISOString().slice(0, 10),
+      })
+    : undefined;
+
   const top = recommendations.slice(0, THRESHOLDS.maxRecommendations);
   return SeoReport.parse({
     versie: 1,
@@ -475,7 +494,8 @@ export function analyse(input: AnalysisInput): SeoReport {
     aanbevelingen: top,
     bewustNiet: skipped,
     merkwoorden: brandWordRows,
-    seizoenNotitie: SEASON_NOTE,
+    seizoenNotitie: seizoen ? SEASON_NOTE_TRENDS : SEASON_NOTE,
+    ...(seizoen && { seizoen }),
     historie: nextHistory(input.history ?? [], input.month, top),
   });
 }
