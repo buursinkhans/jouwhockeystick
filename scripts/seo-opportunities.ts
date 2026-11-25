@@ -1,14 +1,18 @@
-// Monthly SEO opportunity report (read-only). Fetches Search Console rows for the
-// Netherlands (query x page: the last 28 processed days, the 28 before, and
-// about 90 days), looks up what the site offers for each query, and writes ONE
-// sealed file (VERKOOP_SLEUTEL) that the Marketingstudio opens in the owner's
-// browser. Design: docs/seo-market-intelligence-plan.md.
+// Monthly SEO opportunity report (read-only for the site). Fetches Search Console
+// rows for the Netherlands (query x page: the last 28 processed days, the 28
+// before, and about 90 days), looks up what the site offers for each query, and
+// writes ONE sealed file (VERKOOP_SLEUTEL) that the Marketingstudio opens in the
+// owner's browser. Then it measures the recommendations that the owner marked as
+// done 28 days ago, and creates one issue without figures per new recommendation.
+// Design: docs/seo-market-intelligence-plan.md.
 //
 // The repository and its workflow logs are public, so this script prints one
-// status line without any figure, query or page (statusLine). It never prints
-// an HTTP body, a row or an error detail that could hold data.
+// status line without any figure, query or page (statusLine), plus fixed
+// sentences. It never prints an HTTP body, a row or an error detail.
 //
 // Usage: npm run seo:opportunities -- <out.json> [previous-seo.json]
+// Environment: GSC_SERVICE_ACCOUNT_JSON, VERKOOP_SLEUTEL; optional GSC_SITE_URL,
+// GITHUB_TOKEN and GITHUB_REPOSITORY (statuses and issues), SEO_ISSUES=uit (no issues).
 // Exit code 0: written. 1: failed (nothing written). 3: VERKOOP_SLEUTEL is missing
 // (nothing written, so no readable figure ever reaches the public branch).
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -22,8 +26,22 @@ import {
   SEO_RULESET_VERSION,
   SeoReport,
   statusLine,
+  type HistoryMonth,
   type OfferMatch,
 } from '../src/seo/opportunities';
+import {
+  applyOutcomes,
+  dueForEvaluation,
+  idFromBody,
+  LABELS,
+  outcomeOf,
+  statusesFromIssues,
+  type Due,
+  type Figures,
+  type IssueLike,
+  type RecStatus,
+} from '../src/seo/evaluate';
+import { issueFor } from '../src/seo/issues';
 import { getToken, readServiceAccount } from '../src/seo/googleAuth';
 import { GENERIC_WORDS } from '../src/seo/seoConfig';
 import type { Period, SearchRow } from '../src/seo/searchConsole';
@@ -47,16 +65,17 @@ const say = (text: string) => process.stdout.write(`${text}\n`);
 const fail = (text: string) => process.stderr.write(`${text}\n`);
 
 type ApiRow = { keys: string[]; clicks: number; impressions: number; position: number };
+type Filter = { dimension: string; operator: string; expression: string };
 
 class ApiError extends Error {}
 
-async function post(token: string, site: string, body: Record<string, unknown>): Promise<ApiRow[]> {
+async function post(token: string, site: string, body: Record<string, unknown>, extra: Filter[] = []): Promise<ApiRow[]> {
   const response = await fetch(`${API}/${encodeURIComponent(site)}/searchAnalytics/query`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       ...body,
-      dimensionFilterGroups: [{ filters: [{ dimension: 'country', operator: 'equals', expression: COUNTRY }] }],
+      dimensionFilterGroups: [{ filters: [{ dimension: 'country', operator: 'equals', expression: COUNTRY }, ...extra] }],
     }),
   });
   // Only the status code: the body is not printed, even on an error.
@@ -80,6 +99,18 @@ async function pairRows(token: string, site: string, period: Period): Promise<Se
     if (rows.length < PAGE_SIZE) break;
   }
   return out;
+}
+
+/** The figures of one query (all pages, Netherlands) in a window; null when it had no impressions. */
+async function figuresOf(token: string, site: string, query: string, window: Period): Promise<Figures | null> {
+  const rows = await post(
+    token,
+    site,
+    { startDate: window.start, endDate: window.end, dimensions: ['query'], rowLimit: 1 },
+    [{ dimension: 'query', operator: 'equals', expression: query }],
+  );
+  const row = rows[0];
+  return row ? { positie: row.position, vertoningen: row.impressions, klikken: row.clicks } : null;
 }
 
 /** What the site itself offers for a query, from the same search as the header search. */
@@ -106,7 +137,7 @@ function offerLookup(): (query: string) => OfferMatch {
 }
 
 /** The history of the previous sealed file, when it can be opened; otherwise an empty history. */
-function previousHistory(path: string | undefined, key: string) {
+function previousHistory(path: string | undefined, key: string): { history: HistoryMonth[]; read: boolean } {
   if (!path) return { history: [], read: false };
   try {
     const file = JSON.parse(readFileSync(path, 'utf8')) as { versleuteld?: Sealed };
@@ -116,6 +147,83 @@ function previousHistory(path: string | undefined, key: string) {
   } catch {
     return { history: [], read: false };
   }
+}
+
+// ---------------------------------------------------------------- GitHub (issues without figures)
+
+type GhIssue = { number: number; body: string | null; state: string; labels: { name: string }[]; pull_request?: unknown };
+
+/** The GitHub API of this repository, or null outside a workflow (no token or repository given). */
+function githubApi() {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPOSITORY;
+  if (!token || !repo) return null;
+  const call = async (path: string, init: { method?: string; body?: unknown } = {}) => {
+    const response = await fetch(`https://api.github.com/repos/${repo}${path}`, {
+      method: init.method ?? 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json',
+      },
+      ...(init.body !== undefined && { body: JSON.stringify(init.body) }),
+    });
+    return response;
+  };
+  return call;
+}
+
+async function recommendationIssues(call: NonNullable<ReturnType<typeof githubApi>>): Promise<GhIssue[]> {
+  const response = await call(`/issues?labels=${LABELS.recommendation}&state=all&per_page=100`);
+  if (!response.ok) throw new ApiError(`GitHub gaf HTTP ${response.status}.`);
+  return ((await response.json()) as GhIssue[]).filter((issue) => !issue.pull_request);
+}
+
+/** The day the label seo-uitgevoerd was set on an issue (the newest time), from its events. */
+async function doneDate(call: NonNullable<ReturnType<typeof githubApi>>, number: number): Promise<string | undefined> {
+  const response = await call(`/issues/${number}/events?per_page=100`);
+  if (!response.ok) return undefined;
+  const events = (await response.json()) as { event: string; created_at: string; label?: { name: string } }[];
+  const times = events.filter((e) => e.event === 'labeled' && e.label?.name === LABELS.done).map((e) => e.created_at);
+  return times.sort().at(-1)?.slice(0, 10);
+}
+
+async function statusesOf(issues: readonly GhIssue[], call: NonNullable<ReturnType<typeof githubApi>>): Promise<RecStatus[]> {
+  const like: IssueLike[] = [];
+  for (const issue of issues) {
+    const labels = issue.labels.map((label) => label.name);
+    const uitgevoerdOp = labels.includes(LABELS.done) ? await doneDate(call, issue.number) : undefined;
+    like.push({ body: issue.body, labels, ...(uitgevoerdOp && { uitgevoerdOp }) });
+  }
+  return statusesFromIssues(like);
+}
+
+async function ensureLabels(call: NonNullable<ReturnType<typeof githubApi>>) {
+  const labels = [
+    { name: LABELS.recommendation, color: '0E8A16', description: 'SEO-kans uit het maandrapport (zonder cijfers)' },
+    { name: LABELS.approved, color: '1D76DB', description: 'De eigenaar keurt deze SEO-kans goed' },
+    { name: LABELS.done, color: '5319E7', description: 'De wijziging staat live; het maandrapport meet het effect' },
+  ];
+  // A label that exists answers 422: that is fine.
+  for (const label of labels) await call('/labels', { method: 'POST', body: label });
+}
+
+/** One issue per new recommendation, unless an open issue with the same marker exists. Returns how many were made. */
+async function createIssues(
+  call: NonNullable<ReturnType<typeof githubApi>>,
+  recommendations: SeoReport['aanbevelingen'],
+  issues: readonly GhIssue[],
+): Promise<number> {
+  const open = new Set(issues.filter((issue) => issue.state === 'open').map((issue) => idFromBody(issue.body)));
+  let made = 0;
+  for (const rec of recommendations) {
+    if (open.has(rec.id)) continue;
+    const draft = issueFor(rec);
+    const response = await call('/issues', { method: 'POST', body: { title: draft.title, body: draft.body, labels: draft.labels } });
+    if (response.ok) made += 1;
+  }
+  return made;
 }
 
 async function main() {
@@ -155,14 +263,37 @@ async function main() {
   const period = { start: shift(last, -(PERIOD_DAYS - 1)), end: last };
   const previousPeriod = { start: shift(last, -(2 * PERIOD_DAYS - 1)), end: shift(last, -PERIOD_DAYS) };
   const longPeriod = { start: shift(last, -(LONG_DAYS - 1)), end: last };
-  // Sequential on purpose: three calls, in the same order every month.
+  // Sequential on purpose: a few calls, in the same order every month.
   const current = await pairRows(token, site, period);
   const previous = await pairRows(token, site, previousPeriod);
   const long = await pairRows(token, site, longPeriod);
 
   const now = new Date();
   const month = today.slice(0, 7);
-  const { history, read } = previousHistory(process.argv[3], key);
+  const loaded = previousHistory(process.argv[3], key);
+  let history = loaded.history;
+
+  // The status of earlier recommendations comes from the labels on their issues; without a token there are none.
+  const github = githubApi();
+  let issues: GhIssue[] = [];
+  let githubFailed = false;
+  if (github) {
+    try {
+      issues = await recommendationIssues(github);
+    } catch {
+      githubFailed = true;
+    }
+  }
+  if (github && !githubFailed) {
+    const due = dueForEvaluation(history, await statusesOf(issues, github), last);
+    const results: { due: Due; outcome: ReturnType<typeof outcomeOf> }[] = [];
+    for (const item of due) {
+      const after = await figuresOf(token, site, item.zoekterm, item.window);
+      results.push({ due: item, outcome: outcomeOf(item, after) });
+    }
+    history = applyOutcomes(history, results);
+  }
+
   const report = analyse({
     month,
     now,
@@ -179,7 +310,22 @@ async function main() {
   const file = { versie: 1, gemaakt: now.toISOString(), maand: month, regelset: SEO_RULESET_VERSION, versleuteld: seal(report, key, now) };
   writeFileSync(out, `${JSON.stringify(file)}\n`);
   say(statusLine(report));
-  if (process.argv[3] && !read) say('Let op: de historie van de vorige maand kon niet worden gelezen; de historie begint opnieuw.');
+  if (process.argv[3] && !loaded.read) say('Let op: de historie van de vorige maand kon niet worden gelezen; de historie begint opnieuw.');
+
+  // Issues come last: the sealed report is already written, so a GitHub problem never loses it.
+  if (github && process.env.SEO_ISSUES !== 'uit') {
+    if (githubFailed) {
+      say('De GitHub-koppeling gaf een fout: statussen en issues zijn deze maand overgeslagen.');
+    } else {
+      try {
+        await ensureLabels(github);
+        const made = await createIssues(github, report.aanbevelingen, issues);
+        say(`Issues gemaakt: ${made}.`);
+      } catch {
+        say('De GitHub-koppeling gaf een fout bij het maken van issues.');
+      }
+    }
+  }
 }
 
 main().catch((error: unknown) => {

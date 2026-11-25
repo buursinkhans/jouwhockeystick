@@ -38,6 +38,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: SEO-kansenrapport ophalen (versleuteld)
+        # The monthly report (seo-kansen.yml) sits sealed on social-state. The daily script opens it
+        # with the same key and seals it again inside the daily figures (tab SEO in the studio), so
+        # the routine Dagbericht still copies one unchanged file. No file yet: nothing is added.
+        run: |
+          if git fetch -q origin social-state && git show origin/social-state:video/studio/state/seo.json > "$RUNNER_TEMP/seo.json" 2>/dev/null; then
+            echo "SEO_BESTAND=$RUNNER_TEMP/seo.json" >> "$GITHUB_ENV"
+          fi
       - name: Cijfers ophalen
         env:
           POSTHOG_PERSONAL_API_KEY: ${{ secrets.POSTHOG_PERSONAL_API_KEY }}
