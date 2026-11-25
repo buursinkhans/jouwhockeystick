@@ -985,8 +985,7 @@
     },
     "posts/20261203-geschiedenis-twee-platte-kanten": {
       "render": {
-        "gestart": "2026-11-24T00:08:54Z",
-        "klaar": "2026-11-24T00:20:00Z"
+        "gestart": "2026-11-25T14:10:49Z"
       },
       "media": {
         "slides": [
@@ -1013,7 +1012,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "dbe1120b-4f61-434c-9e83-d9cc48a0ebcb",
+  "wijziging": "eeaaddb7-3ce2-483c-a7b1-7e24deca5675",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
