@@ -13,11 +13,12 @@ import {
   bolRaw,
   bolToken,
   daisyconRaw,
+  tradeTrackerCampaignRaw,
   tradeTrackerRaw,
   tradeTrackerSession,
 } from '../src/analytics-report/partnerApi';
 import { awinClicks, type Period } from '../src/analytics-report/sales';
-import { awinMoney, bolMoney, daisyconMoney, tradeTrackerMoney, type Money } from '../src/analytics-report/salesMoney';
+import { awinMoney, bolMoney, daisyconMoney, tradeTrackerCampaignMoney, tradeTrackerMoney, type Money } from '../src/analytics-report/salesMoney';
 import { DAKA_DAISYCON, HOCKEYCITY_TRADETRACKER, PASSASPORTS_TRADETRACKER, PLUTOSPORT_AWIN } from '../src/lib/retailers';
 import { seal } from '../src/marketing/seal';
 
@@ -39,6 +40,20 @@ function periods(now: Date): Record<PeriodKey, Period> {
     vorigeWeek: { from: iso(y - 13 * DAY), to: iso(y - 7 * DAY) },
     maand: { from: iso(Date.UTC(yd.getUTCFullYear(), yd.getUTCMonth(), 1)), to: iso(y) },
   };
+}
+
+
+/**
+ * TradeTracker totals for one campaign. The campaign report counts pending sales and clicks without
+ * a place reference; the reference report only counts settled sales (diagnosis of 2026-11-25).
+ * Falls back to the reference report if the campaign report fails.
+ */
+async function tradeTrackerTotals(session: string, campaign: { campaignId: string; affiliateSiteId: string }, period: Period): Promise<Money> {
+  try {
+    return tradeTrackerCampaignMoney(await tradeTrackerCampaignRaw(session, campaign, period));
+  } catch {
+    return tradeTrackerMoney(await tradeTrackerRaw(session, campaign, period));
+  }
 }
 
 async function perPeriod(
@@ -88,7 +103,7 @@ async function main() {
       naam: 'PassaHockey',
       periodes: await perPeriod(ps, async () => {
         const s = await tt;
-        return async (p) => tradeTrackerMoney(await tradeTrackerRaw(s, PASSASPORTS_TRADETRACKER, p));
+        return async (p) => tradeTrackerTotals(s, PASSASPORTS_TRADETRACKER, p);
       }),
     },
     {
@@ -96,7 +111,7 @@ async function main() {
       naam: 'HockeyCity',
       periodes: await perPeriod(ps, async () => {
         const s = await tt;
-        return async (p) => tradeTrackerMoney(await tradeTrackerRaw(s, HOCKEYCITY_TRADETRACKER, p));
+        return async (p) => tradeTrackerTotals(s, HOCKEYCITY_TRADETRACKER, p);
       }),
     },
     {
