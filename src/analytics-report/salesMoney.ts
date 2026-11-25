@@ -42,7 +42,8 @@ const round2 = (n: number | null) => (n === null ? null : Math.round(n * 100) / 
 const done = (m: Money): Money => ({ ...m, omzet: round2(m.omzet), commissie: round2(m.commissie) });
 
 const BOL_COMMISSION = ['commission', 'totalCommission', 'commissionAmount'] as const;
-const BOL_REVENUE = ['revenue', 'orderValue', 'turnover', 'salesAmount', 'orderAmount'] as const;
+// The v2 promotion report names its revenue `revenueInclVat` / `revenueExclVat` (the older guesses stay as fallbacks).
+const BOL_REVENUE = ['revenueInclVat', 'revenueExclVat', 'revenue', 'orderValue', 'turnover', 'salesAmount', 'orderAmount'] as const;
 
 /** bol.com promotion report (`items`): totals over all rows. */
 export function bolMoney(body: unknown): Money {
