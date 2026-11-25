@@ -1,0 +1,92 @@
+# Monthly SEO opportunity report (read-only). Reads Search Console for the
+# Netherlands and writes ONE sealed file (video/studio/state/seo.json, sealed with
+# VERKOOP_SLEUTEL) to the branch social-state. The repository and its logs are
+# public, so nothing readable leaves the script: it prints one status line without
+# any figure, query or page. It never changes code, content or the live site, and
+# it creates no issue (that is part 2 of Phase 1). Design:
+# docs/seo-market-intelligence-plan.md.
+#
+# Runs on the first Monday of the month (owner, 2026-11-25), or by hand.
+name: SEO-kansenrapport
+
+on:
+  schedule:
+    # Every Monday; the first step skips the run unless it is the first Monday of the month.
+    - cron: '23 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  # Shares the branch with the daily figures and the Publiceerder's record.
+  group: social-state
+  cancel-in-progress: false
+
+jobs:
+  rapport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Eerste maandag van de maand?
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$(date -u +%d)" -gt 7 ]; then
+            echo "skip=1" >> "$GITHUB_ENV"
+            echo "Geen eerste maandag van de maand: niets te doen."
+          fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: env.skip != '1'
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: env.skip != '1'
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+        if: env.skip != '1'
+      - name: Vorige maand ophalen (versleuteld)
+        if: env.skip != '1'
+        # The sealed file of last month holds the history of earlier recommendations.
+        run: |
+          if git fetch -q origin social-state && git show origin/social-state:video/studio/state/seo.json > "$RUNNER_TEMP/seo-vorige.json" 2>/dev/null; then
+            echo "previous=$RUNNER_TEMP/seo-vorige.json" >> "$GITHUB_ENV"
+          else
+            echo "Geen vorig bestand: de historie begint nu."
+          fi
+      - name: Rapport maken
+        if: env.skip != '1'
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+          # Seals the report before it leaves this step.
+          VERKOOP_SLEUTEL: ${{ secrets.VERKOOP_SLEUTEL }}
+        # No shell tracing (set -x) here: the script prints one status line, nothing else.
+        run: npm run --silent seo:opportunities -- "$RUNNER_TEMP/seo.json" ${previous:+"$previous"}
+      - name: Alleen versleuteld?
+        if: env.skip != '1'
+        # Last check before the public branch: metadata without figures and one sealed part.
+        run: |
+          node -e '
+            const f = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+            const allowed = ["versie", "gemaakt", "maand", "regelset", "versleuteld"];
+            const extra = Object.keys(f).filter((k) => !allowed.includes(k));
+            if (extra.length || !f.versleuteld || f.versleuteld.alg !== "PBKDF2-SHA256/AES-256-GCM") {
+              console.error("seo.json is niet (alleen) versleuteld; niet opgeslagen."); process.exit(1);
+            }' "$RUNNER_TEMP/seo.json"
+      - name: Op social-state zetten
+        if: env.skip != '1'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch -q origin social-state; then git checkout -q -B social-state origin/social-state; else git checkout -q -b social-state; fi
+          mkdir -p video/studio/state
+          for attempt in 1 2 3; do
+            cp "$RUNNER_TEMP/seo.json" video/studio/state/seo.json
+            git add video/studio/state/seo.json
+            git diff --cached --quiet && { echo "Geen wijziging."; break; }
+            git commit -q -m "SEO-kansenrapport $(date -u +%Y-%m)"
+            git push -q origin social-state && break
+            git fetch -q origin social-state && git reset -q --hard origin/social-state
+            [ "$attempt" -eq 3 ] && { echo "Schrijven lukte niet na 3 pogingen." >&2; exit 1; }
+          done
