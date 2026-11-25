@@ -2,7 +2,7 @@
 // return for PassaHockey and HockeyCity, and how many sales does it count per place? Prints
 // field names and counts only (names ending in "Count"), never amounts, sessions or secrets;
 // the repository is public. Run with: npm run sales:diagnose -- 2026-11-18 2026-11-25
-import { tradeTrackerRaw, tradeTrackerSession } from '../src/analytics-report/partnerApi';
+import { tradeTrackerCampaignRaw, tradeTrackerRaw, tradeTrackerSession, tradeTrackerTransactionsRaw } from '../src/analytics-report/partnerApi';
 import { HOCKEYCITY_TRADETRACKER, PASSASPORTS_TRADETRACKER } from '../src/lib/retailers';
 
 const [fromArg, toArg] = process.argv.slice(2);
@@ -30,6 +30,29 @@ async function main() {
       process.stdout.write(`- ${all.find(([n]) => n === 'reference')?.[1] || '(leeg)'}: ${counts.map(([n, v]) => `${n}=${v}`).join(', ') || 'alles 0'}\n`);
     }
     process.stdout.write(`Velden: ${[...names].join(', ')}\n`);
+
+    // Campaign totals: do they include clicks and sales without a place reference?
+    try {
+      const total = await tradeTrackerCampaignRaw(session, campaign, { from, to });
+      const counts = tags(total).filter(([n, v]) => /Count$/.test(n) && v !== '0' && v !== '');
+      process.stdout.write(`Campagnetotaal: ${counts.map(([n, v]) => `${n}=${v}`).join(', ') || 'alles 0'}\n`);
+    } catch (e) {
+      process.stdout.write(`Campagnetotaal mislukt: ${e instanceof Error ? e.message : 'onbekende fout'}\n`);
+    }
+
+    // Transactions: status and reference per sale (no amounts).
+    try {
+      const xml = await tradeTrackerTransactionsRaw(session, campaign, { from, to });
+      const items = xml.split(/<item\b[^>]*ConversionTransaction[^>]*>/).slice(1);
+      process.stdout.write(`Transacties: ${items.length}\n`);
+      for (const item of items) {
+        const t = tags(item);
+        const pick = (n: string) => t.find(([k]) => k === n)?.[1] || '-';
+        process.stdout.write(`- ${pick('registrationDate').slice(0, 10)} | type=${pick('transactionType')} | status=${pick('transactionStatus')} | reference=${pick('reference')}\n`);
+      }
+    } catch (e) {
+      process.stdout.write(`Transacties mislukt: ${e instanceof Error ? e.message : 'onbekende fout'}\n`);
+    }
   }
 }
 
