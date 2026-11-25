@@ -5,11 +5,14 @@
 import { tradeTrackerRaw, tradeTrackerSession } from '../src/analytics-report/partnerApi';
 import { HOCKEYCITY_TRADETRACKER, PASSASPORTS_TRADETRACKER } from '../src/lib/retailers';
 
-const [from, to] = process.argv.slice(2);
-if (!from || !to || !/^\d{4}-\d{2}-\d{2}$/.test(from) || !/^\d{4}-\d{2}-\d{2}$/.test(to)) {
+const [fromArg, toArg] = process.argv.slice(2);
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+if (!fromArg || !toArg || !DATE.test(fromArg) || !DATE.test(toArg)) {
   process.stderr.write('Gebruik: sales:diagnose -- JJJJ-MM-DD JJJJ-MM-DD\n');
   process.exit(1);
 }
+const from: string = fromArg;
+const to: string = toArg;
 
 const tags = (xml: string) => [...xml.matchAll(/<([A-Za-z]+)(?:\s[^>]*)?>([^<]*)<\/\1>/g)].map((m) => [m[1]!, m[2]!.trim()] as const);
 
