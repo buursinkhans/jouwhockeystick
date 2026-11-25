@@ -998,22 +998,23 @@
       },
       "kanalen": {
         "insta": {
-          "id": 439616924,
+          "id": 441161048,
           "uuid": "-9083972300789561567",
           "moment": "2026-12-03T19:30:00",
-          "op": "2026-11-24T00:10:45Z"
+          "op": "2026-11-24T00:10:45Z",
+          "concept": true
         }
       },
       "fout": null
     }
   },
-  "laatsteRun": "2026-11-25T00:09:04Z",
+  "laatsteRun": "2026-11-25T02:09:08Z",
   "tegoed": {
     "maand": "2026-11",
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "cda12ef9-af76-4e59-bf94-6917c7661bf4",
+  "wijziging": "b8c00b9f-0e82-41d5-87c7-20be2827eca7",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
