@@ -2,8 +2,10 @@
 # Netherlands and writes ONE sealed file (video/studio/state/seo.json, sealed with
 # VERKOOP_SLEUTEL) to the branch social-state. The repository and its logs are
 # public, so nothing readable leaves the script: it prints one status line without
-# any figure, query or page. It never changes code, content or the live site, and
-# it creates no issue (that is part 2 of Phase 1). Design:
+# any figure, query or page. It never changes code, content or the live site. It
+# creates one issue WITHOUT figures per new recommendation (label seo-aanbeveling),
+# reads the labels seo-akkoord and seo-uitgevoerd of earlier issues, and measures a
+# recommendation 28 days after the owner marked it done. Design:
 # docs/seo-market-intelligence-plan.md.
 #
 # Runs on the first Monday of the month (owner, 2026-11-25), or by hand.
@@ -14,9 +16,17 @@ on:
     # Every Monday; the first step skips the run unless it is the first Monday of the month.
     - cron: '23 6 * * 1'
   workflow_dispatch:
+    inputs:
+      issues:
+        description: "Issues zonder cijfers maken? (aan of uit)"
+        required: false
+        default: "aan"
+        type: choice
+        options: ["aan", "uit"]
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   # Shares the branch with the daily figures and the Publiceerder's record.
@@ -61,6 +71,9 @@ jobs:
           GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
           # Seals the report before it leaves this step.
           VERKOOP_SLEUTEL: ${{ secrets.VERKOOP_SLEUTEL }}
+          # Reads the labels of the recommendation issues and creates new ones (no figures in them).
+          GITHUB_TOKEN: ${{ github.token }}
+          SEO_ISSUES: ${{ inputs.issues }}
         # No shell tracing (set -x) here: the script prints one status line, nothing else.
         run: npm run --silent seo:opportunities -- "$RUNNER_TEMP/seo.json" ${previous:+"$previous"}
       - name: Alleen versleuteld?

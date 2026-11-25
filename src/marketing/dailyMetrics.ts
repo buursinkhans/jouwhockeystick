@@ -3,6 +3,7 @@
 // result is one JSON file that the routine "Dagbericht" reads
 // (docs/marketing/dagbericht.md). Counts only: no persons, no amounts.
 import { z } from 'zod';
+import { SeoReport } from '../seo/opportunities';
 
 export const DAY_MS = 86_400_000;
 
@@ -123,6 +124,8 @@ export const Dagcijfers = z.object({
   bing: part(z.object({ dagen: z.array(SearchDay), vergelijking: z.array(Comparison) })),
   /** Optional: files from before 2026-11-24 have none, and the studio shows what is there. */
   conversie: part(Conversie).optional(),
+  /** The monthly SEO report (src/seo/opportunities.ts), read from the sealed seo.json; optional until the first run. */
+  seo: part(SeoReport).optional(),
 });
 export type Dagcijfers = z.infer<typeof Dagcijfers>;
 

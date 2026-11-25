@@ -34,7 +34,7 @@ export const ACTION_LABELS: Record<ActionCode, string> = {
 
 // ---------------------------------------------------------------- Schema
 
-const Baseline = z.object({ positie: z.number(), vertoningen: z.number(), klikken: z.number() });
+export const Baseline = z.object({ positie: z.number(), vertoningen: z.number(), klikken: z.number() });
 const Period_ = z.object({ start: z.string(), end: z.string() });
 const Totals_ = z.object({ klikken: z.number(), vertoningen: z.number(), zoektermen: z.number() });
 
@@ -64,10 +64,28 @@ export const BrandWord = z.object({
 });
 export type BrandWord = z.infer<typeof BrandWord>;
 
+/** The result of a recommendation, measured 28 days after the owner marked it as done (src/seo/evaluate.ts). */
+export const Outcome = z.object({
+  uitgevoerdOp: z.string(),
+  /** The last day of the 28 days after "uitgevoerd" that this result is about. */
+  gemeten: z.string(),
+  oordeel: z.enum(['verbeterd', 'gelijk', 'verslechterd', 'onvoldoende data', 'niet gemeten']),
+  na: Baseline.nullable(),
+  toelichting: z.string(),
+});
+export type Outcome = z.infer<typeof Outcome>;
+
 export const HistoryMonth = z.object({
   maand: z.string(),
   aanbevelingen: z.array(
-    z.object({ id: z.string(), code: z.string(), pagina: z.string(), zoekterm: z.string(), basislijn: Baseline }),
+    z.object({
+      id: z.string(),
+      code: z.string(),
+      pagina: z.string(),
+      zoekterm: z.string(),
+      basislijn: Baseline,
+      resultaat: Outcome.optional(),
+    }),
   ),
 });
 export type HistoryMonth = z.infer<typeof HistoryMonth>;

@@ -59,6 +59,16 @@ Het tabblad **Conversie** toont de laatste 7 dagen (Amsterdamse dagen, tot en me
 - **Wat het niet laat zien:** welke zoekopdrachten niets opleveren (de getypte tekst wordt niet vastgelegd) en bestellingen via zoeken (de netwerken splitsen per plek, niet per bron).
 - **Zichtbaar na de eerstvolgende run** van Dagcijfers (05:31 Amsterdam, winter). Eerder staat er "Nog geen conversiecijfers".
 
+## SEO (tabblad in de Marketingstudio, sinds 2026-11-25)
+
+Het tabblad **SEO** toont het maandelijkse SEO-kansenrapport: Search Console voor Nederland, de laatste 28 verwerkte dagen tegen de 28 ervoor, met per kans een actiecode (A tot en met F), de pagina, de zoekopdracht, de reden in woorden, prioriteit en zekerheid, een lijst "dit doen we bewust niet", de merkwoorden apart en het effect van uitgevoerde aanbevelingen na 28 dagen. Ontwerp: `docs/seo-market-intelligence-plan.md`.
+
+- **Bron:** `scripts/seo-opportunities.ts` (workflow `SEO-kansenrapport`, eerste maandag van de maand of met de hand) schrijft één versleuteld bestand `video/studio/state/seo.json` op `social-state`. `scripts/daily-metrics.ts` leest dat bestand (functie `seo`, omgevingsvariabele `SEO_BESTAND`, door `dagcijfers.yml` neergezet), opent het met dezelfde sleutel en versleutelt het opnieuw binnen `dagcijfers.json` als deel `seo`. Daardoor kopieert de routine nog steeds één onveranderd bestand en is er niets nieuws voor de geplande taak. Een probleem met dit deel laat de dagelijkse run niet mislukken: het tabblad toont de reden. De leesbare metadata bevat niets uit het rapport; een test bewaakt dat.
+- **Openbaar:** per aanbeveling maakt de maandrun één GitHub-issue zonder cijfers (label `seo-aanbeveling`): pagina, actiecode, zoekopdracht en reden in woorden. Goedkeuren doe je met het label `seo-akkoord`; het label `seo-uitgevoerd` zegt dat de wijziging live staat. Zonder label gebeurt er niets. 28 dagen na `seo-uitgevoerd` meet de volgende maandrun dezelfde zoekopdracht opnieuw en zet het oordeel (verbeterd, ongeveer gelijk, verslechterd, onvoldoende data of niet gemeten) in het versleutelde rapport. Het oordeel is een richting, geen bewijs.
+- **Seizoen:** vertoningen volgen het seizoen (Google Trends, 2026-11-25). Tot Fase 2 de Trends-index toevoegt, is de positie de hoofdmaat.
+- **In de browser:** het tabblad Vandaag opent de cijfers (zie Verkoop) en deelt ze met het tabblad SEO (`window.jhsCijfers`). Het tabblad ontsleutelt niets zelf en schrijft niets. Staat het deel er niet in, dan staat er "Nog geen SEO-rapport".
+- **Zichtbaar na** het eerste maandrapport (maandag 2026-12-07, of eerder met de hand gestart) en de eerstvolgende run van Dagcijfers.
+
 ## Beheer
 
 - Drempels aanpassen: `ANOMALY` en `RISER` in `src/marketing/dailyMetrics.ts`, met tests.

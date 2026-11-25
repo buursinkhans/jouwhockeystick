@@ -9,7 +9,7 @@
 // failed. Exit code 3: VERKOOP_SLEUTEL is missing; nothing is written, so no
 // readable figure ever reaches the public branch.
 // Run with: npm run metrics:daily -- out.json
-import { writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import type { z } from 'zod';
 import { sourceLabel } from '../src/analytics-report/conversion';
 import { collectBrandPages, collectSiteSearch, collectVersus, total, type QueryContext } from '../src/analytics-report/siteSections';
@@ -33,9 +33,10 @@ import {
   type QueryRow,
   type SearchDay,
 } from '../src/marketing/dailyMetrics';
-import { seal } from '../src/marketing/seal';
+import { seal, unseal, type Sealed } from '../src/marketing/seal';
 import { loadSiteConfig } from '../src/marketing/siteConfig';
 import { getToken, readServiceAccount } from '../src/seo/googleAuth';
+import { SeoReport } from '../src/seo/opportunities';
 
 const TZ = 'Europe/Amsterdam';
 const GSC_API = 'https://searchconsole.googleapis.com/webmasters/v3/sites';
@@ -275,6 +276,27 @@ async function bing(): Promise<Dagcijfers['bing']> {
   }
 }
 
+/**
+ * The tab SEO: the sealed monthly report (scripts/seo-opportunities.ts), opened here with the same
+ * key and sealed again inside the daily figures, so the routine Dagbericht copies it unchanged. The
+ * workflow puts the file at SEO_BESTAND; no file (before the first run) means no part. A failure
+ * here never fails the daily run: the tab shows the reason.
+ */
+function seo(key: string): Dagcijfers['seo'] {
+  const path = process.env.SEO_BESTAND;
+  if (!path || !existsSync(path)) return undefined;
+  try {
+    const file = JSON.parse(readFileSync(path, 'utf8')) as { versleuteld?: Sealed };
+    if (!file.versleuteld) return { ok: false, reden: 'SEO-rapport: het bestand heeft geen versleuteld deel.' };
+    const parsed = SeoReport.safeParse(unseal(file.versleuteld, key));
+    return parsed.success
+      ? { ok: true, value: parsed.data }
+      : { ok: false, reden: 'SEO-rapport: het bestand heeft een onverwachte vorm.' };
+  } catch {
+    return { ok: false, reden: 'SEO-rapport: het bestand kon niet worden geopend (andere sleutel of beschadigd).' };
+  }
+}
+
 async function main() {
   const today = amsterdamToday();
   const out: Dagcijfers = {
@@ -286,13 +308,15 @@ async function main() {
     bing: await bing(),
     conversie: await conversie(shift(today, -1)),
   };
-  Dagcijfers.parse(out);
   const passphrase = process.env.VERKOOP_SLEUTEL;
   if (!passphrase) {
     process.stderr.write('VERKOOP_SLEUTEL ontbreekt (GitHub Secrets): geen dagcijfers geschreven.\n');
     process.exitCode = 3;
     return;
   }
+  const seoPart = seo(passphrase);
+  if (seoPart) out.seo = seoPart;
+  Dagcijfers.parse(out);
   const file = { ...dagcijfersMeta(out, shift(today, -1)), versleuteld: seal(out, passphrase) };
   writeFileSync(process.argv[2] ?? 'dagcijfers.json', `${JSON.stringify(file)}\n`);
   const failed = (['posthog', 'google', 'bing', 'conversie'] as const).filter((k) => out[k] && !out[k].ok);
