@@ -998,11 +998,10 @@
       },
       "kanalen": {
         "insta": {
-          "id": 441161048,
+          "id": 441232466,
           "uuid": "-9083972300789561567",
           "moment": "2026-12-03T19:30:00",
-          "op": "2026-11-24T00:10:45Z",
-          "concept": true
+          "op": "2026-11-24T00:10:45Z"
         }
       },
       "fout": null
@@ -1014,7 +1013,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "8429aa1f-90f7-4b76-8b7b-8d48af7f0bf9",
+  "wijziging": "e18f43b4-6af1-421e-8ca1-f0e3e83eb46a",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
