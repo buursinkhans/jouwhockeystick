@@ -11,6 +11,13 @@ describe('bolMoney', () => {
   });
 });
 
+describe('bolMoney (v2 field names)', () => {
+  it('reads the order value from revenueInclVat', () => {
+    const m = bolMoney({ items: [{ clicks: 3, orders: 1, commission: 2.1, revenueInclVat: 30, revenueExclVat: 24.79 }, { clicks: 1, orders: 0, commission: 0, revenueInclVat: 0 }] });
+    expect(m).toEqual({ kliks: 4, orders: 1, omzet: 30, commissie: 2.1 });
+  });
+});
+
 describe('tradeTrackerMoney', () => {
   it('reads the reference report', () => {
     const xml = `<item xsi:type="ns1:ReportReferenceElement"><reportData><overallClickCount>12</overallClickCount><saleCount>2</saleCount><totalCommission>9.99</totalCommission></reportData></item>
