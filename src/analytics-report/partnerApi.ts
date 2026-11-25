@@ -111,6 +111,34 @@ export async function tradeTrackerRaw(
   return text;
 }
 
+/** The campaign totals of one TradeTracker campaign (raw), including traffic without a place reference. */
+export async function tradeTrackerCampaignRaw(
+  session: string,
+  { campaignId, affiliateSiteId }: { campaignId: string; affiliateSiteId: string },
+  period: Period,
+): Promise<string> {
+  const { text } = await soap(
+    'getReportCampaign',
+    `<affiliateSiteID>${affiliateSiteId}</affiliateSiteID><options><campaignID>${campaignId}</campaignID><dateFrom>${period.from}</dateFrom><dateTo>${period.to}</dateTo></options>`,
+    session,
+  );
+  return text;
+}
+
+/** The conversion transactions of one TradeTracker campaign (raw): one row per sale or lead, with status. */
+export async function tradeTrackerTransactionsRaw(
+  session: string,
+  { campaignId, affiliateSiteId }: { campaignId: string; affiliateSiteId: string },
+  period: Period,
+): Promise<string> {
+  const { text } = await soap(
+    'getConversionTransactions',
+    `<affiliateSiteID>${affiliateSiteId}</affiliateSiteID><options><campaignID>${campaignId}</campaignID><registrationDateFrom>${period.from}</registrationDateFrom><registrationDateTo>${period.to}</registrationDateTo></options>`,
+    session,
+  );
+  return text;
+}
+
 // --- Awin publisher API (a static bearer token of the owner's Awin user) ---
 
 const AWIN_API = 'https://api.awin.com';
