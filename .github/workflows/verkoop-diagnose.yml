@@ -1,0 +1,33 @@
+# Manual, read-only diagnosis of the TradeTracker reference report (field names and counts only,
+# no amounts; the repository is public). See scripts/sales-diagnose.ts.
+name: Verkoop-diagnose
+
+on:
+  workflow_dispatch:
+    inputs:
+      van:
+        description: 'Van (JJJJ-MM-DD)'
+        required: true
+      tot:
+        description: 'Tot en met (JJJJ-MM-DD)'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+      - name: Diagnose
+        env:
+          TRADETRACKER_CUSTOMER_ID: ${{ secrets.TRADETRACKER_CUSTOMER_ID }}
+          TRADETRACKER_PASSPHRASE: ${{ secrets.TRADETRACKER_PASSPHRASE }}
+          VAN: ${{ inputs.van }}
+          TOT: ${{ inputs.tot }}
+        run: npm run --silent sales:diagnose -- "$VAN" "$TOT"
