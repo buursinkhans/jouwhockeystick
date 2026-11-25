@@ -44,6 +44,8 @@ import {
 import { issueFor } from '../src/seo/issues';
 import { getToken, readServiceAccount } from '../src/seo/googleAuth';
 import { GENERIC_WORDS } from '../src/seo/seoConfig';
+import { seasonFromExports } from '../src/seo/trends';
+import { readTrendExports } from '../src/seo/trendsFiles';
 import type { Period, SearchRow } from '../src/seo/searchConsole';
 
 const API = 'https://searchconsole.googleapis.com/webmasters/v3/sites';
@@ -304,6 +306,8 @@ async function main() {
     long,
     offerOf: offerLookup(),
     history,
+    // The patterns of the imported Google Trends exports (data/trends/), when there are any.
+    season: seasonFromExports(readTrendExports().exports),
   });
 
   // Metadata without any figure, plus the sealed report (same format as dagcijfers.json).

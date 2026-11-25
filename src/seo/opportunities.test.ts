@@ -18,6 +18,7 @@ import {
   type QueryStat,
 } from './opportunities';
 import type { SearchRow } from './searchConsole';
+import { seasonFromExports } from './trends';
 
 // DEMO — GEEN WERKELIJKE DATA: every figure and query below is synthetic.
 const SITE = 'https://jouwhockeystick.nl';
@@ -292,5 +293,55 @@ describe('statusLine en script', () => {
     expect(source).not.toMatch(/console\.(log|error|warn|info|debug)/);
     expect(source).not.toContain('JSON.stringify(report');
     expect(source).toContain('statusLine(');
+  });
+});
+
+describe('analyse met een Google Trends-seizoen (Fase 2)', () => {
+  // DEMO — GEEN WERKELIJKE DATA: a synthetic yearly pattern.
+  const SHAPE = [56, 67, 104, 97, 87, 93, 63, 122, 137, 108, 182, 86];
+  const points: [string, number][] = [];
+  for (const year of [2022, 2023, 2024, 2025]) for (let m = 1; m <= 12; m += 1) points.push([`${year}-${String(m).padStart(2, '0')}-01`, Math.round((SHAPE[m - 1] as number) / 2)]);
+  const season = seasonFromExports([
+    {
+      versie: 1,
+      thema: 'referentie',
+      rol: 'referentie',
+      regio: 'NL',
+      zoektype: 'web',
+      categorie: 'alle',
+      granulariteit: 'maand',
+      periode: { start: '2022-01-01', end: '2025-12-01' },
+      geexporteerd: '2026-11-25',
+      bron: 'test',
+      termen: [{ term: 'hockeystick', punten: points }],
+      genegeerd: [],
+    },
+  ]);
+  const input = {
+    month: '2026-12',
+    now: new Date('2026-12-07T06:00:00Z'),
+    period: { start: '2026-11-01', end: '2026-11-28' },
+    previousPeriod: { start: '2026-10-04', end: '2026-10-31' },
+    current: [row('osaka hockeystick', '/sticks/demo', 0, 150, 9), row('jouwhockeystick', '/', 5, 99, 1)],
+    previous: [row('osaka hockeystick', '/sticks/demo', 0, 100, 9), row('jouwhockeystick', '/', 5, 10, 1)],
+    long: [],
+    offerOf: () => stick,
+  };
+
+  it('zonder Trends-export staat er geen seizoensdeel en blijft de oude notitie', () => {
+    const report = analyse(input);
+    expect(report.seizoen).toBeUndefined();
+    expect(report.seizoenNotitie).toContain('de positie de hoofdmaat');
+  });
+  it('met een export komt er een seizoensdeel met verwachte, werkelijke en gecorrigeerde verandering, alleen op niet-merk', () => {
+    const report = analyse({ ...input, season });
+    expect(SeoReport.safeParse(report).success).toBe(true);
+    expect(report.seizoen?.werkelijkeVerandering).toBe(1.5); // brand searches are left out: 150 over 100
+    expect(report.seizoen?.verwachteVerandering as number).toBeGreaterThan(1.4);
+    expect(report.seizoen?.gecorrigeerd as number).toBeLessThan(1.1);
+    expect(report.seizoen?.volgendeGolf?.maand).toBe('2027-03');
+    expect(report.seizoenNotitie).toContain('Google Trends');
+    expect(report.seizoenNotitie).toContain('De positie blijft de hoofdmaat');
+    expect(report.seizoen?.bron).toContain('geen zoekaantallen');
   });
 });
