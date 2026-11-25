@@ -16,11 +16,12 @@ Gebruik `gh` voor GitHub (de repo is de huidige repo).
    - `verkoop` — kliks en bestellingen per plek op de site en per stick, bij bol.com en PassaHockey (alleen aantallen; omzet staat er bewust niet in)
    - `conversie` — wat bezoekers doen: de stickwijzer-trechter, afhaakmomenten per vraag, adviezen zonder passende stick, waar bezoekers vandaan komen (Google, social, direct), kliks naar de winkels (bol.com en PassaHockey) per winkel, plek en stick, dead clicks per pagina en per element, rage clicks (PostHog, per bezoeker per dag)
    - `seo-aanbeveling` — SEO-kansen uit het maandrapport, één issue per kans, **zonder cijfers** (de cijfers staan privé in de Marketingstudio). Alleen issues met het label `seo-akkoord` en zonder `seo-uitgevoerd` zijn goedgekeurd door de eigenaar. Maak daar zelf geen werk van uit tenzij het een actie C (nieuwe kenniscontent) is: die mag een van de twee content-briefs worden (volg dan §3, noem het issue in de brief). Actie A, B en D noem je onder **Voor jou** als "goedgekeurd, wacht op uitvoering". Zet zelf nooit de labels `seo-akkoord` of `seo-uitgevoerd`.
+   - `seo-social` — ideeën voor social uit het SEO-maandrapport (actie E: een zoekopdracht buiten ons aanbod, geen websiteactie), zonder cijfers. Zet de open issues met dit label als lijst onder **Voor jou** (hooguit drie, met de zoekterm) en werk ze nooit zelf uit. De eigenaar beslist; de Social-planner verandert hierdoor niet.
 2. **Wat er al loopt:** open issues met label `content-brief` en open pull requests (`gh pr list`). Zet nooit werk uit dat daar al staat.
 3. **Wat er al op de site staat:** de titels en intro's in `src/content/articles/`, `src/content/blogPosts/` en `src/content/zaal.ts`.
 4. **De catalogus:** `npm run catalog:health`, en waar nodig `src/catalog/products/` (merken, zaal of veld, niveau, prijs, junior of senior).
 5. **Eerdere besluiten van de eigenaar:** `docs/decision-log.md`. Een besluit daar gaat voor op een kans die jij ziet (bijvoorbeeld: sticks die bol.com niet verkoopt blijven in het advies).
-6. **Het seizoen:** de datum van vandaag. Het zaalseizoen loopt van december tot en met februari; content daarvoor moet vóór december live staan. Het veldseizoen begint in september en loopt na de winterstop vanaf maart weer.
+6. **Het seizoen:** de datum van vandaag en de seizoensagenda `docs/marketing/seizoensagenda.md`. Die is gemaakt uit Google Trends (een relatieve index, geen zoekaantallen) en noemt de golven van het jaar, de piekmaanden per thema en het voorbereidingsvenster (ongeveer 8 tot 4 weken vóór een golf, een hypothese). Het koopseizoen voor zaal begint in oktober: content daarvoor staat begin oktober live, niet pas in december. Staat de agenda er niet, of is de export ouder dan 100 dagen (zie de bronregel bovenaan het bestand), meld dat onder **Stand**. Verzin geen seizoen dat er niet staat.
 7. **Het hercontrole-signaal:** staat er een bestand `hercontrole-signaal.md` in de root, dan is de catalogus-hercontrole twee geplande runs op rij overgeslagen door een open PR, terwijl er sticks aan de beurt zijn voor de kwartaalcontrole (de workflow schrijft het in de stap "Hercontrole bewaken"). Zet dat als eerste punt onder **Voor jou**, met het aantal sticks en de open PR's uit het bestand. Geen bestand = niets melden.
 
 ## 2. Kansen kiezen
@@ -29,7 +30,7 @@ Een kans is iets wat met weinig moeite veel oplevert voor bezoekers en omzet. Ra
 
 1. **Iets wat de site schaadt**, zoals een fout in het Technical SEO-rapport, een punt onder Samenvatting in het Beveiligingsrapport (noem een mogelijke sleutel in de code altijd als eerste onder **Voor jou**, zonder de waarde), een beveiligings-PR (branch `beveiliging/`) die openstaat, een stick die verborgen dreigt te raken, of een signaal uit het Conversie-rapport (een afhaakmoment in de stickwijzer, dead clicks, een veelbekeken stickpagina zonder klik). Dit is werk voor de eigenaar, geen brief: noem het onder **Voor jou**, met het getal uit het rapport. Veel adviezen zonder passende stick wijzen op een gat in de catalogus; noem welke oorzaak (lengte, budget) en laat het aanvullen aan de Catalogus-aanvuller en de eigenaar.
 2. **Zoekwoorden die bijna op pagina 1 staan** (Search Console, positie 5–20), zodra er data is.
-3. **Seizoen:** content die binnen 6–8 weken nodig is.
+3. **Seizoen:** content die binnen het voorbereidingsvenster van de seizoensagenda valt (ongeveer 8 tot 4 weken vóór een golf).
 4. **Markt:** een onderwerp waar concurrenten content over maken en wij niet. Populaire sticks die niet in onze catalogus staan pakt de Catalogus-aanvuller op (dinsdag, label/branch `catalogus/`); daar maak je geen brief voor. Staat er al langer dan een week een catalogus-PR open, noem die onder **Voor jou**. Hetzelfde geldt voor een hercontrole-PR (branch `hercontrole/`, Catalogus-hercontroleur op donderdag): de kwartaalcontrole pak jij niet op, maar een PR die langer dan een week openstaat noem je onder **Voor jou**.
 5. **Wat bezoekers al doen:** een pagina met veel weergaven of kliks naar bol.com (Conversie-rapport) is een goede plek om vanuit nieuwe content naar te linken, of een reden om een verwante vraag uit te werken.
 6. **Gaten tussen catalogus en content:** een groep sticks (merk, budget, doelgroep) waar bezoekers naar zoeken en die nog geen eigen pagina heeft.
@@ -65,7 +66,7 @@ Eén regel per rapport: wat het zegt, en of het oud is.
 Per brief: link, en in één zin waarom deze nu.
 
 ## Voor jou
-Wat alleen de eigenaar kan doen of beslissen (bijv. een fout uit Technical SEO, ontbrekende productfoto's, een PR die al lang open staat, of het hercontrole-signaal uit §1). Leeg = "Niets."
+Wat alleen de eigenaar kan doen of beslissen (bijv. een fout uit Technical SEO, ontbrekende productfoto's, een PR die al lang open staat, het hercontrole-signaal uit §1, goedgekeurde SEO-kansen die op uitvoering wachten en de ideeën voor social uit `seo-social`). Leeg = "Niets."
 
 ## Overwogen, niet gedaan
 Kansen die je zag maar liet liggen, met de reden.

@@ -9,7 +9,7 @@
 // Defaults: rol is "referentie" for the theme "referentie", otherwise "thema"; the region and the
 // export day come from the file name that Google gives (time_series_NL_..._20261125-2141.csv).
 // Docs: docs/seo-trends-import.md
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { basename } from 'node:path';
 import {
   ANCHOR_TERM,
@@ -21,6 +21,7 @@ import {
   termOf,
   TrendExport,
 } from '../src/seo/trends';
+import { agendaMarkdown } from '../src/seo/seasonAgenda';
 import { readTrendExports, writeTrendExport } from '../src/seo/trendsFiles';
 
 const say = (text: string) => process.stdout.write(`${text}\n`);
@@ -105,6 +106,14 @@ function main() {
   if (process.argv.includes('--proef')) return say('Proef: niets geschreven.');
   const replaced = loaded.exports.find((e) => exportKey(e) === exportKey(incoming)) ?? null;
   say(`Geschreven: ${writeTrendExport(incoming, verdict.action === 'vervangen' ? replaced : null)}`);
+  // The season agenda is generated from the exports: keep it in step, or its test fails.
+  const agenda = agendaMarkdown(readTrendExports().exports);
+  if (agenda) {
+    writeFileSync('docs/marketing/seizoensagenda.md', agenda);
+    say('Seizoensagenda bijgewerkt: docs/marketing/seizoensagenda.md');
+  } else {
+    say('Seizoensagenda niet bijgewerkt: er is nog geen bruikbare referentie-export.');
+  }
 }
 
 main();
