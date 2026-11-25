@@ -1,7 +1,7 @@
 import { webcrypto } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { seal, unseal } from '../marketing/seal';
-import { awinMoney, bolMoney, conversion, daisyconMoney, tradeTrackerMoney } from './salesMoney';
+import { awinMoney, bolMoney, conversion, daisyconMoney, tradeTrackerCampaignMoney, tradeTrackerMoney } from './salesMoney';
 
 describe('bolMoney', () => {
   it('adds clicks, orders and commission; order value stays null when bol does not send it', () => {
@@ -15,6 +15,13 @@ describe('bolMoney (v2 field names)', () => {
   it('reads the order value from revenueInclVat', () => {
     const m = bolMoney({ items: [{ clicks: 3, orders: 1, commission: 2.1, revenueInclVat: 30, revenueExclVat: 24.79 }, { clicks: 1, orders: 0, commission: 0, revenueInclVat: 0 }] });
     expect(m).toEqual({ kliks: 4, orders: 1, omzet: 30, commissie: 2.1 });
+  });
+});
+
+describe('tradeTrackerCampaignMoney', () => {
+  it('counts pending sales and clicks without a place from the campaign report', () => {
+    const xml = '<item><overallClickCount>61</overallClickCount><uniqueClickCount>59</uniqueClickCount><saleCount>2</saleCount><totalCommission>4.5</totalCommission></item>';
+    expect(tradeTrackerCampaignMoney(xml)).toEqual({ kliks: 61, orders: 2, omzet: null, commissie: 4.5 });
   });
 });
 

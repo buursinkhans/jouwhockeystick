@@ -84,6 +84,19 @@ export function tradeTrackerMoney(xml: string): Money {
   return done(m);
 }
 
+/**
+ * TradeTracker getReportCampaign (SOAP): the campaign totals. Unlike the reference report these
+ * include sales that are still pending and clicks without a place reference.
+ */
+export function tradeTrackerCampaignMoney(xml: string): Money {
+  return done({
+    kliks: sumTags(xml, ['overallClickCount']) ?? 0,
+    orders: sumTags(xml, ['saleCount']) ?? 0,
+    omzet: sumTags(xml, ['totalOrderAmount', 'orderAmount', 'saleAmount', 'totalAmount']),
+    commissie: sumTags(xml, ['totalCommission', 'saleCommission']),
+  });
+}
+
 /** Awin transactions (Plutosport) plus the clicks from the advertiser report. */
 export function awinMoney(transactions: unknown, kliks: number | null): Money {
   const list = Array.isArray(transactions) ? (transactions.filter((t) => t && typeof t === 'object') as Record<string, unknown>[]) : [];
