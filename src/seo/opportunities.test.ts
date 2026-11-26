@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   ACTION_LABELS,
   aggregate,
+  ALL_LINKED_REASON,
   analyse,
   categoryPathOf,
   classifyBrand,
@@ -228,7 +229,7 @@ describe('analyse', () => {
     expect(SeoReport.safeParse(report).success).toBe(true);
     expect(report.aanbevelingen.length).toBeLessThanOrEqual(5);
     expect(report.bewustNiet.length).toBeLessThanOrEqual(3);
-    expect(report.regelset).toBe('seo-kansen-v3');
+    expect(report.regelset).toBe('seo-kansen-v4');
     expect(report.land).toBe('nld');
   });
   it('scheidt eigen naam, merkwoorden en niet-merk, en telt rijen met te weinig data apart', () => {
@@ -440,5 +441,47 @@ describe('tweede echte run (2026-11-26): schoenen en kennispagina als hoofdpagin
     const now = stat('welke maat hockeystick', 80, 6, pages);
     const long = stat('welke maat hockeystick', 80, 6, pages);
     expect(decide({ now, before: undefined, long, offer: article('/kennis/b') }).page).toBe('/kennis/b');
+  });
+});
+
+describe('bestaande links tellen mee (seo-kansen-v4)', () => {
+  const pages: [string, number][] = [['/kennis/a', 50], ['/kennis/b', 30], ['/stickwijzer', 20]];
+  const now = stat('welke maat hockeystick', 80, 40, pages);
+  const input = { now, before: undefined, long: now, offer: article('/kennis/a') };
+
+  it('geen actie als alle concurrenten al linken', () => {
+    const decision = decide({ ...input, linked: () => true });
+    expect(decision).toEqual({ code: 'F', page: '/kennis/a', reden: ALL_LINKED_REASON });
+  });
+  it('noemt alleen de pagina\'s waar de link ontbreekt', () => {
+    const decision = decide({ ...input, linked: (from) => from !== '/stickwijzer' });
+    expect(decision.code).toBe('B');
+    expect(decision.missing).toEqual(['/stickwijzer']);
+    expect(decision.others).toEqual(['/kennis/b', '/stickwijzer']);
+  });
+  it('neemt niets aan als een pagina niet te lezen was', () => {
+    const decision = decide({ ...input, linked: () => undefined });
+    expect(decision.code).toBe('B');
+    expect(decision.missing).toBeUndefined();
+  });
+  it('een echte daling blijft zichtbaar, ook als alle links er staan', () => {
+    const lower = stat('welke maat hockeystick', 80, 16, pages);
+    const before = stat('welke maat hockeystick', 80, 9, pages);
+    expect(decide({ ...input, now: lower, before, linked: () => true }).code).toBe('A');
+  });
+  it('zet de vorige periode bij de aanbeveling, niet in het openbare issue', () => {
+    const report = analyse({
+      month: '2026-12',
+      now: new Date('2026-12-07T06:00:00Z'),
+      period: { start: '2026-11-01', end: '2026-11-28' },
+      previousPeriod: { start: '2026-10-04', end: '2026-10-31' },
+      current: [row('osaka hockeystick', '/sticks/demo', 0, 90, 16.6)],
+      previous: [row('osaka hockeystick', '/sticks/demo', 1, 70, 12.8)],
+      long: [],
+      offerOf: () => stick,
+    });
+    const rec = report.aanbevelingen[0];
+    expect(rec?.vorige).toEqual({ positie: 12.8, vertoningen: 70, klikken: 1 });
+    expect(rec && issueFor(rec).body).not.toContain('12.8');
   });
 });

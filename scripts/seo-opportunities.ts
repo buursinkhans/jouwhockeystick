@@ -28,8 +28,10 @@ import {
   SeoReport,
   statusLine,
   type HistoryMonth,
+  type LinkLookup,
   type OfferMatch,
 } from '../src/seo/opportunities';
+import { hasContentLink } from '../src/seo/links';
 import {
   applyOutcomes,
   dueForEvaluation,
@@ -146,6 +148,25 @@ function offerLookup(): (query: string) => OfferMatch {
       if (loose.sticks[0] || loose.brands[0] || loose.articles[0] || loose.answer) return { kind: 'verwant', path: null };
     }
     return { kind: 'geen', path: null };
+  };
+}
+
+const LIVE_SITE = 'https://jouwhockeystick.nl';
+
+/** Reads each live page once and answers whether it links to the other. A page that cannot be read stays unknown. */
+async function liveLinks(pairs: readonly (readonly [string, string])[]): Promise<LinkLookup> {
+  const pages = new Map<string, string>();
+  for (const from of new Set(pairs.map(([page]) => page))) {
+    try {
+      const response = await fetch(`${LIVE_SITE}${from}`, { signal: AbortSignal.timeout(15_000) });
+      if (response.ok) pages.set(from, await response.text());
+    } catch {
+      // Unknown: the report then keeps the general advice.
+    }
+  }
+  return (from, to) => {
+    const html = pages.get(from);
+    return html === undefined ? undefined : hasContentLink(html, to);
   };
 }
 
@@ -384,7 +405,7 @@ async function main() {
   }
 
   const funnel = await organicFunnel(period);
-  const report = analyse({
+  const input = {
     month,
     now,
     period,
@@ -397,7 +418,11 @@ async function main() {
     // The patterns of the imported Google Trends exports (data/trends/), when there are any.
     season: seasonFromExports(readTrendExports().exports),
     funnel,
-  });
+  };
+  // A first pass only collects which links matter; then the live pages are read and the report is made.
+  const pairs: [string, string][] = [];
+  analyse({ ...input, linked: (from, to) => void pairs.push([from, to]) });
+  const report = analyse({ ...input, linked: await liveLinks(pairs) });
 
   // Metadata without any figure, plus the sealed report (same format as dagcijfers.json).
   const file = { versie: 1, gemaakt: now.toISOString(), maand: month, regelset: SEO_RULESET_VERSION, versleuteld: seal(report, key, now) };
