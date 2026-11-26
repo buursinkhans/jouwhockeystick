@@ -1000,13 +1000,13 @@
       "fout": null
     }
   },
-  "laatsteRun": "2026-11-26T08:09:24Z",
+  "laatsteRun": "2026-11-26T09:08:52Z",
   "tegoed": {
     "maand": "2026-11",
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "onderzoek-w48-stand",
+  "wijziging": "fdfeef03-cf0a-4436-bb71-dff2e6b51ffc",
   "resultaten": {
     "insta/7481316443998604276": {
       "id": "7481316443998604276",
