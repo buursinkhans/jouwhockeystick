@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { applyOutcomes, dueForEvaluation, idFromBody, markerOf, outcomeOf, statusesFromIssues, type Due } from './evaluate';
-import { issueFor, outcomeComment, socialIdOf, socialIssueFor } from './issues';
+import { issueFor, outcomeComment, socialIdOf, socialIssueFor, withIssueNumbers } from './issues';
 import { SeoReport, type HistoryMonth, type Recommendation } from './opportunities';
 
 // DEMO — GEEN WERKELIJKE DATA: every figure below is synthetic.
@@ -202,5 +202,54 @@ describe('idee voor social (actie E)', () => {
     const text = issue.body.replace(markerOf(issue.id), '');
     expect(text).not.toContain('!');
     expect(text).not.toContain('—');
+  });
+});
+
+describe('issuenummers in het rapport (optie 1)', () => {
+  const rec: Recommendation = {
+    id: '0123abcd',
+    code: 'A',
+    pagina: '/sticks/demo',
+    paginaType: 'product',
+    zoektermen: ['demo hockeystick'],
+    reden: 'De pagina staat net buiten de eerste resultaten. Verbeter titel, kopjes en inleiding op deze zoekopdracht.',
+    prioriteit: 'hoog',
+    zekerheid: 'middel',
+    basislijn: { positie: 9.4, vertoningen: 4321, klikken: 17 },
+  };
+  const idea = { zoekterm: 'hockeystick knutselen', code: 'E' as const, reden: 'Een zoekopdracht buiten ons aanbod. Hooguit iets voor social, niet voor de site.' };
+  const base = {
+    versie: 1 as const,
+    regelset: 'seo-kansen-v3',
+    gemaakt: '2026-12-07T06:00:00.000Z',
+    maand: '2026-12',
+    land: 'nld',
+    periode: { start: '2026-11-01', end: '2026-11-28' },
+    vorige: { start: '2026-10-04', end: '2026-10-31' },
+    samenvatting: { eigen: { klikken: 0, vertoningen: 0, zoektermen: 0 }, merkwoorden: { klikken: 0, vertoningen: 0, zoektermen: 0 }, nietMerk: { klikken: 0, vertoningen: 0, zoektermen: 0 }, onvoldoende: 0 },
+    aanbevelingen: [rec],
+    bewustNiet: [idea],
+    merkwoorden: [],
+    seizoenNotitie: 'x',
+    historie: [],
+  };
+
+  it('zet het nummer bij de aanbeveling en bij het social-idee, op hun marker-id', () => {
+    const linked = withIssueNumbers(base, new Map([['0123abcd', 42], [socialIdOf('hockeystick knutselen'), 43]]));
+    expect(linked.aanbevelingen[0]?.issue).toBe(42);
+    expect(linked.bewustNiet[0]?.issue).toBe(43);
+  });
+  it('laat een aanbeveling zonder issue ongemoeid en verandert de rest van het rapport niet', () => {
+    const linked = withIssueNumbers(base, new Map([['ander-id', 7]]));
+    expect(linked.aanbevelingen[0]?.issue).toBeUndefined();
+    expect(linked).toEqual(base);
+  });
+  it('geeft een F-regel nooit een nummer, ook niet bij een gelijk id', () => {
+    const f = { zoekterm: 'x', code: 'F' as const, reden: 'Geen passend product in de catalogus. Of we dit gaan aanbieden is een besluit van de eigenaar.' };
+    const linked = withIssueNumbers({ ...base, bewustNiet: [f] }, new Map([[socialIdOf('x'), 9]]));
+    expect(linked.bewustNiet[0]?.issue).toBeUndefined();
+  });
+  it('het issuenummer is geen cijfer uit de meting: het staat niet in de tekst van het issue', () => {
+    expect(issueFor({ ...rec, issue: 42 }).body).not.toContain('42');
   });
 });
