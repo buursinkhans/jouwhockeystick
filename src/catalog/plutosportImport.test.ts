@@ -77,7 +77,7 @@ describe('toPlutosportProduct', () => {
     expect(reason({ name: "Brabo O'GEEZ Baby 18\" Hockeystick Junior", brand: 'Brabo' })).toBe('babystick');
     expect(reason({ name: 'Osaka Goalie Stick', brand: 'Osaka' })).toBe('keepersstick');
     expect(reason({ url: 'https://www.plutosport.nl/the-indian-maharadja-red-hockeystick-junior-10221065-jr' })).toBe('modeljaar 2022');
-    expect(reason({ brand: 'Dita', name: 'Dita Exa 100 Hockeystick' })).toContain('merk');
+    expect(reason({ brand: 'Gryphon', name: 'Gryphon Chrome Hockeystick' })).toContain('merk');
     expect(reason({ sizesInStock: [] })).toBe('geen leverbare lengte in inches');
   });
 });

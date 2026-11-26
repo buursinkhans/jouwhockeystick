@@ -66,6 +66,11 @@ describe('extracting specs from the feed description', () => {
     expect(catalogBrand('Gribbid')).toBeNull();
   });
 
+  it('knows the brands Decathlon sells (decision log 2026-11-26)', () => {
+    expect(catalogBrand('Korok')).toBe('Korok');
+    expect(catalogBrand('DITA')).toBe('Dita');
+  });
+
   it('estimates the level from carbon and price', () => {
     expect(estimateLevel(95, 300)).toBe('ervaren');
     expect(estimateLevel(40, 90)).toBe('gevorderd');

@@ -89,6 +89,8 @@ export const brandSchema = z.enum([
   'Mercian',
   'Cyclone',
   'Naked',
+  'Korok',
+  'Dita',
 ]);
 export type Brand = z.infer<typeof brandSchema>;
 
