@@ -52,6 +52,8 @@ STAP 3 — Issue "Weekrapport <week>", label `marketing`, met per markt:
 
 Ontbrekende data staat er als ontbrekend in. Onderaan, op één regel: `<!-- weekcijfers <JSON-lijst van de WeekNumbers van deze week, per markt> -->`. Maak het met `gh api -X POST repos/$R/issues -f "title=Weekrapport <week>" -F body=@/tmp/rapport.md -f 'labels[]=marketing'`.
 
+Marketingstudio, tabblad Weekrapport: het rapport staat ook als document `weekrapport-<jaar>-W<nn>` in de collectie `markt` (`soort: "weekrapport"`). Schrijf daarin elke week ook `noordsterReeks`: de stickwijzer-starts per week van de laatste 12 weken, als `[{"week": "W47", "totaal": 2, "social": 1, "deels": false}]`. `totaal` is alle `quiz_start`, `social` die uit een bezoek met `utm_medium=social`, en `deels` is `true` voor een week die nog niet voorbij is. Het tabblad tekent er de lijngrafiek "Stickwijzer-starts per week" van. Ontbreekt een week, laat hem dan weg en tel hem nooit als 0.
+
 Sluit af met één regel: de noordster per markt en de link naar het issue.
 
 ---
