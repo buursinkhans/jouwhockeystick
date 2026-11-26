@@ -406,6 +406,22 @@ export const BRAND_PROFILES: BrandProfile[] = [
     characteristicsSourceUrl: 'https://www.hockeycity.nl/hockeysticks/',
     hasCatalogProducts: true,
   },
+  {
+    brand: 'Korok',
+    logoBackground: 'light',
+    characteristics:
+      'Korok heeft geen officiële website die we konden raadplegen (gezocht op 26 november 2026). De Korok-sticks in onze catalogus en hun gegevens komen daarom uit de productfeed van Decathlon, onze partnerwinkel. Volgens de mediapagina van Decathlon is een Korok-stick ontwikkeld door productontwikkelaars samen met veldhockeyers op hoog niveau en specialisten in composietmaterialen van Decathlon R&D. Meer zeggen we zonder officiële bron niet over het merk.',
+    characteristicsSourceUrl: 'https://www.decathlon-united.media/media/sportfolios/korok-dita.html',
+    hasCatalogProducts: true,
+  },
+  {
+    brand: 'Dita',
+    logoBackground: 'light',
+    characteristics:
+      'Dita heeft geen officiële website die we konden raadplegen (gezocht op 26 november 2026). De Dita-sticks in onze catalogus en hun gegevens komen daarom uit de productfeed van Decathlon, onze partnerwinkel. Over de achtergrond van het merk zeggen we zonder officiële bron niets.',
+    characteristicsSourceUrl: 'https://www.decathlon-united.media/media/sportfolios/korok-dita.html',
+    hasCatalogProducts: true,
+  },
 ];
 
 /** The id of a brand's card on /merken, e.g. "merk-grays"; also the anchor articles link to. */

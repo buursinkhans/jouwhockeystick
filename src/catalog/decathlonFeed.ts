@@ -55,7 +55,7 @@ export function decathlonPageUrl(link: string): string | null {
 }
 
 /** Decathlon writes brands in title case; the catalog uses the brand's own spelling. */
-const BRAND_SPELLING: Readonly<Record<string, string>> = { adidas: 'adidas', jdh: 'JDH', tk: 'TK', y1: 'Y1', dita: 'Dita', grays: 'Grays', kipsta: 'Kipsta' };
+const BRAND_SPELLING: Readonly<Record<string, string>> = { adidas: 'adidas', jdh: 'JDH', tk: 'TK', y1: 'Y1', dita: 'Dita', grays: 'Grays', korok: 'Korok', kipsta: 'Kipsta' };
 
 /**
  * What the feed's stock field says: a number is a count, "out of stock" or "0" is none, anything
