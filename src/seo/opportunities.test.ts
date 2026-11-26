@@ -136,6 +136,21 @@ describe('decide', () => {
     const before = stat('osaka hockeystick', 4, 2, [['/sticks/demo', 4]]);
     expect(decide({ now: comparable('osaka hockeystick', 9), before, long: undefined, offer: stick }).reden).not.toContain('verslechterd');
   });
+  it('een daling ver buiten pagina 1 en 2 telt niet', () => {
+    const decision = decide({ now: comparable('osaka hockeystick', 57), before: comparable('osaka hockeystick', 51), long: undefined, offer: stick });
+    expect(decision.code).toBe('F');
+  });
+  it('de zoekwoordtabel gaat voor: een andere getoonde pagina geeft B naar de aangewezen pagina', () => {
+    const guide = '/kennis/hoe-kies-je-de-juiste-hockeystick';
+    const now = stat('welke hockeystick kopen', 40, 57, [['/blog/hockeystick-kopen', 40]]);
+    const before = stat('welke hockeystick kopen', 40, 12, [['/blog/hockeystick-kopen', 40]]);
+    const decision = decide({ now, before, long: undefined, offer: article(guide) });
+    expect(decision.code).toBe('B');
+    expect(decision.page).toBe(guide);
+    expect(decision.reden).not.toContain('verslechterd');
+    const shown = stat('welke hockeystick kopen', 40, 9, [[guide, 40]]);
+    expect(decide({ now: shown, before: undefined, long: undefined, offer: article(guide) }).page).toBe(guide);
+  });
   it('net buiten de eerste resultaten: A, of B/C/D als de pagina niet past bij de vraag', () => {
     const base = { before: undefined, long: undefined };
     expect(decide({ ...base, now: stat('osaka hockeystick', 20, 9, [['/sticks/demo', 20]]), offer: stick }).code).toBe('A');
@@ -211,7 +226,7 @@ describe('analyse', () => {
     expect(SeoReport.safeParse(report).success).toBe(true);
     expect(report.aanbevelingen.length).toBeLessThanOrEqual(5);
     expect(report.bewustNiet.length).toBeLessThanOrEqual(3);
-    expect(report.regelset).toBe('seo-kansen-v1');
+    expect(report.regelset).toBe('seo-kansen-v2');
     expect(report.land).toBe('nld');
   });
   it('scheidt eigen naam, merkwoorden en niet-merk, en telt rijen met te weinig data apart', () => {

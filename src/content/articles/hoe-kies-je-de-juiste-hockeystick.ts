@@ -32,6 +32,11 @@ export const BUDGET_BANDS = (['lt_75', '75_125', '125_175', '175_250', 'gt_250']
   return { band, label, min, max };
 });
 
+/** Official and shop sources behind the claims about bow and position (checked 2026-11-26). */
+const FIH_RULES = 'https://www.fih.hockey/static-assets/pdf/2026_09_14_fih_rules_of_hockey_2027_clean.pdf';
+const GRAYS_DEFENDERS = 'https://www.grays-hockey.com/blogs/news/what-is-the-best-hockey-stick-for-defenders';
+const INTERSPORT_GUIDE = 'https://intersport.nl/blogs/hockey/waar-moet-je-op-letten-bij-de-aanschaf-van-een-hockeystick';
+
 const LEVELS: readonly ExperienceLevel[] = ['beginner', 'gevorderd', 'ervaren'];
 
 /** The hand-checked field sticks in one budget band (price above min, up to and including max). */
@@ -62,6 +67,23 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
   intro: `Welke hockeystick je koopt, hangt af van wie ermee speelt. Kijk eerst naar niveau, speelstijl en budget, dan naar kromming en stickgevoel, en controleer als laatste de lengte. Voor wie begint, is een eenvoudige stick met weinig carbon en een rustige kromming meestal de juiste keuze. Een dure stick met veel carbon maakt leren eerder lastiger dan makkelijker.`,
   sections: [
     {
+      id: 'kort',
+      heading: 'Welke hockeystick past bij wie?',
+      level: 2,
+      body: [
+        {
+          type: 'table',
+          columns: ['Speler', 'Carbon', 'Kromming', 'Verder lezen'],
+          rows: [
+            ['Kind of beginner', `Tot ${SOFT_MAX_CARBON}%`, 'Rustig: standaard of mid bow', '[Kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners)'],
+            ['Beheerst de basis', `${SOFT_MAX_CARBON + 1} tot ${DIRECT_MIN_CARBON - 1}%`, 'Mid bow, pro bow of dynabow', '[Hoeveel carbon](/kennis/meer-carbon-hockeystick-beter)'],
+            ['Ervaren, met 3D-acties of sleeppush', `${DIRECT_MIN_CARBON}% of meer, als de aanname betrouwbaar is`, 'Low bow of extreme low bow', '[Low bow of mid bow](/kennis/low-bow-vs-mid-bow)'],
+          ],
+        },
+        'Zie de tabel als richting. Wat jij prettig vindt en wat je wilt leren, kan je keuze verschuiven. De maat komt uit de [lengtetabel](/kennis/hockeystick-lengte-tabel).',
+      ],
+    },
+    {
       id: 'methode',
       heading: 'De Jouwhockeystick-methode: speler, stick, maat',
       level: 2,
@@ -88,7 +110,7 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
       ],
     },
     {
-      heading: 'Ontwikkelfase',
+      heading: 'Begin je net, of koop je voor een kind?',
       level: 3,
       body: [
         'Wie net begint of een paar seizoenen speelt, heeft het meest aan maat, controle en plezier. Een rustige kromming en weinig carbon vergeven dan meer, en een extreme low bow is geen goede eerste stick. Kent een speler de basis en ontdekt hij of zij een eigen stijl, dan tellen ook de eerste aanname, de ontwikkeldoelen en het stickgevoel mee. Gevorderde jeugd en senioren kiezen gerichter: op acties, kromming, stijfheid en budget.',
@@ -96,14 +118,14 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
       ],
     },
     {
-      heading: 'Speelstijl',
+      heading: 'Maakt je positie uit voor je stick?',
       level: 3,
       body: [
-        'Kijk naar wat de speler doet en wil leren: aannemen, passen, dribbelen, 3D-acties, de backhand of de sleeppush. Wie vooral strak vlak wil passen, heeft weinig aan een stick die gemaakt is om de bal op te tillen. Positie zegt minder dan je denkt: een verdediger die veel dribbelt, zoekt iets anders dan een verdediger die vooral lange ballen slaat. Positie gebruik je daarom alleen om de keuze te verfijnen.',
+        'Een beetje. Ook stickmerk Grays schrijft dat er niet één stick voor alle verdedigers is. Kijk daarom vooral naar wat de speler doet en wil leren: aannemen, passen, dribbelen, 3D-acties, de backhand of de sleeppush. Wie vooral strak vlak wil passen, heeft weinig aan een stick die gemaakt is om de bal op te tillen. Een verdediger die veel dribbelt, zoekt iets anders dan een verdediger die vooral lange ballen slaat. Positie gebruik je daarom alleen om de keuze te verfijnen.',
       ],
     },
     {
-      heading: 'Budget',
+      heading: 'Wat mag de stick kosten?',
       level: 3,
       body: [
         `Zie je budget als een bovengrens: daaronder hoef je niet het duurste te zoeken. In onze catalogus staan ${curated.length} met de hand nagekeken veldsticks, met richtprijzen van ${formatEuro(Math.min(...prices))} tot ${formatEuro(Math.max(...prices))}. Zo zijn ze over de budgetten van de [stickwijzer](/stickwijzer) verdeeld:`,
@@ -128,10 +150,10 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
       ],
     },
     {
-      heading: 'Kromming (bow-profiel)',
+      heading: 'Welke kromming heb je nodig?',
       level: 3,
       body: [
-        'De bow is de kromming van de stick. Elk merk gebruikt eigen namen; grofweg zijn er drie groepen:',
+        'De bow is de kromming van de stick. Volgens de spelregels van de internationale hockeybond FIH mag die hoogstens 25 mm diep zijn, en moet het diepste punt minstens 20 cm boven de onderkant van de krul liggen. Elk merk gebruikt eigen namen; grofweg zijn er drie groepen:',
         {
           type: 'list',
           items: [
@@ -144,7 +166,7 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
       ],
     },
     {
-      heading: 'Materiaal en stickgevoel',
+      heading: 'Wat doet carbon met het stickgevoel?',
       level: 3,
       body: [
         `Carbon maakt een stick stijver. Dat voelt directer, maar een stijve stick vergeeft minder als je de bal net niet goed raakt. Voor beginners is 0 tot ${SOFT_MAX_CARBON}% carbon meestal genoeg; een stick met ${DIRECT_MIN_CARBON}% of meer past vooral bij wie de bal al zuiver aanneemt en slaat. Het carbonpercentage is een indicatie: ook de kromming, het gewicht en de balans bepalen hoe een stick voelt, en niet elk merk vermeldt het percentage.`,
@@ -187,6 +209,7 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
           ],
         },
         'Op [alle veldhockeysticks](/sticks) filter je op niveau, lengte, maximale prijs, kromming en merk, en bij elke stick staat de bron van elk gegeven. Speel je in de zaal, kijk dan bij de [zaalsticks](/zaalsticks). Waar de winkels in verschillen, lees je in [waar koop je een hockeystick?](/kennis/waar-koop-je-een-hockeystick)',
+        'Heb je er twee of drie over? Dan kun je [een hockeystick uitproberen voor je koopt](/blog/hockeystick-kopen), met een test in vijf stappen.',
       ],
     },
     {
@@ -204,9 +227,12 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-09-22',
-  updatedAt: '2026-11-14',
+  updatedAt: '2026-11-26',
   sources: [
     { label: 'Methodiek van de stickwijzer', url: 'https://jouwhockeystick.nl/methodiek' },
+    { label: 'FIH: Rules of Hockey, geldig vanaf 1 november 2026 (specificaties van de stick)', url: FIH_RULES },
+    { label: 'Grays: keuze van een stick voor verdedigers (informatie van het merk)', url: GRAYS_DEFENDERS },
+    { label: 'Intersport: Waar moet je op letten bij de aanschaf van een hockeystick', url: INTERSPORT_GUIDE },
     { label: "Richtprijzen, niveaus en lengtes: de productpagina's op deze site, met bron en datum per gegeven" },
     { label: 'Redactionele inschatting jouwhockeystick.nl (geen eigen tests, geen prestatie-advies)' },
   ],

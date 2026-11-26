@@ -19,17 +19,17 @@ export const hockeystickKopen: Article = {
     'Of een stick bij je past, merk je pas als je hem in je handen hebt. Probeer daarom voor je koopt de acties die je in een wedstrijd het vaakst maakt: aannemen, dribbelen, passen, je favoriete actie en iets wat je lastig vindt. Koop je online, controleer dan de maat met een stick in je handen en kijk vooraf hoe retourneren gaat.',
   sections: [
     {
-      heading: 'Eerst kiezen, dan uitproberen',
+      heading: 'Wat doe je vóór je gaat uitproberen?',
       level: 2,
       body: [
-        'Uitproberen werkt het best met twee of drie sticks die al bij je passen. Die kies je eerst op de speler (niveau, speelstijl en budget), dan op de stick (kromming en stickgevoel) en als laatste op de maat. Hoe dat gaat, lees je in [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick) De [stickwijzer](/stickwijzer) zet zo een rijtje voor je klaar: maximaal drie sticks, elk met de redenen erbij.',
+        'Zet eerst twee of drie sticks op een rij die al bij je passen. Die kies je eerst op de speler (niveau, speelstijl en budget), dan op de stick (kromming en stickgevoel) en als laatste op de maat. Hoe dat gaat, lees je in [welke hockeystick kopen?](/kennis/hoe-kies-je-de-juiste-hockeystick) De [stickwijzer](/stickwijzer) zet zo een rijtje voor je klaar: maximaal drie sticks, elk met de redenen erbij. Zelf rondkijken kan bij de [veldsticks](/sticks) en de [zaalsticks](/zaalsticks).',
       ],
     },
     {
-      heading: 'De test in vijf stappen',
+      heading: 'Hoe test je een hockeystick in de winkel?',
       level: 2,
       body: [
-        'Hoe een stick in je handen ligt, lees je niet af aan een specificatie. Hard slaan is maar één van de dingen die je in een wedstrijd doet, dus test breder:',
+        'Test in vijf stappen: aannemen, dribbelen, passen, je favoriete actie en iets wat je lastig vindt. Hoe een stick in je handen ligt, lees je niet af aan een specificatie.',
         {
           type: 'list',
           ordered: true,
@@ -46,18 +46,18 @@ export const hockeystickKopen: Article = {
       ],
     },
     {
-      heading: 'Klopt de maat? Zo check je het',
+      heading: 'Hoe check je of de maat klopt?',
       level: 2,
       body: [
         'Laat de speler de stick vasthouden in een normale hockeyhouding. Beweegt hij of zij ontspannen, lukt dribbelen en blijft de stick dicht bij het lichaam? Dan zit je goed. Welke maat bij welke lichaamslengte hoort, zie je in de [hockeystick lengte tabel](/kennis/hockeystick-lengte-tabel).',
-        'Koop een kinderstick niet een maat groter om in te groeien. Een stick die nu te lang is, maakt oefenen lastiger, en daar gaat het plezier van af. Twijfel je tussen twee maten, kies dan de kortere.',
+        'Twijfel je tussen twee maten, kies dan de kortere, zeker bij een kind.',
       ],
     },
     {
-      heading: 'Online kopen zonder uitproberen',
+      heading: 'Hoe koop je online zonder uit te proberen?',
       level: 2,
       body: [
-        'Kun je niet testen, dan vang je de grootste risico\'s vooraf op:',
+        'Controleer vooraf de maat, de modelnaam en de retourvoorwaarden:',
         {
           type: 'list',
           items: [
@@ -71,7 +71,7 @@ export const hockeystickKopen: Article = {
       ],
     },
     {
-      heading: 'Check dit voor je afrekent',
+      heading: 'Wat controleer je voor je afrekent?',
       level: 2,
       body: [
         {
@@ -89,11 +89,10 @@ export const hockeystickKopen: Article = {
       ],
     },
     {
-      heading: 'Je eerste stick: eerst ontdekken, later verfijnen',
+      heading: 'Moet je een eerste stick uitproberen?',
       level: 2,
       body: [
-        'Begin je net met hockey? Dan hoeft je eerste stick geen specialistenstick te zijn. Kies een betaalbare stick in de juiste maat en ontdek wat je leuk vindt: opbouwen, verdedigen, dribbelen, scoren of overal een beetje. Bij je volgende stick weet je beter wat je wilt houden en wat je anders wilt, en dan heeft uitproberen ook meer zin.',
-        'Waar je bij een eerste stick op let, staat in [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
+        'Dat hoeft niet uitgebreid. Begin je net met hockey, kies dan een betaalbare stick in de juiste maat en ontdek wat je leuk vindt. Bij je volgende stick weet je beter wat je anders wilt, en dan heeft testen meer zin. Waar je bij een eerste stick op let, staat in [hockeystick voor kinderen en beginners](/kennis/hockeystick-kinderen-en-beginners).',
         {
           type: 'note',
           text: '*Wij testen sticks niet zelf. Deze tips zijn onze eigen uitgangspunten, gebaseerd op informatie van merken en hockeywinkels. Koop je via een knop op deze site, dan zijn dat partnerlinks: wij krijgen dan een kleine vergoeding van de winkel, en de winkel is de verkoper.*',
@@ -103,7 +102,7 @@ export const hockeystickKopen: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-06',
-  updatedAt: '2026-11-14',
+  updatedAt: '2026-11-26',
   sources: [
     {
       label: 'Intersport: Waar moet je op letten bij de aanschaf van een hockeystick',
