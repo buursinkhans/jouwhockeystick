@@ -111,6 +111,15 @@ export default function StickwijzerPage() {
           welke sticks we nooit adviseren, hoe we de rest wegen en welke bronnen
           we gebruiken.
         </p>
+        <p className="mt-2 text-sm text-inkt/80">
+          Liever eerst zelf begrijpen hoe je kiest? Lees{' '}
+          <Link
+            href="/kennis/hoe-kies-je-de-juiste-hockeystick"
+            className="font-semibold text-veld hover:underline"
+          >
+            welke hockeystick kopen?
+          </Link>
+        </p>
       </section>
 
       <FaqSection

@@ -3687,3 +3687,9 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Bewust niet:** een merkprofiel voor ASICS (schoenmerken zijn vrije tekst in de schoencatalogus, er is geen merkenpagina voor schoenen), Member-prijzen, een knop bij een naamgelijkenis, veld of zaal op een gok.
 - **Test:** `decathlonFeed.test.ts` (schoenlezer), `shoes/feedImport.test.ts` (import, EAN-koppeling, naam zonder EAN, gedeelde EAN met een andere winkel), `workflows.test.ts` (volgorde en paden van de sync, proefrun schrijft niets).
 - **Betrokken bestanden:** `src/catalog/{decathlonFeed,shoeFeed}.ts`, `src/catalog/shoes/{feedImport,index,types,importedDecathlon}.ts`, `src/catalog/offers/index.ts`, `scripts/decathlon-feed.ts`, `.github/workflows/{passa-sync,decathlon-feed-check}.yml`, `CLAUDE.md` en de tests.
+
+## 2026-11-26 — Stickwijzer linkt naar de gids "welke hockeystick kopen"
+- **Aanleiding:** het kansenrapport meldde dat `/blog/hockeystick-kopen`, `/kennis` en `/stickwijzer` concurreren met `/kennis/hoe-kies-je-de-juiste-hockeystick`. De blog en `/kennis` linkten al naar de gids, de stickwijzer niet.
+- **Wat (akkoord eigenaar):** één zin met link onder de uitleg van de drie routes op `/stickwijzer`. Titel, vragen en adviesregels zijn niet gewijzigd.
+- **Meten:** SEO-meting van 2026-12-09. Eén interne link zal de positie waarschijnlijk weinig veranderen.
+- **Betrokken bestanden:** `src/app/stickwijzer/page.tsx`.
