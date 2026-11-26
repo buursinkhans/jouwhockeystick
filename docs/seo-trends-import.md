@@ -43,6 +43,7 @@ npm run trends:import -- <bestand.csv> --thema <thema> [--proef]
 - Termen die overal 0 zijn, worden weggelaten en gemeld.
 - Een thema-export mag het anker niet bevatten; een referentie-export moet het bevatten.
 - **Dubbel:** dezelfde vergelijking (thema, termen, periode en instellingen) met dezelfde of een oudere exportdatum wordt niet nog eens geïmporteerd. Een nieuwere export van dezelfde vergelijking vervangt de oude.
+- Na een import maakt het script de seizoensagenda (`docs/marketing/seizoensagenda.md`) opnieuw. Dat kan ook met `npm run trends:agenda`. Het bestand wordt nooit met de hand aangepast; een test faalt als het niet klopt met de gegevens.
 - De instellingen worden vastgelegd: thema, rol, regio, zoektype, categorie, periode, granulariteit en exportdatum.
 
 De gegevens staan in `data/trends/` (één JSON-bestand per export) en worden meegecommit. Het is een openbare, geaggregeerde index, geen Search Console- of PostHog-gegevens.
@@ -57,6 +58,7 @@ De gegevens staan in `data/trends/` (één JSON-bestand per export) en worden me
   - `goed`: gelijkenis minstens 0,6, gemiddelde index minstens 20 en hooguit 10 procent nullen. Te lezen per maand.
   - `richting`: gelijkenis minstens 0,6 en een waarde in minstens 8 maanden, maar klein of met stille maanden. Alleen te lezen als patroon over het jaar.
   - `te klein`: het patroon herhaalt zich niet of er is te weinig. Zo'n term krijgt geen piekmaanden en telt niet mee.
+- **Seizoensagenda:** een gewone tekstpagina uit dezelfde gegevens, zonder cijfers van de site: de golven van het jaar, de piekmaanden per thema en het voorbereidingsvenster. De Orchestrator leest die in plaats van een losse zin over het seizoen.
 - **Verouderd:** een export van meer dan 100 dagen oud wordt als verouderd gemeld. Maak dan een nieuwe.
 
 ## Beperkingen

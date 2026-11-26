@@ -41,7 +41,7 @@ import {
   type IssueLike,
   type RecStatus,
 } from '../src/seo/evaluate';
-import { issueFor } from '../src/seo/issues';
+import { issueFor, outcomeComment, socialIssueFor } from '../src/seo/issues';
 import { getToken, readServiceAccount } from '../src/seo/googleAuth';
 import { GENERIC_WORDS } from '../src/seo/seoConfig';
 import { seasonFromExports } from '../src/seo/trends';
@@ -176,8 +176,8 @@ function githubApi() {
   return call;
 }
 
-async function recommendationIssues(call: NonNullable<ReturnType<typeof githubApi>>): Promise<GhIssue[]> {
-  const response = await call(`/issues?labels=${LABELS.recommendation}&state=all&per_page=100`);
+async function issuesWithLabel(call: NonNullable<ReturnType<typeof githubApi>>, label: string): Promise<GhIssue[]> {
+  const response = await call(`/issues?labels=${label}&state=all&per_page=100`);
   if (!response.ok) throw new ApiError(`GitHub gaf HTTP ${response.status}.`);
   return ((await response.json()) as GhIssue[]).filter((issue) => !issue.pull_request);
 }
@@ -196,7 +196,7 @@ async function statusesOf(issues: readonly GhIssue[], call: NonNullable<ReturnTy
   for (const issue of issues) {
     const labels = issue.labels.map((label) => label.name);
     const uitgevoerdOp = labels.includes(LABELS.done) ? await doneDate(call, issue.number) : undefined;
-    like.push({ body: issue.body, labels, ...(uitgevoerdOp && { uitgevoerdOp }) });
+    like.push({ body: issue.body, labels, number: issue.number, ...(uitgevoerdOp && { uitgevoerdOp }) });
   }
   return statusesFromIssues(like);
 }
@@ -206,6 +206,7 @@ async function ensureLabels(call: NonNullable<ReturnType<typeof githubApi>>) {
     { name: LABELS.recommendation, color: '0E8A16', description: 'SEO-kans uit het maandrapport (zonder cijfers)' },
     { name: LABELS.approved, color: '1D76DB', description: 'De eigenaar keurt deze SEO-kans goed' },
     { name: LABELS.done, color: '5319E7', description: 'De wijziging staat live; het maandrapport meet het effect' },
+    { name: LABELS.social, color: 'C5DEF5', description: 'Idee voor social uit het SEO-maandrapport (zonder cijfers)' },
   ];
   // A label that exists answers 422: that is fine.
   for (const label of labels) await call('/labels', { method: 'POST', body: label });
@@ -226,6 +227,39 @@ async function createIssues(
     if (response.ok) made += 1;
   }
   return made;
+}
+
+/** One issue per social idea (action E), unless an issue with the same marker exists, open or closed: a closed idea is a "no". */
+async function createSocialIssues(
+  call: NonNullable<ReturnType<typeof githubApi>>,
+  ideas: SeoReport['bewustNiet'],
+  existing: readonly GhIssue[],
+): Promise<number> {
+  const known = new Set(existing.map((issue) => idFromBody(issue.body)));
+  let made = 0;
+  for (const idea of ideas.filter((item) => item.code === 'E')) {
+    const draft = socialIssueFor(idea);
+    if (known.has(draft.id)) continue;
+    const response = await call('/issues', { method: 'POST', body: { title: draft.title, body: draft.body, labels: draft.labels } });
+    if (response.ok) made += 1;
+  }
+  return made;
+}
+
+/** The result of a measurement goes on its issue as a word, and the issue is closed. Returns how many were answered. */
+async function answerOutcomes(
+  call: NonNullable<ReturnType<typeof githubApi>>,
+  results: readonly { due: Due; outcome: ReturnType<typeof outcomeOf> }[],
+): Promise<number> {
+  let answered = 0;
+  for (const { due, outcome } of results) {
+    if (due.issue === undefined) continue;
+    const comment = await call(`/issues/${due.issue}/comments`, { method: 'POST', body: { body: outcomeComment(outcome) } });
+    if (!comment.ok) continue;
+    await call(`/issues/${due.issue}`, { method: 'PATCH', body: { state: 'closed', state_reason: 'completed' } });
+    answered += 1;
+  }
+  return answered;
 }
 
 async function main() {
@@ -279,16 +313,16 @@ async function main() {
   const github = githubApi();
   let issues: GhIssue[] = [];
   let githubFailed = false;
+  const results: { due: Due; outcome: ReturnType<typeof outcomeOf> }[] = [];
   if (github) {
     try {
-      issues = await recommendationIssues(github);
+      issues = await issuesWithLabel(github, LABELS.recommendation);
     } catch {
       githubFailed = true;
     }
   }
   if (github && !githubFailed) {
     const due = dueForEvaluation(history, await statusesOf(issues, github), last);
-    const results: { due: Due; outcome: ReturnType<typeof outcomeOf> }[] = [];
     for (const item of due) {
       const after = await figuresOf(token, site, item.zoekterm, item.window);
       results.push({ due: item, outcome: outcomeOf(item, after) });
@@ -325,6 +359,10 @@ async function main() {
         await ensureLabels(github);
         const made = await createIssues(github, report.aanbevelingen, issues);
         say(`Issues gemaakt: ${made}.`);
+        const social = await createSocialIssues(github, report.bewustNiet, await issuesWithLabel(github, LABELS.social));
+        say(`Social-ideeën gemaakt: ${social}.`);
+        const answered = await answerOutcomes(github, results);
+        say(`Resultaten op issues gezet en afgesloten: ${answered}.`);
       } catch {
         say('De GitHub-koppeling gaf een fout bij het maken van issues.');
       }

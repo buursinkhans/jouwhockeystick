@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { applyOutcomes, dueForEvaluation, idFromBody, markerOf, outcomeOf, statusesFromIssues, type Due } from './evaluate';
-import { issueFor } from './issues';
+import { issueFor, outcomeComment, socialIdOf, socialIssueFor } from './issues';
 import { SeoReport, type HistoryMonth, type Recommendation } from './opportunities';
 
 // DEMO — GEEN WERKELIJKE DATA: every figure below is synthetic.
@@ -151,5 +151,56 @@ describe('SeoReport', () => {
   it('een oud rapport zonder resultaten in de historie blijft geldig', () => {
     const parsed = SeoReport.shape.historie.safeParse(history);
     expect(parsed.success).toBe(true);
+  });
+});
+
+describe('terugkoppeling in woorden (Fase 3)', () => {
+  const outcome = {
+    uitgevoerdOp: '2026-12-10',
+    gemeten: '2027-01-07',
+    oordeel: 'verbeterd' as const,
+    na: { positie: 6.2, vertoningen: 4321, klikken: 17 },
+    toelichting: 'Een richting, geen bewijs: ook het seizoen, andere wijzigingen en kleine aantallen verschuiven een positie.',
+  };
+  it('de reactie bevat het oordeel in woorden en geen enkel cijfer uit de meting', () => {
+    const text = outcomeComment(outcome);
+    expect(text).toContain('**Effect na 28 dagen:** Verbeterd.');
+    expect(text).toContain('geen bewijs');
+    for (const secret of ['6.2', '6,2', '4321', '17 ']) expect(text).not.toContain(secret);
+    expect(text).not.toMatch(/vertoningen|klikken/i);
+    expect(text).not.toContain('!');
+  });
+  it('geeft voor elk oordeel een eigen woord', () => {
+    const words = (['verbeterd', 'gelijk', 'verslechterd', 'onvoldoende data', 'niet gemeten'] as const).map((o) => outcomeComment({ ...outcome, oordeel: o }).split('\n')[0]);
+    expect(new Set(words).size).toBe(5);
+  });
+  it('het issuenummer reist mee van de labels naar de meting', () => {
+    const statuses = statusesFromIssues([{ body: `x\n${markerOf('aaaaaaa1')}`, labels: ['seo-aanbeveling', 'seo-uitgevoerd'], uitgevoerdOp: '2026-12-10', number: 42 }]);
+    expect(statuses[0]?.issue).toBe(42);
+    expect(dueForEvaluation(history, statuses, '2027-02-01')[0]?.issue).toBe(42);
+    expect(dueForEvaluation(history, statusesFromIssues([{ body: `x\n${markerOf('aaaaaaa1')}`, labels: ['seo-uitgevoerd'], uitgevoerdOp: '2026-12-10' }]), '2027-02-01')[0]?.issue).toBeUndefined();
+  });
+});
+
+describe('idee voor social (actie E)', () => {
+  const idea = { zoekterm: 'hockeystick sinterklaas', code: 'E' as const, reden: 'Een zoekopdracht buiten ons aanbod. Hooguit iets voor social, niet voor de site.' };
+  const issue = socialIssueFor(idea);
+  it('noemt de zoekterm en de reden, zonder cijfers, met het label seo-social en een merkteken', () => {
+    expect(issue.title).toBe('SEO-social-idee: "hockeystick sinterklaas"');
+    expect(issue.labels).toEqual(['seo-social']);
+    expect(issue.body).toContain('"hockeystick sinterklaas"');
+    expect(issue.body).toContain('Dit is geen websiteactie');
+    expect(idFromBody(issue.body)).toBe(socialIdOf('hockeystick sinterklaas'));
+    expect(issue.body.replace(markerOf(issue.id), '')).not.toMatch(/\d/);
+  });
+  it('geeft per zoekterm een eigen, vast id', () => {
+    expect(socialIdOf('a')).toBe(socialIdOf('a'));
+    expect(socialIdOf('a')).not.toBe(socialIdOf('b'));
+    expect(socialIdOf('a')).toMatch(/^[0-9a-f]{8}$/);
+  });
+  it('houdt de huisstijl', () => {
+    const text = issue.body.replace(markerOf(issue.id), '');
+    expect(text).not.toContain('!');
+    expect(text).not.toContain('—');
   });
 });

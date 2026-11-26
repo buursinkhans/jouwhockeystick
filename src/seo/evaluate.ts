@@ -16,6 +16,8 @@ export const LABELS = {
   recommendation: 'seo-aanbeveling',
   approved: 'seo-akkoord',
   done: 'seo-uitgevoerd',
+  /** Ideas for social (action E), without figures. */
+  social: 'seo-social',
 } as const;
 
 export const EVALUATION_DAYS = 28;
@@ -27,6 +29,8 @@ export type RecStatus = {
   status: 'voorgesteld' | 'goedgekeurd' | 'uitgevoerd';
   /** YYYY-MM-DD: the day the label seo-uitgevoerd was set. Only with status uitgevoerd. */
   uitgevoerdOp?: string;
+  /** The GitHub issue number, so the result can be put on it. */
+  issue?: number;
 };
 
 export type Figures = { positie: number; vertoningen: number; klikken: number };
@@ -44,6 +48,7 @@ export type Due = {
   uitgevoerdOp: string;
   /** The 28 days after "uitgevoerd". */
   window: { start: string; end: string };
+  issue?: number;
 };
 
 /**
@@ -73,6 +78,7 @@ export function dueForEvaluation(history: readonly HistoryMonth[], statuses: rea
       basislijn: newest.rec.basislijn,
       uitgevoerdOp: status.uitgevoerdOp,
       window,
+      ...(status.issue !== undefined && { issue: status.issue }),
     });
   }
   return due;
@@ -115,7 +121,7 @@ export function applyOutcomes(history: readonly HistoryMonth[], results: readonl
 }
 
 /** The shape of an issue as the GitHub API returns it, reduced to what the status needs. */
-export type IssueLike = { body: string | null; labels: readonly string[]; uitgevoerdOp?: string };
+export type IssueLike = { body: string | null; labels: readonly string[]; uitgevoerdOp?: string; number?: number };
 
 const MARKER = /<!--\s*seo-id:([0-9a-f]{8})\s*-->/;
 
@@ -128,9 +134,10 @@ export function statusesFromIssues(issues: readonly IssueLike[]): RecStatus[] {
   for (const issue of issues) {
     const id = idFromBody(issue.body);
     if (!id) continue;
-    if (issue.labels.includes(LABELS.done) && issue.uitgevoerdOp) out.push({ id, status: 'uitgevoerd', uitgevoerdOp: issue.uitgevoerdOp });
-    else if (issue.labels.includes(LABELS.approved) || issue.labels.includes(LABELS.done)) out.push({ id, status: 'goedgekeurd' });
-    else out.push({ id, status: 'voorgesteld' });
+    const ref = issue.number !== undefined ? { issue: issue.number } : {};
+    if (issue.labels.includes(LABELS.done) && issue.uitgevoerdOp) out.push({ id, status: 'uitgevoerd', uitgevoerdOp: issue.uitgevoerdOp, ...ref });
+    else if (issue.labels.includes(LABELS.approved) || issue.labels.includes(LABELS.done)) out.push({ id, status: 'goedgekeurd', ...ref });
+    else out.push({ id, status: 'voorgesteld', ...ref });
   }
   return out;
 }

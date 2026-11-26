@@ -90,7 +90,7 @@
       "actief": true,
       "woordenlijst": {},
       "kalender": [
-        { "id": "veld-start-najaar", "naam": "Start veldseizoen", "van": "08-15", "tot": "09-30", "pijler": "maat" },
+        { "id": "veld-start-najaar", "naam": "Start veldseizoen", "van": "08-01", "tot": "10-31", "pijler": "maat" },
         { "id": "zaalseizoen", "naam": "Zaalseizoen", "van": "10-01", "tot": "02-29", "pijler": "zaal" },
         { "id": "black-friday", "naam": "Black Friday", "van": "11-01", "tot": "11-30", "pijler": "vergelijken" },
         { "id": "sinterklaas", "naam": "Sinterklaas (pakjesavond 5 december)", "van": "11-15", "tot": "12-05", "pijler": "maat" },
