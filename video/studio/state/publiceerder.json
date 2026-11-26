@@ -1006,8 +1006,315 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "89f57b8f-bf7a-4a39-b27c-4c741b6b117e",
-  "resultaten": {},
+  "wijziging": "onderzoek-w48-resultaten",
+  "resultaten": {
+    "insta/7481316443998604276": {
+      "id": "7481316443998604276",
+      "kanaal": "insta",
+      "datum": "2026-11-10",
+      "labels": {
+        "vorm": "carrousel",
+        "pagina": "/kennis/hockeyschoenen-kinderen-maat",
+        "markt": "NL",
+        "dag": "di",
+        "tijd": "19:30"
+      },
+      "waarde": 11,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "insta/7262225222097453236": {
+      "id": "7262225222097453236",
+      "kanaal": "insta",
+      "datum": "2026-11-12",
+      "labels": {
+        "vorm": "beeld",
+        "pagina": "/kennis/hockeyschoenen-waterveld-zandveld",
+        "markt": "NL",
+        "dag": "do",
+        "tijd": "19:30"
+      },
+      "waarde": 7,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "insta/6750081343933336891": {
+      "id": "6750081343933336891",
+      "kanaal": "insta",
+      "datum": "2026-11-13",
+      "labels": {
+        "vorm": "carrousel",
+        "pagina": "/kennis/veldstick-zaalhockey",
+        "markt": "NL",
+        "dag": "vr",
+        "tijd": "19:30"
+      },
+      "waarde": 13,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "insta/4713205353937784384": {
+      "id": "4713205353937784384",
+      "kanaal": "insta",
+      "datum": "2026-11-14",
+      "labels": {
+        "vorm": "carrousel",
+        "pagina": "/kennis/hoe-kies-je-de-juiste-hockeystick",
+        "markt": "NL",
+        "dag": "za",
+        "tijd": "19:30"
+      },
+      "waarde": 7,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "insta/4059740146155407167": {
+      "id": "4059740146155407167",
+      "kanaal": "insta",
+      "datum": "2026-11-17",
+      "labels": {
+        "vorm": "carrousel",
+        "pagina": "/kennis/low-bow-vs-mid-bow",
+        "markt": "NL",
+        "dag": "di",
+        "tijd": "19:30"
+      },
+      "waarde": 10,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "insta/5172925245144910325": {
+      "id": "5172925245144910325",
+      "kanaal": "insta",
+      "datum": "2026-11-19",
+      "labels": {
+        "vorm": "beeld",
+        "pagina": "/sticks/indian-maharadja-black-spark-wood-indoor",
+        "markt": "NL",
+        "dag": "do",
+        "tijd": "19:30"
+      },
+      "waarde": 9,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "fb/7481316443998604276": {
+      "id": "7481316443998604276",
+      "kanaal": "fb",
+      "datum": "2026-11-10",
+      "labels": {
+        "vorm": "carrousel",
+        "pagina": "/kennis/hockeyschoenen-kinderen-maat",
+        "markt": "NL",
+        "dag": "di",
+        "tijd": "19:30"
+      },
+      "waarde": 0,
+      "gedeeld": 0
+    },
+    "fb/7262225222097453236": {
+      "id": "7262225222097453236",
+      "kanaal": "fb",
+      "datum": "2026-11-12",
+      "labels": {
+        "vorm": "beeld",
+        "pagina": "/kennis/hockeyschoenen-waterveld-zandveld",
+        "markt": "NL",
+        "dag": "do",
+        "tijd": "19:30"
+      },
+      "waarde": 0,
+      "gedeeld": 0
+    },
+    "fb/423733727": {
+      "id": "423733727",
+      "kanaal": "fb",
+      "datum": "2026-11-13",
+      "labels": {
+        "vorm": "carrousel",
+        "pagina": "/kennis/veldstick-zaalhockey",
+        "markt": "NL",
+        "dag": "vr",
+        "tijd": "19:30"
+      },
+      "waarde": 0,
+      "gedeeld": 0
+    },
+    "fb/423734326": {
+      "id": "423734326",
+      "kanaal": "fb",
+      "datum": "2026-11-14",
+      "labels": {
+        "vorm": "carrousel",
+        "pagina": "/kennis/hoe-kies-je-de-juiste-hockeystick",
+        "markt": "NL",
+        "dag": "za",
+        "tijd": "19:30"
+      },
+      "waarde": 0,
+      "gedeeld": 0
+    },
+    "fb/429129134": {
+      "id": "429129134",
+      "kanaal": "fb",
+      "datum": "2026-11-17",
+      "labels": {
+        "vorm": "carrousel",
+        "pagina": "/kennis/low-bow-vs-mid-bow",
+        "markt": "NL",
+        "dag": "di",
+        "tijd": "19:30"
+      },
+      "waarde": 0,
+      "gedeeld": 0
+    },
+    "fb/423734726": {
+      "id": "423734726",
+      "kanaal": "fb",
+      "datum": "2026-11-19",
+      "labels": {
+        "vorm": "beeld",
+        "pagina": "/sticks/indian-maharadja-black-spark-wood-indoor",
+        "markt": "NL",
+        "dag": "do",
+        "tijd": "19:30"
+      },
+      "waarde": 0,
+      "gedeeld": 0
+    },
+    "reels/1276885417256634051": {
+      "id": "1276885417256634051",
+      "kanaal": "reels",
+      "datum": "2026-11-11",
+      "labels": {
+        "hook": "mythe",
+        "soort": "hockey",
+        "vorm": "video",
+        "pagina": "/zaalsticks",
+        "markt": "NL",
+        "dag": "wo",
+        "tijd": "19:30"
+      },
+      "waarde": 123,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "reels/-780598427679373823": {
+      "id": "-780598427679373823",
+      "kanaal": "reels",
+      "datum": "2026-11-13",
+      "labels": {
+        "hook": "resultaat",
+        "soort": "kennis",
+        "vorm": "video",
+        "pagina": "/kennis/hockeystick-lengte-tabel",
+        "markt": "NL",
+        "dag": "vr",
+        "tijd": "19:30"
+      },
+      "waarde": 118,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "reels/-5478336064879048843": {
+      "id": "-5478336064879048843",
+      "kanaal": "reels",
+      "datum": "2026-11-16",
+      "labels": {
+        "hook": "vergelijking",
+        "soort": "lijst",
+        "vorm": "video",
+        "pagina": "/zaalsticks",
+        "markt": "NL",
+        "dag": "ma",
+        "tijd": "19:30"
+      },
+      "waarde": 114,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "reels/4442223241926299202": {
+      "id": "4442223241926299202",
+      "kanaal": "reels",
+      "datum": "2026-11-18",
+      "labels": {
+        "hook": "mythe",
+        "soort": "kennis",
+        "vorm": "video",
+        "pagina": "/kennis/zaalstick-voor-kinderen",
+        "markt": "NL",
+        "dag": "wo",
+        "tijd": "19:30"
+      },
+      "waarde": 53,
+      "bewaard": 0,
+      "gedeeld": 0
+    },
+    "shorts/3750979919208268563": {
+      "id": "3750979919208268563",
+      "kanaal": "shorts",
+      "datum": "2026-11-11",
+      "labels": {
+        "hook": "mythe",
+        "soort": "hockey",
+        "vorm": "video",
+        "pagina": "/zaalsticks",
+        "markt": "NL",
+        "dag": "wo",
+        "tijd": "19:30"
+      },
+      "waarde": 39,
+      "gedeeld": 0
+    },
+    "shorts/2802607227839596671": {
+      "id": "2802607227839596671",
+      "kanaal": "shorts",
+      "datum": "2026-11-13",
+      "labels": {
+        "hook": "resultaat",
+        "soort": "kennis",
+        "vorm": "video",
+        "pagina": "/kennis/hockeystick-lengte-tabel",
+        "markt": "NL",
+        "dag": "vr",
+        "tijd": "19:30"
+      },
+      "waarde": 3,
+      "gedeeld": 0
+    },
+    "shorts/8836199211605773539": {
+      "id": "8836199211605773539",
+      "kanaal": "shorts",
+      "datum": "2026-11-16",
+      "labels": {
+        "hook": "vergelijking",
+        "soort": "lijst",
+        "vorm": "video",
+        "pagina": "/zaalsticks",
+        "markt": "NL",
+        "dag": "ma",
+        "tijd": "19:30"
+      },
+      "waarde": 10,
+      "gedeeld": 0
+    },
+    "shorts/-8176426651049507795": {
+      "id": "-8176426651049507795",
+      "kanaal": "shorts",
+      "datum": "2026-11-18",
+      "labels": {
+        "hook": "mythe",
+        "soort": "kennis",
+        "vorm": "video",
+        "pagina": "/kennis/zaalstick-voor-kinderen",
+        "markt": "NL",
+        "dag": "wo",
+        "tijd": "19:30"
+      },
+      "waarde": 26,
+      "gedeeld": 0
+    }
+  },
   "onderzoek": {
     "week": 46,
     "issue": 207,
