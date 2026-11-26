@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getAllProducts, getProductBySlug } from '@/catalog';
-import { shippingCostEur, BOL_SHIPPING, PASSASPORTS_SHIPPING, PLUTOSPORT_SHIPPING } from '@/lib/retailers';
+import { shippingCostEur, BOL_SHIPPING, DECATHLON_SHIPPING, PASSASPORTS_SHIPPING, PLUTOSPORT_SHIPPING } from '@/lib/retailers';
 import { getOffers, isPriceFresh, lowestTotal, sortOffers, totalPrice, type Offer } from './index';
 
 const now = new Date('2026-10-27T12:00:00Z');
@@ -117,5 +117,37 @@ describe('getOffers', () => {
   it('never offers a shop for a stick it does not sell', () => {
     const grays = getProductBySlug('grays-db8-composite');
     expect(grays && getOffers(grays).some((o) => o.retailer === 'plutosport')).toBe(false);
+  });
+});
+
+describe('Decathlon (decision log 2026-11-26)', () => {
+  const base = getAllProducts()[0]!;
+  const page = 'https://www.decathlon.nl/p/hockeystick-demo/123456/m7654321';
+
+  it('een stick met een Decathlon-pagina krijgt een Decathlon-aanbod; zonder prijs in de feed alleen de knop', () => {
+    const offers = getOffers({ ...base, decathlonProductUrl: page });
+    const decathlon = offers.find((o) => o.retailer === 'decathlon');
+    expect(decathlon).toBeTruthy();
+    expect(decathlon?.productUrl).toBe(page);
+    expect(decathlon?.priceEur).toBeNull();
+    expect(decathlon?.readAt).toBeNull();
+  });
+
+  it('zonder Decathlon-pagina geen Decathlon-aanbod', () => {
+    expect(getOffers({ ...base }).some((o) => o.retailer === 'decathlon')).toBe(false);
+  });
+
+  it('de verzendkosten bij een prijs zijn €3,95, zonder een gratis drempel voor niet-Members', () => {
+    expect(shippingCostEur(DECATHLON_SHIPPING, 79.99)).toBe(3.95);
+  });
+
+  it('een Decathlon-aanbod met een prijs staat op totaalprijs tussen de andere winkels', () => {
+    expect(
+      order([
+        offer({ retailer: 'bolcom', priceEur: 90, shippingEur: 0 }),
+        offer({ retailer: 'decathlon', priceEur: 80, shippingEur: 3.95 }),
+        offer({ retailer: 'plutosport', priceEur: 83, shippingEur: 6.95 }),
+      ]),
+    ).toEqual(['decathlon', 'plutosport', 'bolcom']);
   });
 });

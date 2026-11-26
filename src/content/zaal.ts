@@ -124,7 +124,7 @@ export const ZAAL = {
       'Van laag naar hoog in prijs. Dit is een selectie op maat en budget, geen persoonlijk advies: op de pagina van elke stick zie je het profiel, de bronnen en de prijzen per winkel.',
     importedHeading: 'Uit de winkelfeeds, nog niet met de hand gecontroleerd',
     importedNote:
-      'Deze gegevens komen uit de productfeeds van PassaHockey, Plutosport, HockeyCity en Daka. Controleer maat en specificaties bij de winkel.',
+      'Deze gegevens komen uit de productfeeds van PassaHockey, Plutosport, HockeyCity, Daka en Decathlon. Controleer maat en specificaties bij de winkel.',
     loading: 'Sticks uit de winkelfeeds laden…',
     counting: 'Even tellen…',
     loadError: 'Laden lukte niet. Probeer het nog een keer.',

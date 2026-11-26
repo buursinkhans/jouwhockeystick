@@ -119,3 +119,42 @@ describe('het script en de workflow', () => {
     expect(workflow).not.toMatch(/^\s*set -x/m);
   });
 });
+
+describe('categoriepad en merken (Decathlon-feed)', () => {
+  const rowXml = (path: string, brand: string, page: string, name = 'Hockeystick demo') =>
+    `<product><productURL>https://www.decathlon.nl/p/${page}?utm_source=x&amp;utm_campaign=1</productURL><name>${name}</name><brand>${brand}</brand><categoryPath>${path}</categoryPath><price>10</price></product>`;
+
+  it('het categoriepad gaat voor de tekst: een tas met "hockeystick" in de naam is geen stick', () => {
+    expect(kindOf(leafFields(rowXml('Hockey&gt;Hockey accessoires&gt;Hockeytassen', 'Korok', 'tas/1/2', 'Sticktas voor hockeysticks')))).toBe('ander');
+    expect(kindOf(leafFields(rowXml('Hockey&gt;Hockeysticks&gt;Hockeysticks per merk&gt;Dita', 'Dita', 'x/1/2')))).toBe('stick');
+    expect(kindOf(leafFields(rowXml('Hockey&gt;Hockeyschoenen&gt;Hockeyschoenen per merk', 'Grays', 'y/1/2', 'Schoenen')))).toBe('schoen');
+    expect(kindOf(leafFields(rowXml('Ijshockey&gt;Ijshockeyschaatsen', 'Oxelo', 'z/1/2', 'Schaatsen hockey')))).toBe('ander');
+  });
+  it('decodeert de entiteiten van het pad', () => {
+    expect(leafFields(rowXml('Hockey&gt;Hockeysticks', 'A', 'x/1/2')).categoryPath).toBe('Hockey>Hockeysticks');
+  });
+
+  const summary = new FeedSummary();
+  for (const xml of [
+    rowXml('Hockey&gt;Hockeysticks&gt;a', 'Dita', 'dita-a/1/2'),
+    rowXml('Hockey&gt;Hockeysticks&gt;a', 'Dita', 'dita-a/1/2'), // a second size of the same page
+    rowXml('Hockey&gt;Hockeysticks&gt;a', 'Dita', 'dita-b/3/4'),
+    rowXml('Hockey&gt;Hockeysticks&gt;a', 'Kipsta', 'kip/5/6'),
+    rowXml('Hockey&gt;Hockeyschoenen&gt;a', 'Dita', 'schoen/7/8', 'Schoen'),
+  ]) summary.add(xml);
+  const result = summary.result();
+
+  it('telt per merk de productpagina\'s en niet de regels, gesplitst in sticks en schoenen', () => {
+    expect(result.brands).toEqual([
+      { brand: 'Dita', sticks: 2, schoenen: 1 },
+      { brand: 'Kipsta', sticks: 1, schoenen: 0 },
+    ]);
+  });
+  it('het rapport toont de merkentabel en zet erbij of het merk in onze catalogus staat', () => {
+    const text = summaryReport(result, 'product', 100, (brand) => brand === 'Dita');
+    expect(text).toContain('## Merken');
+    expect(text).toContain('| Dita | 2 | 1 | ja |');
+    expect(text).toContain('| Kipsta | 1 | 0 | **nee** |');
+    expect(summaryReport(result, 'product', 100)).not.toContain('In onze catalogus');
+  });
+});

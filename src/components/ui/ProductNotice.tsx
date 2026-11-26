@@ -13,6 +13,7 @@ export function ProductNotice({
   alsoAtPlutosport = false,
   alsoAtHockeyCity = false,
   alsoAtDaka = false,
+  alsoAtDecathlon = false,
 }: {
   /** bol.com does not sell this model, so there is no price to check there. */
   notSoldAtBol?: boolean;
@@ -26,6 +27,8 @@ export function ProductNotice({
   alsoAtHockeyCity?: boolean;
   /** Sold at Daka (with or without bol.com). */
   alsoAtDaka?: boolean;
+  /** Sold at Decathlon (with or without bol.com). */
+  alsoAtDecathlon?: boolean;
 }) {
   const shops = [
     ...(notSoldAtBol ? [] : ['bol.com']),
@@ -33,6 +36,7 @@ export function ProductNotice({
     ...(alsoAtPlutosport ? ['Plutosport'] : []),
     ...(alsoAtHockeyCity ? ['HockeyCity'] : []),
     ...(alsoAtDaka ? ['Daka'] : []),
+    ...(alsoAtDecathlon ? ['Decathlon'] : []),
   ];
   const where =
     shops.length <= 1

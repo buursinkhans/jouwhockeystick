@@ -51,6 +51,7 @@ describe('homepage Black Friday card, with the data as checked (10 November, Plu
       const all = JSON.stringify(cardOn(day));
       expect(all).not.toContain('HockeyCity');
       expect(all).not.toContain('Daka');
+      expect(all).not.toContain('Decathlon');
       expect(all).not.toContain('partnerwinkel');
     }
   });
@@ -93,6 +94,7 @@ describe('status per shop on /black-friday-hockey', () => {
       passasports: 'Begint op 20 november',
       plutosport: 'Nu bezig',
       daka: 'Geen actie gevonden',
+      decathlon: 'Nog niet nagekeken',
     });
   });
 

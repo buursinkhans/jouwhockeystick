@@ -17,6 +17,7 @@
     "bol:feed-check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/bol-feed-check.ts",
     "seo:report": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/search-console-report.ts",
     "dashboard:data": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/agent-dashboard-data.ts",
+    "decathlon:feed": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/decathlon-feed.ts",
     "decathlon:feed-check": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/decathlon-feed-check.ts",
     "trends:agenda": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/trends-agenda.ts",
     "trends:import": "node --experimental-strip-types --no-warnings --import ./scripts/ts-register.mjs scripts/trends-import.ts",

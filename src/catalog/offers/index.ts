@@ -12,6 +12,7 @@ import { PASSAHOCKEY_LIVE_PRICES } from '../imported/passaPrices';
 import type { ShoeListing } from '../shoes/types';
 import { BOL_PRICES } from './bolPrices';
 import { DAKA_OFFERS } from './daka';
+import { DECATHLON_OFFERS } from './decathlon';
 import { HOCKEYCITY_OFFERS } from './hockeyCity';
 import { PLUTOSPORT_MATCHES } from './matches';
 import type { Offer } from './sort';
@@ -98,6 +99,32 @@ export type DakaOffers = {
   shoes: Readonly<Record<string, ShoeListing>>;
 };
 
+/** A stick at Decathlon; lengths and price come from the feed rows (one per length). */
+export type DecathlonStickMatch = {
+  /** Product page on decathlon.nl without query; the tracking tags are added in src/lib/retailers.ts. */
+  productUrl: string;
+  /** 'ean': the same EAN as the PassaHockey stick; 'naam': brand, model, bow and year the same; 'handmatig': confirmed by the owner (decathlonConfirmed.ts). */
+  method: 'ean' | 'naam' | 'handmatig';
+  /** Lowest price of a length that is not out of stock, incl. btw (never a from-price or an old price). */
+  priceEur: number;
+  /** Lengths in inches that are not out of stock. */
+  lengths?: readonly number[];
+};
+
+export type DecathlonOffers = {
+  /** YYYY-MM-DD: when the feed was read. */
+  date: string;
+  sticks: Readonly<Record<string, DecathlonStickMatch>>;
+  /** Shoe models with a Decathlon page of the same EAN (shoes follow in a later step). */
+  shoes: Readonly<Record<string, ShoeListing>>;
+};
+
+/** Adds the Decathlon page to a stick that has a match. */
+export function withDecathlon(product: Product, decathlon: DecathlonOffers): Product {
+  const match = decathlon.sticks[product.slug];
+  return match ? { ...product, decathlonProductUrl: match.productUrl } : product;
+}
+
 /** Adds the Daka page to a stick that has a confirmed match. */
 export function withDaka(product: Product, daka: DakaOffers): Product {
   const match = daka.sticks[product.slug];
@@ -183,6 +210,18 @@ export function getOffers(product: Product): Offer[] {
       // Only in-stock pages are matched (scripts/daka-feed.ts); lengths from the feed rows.
       const match = DAKA_OFFERS.sticks[slug];
       offers.push(offer('daka', product.dakaProductUrl, match?.priceEur ?? null, DAKA_OFFERS.date, true, match?.lengths));
+    }
+  }
+
+  if (product.decathlonProductUrl) {
+    if (product.feedImport?.feed === 'decathlon') {
+      offers.push(
+        offer('decathlon', product.decathlonProductUrl, product.priceIndicativeEur.value, product.feedImport.importedAt, true, product.lengthsInches.value),
+      );
+    } else {
+      // Only pages with a length that is not out of stock are matched (scripts/decathlon-feed.ts); lengths from the feed rows.
+      const match = DECATHLON_OFFERS.sticks[slug];
+      offers.push(offer('decathlon', product.decathlonProductUrl, match?.priceEur ?? null, DECATHLON_OFFERS.date, true, match?.lengths));
     }
   }
   return offers;

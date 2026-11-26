@@ -76,7 +76,7 @@ export const VELD = {
     prices: {
       question: 'Waar komen de winkelprijzen vandaan?',
       answer:
-        `Uit de productfeeds van onze partnerwinkels: bol.com, PassaHockey, Plutosport, HockeyCity en Daka. We lezen ze elke week en zetten de datum erbij, bovenaan de pagina. Prijzen kunnen bij de winkel intussen veranderd zijn, dus de prijs op de winkelsite geldt. Is een prijs ouder dan 14 dagen, dan tonen we hem niet meer. Heeft een stick geen actuele winkelprijs, dan zie je de richtprijs, met bron en datum. De knoppen naar de winkels zijn partnerlinks: koop je via zo'n knop, dan krijgen wij een kleine vergoeding van de winkel. Die vergoeding bepaalt niet de volgorde, en sticks die geen partnerwinkel verkoopt, staan er ook tussen.`,
+        `Uit de productfeeds van onze partnerwinkels: bol.com, PassaHockey, Plutosport, HockeyCity, Daka en Decathlon. We lezen ze elke week en zetten de datum erbij, bovenaan de pagina. Prijzen kunnen bij de winkel intussen veranderd zijn, dus de prijs op de winkelsite geldt. Is een prijs ouder dan 14 dagen, dan tonen we hem niet meer. Heeft een stick geen actuele winkelprijs, dan zie je de richtprijs, met bron en datum. De knoppen naar de winkels zijn partnerlinks: koop je via zo'n knop, dan krijgen wij een kleine vergoeding van de winkel. Die vergoeding bepaalt niet de volgorde, en sticks die geen partnerwinkel verkoopt, staan er ook tussen.`,
     },
     indoor: {
       question: 'Wat is het verschil tussen een veldstick en een zaalstick?',
