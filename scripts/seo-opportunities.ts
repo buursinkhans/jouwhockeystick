@@ -43,6 +43,8 @@ import {
 } from '../src/seo/evaluate';
 import { issueFor, outcomeComment, socialIssueFor } from '../src/seo/issues';
 import { getToken, readServiceAccount } from '../src/seo/googleAuth';
+import { BOT_PATTERN, hogql, LIVE_HOSTS, readPosthogConfig } from '../src/analytics-report/hogql';
+import { funnelFromRows, funnelQuery, type Funnel, type FunnelFigures } from '../src/seo/funnel';
 import { GENERIC_WORDS } from '../src/seo/seoConfig';
 import { seasonFromExports } from '../src/seo/trends';
 import { readTrendExports } from '../src/seo/trendsFiles';
@@ -148,6 +150,34 @@ function previousHistory(path: string | undefined, key: string): { history: Hist
     return parsed.success ? { history: parsed.data, read: true } : { history: [], read: false };
   } catch {
     return { history: [], read: false };
+  }
+}
+
+// ---------------------------------------------------------------- PostHog (organic funnel)
+
+const FUNNEL_FILTERS = { liveHosts: LIVE_HOSTS, botPattern: BOT_PATTERN } as const;
+
+/**
+ * Visitors from Google (no campaign) per landing page and how many clicked to a shop that day. Null when
+ * PostHog cannot be read (no key, or an error): the funnel is then left out of the report. A query error
+ * is never printed; only a fixed sentence, because it may hold part of the query.
+ */
+async function organicFunnel(period: Period): Promise<Funnel | null> {
+  try {
+    const config = readPosthogConfig();
+    return funnelFromRows(await hogql(config, funnelQuery(period, FUNNEL_FILTERS), 'seo-funnel'), period);
+  } catch {
+    return null;
+  }
+}
+
+/** The funnel of one page in a window (zeros when nobody came from Google); undefined when PostHog cannot be read. */
+async function pageFunnel(page: string, window: Period): Promise<FunnelFigures | undefined> {
+  try {
+    const config = readPosthogConfig();
+    return funnelFromRows(await hogql(config, funnelQuery(window, FUNNEL_FILTERS, page), 'seo-funnel-pagina'), window).totaal;
+  } catch {
+    return undefined;
   }
 }
 
@@ -325,11 +355,14 @@ async function main() {
     const due = dueForEvaluation(history, await statusesOf(issues, github), last);
     for (const item of due) {
       const after = await figuresOf(token, site, item.zoekterm, item.window);
-      results.push({ due: item, outcome: outcomeOf(item, after) });
+      // Action D is judged on the funnel of its page (Google visitors who click to a shop); the others on the position.
+      const funnelAfter = item.code === 'D' ? await pageFunnel(item.pagina, item.window) : undefined;
+      results.push({ due: item, outcome: outcomeOf(item, after, funnelAfter) });
     }
     history = applyOutcomes(history, results);
   }
 
+  const funnel = await organicFunnel(period);
   const report = analyse({
     month,
     now,
@@ -342,12 +375,14 @@ async function main() {
     history,
     // The patterns of the imported Google Trends exports (data/trends/), when there are any.
     season: seasonFromExports(readTrendExports().exports),
+    funnel,
   });
 
   // Metadata without any figure, plus the sealed report (same format as dagcijfers.json).
   const file = { versie: 1, gemaakt: now.toISOString(), maand: month, regelset: SEO_RULESET_VERSION, versleuteld: seal(report, key, now) };
   writeFileSync(out, `${JSON.stringify(file)}\n`);
   say(statusLine(report));
+  if (!funnel) say('PostHog gaf geen cijfers: de organische funnel is deze maand overgeslagen.');
   if (process.argv[3] && !loaded.read) say('Let op: de historie van de vorige maand kon niet worden gelezen; de historie begint opnieuw.');
 
   // Issues come last: the sealed report is already written, so a GitHub problem never loses it.

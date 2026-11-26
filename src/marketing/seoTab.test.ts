@@ -82,3 +82,22 @@ describe('Marketingstudio: seizoenskaart in het tabblad SEO (Fase 2)', () => {
     }
   });
 });
+
+describe('Marketingstudio: organische funnel in het tabblad SEO (Fase 3)', () => {
+  it('toont de funnel per landingspagina en zegt wat ze wel en niet is', () => {
+    for (const text of ['Organisch verkeer naar winkelklik', 'Bezoekers uit Google', 'Klikten naar een winkel', 'Een winkelklik is geen bestelling', 'cookieloos', 'PostHog gaf deze maand geen cijfers']) {
+      expect(tab, text).toContain(text);
+    }
+  });
+  it('escapet de pagina\'s en de teksten uit de gegevens', () => {
+    for (const field of ['p.pagina', 'shareText(z.totaal)']) {
+      expect(tab, field).toContain(`esc(${field}`);
+    }
+    expect(tab).toContain("esc(dayName(z.periode.start))");
+  });
+  it('toont bij actie D de doorklik voor en na in plaats van de positie', () => {
+    expect(tab).toContain("'doorklik ' + shareText(x.a.funnelBasislijn)");
+    expect(tab).toContain("'doorklik ' + shareText(x.a.resultaat.funnelNa)");
+    expect(tab).toContain('Doorklik naar een winkel: ');
+  });
+});

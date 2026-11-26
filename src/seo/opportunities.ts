@@ -12,6 +12,7 @@ import { z } from 'zod';
 import { LOW_CTR, NEAR_PAGE_ONE, type Period, type SearchRow } from './searchConsole';
 import { INTENT_WORDS, KEYWORD_PAGES, SEASON_NOTE, SEASON_NOTE_TRENDS, SEO_BRAND_TERMS, THRESHOLDS, type BrandTerms } from './seoConfig';
 import { buildSeason, Season, type SeasonInput } from './trends';
+import { figuresOfPage, Funnel, FunnelFigures } from './funnel';
 
 export const SEO_RULESET_VERSION = 'seo-kansen-v2';
 
@@ -50,6 +51,8 @@ export const Recommendation = z.object({
   prioriteit: z.enum(['hoog', 'middel', 'laag']),
   zekerheid: z.enum(['hoog', 'middel', 'laag']),
   basislijn: Baseline,
+  /** Action D only: visitors from Google on this page and how many clicked to a shop that day, in the period of the report. */
+  funnel: FunnelFigures.optional(),
 });
 export type Recommendation = z.infer<typeof Recommendation>;
 
@@ -72,6 +75,8 @@ export const Outcome = z.object({
   gemeten: z.string(),
   oordeel: z.enum(['verbeterd', 'gelijk', 'verslechterd', 'onvoldoende data', 'niet gemeten']),
   na: Baseline.nullable(),
+  /** Action D: the funnel of the page in those 28 days. */
+  funnelNa: FunnelFigures.nullable().optional(),
   toelichting: z.string(),
 });
 export type Outcome = z.infer<typeof Outcome>;
@@ -85,6 +90,7 @@ export const HistoryMonth = z.object({
       pagina: z.string(),
       zoekterm: z.string(),
       basislijn: Baseline,
+      funnelBasislijn: FunnelFigures.optional(),
       resultaat: Outcome.optional(),
     }),
   ),
@@ -106,6 +112,8 @@ export const SeoReport = z.object({
   seizoenNotitie: z.string(),
   /** The season effect from the Google Trends exports; absent until an export is imported (Phase 2). */
   seizoen: Season.optional(),
+  /** The organic funnel (Google to shop click) per landing page; absent when PostHog gave no answer. */
+  funnel: Funnel.optional(),
   historie: z.array(HistoryMonth),
 });
 export type SeoReport = z.infer<typeof SeoReport>;
@@ -377,6 +385,8 @@ export type AnalysisInput = {
   terms?: BrandTerms;
   /** The patterns of the imported Google Trends exports, when there are any. */
   season?: SeasonInput | null;
+  /** The organic funnel of the same period, when PostHog could be read. */
+  funnel?: Funnel | null;
 };
 
 const CODE_ORDER: Record<ActionCode, number> = { A: 0, B: 1, D: 2, C: 3, E: 4, F: 5 };
@@ -430,6 +440,7 @@ export function analyse(input: AnalysisInput): SeoReport {
   const recommendations: Recommendation[] = [...groups.values()].map((members) => {
     const lead = members[0] as Hit; // `ranked` is sorted by impressions, so the first is the largest.
     const { code, page, reden } = lead.decision;
+    const funnelFigures = code === 'D' ? figuresOfPage(input.funnel, page) : null;
     return {
       id: shortId(code === 'C' ? `C|${lead.stat.query}` : `${code}|${page}`),
       code: code as Recommendation['code'],
@@ -444,6 +455,7 @@ export function analyse(input: AnalysisInput): SeoReport {
         vertoningen: lead.stat.impressions,
         klikken: lead.stat.clicks,
       },
+      ...(funnelFigures && { funnel: funnelFigures }),
     };
   });
   const impressionsOf = (rec: Recommendation) => rec.basislijn.vertoningen;
@@ -506,6 +518,7 @@ export function analyse(input: AnalysisInput): SeoReport {
     merkwoorden: brandWordRows,
     seizoenNotitie: seizoen ? SEASON_NOTE_TRENDS : SEASON_NOTE,
     ...(seizoen && { seizoen }),
+    ...(input.funnel && { funnel: input.funnel }),
     historie: nextHistory(input.history ?? [], input.month, top),
   });
 }
@@ -524,6 +537,7 @@ export function nextHistory(
       pagina: rec.pagina,
       zoekterm: rec.zoektermen[0] ?? '',
       basislijn: rec.basislijn,
+      ...(rec.funnel && { funnelBasislijn: rec.funnel }),
     })),
   };
   return [...history.filter((h) => h.maand !== month), entry]

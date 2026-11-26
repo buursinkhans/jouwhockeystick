@@ -71,6 +71,9 @@ jobs:
           GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
           # Seals the report before it leaves this step.
           VERKOOP_SLEUTEL: ${{ secrets.VERKOOP_SLEUTEL }}
+          # The organic funnel (visitors from Google who click to a shop): a read-only PostHog key, as in the daily figures.
+          POSTHOG_PERSONAL_API_KEY: ${{ secrets.POSTHOG_PERSONAL_API_KEY }}
+          POSTHOG_PROJECT_ID: ${{ vars.POSTHOG_PROJECT_ID }}
           # Reads the labels of the recommendation issues and creates new ones (no figures in them).
           GITHUB_TOKEN: ${{ github.token }}
           SEO_ISSUES: ${{ inputs.issues }}
