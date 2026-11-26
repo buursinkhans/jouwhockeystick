@@ -23,6 +23,7 @@ import { DAY_MS, isoDay, lastReportedDay } from '../src/marketing/dailyMetrics';
 import { seal, unseal, type Sealed } from '../src/marketing/seal';
 import {
   analyse,
+  categoryPathOf,
   SEO_RULESET_VERSION,
   SeoReport,
   statusLine,
@@ -136,6 +137,14 @@ function offerLookup(): (query: string) => OfferMatch {
     const article = found.articles[0]?.item;
     if (article) return { kind: 'artikel', path: article.path };
     if (found.wijzerHint) return { kind: 'tool', path: '/stickwijzer' };
+    // A word that points at one of our category pages (zaal, veld): not outside our offer.
+    const category = categoryPathOf(rest);
+    if (category) return { kind: 'categorie', path: category };
+    // A loose match: one word of the query finds something of ours. We do not know which page fits, so no path.
+    for (const word of rest.filter((w) => w.length >= 4)) {
+      const loose = search(index, word, config, { sticks: 1, brands: 1, articles: 1 });
+      if (loose.sticks[0] || loose.brands[0] || loose.articles[0] || loose.answer) return { kind: 'verwant', path: null };
+    }
     return { kind: 'geen', path: null };
   };
 }
