@@ -51,6 +51,8 @@ export const Recommendation = z.object({
   prioriteit: z.enum(['hoog', 'middel', 'laag']),
   zekerheid: z.enum(['hoog', 'middel', 'laag']),
   basislijn: Baseline,
+  /** The number of the GitHub issue of this recommendation, so the studio can link to it (the owner sets the label there). */
+  issue: z.number().int().positive().optional(),
   /** Action B (competing pages): the other pages that show up for the same search, so the owner sees both. */
   andere: z.array(z.string()).max(3).optional(),
   /** Action D only: visitors from Google on this page and how many clicked to a shop that day, in the period of the report. */
@@ -58,7 +60,13 @@ export const Recommendation = z.object({
 });
 export type Recommendation = z.infer<typeof Recommendation>;
 
-export const Skipped = z.object({ zoekterm: z.string(), code: z.enum(['E', 'F']), reden: z.string() });
+export const Skipped = z.object({
+  zoekterm: z.string(),
+  code: z.enum(['E', 'F']),
+  reden: z.string(),
+  /** The GitHub issue of a social idea (action E), when there is one. */
+  issue: z.number().int().positive().optional(),
+});
 export type Skipped = z.infer<typeof Skipped>;
 
 export const BrandWord = z.object({

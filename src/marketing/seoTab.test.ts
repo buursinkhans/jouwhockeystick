@@ -108,3 +108,19 @@ describe('Marketingstudio: concurrerende pagina\'s bij actie B', () => {
     expect(tab).toContain("esc(a)");
   });
 });
+
+describe('Marketingstudio: knop naar het GitHub-issue (optie 1)', () => {
+  it('opent het issue van een aanbeveling en van een social-idee in een nieuw tabblad', () => {
+    expect(tab).toContain("const ISSUES = 'https://github.com/buursinkhans/jouwhockeystick/issues/'");
+    expect(tab).toContain('target="_blank" rel="noopener noreferrer"');
+    expect(tab).toContain("issueLink(r.issue, 'Open issue #' + r.issue + ' in GitHub')");
+    expect(tab).toContain("issueLink(x.issue, 'Open het idee in GitHub')");
+  });
+  it('maakt alleen een link van een heel getal en schrijft niets zelf naar GitHub', () => {
+    expect(tab).toContain('Number.isInteger(n) && n > 0');
+    expect(tab).not.toMatch(/api\.github\.com|Authorization|fetch\(/);
+  });
+  it('zegt in de tekst bij de aanbevelingen dat de knop het issue opent', () => {
+    expect(tab).toContain('de knop bij elke aanbeveling opent dat issue');
+  });
+});

@@ -42,7 +42,7 @@ import {
   type IssueLike,
   type RecStatus,
 } from '../src/seo/evaluate';
-import { issueFor, outcomeComment, socialIssueFor } from '../src/seo/issues';
+import { issueFor, outcomeComment, socialIssueFor, withIssueNumbers } from '../src/seo/issues';
 import { getToken, readServiceAccount } from '../src/seo/googleAuth';
 import { BOT_PATTERN, hogql, LIVE_HOSTS, readPosthogConfig } from '../src/analytics-report/hogql';
 import { funnelFromRows, funnelQuery, type Funnel, type FunnelFigures } from '../src/seo/funnel';
@@ -256,6 +256,7 @@ async function createIssues(
   call: NonNullable<ReturnType<typeof githubApi>>,
   recommendations: SeoReport['aanbevelingen'],
   issues: readonly GhIssue[],
+  numbers: Map<string, number>,
 ): Promise<number> {
   const open = new Set(issues.filter((issue) => issue.state === 'open').map((issue) => idFromBody(issue.body)));
   let made = 0;
@@ -263,9 +264,17 @@ async function createIssues(
     if (open.has(rec.id)) continue;
     const draft = issueFor(rec);
     const response = await call('/issues', { method: 'POST', body: { title: draft.title, body: draft.body, labels: draft.labels } });
-    if (response.ok) made += 1;
+    if (!response.ok) continue;
+    made += 1;
+    await rememberNumber(response, draft.id, numbers);
   }
   return made;
+}
+
+/** Keeps the number of a newly created issue, so the report can link to it. */
+async function rememberNumber(response: Response, id: string, numbers: Map<string, number>) {
+  const created = (await response.json().catch(() => ({}))) as { number?: unknown };
+  if (typeof created.number === 'number') numbers.set(id, created.number);
 }
 
 /** One issue per social idea (action E), unless an issue with the same marker exists, open or closed: a closed idea is a "no". */
@@ -273,6 +282,7 @@ async function createSocialIssues(
   call: NonNullable<ReturnType<typeof githubApi>>,
   ideas: SeoReport['bewustNiet'],
   existing: readonly GhIssue[],
+  numbers: Map<string, number>,
 ): Promise<number> {
   const known = new Set(existing.map((issue) => idFromBody(issue.body)));
   let made = 0;
@@ -280,7 +290,9 @@ async function createSocialIssues(
     const draft = socialIssueFor(idea);
     if (known.has(draft.id)) continue;
     const response = await call('/issues', { method: 'POST', body: { title: draft.title, body: draft.body, labels: draft.labels } });
-    if (response.ok) made += 1;
+    if (!response.ok) continue;
+    made += 1;
+    await rememberNumber(response, draft.id, numbers);
   }
   return made;
 }
@@ -395,21 +407,33 @@ async function main() {
   if (process.argv[3] && !loaded.read) say('Let op: de historie van de vorige maand kon niet worden gelezen; de historie begint opnieuw.');
 
   // Issues come last: the sealed report is already written, so a GitHub problem never loses it.
-  if (github && process.env.SEO_ISSUES !== 'uit') {
-    if (githubFailed) {
-      say('De GitHub-koppeling gaf een fout: statussen en issues zijn deze maand overgeslagen.');
-    } else {
-      try {
-        await ensureLabels(github);
-        const made = await createIssues(github, report.aanbevelingen, issues);
-        say(`Issues gemaakt: ${made}.`);
-        const social = await createSocialIssues(github, report.bewustNiet, await issuesWithLabel(github, LABELS.social));
-        say(`Social-ideeën gemaakt: ${social}.`);
-        const answered = await answerOutcomes(github, results);
-        say(`Resultaten op issues gezet en afgesloten: ${answered}.`);
-      } catch {
-        say('De GitHub-koppeling gaf een fout bij het maken van issues.');
+  // The issue numbers go into the report afterwards (the studio links to them), by writing the file once more.
+  if (github && githubFailed) {
+    say('De GitHub-koppeling gaf een fout: statussen en issues zijn deze maand overgeslagen.');
+  } else if (github) {
+    const numbers = new Map<string, number>();
+    const remember = (list: readonly GhIssue[]) => {
+      for (const issue of list.filter((i) => i.state === 'open')) {
+        const id = idFromBody(issue.body);
+        if (id) numbers.set(id, issue.number);
       }
+    };
+    remember(issues);
+    try {
+      const socialIssues = await issuesWithLabel(github, LABELS.social);
+      remember(socialIssues);
+      if (process.env.SEO_ISSUES !== 'uit') {
+        await ensureLabels(github);
+        say(`Issues gemaakt: ${await createIssues(github, report.aanbevelingen, issues, numbers)}.`);
+        say(`Social-ideeën gemaakt: ${await createSocialIssues(github, report.bewustNiet, socialIssues, numbers)}.`);
+        say(`Resultaten op issues gezet en afgesloten: ${await answerOutcomes(github, results)}.`);
+      }
+    } catch {
+      say('De GitHub-koppeling gaf een fout bij het maken van issues.');
+    }
+    if (numbers.size > 0) {
+      const linked = withIssueNumbers(report, numbers);
+      writeFileSync(out, `${JSON.stringify({ ...file, versleuteld: seal(linked, key, now) })}\n`);
     }
   }
 }

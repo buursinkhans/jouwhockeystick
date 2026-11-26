@@ -5,7 +5,7 @@
  * Marketingstudio opens. The marker at the end lets the next run find the issue
  * again and read its labels.
  */
-import { ACTION_LABELS, shortId, type Outcome, type Recommendation, type Skipped } from './opportunities';
+import { ACTION_LABELS, shortId, SeoReport, type Outcome, type Recommendation, type Skipped } from './opportunities';
 import { LABELS, markerOf } from './evaluate';
 
 export type IssueDraft = { id: string; title: string; body: string; labels: string[] };
@@ -52,6 +52,24 @@ export function socialIssueFor(item: Skipped): IssueDraft {
     markerOf(id),
   ].join('\n');
   return { id, title: `SEO-social-idee: "${item.zoekterm}"`, body, labels: [LABELS.social] };
+}
+
+/**
+ * Puts the GitHub issue numbers on the recommendations and the social ideas of a report, matched by
+ * their marker id, so the studio can link to the issue. Everything else stays as it was.
+ */
+export function withIssueNumbers(report: SeoReport, numbers: ReadonlyMap<string, number>): SeoReport {
+  return SeoReport.parse({
+    ...report,
+    aanbevelingen: report.aanbevelingen.map((rec) => {
+      const issue = numbers.get(rec.id);
+      return issue === undefined ? rec : { ...rec, issue };
+    }),
+    bewustNiet: report.bewustNiet.map((item) => {
+      const issue = item.code === 'E' ? numbers.get(socialIdOf(item.zoekterm)) : undefined;
+      return issue === undefined ? item : { ...item, issue };
+    }),
+  });
 }
 
 export function issueFor(rec: Recommendation): IssueDraft {
