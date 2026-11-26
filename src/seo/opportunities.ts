@@ -14,7 +14,7 @@ import { CATEGORY_WORDS, INTENT_WORDS, KEYWORD_PAGES, SEASON_NOTE, SEASON_NOTE_T
 import { buildSeason, Season, type SeasonInput } from './trends';
 import { figuresOfPage, Funnel, FunnelFigures } from './funnel';
 
-export const SEO_RULESET_VERSION = 'seo-kansen-v3';
+export const SEO_RULESET_VERSION = 'seo-kansen-v4';
 
 export type BrandClass = 'eigen' | 'merkwoord' | 'niet-merk';
 export type PageType = 'home' | 'product' | 'catalogus' | 'kennis' | 'blog' | 'merk' | 'vergelijk' | 'tool' | 'schoen' | 'overig';
@@ -55,6 +55,10 @@ export const Recommendation = z.object({
   issue: z.number().int().positive().optional(),
   /** Action B (competing pages): the other pages that show up for the same search, so the owner sees both. */
   andere: z.array(z.string()).max(3).optional(),
+  /** Action B: the pages of which we saw that their content does not link to `pagina` yet. */
+  ontbrekendeLinks: z.array(z.string()).max(3).optional(),
+  /** The same search term as `basislijn` in the period before, when it was shown then ("was → nu" in the studio). */
+  vorige: Baseline.optional(),
   /** Action D only: visitors from Google on this page and how many clicked to a shop that day, in the period of the report. */
   funnel: FunnelFigures.optional(),
 });
@@ -276,7 +280,16 @@ type Decision = {
   reden: string;
   /** Competing pages (action B). */
   others?: string[];
+  /** Of those, the pages without a link to the main page (action B). */
+  missing?: string[];
 };
+
+/** Does the content of `from` link to `to`? Undefined when we could not look. */
+export type LinkLookup = (from: string, to: string) => boolean | undefined;
+
+export const ALL_LINKED_REASON = 'Alle concurrerende pagina\'s linken al naar de hoofdpagina. Geen actie, volgen.';
+const MISSING_LINK_REASON =
+  'Meer dan één pagina concurreert om dezelfde zoekopdracht. Zet een interne link naar de hoofdpagina op de pagina\'s waar die nog ontbreekt.';
 
 /** The reason of a query that needs no action; those queries are not listed. */
 export const NO_ACTION_REASON = 'Geen aanleiding voor een actie.';
@@ -299,10 +312,12 @@ export type DecisionInput = {
   before: QueryStat | undefined;
   long: QueryStat | undefined;
   offer: OfferMatch;
+  /** The links that are there now; without it nothing is assumed. */
+  linked?: LinkLookup;
 };
 
 /** One deterministic decision per non-brand query with enough data. Order of the rules matters. */
-export function decide({ now, before, long, offer }: DecisionInput): Decision {
+export function decide({ now, before, long, offer, linked }: DecisionInput): Decision {
   const top = now.pages[0]?.page ?? '/';
   const type = pageType(top);
   const intent = intentOf(now.query, offer);
@@ -313,6 +328,7 @@ export function decide({ now, before, long, offer }: DecisionInput): Decision {
   // The owner's keyword table goes first: improving another page for this query would undo that choice.
   const assigned = Object.hasOwn(KEYWORD_PAGES, now.query) ? KEYWORD_PAGES[now.query] : undefined;
   if (assigned && assigned !== top) {
+    if (linked?.(top, assigned) === true) return { code: 'F', page: assigned, reden: ALL_LINKED_REASON };
     return {
       code: 'B',
       page: assigned,
@@ -329,6 +345,12 @@ export function decide({ now, before, long, offer }: DecisionInput): Decision {
     }
     return { code: 'E', page: top, reden: 'Een zoekopdracht buiten ons aanbod. Hooguit iets voor social, niet voor de site.' };
   }
+  const lost = delta !== null && !!before && before.position <= THRESHOLDS.lossMaxPosition && delta >= THRESHOLDS.positionWorse;
+  const loss: Decision = {
+    code: 'A',
+    page: top,
+    reden: 'De positie is verslechterd ten opzichte van de periode ervoor. Vergelijk de pagina met een eerdere versie voordat je iets verandert.',
+  };
   if (cannibalised(long)) {
     // The main page is the one our own search names for this query when it is among the competitors; otherwise the one shown most.
     const competing = (long?.pages ?? []).filter((p) => p.impressions >= THRESHOLDS.cannibalMinImpressions).map((p) => p.page);
@@ -336,20 +358,24 @@ export function decide({ now, before, long, offer }: DecisionInput): Decision {
     const asks = intent === 'informatie' || intent === 'vergelijken';
     const knowledge = asks ? competing.find((page) => INFO_PAGES.includes(pageType(page))) : undefined;
     const main = offer.path && competing.includes(offer.path) ? offer.path : (knowledge ?? top);
+    const competitors = competing.filter((page) => page !== main);
+    const states = competitors.map((page) => linked?.(page, main));
+    // Every link is there: nothing to add. A real loss of position still counts.
+    if (states.length > 0 && states.every((state) => state === true)) {
+      return lost ? loss : { code: 'F', page: main, reden: ALL_LINKED_REASON };
+    }
+    const missing = competitors.filter((_, index) => states[index] === false);
     return {
       code: 'B',
       page: main,
-      others: competing.filter((page) => page !== main).slice(0, 3),
-      reden: 'Meer dan één pagina concurreert om dezelfde zoekopdracht. Verwijs vanaf de andere pagina\'s met een interne link naar de hoofdpagina, of kies zelf een andere hoofdpagina als die beter past.',
+      others: competitors.slice(0, 3),
+      ...(missing.length > 0 && { missing: missing.slice(0, 3) }),
+      reden: missing.length > 0
+        ? MISSING_LINK_REASON
+        : 'Meer dan één pagina concurreert om dezelfde zoekopdracht. Verwijs vanaf de andere pagina\'s met een interne link naar de hoofdpagina, of kies zelf een andere hoofdpagina als die beter past.',
     };
   }
-  if (delta !== null && before && before.position <= THRESHOLDS.lossMaxPosition && delta >= THRESHOLDS.positionWorse) {
-    return {
-      code: 'A',
-      page: top,
-      reden: 'De positie is verslechterd ten opzichte van de periode ervoor. Vergelijk de pagina met een eerdere versie voordat je iets verandert.',
-    };
-  }
+  if (lost) return loss;
   if (nearOne) {
     if (intent === 'informatie' && !INFO_PAGES.includes(type)) {
       if ((offer.kind === 'artikel' || offer.kind === 'tool') && offer.path && offer.path !== top) {
@@ -406,6 +432,8 @@ export type AnalysisInput = {
   /** About 90 days, ending at the same day: used for cannibalisation only. */
   long: readonly SearchRow[];
   offerOf: (query: string) => OfferMatch;
+  /** Which pages already link to which (the script reads the live pages). */
+  linked?: LinkLookup;
   history?: readonly HistoryMonth[];
   terms?: BrandTerms;
   /** The patterns of the imported Google Trends exports, when there are any. */
@@ -451,7 +479,7 @@ export function analyse(input: AnalysisInput): SeoReport {
   type Hit = { stat: QueryStat; decision: Decision };
   const hits: Hit[] = ranked.map((stat) => ({
     stat,
-    decision: decide({ now: stat, before: before.get(stat.query), long: long.get(stat.query), offer: input.offerOf(stat.query) }),
+    decision: decide({ now: stat, before: before.get(stat.query), long: long.get(stat.query), offer: input.offerOf(stat.query), linked: input.linked }),
   }));
 
   // Group the actionable decisions per page and code: one recommendation per page and action.
@@ -466,6 +494,8 @@ export function analyse(input: AnalysisInput): SeoReport {
     const lead = members[0] as Hit; // `ranked` is sorted by impressions, so the first is the largest.
     const { code, page, reden } = lead.decision;
     const funnelFigures = code === 'D' ? figuresOfPage(input.funnel, page) : null;
+    const earlier = before.get(lead.stat.query);
+    const missing = [...new Set(members.flatMap((member) => member.decision.missing ?? []))].slice(0, 3);
     return {
       id: shortId(code === 'C' ? `C|${lead.stat.query}` : `${code}|${page}`),
       code: code as Recommendation['code'],
@@ -481,6 +511,10 @@ export function analyse(input: AnalysisInput): SeoReport {
         klikken: lead.stat.clicks,
       },
       ...(lead.decision.others?.length && { andere: lead.decision.others }),
+      ...(missing.length > 0 && { ontbrekendeLinks: missing }),
+      ...(earlier && {
+        vorige: { positie: Math.round(earlier.position * 10) / 10, vertoningen: earlier.impressions, klikken: earlier.clicks },
+      }),
       ...(funnelFigures && { funnel: funnelFigures }),
     };
   });

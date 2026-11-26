@@ -3687,3 +3687,9 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Bewust niet:** een merkprofiel voor ASICS (schoenmerken zijn vrije tekst in de schoencatalogus, er is geen merkenpagina voor schoenen), Member-prijzen, een knop bij een naamgelijkenis, veld of zaal op een gok.
 - **Test:** `decathlonFeed.test.ts` (schoenlezer), `shoes/feedImport.test.ts` (import, EAN-koppeling, naam zonder EAN, gedeelde EAN met een andere winkel), `workflows.test.ts` (volgorde en paden van de sync, proefrun schrijft niets).
 - **Betrokken bestanden:** `src/catalog/{decathlonFeed,shoeFeed}.ts`, `src/catalog/shoes/{feedImport,index,types,importedDecathlon}.ts`, `src/catalog/offers/index.ts`, `scripts/decathlon-feed.ts`, `.github/workflows/{passa-sync,decathlon-feed-check}.yml`, `CLAUDE.md` en de tests.
+
+## 2026-11-26 — Kansenrapport kijkt of de interne link al bestaat (`seo-kansen-v4`)
+- **Aanleiding:** drie aanbevelingen "voeg een interne link toe" op één dag, terwijl de links er (op één na) al stonden. En een daling las als een daling van de hele pagina, terwijl de cijfers van één zoekterm waren.
+- **Wat (opdracht eigenaar):** het maandscript leest de concurrerende live pagina's en telt alleen links binnen `<main>`. Alle links aanwezig: geen aanbeveling maar "bewust niet" (een echte daling blijft actie A). Ontbreekt er een: de aanbeveling en het issue noemen die pagina. Is een pagina niet te lezen, dan blijft het algemene advies. Elke aanbeveling bewaart de vorige periode van de zoekterm, alleen in het versleutelde rapport.
+- **Gevolg:** al open issues blijven open; sluit ze met de hand.
+- **Betrokken bestanden:** `src/seo/{opportunities,issues,links}.ts` (+ tests), `scripts/seo-opportunities.ts`, `docs/marketing/dagbericht.md`.

@@ -77,6 +77,7 @@ export function issueFor(rec: Recommendation): IssueDraft {
     `**Actie ${rec.code}:** ${ACTION_LABELS[rec.code]}`,
     `**Pagina:** \`${rec.pagina}\``,
     ...(rec.andere?.length ? [`**Concurreert met:** ${rec.andere.map((page) => `\`${page}\``).join(', ')}`] : []),
+    ...(rec.ontbrekendeLinks?.length ? [`**Link ontbreekt vanaf:** ${rec.ontbrekendeLinks.map((page) => `\`${page}\``).join(', ')}`] : []),
     `**Zoekopdracht${rec.zoektermen.length > 1 ? 'en' : ''}:** ${rec.zoektermen.map((term) => `"${term}"`).join(', ')}`,
     `**Waarom:** ${rec.reden}`,
     `**Prioriteit:** ${rec.prioriteit}. **Zekerheid:** ${rec.zekerheid}.`,
