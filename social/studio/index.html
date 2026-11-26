@@ -591,7 +591,7 @@ html.v-social .intro { display: none; }
       </div>
     </div>
     <div class="board">
-      <div class="scroll"><svg id="map" viewBox="0 0 1200 830" role="img" aria-label="Kaart van de marketingstack: bronnen, agents, werkplekken en kanalen met hun verbindingen"></svg></div>
+      <div class="scroll"><svg id="map" viewBox="0 0 1200 1030" role="img" aria-label="Kaart van de marketingstack: bronnen, agents, werkplekken en kanalen met hun verbindingen"></svg></div>
       <div class="inspector">
         <div class="ins-info" id="inspector" aria-live="polite">
           <h3 id="ins-title">Klik op een onderdeel</h3>
@@ -655,13 +655,16 @@ html.v-social .intro { display: none; }
         <li><b>Lessen naar het merkplatform</b> (lessen.yml): als jij een les aanvinkt in het voorstellen-issue.</li>
         <li><b>Kwaliteitscontrole en Review-agent</b>: bij elke pull request, vóór jij merget.</li>
         <li><b>Content-agent</b>: bij een content-brief of een opdracht van de Orchestrator.</li>
+        <li><b>Dagcijfers en Dagbericht</b>: elke dag. De cijfers om 05:31 en in de middag, het Dagbericht zet ze om 07:03 en 17:03 in de studio; Noor schrijft het bericht als jij Vandaag opent.</li>
+        <li><b>Reactie-wachter</b>: elke dag om 08:12, 12:12, 17:12 en 21:12, met alleen een melding bij nieuwe reacties.</li>
+        <li><b>SEO-kansenrapport</b>: de eerste maandag van de maand om 07:23.</li>
         <li><b>Uitvoerder</b> (Agent-bediening): zodra jij in de Agent-bediening een opdracht klaarzet.</li>
         <li><b>Meetmomenten SEO en GEO</b>: SEO-evaluatie op 20 november, herhaling van de AI-nulmeting op 25 november.</li>
         <li><b>Render-workflow</b> (social-render.yml): als de Publiceerder beelden of video's nodig heeft.</li>
         <li><b>Instagram-token verversen</b>: de 1e van elke maand om 07:17.</li>
       </ul>
     </div>
-    <p class="foot">Bron: de schema's in <span class="mono">.github/workflows</span> van de repo en de geplande taken in claude.ai. Stand 11 november 2026. Ritme nu: 2 posts (di, do) en 2 video's (wo, vr) per week, later 3 en 3.</p>
+    <p class="foot">Bron: de schema's in <span class="mono">.github/workflows</span> van de repo en de geplande taken in claude.ai. Stand 26 november 2026. Ritme nu: 2 posts (di, do) en 2 video's (wo, vr) per week, later 3 en 3.</p>
   </section>
 
   <section class="view" id="view-ritme" aria-labelledby="h-ritme" hidden>
@@ -714,6 +717,10 @@ html.v-social .intro { display: none; }
     { id: 'cat', st: 'live', col: 1, r: 7, t: 'Catalogus-agents', s: 'ma tot vr, vroeg', k: 'agent', d: 'Controle, aanvuller, verrijker en hercontrole: houden de stickcatalogus volledig en juist.' },
     { id: 'rev', st: 'live', col: 1, r: 8, t: 'Review en CI', s: 'bij elke PR', k: 'agent', d: 'Kwaliteitscontrole en review-agent: lint, types, tests en schrijfregels vóór jij merget.' },
     { id: 'uitv', col: 1, r: 9, t: 'Uitvoerder', s: 'Agent-bediening, op opdracht', k: 'agent', st: 'live', d: 'Voert uit wat jij in de Agent-bediening klaarzet: een brief goedkeuren, een PR mergen als de checks groen zijn, of een agent starten.' },
+    { id: 'dagb', col: 1, r: 10, t: 'Dagbericht', s: 'elke dag 07:03 en 17:03', k: 'agent', st: 'live', d: 'Kopieert de versleutelde dagcijfers en verkoopcijfers (workflow Dagcijfers: PostHog, Search Console en Bing) naar de Marketingstudio. Hij kan ze niet lezen. Stuurt in de ochtend een melding zonder getal als iets opvalt.' },
+    { id: 'noor', col: 1, r: 11, t: 'Noor', s: 'als jij Vandaag opent', k: 'agent', st: 'live', d: 'Je virtuele marketeer in het tabblad Vandaag. Schrijft bij het eerste openen van de dag het dagbericht en beantwoordt je vragen over de cijfers. Ze draait niet zelfstandig en jij beslist.' },
+    { id: 'react', col: 1, r: 12, t: 'Reactie-wachter', s: '4 keer per dag', k: 'agent', st: 'live', d: 'Kijkt om 08:12, 12:12, 17:12 en 21:12 in Metricool of er nieuwe reacties zijn en stuurt dan een pushmelding met een link naar elke post. Reageren doe je zelf.' },
+    { id: 'seok', col: 1, r: 13, t: 'SEO-kansenrapport', s: '1e maandag van de maand', k: 'agent', st: 'live', d: 'Zoekt met vaste regels (geen AI-model) kansen in Search Console voor Nederland. Cijfers komen versleuteld in het tabblad SEO; elke aanbeveling wordt een issue zonder cijfers, dat jij goedkeurt met het label seo-akkoord.' },
     // werkplekken
     { id: 'you', col: 2, r: 0, t: 'Jij', s: 'keurt goed, vinkt aan', k: 'you', d: 'De eigenaar. Eén tik per post of video in de studio, een vinkje bij voorstellen en lessen in de GitHub-app, en mergen. Ongeveer tien minuten per week.' },
     { id: 'studio', col: 2, r: 1, t: 'Social-studio', s: 'één scherm, ook mobiel', k: 'ext new', st: 'live', d: 'Eén statusregel, kaarten voor 14 dagen met Goedkeuren en Aanpassen, en de tabs Te keuren, Kalender en Cijfers. De status komt uit Metricool, alleen lezen.' },
@@ -746,6 +753,8 @@ html.v-social .intro { display: none; }
     ['markt', 'issues'], ['cat', 'repo'], ['content', 'repo'], ['orch', 'content'], ['rev', 'repo'], ['you', 'repo'], ['repo', 'site'],
     ['week', 'kpi'], ['kpi', 'you'],
     ['you', 'regie'], ['regie', 'uitv'], ['uitv', 'repo'], ['issues', 'regie'], ['repo', 'methode'], ['methode', 'site'], ['site', 'ai'], ['bing', 'ai'], ['ai', 'ph'], ['bing', 'ond'], ['koper', 'ond'], ['koper', 'content'],
+    ['sc', 'dagb'], ['ph', 'dagb'], ['bing', 'dagb'], ['dagb', 'studio'], ['dagb', 'noor'], ['dagb', 'you'], ['noor', 'you'], ['you', 'noor'], ['mcs', 'react'], ['react', 'you'],
+    ['sc', 'seok'], ['ph', 'seok'], ['seok', 'issues'], ['seok', 'dagb'], ['you', 'seok'],
   ];
   const W = 210, H = 50, Y0 = 84, DY = 66;
   const byId = Object.fromEntries(N.map((n) => [n.id, n]));
@@ -764,9 +773,9 @@ html.v-social .intro { display: none; }
   const svg = document.getElementById('map');
   // the pitch: centre line, the shooting circles, faint, as the ground of the map
   const ground = mk('g', { 'aria-hidden': 'true', fill: 'none', stroke: 'var(--pitch)', 'stroke-width': '3' });
-  ground.append(mk('rect', { x: 8, y: 8, width: 1184, height: 814, rx: 14 }), mk('line', { x1: 600, y1: 8, x2: 600, y2: 822 }),
-    mk('path', { d: 'M8 255 A 160 160 0 0 1 8 575' }), mk('path', { d: 'M1192 255 A 160 160 0 0 0 1192 575' }),
-    mk('circle', { cx: 600, cy: 415, r: 6, fill: 'var(--pitch)' }));
+  ground.append(mk('rect', { x: 8, y: 8, width: 1184, height: 1014, rx: 14 }), mk('line', { x1: 600, y1: 8, x2: 600, y2: 1022 }),
+    mk('path', { d: 'M8 355 A 160 160 0 0 1 8 675' }), mk('path', { d: 'M1192 355 A 160 160 0 0 0 1192 675' }),
+    mk('circle', { cx: 600, cy: 515, r: 6, fill: 'var(--pitch)' }));
   svg.append(ground);
   const defs = mk('defs');
   const marker = mk('marker', { id: 'ar', viewBox: '0 0 10 10', refX: '9', refY: '5', markerWidth: '6', markerHeight: '6', orient: 'auto-start-reverse' });

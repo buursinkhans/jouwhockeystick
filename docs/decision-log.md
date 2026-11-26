@@ -3596,6 +3596,14 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Bewust niet:** nog geen knop, geen prijzen en geen tekst op de site, geen wijziging aan `retailers.ts`, de catalogus of de privacyverklaring.
 - **Betrokken bestanden:** `scripts/decathlon-feed-check.ts`, `src/lib/feedSample.ts` (+ test), `.github/workflows/decathlon-feed-check.yml` en `package.json`.
 
+## 2026-11-26 — Marketingstudio: Stack en Week bijgewerkt
+
+- **Opdracht eigenaar:** de onderdelen toevoegen die op de kaart ontbraken.
+- **Wat:** het tabblad Stack heeft vier nieuwe blokken (Dagbericht, Noor, Reactie-wachter, SEO-kansenrapport) met hun verbindingen; de kaart is daarvoor hoger. Het tabblad Week noemt hun schema onder "Niet aan een dag gebonden" en heeft stand 26 november.
+- **Keuze:** het SEO-kansenrapport staat als agent op de kaart, al werkt het met vaste regels en zonder AI-model; de toelichting zegt dat.
+- **Bewust niet:** geen blokken voor Technical SEO en Geplande publicatie; geen andere tabbladen of schema's gewijzigd. De pagina is niet gepubliceerd.
+- **Betrokken bestanden:** `social/studio/index.html` en dit logboek.
+
 ## 2026-11-26 — Decathlon als zesde partnerwinkel (Odyssey Partnerships), stap 2: sticks
 
 **Opdracht eigenaar (2026-11-26):** Decathlon koppelen via Odyssey Partnerships. Besluiten van de eigenaar: sticks die alleen Decathlon verkoopt komen als `noindex`-pagina (zoals bij de andere winkels); de feed zegt maar bij weinig regels iets over voorraad, en de prijs uit de feed gaat toch in "Waar te koop", met de bestaande regel dat voorraad en maat bij de winkel te controleren zijn; verzendkosten volgens de aangeleverde gegevens; een voorstel voor de privacytekst, nog niet in de site.
