@@ -95,6 +95,8 @@ export type ShoeImportResult = {
   hockeyCityNameOnly: { name: string; url: string }[];
   /** The same for Daka pages: a name we already show (or another shop shows), no shared EAN. */
   dakaNameOnly: { name: string; url: string }[];
+  /** The same for Decathlon pages (decision log 2026-11-26). */
+  decathlonNameOnly: { name: string; url: string }[];
 };
 
 const slugify = (text: string) =>
@@ -248,6 +250,7 @@ export function buildShoeImport(
     pluto: readonly ShoeModel[];
     hockeyCity?: readonly ShoeModel[];
     daka?: readonly ShoeModel[];
+    decathlon?: readonly ShoeModel[];
   },
   curated: readonly Pick<Shoe, 'slug' | 'eans'>[],
   date: string,
@@ -263,17 +266,20 @@ export function buildShoeImport(
   const pluto = groupShop(feeds.pluto);
   const hockeyCity = groupShop(feeds.hockeyCity ?? []);
   const daka = groupShop(feeds.daka ?? []);
-  const models = joinOnEan([...passa.groups, ...pluto.groups, ...hockeyCity.groups, ...daka.groups]);
-  const splitCode = new Map([...passa.splitCode, ...pluto.splitCode, ...hockeyCity.splitCode, ...daka.splitCode]);
-  // Shops whose models only come in when nothing else shows them (HockeyCity, Daka): their name
-  // must not be the name of a model of another shop in this run (decision log 2026-11-03, 2026-11-04).
+  const decathlon = groupShop(feeds.decathlon ?? []);
+  const models = joinOnEan([...passa.groups, ...pluto.groups, ...hockeyCity.groups, ...daka.groups, ...decathlon.groups]);
+  const splitCode = new Map([...passa.splitCode, ...pluto.splitCode, ...hockeyCity.splitCode, ...daka.splitCode, ...decathlon.splitCode]);
+  // Shops whose models only come in when nothing else shows them (HockeyCity, Daka, Decathlon): their name
+  // must not be the name of a model of another shop in this run (decision log 2026-11-03, 2026-11-04, 2026-11-26).
   const keysOf = (models: readonly ShoeModel[]) => new Set(models.map(modelKey));
-  const otherShopKeys: Record<'HockeyCity' | 'Daka', ReadonlySet<string>> = {
+  const otherShopKeys: Record<'HockeyCity' | 'Daka' | 'Decathlon', ReadonlySet<string>> = {
     HockeyCity: keysOf([...feeds.passa, ...feeds.pluto]),
     Daka: keysOf([...feeds.passa, ...feeds.pluto, ...(feeds.hockeyCity ?? [])]),
+    Decathlon: keysOf([...feeds.passa, ...feeds.pluto, ...(feeds.hockeyCity ?? []), ...(feeds.daka ?? [])]),
   };
   const nameOnly: { name: string; url: string }[] = [];
   const dakaNameOnly: { name: string; url: string }[] = [];
+  const decathlonNameOnly: { name: string; url: string }[] = [];
 
   const curatedByEan = new Map<string, string>();
   for (const shoe of curated) for (const ean of shoe.eans) curatedByEan.set(ean, shoe.slug);
@@ -295,6 +301,7 @@ export function buildShoeImport(
     if (shopPages('Plutosport').length) modelListings.push(listing('plutosport', shopPages('Plutosport'), date));
     if (shopPages('HockeyCity').length) modelListings.push(listing('hockeycity', shopPages('HockeyCity'), date));
     if (shopPages('Daka').length) modelListings.push(listing('daka', shopPages('Daka'), date));
+    if (shopPages('Decathlon').length) modelListings.push(listing('decathlon', shopPages('Decathlon'), date));
     const eans = [...new Set(members.flatMap((m) => m.eans))].sort();
 
     const curatedSlug = eans.map((ean) => curatedByEan.get(ean)).find(Boolean);
@@ -303,11 +310,11 @@ export function buildShoeImport(
       listings[curatedSlug] = mergeListings([...(listings[curatedSlug] ?? []), ...modelListings]);
       continue;
     }
-    const onlyShop = members.every((m) => m.shop === 'HockeyCity') ? 'HockeyCity' : members.every((m) => m.shop === 'Daka') ? 'Daka' : null;
+    const onlyShop = (['HockeyCity', 'Daka', 'Decathlon'] as const).find((shop) => members.every((m) => m.shop === shop)) ?? null;
     if (onlyShop) {
       const key = modelKey(members[0]!);
       if (knownModelKeys.has(key) || otherShopKeys[onlyShop].has(key)) {
-        (onlyShop === 'Daka' ? dakaNameOnly : nameOnly).push(...members.map((m) => ({ name: m.name, url: m.url })));
+        (onlyShop === 'Daka' ? dakaNameOnly : onlyShop === 'Decathlon' ? decathlonNameOnly : nameOnly).push(...members.map((m) => ({ name: m.name, url: m.url })));
         continue;
       }
     }
@@ -328,6 +335,7 @@ export function buildShoeImport(
     const plutoPage = modelListings.find((l) => l.shop === 'plutosport')?.url;
     const hockeyCityPage = modelListings.find((l) => l.shop === 'hockeycity')?.url;
     const dakaPage = modelListings.find((l) => l.shop === 'daka')?.url;
+    const decathlonPage = modelListings.find((l) => l.shop === 'decathlon')?.url;
     const sizes = [...new Set(modelListings.flatMap((l) => l.sizes))].sort(bySize);
     const image = members.find((m) => m.imageUrl)?.imageUrl;
     const shopLabel = (shop: ShoeModel['shop']) => `de categorie van ${shop}`;
@@ -336,7 +344,9 @@ export function buildShoeImport(
       ? `Maten op de productpagina van HockeyCity op ${date}; geen maattabel van het merk.`
       : members.every((m) => m.shop === 'Daka')
         ? `Maten in de productfeed van Daka op ${date} (één regel per maat); geen maattabel van het merk.`
-        : `Maten in de productfeed van de winkel op ${date}; geen maattabel van het merk.`;
+        : members.every((m) => m.shop === 'Decathlon')
+          ? `Maten in de productfeed van Decathlon op ${date} (één regel per maat); geen maattabel van het merk.`
+          : `Maten in de productfeed van de winkel op ${date}; geen maattabel van het merk.`;
 
     shoes.push({
       id: slug,
@@ -384,6 +394,7 @@ export function buildShoeImport(
       ...(plutoPage && { plutosportProductUrl: plutoPage }),
       ...(hockeyCityPage && { hockeyCityProductUrl: hockeyCityPage }),
       ...(dakaPage && { dakaProductUrl: dakaPage }),
+      ...(decathlonPage && { decathlonProductUrl: decathlonPage }),
       ...(image && { imageUrl: image }),
       feedImport: {
         feeds: [
@@ -391,6 +402,7 @@ export function buildShoeImport(
           ...(plutoPage ? (['plutosport'] as const) : []),
           ...(hockeyCityPage ? (['hockeycity'] as const) : []),
           ...(dakaPage ? (['daka'] as const) : []),
+          ...(decathlonPage ? (['decathlon'] as const) : []),
         ],
         importedAt: date,
       },
@@ -402,9 +414,10 @@ export function buildShoeImport(
     shoes: shoes.sort((a, b) => a.slug.localeCompare(b.slug)),
     listings,
     curatedMatched: [...curatedMatched].sort(),
-    splitByArticle: [...passa.split, ...pluto.split, ...hockeyCity.split, ...daka.split],
+    splitByArticle: [...passa.split, ...pluto.split, ...hockeyCity.split, ...daka.split, ...decathlon.split],
     disciplineConflicts: conflicts,
     hockeyCityNameOnly: nameOnly,
     dakaNameOnly,
+    decathlonNameOnly,
   };
 }

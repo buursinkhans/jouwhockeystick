@@ -25,4 +25,16 @@ describe('GitHub workflows', () => {
     expect(text.indexOf('daka:feed')).toBeGreaterThan(text.indexOf('hockeycity:feed'));
     expect(text.match(/src\/catalog\/shoes\/importedDaka\.ts/g)?.length).toBe(3);
   });
+
+  it('runs the Decathlon step after Daka in the weekly sync, and lets its shoe file into the PR', () => {
+    const text = readFileSync(`${DIR}/passa-sync.yml`, 'utf8');
+    expect(text.indexOf('decathlon:feed')).toBeGreaterThan(text.indexOf('daka:feed'));
+    expect(text.match(/src\/catalog\/shoes\/importedDecathlon\.ts/g)?.length).toBe(3);
+  });
+
+  it('the Decathlon feed check has a dry run that never writes', () => {
+    const text = readFileSync(`${DIR}/decathlon-feed-check.yml`, 'utf8');
+    expect(text).toMatch(/decathlon:feed -- proefrun\.md/);
+    expect(text).not.toMatch(/--write/);
+  });
 });

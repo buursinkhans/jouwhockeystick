@@ -31,3 +31,14 @@ jobs:
           npm run --silent decathlon:feed-check > report.md
           cat report.md
           cat report.md >> "$GITHUB_STEP_SUMMARY"
+
+      # The weekly import as a dry run: the same script as the weekly sync, run without its write
+      # option, so nothing in the repository changes. The report shows what the sync would do with the sticks
+      # and the shoes (decision log 2026-11-26).
+      - name: Proefrun van de import (schrijft niets)
+        env:
+          ODYSSEY_FEED_URL: ${{ secrets.ODYSSEY_FEED_URL }}
+        run: |
+          npm run --silent decathlon:feed -- proefrun.md
+          cat proefrun.md
+          cat proefrun.md >> "$GITHUB_STEP_SUMMARY"
