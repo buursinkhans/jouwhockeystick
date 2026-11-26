@@ -887,7 +887,8 @@
           "uuid": "-2361942060607586168",
           "moment": "2026-12-08T19:30:00",
           "op": "2026-11-21T14:58:29Z",
-          "concept": true
+          "concept": true,
+          "bezig": "2026-11-26T19:23:31Z"
         }
       }
     },
@@ -1006,7 +1007,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "78dca7f4-848c-4391-85d8-5cbccb9af605",
+  "wijziging": "cd11bd0e-ca71-49de-b56b-14b0ca96e235",
   "resultaten": {
     "insta/7481316443998604276": {
       "id": "7481316443998604276",
