@@ -3671,3 +3671,19 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Gevolg voor de lopende sync:** PR #324 bevat de verkeerde niveaus. Volgorde: deze PR mergen, #324 sluiten zonder te mergen en de workflow "PassaHockey-sync" opnieuw starten.
 - **Test:** `decathlonFeed.test.ts` controleert dat uit de titel 85% carbon wordt gelezen.
 - **Betrokken bestanden:** `src/catalog/decathlonFeed.ts` (+ test).
+
+## 2026-11-26 — Decathlon: schoenen
+**Opdracht eigenaar (2026-11-26):** "Bouw het punt van de schoenen eerst" (vervolg op de Decathlon-entry hierboven).
+
+- **Wat de feed heeft:** 10 schoenpagina's (adidas 6, Grays 3, Asics 1), met een EAN op elke regel, de maat als EU-maat ("42") en het categoriepad `Hockey>Hockeyschoenen>…`. Dat pad zegt niets over veld of zaal. De eerder genoemde ±49 waren regels, geen pagina's. De proefrun op de echte feed (zelfde dag) gaf: 4 pagina's met een gedeelde EAN bij een model dat we al tonen, 6 alleen bij Decathlon.
+- **Gekozen (zelfde regels als Daka en HockeyCity):**
+  - Koppelen alleen op **EAN**, nooit op naam. Dezelfde naam als een model dat we al tonen zonder gedeelde EAN wordt niet geïmporteerd en staat in het rapport.
+  - Veld of zaal alleen als de titel het zegt ("indoor", "zaal"); de categorie van Decathlon is geen bron. Alle overige eigenschappen blijven onbekend, het model is `noindex` tot het met de hand is verrijkt, en de maten hebben de bron "productfeed van Decathlon" met datum.
+  - **Voorraad:** een pagina telt als leverbaar als een regel niet "geen voorraad" zegt (dezelfde keuze als bij sticks). Een **maat** staat alleen in "Maten op voorraad" als de feed een voorraad boven nul noemt; een leeg voorraadveld zegt niets over die maat. Zonder bevestigde maat zegt de rij "maat kiezen bij de winkel": geen belofte van directe levering.
+  - Prijs: de laagste prijs van de regels die niet uitverkocht zijn; verzendkosten €3,95 volgens `SHIPPING`.
+- **Techniek:** `decathlonShoes` (`src/catalog/decathlonFeed.ts`) levert modellen in de vorm van de gedeelde schoenimport; `buildShoeImport` kreeg een `decathlon`-feed (naamcontrole tegen alle andere winkels van de run en tegen wat we al tonen). Nieuw bestand `src/catalog/shoes/importedDecathlon.ts`; de weekly sync neemt het mee in de PR. Het script `decathlon:feed` schrijft nu ook de schoenen en toont per schoenpagina wat ermee gebeurt.
+- **Proefrun:** de workflow "Decathlon-feed (controle)" draait nu ook het importscript zonder te schrijven en zet het rapport in de samenvatting. Zo is te zien wat de sync zou doen vóór er een PR is.
+- **Namen:** Decathlon schrijft titels in kleine letters; het model krijgt hoofdletters per woord ("Stealth 1.0 Zwart/Oranje"). De slug volgt de titel en blijft stabiel.
+- **Bewust niet:** een merkprofiel voor ASICS (schoenmerken zijn vrije tekst in de schoencatalogus, er is geen merkenpagina voor schoenen), Member-prijzen, een knop bij een naamgelijkenis, veld of zaal op een gok.
+- **Test:** `decathlonFeed.test.ts` (schoenlezer), `shoes/feedImport.test.ts` (import, EAN-koppeling, naam zonder EAN, gedeelde EAN met een andere winkel), `workflows.test.ts` (volgorde en paden van de sync, proefrun schrijft niets).
+- **Betrokken bestanden:** `src/catalog/{decathlonFeed,shoeFeed}.ts`, `src/catalog/shoes/{feedImport,index,types,importedDecathlon}.ts`, `src/catalog/offers/index.ts`, `scripts/decathlon-feed.ts`, `.github/workflows/{passa-sync,decathlon-feed-check}.yml`, `CLAUDE.md` en de tests.
