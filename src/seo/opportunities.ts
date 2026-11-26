@@ -10,10 +10,10 @@
  */
 import { z } from 'zod';
 import { LOW_CTR, NEAR_PAGE_ONE, type Period, type SearchRow } from './searchConsole';
-import { INTENT_WORDS, SEASON_NOTE, SEASON_NOTE_TRENDS, SEO_BRAND_TERMS, THRESHOLDS, type BrandTerms } from './seoConfig';
+import { INTENT_WORDS, KEYWORD_PAGES, SEASON_NOTE, SEASON_NOTE_TRENDS, SEO_BRAND_TERMS, THRESHOLDS, type BrandTerms } from './seoConfig';
 import { buildSeason, Season, type SeasonInput } from './trends';
 
-export const SEO_RULESET_VERSION = 'seo-kansen-v1';
+export const SEO_RULESET_VERSION = 'seo-kansen-v2';
 
 export type BrandClass = 'eigen' | 'merkwoord' | 'niet-merk';
 export type PageType = 'home' | 'product' | 'catalogus' | 'kennis' | 'blog' | 'merk' | 'vergelijk' | 'tool' | 'schoen' | 'overig';
@@ -284,6 +284,16 @@ export function decide({ now, before, long, offer }: DecisionInput): Decision {
   const delta = comparable && before ? now.position - before.position : null;
   const nearOne = now.position >= NEAR_PAGE_ONE.minPosition && now.position <= NEAR_PAGE_ONE.maxPosition;
 
+  // The owner's keyword table goes first: improving another page for this query would undo that choice.
+  const assigned = Object.hasOwn(KEYWORD_PAGES, now.query) ? KEYWORD_PAGES[now.query] : undefined;
+  if (assigned && assigned !== top) {
+    return {
+      code: 'B',
+      page: assigned,
+      reden: 'Deze zoekopdracht hoort volgens de zoekwoordtabel bij deze pagina, maar de zoekmachine toont een andere. Controleer de interne link vanaf de getoonde pagina en verbeter die pagina niet op deze zoekopdracht.',
+    };
+  }
+
   if (offer.kind === 'geen') {
     if (intent === 'informatie') {
       return { code: 'C', page: '/kennis', reden: 'Een informatievraag waar de site nog geen passende pagina voor heeft.' };
@@ -300,7 +310,7 @@ export function decide({ now, before, long, offer }: DecisionInput): Decision {
       reden: 'Twee pagina\'s concurreren om dezelfde zoekopdracht. Kies een hoofdpagina en verwijs er vanaf de andere pagina met een interne link naartoe.',
     };
   }
-  if (delta !== null && delta >= THRESHOLDS.positionWorse) {
+  if (delta !== null && before && before.position <= THRESHOLDS.lossMaxPosition && delta >= THRESHOLDS.positionWorse) {
     return {
       code: 'A',
       page: top,
