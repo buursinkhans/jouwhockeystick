@@ -410,16 +410,16 @@ export const BRAND_PROFILES: BrandProfile[] = [
     brand: 'Korok',
     logoBackground: 'light',
     characteristics:
-      'Korok heeft geen officiële website die we konden raadplegen (gezocht op 26 november 2026). De Korok-sticks in onze catalogus en hun gegevens komen daarom uit de productfeed van Decathlon, onze partnerwinkel. Volgens de mediapagina van Decathlon is een Korok-stick ontwikkeld door productontwikkelaars samen met veldhockeyers op hoog niveau en specialisten in composietmaterialen van Decathlon R&D. Meer zeggen we zonder officiële bron niet over het merk.',
-    characteristicsSourceUrl: 'https://www.decathlon-united.media/media/sportfolios/korok-dita.html',
+      'Korok is een eigen merk van Decathlon en heeft daarom geen eigen website (gezocht op 26 november 2026). Volgens het persbericht van Decathlon over de overname van Dita (9 december 2019) bestaat het Korok-assortiment uit door Decathlon zelf ontwikkelde hockeyproducten. Volgens de mediapagina van Decathlon is een Korok-stick ontwikkeld door productontwikkelaars samen met veldhockeyers op hoog niveau en specialisten in composietmaterialen van Decathlon R&D. De Korok-sticks in onze catalogus en hun gegevens komen uit de productfeed van Decathlon, onze partnerwinkel.',
+    characteristicsSourceUrl: 'https://www.decathlon-united.media/media/decathlon-hockey-dita',
     hasCatalogProducts: true,
   },
   {
     brand: 'Dita',
     logoBackground: 'light',
     characteristics:
-      'Dita heeft geen officiële website die we konden raadplegen (gezocht op 26 november 2026). De Dita-sticks in onze catalogus en hun gegevens komen daarom uit de productfeed van Decathlon, onze partnerwinkel. Over de achtergrond van het merk zeggen we zonder officiële bron niets.',
-    characteristicsSourceUrl: 'https://www.decathlon-united.media/media/sportfolios/korok-dita.html',
+      'Dita is een hockeymerk dat volgens een persbericht van Decathlon (9 december 2019) in 1896 is opgericht en in de jaren tachtig door de hockeyfamilie Kruize naar Nederland is gebracht. In dat persbericht meldt Decathlon dat het overeenstemming heeft bereikt over de overname van Dita van All Weather Sports. Een eigen website van het merk konden we niet vinden (gezocht op 26 november 2026). Volgens het persbericht blijft de levering aan hockeyspeciaalzaken bij All Weather Sports. De Dita-sticks in onze catalogus en hun gegevens komen uit de productfeed van Decathlon, onze partnerwinkel.',
+    characteristicsSourceUrl: 'https://www.decathlon-united.media/media/decathlon-hockey-dita',
     hasCatalogProducts: true,
   },
 ];
