@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DECATHLON_ODYSSEY, DECATHLON_SHIPPING, RETAILERS, decathlonTrackingUrl, isDecathlonProductPage, shippingCostEur } from '@/lib/retailers';
 import {
+  decathlonImportModel,
   decathlonPageUrl,
   decathlonStickMatches,
   decathlonSticks,
@@ -10,6 +11,7 @@ import {
   stickModelName,
   stockState,
 } from './decathlonFeed';
+import { carbonFromText } from './plutosportImport';
 import type { StickMatch } from './plutosportFeed';
 
 // DEMO — GEEN WERKELIJKE DATA: synthetic rows in the shape of the feed read on 2026-11-26.
@@ -131,6 +133,11 @@ describe('decathlonSticks', () => {
     expect(kid).toMatchObject({ name: 'adidas youngstar 10 voor kinderen blauw/rood', brand: 'adidas', discipline: 'veld', junior: true });
     expect(adult?.name).toBe('Dita low bow 85% carbon carbotec c85 goud/zwart');
     expect(decathlonSticks(parseDecathlonFeed(row({ name: 'Hockeystick osaka pro tough 3', brand: 'Osaka', size: '36,5"' })))[0]?.name).toBe('Osaka pro tough 3');
+  });
+  it('de import leest het carbonpercentage uit de titel (niet het niveau op prijs)', () => {
+    const model = decathlonImportModel(adult as NonNullable<typeof adult>);
+    expect(carbonFromText(`${model.specText} | ${model.description}`)).toBe(85);
+    expect(decathlonImportModel(kid as NonNullable<typeof kid>).description).toBe('Deze hockeystick is ontworpen voor jonge kinderen');
   });
   it('telt alleen lengtes die niet uitverkocht zijn en de laagste prijs daarvan', () => {
     expect(kid?.lengths).toEqual([31, 32]); // 33" has stock 0

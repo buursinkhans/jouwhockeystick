@@ -138,6 +138,8 @@ export type DecathlonStickModel = FeedStickModel & {
   lengths: number[];
   /** The feed said something about stock on at least one row; false means "listed only". */
   stockStated: boolean;
+  /** The feed's description of the page (the first row's); the import reads a carbon percentage from it. */
+  description: string;
   /** The shop's delivery costs on the rows, when they are all the same. */
   deliveryCostsEur?: number;
 };
@@ -171,6 +173,7 @@ export function decathlonSticks(rows: readonly DecathlonRow[]): DecathlonStickMo
         priceMin: Math.min(...prices),
         lengths,
         stockStated: page.some((row) => row.stockStated),
+        description: first.description,
         ...(delivery.size === 1 && { deliveryCostsEur: [...delivery][0] as number }),
         ...(image && { imageUrl: image }),
       };
@@ -185,7 +188,9 @@ export function decathlonImportModel(model: DecathlonStickModel): PlutoStickMode
     name: model.name,
     brand: model.brand,
     modelText: '',
-    specText: '',
+    // Decathlon writes the carbon share in the title ("… 85% carbon …"); the import reads it from
+    // the spec text and the description. Matching never reads these fields of the import model.
+    specText: model.name,
     url: model.url,
     awDeepLink: '',
     discipline: model.discipline,
@@ -199,7 +204,7 @@ export function decathlonImportModel(model: DecathlonStickModel): PlutoStickMode
     inStock: model.inStock,
     categories: [],
     ...(model.imageUrl && { imageUrl: model.imageUrl }),
-    description: '',
+    description: model.description,
   };
 }
 

@@ -3664,3 +3664,10 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Tests:** `privacy.test.ts` en `shoe-advice/wizard.test.ts` kennen versie 1.8 en de nieuwe alinea.
 - **Volgorde:** hiermee is de voorwaarde uit de vorige entry vervuld. De eerste PassaHockey-sync met Decathlon-knoppen mag na deze PR worden gemerged.
 - **Betrokken bestanden:** `src/content/privacy.ts`, `src/content/privacy.test.ts`, `src/shoe-advice/wizard.test.ts`.
+
+## 2026-11-26 — Decathlon: carbonpercentage uit de titel lezen (gevonden in de eerste sync)
+- **Aanleiding:** de eerste Decathlon-sync (PR #324) importeerde 22 sticks, maar elk niveau was op de prijs geschat, met de zin "carbonpercentage onbekend". Het percentage staat bij de meeste sticks gewoon in de titel ("Korok Fh995 … 95% carbon"). De importfunctie gaf de import een lege specificatietekst en een lege beschrijving mee, en de carbonlezer leest alleen die twee. Gevolg: dezelfde 30% carbon was bij de ene stick "beginner" en bij de andere "gevorderd", en een hogere prijs gaf een hoger niveau. Dat is tegen de regel van de eigenaar van 2026-11-08 (het niveau volgt alleen het carbonpercentage, nooit de prijs).
+- **Gekozen:** de import krijgt de titel als specificatietekst en de beschrijving uit de feed. Het carbonpercentage, de bron ("Decathlon vermeldt een carbonpercentage van …") en het niveau volgen dan dezelfde regels als bij de andere winkels, inclusief de controle op een onwaarschijnlijk percentage bij een lage prijs. De naammatching leest deze velden niet en verandert niet.
+- **Gevolg voor de lopende sync:** PR #324 bevat de verkeerde niveaus. Volgorde: deze PR mergen, #324 sluiten zonder te mergen en de workflow "PassaHockey-sync" opnieuw starten.
+- **Test:** `decathlonFeed.test.ts` controleert dat uit de titel 85% carbon wordt gelezen.
+- **Betrokken bestanden:** `src/catalog/decathlonFeed.ts` (+ test).
