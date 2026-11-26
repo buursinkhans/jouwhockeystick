@@ -928,7 +928,7 @@
           }
         ]
       },
-      "fout": null
+      "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
     },
     "posts/20261210-geschiedenis-winkeltermen": {
       "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
@@ -1000,13 +1000,13 @@
       "fout": null
     }
   },
-  "laatsteRun": "2026-11-26T02:08:21Z",
+  "laatsteRun": "2026-11-26T03:08:24Z",
   "tegoed": {
     "maand": "2026-11",
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "702114ff-d180-4854-b4b1-0c9b38292948",
+  "wijziging": "46f66d91-2c8b-42b6-a5f1-c3e9baa5f5ef",
   "resultaten": {},
   "onderzoek": {
     "week": 46,
