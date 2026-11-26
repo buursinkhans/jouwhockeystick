@@ -3595,3 +3595,11 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Wat volgt:** de eigenaar zet het secret en start de workflow; daarna bouwt stap 2 de koppeling (links, knop, prijs en voorraad uit de feed, koppelen alleen op EAN of met de hand bevestigd) op wat de feed blijkt te bevatten.
 - **Bewust niet:** nog geen knop, geen prijzen en geen tekst op de site, geen wijziging aan `retailers.ts`, de catalogus of de privacyverklaring.
 - **Betrokken bestanden:** `scripts/decathlon-feed-check.ts`, `src/lib/feedSample.ts` (+ test), `.github/workflows/decathlon-feed-check.yml` en `package.json`.
+
+## 2026-11-26 — Marketingstudio: Stack en Week bijgewerkt
+
+- **Opdracht eigenaar:** de onderdelen toevoegen die op de kaart ontbraken.
+- **Wat:** het tabblad Stack heeft vier nieuwe blokken (Dagbericht, Noor, Reactie-wachter, SEO-kansenrapport) met hun verbindingen; de kaart is daarvoor hoger. Het tabblad Week noemt hun schema onder "Niet aan een dag gebonden" en heeft stand 26 november.
+- **Keuze:** het SEO-kansenrapport staat als agent op de kaart, al werkt het met vaste regels en zonder AI-model; de toelichting zegt dat.
+- **Bewust niet:** geen blokken voor Technical SEO en Geplande publicatie; geen andere tabbladen of schema's gewijzigd. De pagina is niet gepubliceerd.
+- **Betrokken bestanden:** `social/studio/index.html` en dit logboek.
