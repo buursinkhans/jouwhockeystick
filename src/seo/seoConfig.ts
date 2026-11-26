@@ -78,6 +78,11 @@ export const INTENT_WORDS = {
  * Found on the first real run (2026-11-26): "zaalsticks" was reported as a social idea.
  */
 export const CATEGORY_WORDS: readonly { path: string; words: readonly string[] }[] = [
+  // Shoes first: "zaalhockeyschoenen" is a shoe query, not a zaal stick query (second real run, 2026-11-26).
+  {
+    path: '/hockeyschoenen',
+    words: ['hockeyschoenen', 'hockeyschoen', 'zaalhockeyschoenen', 'zaalhockeyschoen', 'zaalschoenen', 'zaalschoen', 'veldhockeyschoenen', 'indoorschoenen', 'schoenen', 'schoen'],
+  },
   {
     path: '/zaalsticks',
     words: ['zaalsticks', 'zaalstick', 'zaalhockeystick', 'zaalhockeysticks', 'indoorsticks', 'indoorstick', 'indoorhockeystick', 'zaal', 'indoor'],

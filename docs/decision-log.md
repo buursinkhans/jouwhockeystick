@@ -3575,3 +3575,12 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Goedkeuren doet zelf niets:** het label is een markering. De Orchestrator zet goedgekeurde SEO-kansen onder "Voor jou"; de pagina aanpassen gebeurt daarna in een sessie met Claude (alleen bij actie C kan de Orchestrator er een brief van maken).
 - **Gecontroleerd:** lint, typecheck en alle tests (nieuw: vier tests voor de nummers in `evaluate.test.ts` en drie voor de knop in `seoTab.test.ts`). Twee volledige runs met nagemaakte antwoorden: de eerste koppelde de nieuw gemaakte issues, de tweede (zonder nieuwe issues) de bestaande; het bestand heeft dezelfde sleutels als voorheen, dus de controle "alleen versleuteld" slaagt. De kaart is bekeken met voorbeeldnummers. **Niet gecontroleerd:** de link in claude.ai zelf (een artifact kan externe links beperken) en een echte run.
 - **Betrokken bestanden:** `src/seo/{opportunities,issues}.ts`, `scripts/seo-opportunities.ts`, `social/studio/index.html` en de tests.
+
+## 2026-11-26 — SEO-kansenrapport: tweede echte run, twee punten bijgesteld
+
+- **Aanleiding:** de tweede echte run (2026-11-26, na de fix van die ochtend) maakte drie B-issues (#313, #314, #315) en één social-idee (#316). De fix van die ochtend werkte (de zaalzoekopdrachten zijn geen social-idee meer en de issues noemen de concurrerende pagina's), maar twee punten klopten nog niet.
+- **Punt 1, schoenen:** "zaalhockeyschoenen" werd een social-idee, terwijl `/hockeyschoenen` bestaat. De categoriewoorden hebben nu een schoenenregel (`/hockeyschoenen`, vóór de zaalregel, omdat "zaalhockeyschoenen" een schoenenvraag is en geen zaalstickvraag).
+- **Punt 2, hoofdpagina:** B-issue #313 koos de catalogus `/zaalsticks` als hoofdpagina voor "verschil veldhockey zaalhockey stick", terwijl `/kennis/veldstick-zaalhockey` het antwoord is. Bij een vraag of vergelijking (intentie informatie of vergelijken) is de hoofdpagina nu een kennispagina als een van de concurrenten dat is. De zoekmodule gaat nog steeds voor; een koopzoekopdracht houdt de meest getoonde pagina.
+- **Open issues:** #313 en #316 zijn niet aangeraakt. Met de bijstelling zou de maandrun voor #313 een ander issue maken (een andere hoofdpagina geeft een ander id); de eigenaar kan #313 en #316 sluiten.
+- **Gecontroleerd:** lint, typecheck en alle tests (nieuw: vier tests in `opportunities.test.ts`). **Niet gecontroleerd:** de nieuwe regels tegen de echte zoekopdrachten (dat blijkt bij de volgende run).
+- **Betrokken bestanden:** `src/seo/{opportunities,seoConfig}.ts` en `src/seo/opportunities.test.ts`.

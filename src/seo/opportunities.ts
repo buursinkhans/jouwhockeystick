@@ -332,7 +332,10 @@ export function decide({ now, before, long, offer }: DecisionInput): Decision {
   if (cannibalised(long)) {
     // The main page is the one our own search names for this query when it is among the competitors; otherwise the one shown most.
     const competing = (long?.pages ?? []).filter((p) => p.impressions >= THRESHOLDS.cannibalMinImpressions).map((p) => p.page);
-    const main = offer.path && competing.includes(offer.path) ? offer.path : top;
+    // For a question or a comparison the main page is a knowledge page when one of the competitors is one (the catalogue page is not the answer).
+    const asks = intent === 'informatie' || intent === 'vergelijken';
+    const knowledge = asks ? competing.find((page) => INFO_PAGES.includes(pageType(page))) : undefined;
+    const main = offer.path && competing.includes(offer.path) ? offer.path : (knowledge ?? top);
     return {
       code: 'B',
       page: main,

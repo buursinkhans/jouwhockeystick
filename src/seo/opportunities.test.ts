@@ -410,3 +410,35 @@ describe('eerste echte run (2026-11-26): aanbod herkennen en concurrerende pagin
     expect(issue.body).not.toMatch(/\b90\b|\b60\b/);
   });
 });
+
+describe('tweede echte run (2026-11-26): schoenen en kennispagina als hoofdpagina', () => {
+  it('een schoenenzoekopdracht wijst naar de schoenensectie en niet naar de zaalsticks', () => {
+    expect(categoryPathOf(['zaalhockeyschoenen'])).toBe('/hockeyschoenen');
+    expect(categoryPathOf(['indoor', 'schoenen'])).toBe('/hockeyschoenen');
+    expect(categoryPathOf(['hockeyschoenen'])).toBe('/hockeyschoenen');
+    expect(categoryPathOf(['zaalsticks'])).toBe('/zaalsticks');
+  });
+  it('bij een vraag of vergelijking is de hoofdpagina een kennispagina als een van de concurrenten dat is', () => {
+    const pages: [string, number][] = [['/zaalsticks', 50], ['/kennis/veldstick-zaalhockey', 30], ['/kennis/zaalstick-budget', 20]];
+    const now = stat('verschil veldhockey zaalhockey stick', 100, 6, pages);
+    const long = stat('verschil veldhockey zaalhockey stick', 100, 6, pages);
+    const decision = decide({ now, before: undefined, long, offer: { kind: 'verwant', path: null } });
+    expect(decision.code).toBe('B');
+    expect(decision.page).toBe('/kennis/veldstick-zaalhockey');
+    expect(decision.others).toEqual(['/zaalsticks', '/kennis/zaalstick-budget']);
+  });
+  it('bij een koopzoekopdracht blijft de meest getoonde pagina de hoofdpagina', () => {
+    const pages: [string, number][] = [['/sticks', 50], ['/kennis/waar-koop-je-een-hockeystick', 30]];
+    const now = stat('hockeystick kopen online', 80, 6, pages);
+    const long = stat('hockeystick kopen online', 80, 6, pages);
+    const decision = decide({ now, before: undefined, long, offer: { kind: 'categorie', path: '/sticks' } });
+    expect(decision.code).toBe('B');
+    expect(decision.page).toBe('/sticks');
+  });
+  it('de zoekmodule gaat voor: noemt die een van de concurrenten, dan is dat de hoofdpagina', () => {
+    const pages: [string, number][] = [['/kennis/a', 50], ['/kennis/b', 30]];
+    const now = stat('welke maat hockeystick', 80, 6, pages);
+    const long = stat('welke maat hockeystick', 80, 6, pages);
+    expect(decide({ now, before: undefined, long, offer: article('/kennis/b') }).page).toBe('/kennis/b');
+  });
+});
