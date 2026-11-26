@@ -10,17 +10,17 @@
  */
 import { z } from 'zod';
 import { LOW_CTR, NEAR_PAGE_ONE, type Period, type SearchRow } from './searchConsole';
-import { INTENT_WORDS, KEYWORD_PAGES, SEASON_NOTE, SEASON_NOTE_TRENDS, SEO_BRAND_TERMS, THRESHOLDS, type BrandTerms } from './seoConfig';
+import { CATEGORY_WORDS, INTENT_WORDS, KEYWORD_PAGES, SEASON_NOTE, SEASON_NOTE_TRENDS, SEO_BRAND_TERMS, THRESHOLDS, type BrandTerms } from './seoConfig';
 import { buildSeason, Season, type SeasonInput } from './trends';
 import { figuresOfPage, Funnel, FunnelFigures } from './funnel';
 
-export const SEO_RULESET_VERSION = 'seo-kansen-v2';
+export const SEO_RULESET_VERSION = 'seo-kansen-v3';
 
 export type BrandClass = 'eigen' | 'merkwoord' | 'niet-merk';
 export type PageType = 'home' | 'product' | 'catalogus' | 'kennis' | 'blog' | 'merk' | 'vergelijk' | 'tool' | 'schoen' | 'overig';
 export type Intent = 'kopen' | 'vergelijken' | 'informatie' | 'product' | 'onbekend';
 /** What our own site offers for a query, from the live search ('categorie': only general words, such as "hockeystick kopen"). */
-export type OfferKind = 'stick' | 'merk' | 'artikel' | 'tool' | 'categorie' | 'geen';
+export type OfferKind = 'stick' | 'merk' | 'artikel' | 'tool' | 'categorie' | 'verwant' | 'geen';
 export type OfferMatch = { kind: OfferKind; path: string | null };
 export type ActionCode = 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 export type Level = 'hoog' | 'middel' | 'laag';
@@ -51,6 +51,8 @@ export const Recommendation = z.object({
   prioriteit: z.enum(['hoog', 'middel', 'laag']),
   zekerheid: z.enum(['hoog', 'middel', 'laag']),
   basislijn: Baseline,
+  /** Action B (competing pages): the other pages that show up for the same search, so the owner sees both. */
+  andere: z.array(z.string()).max(3).optional(),
   /** Action D only: visitors from Google on this page and how many clicked to a shop that day, in the period of the report. */
   funnel: FunnelFigures.optional(),
 });
@@ -243,6 +245,12 @@ export function pageType(path: string): PageType {
   }
 }
 
+/** The category page that a query points at (zaal or veld words), or null. */
+export function categoryPathOf(words: readonly string[]): string | null {
+  const set = new Set(words.map((word) => word.toLowerCase()));
+  return CATEGORY_WORDS.find((entry) => entry.words.some((word) => set.has(word)))?.path ?? null;
+}
+
 export function intentOf(query: string, offer: OfferMatch): Intent {
   const words = new Set(wordsOf(query));
   const has = (list: readonly string[]) => list.some((word) => words.has(word));
@@ -258,6 +266,8 @@ type Decision = {
   code: ActionCode;
   page: string;
   reden: string;
+  /** Competing pages (action B). */
+  others?: string[];
 };
 
 /** The reason of a query that needs no action; those queries are not listed. */
@@ -312,10 +322,14 @@ export function decide({ now, before, long, offer }: DecisionInput): Decision {
     return { code: 'E', page: top, reden: 'Een zoekopdracht buiten ons aanbod. Hooguit iets voor social, niet voor de site.' };
   }
   if (cannibalised(long)) {
+    // The main page is the one our own search names for this query when it is among the competitors; otherwise the one shown most.
+    const competing = (long?.pages ?? []).filter((p) => p.impressions >= THRESHOLDS.cannibalMinImpressions).map((p) => p.page);
+    const main = offer.path && competing.includes(offer.path) ? offer.path : top;
     return {
       code: 'B',
-      page: top,
-      reden: 'Twee pagina\'s concurreren om dezelfde zoekopdracht. Kies een hoofdpagina en verwijs er vanaf de andere pagina met een interne link naartoe.',
+      page: main,
+      others: competing.filter((page) => page !== main).slice(0, 3),
+      reden: 'Meer dan één pagina concurreert om dezelfde zoekopdracht. Verwijs vanaf de andere pagina\'s met een interne link naar de hoofdpagina, of kies zelf een andere hoofdpagina als die beter past.',
     };
   }
   if (delta !== null && before && before.position <= THRESHOLDS.lossMaxPosition && delta >= THRESHOLDS.positionWorse) {
@@ -455,6 +469,7 @@ export function analyse(input: AnalysisInput): SeoReport {
         vertoningen: lead.stat.impressions,
         klikken: lead.stat.clicks,
       },
+      ...(lead.decision.others?.length && { andere: lead.decision.others }),
       ...(funnelFigures && { funnel: funnelFigures }),
     };
   });

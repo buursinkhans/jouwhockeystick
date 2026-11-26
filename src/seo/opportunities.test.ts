@@ -4,6 +4,7 @@ import {
   ACTION_LABELS,
   aggregate,
   analyse,
+  categoryPathOf,
   classifyBrand,
   confidenceOf,
   decide,
@@ -17,6 +18,7 @@ import {
   type OfferMatch,
   type QueryStat,
 } from './opportunities';
+import { issueFor } from './issues';
 import type { SearchRow } from './searchConsole';
 import { seasonFromExports } from './trends';
 
@@ -226,7 +228,7 @@ describe('analyse', () => {
     expect(SeoReport.safeParse(report).success).toBe(true);
     expect(report.aanbevelingen.length).toBeLessThanOrEqual(5);
     expect(report.bewustNiet.length).toBeLessThanOrEqual(3);
-    expect(report.regelset).toBe('seo-kansen-v2');
+    expect(report.regelset).toBe('seo-kansen-v3');
     expect(report.land).toBe('nld');
   });
   it('scheidt eigen naam, merkwoorden en niet-merk, en telt rijen met te weinig data apart', () => {
@@ -358,5 +360,53 @@ describe('analyse met een Google Trends-seizoen (Fase 2)', () => {
     expect(report.seizoenNotitie).toContain('Google Trends');
     expect(report.seizoenNotitie).toContain('De positie blijft de hoofdmaat');
     expect(report.seizoen?.bron).toContain('geen zoekaantallen');
+  });
+});
+
+describe('eerste echte run (2026-11-26): aanbod herkennen en concurrerende pagina\'s', () => {
+  it('een woord dat naar een categoriepagina wijst valt niet buiten ons aanbod', () => {
+    expect(categoryPathOf(['zaalsticks'])).toBe('/zaalsticks');
+    expect(categoryPathOf(['indoor', 'hockeystick'])).toBe('/zaalsticks');
+    expect(categoryPathOf(['veldsticks'])).toBe('/sticks');
+    expect(categoryPathOf(['Zaalstick'])).toBe('/zaalsticks');
+    expect(categoryPathOf(['knutselen'])).toBeNull();
+    expect(categoryPathOf([])).toBeNull();
+  });
+  it('een ruim aanbod ("verwant") is nooit E: er is iets van ons bij, ook al weten we niet welke pagina', () => {
+    const now = stat('verschil veldhockey zaalhockey stick', 20, 30, [['/', 20]]);
+    const decision = decide({ now, before: undefined, long: undefined, offer: { kind: 'verwant', path: null } });
+    expect(decision.code).not.toBe('E');
+  });
+  it('de hoofdpagina bij twee concurrerende pagina\'s is de pagina die onze eigen zoekmodule noemt, en de andere wordt genoemd', () => {
+    const now = stat('hockeystick maat kind', 40, 6, [['/clubs', 24], ['/kennis/hockeystick-kinderen-en-beginners', 16]]);
+    const long = stat('hockeystick maat kind', 100, 6, [['/clubs', 60], ['/kennis/hockeystick-kinderen-en-beginners', 40]]);
+    const decision = decide({ now, before: undefined, long, offer: article('/kennis/hockeystick-kinderen-en-beginners') });
+    expect(decision.code).toBe('B');
+    expect(decision.page).toBe('/kennis/hockeystick-kinderen-en-beginners');
+    expect(decision.others).toEqual(['/clubs']);
+  });
+  it('noemt de pagina die het meest getoond wordt als onze zoekmodule geen van beide noemt', () => {
+    const now = stat('osaka hockeystick', 40, 6, [['/merken/osaka', 24], ['/sticks/demo', 16]]);
+    const long = stat('osaka hockeystick', 100, 6, [['/merken/osaka', 60], ['/sticks/demo', 40]]);
+    const decision = decide({ now, before: undefined, long, offer: { kind: 'merk', path: '/merken/andere' } });
+    expect(decision.page).toBe('/merken/osaka');
+    expect(decision.others).toEqual(['/sticks/demo']);
+  });
+  it('de aanbeveling en het issue noemen de concurrerende pagina\'s, zonder cijfers', () => {
+    const report = analyse({
+      month: '2026-12',
+      now: new Date('2026-12-07T06:00:00Z'),
+      period: { start: '2026-11-01', end: '2026-11-28' },
+      previousPeriod: { start: '2026-10-04', end: '2026-10-31' },
+      current: [row('osaka hockeystick', '/merken/osaka', 0, 90, 6), row('osaka hockeystick', '/sticks/demo', 0, 60, 7)],
+      previous: [],
+      long: [row('osaka hockeystick', '/merken/osaka', 0, 90, 6), row('osaka hockeystick', '/sticks/demo', 0, 60, 7)],
+      offerOf: () => ({ kind: 'merk', path: '/merken/andere' }),
+    });
+    const rec = report.aanbevelingen.find((r) => r.code === 'B');
+    expect(rec?.andere).toEqual(['/sticks/demo']);
+    const issue = issueFor(rec as NonNullable<typeof rec>);
+    expect(issue.body).toContain('**Concurreert met:** `/sticks/demo`');
+    expect(issue.body).not.toMatch(/\b90\b|\b60\b/);
   });
 });

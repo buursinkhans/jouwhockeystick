@@ -101,3 +101,10 @@ describe('Marketingstudio: organische funnel in het tabblad SEO (Fase 3)', () =>
     expect(tab).toContain('Doorklik naar een winkel: ');
   });
 });
+
+describe('Marketingstudio: concurrerende pagina\'s bij actie B', () => {
+  it('toont de pagina\'s waarmee de hoofdpagina concurreert, ge-escaped', () => {
+    expect(tab).toContain("'<div>Concurreert met: '");
+    expect(tab).toContain("esc(a)");
+  });
+});

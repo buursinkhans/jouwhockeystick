@@ -72,6 +72,19 @@ export const INTENT_WORDS = {
   ],
 } as const;
 
+/**
+ * Words that point at one of our category pages. A query with one of them is not "outside our offer"
+ * even when no stick, brand or article matches by name ("zaalsticks" has the page /zaalsticks).
+ * Found on the first real run (2026-11-26): "zaalsticks" was reported as a social idea.
+ */
+export const CATEGORY_WORDS: readonly { path: string; words: readonly string[] }[] = [
+  {
+    path: '/zaalsticks',
+    words: ['zaalsticks', 'zaalstick', 'zaalhockeystick', 'zaalhockeysticks', 'indoorsticks', 'indoorstick', 'indoorhockeystick', 'zaal', 'indoor'],
+  },
+  { path: '/sticks', words: ['veldsticks', 'veldstick', 'veldhockeystick', 'veldhockeysticks', 'veld'] },
+];
+
 /** Words that describe the category and do not name a model: removed before looking for our own offer. */
 export const GENERIC_WORDS = [
   'hockeystick',
