@@ -11,9 +11,11 @@
  * scripts/decathlon-feed.ts.
  */
 import { isDecathlonProductPage } from '@/lib/retailers';
+import { euShoeSize } from './dakaFeed';
 import { lengthInches } from './hockeyCityFeed';
 import type { DecathlonStickMatch } from './offers/index';
 import type { FeedStickModel, PlutoStickModel, StickMatch } from './plutosportFeed';
+import { bySize, type ShoeModel } from './shoeFeed';
 
 export type DecathlonRow = {
   /** Product page without query, e.g. https://www.decathlon.nl/p/hockeystick-youngstar-10-voor-kinderen-blauw-rood/375081/m9055975 */
@@ -241,4 +243,62 @@ export function decathlonStickMatches(
     }
   }
   return result;
+}
+
+// ---------------------------------------------------------------------------
+// Shoes (decision log 2026-11-26)
+
+/** A hockey shoe page: the category path says so. It says nothing about field or indoor. */
+export const SHOE_CATEGORY = /^Hockey>Hockeyschoenen(>|$)/i;
+/** Below EU 36 every size is a children's size. */
+const JUNIOR_SIZE_LIMIT = 36;
+
+/** A hockey shoe: in the shoe category, at least one EU size. */
+export function isDecathlonShoe(rows: readonly DecathlonRow[]): boolean {
+  const first = rows[0];
+  return first !== undefined && SHOE_CATEGORY.test(first.categoryPath) && rows.some((row) => euShoeSize(row.size) !== null);
+}
+
+/** "hockeyschoenen stealth 1.0 zwart/oranje" → "Stealth 1.0 Zwart/Oranje": Decathlon writes names in lower case. */
+export const shoeModelName = (title: string) =>
+  title
+    .replace(/^(zaal)?hockeyschoenen?\s+/i, '')
+    .trim()
+    .replace(/(^|[\s/-])(\p{L})/gu, (_, before: string, letter: string) => before + letter.toUpperCase());
+
+/**
+ * The shoe pages as models of the shared shoe import (src/catalog/shoes/feedImport.ts). Field or
+ * indoor only when the title says so (the category path does not). A page counts as in stock when
+ * one of its rows is not stated as "none"; a size counts as in stock only where the feed states a
+ * stock above zero (an empty stock field says nothing about that size).
+ */
+export function decathlonShoes(rows: readonly DecathlonRow[]): ShoeModel[] {
+  return groupByPage(rows)
+    .filter(isDecathlonShoe)
+    .map((page) => {
+      const first = page[0] as DecathlonRow;
+      const sized = page.map((row) => ({ ...row, eu: euShoeSize(row.size) })).filter((row) => row.eu !== null);
+      const available = sized.filter((row) => row.inStock);
+      const confirmed = sized.filter((row) => row.inStock && row.stockStated);
+      const prices = (available.length ? available : sized).map((row) => row.priceEur);
+      const sizes = [...new Set(sized.map((row) => row.eu as string))].sort(bySize);
+      const childSizes = sizes.length > 0 && sizes.every((size) => parseInt(size, 10) < JUNIOR_SIZE_LIMIT);
+      const image = page.find((row) => row.imageUrl)?.imageUrl;
+      return {
+        shop: 'Decathlon' as const,
+        url: first.url,
+        name: shoeModelName(first.title),
+        brand: first.brand,
+        discipline: /\bindoor\b|zaal/i.test(first.title) ? ('zaal' as const) : ('onbekend' as const),
+        junior: /\b(kinderen|kind|kids|jr|junior|jongens|meisjes)\b/i.test(first.title) || childSizes,
+        sizes,
+        sizesInStock: [...new Set(confirmed.map((row) => row.eu as string))].sort(bySize),
+        ...(image && { imageUrl: image }),
+        eans: [...new Set(sized.flatMap((row) => (row.ean ? [row.ean] : [])))].sort(),
+        priceMin: Math.min(...prices),
+        priceMax: Math.max(...prices),
+        inStock: available.length > 0,
+        categories: [],
+      };
+    });
 }

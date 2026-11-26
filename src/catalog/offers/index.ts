@@ -115,7 +115,7 @@ export type DecathlonOffers = {
   /** YYYY-MM-DD: when the feed was read. */
   date: string;
   sticks: Readonly<Record<string, DecathlonStickMatch>>;
-  /** Shoe models with a Decathlon page of the same EAN (shoes follow in a later step). */
+  /** Shoe models with a Decathlon page of the same EAN, and the shoes only Decathlon sells. */
   shoes: Readonly<Record<string, ShoeListing>>;
 };
 
