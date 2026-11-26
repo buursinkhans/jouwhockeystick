@@ -4,6 +4,7 @@
 // The feed URL comes from ODYSSEY_FEED_URL (a GitHub secret). It holds a signature: it is never
 // printed, logged or written, and an error shows only a fixed sentence and the HTTP status.
 // Usage: npm run decathlon:feed-check > report.md
+import { catalogBrand } from '../src/catalog/feedImport';
 import { detectItemTag, FeedSummary, maskSecrets, summaryReport } from '../src/lib/feedSample';
 
 const SAMPLE_BYTES = 400_000;
@@ -60,7 +61,7 @@ async function main() {
     if (done || bytes > MAX_BYTES) break;
   }
   if (tag === null) return stop('De feed was leeg.');
-  process.stdout.write(`${summaryReport(summary.result(), tag, bytes)}\n`);
+  process.stdout.write(`${summaryReport(summary.result(), tag, bytes, (brand) => catalogBrand(brand) !== null)}\n`);
 }
 
 main().catch(() => stop('De feedcontrole mislukte (onverwachte fout).'));

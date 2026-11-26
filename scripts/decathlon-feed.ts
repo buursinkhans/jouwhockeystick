@@ -11,7 +11,7 @@
 // Usage: npm run decathlon:feed -- [report.md] [feed.xml] [--write]
 import { readFileSync, writeFileSync } from 'node:fs';
 import { getDiscipline } from '../src/catalog/discipline';
-import type { ImportSkip } from '../src/catalog/feedImport';
+import { catalogBrand, type ImportSkip } from '../src/catalog/feedImport';
 import {
   decathlonImportModel,
   decathlonStickMatches,
@@ -173,6 +173,9 @@ function report(run: Run, rows: readonly DecathlonRow[], sticks: readonly Decath
     const reason = s.reason.replace(/"[^"]*"/, '"…"');
     reasons.set(reason, (reasons.get(reason) ?? 0) + 1);
   }
+  const missing = new Map<string, number>();
+  for (const stick of sticks) if (!catalogBrand(stick.brand)) missing.set(stick.brand, (missing.get(stick.brand) ?? 0) + 1);
+  const missingBrands = [...missing.entries()].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]));
   return [
     '## Decathlon',
     '',
@@ -191,6 +194,7 @@ function report(run: Run, rows: readonly DecathlonRow[], sticks: readonly Decath
     '',
     `- **Sticks:** ${run.products.length} (nieuw: ${newSticks.length ? newSticks.map((p) => `${p.name} (\`${p.slug}\`)`).join(', ') : 'geen'}; verdwenen: ${goneSticks.length ? goneSticks.map((s) => `\`${s}\``).join(', ') : 'geen'})`,
     `- **Overgeslagen sticks:** ${reasons.size ? [...reasons.entries()].map(([reason, count]) => `${reason}: ${count}`).join(', ') : 'geen'}`,
+    `- **Merken van Decathlon-sticks die niet in onze catalogus staan (stickpagina's):** ${missingBrands.length ? missingBrands.map(([brand, count]) => `${brand} (${count})`).join(', ') : 'geen'}`,
     '',
     '### Twijfel: met de hand bevestigen',
     '',

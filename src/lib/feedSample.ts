@@ -25,7 +25,9 @@ export function maskSecrets(text: string): string {
     .replace(/\b[0-9a-f]{32,}\b/gi, '***');
 }
 
-const unwrap = (value: string) => value.replace(/^\s*<!\[CDATA\[/, '').replace(/\]\]>\s*$/, '').trim();
+const ENTITIES: Readonly<Record<string, string>> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", '#39': "'" };
+const decode = (text: string) => text.replace(/&(amp|lt|gt|quot|apos|#39);/g, (_, name: string) => ENTITIES[name] ?? '');
+const unwrap = (value: string) => decode(value.replace(/^\s*<!\[CDATA\[/, '').replace(/\]\]>\s*$/, '').trim());
 
 /** The leaf fields of one product (`<name>value</name>`), nested products flattened with a dotted name; attributes ignored. */
 export function leafFields(itemXml: string): Record<string, string> {
@@ -52,6 +54,13 @@ export type Kind = 'stick' | 'schoen' | 'ander';
 
 /** A product is a hockey stick or a hockey shoe when its text says hockey and stick or shoe; everything else is "ander". */
 export function kindOf(fields: Record<string, string>): Kind {
+  // A category path in the feed ("Hockey>Hockeysticks>…") says what a product is; the text is only the fallback.
+  const path = fields.categoryPath;
+  if (path) {
+    if (/^Hockey>Hockeysticks(>|$)/i.test(path)) return 'stick';
+    if (/^Hockey>Hockeyschoenen(>|$)/i.test(path)) return 'schoen';
+    return 'ander';
+  }
   const text = Object.values(fields).join(' ');
   if (!HOCKEY.test(text)) return 'ander';
   if (SHOE.test(text) && !STICK.test(fields.title ?? fields.name ?? '')) return 'schoen';
@@ -75,6 +84,8 @@ export type Summary = {
   samples: Record<'stick' | 'schoen', Record<string, string>[]>;
   /** Of the hockey sticks: how many have a value in a field that looks like an EAN, a price, a stock or a link field. */
   stickFields: { ean: number; price: number; stock: number; link: number };
+  /** Per brand: the number of product pages (not rows) of sticks and of shoes, busiest first. */
+  brands: { brand: string; sticks: number; schoenen: number }[];
 };
 
 const EAN = /^(ean|gtin|barcode|gtin13|ean13)$/i;
@@ -89,6 +100,7 @@ export class FeedSummary {
   private counts: Record<Kind, number> = { stick: 0, schoen: 0, ander: 0 };
   private samples: Summary['samples'] = { stick: [], schoen: [] };
   private stickFields = { ean: 0, price: 0, stock: 0, link: 0 };
+  private brandPages = { stick: new Map<string, Set<string>>(), schoen: new Map<string, Set<string>>() };
 
   private readonly maxSamples: number;
 
@@ -104,6 +116,12 @@ export class FeedSummary {
     const kind = kindOf(fields);
     this.counts[kind] += 1;
     if (kind === 'ander') return;
+    const brand = (fields.brand ?? '').trim();
+    const page = (fields.productURL ?? fields.link ?? '').split('?')[0] ?? '';
+    if (brand && page) {
+      const pages = this.brandPages[kind];
+      pages.set(brand, (pages.get(brand) ?? new Set<string>()).add(page));
+    }
     const samples = this.samples[kind];
     if (samples.length < this.maxSamples) samples.push(fields);
     if (kind === 'stick') {
@@ -117,12 +135,16 @@ export class FeedSummary {
   }
 
   result(): Summary {
-    return { total: this.total, fieldNames: [...this.names].sort(), counts: this.counts, samples: this.samples, stickFields: this.stickFields };
+    const names = new Set([...this.brandPages.stick.keys(), ...this.brandPages.schoen.keys()]);
+    const brands = [...names]
+      .map((brand) => ({ brand, sticks: this.brandPages.stick.get(brand)?.size ?? 0, schoenen: this.brandPages.schoen.get(brand)?.size ?? 0 }))
+      .sort((a, b) => b.sticks - a.sticks || b.schoenen - a.schoenen || a.brand.localeCompare(b.brand));
+    return { total: this.total, fieldNames: [...this.names].sort(), counts: this.counts, samples: this.samples, stickFields: this.stickFields, brands };
   }
 }
 
 /** The report in Dutch Markdown. */
-export function summaryReport(summary: Summary, itemTag: string, bytes: number): string {
+export function summaryReport(summary: Summary, itemTag: string, bytes: number, inCatalog?: (brand: string) => boolean): string {
   const sticks = summary.counts.stick;
   const lines = [
     '# Decathlon-feed (alleen lezen)',
@@ -137,6 +159,16 @@ export function summaryReport(summary: Summary, itemTag: string, bytes: number):
     summary.fieldNames.length ? summary.fieldNames.map((name) => `\`${name}\``).join(', ') : 'Geen velden gevonden.',
     '',
   ];
+  if (summary.brands.length) {
+    lines.push(
+      '## Merken (productpagina\'s, niet regels)',
+      '',
+      `| Merk | Sticks | Schoenen${inCatalog ? ' | In onze catalogus' : ''} |`,
+      `|---|---|---${inCatalog ? '|---' : ''}|`,
+      ...summary.brands.map((b) => `| ${b.brand} | ${b.sticks} | ${b.schoenen}${inCatalog ? ` | ${inCatalog(b.brand) ? 'ja' : '**nee**'}` : ''} |`),
+      '',
+    );
+  }
   for (const kind of ['stick', 'schoen'] as const) {
     lines.push(`## Voorbeeld${kind === 'stick' ? 'en van een stick' : 'en van een schoen'}`, '');
     if (summary.samples[kind].length === 0) lines.push('Geen.', '');
