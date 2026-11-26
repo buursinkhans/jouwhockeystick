@@ -9,6 +9,7 @@
  * proof: other changes, the season and small numbers all move a position.
  */
 import { THRESHOLDS } from './seoConfig';
+import { funnelVerdict, type FunnelFigures } from './funnel';
 import type { ActionCode } from './opportunities';
 import type { HistoryMonth, Outcome } from './opportunities';
 
@@ -49,6 +50,8 @@ export type Due = {
   /** The 28 days after "uitgevoerd". */
   window: { start: string; end: string };
   issue?: number;
+  /** Action D: the funnel of the page before the change. */
+  funnelBasislijn?: FunnelFigures;
 };
 
 /**
@@ -79,16 +82,30 @@ export function dueForEvaluation(history: readonly HistoryMonth[], statuses: rea
       uitgevoerdOp: status.uitgevoerdOp,
       window,
       ...(status.issue !== undefined && { issue: status.issue }),
+      ...(newest.rec.funnelBasislijn && { funnelBasislijn: newest.rec.funnelBasislijn }),
     });
   }
   return due;
 }
 
-/** Direction of the position, with enough impressions before and after; otherwise "onvoldoende data". */
-export function outcomeOf(due: Due, after: Figures | null): Outcome {
+/**
+ * Direction of the position, with enough impressions before and after; otherwise "onvoldoende data".
+ * Action D is judged on the funnel instead (visitors from Google who click to a shop), when PostHog gave
+ * figures for the page after the change (`funnelAfter`; undefined means PostHog was not read).
+ */
+export function outcomeOf(due: Due, after: Figures | null, funnelAfter?: FunnelFigures | null): Outcome {
   const base = { uitgevoerdOp: due.uitgevoerdOp, gemeten: due.window.end };
   if ((due.code as ActionCode) === 'D') {
-    return { ...base, oordeel: 'niet gemeten', na: after, toelichting: 'De doorklik naar de winkel wordt nog niet gemeten.' };
+    if (funnelAfter === undefined || !due.funnelBasislijn) {
+      return {
+        ...base,
+        oordeel: 'niet gemeten',
+        na: after,
+        toelichting: due.funnelBasislijn ? 'PostHog gaf deze maand geen cijfers voor de doorklik naar de winkel.' : 'Voor deze aanbeveling is de doorklik naar de winkel niet vastgelegd vóór de wijziging.',
+      };
+    }
+    const verdict = funnelVerdict(due.funnelBasislijn, funnelAfter);
+    return { ...base, oordeel: verdict.oordeel, na: after, funnelNa: funnelAfter, toelichting: verdict.toelichting };
   }
   if (!after || after.vertoningen < THRESHOLDS.minImpressions || due.basislijn.vertoningen < THRESHOLDS.minImpressions) {
     return {
