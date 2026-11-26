@@ -185,6 +185,7 @@ export function ProductDetail({ product }: { product: Product }) {
                     alsoAtPlutosport={product.plutosportProductUrl !== undefined}
                     alsoAtHockeyCity={product.hockeyCityProductUrl !== undefined}
                     alsoAtDaka={product.dakaProductUrl !== undefined}
+                    alsoAtDecathlon={product.decathlonProductUrl !== undefined}
                   />
                 </div>
               </>

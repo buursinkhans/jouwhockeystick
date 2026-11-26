@@ -4,9 +4,9 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import OverOnsPage from './page';
 
 describe('/over-ons', () => {
-  it('names all four partner shops and how the site earns money', () => {
+  it('names all six partner shops and how the site earns money', () => {
     const html = renderToStaticMarkup(createElement(OverOnsPage));
-    expect(html).toContain('bol.com, PassaHockey, Plutosport, HockeyCity of Daka');
+    expect(html).toContain('bol.com, PassaHockey, Plutosport, HockeyCity, Daka of Decathlon');
     expect(html).toContain('Zo verdienen we geld');
     expect(html).toContain('nooit op vergoeding');
   });

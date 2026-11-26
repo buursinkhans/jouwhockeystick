@@ -73,7 +73,7 @@ export function plutosportGaps(models: readonly PlutoStickModel[], matchedKeys: 
 
 /** The shop a feed-only stick comes from: Plutosport or HockeyCity (decision log 2026-11-03). */
 export type ImportShop = {
-  feed: 'plutosport' | 'hockeycity' | 'daka';
+  feed: 'plutosport' | 'hockeycity' | 'daka' | 'decathlon';
   label: string;
   /** Where the lengths come from, for the source of `lengthsInches`. */
   lengthsFrom: string;
@@ -98,6 +98,22 @@ export const DAKA_IMPORT: ImportShop = {
     const page = (new URL(model.url).pathname.split('/').pop() ?? '')
       .toLowerCase()
       .replace(/-sku_\d+$/, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+    const brandSlug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return page.startsWith(brandSlug) ? page : `${brandSlug}-${page}`;
+  },
+};
+
+/** Decathlon page paths are /p/<slug>/<id>/<variant>; the catalog slug is the brand and the page slug, without the generic first word. */
+export const DECATHLON_IMPORT: ImportShop = {
+  feed: 'decathlon',
+  label: 'Decathlon',
+  lengthsFrom: 'volgens de productfeed van Decathlon niet uitverkocht waren op de controledatum (één regel per lengte)',
+  slug: (model, brand) => {
+    const page = (new URL(model.url).pathname.split('/')[2] ?? '')
+      .toLowerCase()
+      .replace(/^(zaal|indoor)?hockeystick-/, '')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '');
     const brandSlug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -191,7 +207,9 @@ export function toFeedProduct(
       ? { plutosportProductUrl: model.url }
       : shop.feed === 'daka'
         ? { dakaProductUrl: model.url }
-        : { hockeyCityProductUrl: model.url }),
+        : shop.feed === 'decathlon'
+          ? { decathlonProductUrl: model.url }
+          : { hockeyCityProductUrl: model.url }),
     imageAlt: `${model.name}`,
     ...(model.imageUrl && { imageUrl: model.imageUrl, imageSourceUrl: model.url }),
     discipline: {

@@ -549,7 +549,7 @@ export function IndoorFinder({
                 >
                   {imported.kind === 'loading'
                     ? 'Bezig met laden…'
-                    : `Toon ook ${importedTotal} sticks uit het aanbod van PassaHockey, Plutosport, HockeyCity en Daka`}
+                    : `Toon ook ${importedTotal} sticks uit het aanbod van PassaHockey, Plutosport, HockeyCity, Daka en Decathlon`}
                 </Button>
                 {imported.kind === 'error' && <p className="mt-2 text-sm text-red-700">{TEXT.loadError}</p>}
               </>

@@ -5,10 +5,12 @@ import { PLUTOSPORT_PRODUCTS } from './imported/plutosport';
 import { HOCKEYCITY_PRODUCTS } from './imported/hockeycity';
 import { PASSAHOCKEY_LIVE_PRICES } from './imported/passaPrices';
 import { withLivePrice } from './livePrice';
-import { withDaka, withHockeyCity, withPlutosport } from './offers';
+import { withDaka, withDecathlon, withHockeyCity, withPlutosport } from './offers';
 import { HOCKEYCITY_OFFERS } from './offers/hockeyCity';
 import { DAKA_OFFERS } from './offers/daka';
 import { DAKA_PRODUCTS } from './imported/daka';
+import { DECATHLON_OFFERS } from './offers/decathlon';
+import { DECATHLON_PRODUCTS } from './imported/decathlon';
 import { PLUTOSPORT_MATCHES } from './offers/matches';
 
 export { getDiscipline };
@@ -292,6 +294,11 @@ export function getDakaImportedProducts(): readonly Product[] {
   return DAKA_PRODUCTS;
 }
 
+/** Sticks imported from the Decathlon feed that no other shop sells (generated). */
+export function getDecathlonImportedProducts(): readonly Product[] {
+  return DECATHLON_PRODUCTS;
+}
+
 /** True for a stick from the bulk feed import: noindex page, not in the sitemap or articles. */
 export function isFeedImport(product: Product): boolean {
   return product.feedImport !== undefined;
@@ -312,15 +319,18 @@ export type ProductQuery = {
  * HockeyCity page where the match is 'zeker' or confirmed by hand.
  */
 const CURATED_WITH_LIVE_PRICES: Product[] = ALL_PRODUCTS.map((product) =>
-  withDaka(
-    withHockeyCity(
-      withPlutosport(
-        withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
-        PLUTOSPORT_MATCHES,
+  withDecathlon(
+    withDaka(
+      withHockeyCity(
+        withPlutosport(
+          withLivePrice(product, PASSAHOCKEY_LIVE_PRICES),
+          PLUTOSPORT_MATCHES,
+        ),
+        HOCKEYCITY_OFFERS,
       ),
-      HOCKEYCITY_OFFERS,
+      DAKA_OFFERS,
     ),
-    DAKA_OFFERS,
+    DECATHLON_OFFERS,
   ),
 );
 
@@ -329,7 +339,8 @@ const CURATED_WITH_LIVE_PRICES: Product[] = ALL_PRODUCTS.map((product) =>
  * match is 'zeker'), then the Plutosport sticks that PassaHockey does not
  * sell; both with the HockeyCity page where there is one; then the
  * HockeyCity sticks that no other shop sells; all with the Daka page where
- * there is one; then the Daka sticks that no other shop sells.
+ * there is one; then the Daka sticks that no other shop sells; all with the Decathlon
+ * page where there is one; then the Decathlon sticks that no other shop sells.
  */
 const IMPORTED_WITH_OFFERS: Product[] = [
   ...[
@@ -339,7 +350,9 @@ const IMPORTED_WITH_OFFERS: Product[] = [
   ...HOCKEYCITY_PRODUCTS,
 ]
   .map((product) => withDaka(product, DAKA_OFFERS))
-  .concat(DAKA_PRODUCTS);
+  .concat(DAKA_PRODUCTS)
+  .map((product) => withDecathlon(product, DECATHLON_OFFERS))
+  .concat(DECATHLON_PRODUCTS);
 
 export function getAllProducts(
   now: Date = new Date(),

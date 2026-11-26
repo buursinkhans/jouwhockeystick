@@ -158,13 +158,22 @@ export const productSchema = z.object({
     .startsWith('https://www.daka.nl/p/')
     .optional(),
   /**
+   * Decathlon product page (Odyssey), added by the catalog from src/catalog/offers/decathlon.ts
+   * like Daka's; never written in the product files. The tracking tags are added in src/lib/retailers.ts.
+   */
+  decathlonProductUrl: z
+    .string()
+    .url()
+    .startsWith('https://www.decathlon.nl/p/')
+    .optional(),
+  /**
    * Set for sticks imported in bulk from a partner's product feed instead of
    * curated one by one. Their specs come from the feed only; their pages are
    * noindex, stay out of the sitemap and articles, and bol.com availability
    * is unknown until checked. Removed once a stick is enriched by hand.
    */
   feedImport: z
-    .object({ feed: z.enum(['passahockey', 'plutosport', 'hockeycity', 'daka']), importedAt: z.string() })
+    .object({ feed: z.enum(['passahockey', 'plutosport', 'hockeycity', 'daka', 'decathlon']), importedAt: z.string() })
     .optional(),
   experienceLevel: sourcedValueSchema(experienceLevelSchema),
   recommendedPositions: sourcedValueSchema(z.array(positionSchema)),

@@ -1,4 +1,4 @@
-export type RetailerId = 'bolcom' | 'passasports' | 'plutosport' | 'hockeycity' | 'daka';
+export type RetailerId = 'bolcom' | 'passasports' | 'plutosport' | 'hockeycity' | 'daka' | 'decathlon';
 
 /** Where on the site a shop link sits; sent as bol.com sub-ID to see which pages convert. */
 export type RetailerPlacement =
@@ -249,6 +249,56 @@ export function dakaTrackingUrl(productUrl: string, placement: string): string |
 }
 
 /**
+ * Decathlon affiliate programme via Odyssey Partnerships (advertiser Decathlon NL, contract
+ * 1318, active since 2026-11-26; decision log 2026-11-26). Not secrets: they are part of every
+ * link. Odyssey tracks with UTM tags on the shop's own product page, as the URL Builder of the
+ * dashboard and the product feed show on 2026-11-26:
+ * decathlon.nl/p/<slug>/<id>/<variant>?utm_source=Odyssey_Partnerships&utm_medium=affiliate&utm_campaign=<campaign>
+ * We add `utm_content` with the place on our site, like the sub-ID at the other shops.
+ */
+export const DECATHLON_ODYSSEY = {
+  source: 'Odyssey_Partnerships',
+  medium: 'affiliate',
+  /** The campaign number of our account in every link of the feed (the URL Builder fills it in). */
+  campaign: '2715',
+  contractId: '1318',
+} as const;
+
+const DECATHLON_HOST = 'www.decathlon.nl';
+
+/** Product pages only (/p/<slug>/<id>[/<variant>]), no query: never a search or category page. */
+export function isDecathlonProductPage(url: URL): boolean {
+  return (
+    url.hostname === DECATHLON_HOST &&
+    url.protocol === 'https:' &&
+    url.search === '' &&
+    /^\/p\/[a-z0-9-]+\/[a-z0-9]+(\/[a-z0-9]+)?$/i.test(url.pathname)
+  );
+}
+
+/**
+ * Adds the Odyssey UTM tags to a Decathlon product page. `utm_content` says where on our site the
+ * link sits; the other three are the ones the URL Builder writes. Only product pages.
+ */
+export function decathlonTrackingUrl(productUrl: string, placement: string): string | null {
+  let target: URL;
+  try {
+    target = new URL(productUrl);
+  } catch {
+    return null;
+  }
+  if (!isDecathlonProductPage(target)) return null;
+  const { source, medium, campaign } = DECATHLON_ODYSSEY;
+  const params = new URLSearchParams({
+    utm_source: source,
+    utm_medium: medium,
+    utm_campaign: campaign,
+    utm_content: placement,
+  });
+  return `${target.origin}${target.pathname}?${params.toString()}`;
+}
+
+/**
  * A tracked link to a shop's own action or sale page (not a product), for the
  * shop overview on /black-friday-hockey (decision log 2026-11-10). Same link
  * formats and IDs as the product links above, only the page check is the
@@ -305,6 +355,13 @@ export function shopPageTrackingUrl(
         dl: `${target.pathname.slice(1)}${target.search}`,
       });
       return `https://partner.daka.nl/c/?${params.toString()}`;
+    }
+    case 'decathlon': {
+      if (host !== DECATHLON_HOST) return null;
+      const { source, medium, campaign } = DECATHLON_ODYSSEY;
+      const params = new URLSearchParams({ utm_source: source, utm_medium: medium, utm_campaign: campaign, utm_content: placement });
+      // The page's own query is dropped: the feed's links carry only the UTM tags.
+      return `${target.origin}${target.pathname}?${params.toString()}`;
     }
   }
 }
@@ -397,12 +454,26 @@ export const DAKA_SHIPPING: ShippingTerms = {
   note: 'Bezorging via PostNL: €4,95 onder €50, gratis vanaf €50 (campagnepagina van Daisycon en de productfeed van Daka; daka.nl zelf was niet te lezen).',
 };
 
+/**
+ * Decathlon (decision log 2026-11-26). The shop's own page on shipping costs was not readable for us
+ * (HTTP 403). What we know: the product feed says €3,95 on every hockey item, and the product page
+ * (seen by the owner on 2026-11-26) says free shipping for Members from €60 and free returns. We do
+ * not assume a Member, so €3,95 always: a total is never too low. To confirm on decathlon.nl.
+ */
+export const DECATHLON_SHIPPING: ShippingTerms = {
+  tiers: [{ belowEur: null, costEur: 3.95 }],
+  sourceUrl: 'https://help.decathlon.nl/hc/nl/articles/27583116226716-Wat-zijn-de-verzendkosten-van-mijn-bestelling',
+  checkedAt: '2026-11-26',
+  note: 'Verzending €3,95 (productfeed van Decathlon); gratis voor Members vanaf €60 en gratis retourneren, volgens de productpagina. De verzendpagina van Decathlon was niet te lezen.',
+};
+
 export const SHIPPING: Record<RetailerId, ShippingTerms> = {
   bolcom: BOL_SHIPPING,
   passasports: PASSASPORTS_SHIPPING,
   plutosport: PLUTOSPORT_SHIPPING,
   hockeycity: HOCKEYCITY_SHIPPING,
   daka: DAKA_SHIPPING,
+  decathlon: DECATHLON_SHIPPING,
 };
 
 /** Shipping for an order of one item at this price; null when unknown. */
@@ -482,5 +553,12 @@ export const RETAILERS: Record<RetailerId, Retailer> = {
     // Only direct product links: never a Daka search.
     getUrl: ({ placement, productUrl }) =>
       productUrl ? dakaTrackingUrl(productUrl, placement) : null,
+  },
+  decathlon: {
+    id: 'decathlon',
+    label: 'Decathlon',
+    // Only direct product links: never a Decathlon search.
+    getUrl: ({ placement, productUrl }) =>
+      productUrl ? decathlonTrackingUrl(productUrl, placement) : null,
   },
 };

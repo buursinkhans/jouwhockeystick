@@ -109,6 +109,22 @@ export const BLACK_FRIDAY_PROMOS: readonly ShopPromo[] = [
     sourceUrl: 'https://www.daka.nl/sale/hockey',
     url: 'https://www.daka.nl/sale/hockey',
   },
+  {
+    retailer: 'decathlon',
+    kind: 'geen',
+    name: null,
+    audience: null,
+    // Partner since 2026-11-26; decathlon.nl blocks automated reads (HTTP 403) and the owner has not checked its action page yet.
+    status: 'niet-gecontroleerd',
+    categories: [],
+    startsAt: null,
+    endsAt: null,
+    verifiedAt: null,
+    summary: 'We hebben de actiepagina van Decathlon nog niet nagekeken. Kijk op de site van de winkel of er een actie loopt.',
+    conditions: null,
+    sourceUrl: 'https://www.decathlon.nl/',
+    url: 'https://www.decathlon.nl/',
+  },
 ];
 
 const nlDate = (date: string) =>
@@ -243,7 +259,7 @@ export const BLACK_FRIDAY = {
       },
       {
         question: 'Welke hockeywinkels staan op deze pagina?',
-        answer: 'De vijf partnerwinkels van jouwhockeystick.nl: bol.com, PassaHockey (PassaSports), Plutosport, HockeyCity en Daka. Per winkel staat erbij of we de actie hebben nagekeken en wanneer. Het verschil tussen de winkels lees je in [waar koop je een hockeystick](/kennis/waar-koop-je-een-hockeystick).',
+        answer: 'De zes partnerwinkels van jouwhockeystick.nl: bol.com, PassaHockey (PassaSports), Plutosport, HockeyCity, Daka en Decathlon. Per winkel staat erbij of we de actie hebben nagekeken en wanneer. Het verschil tussen de winkels lees je in [waar koop je een hockeystick](/kennis/waar-koop-je-een-hockeystick).',
       },
       {
         question: 'Zijn hockeyschoenen ook afgeprijsd?',
@@ -256,7 +272,7 @@ export const BLACK_FRIDAY = {
     ],
   },
   transparency:
-    'jouwhockeystick.nl verkoopt zelf niets. We vergelijken sticks en schoenen bij vijf partnerwinkels en krijgen een vergoeding als je via onze link koopt. Die vergoeding speelt geen rol in de volgorde van de winkels, de selectie van de sticks of ons advies.',
+    'jouwhockeystick.nl verkoopt zelf niets. We vergelijken sticks en schoenen bij zes partnerwinkels en krijgen een vergoeding als je via onze link koopt. Die vergoeding speelt geen rol in de volgorde van de winkels, de selectie van de sticks of ons advies.',
   campaignNote: `Black Friday is op ${nlDate(day)}: zie welke hockeywinkels een actie hebben.`,
   /** The band under the homepage hero (CampaignBand) and the links in the search block and the top bar. */
   homeBand: {

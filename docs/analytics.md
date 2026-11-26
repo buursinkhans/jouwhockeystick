@@ -96,6 +96,7 @@ Het verkooprapport (`sales-report.yml`, maandag 05:41 UTC, issue met label `verk
 | PassaHockey, HockeyCity | TradeTracker, referentierapport | referentie (de plek) | per plek | per plek |
 | Plutosport | Awin, publisher-API | `clickref` (de plek) | alleen in totaal (rapport per adverteerder) | per plek (transacties) |
 | Daka | Daisycon, transactie-export (URL met vast token) | `ws` (de plek, het sub-ID) | niet in de export, zie PostHog | per plek |
+| Decathlon | **Nog niet in het rapport** (besluit 2026-11-26): Odyssey heeft een Data API met een bearer-token (rapportage per `utm_content`, de plek); dat token zou een GitHub-secret worden en is een apart besluit | `utm_content` (de plek) | zie PostHog | per plek, zodra de API is gekoppeld |
 
 **Eerste echte run (2026-11-11, week 4 t/m 10 november):** bol.com, PassaHockey en HockeyCity werken (bol.com 11 kliks en 1 bestelling, PassaHockey 127 kliks en 2 verkopen). Plutosport: de Awin-token werkt, maar het rapport per adverteerder had geen rij voor adverteerder 8342, waarschijnlijk omdat er geen klik was (het conversie-rapport van PostHog toont ook geen Plutosport-klik). Daka: nog niet opgehaald.
 
