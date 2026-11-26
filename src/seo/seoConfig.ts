@@ -94,6 +94,22 @@ export const GENERIC_WORDS = [
 ] as const;
 
 /**
+ * The owner's keyword table: one page per search query (decision log 2026-11-14).
+ * When the search engine shows another page for such a query, the report points
+ * to the assigned page and never asks to improve the page that is shown.
+ * Keys are lowercase with single spaces (see normalizeQuery).
+ */
+export const KEYWORD_PAGES: Readonly<Record<string, string>> = {
+  'welke hockeystick kopen': '/kennis/hoe-kies-je-de-juiste-hockeystick',
+  'hoe kies je een hockeystick': '/kennis/hoe-kies-je-de-juiste-hockeystick',
+  veldhockeystick: '/sticks',
+  veldhockeysticks: '/sticks',
+  veldsticks: '/sticks',
+  'hockeysticks vergelijken': '/sticks',
+  'hockeystick uitproberen': '/blog/hockeystick-kopen',
+};
+
+/**
  * Thresholds: a proposal, to be tested after the first runs (plan, appendix C.3).
  * Search Console averages the position over impressions, so with few impressions
  * one ranking test decides the average.
@@ -105,6 +121,8 @@ export const THRESHOLDS = {
   strongImpressions: 30,
   /** A position this many places worse than the period before is a loss. */
   positionWorse: 3,
+  /** ...and only counts when the earlier position was this good: further down, positions swing on their own. */
+  lossMaxPosition: 20,
   /** Cannibalisation: the second page needs this many impressions over 90 days... */
   cannibalMinImpressions: 10,
   /** ...and this share of the impressions of the query. */

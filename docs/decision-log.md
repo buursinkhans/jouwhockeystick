@@ -3538,6 +3538,14 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Bewust niet:** geen automatisch goedkeuren of publiceren, geen wijziging aan de Social-planner, geen wijziging aan de Vlaamse kalender, geen toetsing van het voorbereidingsvenster (dat kan pas na een jaar eigen data).
 - **Betrokken bestanden:** `src/seo/{seasonAgenda,issues,evaluate}.ts` en tests, `src/seo/seasonRules.test.ts`, `scripts/{trends-agenda,trends-import,seo-opportunities}.ts`, `docs/marketing/seizoensagenda.md`, `docs/orchestrator.md`, `marketing/sites/jouwhockeystick.json`, `docs/seo-trends-import.md`, `docs/marketing/dagbericht.md`, `package.json`.
 
+## 2026-11-26 — Gids "welke hockeystick kopen" versterkt; blog uitproberen gelinkt; kansenrapport volgt de zoekwoordtabel
+
+- **Aanleiding:** het kansenrapport vroeg om `/blog/hockeystick-kopen` te verbeteren voor "welke hockeystick kopen". Die zoekvraag hoort sinds 2026-11-14 bij `/kennis/hoe-kies-je-de-juiste-hockeystick`.
+- **Gids:** een antwoordtabel bovenaan (speler, carbon, kromming; de carbongrenzen komen uit de adviesengine), vraagkoppen, de FIH-grens voor de kromming en externe bronnen (FIH, Grays, Intersport). Geen FAQ-opmaak.
+- **Blog:** vraagkoppen, minder overlap met de gids, links naar `/sticks` en `/zaalsticks`. Nieuwe links ernaartoe vanuit de gids, "waar koop je" en "kinderen en beginners".
+- **Rapport (`seo-kansen-v2`):** zoekwoordtabel `KEYWORD_PAGES` gaat voor; een daling telt alleen als de positie ervoor 20 of beter was.
+- **Gevolg voor de meting:** de gids is binnen de afgesproken 4 tot 6 weken na 2026-11-14 opnieuw gewijzigd (besluit eigenaar 2026-11-26), dus het effect van beide wijzigingen is niet te scheiden.
+
 ## 2026-11-26 — SEO-kansenrapport, Fase 3 (deel 2: organische funnel voor actie D)
 
 - **Aanleiding:** besluit van de eigenaar op 2026-11-25 (vraag 6 van Fase 3): de organische funnel nu meebouwen, omdat actie D (vergelijker of productpresentatie verbeteren) anders niet meetbaar blijft. Deel 1 staat op `main` (PR 303).

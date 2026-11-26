@@ -49,7 +49,7 @@ export const waarKoopJeEenHockeystick: Article = {
       heading: 'Je mag je stick overal kopen',
       level: 2,
       body: [
-        'Echt waar: jouwhockeystick.nl is geen winkel. We helpen je kiezen, en waar je de stick daarna koopt, maak jij uit. Heeft je club een clubshop of zit er een hockeywinkel bij jou in de buurt? Dan kun je de stick daar vaak ook even in je handen nemen. Dat is altijd fijn.',
+        'Echt waar: jouwhockeystick.nl is geen winkel. We helpen je kiezen, en waar je de stick daarna koopt, maak jij uit. Heeft je club een clubshop of zit er een hockeywinkel bij jou in de buurt? Dan kun je de stick daar vaak ook even in je handen nemen. Dat is altijd fijn. Lees vooraf hoe je [een hockeystick uitprobeert voor je koopt](/blog/hockeystick-kopen).',
         'Onze tip: neem de modelnaam en de lengte uit je advies mee. Dan weet je zeker dat je dezelfde stick krijgt, en niet een nét andere uitvoering of een maat te lang.',
       ],
     },
@@ -152,7 +152,7 @@ export const waarKoopJeEenHockeystick: Article = {
   ],
   author: 'Redactie jouwhockeystick.nl',
   publishedAt: '2026-10-16',
-  updatedAt: '2026-11-13',
+  updatedAt: '2026-11-26',
   sources: [
     { label: 'bol.com: Retourvoorwaarden', url: BOL_RETURNS },
     { label: 'bol.com: Bezorgen en ontvangen', url: BOL_DELIVERY },
