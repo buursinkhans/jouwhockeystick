@@ -3688,6 +3688,12 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Test:** `decathlonFeed.test.ts` (schoenlezer), `shoes/feedImport.test.ts` (import, EAN-koppeling, naam zonder EAN, gedeelde EAN met een andere winkel), `workflows.test.ts` (volgorde en paden van de sync, proefrun schrijft niets).
 - **Betrokken bestanden:** `src/catalog/{decathlonFeed,shoeFeed}.ts`, `src/catalog/shoes/{feedImport,index,types,importedDecathlon}.ts`, `src/catalog/offers/index.ts`, `scripts/decathlon-feed.ts`, `.github/workflows/{passa-sync,decathlon-feed-check}.yml`, `CLAUDE.md` en de tests.
 
+## 2026-11-26 — Stickwijzer linkt naar de gids "welke hockeystick kopen"
+- **Aanleiding:** het kansenrapport meldde dat `/blog/hockeystick-kopen`, `/kennis` en `/stickwijzer` concurreren met `/kennis/hoe-kies-je-de-juiste-hockeystick`. De blog en `/kennis` linkten al naar de gids, de stickwijzer niet.
+- **Wat (akkoord eigenaar):** één zin met link onder de uitleg van de drie routes op `/stickwijzer`. Titel, vragen en adviesregels zijn niet gewijzigd.
+- **Meten:** SEO-meting van 2026-12-09. Eén interne link zal de positie waarschijnlijk weinig veranderen.
+- **Betrokken bestanden:** `src/app/stickwijzer/page.tsx`.
+
 ## 2026-11-26 — Kansenrapport kijkt of de interne link al bestaat (`seo-kansen-v4`)
 - **Aanleiding:** drie aanbevelingen "voeg een interne link toe" op één dag, terwijl de links er (op één na) al stonden. En een daling las als een daling van de hele pagina, terwijl de cijfers van één zoekterm waren.
 - **Wat (opdracht eigenaar):** het maandscript leest de concurrerende live pagina's en telt alleen links binnen `<main>`. Alle links aanwezig: geen aanbeveling maar "bewust niet" (een echte daling blijft actie A). Ontbreekt er een: de aanbeveling en het issue noemen die pagina. Is een pagina niet te lezen, dan blijft het algemene advies. Elke aanbeveling bewaart de vorige periode van de zoekterm, alleen in het versleutelde rapport.
