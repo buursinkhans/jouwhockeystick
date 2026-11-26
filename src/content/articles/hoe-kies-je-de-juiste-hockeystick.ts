@@ -80,7 +80,7 @@ export const hoeKiesJeDeJuisteHockeystick: Article = {
             ['Ervaren, met 3D-acties of sleeppush', `${DIRECT_MIN_CARBON}% of meer, als de aanname betrouwbaar is`, 'Low bow of extreme low bow', '[Low bow of mid bow](/kennis/low-bow-vs-mid-bow)'],
           ],
         },
-        'Zie de tabel als richting. Wat jij prettig vindt en wat je wilt leren, kan je keuze verschuiven. De maat komt uit de [lengtetabel](/kennis/hockeystick-lengte-tabel).',
+        'Zie de tabel als richting. Wat jij prettig vindt en wat je wilt leren, mag de keuze verschuiven. De maat komt uit de [lengtetabel](/kennis/hockeystick-lengte-tabel).',
       ],
     },
     {
