@@ -3671,3 +3671,9 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Gevolg voor de lopende sync:** PR #324 bevat de verkeerde niveaus. Volgorde: deze PR mergen, #324 sluiten zonder te mergen en de workflow "PassaHockey-sync" opnieuw starten.
 - **Test:** `decathlonFeed.test.ts` controleert dat uit de titel 85% carbon wordt gelezen.
 - **Betrokken bestanden:** `src/catalog/decathlonFeed.ts` (+ test).
+
+## 2026-11-26 — Stickwijzer linkt naar de gids "welke hockeystick kopen"
+- **Aanleiding:** het kansenrapport meldde dat `/blog/hockeystick-kopen`, `/kennis` en `/stickwijzer` concurreren met `/kennis/hoe-kies-je-de-juiste-hockeystick`. De blog en `/kennis` linkten al naar de gids, de stickwijzer niet.
+- **Wat (akkoord eigenaar):** één zin met link onder de uitleg van de drie routes op `/stickwijzer`. Titel, vragen en adviesregels zijn niet gewijzigd.
+- **Meten:** SEO-meting van 2026-12-09. Eén interne link zal de positie waarschijnlijk weinig veranderen.
+- **Betrokken bestanden:** `src/app/stickwijzer/page.tsx`.
