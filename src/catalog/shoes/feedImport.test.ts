@@ -189,3 +189,48 @@ describe('shoe feed import: nothing is known about the shoe itself', () => {
     expect(shoe!.ageGroup).toBe('junior');
   });
 });
+
+describe('shoe feed import: Decathlon (decision log 2026-11-26)', () => {
+  const dec = (overrides: Partial<ShoeModel> & Pick<ShoeModel, 'url' | 'name'>) =>
+    page({ shop: 'Decathlon', brand: 'Grays', discipline: 'onbekend', categories: [], sizes: ['41', '42'], sizesInStock: ['42'], priceMin: 64.99, priceMax: 64.99, ...overrides });
+  const URL = 'https://www.decathlon.nl/p/hockeyschoenen-stealth-1-0-zwart-oranje/373967/m8970360';
+  const build = (decathlon: ShoeModel[], curated: { slug: string; eans: string[] }[] = [], known: ReadonlySet<string> = new Set(), others: { passa?: ShoeModel[]; hockeyCity?: ShoeModel[] } = {}) =>
+    buildShoeImport({ passa: others.passa ?? [], pluto: [], ...(others.hockeyCity && { hockeyCity: others.hockeyCity }), decathlon }, curated, DATE, known);
+
+  it('imports a shoe only Decathlon sells as an unknown, noindex model with the Decathlon page and sizes', () => {
+    const result = build([dec({ url: URL, name: 'Stealth 1.0 Zwart/Oranje', eans: ['5039044453218'] })]);
+    expect(result.shoes).toHaveLength(1);
+    const [shoe] = result.shoes;
+    expect(shoe).toMatchObject({ brand: 'Grays', decathlonProductUrl: URL, feedImport: { feeds: ['decathlon'] }, category: { value: 'onbekend' } });
+    expect(shoe?.sizesAndWidths).toMatchObject({ value: { sizes: ['41', '42'] }, source: 'partner-shop' });
+    expect(JSON.stringify(shoe?.sizesAndWidths)).toMatch(/productfeed van Decathlon/);
+    for (const property of SHOE_CONTENT_PROPERTIES) expect(shoe?.[property], property).toEqual({ value: 'onbekend' });
+    expect(result.listings[shoe!.slug]).toMatchObject([{ shop: 'decathlon', url: URL, priceEur: 64.99, sizesInStock: ['42'] }]);
+  });
+
+  it('gives a model we already show a Decathlon listing on a shared EAN, and does not import it again', () => {
+    const result = build([dec({ url: URL, name: 'Stealth 1.0 Zwart/Oranje', eans: ['5039044453218'] })], [{ slug: 'grays-stealth-1-0', eans: ['5039044453218'] }]);
+    expect(result.shoes).toEqual([]);
+    expect(result.curatedMatched).toEqual(['grays-stealth-1-0']);
+    expect(result.listings['grays-stealth-1-0']).toMatchObject([{ shop: 'decathlon', url: URL }]);
+  });
+
+  it('never links on the name: the same name without a shared EAN is not imported, and is reported', () => {
+    const known = new Set([modelKey({ name: 'Grays Stealth 1.0 Zwart/Oranje', brand: 'Grays' })]);
+    const result = build([dec({ url: URL, name: 'Stealth 1.0 Zwart/Oranje', eans: ['5039044453218'] })], [{ slug: 'grays-stealth-1-0', eans: ['9'.repeat(13)] }], known);
+    expect(result.shoes).toEqual([]);
+    expect(result.listings).toEqual({});
+    expect(result.decathlonNameOnly).toEqual([{ name: 'Stealth 1.0 Zwart/Oranje', url: URL }]);
+  });
+
+  it('adds a Decathlon listing to a model another shop in this run shows when the EAN is shared', () => {
+    const result = build(
+      [dec({ url: URL, name: 'Stealth 1.0 Zwart/Oranje', eans: ['5039044453218'] })],
+      [],
+      new Set(),
+      { hockeyCity: [page({ shop: 'HockeyCity', brand: 'Grays', url: 'https://www.hockeycity.nl/grays-stealth-black-orange', name: 'Grays Stealth Black Orange', eans: ['5039044453218'] })] },
+    );
+    expect(result.shoes).toHaveLength(1);
+    expect(result.shoes[0]).toMatchObject({ hockeyCityProductUrl: 'https://www.hockeycity.nl/grays-stealth-black-orange', decathlonProductUrl: URL, feedImport: { feeds: ['hockeycity', 'decathlon'] } });
+  });
+});

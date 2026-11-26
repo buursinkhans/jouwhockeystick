@@ -4,8 +4,9 @@
 // With --write it writes
 //   src/catalog/offers/decathlon.ts   buttons and prices for sticks we already have,
 //   src/catalog/imported/decathlon.ts sticks only Decathlon sells (noindex).
-// Shoes follow in a later step. The weekly PassaHockey sync runs it after the Daka step, so
-// nothing those already show is imported twice.
+//   src/catalog/shoes/importedDecathlon.ts shoes only Decathlon sells (noindex); shoes with the
+//   same EAN as a model we show get a Decathlon listing in offers/decathlon.ts (never linked on a name).
+// The weekly PassaHockey sync runs it after the Daka step, so nothing those already show is imported twice.
 // The feed URL comes from ODYSSEY_FEED_URL (a GitHub secret). It holds a signature: it is never
 // printed, logged or written to a file or the report.
 // Usage: npm run decathlon:feed -- [report.md] [feed.xml] [--write]
@@ -14,6 +15,7 @@ import { getDiscipline } from '../src/catalog/discipline';
 import { catalogBrand, type ImportSkip } from '../src/catalog/feedImport';
 import {
   decathlonImportModel,
+  decathlonShoes,
   decathlonStickMatches,
   decathlonSticks,
   parseDecathlonFeed,
@@ -35,6 +37,14 @@ import { DECATHLON_CONFIRMED, DECATHLON_REJECTED } from '../src/catalog/offers/d
 import { PASSAHOCKEY_FEED_URL, isJunior, parsePassaFeed, type PassaStickModel } from '../src/catalog/passaFeed';
 import { matchStick, type StickMatch } from '../src/catalog/plutosportFeed';
 import { DECATHLON_IMPORT, modelNameKey, toFeedProduct } from '../src/catalog/plutosportImport';
+import { buildShoeImport, modelKey } from '../src/catalog/shoes/feedImport';
+import { IMPORTED_SHOES } from '../src/catalog/shoes/imported';
+import { DAKA_SHOES } from '../src/catalog/shoes/importedDaka';
+import { DECATHLON_SHOES } from '../src/catalog/shoes/importedDecathlon';
+import { HOCKEYCITY_SHOES } from '../src/catalog/shoes/importedHockeyCity';
+import { CURATED_SHOES } from '../src/catalog/shoes/products';
+import type { Shoe, ShoeListing } from '../src/catalog/shoes/types';
+import type { ShoeModel } from '../src/catalog/shoeFeed';
 import { isJuniorStick } from '../src/catalog/similar';
 import type { Product } from '../src/catalog/types';
 
@@ -46,6 +56,7 @@ const DOUBT_LIMIT = 40;
 
 const OFFERS_PATH = 'src/catalog/offers/decathlon.ts';
 const STICKS_PATH = 'src/catalog/imported/decathlon.ts';
+const SHOES_PATH = 'src/catalog/shoes/importedDecathlon.ts';
 
 async function readFeed(localPath: string | undefined): Promise<string> {
   if (localPath) return readFileSync(localPath, 'utf8');
@@ -141,7 +152,17 @@ function importSticks(
 const euro = (n: number) => `€${n.toFixed(2).replace('.', ',')}`;
 const json = (value: unknown) => JSON.stringify(value);
 
-type Run = { data: DecathlonOffers; products: Product[]; skips: ImportSkip[]; usedEan: boolean };
+/** The shoe key of a model we show: its brand and model name, as the shoe import compares names. */
+const shoeKey = (shoe: Shoe) => modelKey({ name: `${shoe.brand} ${shoe.model}`, brand: shoe.brand });
+
+type Run = {
+  data: DecathlonOffers;
+  products: Product[];
+  skips: ImportSkip[];
+  usedEan: boolean;
+  shoes: Shoe[];
+  nameOnlyShoes: { name: string; url: string }[];
+};
 
 /** What the feed's stock field holds, so the owner and I can see what it means (it is not documented). */
 function stockProfile(rows: readonly DecathlonRow[]): string {
@@ -155,7 +176,32 @@ function stockProfile(rows: readonly DecathlonRow[]): string {
   return `Voorraadveld bij ${sticks.length} stickregels: ${top.map(([text, count]) => `"${text}" ${count}x`).join(', ') || 'geen'}.`;
 }
 
-function report(run: Run, rows: readonly DecathlonRow[], sticks: readonly DecathlonStickModel[], matches: readonly ProductMatch[]): string {
+/** One line per shoe page: what the import did with it, so the owner sees every page of this small range. */
+function shoeLines(run: Run, shoeModels: readonly ShoeModel[]): string[] {
+  const slugByUrl = new Map(Object.entries(run.data.shoes).map(([slug, listing]) => [listing.url, slug]));
+  const imported = new Set(run.shoes.map((s) => s.slug));
+  const skipped = new Set(run.nameOnlyShoes.map((s) => s.url));
+  return shoeModels.map((model) => {
+    const slug = slugByUrl.get(model.url);
+    const status = skipped.has(model.url)
+      ? 'niet geïmporteerd: dezelfde naam als een model dat we al tonen, maar geen gedeelde EAN'
+      : slug && imported.has(slug)
+        ? `alleen bij Decathlon (\`${slug}\`)`
+        : slug
+          ? `knop bij een model dat we al hadden (\`${slug}\`, zelfde EAN)`
+          : 'niet gekoppeld';
+    const field = model.discipline === 'onbekend' ? 'veld of zaal onbekend' : model.discipline;
+    return `- ${model.brand} ${model.name} (${model.junior ? 'junior' : 'senior'}, ${field}; ${model.sizes.length} maten, ${model.sizesInStock.length} met een voorraad boven nul in de feed; ${euro(model.priceMin)}; ${model.eans.length} EAN's): ${status}`;
+  });
+}
+
+function report(
+  run: Run,
+  rows: readonly DecathlonRow[],
+  sticks: readonly DecathlonStickModel[],
+  matches: readonly ProductMatch[],
+  shoeModels: readonly ShoeModel[],
+): string {
   const { data } = run;
   const slugs = Object.keys(data.sticks);
   const method = (name: string) => slugs.filter((s) => data.sticks[s]?.method === name).length;
@@ -176,6 +222,8 @@ function report(run: Run, rows: readonly DecathlonRow[], sticks: readonly Decath
   const missing = new Map<string, number>();
   for (const stick of sticks) if (!catalogBrand(stick.brand)) missing.set(stick.brand, (missing.get(stick.brand) ?? 0) + 1);
   const missingBrands = [...missing.entries()].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0]));
+  const shoesBefore = new Set(DECATHLON_SHOES.map((shoe) => shoe.slug));
+  const linkedShoes = Object.keys(data.shoes).length - run.shoes.length;
   return [
     '## Decathlon',
     '',
@@ -196,6 +244,12 @@ function report(run: Run, rows: readonly DecathlonRow[], sticks: readonly Decath
     `- **Overgeslagen sticks:** ${reasons.size ? [...reasons.entries()].map(([reason, count]) => `${reason}: ${count}`).join(', ') : 'geen'}`,
     `- **Merken van Decathlon-sticks die niet in onze catalogus staan (stickpagina's):** ${missingBrands.length ? missingBrands.map(([brand, count]) => `${brand} (${count})`).join(', ') : 'geen'}`,
     '',
+    '### Schoenen',
+    '',
+    `- **Schoenpagina's in de feed:** ${shoeModels.length}. **Knoppen bij schoenen die we al hadden (zelfde EAN):** ${linkedShoes}. **Alleen bij Decathlon (noindex):** ${run.shoes.length} (nieuw: ${run.shoes.filter((s) => !shoesBefore.has(s.slug)).map((s) => `\`${s.slug}\``).join(', ') || 'geen'}).`,
+    '- Koppelen gebeurt alleen op EAN, nooit op naam. Veld of zaal volgens de titel (de categorie van Decathlon zegt dat niet); een maat telt als op voorraad alleen waar de feed een voorraad boven nul noemt.',
+    ...shoeLines(run, shoeModels),
+    '',
     '### Twijfel: met de hand bevestigen',
     '',
     doubts.length
@@ -215,10 +269,25 @@ function report(run: Run, rows: readonly DecathlonRow[], sticks: readonly Decath
 function offersFile(data: DecathlonOffers): string {
   return [
     '// GENERATED by `npm run decathlon:feed -- --write` from the Decathlon product feed (Odyssey Partnerships).',
-    "// Sticks: 'zeker' matches (same EAN, or brand, model, bow and year) and hand-confirmed ones; shoes follow in a later step.",
+    "// Sticks: 'zeker' matches (same EAN, or brand, model, bow and year) and hand-confirmed ones; shoes: same EAN, and the shoes only Decathlon sells.",
     "import type { DecathlonOffers } from './index';",
     '',
     `export const DECATHLON_OFFERS: DecathlonOffers = ${json(data)};`,
+    '',
+  ].join('\n');
+}
+
+function shoesFile(date: string, shoes: readonly Shoe[]): string {
+  return [
+    '// GENERATED by `npm run decathlon:feed -- --write` from the Decathlon product feed (Odyssey Partnerships).',
+    '// Shoe models only Decathlon sells; their listings are in src/catalog/offers/decathlon.ts.',
+    "import type { Shoe } from './types';",
+    '',
+    `export const DECATHLON_SHOE_IMPORT_DATE = '${date}';`,
+    '',
+    'export const DECATHLON_SHOES: Shoe[] = [',
+    ...shoes.map((s) => `  ${json(s)},`),
+    '];',
     '',
   ].join('\n');
 }
@@ -270,13 +339,34 @@ async function main() {
   const taken = new Set(products.map((p) => p.slug));
   const imported = importSticks(sticks, matches, date, taken);
 
-  const run: Run = { data: { date, sticks: stickOffers, shoes: {} }, products: imported.products, skips: imported.skips, usedEan: passaModels !== null };
+  // Shoes: linked on EAN to what we show; the rest imported unless a model we show has the same name.
+  // Our own Decathlon shoes are left out of `known`, like the sticks: they would match their own page.
+  const shoeModels = decathlonShoes(rows);
+  const known = [...CURATED_SHOES, ...IMPORTED_SHOES, ...HOCKEYCITY_SHOES, ...DAKA_SHOES];
+  const shoeResult = buildShoeImport({ passa: [], pluto: [], decathlon: shoeModels }, known, date, new Set(known.map(shoeKey)));
+  const shoeListings: Record<string, ShoeListing> = {};
+  for (const [slug, listings] of Object.entries(shoeResult.listings).sort(([a], [b]) => a.localeCompare(b))) {
+    const listing = listings.find((l) => l.shop === 'decathlon');
+    if (listing) shoeListings[slug] = listing;
+  }
+
+  const run: Run = {
+    data: { date, sticks: stickOffers, shoes: shoeListings },
+    products: imported.products,
+    skips: imported.skips,
+    usedEan: passaModels !== null,
+    shoes: shoeResult.shoes,
+    nameOnlyShoes: shoeResult.decathlonNameOnly,
+  };
   if (write) {
     writeFileSync(OFFERS_PATH, offersFile(run.data));
     writeFileSync(STICKS_PATH, sticksFile(date, run.products));
+    writeFileSync(SHOES_PATH, shoesFile(date, run.shoes));
   }
-  writeFileSync(mdPath, report(run, rows, sticks, matches));
-  console.log(`${rows.length} regels; knoppen: ${Object.keys(stickOffers).length} sticks; alleen bij Decathlon: ${run.products.length} sticks.`);
+  writeFileSync(mdPath, report(run, rows, sticks, matches, shoeModels));
+  console.log(
+    `${rows.length} regels; knoppen: ${Object.keys(stickOffers).length} sticks en ${Object.keys(shoeListings).length - run.shoes.length} schoenen; alleen bij Decathlon: ${run.products.length} sticks en ${run.shoes.length} schoenen.`,
+  );
 }
 
 main().catch((error: unknown) => {

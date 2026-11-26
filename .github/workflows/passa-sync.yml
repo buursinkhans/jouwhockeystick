@@ -115,14 +115,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           trap 'echo "::error::Pull request openen mislukt bij: $BASH_COMMAND"' ERR
-          if [ -z "$(git status --porcelain src/catalog/imported src/catalog/offers src/catalog/shoes/imported.ts src/catalog/shoes/importedHockeyCity.ts src/catalog/shoes/importedDaka.ts)" ]; then echo "Geen wijzigingen."; exit 0; fi
-          other=$(git status --porcelain | awk '{print $2}' | grep -v -e '^src/catalog/imported/' -e '^src/catalog/offers/' -e '^src/catalog/shoes/imported.ts' -e '^src/catalog/shoes/importedHockeyCity.ts' -e '^src/catalog/shoes/importedDaka.ts' || true)
+          if [ -z "$(git status --porcelain src/catalog/imported src/catalog/offers src/catalog/shoes/imported.ts src/catalog/shoes/importedHockeyCity.ts src/catalog/shoes/importedDaka.ts src/catalog/shoes/importedDecathlon.ts)" ]; then echo "Geen wijzigingen."; exit 0; fi
+          other=$(git status --porcelain | awk '{print $2}' | grep -v -e '^src/catalog/imported/' -e '^src/catalog/offers/' -e '^src/catalog/shoes/imported.ts' -e '^src/catalog/shoes/importedHockeyCity.ts' -e '^src/catalog/shoes/importedDaka.ts' -e '^src/catalog/shoes/importedDecathlon.ts' || true)
           if [ -n "$other" ]; then echo "::error::Wijzigingen buiten src/catalog/imported/, src/catalog/offers/ en de schoenenimport: $other"; exit 1; fi
           branch="catalogus/passa-sync-$(date -u +%Y-%m-%d)"
           git config user.name "PassaHockey-sync"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add src/catalog/imported src/catalog/offers src/catalog/shoes/imported.ts src/catalog/shoes/importedHockeyCity.ts src/catalog/shoes/importedDaka.ts
+          git add src/catalog/imported src/catalog/offers src/catalog/shoes/imported.ts src/catalog/shoes/importedHockeyCity.ts src/catalog/shoes/importedDaka.ts src/catalog/shoes/importedDecathlon.ts
           git commit -m "Catalogus: PassaHockey-feed bijgewerkt ($(date -u +%F))"
           git push origin "$branch"
           { cat "$RUNNER_TEMP/import.md"; if [ -f "$RUNNER_TEMP/pluto-koppelingen.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/pluto-koppelingen.md"; fi; if [ -f "$RUNNER_TEMP/bol-prices.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/bol-prices.md"; fi; if [ -f "$RUNNER_TEMP/shoes.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/shoes.md"; fi; if [ -f "$RUNNER_TEMP/hockeycity.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/hockeycity.md"; fi; if [ -f "$RUNNER_TEMP/daka.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/daka.md"; fi; if [ -f "$RUNNER_TEMP/decathlon.md" ]; then printf '\n\n'; cat "$RUNNER_TEMP/decathlon.md"; fi; printf '\n\n_Gemaakt door de wekelijkse PassaHockey-sync. Merge om prijzen, voorraad en nieuwe sticks live te zetten; deze workflow merget nooit zelf._\n'; } > "$RUNNER_TEMP/body.md"

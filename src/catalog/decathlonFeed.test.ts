@@ -3,11 +3,14 @@ import { DECATHLON_ODYSSEY, DECATHLON_SHIPPING, RETAILERS, decathlonTrackingUrl,
 import {
   decathlonImportModel,
   decathlonPageUrl,
+  decathlonShoes,
   decathlonStickMatches,
   decathlonSticks,
   groupByPage,
+  isDecathlonShoe,
   isDecathlonStick,
   parseDecathlonFeed,
+  shoeModelName,
   stickModelName,
   stockState,
 } from './decathlonFeed';
@@ -224,5 +227,64 @@ describe('links en verzendkosten (Odyssey)', () => {
     expect(shippingCostEur(DECATHLON_SHIPPING, 250)).toBe(3.95);
     expect(DECATHLON_SHIPPING.note).toContain('Members');
     expect(DECATHLON_SHIPPING.checkedAt).toBe('2026-11-26');
+  });
+});
+
+describe('decathlonShoes (decision log 2026-11-26)', () => {
+  const SHOE = `https://www.decathlon.nl/p/hockeyschoenen-stealth-1-0-zwart-oranje/373967/m8970360${SPORT}`;
+  const shoeRow = (over: Record<string, string> = {}) =>
+    row({
+      productURL: SHOE,
+      name: 'Hockeyschoenen stealth 1.0 zwart/oranje',
+      brand: 'Grays',
+      price: '64.99',
+      categoryPath: 'Hockey&gt;Hockeyschoenen&gt;Hockeyschoenen per merk',
+      size: '42',
+      EAN: '5039044453218',
+      ...over,
+    });
+  const shoeRows = parseDecathlonFeed(
+    [
+      shoeRow({ size: '41', EAN: '5039044453201' }),
+      shoeRow({ stock: '8' }),
+      shoeRow({ size: '43', EAN: '5039044453225', stock: '0', price: '59.99' }),
+      shoeRow({
+        productURL: `https://www.decathlon.nl/p/zaalhockeyschoenen-kids-indoor/111111/m1${SPORT}`,
+        name: 'Zaalhockeyschoenen kids indoor wit',
+        brand: 'Asics',
+        size: '33',
+        EAN: '4550456000001',
+      }),
+      row({ size: '36,5"' }),
+    ].join(''),
+  );
+  const [grays, asics] = decathlonShoes(shoeRows);
+
+  it('takes shoe pages only: a stick, a bag or a size in inches is no shoe', () => {
+    expect(decathlonShoes(shoeRows)).toHaveLength(2);
+    expect(isDecathlonShoe(shoeRows.filter((r) => r.title.startsWith('Hockeystick')))).toBe(false);
+  });
+  it('writes the model name in capitals and keeps the shop and brand', () => {
+    expect(shoeModelName('Hockeyschoenen stealth 1.0 zwart/oranje')).toBe('Stealth 1.0 Zwart/Oranje');
+    expect(grays).toMatchObject({ shop: 'Decathlon', brand: 'Grays', name: 'Stealth 1.0 Zwart/Oranje', url: 'https://www.decathlon.nl/p/hockeyschoenen-stealth-1-0-zwart-oranje/373967/m8970360' });
+  });
+  it('lists every size, but calls a size in stock only where the feed states a stock above zero', () => {
+    expect(grays?.sizes).toEqual(['41', '42', '43']);
+    expect(grays?.sizesInStock).toEqual(['42']);
+    // The page counts as in stock: size 41 says nothing, 43 says "none".
+    expect(grays?.inStock).toBe(true);
+  });
+  it('takes the lowest price of the rows that are not out of stock, and the EAN of every size', () => {
+    expect(grays?.priceMin).toBe(64.99);
+    expect(grays?.eans).toEqual(['5039044453201', '5039044453218', '5039044453225']);
+  });
+  it('says field or indoor only when the title does: the category does not', () => {
+    expect(grays?.discipline).toBe('onbekend');
+    expect(grays?.categories).toEqual([]);
+    expect(asics).toMatchObject({ discipline: 'zaal', junior: true });
+  });
+  it('a page whose rows all say "none" is not in stock, and still has its sizes', () => {
+    const gone = decathlonShoes(parseDecathlonFeed(shoeRow({ stock: '0' })))[0];
+    expect(gone).toMatchObject({ inStock: false, sizes: ['42'], sizesInStock: [] });
   });
 });
