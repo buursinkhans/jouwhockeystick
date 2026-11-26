@@ -21,7 +21,7 @@ describe('Marketingstudio: tab SEO', () => {
   it('has the tab, the view and the router entry', () => {
     expect(studio).toContain('<a href="#seo" data-view="seo">SEO</a>');
     expect(studio).toContain('id="view-seo"');
-    expect(studio).toContain("'conversie', 'seo', 'social'");
+    expect(studio).toContain("'conversie', 'seo', 'weekrapport', 'social'");
     expect(studio).toContain("v === 'seo'");
   });
 
