@@ -1,0 +1,33 @@
+# Decathlon product feed (Odyssey Partnerships), read-only look. Reads the feed and writes only
+# its structure, the number of hockey sticks and shoes and a few masked sample products to the
+# run summary. It never changes the site, the catalog or an issue. The feed URL holds a
+# signature (GitHub Secret ODYSSEY_FEED_URL): the script never prints it.
+# Started by hand: Actions, "Decathlon-feed (controle)", Run workflow.
+name: Decathlon-feed (controle)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  controle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Feed lezen
+        env:
+          # Contains a signature: only the script reads it, it never prints it.
+          ODYSSEY_FEED_URL: ${{ secrets.ODYSSEY_FEED_URL }}
+        # No shell tracing (set -x): the report goes to a file and then to the run summary and the log.
+        run: |
+          npm run --silent decathlon:feed-check > report.md
+          cat report.md
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
