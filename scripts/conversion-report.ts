@@ -8,6 +8,7 @@ import { QUESTION_META, type QuestionId } from '../src/advice-engine/answers';
 import { QUESTIONS, SCREENS } from '../src/content/stickwijzer/questions';
 import {
   hogql as runHogql,
+  LIVE_HOSTS,
   LIVE_VISITORS,
   readPosthogConfig as readConfig,
   type PosthogConfig,
@@ -159,6 +160,7 @@ async function aiVisits(config: { key: string; projectId: string }): Promise<Cou
 }
 
 async function otherHostEvents(config: { key: string; projectId: string }): Promise<number> {
+  const hosts = LIVE_HOSTS.map((host) => `'${host}'`).join(', ');
   const rows = await hogql(
     config,
     `SELECT count() FROM events
