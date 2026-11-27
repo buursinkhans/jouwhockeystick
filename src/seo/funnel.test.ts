@@ -11,11 +11,13 @@ import {
   funnelVerdict,
   type Funnel,
 } from './funnel';
+import { LIVE_VISITORS } from '../analytics-report/hogql';
+import { VISITOR } from '../analytics-report/visitorFilter';
 import { analyse, nextHistory, SeoReport, type HistoryMonth, type OfferMatch } from './opportunities';
 
 // DEMO — GEEN WERKELIJKE DATA: every figure below is synthetic.
 const period = { start: '2026-11-01', end: '2026-11-28' };
-const filters = { liveHosts: ['jouwhockeystick.nl', 'www.jouwhockeystick.nl'], botPattern: '(?i)bot|crawl' };
+const filters = { visitors: LIVE_VISITORS };
 
 describe('funnelQuery', () => {
   const query = funnelQuery(period, filters);
@@ -33,7 +35,7 @@ describe('funnelQuery', () => {
   });
   it('telt alleen de live site en geen bots, en sluit de eigen site als herkomst uit', () => {
     expect(query).toContain("properties.$host IN ('jouwhockeystick.nl', 'www.jouwhockeystick.nl')");
-    expect(query).toContain("NOT match(coalesce(toString(properties.$raw_user_agent), ''), '(?i)bot|crawl')");
+    expect(query).toContain(VISITOR);
     expect(query).toContain("ref NOT LIKE '%jouwhockeystick%'");
   });
   it('beperkt zich op verzoek tot één pagina, met en zonder slash achter het pad', () => {

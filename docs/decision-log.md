@@ -3699,3 +3699,11 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Wat (opdracht eigenaar):** het maandscript leest de concurrerende live pagina's en telt alleen links binnen `<main>`. Alle links aanwezig: geen aanbeveling maar "bewust niet" (een echte daling blijft actie A). Ontbreekt er een: de aanbeveling en het issue noemen die pagina. Is een pagina niet te lezen, dan blijft het algemene advies. Elke aanbeveling bewaart de vorige periode van de zoekterm, alleen in het versleutelde rapport.
 - **Gevolg:** al open issues blijven open; sluit ze met de hand.
 - **Betrokken bestanden:** `src/seo/{opportunities,issues,links}.ts` (+ tests), `scripts/seo-opportunities.ts`, `docs/marketing/dagbericht.md`.
+
+## 2026-11-27 — KPI Performance, stap 1: botfilter dat wel filtert
+- **Aanleiding:** de analyse voor KPI Performance (Fase 0, 2026-11-26) liet zien dat het botfilter niets deed: het keek naar `$raw_user_agent`, en die eigenschap ontbreekt op alle pageviews. Partner-CTR over 12 tot en met 25 november: ongeveer 4% ongefilterd, ongeveer 11% met filter.
+- **Besluit eigenaar (2026-11-27, "akkoord met alle voorstellen"):** eerst de meting herstellen, daarna een klein MVP als hoofdtab "KPI" in de Marketingstudio. Botfilter: technische botkenmerken eruit; bezoek van buiten Europa niet meetellen en apart tonen. Targets privé in de studio; ze worden ingevoerd zoals opgegeven en eind januari 2027 herijkt. Omzet-KPI wordt goedgekeurde commissie (in het MVP nog "voorlopig"). Gebruik van de vergelijker: `offer_compare_click`, `product_card_click`, `indoor_selection`, `versus_view`, `catalog_block_click`. Decathlon in de verkooprapportage: later apart.
+- **Gebouwd:** `src/analytics-report/visitorFilter.ts` en `LIVE_VISITORS` in `hogql.ts`, gebruikt door de dagcijfers, het Conversie-rapport en het SEO-kansenrapport. Uitleg in `docs/analytics.md`.
+- **Gevolg:** bezoekcijfers in die rapporten dalen vanaf nu sterk. Dat is de meting, niet het verkeer. De tracking en de publieke site zijn niet veranderd.
+- **Nog niet:** het aantal uitgefilterde sessies is nog nergens zichtbaar; dat komt met de KPI-tab.
+- **Betrokken bestanden:** `src/analytics-report/{hogql,visitorFilter,conversion}.ts` (+ test), `src/seo/funnel.ts` (+ test), `scripts/{daily-metrics,conversion-report,seo-opportunities}.ts`, `docs/analytics.md`.

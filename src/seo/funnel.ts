@@ -35,8 +35,8 @@ export type Funnel = z.infer<typeof Funnel>;
 
 const TZ = 'Europe/Amsterdam';
 
-/** The site's events only, and no bots (the same filter as the weekly report and the daily figures). */
-export type Filters = { liveHosts: readonly string[]; botPattern: string };
+/** LIVE_VISITORS of ../analytics-report/hogql: the same filter as the weekly report and the daily figures. */
+export type Filters = { visitors: string };
 
 const quote = (text: string) => `'${text.replace(/'/g, "\\'")}'`;
 const at = (date: string) => `toDateTime('${date} 00:00:00', '${TZ}')`;
@@ -48,10 +48,6 @@ const dayAfter = (date: string) => new Date(Date.parse(`${date}T00:00:00Z`) + 86
  * `onlyPage` limits it to one page (for the measurement after a change).
  */
 export function funnelQuery(period: Period, filters: Filters, onlyPage?: string): string {
-  const live = [
-    `properties.$host IN (${filters.liveHosts.map(quote).join(', ')})`,
-    `NOT match(coalesce(toString(properties.$raw_user_agent), ''), ${quote(filters.botPattern)})`,
-  ].join(' AND ');
   const page = onlyPage === undefined ? '' : ` AND landing IN (${[onlyPage, `${onlyPage}/`].map(quote).join(', ')})`;
   return `SELECT landing, count() AS bezoekers, countIf(clicked) AS klikkers FROM (
   SELECT distinct_id,
@@ -61,7 +57,7 @@ export function funnelQuery(period: Period, filters: Filters, onlyPage?: string)
     argMinIf(coalesce(toString(properties.utm_source), ''), timestamp, event = '$pageview') AS campaign,
     countIf(event = 'retailer_click') > 0 AS clicked
   FROM events
-  WHERE timestamp >= ${at(period.start)} AND timestamp < ${at(dayAfter(period.end))} AND ${live}
+  WHERE timestamp >= ${at(period.start)} AND timestamp < ${at(dayAfter(period.end))} AND ${filters.visitors}
     AND event IN ('$pageview', 'retailer_click')
   GROUP BY distinct_id, d
 ) WHERE ref LIKE '%google.%' AND ref NOT LIKE '%jouwhockeystick%' AND campaign = ''${page}

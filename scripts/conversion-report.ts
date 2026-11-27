@@ -7,9 +7,8 @@
 import { QUESTION_META, type QuestionId } from '../src/advice-engine/answers';
 import { QUESTIONS, SCREENS } from '../src/content/stickwijzer/questions';
 import {
-  BOT_PATTERN,
   hogql as runHogql,
-  LIVE_HOSTS,
+  LIVE_VISITORS,
   readPosthogConfig as readConfig,
   type PosthogConfig,
 } from '../src/analytics-report/hogql';
@@ -37,12 +36,10 @@ const prevStart = end - 14 * DAY;
 const current: Period = { start: isoDate(curStart), end: isoDate(end - DAY) };
 const previous: Period = { start: isoDate(prevStart), end: isoDate(curStart - DAY) };
 
-const hosts = LIVE_HOSTS.map((host) => `'${host}'`).join(', ');
 const BASE_FILTER = [
   `timestamp >= ${literal(prevStart)}`,
   `timestamp < ${literal(end)}`,
-  `properties.$host IN (${hosts})`,
-  `NOT match(coalesce(toString(properties.$raw_user_agent), ''), '${BOT_PATTERN}')`,
+  LIVE_VISITORS,
 ].join(' AND ');
 const IS_NOW = `timestamp >= ${literal(curStart)}`;
 

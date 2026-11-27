@@ -70,6 +70,24 @@ Drie nieuwe delen in het wekelijkse Conversie-rapport, elk met "deze week", "vor
 - **Omzet via zoeken:** het rapport telt winkelkliks (`fromSearch`), geen bestellingen. De netwerken geven aantallen per sub-ID (de plek, hier `productpagina`), niet per bron. Bestellingen via zoeken zijn dus niet los te zien; zie "Van klik naar omzet".
 - **Ontbrekende data:** kan PostHog een van de drie delen niet beantwoorden, dan staat er "PostHog kon dit deze week niet beantwoorden" en gaat de rest van het rapport door.
 
+## Welke bezoeken tellen (botfilter, 2026-11-27)
+
+Alle rapporten (dagcijfers, Conversie-rapport, SEO-kansenrapport) gebruiken één filter: `LIVE_VISITORS` in `src/analytics-report/hogql.ts`. Alleen de live site telt, en alleen events die geen van deze kenmerken hebben:
+
+| Groep | Kenmerk | In de cijfers |
+|---|---|---|
+| `technical` | geen of UTC-tijdzone, scherm van 800 × 600, of een venster meer dan 1,5 keer zo breed als het scherm | nee |
+| `outside` | tijdzone buiten Europa | nee, apart te tellen |
+| `visitor` | al het overige | ja |
+
+De groepen staan in `src/analytics-report/visitorFilter.ts`. Het oude filter keek naar `$raw_user_agent`, een eigenschap die de site niet meestuurt: het filterde niets.
+
+- **Gemeten, 12 tot en met 25 november:** 101 sessies technisch, 39 buiten Europa, 81 bezoek. De eerste twee groepen hadden geen enkele winkelklik.
+- **Beperking:** sterke aanwijzing, geen bewijs. Een echte bezoeker buiten Europa valt weg; een bot die op een Europese telefoon lijkt blijft staan.
+- **Trend:** de dagcijfers lezen de hele reeks elke keer opnieuw, dus de 35 dagen zijn onderling vergelijkbaar. Cijfers in rapporten van vóór deze datum zijn hoger en niet met nieuwe te vergelijken.
+- De tracking op de site is niet veranderd.
+- Controleer de kenmerken elk kwartaal.
+
 ## Eigen verkeer uitsluiten
 
 Open de site eenmaal op elk eigen apparaat met `?intern=aan`, bijvoorbeeld `https://jouwhockeystick.nl/?intern=aan`. Vanaf dan stuurt die browser geen PostHog-metingen en geen funnel-events meer. `?intern=uit` zet het weer terug. Code: `src/lib/analytics/internal.ts`.

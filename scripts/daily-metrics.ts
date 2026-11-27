@@ -13,7 +13,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import type { z } from 'zod';
 import { sourceLabel } from '../src/analytics-report/conversion';
 import { collectBrandPages, collectSiteSearch, collectVersus, total, type QueryContext } from '../src/analytics-report/siteSections';
-import { BOT_PATTERN, hogql, LIVE_HOSTS, readPosthogConfig } from '../src/analytics-report/hogql';
+import { hogql, LIVE_VISITORS, readPosthogConfig } from '../src/analytics-report/hogql';
 import { dayRows, redact, registeredSite, SitesAnswer, TrafficAnswer } from '../src/marketing/bingReport';
 import {
   compareAll,
@@ -50,12 +50,6 @@ const shift = (date: string, days: number) => isoDay(Date.parse(`${date}T00:00:0
 const num = (v: unknown) => (typeof v === 'number' ? v : Number(v) || 0);
 const why = (e: unknown) => (e instanceof Error ? e.message : 'onbekende fout');
 
-/** Events from the live site only, no bots (the same filter as the weekly report). */
-const LIVE_FILTER = [
-  `properties.$host IN (${LIVE_HOSTS.map((h) => `'${h}'`).join(', ')})`,
-  `NOT match(coalesce(toString(properties.$raw_user_agent), ''), '${BOT_PATTERN}')`,
-].join(' AND ');
-
 /**
  * The tab "Conversie": the last 7 Amsterdam days (ending yesterday) against the 7
  * before, with the same queries as the weekly Conversie-rapport
@@ -70,7 +64,7 @@ async function conversie(yesterday: string): Promise<Dagcijfers['conversie']> {
     const beforeStart = shift(yesterday, -13);
     const ctx: QueryContext = {
       run: (query) => hogql(config, query, 'dagcijfers-conversie'),
-      baseFilter: `timestamp >= ${at(beforeStart)} AND timestamp < ${at(shift(yesterday, 1))} AND ${LIVE_FILTER}`,
+      baseFilter: `timestamp >= ${at(beforeStart)} AND timestamp < ${at(shift(yesterday, 1))} AND ${LIVE_VISITORS}`,
       isNow: `timestamp >= ${at(nowStart)}`,
     };
     // Sequential on purpose: PostHog allows only a few concurrent queries.
@@ -101,11 +95,7 @@ async function posthog(yesterday: string): Promise<Dagcijfers['posthog']> {
     const config = readPosthogConfig();
     const first = shift(yesterday, -(SERIES_DAYS - 1));
     const at = (date: string) => `toDateTime('${date} 00:00:00', '${TZ}')`;
-    const live = [
-      `properties.$host IN (${LIVE_HOSTS.map((h) => `'${h}'`).join(', ')})`,
-      `NOT match(coalesce(toString(properties.$raw_user_agent), ''), '${BOT_PATTERN}')`,
-    ].join(' AND ');
-    const yesterdayOnly = `timestamp >= ${at(yesterday)} AND timestamp < ${at(shift(yesterday, 1))} AND ${live}`;
+    const yesterdayOnly = `timestamp >= ${at(yesterday)} AND timestamp < ${at(shift(yesterday, 1))} AND ${LIVE_VISITORS}`;
 
     // Sequential on purpose: PostHog allows only a few concurrent queries.
     const days = await hogql(
@@ -117,7 +107,7 @@ async function posthog(yesterday: string): Promise<Dagcijfers['posthog']> {
          count(DISTINCT if(event = 'advice_completed', distinct_id, NULL)),
          countIf(event = 'retailer_click')
        FROM events
-       WHERE timestamp >= ${at(first)} AND timestamp < ${at(shift(yesterday, 2))} AND ${live}
+       WHERE timestamp >= ${at(first)} AND timestamp < ${at(shift(yesterday, 2))} AND ${LIVE_VISITORS}
          AND event IN ('$pageview', 'advice_started', 'advice_completed', 'retailer_click')
        GROUP BY d ORDER BY d`,
       'dagcijfers',

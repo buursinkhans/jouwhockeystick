@@ -46,7 +46,7 @@ import {
 } from '../src/seo/evaluate';
 import { issueFor, outcomeComment, socialIssueFor, withIssueNumbers } from '../src/seo/issues';
 import { getToken, readServiceAccount } from '../src/seo/googleAuth';
-import { BOT_PATTERN, hogql, LIVE_HOSTS, readPosthogConfig } from '../src/analytics-report/hogql';
+import { hogql, LIVE_VISITORS, readPosthogConfig } from '../src/analytics-report/hogql';
 import { funnelFromRows, funnelQuery, type Funnel, type FunnelFigures } from '../src/seo/funnel';
 import { GENERIC_WORDS } from '../src/seo/seoConfig';
 import { seasonFromExports } from '../src/seo/trends';
@@ -185,7 +185,7 @@ function previousHistory(path: string | undefined, key: string): { history: Hist
 
 // ---------------------------------------------------------------- PostHog (organic funnel)
 
-const FUNNEL_FILTERS = { liveHosts: LIVE_HOSTS, botPattern: BOT_PATTERN } as const;
+const FUNNEL_FILTERS = { visitors: LIVE_VISITORS } as const;
 
 /**
  * Visitors from Google (no campaign) per landing page and how many clicked to a shop that day. Null when

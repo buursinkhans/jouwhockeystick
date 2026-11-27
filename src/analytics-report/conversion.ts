@@ -603,7 +603,7 @@ export function formatReport(
     '',
     '---',
     '',
-    '_PostHog draait cookieloos: een bezoeker is binnen één dag te volgen, niet over meerdere dagen. Wie op drie dagen komt, telt drie keer. Bots met een bekende user-agent en Netlify-previews zijn eruit gefilterd; slimmere bots niet. Waar precies geklikt wordt, zie je in de heatmaps in PostHog._',
+    '_PostHog draait cookieloos: een bezoeker is binnen één dag te volgen, niet over meerdere dagen. Wie op drie dagen komt, telt drie keer. Netlify-previews tellen niet mee. Automatische browsers (geen of UTC-tijdzone, scherm van 800 bij 600, of een venster veel breder dan het scherm) en bezoek van buiten Europa ook niet; slimmere bots wel. Waar precies geklikt wordt, zie je in de heatmaps in PostHog._',
   ];
 
   if (data.otherHostEvents > 0) {
