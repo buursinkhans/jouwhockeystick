@@ -64,6 +64,6 @@ describe('dagcijfers met een SEO-deel', () => {
     expect(workflow).toContain('video/studio/state/seo.json');
     expect(workflow).toContain('SEO_BESTAND=');
     // The sealed check before the public branch is unchanged: no readable part.
-    expect(workflow).toContain('["posthog", "google", "bing", "detail"]');
+    expect(workflow).toContain('["posthog", "google", "bing", "detail", "conversie", "seo", "kpi"]');
   });
 });

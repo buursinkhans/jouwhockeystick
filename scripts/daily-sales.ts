@@ -18,6 +18,7 @@ import {
   tradeTrackerSession,
 } from '../src/analytics-report/partnerApi';
 import { awinClicks, type Period } from '../src/analytics-report/sales';
+import { monthPeriods } from '../src/kpi/months';
 import { awinMoney, bolMoney, daisyconMoney, tradeTrackerCampaignMoney, tradeTrackerMoney, type Money } from '../src/analytics-report/salesMoney';
 import { DAKA_DAISYCON, HOCKEYCITY_TRADETRACKER, PASSASPORTS_TRADETRACKER, PLUTOSPORT_AWIN } from '../src/lib/retailers';
 import { seal } from '../src/marketing/seal';
@@ -57,26 +58,29 @@ async function tradeTrackerTotals(session: string, campaign: { campaignId: strin
 }
 
 async function perPeriod(
-  ps: Record<PeriodKey, Period>,
+  ps: Record<string, Period>,
   load: () => Promise<(p: Period) => Promise<Money>>,
-): Promise<Record<PeriodKey, Result>> {
-  const keys = Object.keys(ps) as PeriodKey[];
+): Promise<Record<string, Result>> {
+  const keys = Object.keys(ps);
   try {
     const run = await load();
-    const out = {} as Record<PeriodKey, Result>;
+    const out: Record<string, Result> = {};
     // One period at a time: the networks rate-limit.
     for (const k of keys) {
       try {
-        out[k] = await run(ps[k]);
+        out[k] = await run(ps[k]!);
       } catch (e) {
         out[k] = { fout: why(e) };
       }
     }
     return out;
   } catch (e) {
-    return Object.fromEntries(keys.map((k) => [k, { fout: why(e) }])) as Record<PeriodKey, Result>;
+    return Object.fromEntries(keys.map((k) => [k, { fout: why(e) }]));
   }
 }
+
+/** First month with sales figures in KPI Performance; at most the last 15 months are read. */
+const FIRST_MONTH = '2026-10';
 
 async function main() {
   const passphrase = process.env.VERKOOP_SLEUTEL;
@@ -85,7 +89,9 @@ async function main() {
     process.exitCode = 3;
     return;
   }
-  const ps = periods(new Date());
+  const now = new Date();
+  const months = monthPeriods(now, FIRST_MONTH);
+  const ps: Record<string, Period> = { ...periods(now), ...months };
   const tt = tradeTrackerSession();
   tt.catch(() => undefined);
 
@@ -134,11 +140,20 @@ async function main() {
     },
   ];
 
+  // The months (KPI Performance) travel apart, so the tab Verkoop keeps its five periods.
+  const maanden = Object.keys(months).map((maand) => ({
+    maand,
+    ...months[maand]!,
+    partners: Object.fromEntries(partners.map((p) => [p.id, p.periodes[maand]!])),
+  }));
+  const split = partners.map((p) => ({ ...p, periodes: Object.fromEntries(Object.entries(p.periodes).filter(([k]) => !(k in months))) }));
+
   const value = {
     versie: 1,
+    maanden,
     gemaakt: new Date().toISOString(),
-    periodes: ps,
-    partners,
+    periodes: periods(now),
+    partners: split,
     noot: 'Inclusief orders die de partner nog moet goedkeuren; afgewezen orders tellen niet. Daka geeft geen kliks.',
   };
   writeFileSync(process.argv[2] ?? 'verkoop.json', `${JSON.stringify(seal(value, passphrase))}\n`);

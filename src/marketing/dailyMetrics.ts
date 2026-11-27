@@ -3,6 +3,7 @@
 // result is one JSON file that the routine "Dagbericht" reads
 // (docs/marketing/dagbericht.md). Counts only: no persons, no amounts.
 import { z } from 'zod';
+import { Kpi } from '../kpi/data';
 import { SeoReport } from '../seo/opportunities';
 
 export const DAY_MS = 86_400_000;
@@ -126,6 +127,8 @@ export const Dagcijfers = z.object({
   conversie: part(Conversie).optional(),
   /** The monthly SEO report (src/seo/opportunities.ts), read from the sealed seo.json; optional until the first run. */
   seo: part(SeoReport).optional(),
+  /** KPI Performance (src/kpi/data.ts): daily session counts and Search Console days since the start. */
+  kpi: Kpi.optional(),
 });
 export type Dagcijfers = z.infer<typeof Dagcijfers>;
 
