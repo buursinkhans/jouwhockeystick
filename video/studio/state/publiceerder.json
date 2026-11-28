@@ -819,7 +819,15 @@
           }
         ]
       },
-      "fout": null
+      "fout": null,
+      "kanalen": {
+        "insta": {
+          "id": 433428082,
+          "uuid": "-5324752117399535049",
+          "moment": "2026-12-01T19:30:00",
+          "op": "2026-11-28T07:09:47Z"
+        }
+      }
     },
     "posts/20261130-eerste-zaalseizoen": {
       "render": {
@@ -833,7 +841,15 @@
           }
         ]
       },
-      "fout": null
+      "fout": null,
+      "kanalen": {
+        "insta": {
+          "id": 433430094,
+          "uuid": "1191844933249027604",
+          "moment": "2026-11-30T19:30:00",
+          "op": "2026-11-28T07:09:47Z"
+        }
+      }
     },
     "posts/20261208-geschiedenis-bow-regels": {
       "render": {
@@ -870,7 +886,7 @@
           "id": 443549594,
           "uuid": "-2361942060607586168",
           "moment": "2026-12-08T19:30:00",
-          "op": "2026-11-21T14:58:29Z"
+          "op": "2026-11-28T07:09:47Z"
         }
       }
     },
@@ -911,7 +927,15 @@
           }
         ]
       },
-      "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
+      "fout": null,
+      "kanalen": {
+        "insta": {
+          "id": 444702025,
+          "uuid": "-9083972300789561567",
+          "moment": "2026-12-03T19:30:00",
+          "op": "2026-11-28T07:09:47Z"
+        }
+      }
     },
     "posts/20261210-geschiedenis-winkeltermen": {
       "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
@@ -972,14 +996,7 @@
           }
         ]
       },
-      "kanalen": {
-        "insta": {
-          "id": 444702025,
-          "uuid": "-9083972300789561567",
-          "moment": "2026-12-03T19:30:00",
-          "op": "2026-11-25T18:10:41Z"
-        }
-      },
+      "kanalen": {},
       "fout": null
     }
   },
@@ -989,7 +1006,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "339bba67-c80b-4564-8fb5-36f5ba68d847",
+  "wijziging": "a444e966-f1f6-4644-8b48-69f6ae31e8cf",
   "resultaten": {
     "insta/7481316443998604276": {
       "id": "7481316443998604276",
