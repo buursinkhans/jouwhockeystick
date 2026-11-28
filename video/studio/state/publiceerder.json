@@ -999,13 +999,13 @@
       "fout": null
     }
   },
-  "laatsteRun": "2026-11-28T02:08:19Z",
+  "laatsteRun": "2026-11-28T03:08:57Z",
   "tegoed": {
     "maand": "2026-11",
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "publiceerder-202611280208",
+  "wijziging": "eced9b1e-dd9b-40db-b721-85b063f63348",
   "resultaten": {
     "insta/7481316443998604276": {
       "id": "7481316443998604276",
