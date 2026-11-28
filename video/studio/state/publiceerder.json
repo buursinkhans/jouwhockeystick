@@ -793,7 +793,7 @@
     },
     "posts/20261201-geschiedenis-tijdlijn": {
       "render": {
-        "klaar": "2026-11-25T18:10:41Z"
+        "klaar": "2026-11-28T07:09:07Z"
       },
       "media": {
         "slides": [
@@ -819,19 +819,11 @@
           }
         ]
       },
-      "kanalen": {
-        "insta": {
-          "id": 433428082,
-          "uuid": "-5324752117399535049",
-          "moment": "2026-12-01T19:30:00",
-          "op": "2026-11-25T18:10:41Z"
-        }
-      },
       "fout": null
     },
     "posts/20261130-eerste-zaalseizoen": {
       "render": {
-        "klaar": "2026-11-25T18:10:41Z"
+        "klaar": "2026-11-28T07:09:07Z"
       },
       "media": {
         "slides": [
@@ -840,14 +832,6 @@
             "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261130-eerste-zaalseizoen-1.png"
           }
         ]
-      },
-      "kanalen": {
-        "insta": {
-          "id": 433430094,
-          "uuid": "1191844933249027604",
-          "moment": "2026-11-30T19:30:00",
-          "op": "2026-11-25T18:10:41Z"
-        }
       },
       "fout": null
     },
@@ -1005,7 +989,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "af4b671a-d128-4935-8697-33ce758727dc",
+  "wijziging": "339bba67-c80b-4564-8fb5-36f5ba68d847",
   "resultaten": {
     "insta/7481316443998604276": {
       "id": "7481316443998604276",
