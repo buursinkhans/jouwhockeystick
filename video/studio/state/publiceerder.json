@@ -914,29 +914,6 @@
         }
       }
     },
-    "posts/20261203-geschiedenis-platte-kanten": {
-      "render": {
-        "gestart": "2026-11-24T00:08:54Z",
-        "klaar": "2026-11-24T00:20:00Z"
-      },
-      "media": {
-        "slides": [
-          {
-            "name": "20261203-geschiedenis-platte-kanten-1.png",
-            "url": "https://github.com/buursinkhans/jouwhockeystick/releases/download/social-media/20261203-geschiedenis-platte-kanten-1.png"
-          }
-        ]
-      },
-      "fout": null,
-      "kanalen": {
-        "insta": {
-          "id": 444702025,
-          "uuid": "-9083972300789561567",
-          "moment": "2026-12-03T19:30:00",
-          "op": "2026-11-28T07:09:47Z"
-        }
-      }
-    },
     "posts/20261210-geschiedenis-winkeltermen": {
       "fout": "Dit is een Facebook-linkpost (kanaal: facebook). De Publiceerder plant die niet in; zet het kanaal in de studio na."
     },
@@ -996,7 +973,14 @@
           }
         ]
       },
-      "kanalen": {},
+      "kanalen": {
+        "insta": {
+          "id": 444702025,
+          "uuid": "-9083972300789561567",
+          "moment": "2026-12-03T19:30:00",
+          "op": "2026-11-28T07:09:47Z"
+        }
+      },
       "fout": null
     }
   },
@@ -1006,7 +990,7 @@
     "gebruikt": 38,
     "grens": 100
   },
-  "wijziging": "84609a8d-0001-415f-832e-a2a15d892d1b",
+  "wijziging": "c036666d-f1fc-4f8e-9815-bd4fabd33a00",
   "resultaten": {
     "insta/7481316443998604276": {
       "id": "7481316443998604276",
