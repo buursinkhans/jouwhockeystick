@@ -1,4 +1,6 @@
-// Daily figures (read-only): PostHog (yesterday and the 34 days before, in
+// Daily figures (read-only), with the `kpi` part for KPI Performance (daily
+// session counts and Search Console days since the start, src/kpi/data.ts):
+// PostHog (yesterday and the 34 days before, in
 // Amsterdam days, plus today so far), Search Console (daily totals plus the queries of the last
 // 7 available days) and Bing (daily totals). Writes one JSON file (path as
 // first argument, default dagcijfers.json): metadata without any figure, plus
@@ -15,6 +17,19 @@ import { sourceLabel } from '../src/analytics-report/conversion';
 import { collectBrandPages, collectSiteSearch, collectVersus, total, type QueryContext } from '../src/analytics-report/siteSections';
 import { hogql, LIVE_VISITORS, readPosthogConfig } from '../src/analytics-report/hogql';
 import { dayRows, redact, registeredSite, SitesAnswer, TrafficAnswer } from '../src/marketing/bingReport';
+import {
+  BREAKDOWN_DAYS,
+  clicksQuery,
+  daysQuery,
+  excludedQuery,
+  KPI_MAX_DAYS,
+  KPI_START,
+  landingQuery,
+  pagesQuery,
+  parseBreakdown,
+  parseDays,
+  type Kpi,
+} from '../src/kpi/data';
 import {
   compareAll,
   Dagcijfers,
@@ -287,6 +302,62 @@ function seo(key: string): Dagcijfers['seo'] {
   }
 }
 
+/** KPI Performance: the whole series is read again every run, so no history is stored (src/kpi/data.ts). */
+async function kpiSessions(tot: string): Promise<Kpi['sessies']> {
+  try {
+    const config = readPosthogConfig();
+    const oldest = shift(tot, -(KPI_MAX_DAYS - 1));
+    const first = oldest > KPI_START ? oldest : KPI_START;
+    const periode = { start: shift(tot, -(BREAKDOWN_DAYS - 1)), end: tot };
+    // Sequential on purpose: PostHog allows only a few concurrent queries.
+    const run = (query: string) => hogql(config, query, 'dagcijfers-kpi');
+    const days = await run(daysQuery(first, tot));
+    const excluded = await run(excludedQuery(first, tot));
+    const landing = await run(landingQuery(periode.start, periode.end));
+    const clicks = await run(clicksQuery(periode.start, periode.end));
+    const pages = await run(pagesQuery(periode.start, periode.end));
+    return {
+      ok: true,
+      value: {
+        dagen: parseDays(days, excluded, dateRange(first, tot)),
+        uitsplitsing: parseBreakdown(periode, landing, clicks, pages),
+      },
+    };
+  } catch (e) {
+    return { ok: false, reden: `PostHog (KPI): ${why(e)}` };
+  }
+}
+
+/** Search Console per day from the start of the site, up to the last day it reported. */
+async function kpiGoogle(today: string): Promise<Kpi['google']> {
+  try {
+    const token = await getToken(readServiceAccount());
+    const latest = shift(today, -GSC_LAG_DAYS);
+    const oldest = shift(latest, -(KPI_MAX_DAYS - 1));
+    const first = oldest > KPI_START ? oldest : KPI_START;
+    const candidates = process.env.GSC_SITE_URL ? [process.env.GSC_SITE_URL] : GSC_SITES;
+    const failures: string[] = [];
+    for (const site of candidates) {
+      try {
+        const rows = (await gscQuery(token, site, first, latest, 'date'))
+          .map((r) => ({ date: r.keys[0] ?? '', klikken: r.clicks, vertoningen: r.impressions }))
+          .sort((a, b) => a.date.localeCompare(b.date));
+        const begin = rows[0]?.date;
+        const end = rows.at(-1)?.date;
+        // Days before the first and after the last reported day stay unknown, never zero.
+        if (!begin || !end) return { ok: true, value: { dagen: [] } };
+        const dagen = fillDays(rows, dateRange(begin, end), (date) => ({ date, klikken: 0, vertoningen: 0 }));
+        return { ok: true, value: { dagen: dagen.map((d): [string, number, number] => [d.date, d.klikken, d.vertoningen]) } };
+      } catch (e) {
+        failures.push(why(e));
+      }
+    }
+    return { ok: false, reden: failures.join(' ') || 'Geen Search Console-property gevonden.' };
+  } catch (e) {
+    return { ok: false, reden: `Search Console (KPI): ${why(e)}` };
+  }
+}
+
 async function main() {
   const today = amsterdamToday();
   const out: Dagcijfers = {
@@ -297,6 +368,12 @@ async function main() {
     google: await google(today),
     bing: await bing(),
     conversie: await conversie(shift(today, -1)),
+  };
+  out.kpi = {
+    versie: 1,
+    tot: shift(today, -1),
+    sessies: await kpiSessions(shift(today, -1)),
+    google: await kpiGoogle(today),
   };
   const passphrase = process.env.VERKOOP_SLEUTEL;
   if (!passphrase) {
@@ -314,8 +391,10 @@ async function main() {
     const p = out[k];
     if (p && !p.ok) process.stderr.write(`${p.reden}\n`);
   }
+  const kpiFailed = [out.kpi.sessies, out.kpi.google].flatMap((p) => (p.ok ? [] : [p.reden]));
+  for (const reden of kpiFailed) process.stderr.write(`${reden}\n`);
   // Exit code 2: written, but one or more sources failed (the workflow still saves the file).
-  if (failed.length) process.exitCode = 2;
+  if (failed.length || kpiFailed.length) process.exitCode = 2;
 }
 
 main().catch((e: unknown) => {

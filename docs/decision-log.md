@@ -3707,3 +3707,14 @@ Ook bouwt hij als hij handmatig met "forceer" gestart is.
 - **Gevolg:** bezoekcijfers in die rapporten dalen vanaf nu sterk. Dat is de meting, niet het verkeer. De tracking en de publieke site zijn niet veranderd.
 - **Nog niet:** het aantal uitgefilterde sessies is nog nergens zichtbaar; dat komt met de KPI-tab.
 - **Betrokken bestanden:** `src/analytics-report/{hogql,visitorFilter,conversion}.ts` (+ test), `src/seo/funnel.ts` (+ test), `scripts/{daily-metrics,conversion-report,seo-opportunities}.ts`, `docs/analytics.md`.
+
+## 2026-11-27 — KPI Performance, MVP: tabblad "KPI" in de Marketingstudio
+- **Besluit eigenaar (2026-11-27, "akkoord met alle voorstellen"):** één hoofdtab "KPI" met Overzicht, Traffic, Engagement, Conversie en Omzet. In fase 2 gaan de oude tabbladen Conversie en Verkoop hierin op.
+- **Hergebruik:** workflow Dagcijfers, de versleuteling, de geplande taak Dagbericht en de bestaande studio. Geen nieuwe agent, geen nieuwe dienst, geen extra kosten.
+- **Definities:** een bezoek is een sessie met een paginaweergave, op de Amsterdamse begindag, na het bezoekersfilter. Partner-CTR is het deel van de bezoeken met minstens één partnerklik. Percentages komen uit totalen.
+- **Status:** groen vanaf 100% van het target tot de laatste volledige dag, oranje 85 tot 99%, rood daaronder. Optellende KPI's naar rato van de dagen, percentages tegen het volle target. Grijs zonder target, bij ontbrekende of onvolledige cijfers, bij verkoop onder 10 orders en (aanname van de bouwer) bij een percentage over minder dan 30 gevallen. Prognose alleen voor klikken en bezoeken, vanaf dag 10, rechtgetrokken zonder seizoen.
+- **Targets:** collectie `targets` in de studio (lezen admin, schrijven owner), met versies. Niet in deze repo.
+- **Verkoop:** per kalendermaand, voorlopig (inclusief nog te beoordelen orders). Indicatieve partnerconversie is orders gedeeld door bezoeken met een partnerklik (het rekenmodel achter de targets); affiliateconversie is orders per geregistreerde klik, zonder Daka.
+- **Na het mergen:** de studio opnieuw publiceren met `kpi.js` en `kpi-tab.js` en de databaseregel voor `targets`, daarna de targets invoeren.
+- **Betrokken bestanden:** `src/kpi/*`, `scripts/{daily-metrics,daily-sales}.ts`, `src/marketing/dailyMetrics.ts`, `social/studio/{index.html,kpi.js,kpi-tab.js,README.md}`, `.github/workflows/dagcijfers.yml`, `docs/marketing/dagbericht.md` en de tests.
+

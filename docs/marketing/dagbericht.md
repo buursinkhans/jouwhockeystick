@@ -72,6 +72,16 @@ Het tabblad **SEO** toont het maandelijkse SEO-kansenrapport: Search Console voo
 - **In de browser:** het tabblad Vandaag opent de cijfers (zie Verkoop) en deelt ze met het tabblad SEO (`window.jhsCijfers`). Het tabblad ontsleutelt niets zelf en schrijft niets. Staat het deel er niet in, dan staat er "Nog geen SEO-rapport".
 - **Zichtbaar na** het eerste maandrapport (maandag 2026-12-07, of eerder met de hand gestart) en de eerstvolgende run van Dagcijfers.
 
+## KPI Performance (tabblad "KPI" in de Marketingstudio, sinds 2026-11-27)
+
+Managementoverzicht met de onderdelen Overzicht, Traffic, Engagement, Conversie en Omzet. Definities en rekenregels staan op één plek: `social/studio/kpi.js` (in de studio onder "Definities").
+
+- **Sessiecijfers:** `scripts/daily-metrics.ts` voegt een deel `kpi` toe aan dezelfde versleutelde `dagcijfers.json` (`src/kpi/data.ts`): per dag de aantallen sessies sinds 2026-10-06 (hooguit 430 dagen), na het bezoekersfilter, plus een uitsplitsing over 28 dagen en de Search Console-dagen. Elke run leest de hele reeks opnieuw, dus er wordt geen eigen historie opgeslagen.
+- **Verkoopcijfers:** `scripts/daily-sales.ts` voegt `maanden` toe aan het versleutelde `verkoop.json` (per kalendermaand sinds oktober 2026, per partner, zonder Decathlon). Het aantal API-vragen per run groeit met elke maand.
+- **Targets:** alleen in de database van de studio (collectie `targets`), in te voeren op KPI → Overzicht → "Targets beheren". Elke wijziging is een nieuwe versie. Agents wijzigen geen targets.
+- **Niets nieuws voor de geplande taak:** de routine kopieert de twee bestanden nog steeds ongewijzigd.
+- **Nog niet:** relevante zoektermen in de top 10 en top 3, omzet gesplitst in goedgekeurd en voorlopig, de commerciële funnel als beeld, een geschreven managementsamenvatting en acties.
+
 ## Beheer
 
 - Drempels aanpassen: `ANOMALY` en `RISER` in `src/marketing/dailyMetrics.ts`, met tests.

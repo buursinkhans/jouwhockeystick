@@ -17,13 +17,13 @@ describe('Marketingstudio: tab Conversie', () => {
     });
   });
 
-  it('has the tab, the view and the router entry, and the number keys cover the first nine of the ten views', () => {
+  it('has the tab, the view and the router entry, and the number keys cover the first nine of the eleven views', () => {
     expect(studio).toContain('<a href="#conversie" data-view="conversie">Conversie</a>');
     expect(studio).toContain('id="view-conversie"');
-    expect(studio).toContain("const VIEWS = ['vandaag', 'verkoop', 'conversie', 'seo', 'weekrapport', 'social', 'stack', 'post', 'week', 'ritme'];");
+    expect(studio).toContain("const VIEWS = ['vandaag', 'kpi', 'verkoop', 'conversie', 'seo', 'weekrapport', 'social', 'stack', 'post', 'week', 'ritme'];");
     expect(studio).toContain('/^[1-9]$/.test(ev.key)');
     expect(studio).toContain('<kbd>1</kbd>–<kbd>9</kbd>');
-    for (const view of ['vandaag', 'verkoop', 'conversie', 'seo', 'weekrapport', 'social', 'stack', 'post', 'week', 'ritme']) {
+    for (const view of ['vandaag', 'kpi', 'verkoop', 'conversie', 'seo', 'weekrapport', 'social', 'stack', 'post', 'week', 'ritme']) {
       expect(studio, view).toContain(`id="view-${view}"`);
       expect(studio, view).toContain(`data-view="${view}"`);
     }

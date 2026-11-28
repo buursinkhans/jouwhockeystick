@@ -69,7 +69,7 @@ jobs:
           [ -f "$RUNNER_TEMP/dagcijfers.json" ] || exit 0
           node -e '
             const f = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
-            const plain = ["posthog", "google", "bing", "detail"].filter((k) => k in f);
+            const plain = ["posthog", "google", "bing", "detail", "conversie", "seo", "kpi"].filter((k) => k in f);
             if (f.versie !== 3 || !f.versleuteld || f.versleuteld.alg !== "PBKDF2-SHA256/AES-256-GCM" || plain.length) {
               console.error("dagcijfers.json is niet (alleen) versleuteld; niet opgeslagen."); process.exit(1);
             }' "$RUNNER_TEMP/dagcijfers.json"
